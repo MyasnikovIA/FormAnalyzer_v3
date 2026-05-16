@@ -8,23 +8,15 @@ import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
-/**
- * Извлечение контекстного меню (PopupMenu) из форм
- * Поддерживает:
- * - <cmpPopupMenu>
- * - <component cmptype="Popup">
- * - <cmpPopupItem>
- * - <component cmptype="PopupItem">
- */
 public class PopupMenuProcessor implements IXmlProcessor {
 
     private static final Pattern SEPARATOR_PATTERN = Pattern.compile("^[-]+$");
+
+    private final Map<String, PopupMenuInfo> menuMap = new LinkedHashMap<>();
+    private final List<AutoPopupInfo> autoPopups = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -38,44 +30,93 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
     @Override
     public void process(Document doc, FormInfo formInfo) {
-        List<PopupMenuInfo> menus = new ArrayList<>();
+        menuMap.clear();
+        autoPopups.clear();
 
-        // 1. Поиск D3 PopupMenu: <cmpPopupMenu>
+        // 1. Поиск D3 PopupMenu
         Elements d3Popups = doc.select("cmpPopupMenu");
         for (Element popup : d3Popups) {
             String name = popup.attr("name");
+            if (name == null || name.isEmpty()) continue;
             PopupMenuInfo menu = new PopupMenuInfo(name);
             parseMenuItems(popup, menu.getRootItems());
-            menus.add(menu);
+            menuMap.put(name, menu);
         }
 
-        // 2. Поиск M2 PopupMenu: <component cmptype="Popup">
+        // 2. Поиск M2 PopupMenu
         Elements m2Popups = doc.select("component[cmptype=Popup]");
         for (Element popup : m2Popups) {
             String name = popup.attr("name");
+            if (name == null || name.isEmpty()) continue;
             PopupMenuInfo menu = new PopupMenuInfo(name);
             parseMenuItems(popup, menu.getRootItems());
-            menus.add(menu);
+            menuMap.put(name, menu);
         }
 
-        // Сохраняем в FormInfo
-        formInfo.setPopupMenus(menus);
+        // 3. Поиск D3 AutoPopupMenu
+        Elements d3AutoPopups = doc.select("cmpAutoPopupMenu");
+        for (Element autoPopup : d3AutoPopups) {
+            String joinMenu = autoPopup.attr("join_menu");
+            String name = autoPopup.attr("name");
+            if (joinMenu == null || joinMenu.isEmpty()) continue;
+
+            AutoPopupInfo info = new AutoPopupInfo();
+            info.targetMenuName = joinMenu;
+            info.autoPopupName = name;
+            parseMenuItems(autoPopup, info.items);
+            autoPopups.add(info);
+        }
+
+        // 4. Поиск M2 AutoPopupMenu
+        Elements m2AutoPopups = doc.select("component[cmptype=AutoPopupMenu]");
+        for (Element autoPopup : m2AutoPopups) {
+            String joinMenu = autoPopup.attr("join_menu");
+            String name = autoPopup.attr("name");
+            if (joinMenu == null || joinMenu.isEmpty()) continue;
+
+            AutoPopupInfo info = new AutoPopupInfo();
+            info.targetMenuName = joinMenu;
+            info.autoPopupName = name;
+            parseMenuItems(autoPopup, info.items);
+            autoPopups.add(info);
+        }
+
+        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu (добавляем В КОНЕЦ)
+        for (AutoPopupInfo autoPopup : autoPopups) {
+            PopupMenuInfo targetMenu = menuMap.get(autoPopup.targetMenuName);
+            if (targetMenu != null) {
+                for (PopupMenuInfo.MenuItem item : autoPopup.items) {
+                    item.setFromAutoPopup(true);
+                    item.setAutoPopupName(autoPopup.autoPopupName);
+                    // Добавляем в конец списка
+                    targetMenu.addItem(item);
+                }
+            }
+        }
+
+        // 6. Сохраняем в FormInfo
+        List<PopupMenuInfo> result = new ArrayList<>();
+        for (PopupMenuInfo menu : menuMap.values()) {
+            if (!menu.getRootItems().isEmpty()) {
+                result.add(menu);
+            }
+        }
+
+        formInfo.setPopupMenus(result);
     }
 
     /**
      * Рекурсивный парсинг пунктов меню
      */
     private void parseMenuItems(Element parent, List<PopupMenuInfo.MenuItem> items) {
-        // Поиск дочерних элементов меню
         Elements children = parent.children();
 
         for (Element child : children) {
             String tagName = child.tagName().toLowerCase();
             boolean isPopupItem = false;
 
-            // Проверяем тип элемента
             if (tagName.equals("cmppopupitem") ||
-                    tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype"))) {
+                    (tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype")))) {
                 isPopupItem = true;
             }
 
@@ -83,23 +124,33 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 String caption = child.attr("caption");
                 String name = child.attr("name");
 
-                // Пропускаем разделители (caption = "-")
+                // Пропускаем разделители
                 if (caption != null && SEPARATOR_PATTERN.matcher(caption).matches()) {
                     continue;
                 }
 
                 PopupMenuInfo.MenuItem item = new PopupMenuInfo.MenuItem();
-                item.setCaption(caption);
-                item.setName(name);
+                if (caption != null && !caption.isEmpty()) {
+                    item.setCaption(caption);
+                }
+                if (name != null && !name.isEmpty()) {
+                    item.setName(name);
+                }
 
-                // Рекурсивно обрабатываем вложенные пункты
                 parseMenuItems(child, item.getChildren());
-
                 items.add(item);
+            } else if (tagName.equals("cmppopupmenu") ||
+                    (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype")))) {
+                parseMenuItems(child, items);
             } else {
-                // Если не PopupItem, но может содержать вложенные пункты меню
                 parseMenuItems(child, items);
             }
         }
+    }
+
+    private static class AutoPopupInfo {
+        String targetMenuName;
+        String autoPopupName;
+        List<PopupMenuInfo.MenuItem> items = new ArrayList<>();
     }
 }

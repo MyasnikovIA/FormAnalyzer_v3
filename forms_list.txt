@@ -1,1 +1,17 @@
-Forms/Telemed/tm_cancel_reasons.frm
+-----------------------------------------------------------------------------
+Forms/ControlCard/dispensary_observation_plan/dispensary_observation_plan.frm
+-----------------------------------------------------------------------------
+
+select t.*, t.rowid from D_REPORTS_LINKS t
+join d_reports r on t.pid = r.id
+where t.unitcode = 'HOSP_HISTORIES'
+
+
+
+
+select --t.*, t.rowid
+r.* from D_REPORTS_LINKS t
+join d_reports r on t.pid = r.id
+where t.unitcode = 'HOSP_HISTORIES'
+--Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной
+

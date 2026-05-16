@@ -331,8 +331,10 @@ public class ReportGenerator {
     }
 
 
+    // core/report/ReportGenerator.java
+
     /**
-     * Вывод контекстного меню (PopupMenu)
+     * Вывод контекстного меню (PopupMenu) в виде дерева
      */
     private void writePopupMenusBlock(PrintWriter writer, FormInfo form) {
         List<PopupMenuInfo> menus = form.getPopupMenus();
@@ -340,16 +342,49 @@ public class ReportGenerator {
             return;
         }
 
+        writer.println();
         writer.println("Контекстное меню используемое на форме (ПКМ):");
         writer.println();
 
-        for (PopupMenuInfo menu : menus) {
-            writer.println("        name=\"" + menu.getName() + "\"");
-            writeMenuItems(writer, menu.getRootItems(), 2);
-            writer.println();
-        }
+        for (int i = 0; i < menus.size(); i++) {
+            PopupMenuInfo menu = menus.get(i);
+            boolean isLast = (i == menus.size() - 1);
 
+            // Вывод корневого элемента меню
+            String prefix = isLast ? "└── " : "├── ";
+            writer.println(prefix + "name=\"" + menu.getName() + "\"");
+
+            // Вывод пунктов меню
+            writeMenuTree(writer, menu.getRootItems(), isLast ? "    " : "│   ");
+
+            if (!isLast) {
+                writer.println();
+            }
+        }
         writer.println();
+    }
+
+    /**
+     * Рекурсивный вывод дерева пунктов меню
+     */
+    private void writeMenuTree(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, String indent) {
+        for (int i = 0; i < items.size(); i++) {
+            PopupMenuInfo.MenuItem item = items.get(i);
+            boolean isLast = (i == items.size() - 1);
+
+            // Выбор символов для ветки
+            String branch = isLast ? "└── " : "├── ";
+            String childIndent = indent + (isLast ? "    " : "│   ");
+
+            // Формирование строки с учетом AutoPopup
+            String displayText = item.getPrefix() + item.getDisplayCaption();
+            writer.println(indent + branch + displayText);
+
+            // Рекурсивный вывод дочерних элементов
+            if (item.hasChildren()) {
+                writeMenuTree(writer, item.getChildren(), childIndent);
+            }
+        }
     }
 
 

@@ -1,47 +1,91 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Sat May 16 09:39:19 GMT+07:00 2026
+Дата создания: Sat May 16 10:09:38 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
 ----------------------------------------------------------------------------------------------------
-ФОРМА: /Forms/Telemed/tm_cancel_reasons.frm
+ФОРМА: /Forms/ControlCard/dispensary_observation_plan/dispensary_observation_plan.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\4_mis_MEDDEV-151437\Forms\Telemed\tm_cancel_reasons.frm
+Базовая форма: C:\AppServ\www\4_mis_MEDDEV-151437\Forms\ControlCard\dispensary_observation_plan\dispensary_observation_plan.frm
 СТАТУС: БАЗОВАЯ ФОРМА
 
 SubForm:
-     (не найдено)
+     ControlCard/subforms/visit_functions
 
 Список вызываемых форм в JS:
-     Telemed/AddEditCancReason.frm
-     Log/log_record.frm
+     ControlCard/subforms/services_with_visit.frm
+     ControlCard/control_card_appointment.frm
+     ControlCard/cc_attach_services.frm
+     GenRegistry/reg_full.frm
+
 
 Контекстное меню используемое на форме (ПКМ):
 
-        name="pTM_CANC_REASON"
-            "Обновить"
-            "Добавить"
-            "Редактировать"
-            "Удалить"
-            "Сервис"
-                "Логи"
+├── name="DISP_PLAN_POPUP"
+│   ├── "Обновить"
+│   ├── "Удалить запись"
+│   ├── "Добавить услугу"
+│   ├── "Связать с услугой в текущей МО"
+│   ├── "Связать с услугой в другой МО"
+│   ├── "Отменить связывание услуг"
+│   ├── "Удалить услугу из плана"
+│   ├── (AutoPopup "piReports") "Массовая печать направлений на анализы"
+│   ├── (AutoPopup "piReports") "Массовая печать V2"
+│   ├── (AutoPopup "piReports") "Массовая печать V3"
+│   └── (AutoPopup "piReports") "Сервис_v2"
+│       ├── "Логи1"
+│       └── "Логи2"
 
+└── name="DISP_PLAN_POPUP333"
+    ├── "Обновить"
+    ├── "Удалить запись"
+    ├── "Добавить услугу"
+    ├── "Связать с услугой в текущей МО"
+    ├── "Связать с услугой в другой МО"
+    ├── "Отменить связывание услуг"
+    ├── "Удалить услугу из плана"
+    ├── (AutoPopup "piReports") "Массовая печать направлений на анализы"
+    ├── (AutoPopup "piReports") "Массовая печать V4"
+    ├── (AutoPopup "piReports") "Массовая печать V5"
+    └── (AutoPopup "piReports") "Сервис_v2"
+        ├── "Логи6"
+        └── "Логи7"
 
-SQL ЗАПРОСЫ (1):
+SQL ЗАПРОСЫ (6):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
-    D_V_TELMED_CANCEL_REASONS
+    PLAN_DATE
+    D_V_SERVICES_BASE
+    D_V_PMC_DISP_PLAN_CONTROL
+    DPC
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
-    D_TELMED_CANCEL_REASONS
+    D_SERVICES
+    D_SPECIALITIES
+    D_EMPLOYERS
+    D_AGENTS
+    D_CABLAB
+    D_LPUDICT
+    D_LPU
+    D_PMC_DISP_PLAN
+    D_DIRECTION_SERVICES
+    D_VISITS
 
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
-    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_LABMED_ANALYZE.IS_LIS_ANALYZE_BY_DS
+    D_PKG_DATE_TOOLS.END_OF_MONTH
+    D_PKG_PMC_DISP_PLAN.SET_DISP_PLACE
+    D_PKG_CONTROL_CARD.RECOUNT_PLAN_DATES
+    D_PKG_CONTROL_CARD.CLEAR_REG_FROM_DISP_PLAN
+
+СИСТЕМНЫЕ ОПЦИИ:
+    FindDuchTAP
 
 БРОКЕРЫ:
-    unit:TELMED_CANCEL_REASONS  action:DELETE;
+    unit:PMC_DISP_PLAN  action:SET_REG;
+    unit:DIRECTION_SERVICES  action:DELETE;
 
 
 ====================================================================================================

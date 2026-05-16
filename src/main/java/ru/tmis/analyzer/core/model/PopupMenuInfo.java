@@ -25,16 +25,23 @@ public class PopupMenuInfo {
         return rootItems;
     }
 
+    public void addItem(MenuItem item) {
+        this.rootItems.add(item);
+    }
+
     /**
      * Пункт меню
      */
     public static class MenuItem {
         private String caption;
         private String name;
+        private boolean fromAutoPopup;
+        private String autoPopupName;
         private final List<MenuItem> children;
 
         public MenuItem() {
             this.children = new ArrayList<>();
+            this.fromAutoPopup = false;
         }
 
         public String getCaption() {
@@ -53,12 +60,32 @@ public class PopupMenuInfo {
             this.name = name;
         }
 
+        public boolean isFromAutoPopup() {
+            return fromAutoPopup;
+        }
+
+        public void setFromAutoPopup(boolean fromAutoPopup) {
+            this.fromAutoPopup = fromAutoPopup;
+        }
+
+        public String getAutoPopupName() {
+            return autoPopupName;
+        }
+
+        public void setAutoPopupName(String autoPopupName) {
+            this.autoPopupName = autoPopupName;
+        }
+
         public List<MenuItem> getChildren() {
             return children;
         }
 
         public boolean hasChildren() {
             return !children.isEmpty();
+        }
+
+        public void addChild(MenuItem child) {
+            this.children.add(child);
         }
 
         public String getDisplayCaption() {
@@ -69,6 +96,13 @@ public class PopupMenuInfo {
                 return "name=\"" + name + "\"";
             }
             return "(без названия)";
+        }
+
+        public String getPrefix() {
+            if (fromAutoPopup && autoPopupName != null) {
+                return "(AutoPopup \"" + autoPopupName + "\") ";
+            }
+            return "";
         }
     }
 }
