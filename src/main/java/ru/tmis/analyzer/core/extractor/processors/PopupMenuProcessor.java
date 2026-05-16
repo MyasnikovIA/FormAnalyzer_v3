@@ -113,11 +113,9 @@ public class PopupMenuProcessor implements IXmlProcessor {
                             dbService.getReportsByUnit(autoPopup.unit);
 
                     if (!dbReports.isEmpty()) {
-                        // Форматируем отчеты - передаем пустую строку для indent,
-                        // так как indent будет добавлен в ReportGenerator
+                        // Форматируем отчеты с поддержкой дерева
                         List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
-                                dbReports, autoPopup.autoPopupName, ""
-                        );
+                                dbReports, autoPopup.autoPopupName, "", true);
 
                         for (String formattedReport : formattedReports) {
                             PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();

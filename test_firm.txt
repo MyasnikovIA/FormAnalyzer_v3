@@ -18,3 +18,66 @@ where t.unitcode = 'HOSP_HISTORIES'
 --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной
 
 
+
+
+
+------------------
+
+
+SELECT rep.ID,
+       drl.PRIV_NAME,
+       rep.REP_TYPE, --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной
+       rep.REP_DATA,
+       rep.REP_FILENAME ,
+       rep.REP_NAME,
+       rep.REP_CODE
+  from D_REPORTS_LINKS drl
+       join d_reports rep on drl.pid = rep.id
+ --where drl.unitcode = 'VMP_APPLICATIONS'
+  where drl.unitcode = 'HOSP_HISTORIES'
+   -- AND rep.REP_TYPE = 6
+    AND rep.ID = 382272424
+
+
+        select rs.*
+          from D_V_REPORTS_STRUCTURE rs
+         where rs.PID = 382272424 --382272424--423419106-- r.ID,
+        order by rs.SORT
+
+
+select -- Представление для раздела : Пользовательские отчеты: Состав отчета
+       rep.ID,
+       rep.REP_CODE      SUBREPORT_CODE,
+       rep.REP_NAME      SUBREPORT_NAME,
+       rep.REP_TYPE      SUBREPORT_TYPE,
+       decode(rep.REP_TYPE, 0, 'Crystal Reports', 1, 'Web-форма (frm)', 2, 'Crystal Reports (PDF)', 3, 'Бланк', 5, 'WEB-конструктор', 6, 'Составной', null) SUBREPORT_STYPE,
+       t2.FULLNAME      SUBREPORT_LPU_NAME,
+       rep.IS_SHARE      SUBREPORT_IS_SHARE,
+       t.SORT,
+       rep.REP_TYPE, --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной
+       rep.REP_DATA,
+       rep.REP_FILENAME ,
+       rep.REP_NAME,
+       rep.REP_CODE,
+       drl.PRIV_NAME      -- Добавленное поле
+  from D_REPORTS_STRUCTURE             t
+  join D_REPORTS                       rep on rep.ID = t.SUBREPORT
+  join D_LPU                           t2 on rep.LPU = t2.ID
+  join D_REPORTS_LINKS                 drl on drl.pid = rep.id
+ where t.PID = 382272424 -- 455125366-- 423419106  -- r.ID
+   and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t.CID and ur.UNITCODE = 'REPORTS_STRUCTURE')
+
+
+select --t.*, t.rowid
+r.* from D_REPORTS_LINKS t
+join d_reports r on t.pid = r.id
+where t.unitcode = 'HOSP_HISTORIES'
+--Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной
+
+PRIV_NAME                                                                                                                             |REP_TYPE|REP_DATA|REP_FILENAME                                           |REP_NAME                                                                                                                                        |REP_CODE                      |
+--------------------------------------------------------------------------------------------------------------------------------------+--------+--------+-------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------+
+КАРТА ПРЕРЫВАНИЯ БЕРЕМЕННОСТИ                                                                                                         |       1|[BLOB]  |Reports/HospPlan/stop_pregnancy_card                   |Карта прерывания беременности                                                                                                                   |stop_pregnancy_card           |
+096/1у-20 Мед.карта ОПБ                                                                                                               |       6|[BLOB]  |                                                       |096/1у-20 Мед.карта ОПБ                                                                                                                         |OPB_096u20                    |
+Тест_отчет_новорожденные2                                                                                                             |       5|[BLOB]  |                                                       |Тест_отчет_новорожденные2                                                                                                                       |test_novor2                   |
+
+---------------------

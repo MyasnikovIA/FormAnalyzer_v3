@@ -35,8 +35,6 @@ public class ReportsFromDbService {
      * @param unitCode код unit'а (например, 'HOSP_HISTORIES')
      * @return список отчетов
      */
-    // core/db/ReportsFromDbService.java - исправленный метод
-
     public List<DbReportInfo> getReportsByUnit(String unitCode) {
         List<DbReportInfo> result = new ArrayList<>();
 
@@ -44,12 +42,16 @@ public class ReportsFromDbService {
             return result;
         }
 
-        String sql =
-                "SELECT t.ID, t.PRIV_NAME, r.REP_TYPE, r.REP_DATA, r.REP_FILENAME, r.REP_NAME, r.REP_CODE " +
-                        "FROM D_REPORTS_LINKS t " +
-                        "JOIN D_REPORTS r ON t.PID = r.ID " +
-                        "WHERE t.UNITCODE = ?";
-
+        String sql = "SELECT rep.ID,\n" +
+                     "       drl.PRIV_NAME,\n" +
+                     "       rep.REP_TYPE, --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
+                     "       rep.REP_DATA,\n" +
+                     "       rep.REP_FILENAME ,\n" +
+                     "       rep.REP_NAME,\n" +
+                     "       rep.REP_CODE\n" +
+                     "  from D_REPORTS_LINKS drl\n" +
+                     "       join d_reports rep on drl.pid = rep.id\n" +
+                     "  where drl.unitcode = ?\n";
         Properties props = new Properties();
         props.setProperty("user", settings.getOracleUser());
         props.setProperty("password", settings.getOraclePassword());
@@ -67,13 +69,22 @@ public class ReportsFromDbService {
             while (rs.next()) {
                 DbReportInfo report = new DbReportInfo();
                 report.setPrivName(rs.getString("PRIV_NAME"));
-                report.setUnitCode(unitCode);  // <-- СОХРАНЯЕМ UNITCODE
+                report.setUnitCode(unitCode);
                 report.setRepType(rs.getInt("REP_TYPE"));
                 report.setRepData(rs.getBytes("REP_DATA"));
                 report.setRepFilename(rs.getString("REP_FILENAME"));
                 report.setRepName(rs.getString("REP_NAME"));
                 report.setRepCode(rs.getString("REP_CODE"));
                 report.setRepID(rs.getInt("ID"));
+                // Если отчет составной, загружаем его структуру
+                if (report.isComposite()) {
+                     int tmp = report.getRepID();
+                    List<DbReportInfo> children = getCompositeReports(report.getRepID());
+                    for (DbReportInfo child : children) {
+                        report.addChild(child);
+                    }
+                }
+
                 result.add(report);
             }
 
@@ -96,6 +107,12 @@ public class ReportsFromDbService {
         private String repName;
         private String repCode;
         private int repID;
+        private List<DbReportInfo> children;
+
+        public DbReportInfo() {
+            this.children = new ArrayList<>();
+        }
+
         // Getters and Setters
         public String getPrivName() { return privName; }
         public void setPrivName(String privName) { this.privName = privName; }
@@ -121,6 +138,13 @@ public class ReportsFromDbService {
         public int getRepID() { return repID; }
         public void setRepID(int repID) { this.repID = repID; }
 
+        public List<DbReportInfo> getChildren() { return children; }
+        public void setChildren(List<DbReportInfo> children) { this.children = children; }
+        public void addChild(DbReportInfo child) { this.children.add(child); }
+        public boolean hasChildren() { return !children.isEmpty(); }
+        public boolean isComposite() { return repType == 6; }
+
+
         public String getRepTypeName() {
             return getRepTypeNameStatic(repType);
         }
@@ -136,12 +160,26 @@ public class ReportsFromDbService {
             StringBuilder sb = new StringBuilder();
             sb.append("(UNIT='");
             sb.append(unitCode != null && !unitCode.isEmpty() ? unitCode : "?");
-            sb.append("') \"");
-            sb.append(repName != null && !repName.isEmpty() ? repName : "без названия");
+            sb.append("') - REP_TYPE=\"");
+            sb.append(getRepTypeName());
             sb.append("\" - REP_CODE=\"");
             sb.append(repCode != null && !repCode.isEmpty() ? repCode : "?");
-            sb.append("\" - REP_TYPE=\"");
+            sb.append("\" \"");
+            sb.append(repName != null && !repName.isEmpty() ? repName : "без названия");
+            sb.append("\"");
+            if (getFormPath() != null) {
+                sb.append(" Form=\"").append(getFormPath()).append("\"");
+            }
+            return sb.toString();
+        }
+        public String getShortDisplayString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("- REP_TYPE=\"");
             sb.append(getRepTypeName());
+            sb.append("\" - REP_CODE=\"");
+            sb.append(repCode != null && !repCode.isEmpty() ? repCode : "?");
+            sb.append("\" \"");
+            sb.append(repName != null && !repName.isEmpty() ? repName : "без названия");
             sb.append("\"");
             if (getFormPath() != null) {
                 sb.append(" Form=\"").append(getFormPath()).append("\"");
@@ -149,64 +187,52 @@ public class ReportsFromDbService {
             return sb.toString();
         }
     }
+
     /**
      * Форматированный вывод списка отчетов с выравниванием по колонкам
      * @param reports список отчетов
      * @param autoPopupName имя AutoPopup
-     * @param indent отступ перед каждой строкой (без учета символов дерева)
+     * @param indent отступ перед каждой строкой
+     * @param isLastList является ли последним элементом в родительском списке
      * @return список отформатированных строк
      */
-
     public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
                                                        String autoPopupName,
-                                                       String indent) {
+                                                       String indent,
+                                                       boolean isLastList) {
         if (reports == null || reports.isEmpty()) {
             return Collections.emptyList();
         }
 
         String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
 
-        // Собираем данные для анализа
-        List<ReportRowData> rows = new ArrayList<>();
-        for (DbReportInfo report : reports) {
-            ReportRowData row = new ReportRowData();
-            row.autoPopupPart = autoPopupPrefix;
-            row.unitPart = "(UNIT='" + report.getUnitCode() + "') ";
-            row.typePart = "- REP_TYPE=\"" + report.getRepTypeName() + "\"";
-            row.codePart = " - REP_CODE=\"" + report.getRepCode() + "\"";
-            row.namePart = "\"" + report.getRepName() + "\"";
-            row.formPart = (report.getFormPath() != null) ? " Form=\"" + report.getFormPath() + "\"" : "";
-            rows.add(row);
-        }
-
-        // Вычисляем максимальную длину каждой колонки
-        int maxAutoPopupPart = 0;
-        int maxUnitPart = 0;
-        int maxTypePart = 0;
-        int maxCodePart = 0;
-        int maxNamePart = 0;
-
-        for (ReportRowData row : rows) {
-            maxAutoPopupPart = Math.max(maxAutoPopupPart, row.autoPopupPart.length());
-            maxUnitPart = Math.max(maxUnitPart, row.unitPart.length());
-            maxTypePart = Math.max(maxTypePart, row.typePart.length());
-            maxCodePart = Math.max(maxCodePart, row.codePart.length());
-            maxNamePart = Math.max(maxNamePart, row.namePart.length());
-        }
-
-        // Формируем отформатированные строки
         List<String> result = new ArrayList<>();
-        for (ReportRowData row : rows) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(indent);
-            sb.append(padRight(row.autoPopupPart, maxAutoPopupPart));
-            sb.append(padRight(row.unitPart, maxUnitPart));
-            sb.append(padRight(row.typePart, maxTypePart));
-            sb.append(padRight(row.codePart, maxCodePart));
-            sb.append(" ");
-            sb.append(padRight(row.namePart, maxNamePart));
-            sb.append(row.formPart);
-            result.add(sb.toString());
+
+        for (int i = 0; i < reports.size(); i++) {
+            DbReportInfo report = reports.get(i);
+            boolean isLast = (i == reports.size() - 1);
+
+            // Для корневых отчетов используем полный формат с AutoPopup
+            String line;
+            if (indent.isEmpty()) {
+                // Корневой уровень
+                line = autoPopupPrefix + report.getDisplayString();
+            } else {
+                // Вложенный уровень
+                line = report.getShortDisplayString();
+            }
+
+            result.add(line);
+
+            // Рекурсивно обрабатываем дочерние отчеты
+            if (report.hasChildren()) {
+                String childIndent = indent + (isLast ? "    " : "│   ");
+                List<String> childLines = formatReportsForDisplay(
+                        report.getChildren(), autoPopupName, childIndent, isLast);
+                for (String childLine : childLines) {
+                    result.add(childIndent + "├── " + childLine);
+                }
+            }
         }
 
         return result;
@@ -235,5 +261,113 @@ public class ReportsFromDbService {
             sb.append(' ');
         }
         return sb.toString();
+    }
+    /**
+     * Загрузить составные части отчета (для REP_TYPE = 6)
+     * @param parentReportId ID родительского отчета
+     * @return список вложенных отчетов
+     */
+    /**
+     * Загрузить составные части отчета (для REP_TYPE = 6) с рекурсивным обходом
+     * @param parentReportId ID родительского отчета
+     * @return список вложенных отчетов
+     */
+    public List<DbReportInfo> getCompositeReports(int parentReportId) {
+        List<DbReportInfo> result = new ArrayList<>();
+
+        String sql =
+                "SELECT rep.ID, " +
+                        "       rep.REP_CODE, " +
+                        "       rep.REP_NAME, " +
+                        "       rep.REP_TYPE, " +
+                        "       rep.REP_FILENAME, " +
+                        "       rep.LPU, " +
+                        "       drl.PRIV_NAME " +
+                        "FROM D_REPORTS_STRUCTURE t " +
+                        "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
+                        "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
+                        "WHERE t.PID = ? " +
+                        "ORDER BY t.SORT";
+
+        Properties props = new Properties();
+        props.setProperty("user", settings.getOracleUser());
+        props.setProperty("password", settings.getOraclePassword());
+        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+        props.setProperty("oracle.jdbc.defaultNChar", "true");
+
+        try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, parentReportId);
+            pstmt.setQueryTimeout(30);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                DbReportInfo report = new DbReportInfo();
+                report.setRepID(rs.getInt("ID"));
+                report.setRepCode(rs.getString("REP_CODE"));
+                report.setRepName(rs.getString("REP_NAME"));
+                report.setRepType(rs.getInt("REP_TYPE"));
+                report.setRepFilename(rs.getString("REP_FILENAME"));
+                report.setPrivName(rs.getString("PRIV_NAME"));
+                report.setUnitCode(rs.getString("LPU") != null ? String.valueOf(rs.getInt("LPU")) : null);
+
+                // Рекурсивно загружаем дочерние отчеты, если текущий тоже составной
+                if (report.isComposite()) {
+                    List<DbReportInfo> children = getCompositeReports(report.getRepID());
+                    for (DbReportInfo child : children) {
+                        report.addChild(child);
+                    }
+                }
+
+                result.add(report);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения составных отчетов для ID=" + parentReportId + ": " + e.getMessage());
+        }
+
+        return result;
+    }
+    /**
+     * Рекурсивное форматирование дерева отчетов
+     */
+    public static List<String> formatReportTree(List<DbReportInfo> reports,
+                                                String autoPopupName,
+                                                String indent,
+                                                boolean isLastList) {
+        List<String> result = new ArrayList<>();
+
+        String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
+
+        for (int i = 0; i < reports.size(); i++) {
+            DbReportInfo report = reports.get(i);
+            boolean isLast = (i == reports.size() - 1);
+
+            // Формируем строку отчета
+            String line;
+            if (indent.isEmpty()) {
+                // Корневой уровень
+                line = autoPopupPrefix + report.getDisplayString();
+            } else {
+                // Вложенный уровень
+                line = report.getShortDisplayString();
+            }
+
+            result.add(line);
+
+            // Рекурсивно обрабатываем дочерние отчеты
+            if (report.hasChildren()) {
+                String childIndent = indent + (isLast ? "    " : "│   ");
+                List<String> childLines = formatReportTree(
+                        report.getChildren(), autoPopupName, childIndent, isLast);
+                for (String childLine : childLines) {
+                    result.add(childIndent + "├── " + childLine);
+                }
+            }
+        }
+
+        return result;
     }
 }
