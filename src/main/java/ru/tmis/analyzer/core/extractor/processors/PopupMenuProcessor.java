@@ -92,7 +92,9 @@ public class PopupMenuProcessor implements IXmlProcessor {
             autoPopups.add(info);
         }
 
-        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu
+        // core/extractor/processors/PopupMenuProcessor.java - исправленный фрагмент
+
+// 5. Объединяем AutoPopupMenu с целевыми PopupMenu
         ReportsFromDbService dbService = new ReportsFromDbService(settings);
 
         for (AutoPopupInfo autoPopup : autoPopups) {
@@ -110,15 +112,21 @@ public class PopupMenuProcessor implements IXmlProcessor {
                     List<ReportsFromDbService.DbReportInfo> dbReports =
                             dbService.getReportsByUnit(autoPopup.unit);
 
-                    for (ReportsFromDbService.DbReportInfo dbReport : dbReports) {
-                        PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
-                        dbItem.setFromAutoPopup(true);
-                        dbItem.setAutoPopupName(autoPopup.autoPopupName);
-                        dbItem.setCaption(dbReport.getDisplayString());
-                        dbItem.setName(dbReport.getRepCode());
-                        dbItem.setDbReport(true);
-                        dbItem.setDbReportInfo(dbReport);
-                        targetMenu.addItem(dbItem);
+                    if (!dbReports.isEmpty()) {
+                        // Форматируем отчеты - передаем пустую строку для indent,
+                        // так как indent будет добавлен в ReportGenerator
+                        List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
+                                dbReports, autoPopup.autoPopupName, ""
+                        );
+
+                        for (String formattedReport : formattedReports) {
+                            PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
+                            dbItem.setFromAutoPopup(true);
+                            dbItem.setAutoPopupName(autoPopup.autoPopupName);
+                            dbItem.setCaption(formattedReport);
+                            dbItem.setDbReport(true);
+                            targetMenu.addItem(dbItem);
+                        }
                     }
                 }
             }

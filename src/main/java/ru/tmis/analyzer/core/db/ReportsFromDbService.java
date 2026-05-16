@@ -144,4 +144,89 @@ public class ReportsFromDbService {
             return sb.toString();
         }
     }
+    /**
+     * Форматированный вывод списка отчетов с выравниванием по колонкам
+     * @param reports список отчетов
+     * @param autoPopupName имя AutoPopup
+     * @param indent отступ перед каждой строкой (без учета символов дерева)
+     * @return список отформатированных строк
+     */
+    public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
+                                                       String autoPopupName,
+                                                       String indent) {
+        if (reports == null || reports.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
+
+        // Собираем данные для анализа
+        List<ReportRowData> rows = new ArrayList<>();
+        for (DbReportInfo report : reports) {
+            ReportRowData row = new ReportRowData();
+            row.autoPopupPart = autoPopupPrefix;
+            row.unitPart = "(UNIT='" + report.getUnitCode() + "') ";
+            row.namePart = "\"" + report.getRepName() + "\"";
+            row.codePart = " - REP_CODE=\"" + report.getRepCode() + "\"";
+            row.typePart = " - REP_TYPE=\"" + report.getRepTypeName() + "\"";
+            row.formPart = (report.getFormPath() != null) ? " Form=\"" + report.getFormPath() + "\"" : "";
+            rows.add(row);
+        }
+
+        // Вычисляем максимальную длину каждой колонки
+        int maxAutoPopupPart = 0;
+        int maxUnitPart = 0;
+        int maxNamePart = 0;
+        int maxCodePart = 0;
+        int maxTypePart = 0;
+
+        for (ReportRowData row : rows) {
+            maxAutoPopupPart = Math.max(maxAutoPopupPart, row.autoPopupPart.length());
+            maxUnitPart = Math.max(maxUnitPart, row.unitPart.length());
+            maxNamePart = Math.max(maxNamePart, row.namePart.length());
+            maxCodePart = Math.max(maxCodePart, row.codePart.length());
+            maxTypePart = Math.max(maxTypePart, row.typePart.length());
+        }
+
+        // Формируем отформатированные строки
+        List<String> result = new ArrayList<>();
+        for (ReportRowData row : rows) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(indent);
+            sb.append(padRight(row.autoPopupPart, maxAutoPopupPart));
+            sb.append(padRight(row.unitPart, maxUnitPart));
+            sb.append(padRight(row.namePart, maxNamePart));
+            sb.append(padRight(row.codePart, maxCodePart));
+            sb.append(padRight(row.typePart, maxTypePart));
+            sb.append(row.formPart);
+            result.add(sb.toString());
+        }
+
+        return result;
+    }
+    
+    /**
+     * Вспомогательный класс для хранения данных строки
+     */
+    private static class ReportRowData {
+        String autoPopupPart;
+        String unitPart;
+        String namePart;
+        String codePart;
+        String typePart;
+        String formPart;
+    }
+
+    /**
+     * Дополнить строку пробелами справа до нужной длины
+     */
+    private static String padRight(String s, int length) {
+        if (s == null) s = "";
+        if (s.length() >= length) return s;
+        StringBuilder sb = new StringBuilder(s);
+        for (int i = s.length(); i < length; i++) {
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
 }

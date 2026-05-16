@@ -372,20 +372,30 @@ public class ReportGenerator {
             PopupMenuInfo.MenuItem item = items.get(i);
             boolean isLast = (i == items.size() - 1);
 
-            // Выбор символов для ветки
             String branch = isLast ? "└── " : "├── ";
             String childIndent = indent + (isLast ? "    " : "│   ");
 
-            // Формирование строки с учетом AutoPopup
-            String displayText = item.getPrefix() + item.getDisplayCaption();
+            String displayText;
+            if (item.isDbReport()) {
+                // Для отчетов из БД используем уже отформатированный caption
+                // Убираем лишние пробелы в начале, если они есть
+                String caption = item.getCaption();
+                if (caption != null) {
+                    caption = caption.trim();
+                }
+                displayText = caption;
+            } else {
+                displayText = item.getPrefix() + item.getDisplayCaption();
+            }
+
             writer.println(indent + branch + displayText);
 
-            // Рекурсивный вывод дочерних элементов
             if (item.hasChildren()) {
                 writeMenuTree(writer, item.getChildren(), childIndent);
             }
         }
     }
+
 
 
     /**
