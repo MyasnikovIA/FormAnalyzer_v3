@@ -156,7 +156,6 @@ public class ReportsFromDbService {
      * @param indent отступ перед каждой строкой (без учета символов дерева)
      * @return список отформатированных строк
      */
-    // core/db/ReportsFromDbService.java
 
     public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
                                                        String autoPopupName,
@@ -174,8 +173,8 @@ public class ReportsFromDbService {
             row.autoPopupPart = autoPopupPrefix;
             row.unitPart = "(UNIT='" + report.getUnitCode() + "') ";
             row.typePart = "- REP_TYPE=\"" + report.getRepTypeName() + "\"";
+            row.codePart = " - REP_CODE=\"" + report.getRepCode() + "\"";
             row.namePart = "\"" + report.getRepName() + "\"";
-            row.codePart = "- REP_CODE=\"" + report.getRepCode() + "\"";
             row.formPart = (report.getFormPath() != null) ? " Form=\"" + report.getFormPath() + "\"" : "";
             rows.add(row);
         }
@@ -184,15 +183,15 @@ public class ReportsFromDbService {
         int maxAutoPopupPart = 0;
         int maxUnitPart = 0;
         int maxTypePart = 0;
-        int maxNamePart = 0;
         int maxCodePart = 0;
+        int maxNamePart = 0;
 
         for (ReportRowData row : rows) {
             maxAutoPopupPart = Math.max(maxAutoPopupPart, row.autoPopupPart.length());
             maxUnitPart = Math.max(maxUnitPart, row.unitPart.length());
             maxTypePart = Math.max(maxTypePart, row.typePart.length());
-            maxNamePart = Math.max(maxNamePart, row.namePart.length());
             maxCodePart = Math.max(maxCodePart, row.codePart.length());
+            maxNamePart = Math.max(maxNamePart, row.namePart.length());
         }
 
         // Формируем отформатированные строки
@@ -203,10 +202,9 @@ public class ReportsFromDbService {
             sb.append(padRight(row.autoPopupPart, maxAutoPopupPart));
             sb.append(padRight(row.unitPart, maxUnitPart));
             sb.append(padRight(row.typePart, maxTypePart));
+            sb.append(padRight(row.codePart, maxCodePart));
             sb.append(" ");
             sb.append(padRight(row.namePart, maxNamePart));
-            sb.append(" ");
-            sb.append(padRight(row.codePart, maxCodePart));
             sb.append(row.formPart);
             result.add(sb.toString());
         }
@@ -221,8 +219,8 @@ public class ReportsFromDbService {
         String autoPopupPart;
         String unitPart;
         String typePart;
-        String namePart;
         String codePart;
+        String namePart;
         String formPart;
     }
 
