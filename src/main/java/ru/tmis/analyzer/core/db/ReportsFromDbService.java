@@ -45,7 +45,7 @@ public class ReportsFromDbService {
         }
 
         String sql =
-                "SELECT t.PRIV_NAME, r.REP_TYPE, r.REP_DATA, r.REP_FILENAME, r.REP_NAME, r.REP_CODE " +
+                "SELECT t.ID, t.PRIV_NAME, r.REP_TYPE, r.REP_DATA, r.REP_FILENAME, r.REP_NAME, r.REP_CODE " +
                         "FROM D_REPORTS_LINKS t " +
                         "JOIN D_REPORTS r ON t.PID = r.ID " +
                         "WHERE t.UNITCODE = ?";
@@ -73,6 +73,7 @@ public class ReportsFromDbService {
                 report.setRepFilename(rs.getString("REP_FILENAME"));
                 report.setRepName(rs.getString("REP_NAME"));
                 report.setRepCode(rs.getString("REP_CODE"));
+                report.setRepID(rs.getInt("ID"));
                 result.add(report);
             }
 
@@ -94,6 +95,7 @@ public class ReportsFromDbService {
         private String repFilename;
         private String repName;
         private String repCode;
+        private int repID;
         // Getters and Setters
         public String getPrivName() { return privName; }
         public void setPrivName(String privName) { this.privName = privName; }
@@ -115,6 +117,9 @@ public class ReportsFromDbService {
 
         public String getRepCode() { return repCode; }
         public void setRepCode(String repCode) { this.repCode = repCode; }
+
+        public int getRepID() { return repID; }
+        public void setRepID(int repID) { this.repID = repID; }
 
         public String getRepTypeName() {
             return getRepTypeNameStatic(repType);
@@ -151,6 +156,8 @@ public class ReportsFromDbService {
      * @param indent отступ перед каждой строкой (без учета символов дерева)
      * @return список отформатированных строк
      */
+    // core/db/ReportsFromDbService.java
+
     public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
                                                        String autoPopupName,
                                                        String indent) {
@@ -166,9 +173,9 @@ public class ReportsFromDbService {
             ReportRowData row = new ReportRowData();
             row.autoPopupPart = autoPopupPrefix;
             row.unitPart = "(UNIT='" + report.getUnitCode() + "') ";
+            row.typePart = "- REP_TYPE=\"" + report.getRepTypeName() + "\"";
             row.namePart = "\"" + report.getRepName() + "\"";
-            row.codePart = " - REP_CODE=\"" + report.getRepCode() + "\"";
-            row.typePart = " - REP_TYPE=\"" + report.getRepTypeName() + "\"";
+            row.codePart = "- REP_CODE=\"" + report.getRepCode() + "\"";
             row.formPart = (report.getFormPath() != null) ? " Form=\"" + report.getFormPath() + "\"" : "";
             rows.add(row);
         }
@@ -176,16 +183,16 @@ public class ReportsFromDbService {
         // Вычисляем максимальную длину каждой колонки
         int maxAutoPopupPart = 0;
         int maxUnitPart = 0;
+        int maxTypePart = 0;
         int maxNamePart = 0;
         int maxCodePart = 0;
-        int maxTypePart = 0;
 
         for (ReportRowData row : rows) {
             maxAutoPopupPart = Math.max(maxAutoPopupPart, row.autoPopupPart.length());
             maxUnitPart = Math.max(maxUnitPart, row.unitPart.length());
+            maxTypePart = Math.max(maxTypePart, row.typePart.length());
             maxNamePart = Math.max(maxNamePart, row.namePart.length());
             maxCodePart = Math.max(maxCodePart, row.codePart.length());
-            maxTypePart = Math.max(maxTypePart, row.typePart.length());
         }
 
         // Формируем отформатированные строки
@@ -195,25 +202,27 @@ public class ReportsFromDbService {
             sb.append(indent);
             sb.append(padRight(row.autoPopupPart, maxAutoPopupPart));
             sb.append(padRight(row.unitPart, maxUnitPart));
-            sb.append(padRight(row.namePart, maxNamePart));
-            sb.append(padRight(row.codePart, maxCodePart));
             sb.append(padRight(row.typePart, maxTypePart));
+            sb.append(" ");
+            sb.append(padRight(row.namePart, maxNamePart));
+            sb.append(" ");
+            sb.append(padRight(row.codePart, maxCodePart));
             sb.append(row.formPart);
             result.add(sb.toString());
         }
 
         return result;
     }
-    
+
     /**
      * Вспомогательный класс для хранения данных строки
      */
     private static class ReportRowData {
         String autoPopupPart;
         String unitPart;
+        String typePart;
         String namePart;
         String codePart;
-        String typePart;
         String formPart;
     }
 
