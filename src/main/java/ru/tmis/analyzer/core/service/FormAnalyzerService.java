@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
+import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import ru.tmis.analyzer.utils.CommentRemover;
@@ -25,6 +26,7 @@ public class FormAnalyzerService {
 
     private BooleanSupplier stopCondition = () -> false;
     private ProgressCallback progressCallback;
+    private ILogger logger;  // <-- Добавить логгер
 
     public interface ProgressCallback {
         void onProgress(int processed, int total, String currentForm);
@@ -36,6 +38,23 @@ public class FormAnalyzerService {
         this.userFormsResolver = new UserFormsResolver(scannerService);
         this.extractorManager = new ExtractorManager();
     }
+    public void setLogger(ILogger logger) {
+        this.logger = logger;
+    }
+
+    private void log(String message) {
+        if (logger != null) {
+            logger.log(message);
+        }
+        System.out.println(message);
+    }
+    private void error(String message) {
+        if (logger != null) {
+            logger.error(message);
+        }
+        System.err.println(message);
+    }
+
 
     public void setStopCondition(BooleanSupplier condition) {
         this.stopCondition = condition;
@@ -123,6 +142,12 @@ public class FormAnalyzerService {
         if (!viewNames.isEmpty()) {
             Map<String, ViewTableDependencies> viewDeps = loadViewDependencies(viewNames);
             formInfo.setViewDependencies(viewDeps);
+            log("  Сохранено зависимостей вьюх: " + viewDeps.size() + " шт.");
+
+            // Отладочный вывод: какие таблицы найдены
+            for (Map.Entry<String, ViewTableDependencies> entry : viewDeps.entrySet()) {
+                log("    Вьюха " + entry.getKey() + " содержит " + entry.getValue().getOracleTables().size() + " таблиц");
+            }
         }
 
         return formInfo;
@@ -187,20 +212,22 @@ public class FormAnalyzerService {
         Map<String, ViewTableDependencies> result = new LinkedHashMap<>();
         ViewDependencyAnalyzer analyzer = new ViewDependencyAnalyzer(settings);
 
-        System.out.println("  Загрузка зависимостей для " + viewNames.size() + " вьюх...");
+        log("  Загрузка зависимостей для " + viewNames.size() + " вьюх...");
 
+        int count = 0;
         for (String viewName : viewNames) {
             if (stopCondition.getAsBoolean()) {
                 break;
             }
-            System.out.print("    Анализ вьюхи: " + viewName + " ... ");
+            count++;
+            log("    [" + count + "/" + viewNames.size() + "] Анализ вьюхи: " + viewName + " ... ");
 
             try {
                 ViewTableDependencies deps = analyzer.analyzeView(viewName);
                 result.put(viewName, deps);
-                System.out.println("OK (таблиц: " + deps.getOracleTables().size() + ")");
+                log("      OK (таблиц: " + deps.getOracleTables().size() + ")");
             } catch (Exception e) {
-                System.err.println("ОШИБКА: " + e.getMessage());
+                error("      ОШИБКА: " + e.getMessage());
                 ViewTableDependencies errorDeps = new ViewTableDependencies(viewName);
                 errorDeps.setExistsInOracle(false);
                 errorDeps.setOracleError(e.getMessage());
@@ -208,6 +235,7 @@ public class FormAnalyzerService {
             }
         }
 
+        log("  Загружено зависимостей: " + result.size() + " вьюх");
         return result;
     }
 }

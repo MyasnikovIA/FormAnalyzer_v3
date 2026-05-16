@@ -1,7 +1,8 @@
-// core/extractor/processors/ReportProcessor.java - обновленная версия
+// core/extractor/processors/ReportProcessor.java
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -14,40 +15,22 @@ import java.util.regex.Pattern;
 
 /**
  * Извлечение отчетов из форм
+ * Отчеты извлекаются ТОЛЬКО из:
+ * 1. SQL запросов (внутри DataSet/Action компонентов)
+ * 2. JS вызовов внутри Action компонентов
  */
 public class ReportProcessor implements IXmlProcessor {
 
-    // Паттерн для printReportByCode
     private static final Pattern PRINT_REPORT_PATTERN = Pattern.compile(
             "printReportByCode\\s*\\(\\s*['\"]([^'\"]+)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    // Паттерн для printReport
-    private static final Pattern PRINT_REPORT_SIMPLE_PATTERN = Pattern.compile(
-            "printReport\\s*\\(\\s*['\"]([^'\"]+)['\"]",
-            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
-    );
-
-    // Паттерн для путей Reports/
     private static final Pattern REPORTS_PATH_PATTERN = Pattern.compile(
             "['\"]Reports/([^'\"]+\\.frm)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    // Паттерн для showReport
-    private static final Pattern SHOW_REPORT_PATTERN = Pattern.compile(
-            "showReport\\s*\\(\\s*['\"]([^'\"]+)['\"]",
-            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
-    );
-
-    // Паттерн для вызова отчета через action
-    private static final Pattern ACTION_REPORT_PATTERN = Pattern.compile(
-            "action\\s*=\\s*['\"]printReportByCode['\"][^>]*?\\s*params\\s*=\\s*['\"][^'\"]*?code['\"]?\\s*:\\s*['\"]([^'\"]+)['\"]",
-            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
-    );
-
-    // CDATA паттерн
     private static final Pattern CDATA_PATTERN = Pattern.compile(
             "<!\\[CDATA\\[(.*?)\\]\\]>",
             Pattern.DOTALL
@@ -65,56 +48,81 @@ public class ReportProcessor implements IXmlProcessor {
 
     @Override
     public void process(Document doc, FormInfo formInfo) {
-        String html = doc.html();
         Set<String> reports = new LinkedHashSet<>();
 
-        // 1. Поиск printReportByCode в CDATA
-        Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
-        while (cdataMatcher.find()) {
-            String jsContent = cdataMatcher.group(1);
-            reports.addAll(extractFromJs(jsContent));
-        }
-
-        // 2. Поиск в основном HTML
-        reports.addAll(extractFromJs(html));
-
-        // 3. Поиск в атрибутах компонентов
-        Elements components = doc.select("[onclick], [onchange], [onload]");
-        for (var element : components) {
-            String onclick = element.attr("onclick");
-            if (onclick != null && !onclick.isEmpty()) {
-                reports.addAll(extractFromJs(onclick));
-            }
-        }
-
-        // 4. ПОИСК ОТЧЕТОВ В SQL ЗАПРОСАХ
+        // 1. Ищем отчеты ТОЛЬКО в SQL запросах
         for (SqlInfo sql : formInfo.getSqlQueries()) {
             String sqlContent = sql.getSqlContent();
             if (sqlContent != null) {
-                reports.addAll(extractFromJs(sqlContent));
+                reports.addAll(extractFromText(sqlContent));
             }
         }
 
-        // 5. Добавляем найденные отчеты
-        for (String report : reports) {
-            formInfo.addReport(report);
-            System.out.println("  [ReportProcessor] Найден отчет: " + report);
+        // 2. Ищем отчеты в Action компонентах (которые не являются SQL)
+        Elements actions = doc.select("component[cmptype=Action], cmpAction");
+        for (Element action : actions) {
+            // Пропускаем Action, которые содержат SQL (уже обработаны выше)
+            if (hasSqlContent(action)) {
+                continue;
+            }
+
+            String actionHtml = action.html();
+            if (actionHtml != null) {
+                reports.addAll(extractFromText(actionHtml));
+            }
         }
 
-        if (!reports.isEmpty()) {
-            System.out.println("  [ReportProcessor] Всего отчетов: " + reports.size());
+        // 3. Добавляем найденные отчеты
+        for (String report : reports) {
+            formInfo.addReport(report);
         }
     }
 
-    private Set<String> extractFromJs(String jsContent) {
+    /**
+     * Проверка, содержит ли компонент SQL запрос
+     */
+    private boolean hasSqlContent(Element element) {
+        String html = element.html();
+        if (html == null) return false;
+
+        // Проверяем наличие CDATA с SQL
+        Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
+        while (cdataMatcher.find()) {
+            String content = cdataMatcher.group(1);
+            if (isSqlContent(content)) {
+                return true;
+            }
+        }
+
+        // Проверяем прямой текст (без CDATA)
+        String text = element.ownText();
+        return isSqlContent(text);
+    }
+
+    /**
+     * Проверка, является ли содержимое SQL запросом
+     */
+    private boolean isSqlContent(String content) {
+        if (content == null) return false;
+        String lower = content.toLowerCase().trim();
+        return lower.startsWith("select") || lower.startsWith("insert") ||
+                lower.startsWith("update") || lower.startsWith("delete") ||
+                lower.startsWith("begin") || lower.startsWith("declare") ||
+                lower.contains("into") || lower.contains("from");
+    }
+
+    /**
+     * Извлечение отчетов из текста
+     */
+    private Set<String> extractFromText(String text) {
         Set<String> result = new LinkedHashSet<>();
 
-        if (jsContent == null || jsContent.isEmpty()) {
+        if (text == null || text.isEmpty()) {
             return result;
         }
 
         // printReportByCode('REPORT_CODE')
-        Matcher printMatcher = PRINT_REPORT_PATTERN.matcher(jsContent);
+        Matcher printMatcher = PRINT_REPORT_PATTERN.matcher(text);
         while (printMatcher.find()) {
             String reportCode = cleanValue(printMatcher.group(1));
             if (isValidReportCode(reportCode)) {
@@ -122,39 +130,12 @@ public class ReportProcessor implements IXmlProcessor {
             }
         }
 
-        // printReport('REPORT_CODE')
-        Matcher simpleMatcher = PRINT_REPORT_SIMPLE_PATTERN.matcher(jsContent);
-        while (simpleMatcher.find()) {
-            String reportCode = cleanValue(simpleMatcher.group(1));
-            if (isValidReportCode(reportCode)) {
-                result.add(reportCode);
-            }
-        }
-
-        // showReport('REPORT_CODE')
-        Matcher showMatcher = SHOW_REPORT_PATTERN.matcher(jsContent);
-        while (showMatcher.find()) {
-            String reportCode = cleanValue(showMatcher.group(1));
-            if (isValidReportCode(reportCode)) {
-                result.add(reportCode);
-            }
-        }
-
         // Reports/some_report.frm
-        Matcher pathMatcher = REPORTS_PATH_PATTERN.matcher(jsContent);
+        Matcher pathMatcher = REPORTS_PATH_PATTERN.matcher(text);
         while (pathMatcher.find()) {
             String reportPath = pathMatcher.group(1);
             if (reportPath != null && !reportPath.isEmpty()) {
                 result.add("/Reports/" + reportPath);
-            }
-        }
-
-        // В XML атрибутах
-        Matcher actionMatcher = ACTION_REPORT_PATTERN.matcher(jsContent);
-        while (actionMatcher.find()) {
-            String reportCode = cleanValue(actionMatcher.group(1));
-            if (isValidReportCode(reportCode)) {
-                result.add(reportCode);
             }
         }
 
@@ -177,8 +158,6 @@ public class ReportProcessor implements IXmlProcessor {
                 code.contains("function") || code.contains("return")) {
             return false;
         }
-        // Пропускаем слишком длинные (вероятно не код отчета)
-        if (code.length() > 100) return false;
         return true;
     }
 }

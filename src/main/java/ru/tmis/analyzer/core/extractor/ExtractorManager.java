@@ -59,6 +59,9 @@ public class ExtractorManager {
         // 12. AutoPopupMenu (priority 80)
         processors.add(new AutoPopupMenuProcessor());
 
+        // 12.5. PopupMenu (priority 85)
+        processors.add(new PopupMenuProcessor());
+
         // 13. UnknownObjects (priority 200)
         processors.add(new UnknownObjectProcessor());
 

@@ -29,8 +29,8 @@ public class FormInfo {
     private Set<String> openFormCompositions;
     private Set<String> d3ApiShowFormCompositions;
     private Set<String> openD3FormCompositions;
-
     private Map<String, ViewTableDependencies> viewDependencies;
+    private List<PopupMenuInfo> popupMenus;
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -115,6 +115,13 @@ public class FormInfo {
     public int getTotalSqlQueries() { return sqlQueries.size(); }
     public Map<String, ViewTableDependencies> getViewDependencies() { return viewDependencies; }
     public void setViewDependencies(Map<String, ViewTableDependencies> deps) { this.viewDependencies = deps; }
+    public List<PopupMenuInfo> getPopupMenus() {
+        return popupMenus;
+    }
+
+    public void setPopupMenus(List<PopupMenuInfo> popupMenus) {
+        this.popupMenus = popupMenus;
+    }
 
     /**
      * Информация о переопределении формы

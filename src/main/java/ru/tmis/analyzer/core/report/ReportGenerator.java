@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
@@ -98,6 +99,9 @@ public class ReportGenerator {
         }
         writer.println();
 
+        // Контекстное меню (ПКМ)
+        writePopupMenusBlock(writer, form);
+
         // SQL запросы
         if (config.isIncludeSqlContent()) {
             writeSqlQueries(writer, form);
@@ -116,8 +120,12 @@ public class ReportGenerator {
             writer.println();
         }
         // Таблицы, используемые через вьюхи
+        System.out.println("[DEBUG] Checking viewDependencies: " + (form.getViewDependencies() != null ? form.getViewDependencies().size() : "null"));
         if (form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
+            System.out.println("[DEBUG] Calling writeViewTablesBlock");
             writeViewTablesBlock(writer, form, form.getViewDependencies());
+        } else {
+            System.out.println("[DEBUG] viewDependencies is null or empty, skipping");
         }
 
         // Используемые пакеты и функции
@@ -277,9 +285,12 @@ public class ReportGenerator {
      * @param formInfo информация о форме
      * @param viewDependencies карта зависимостей вьюх
      */
+    // core/report/ReportGenerator.java
+
     private void writeViewTablesBlock(PrintWriter writer, FormInfo formInfo,
                                       Map<String, ViewTableDependencies> viewDependencies) {
         if (viewDependencies == null || viewDependencies.isEmpty()) {
+            System.out.println("[DEBUG] writeViewTablesBlock: viewDependencies is null or empty");
             return;
         }
 
@@ -292,6 +303,7 @@ public class ReportGenerator {
         }
 
         if (viewsUsed.isEmpty()) {
+            System.out.println("[DEBUG] writeViewTablesBlock: no views found in form");
             return;
         }
 
@@ -305,6 +317,7 @@ public class ReportGenerator {
         }
 
         if (allTables.isEmpty()) {
+            System.out.println("[DEBUG] writeViewTablesBlock: no tables extracted from views");
             return;
         }
 
@@ -313,8 +326,50 @@ public class ReportGenerator {
             writer.println("    " + table);
         }
         writer.println();
+
+        System.out.println("[DEBUG] writeViewTablesBlock: wrote " + allTables.size() + " tables");
     }
 
+
+    /**
+     * Вывод контекстного меню (PopupMenu)
+     */
+    private void writePopupMenusBlock(PrintWriter writer, FormInfo form) {
+        List<PopupMenuInfo> menus = form.getPopupMenus();
+        if (menus == null || menus.isEmpty()) {
+            return;
+        }
+
+        writer.println("Контекстное меню используемое на форме (ПКМ):");
+        writer.println();
+
+        for (PopupMenuInfo menu : menus) {
+            writer.println("        name=\"" + menu.getName() + "\"");
+            writeMenuItems(writer, menu.getRootItems(), 2);
+            writer.println();
+        }
+
+        writer.println();
+    }
+
+
+    /**
+     * Рекурсивный вывод пунктов меню
+     * @param writer PrintWriter
+     * @param items список пунктов меню
+     * @param level уровень вложенности (количество отступов)
+     */
+    private void writeMenuItems(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, int level) {
+        String indent = "    ".repeat(level + 1); // +1 для учета корневого отступа
+
+        for (PopupMenuInfo.MenuItem item : items) {
+            writer.println(indent + item.getDisplayCaption());
+
+            if (item.hasChildren()) {
+                writeMenuItems(writer, item.getChildren(), level + 1);
+            }
+        }
+    }
     /**
      * Вывод списка вызываемых форм в JS
      */

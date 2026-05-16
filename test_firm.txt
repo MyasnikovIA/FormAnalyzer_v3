@@ -1,0 +1,2 @@
+cmpAutoPopupMenu - со вложением
+Forms/ControlCard/dispensary_observation_plan/dispensary_observation_plan.frm

@@ -75,11 +75,22 @@ public class ViewDependencyAnalyzer {
                 "UNION", "INTERSECT", "MINUS", "WITH", "RECURSIVE"
         );
 
+        // Системные объекты Oracle, которые не являются таблицами пользователя
+        Set<String> systemObjects = Set.of(
+                "DUAL",      // Системная таблица Oracle
+                "USER",      // Системная информация
+                "ALL_USERS", // Системная информация
+                "USER_TABLES" // Системная информация
+        );
+
         while (matcher.find()) {
             String table = matcher.group(1);
             if (table == null) table = matcher.group(2);
 
-            if (table != null && !sqlKeywords.contains(table) && !table.startsWith("D_V_")) {
+            if (table != null &&
+                    !sqlKeywords.contains(table) &&
+                    !table.startsWith("D_V_") &&
+                    !systemObjects.contains(table)) {  // <-- Добавить проверку системных объектов
                 deps.addOracleTable(table);
             }
         }

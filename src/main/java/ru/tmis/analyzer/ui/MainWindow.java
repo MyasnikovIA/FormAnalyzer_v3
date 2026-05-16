@@ -3,6 +3,7 @@ package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
 import ru.tmis.analyzer.core.report.ReportGenerator;
@@ -224,6 +225,26 @@ public class MainWindow extends JFrame {
         appendLog("");
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings);
+
+        // Устанавливаем логгер для вывода в UI
+        analyzer.setLogger(new ILogger() {
+            @Override
+            public void log(String message) {
+                appendLog(message);
+            }
+
+            @Override
+            public void error(String message) {
+                appendLog("ОШИБКА: " + message);
+            }
+
+            @Override
+            public void debug(String message) {
+                // Для отладки - можно закомментировать
+                appendLog("[DEBUG] " + message);
+            }
+        });
+
         analyzer.setStopCondition(() -> stopRequested);
         analyzer.setProgressCallback((processed, total, currentForm) -> {
             SwingUtilities.invokeLater(() -> {
