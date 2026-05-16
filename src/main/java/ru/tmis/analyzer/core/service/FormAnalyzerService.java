@@ -36,7 +36,7 @@ public class FormAnalyzerService {
         this.settings = settings;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
-        this.extractorManager = new ExtractorManager();
+        this.extractorManager = new ExtractorManager(settings);
     }
     public void setLogger(ILogger logger) {
         this.logger = logger;

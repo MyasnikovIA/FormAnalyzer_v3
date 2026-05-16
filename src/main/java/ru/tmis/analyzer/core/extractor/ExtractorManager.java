@@ -4,6 +4,7 @@ package ru.tmis.analyzer.core.extractor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
+import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -16,8 +17,10 @@ public class ExtractorManager {
 
     private final List<IXmlProcessor> processors = new ArrayList<>();
     private final SqlExtractor sqlExtractor;
+    private final SettingsModel settings;
 
-    public ExtractorManager() {
+    public ExtractorManager(SettingsModel settings) {
+        this.settings = settings;
         this.sqlExtractor = new SqlExtractor();
         registerDefaultProcessors();
     }
@@ -60,7 +63,7 @@ public class ExtractorManager {
         processors.add(new AutoPopupMenuProcessor());
 
         // 12.5. PopupMenu (priority 85)
-        processors.add(new PopupMenuProcessor());
+        processors.add(new PopupMenuProcessor(settings));
 
         // 13. UnknownObjects (priority 200)
         processors.add(new UnknownObjectProcessor());

@@ -4,9 +4,11 @@ package ru.tmis.analyzer.core.extractor.processors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.tmis.analyzer.core.db.ReportsFromDbService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
+import ru.tmis.analyzer.config.SettingsModel;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -15,8 +17,13 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
     private static final Pattern SEPARATOR_PATTERN = Pattern.compile("^[-]+$");
 
+    private final SettingsModel settings;
     private final Map<String, PopupMenuInfo> menuMap = new LinkedHashMap<>();
     private final List<AutoPopupInfo> autoPopups = new ArrayList<>();
+
+    public PopupMenuProcessor(SettingsModel settings) {
+        this.settings = settings;
+    }
 
     @Override
     public String getName() {
@@ -58,11 +65,13 @@ public class PopupMenuProcessor implements IXmlProcessor {
         for (Element autoPopup : d3AutoPopups) {
             String joinMenu = autoPopup.attr("join_menu");
             String name = autoPopup.attr("name");
+            String unit = autoPopup.attr("unit");
             if (joinMenu == null || joinMenu.isEmpty()) continue;
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
             info.autoPopupName = name;
+            info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);
         }
@@ -72,24 +81,45 @@ public class PopupMenuProcessor implements IXmlProcessor {
         for (Element autoPopup : m2AutoPopups) {
             String joinMenu = autoPopup.attr("join_menu");
             String name = autoPopup.attr("name");
+            String unit = autoPopup.attr("unit");
             if (joinMenu == null || joinMenu.isEmpty()) continue;
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
             info.autoPopupName = name;
+            info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);
         }
 
-        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu (добавляем В КОНЕЦ)
+        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu
+        ReportsFromDbService dbService = new ReportsFromDbService(settings);
+
         for (AutoPopupInfo autoPopup : autoPopups) {
             PopupMenuInfo targetMenu = menuMap.get(autoPopup.targetMenuName);
             if (targetMenu != null) {
+                // Добавляем пункты из XML
                 for (PopupMenuInfo.MenuItem item : autoPopup.items) {
                     item.setFromAutoPopup(true);
                     item.setAutoPopupName(autoPopup.autoPopupName);
-                    // Добавляем в конец списка
                     targetMenu.addItem(item);
+                }
+
+                // Если есть unit, добавляем отчеты из БД
+                if (autoPopup.unit != null && !autoPopup.unit.isEmpty()) {
+                    List<ReportsFromDbService.DbReportInfo> dbReports =
+                            dbService.getReportsByUnit(autoPopup.unit);
+
+                    for (ReportsFromDbService.DbReportInfo dbReport : dbReports) {
+                        PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
+                        dbItem.setFromAutoPopup(true);
+                        dbItem.setAutoPopupName(autoPopup.autoPopupName);
+                        dbItem.setCaption(dbReport.getDisplayString());
+                        dbItem.setName(dbReport.getRepCode());
+                        dbItem.setDbReport(true);
+                        dbItem.setDbReportInfo(dbReport);
+                        targetMenu.addItem(dbItem);
+                    }
                 }
             }
         }
@@ -151,6 +181,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
     private static class AutoPopupInfo {
         String targetMenuName;
         String autoPopupName;
+        String unit;
         List<PopupMenuInfo.MenuItem> items = new ArrayList<>();
     }
 }

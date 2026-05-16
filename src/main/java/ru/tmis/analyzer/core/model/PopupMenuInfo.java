@@ -1,6 +1,8 @@
 // core/model/PopupMenuInfo.java
 package ru.tmis.analyzer.core.model;
 
+import ru.tmis.analyzer.core.db.ReportsFromDbService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +39,14 @@ public class PopupMenuInfo {
         private String name;
         private boolean fromAutoPopup;
         private String autoPopupName;
+        private boolean dbReport;
+        private ReportsFromDbService.DbReportInfo dbReportInfo;
         private final List<MenuItem> children;
 
         public MenuItem() {
             this.children = new ArrayList<>();
             this.fromAutoPopup = false;
+            this.dbReport = false;
         }
 
         public String getCaption() {
@@ -76,6 +81,22 @@ public class PopupMenuInfo {
             this.autoPopupName = autoPopupName;
         }
 
+        public boolean isDbReport() {
+            return dbReport;
+        }
+
+        public void setDbReport(boolean dbReport) {
+            this.dbReport = dbReport;
+        }
+
+        public ReportsFromDbService.DbReportInfo getDbReportInfo() {
+            return dbReportInfo;
+        }
+
+        public void setDbReportInfo(ReportsFromDbService.DbReportInfo dbReportInfo) {
+            this.dbReportInfo = dbReportInfo;
+        }
+
         public List<MenuItem> getChildren() {
             return children;
         }
@@ -89,6 +110,9 @@ public class PopupMenuInfo {
         }
 
         public String getDisplayCaption() {
+            if (dbReport && dbReportInfo != null) {
+                return dbReportInfo.getDisplayString();
+            }
             if (caption != null && !caption.isEmpty()) {
                 return "\"" + caption + "\"";
             }
