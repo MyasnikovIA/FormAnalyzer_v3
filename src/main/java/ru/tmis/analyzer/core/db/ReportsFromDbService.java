@@ -203,7 +203,7 @@ public class ReportsFromDbService {
             return Collections.emptyList();
         }
 
-        // Сначала вычислим максимальную длину REP_TYPE и REP_CODE для текущего уровня
+        // Вычисляем максимальную длину REP_TYPE и REP_CODE для текущего уровня
         int maxTypeLen = 0;
         int maxCodeLen = 0;
         for (DbReportInfo report : reports) {
@@ -220,14 +220,14 @@ public class ReportsFromDbService {
             DbReportInfo report = reports.get(i);
             boolean isLast = (i == reports.size() - 1);
 
-            // Формируем строку с выравниванием
             String line;
             if (prefix.isEmpty()) {
-                // Корневой уровень: добавляем отступ 4 пробела, символ ветки, AutoPopupPrefix,
-                // а затем форматируем остальное
+                // Корневой уровень: используем └── для последнего, иначе ├──
+                String connector = isLast ? "└── " : "├── ";
                 String formatted = formatReportLine(report, maxTypeLen, maxCodeLen);
-                line = "    ├── " + autoPopupPrefix + formatted;
+                line = "    " + connector + autoPopupPrefix + formatted;
             } else {
+                // Вложенный уровень: prefix уже содержит отступ и вертикальные линии
                 String connector = isLast ? "└── " : "├── ";
                 String formatted = formatShortReportLine(report, maxTypeLen, maxCodeLen);
                 line = prefix + connector + formatted;
