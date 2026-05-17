@@ -358,7 +358,7 @@ public class ReportGenerator {
             writeMenuTree(writer, menu.getRootItems(), isLast ? "    " : "│   ");
 
             if (!isLast) {
-                writer.println();
+                writer.println("│   ");
             }
         }
         writer.println();
