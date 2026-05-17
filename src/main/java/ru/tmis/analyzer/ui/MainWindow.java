@@ -15,6 +15,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainWindow extends JFrame {
 
@@ -33,10 +34,16 @@ public class MainWindow extends JFrame {
     private Future<?> currentTask;
     private volatile boolean stopRequested = false;
 
+
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private ExecutorService executorService; // вместо executor
+
+
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
         this.executor = Executors.newSingleThreadExecutor();
+        this.executorService = Executors.newSingleThreadExecutor();
 
         initUI();
         loadFormsList();
@@ -173,38 +180,81 @@ public class MainWindow extends JFrame {
     }
 
     private void startAnalysis() {
-        if (currentTask != null && !currentTask.isDone()) {
+        if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
             return;
         }
 
         stopRequested = false;
-
-        saveFormsList();
-
+        isRunning.set(true);
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
         statusLabel.setText("Статус: Анализ запущен");
 
-        currentTask = executor.submit(() -> {
-            try {
-                runAnalysis();
-            } catch (Exception e) {
-                SwingUtilities.invokeLater(() -> {
-                    appendLog("ОШИБКА: " + e.getMessage());
+        // Сохраняем оригинальные потоки
+        PrintStream originalOut = System.out;
+        PrintStream originalErr = System.err;
+
+        try {
+            PipedInputStream pipeIn = new PipedInputStream();
+            PipedOutputStream pipeOut = new PipedOutputStream(pipeIn);
+            PrintStream customOut = new PrintStream(pipeOut, true);
+            System.setOut(customOut);
+            System.setErr(customOut);
+
+            // Поток для чтения вывода и записи в лог
+            Thread logReader = new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(pipeIn))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        final String finalLine = line;
+                        SwingUtilities.invokeLater(() -> appendLog(finalLine));
+                    }
+                } catch (IOException e) {
+                    if (!Thread.currentThread().isInterrupted()) {
+                        SwingUtilities.invokeLater(() -> appendLog("Ошибка чтения лога: " + e.getMessage()));
+                    }
+                }
+            });
+            logReader.start();
+
+            // Запуск анализа
+            currentTask = executorService.submit(() -> {
+                try {
+                    runAnalysis();
+                } catch (Exception e) {
+                    SwingUtilities.invokeLater(() -> appendLog("ОШИБКА: " + e.getMessage()));
                     e.printStackTrace();
-                });
-            } finally {
-                SwingUtilities.invokeLater(() -> {
-                    startButton.setEnabled(true);
-                    stopButton.setEnabled(false);
-                    settingsButton.setEnabled(true);
-                    statusLabel.setText("Статус: Готов");
-                });
-            }
-        });
+                } finally {
+                    // Восстанавливаем потоки
+                    System.setOut(originalOut);
+                    System.setErr(originalErr);
+                    logReader.interrupt();
+                    isRunning.set(false);
+                    SwingUtilities.invokeLater(() -> {
+                        startButton.setEnabled(true);
+                        stopButton.setEnabled(false);
+                        settingsButton.setEnabled(true);
+                        statusLabel.setText("Статус: Готов");
+                        if (!stopRequested) {
+                            progressBar.setString("Анализ завершен");
+                        } else {
+                            progressBar.setString("Анализ остановлен");
+                        }
+                    });
+                }
+            });
+        } catch (IOException e) {
+            appendLog("Не удалось перенаправить вывод: " + e.getMessage());
+            System.setOut(originalOut);
+            System.setErr(originalErr);
+            isRunning.set(false);
+            startButton.setEnabled(true);
+            stopButton.setEnabled(false);
+            settingsButton.setEnabled(true);
+        }
     }
 
     private void stopAnalysis() {
