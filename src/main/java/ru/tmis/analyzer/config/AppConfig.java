@@ -26,6 +26,7 @@ public class AppConfig {
     private int windowExtendedState = 0;
     private int splitDividerLocation = 400;
 
+
     // Настройки отчета
     private boolean includeSqlContent = false;
     private boolean includeJsForms = true;
@@ -33,6 +34,7 @@ public class AppConfig {
     private boolean includeViewTables = true;
     private boolean includeJsUnitCompositions = true;
     private boolean includeViewDetails = false;
+    private boolean includePopupMenus = true;  // По умолчанию true
 
     // Проверка БД
     private boolean checkDbObjects = false;
@@ -285,6 +287,15 @@ public class AppConfig {
     public void setIncludeBrokerFunctions(boolean includeBrokerFunctions) {
         this.includeBrokerFunctions = includeBrokerFunctions;
     }
+    // Добавить геттер и сеттер
+    public boolean isIncludePopupMenus() {
+        return includePopupMenus;
+    }
+
+    public void setIncludePopupMenus(boolean includePopupMenus) {
+        this.includePopupMenus = includePopupMenus;
+    }
+
 
     private boolean includeOracleFunctions = true;
     private boolean includePostgresFunctions = true;

@@ -100,7 +100,9 @@ public class ReportGenerator {
         writer.println();
 
         // Контекстное меню (ПКМ)
-        writePopupMenusBlock(writer, form);
+        if (config.isIncludePopupMenus()) {
+            writePopupMenusBlock(writer, form);
+        }
 
         // SQL запросы
         if (config.isIncludeSqlContent()) {

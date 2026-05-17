@@ -22,7 +22,26 @@ import java.util.regex.Pattern;
  */
 public class SqlExtractor {
 
-    // ==================== ПАТТЕРНЫ ДЛЯ ПОИСКА ====================
+
+    // Паттерн для поиска CTE (WITH ... AS)
+    private static final Pattern CTE_PATTERN = Pattern.compile(
+            "\\bWITH\\s+([A-Za-z0-9_]+)\\s+AS\\s*\\(",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    // Паттерн для поиска псевдонимов таблиц (после FROM/JOIN)
+    private static final Pattern TABLE_ALIAS_PATTERN = Pattern.compile(
+            "\\b(?:FROM|JOIN)\\s+[A-Za-z0-9_.]+\\s+([A-Za-z0-9_]+)\\b",
+            Pattern.CASE_INSENSITIVE
+    );
+
+
+    // Паттерн для поиска псевдонимов колонок в SELECT
+    private static final Pattern COLUMN_ALIAS_PATTERN = Pattern.compile(
+            "\\bAS\\s+([A-Za-z0-9_]+)\\b|\\b([A-Za-z0-9_]+)\\s+(?=FROM|WHERE|GROUP|ORDER|HAVING|UNION|INTERSECT|MINUS|$)",
+            Pattern.CASE_INSENSITIVE
+    );
+
 
     private static final Pattern CDATA_PATTERN = Pattern.compile("<!\\[CDATA\\[(.*?)\\]\\]>", Pattern.DOTALL);
 
@@ -80,22 +99,23 @@ public class SqlExtractor {
             Pattern.CASE_INSENSITIVE
     );
 
-    // ==================== SQL КЛЮЧЕВЫЕ СЛОВА ДЛЯ ИСКЛЮЧЕНИЯ ====================
-
+    // SQL ключевые слова для исключения
     private static final Set<String> SQL_KEYWORDS = Set.of(
             "SELECT", "FROM", "WHERE", "JOIN", "LEFT", "RIGHT", "INNER", "OUTER",
             "ON", "AND", "OR", "NOT", "IN", "EXISTS", "AS", "BY", "ORDER", "GROUP",
             "HAVING", "UNION", "INTERSECT", "MINUS", "WITH", "RECURSIVE",
             "SYSDATE", "TO_DATE", "TO_CHAR", "TRUNC", "NVL", "COALESCE", "CASE",
-            "WHEN", "THEN", "ELSE", "END", "COUNT", "SUM", "AVG", "MAX", "MIN"
+            "WHEN", "THEN", "ELSE", "END", "COUNT", "SUM", "AVG", "MAX", "MIN",
+            "ROW_NUMBER", "RANK", "DENSE_RANK", "LAG", "LEAD"
     );
+
     // Системные объекты Oracle/SQL, которые не являются таблицами пользователя
     private static final Set<String> SYSTEM_OBJECTS = Set.of(
             "DUAL",      // Системная таблица Oracle
-            "TABLE"      // Оператор TABLE для работы с коллекциями
+            "TABLE",     // Оператор TABLE для работы с коллекциями
+            "SYS_DUMMY"  // Системная
     );
 
-    // ==================== ПУБЛИЧНЫЕ МЕТОДЫ ====================
 
     /**
      * Извлечь все SQL запросы из документа
@@ -176,16 +196,23 @@ public class SqlExtractor {
         extractUnknownObjects(upperSql, sqlInfo);
     }
 
-    // core/extractor/SqlExtractor.java - исправленный метод extractTablesAndViews
-
-    /**
-     * Извлечение таблиц и представлений по контексту FROM/JOIN
-     * Это самый надежный способ отличить таблицу от других объектов
-     */
     /**
      * Извлечение таблиц и представлений по контексту FROM/JOIN
      */
     private void extractTablesAndViewsByContext(String upperSql, SqlInfo sqlInfo) {
+        // 1. Извлекаем CTE
+        Set<String> cteNames = extractCTENames(upperSql);
+
+        // 2. Извлекаем псевдонимы таблиц
+        Set<String> tableAliases = extractTableAliases(upperSql);
+
+        if (!cteNames.isEmpty()) {
+            System.out.println("      [DEBUG] Найдены CTE: " + cteNames);
+        }
+        if (!tableAliases.isEmpty()) {
+            System.out.println("      [DEBUG] Найдены псевдонимы таблиц: " + tableAliases);
+        }
+
         Matcher matcher = TABLE_IN_FROM_JOIN_PATTERN.matcher(upperSql);
         while (matcher.find()) {
             String name = matcher.group(1);
@@ -195,14 +222,13 @@ public class SqlExtractor {
                 name = name.substring(name.lastIndexOf(".") + 1);
             }
 
-            // Пропускаем SQL ключевые слова
-            if (SQL_KEYWORDS.contains(name)) continue;
-
-            // Пропускаем системные объекты Oracle (DUAL, TABLE и т.д.)
-            if (SYSTEM_OBJECTS.contains(name)) continue;
-
-            // Это точно таблица или вьюха
-            sqlInfo.addTableView(name);
+            // Проверяем, является ли это реальным объектом БД
+            if (isRealDatabaseObject(name, upperSql, cteNames, tableAliases)) {
+                sqlInfo.addTableView(name);
+                System.out.println("      [DEBUG] Добавлена таблица/вьюха: " + name);
+            } else {
+                System.out.println("      [SKIP] Пропущен объект: " + name);
+            }
         }
     }
 
@@ -290,6 +316,9 @@ public class SqlExtractor {
      * - Встречаются в SELECT, WHERE, CASE, вызовах функций и т.д.
      */
     private void extractUnknownObjects(String upperSql, SqlInfo sqlInfo) {
+        Set<String> cteNames = extractCTENames(upperSql);
+        Set<String> tableAliases = extractTableAliases(upperSql);
+
         Matcher matcher = UNKNOWN_OBJECT_PATTERN.matcher(upperSql);
         while (matcher.find()) {
             String name = matcher.group(1);
@@ -300,18 +329,29 @@ public class SqlExtractor {
             // Пропускаем системные объекты
             if (SYSTEM_OBJECTS.contains(name)) continue;
 
+            // Пропускаем CTE
+            if (cteNames.contains(name)) continue;
+
+            // Пропускаем псевдонимы таблиц
+            if (tableAliases.contains(name)) continue;
+
             // Если это уже известная таблица/вьюха - пропускаем
             if (sqlInfo.getTablesViews().contains(name)) continue;
 
             // Если это уже известный пакет - пропускаем
             if (sqlInfo.getPackagesFunctions().contains(name)) continue;
 
+            // Имена без префикса D_ не добавляем в unknown (это псевдонимы полей)
+            if (!name.startsWith("D_")) {
+                System.out.println("      [SKIP] Пропущен в unknown (нет префикса D_): " + name);
+                continue;
+            }
+
             sqlInfo.addUnknownObject(name);
         }
     }
 
 
-    // ==================== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ====================
 
     /**
      * Извлечь SQL содержимое из элемента (поддерживает CDATA и прямые тексты)
@@ -350,5 +390,139 @@ public class SqlExtractor {
     private String cleanSql(String sql) {
         if (sql == null) return "";
         return sql.replaceAll("\\s+", " ").trim();
+    }
+
+    /**
+     * Проверка, является ли имя реальной таблицей/вьюхой
+     * Признаки:
+     * 1. Имеет префикс D_ или D_V_ (схема T-MIS)
+     * 2. Не является CTE
+     * 3. Не является псевдонимом таблицы
+     * 4. Не является SQL ключевым словом
+     * 5. Не является псевдонимом колонки (определяется по контексту)
+     * Извлечение имён CTE (Common Table Expressions)
+     * Пример: WITH DPC AS (SELECT ...) -> DPC
+     */
+    private Set<String> extractCTENames(String upperSql) {
+        Set<String> cteNames = new LinkedHashSet<>();
+        Matcher matcher = CTE_PATTERN.matcher(upperSql);
+        while (matcher.find()) {
+            String cteName = matcher.group(1);
+            if (cteName != null && !cteName.isEmpty()) {
+                cteNames.add(cteName);
+            }
+        }
+        return cteNames;
+    }
+
+    /**
+     * Извлечение псевдонимов таблиц из FROM/JOIN
+     * Пример: FROM D_TABLE t -> t
+     */
+    private Set<String> extractTableAliases(String upperSql) {
+        Set<String> aliases = new LinkedHashSet<>();
+        Matcher matcher = TABLE_ALIAS_PATTERN.matcher(upperSql);
+        while (matcher.find()) {
+            String alias = matcher.group(1);
+            if (alias != null && !alias.isEmpty()) {
+                // Пропускаем SQL ключевые слова
+                if (!SQL_KEYWORDS.contains(alias)) {
+                    aliases.add(alias);
+                }
+            }
+        }
+        return aliases;
+    }
+
+    /**
+     * Проверка, является ли имя реальной таблицей/вьюхой
+     */
+    private boolean isRealDatabaseObject(String name, String sqlContext, Set<String> cteNames, Set<String> tableAliases) {
+        if (name == null || name.isEmpty()) return false;
+
+        String upperName = name.toUpperCase();
+
+        // 1. Если имеет префикс D_ или D_V_ - это точно объект БД
+        if (upperName.startsWith("D_") || upperName.startsWith("D_V_")) {
+            return true;
+        }
+
+        // 2. Пропускаем SQL ключевые слова
+        if (SQL_KEYWORDS.contains(upperName)) return false;
+
+        // 3. Пропускаем системные объекты
+        if (SYSTEM_OBJECTS.contains(upperName)) return false;
+
+        // 4. Пропускаем CTE
+        if (cteNames.contains(upperName)) return false;
+
+        // 5. Пропускаем псевдонимы таблиц
+        if (tableAliases.contains(upperName)) return false;
+
+        // 6. Имена без префикса D_ - не являются таблицами/вьюхами в T-MIS
+        if (!upperName.startsWith("D_")) {
+            return false;
+        }
+        // 7. Если имя содержит только буквы и цифры без префикса D_ - вероятно не таблица
+        if (upperName.matches("^[A-Z][A-Z0-9]*$") && !upperName.startsWith("D_")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Проверка, является ли имя псевдонимом колонки
+     * Анализирует контекст: встречается ли имя после SELECT ... AS или в конце выражения
+     */
+    private boolean isColumnAlias(String name, String sqlContext) {
+        if (name == null || name.isEmpty()) return false;
+
+        // Паттерн: SELECT ... AS NAME или SELECT ... NAME (неявный псевдоним)
+        Pattern aliasPattern = Pattern.compile(
+                "\\bAS\\s+" + name + "\\b|\\b" + name + "\\s+(?=FROM|WHERE|GROUP|ORDER|HAVING|UNION|$)",
+                Pattern.CASE_INSENSITIVE
+        );
+
+        // Проверяем в SELECT части запроса
+        String selectPart = extractSelectPart(sqlContext);
+        if (selectPart != null && aliasPattern.matcher(selectPart).find()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Извлечение SELECT части SQL запроса (до FROM)
+     */
+    private String extractSelectPart(String sql) {
+        Pattern selectPattern = Pattern.compile(
+                "\\bSELECT\\b(.*?)\\bFROM\\b",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher matcher = selectPattern.matcher(sql);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    /**
+     * Проверка, является ли имя функцией или выражением
+     */
+    private boolean isFunctionOrExpression(String name, String sqlContext) {
+        if (name == null || name.isEmpty()) return false;
+
+        // Если после имени идёт открывающая скобка - это функция
+        Pattern functionPattern = Pattern.compile(
+                "\\b" + name + "\\s*\\(",
+                Pattern.CASE_INSENSITIVE
+        );
+        if (functionPattern.matcher(sqlContext).find()) {
+            return true;
+        }
+
+        return false;
     }
 }

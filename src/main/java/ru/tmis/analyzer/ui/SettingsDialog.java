@@ -43,6 +43,13 @@ public class SettingsDialog extends JDialog {
     private JCheckBox includePostgresFunctionsCheckbox;
     private JCheckBox includeBrokerFunctionsCheckbox;
 
+    // Report settings
+    private JCheckBox includeSqlContentCheckbox;
+    private JCheckBox includeTablesViewsCheckbox;
+    private JCheckBox includeJsUnitCompositionsCheckbox;
+    private JCheckBox includeBrokerFunctionsReportCheckbox;
+    private JCheckBox includePopupMenusCheckbox;
+
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
         this.settings = settings;
@@ -195,7 +202,6 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
-    // Пример: переработанный метод createReportPanel() для настроек отчета
     private JPanel createReportPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -203,44 +209,57 @@ public class SettingsDialog extends JDialog {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-        // Заголовок
         JLabel titleLabel = new JLabel("Настройки отчета");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(titleLabel);
         contentPanel.add(Box.createVerticalStrut(15));
 
-        // Чекбоксы с описаниями (как в родительском проекте)
-        JCheckBox includeSqlCheckbox = new JCheckBox("Показывать SQL запросы");
-        includeSqlCheckbox.setSelected(config.isIncludeSqlContent());
-        includeSqlCheckbox.addActionListener(e -> config.setIncludeSqlContent(includeSqlCheckbox.isSelected()));
-        contentPanel.add(createCheckboxWithDescription(includeSqlCheckbox,
+        // SQL запросы
+        includeSqlContentCheckbox = new JCheckBox("Показывать SQL запросы");
+        includeSqlContentCheckbox.setSelected(config.isIncludeSqlContent());
+        includeSqlContentCheckbox.addActionListener(e -> config.setIncludeSqlContent(includeSqlContentCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeSqlContentCheckbox,
                 "Выводить полное содержимое SQL запросов в отчете.\n" +
                         "Включает: SELECT, INSERT, UPDATE, DELETE, BEGIN...END блоки"));
         contentPanel.add(Box.createVerticalStrut(5));
 
-        JCheckBox includeTablesCheckbox = new JCheckBox("Показывать таблицы и вьюхи");
-        includeTablesCheckbox.setSelected(config.isIncludeTablesViews());
-        includeTablesCheckbox.addActionListener(e -> config.setIncludeTablesViews(includeTablesCheckbox.isSelected()));
-        contentPanel.add(createCheckboxWithDescription(includeTablesCheckbox,
+        // Таблицы и вьюхи
+        includeTablesViewsCheckbox = new JCheckBox("Показывать таблицы и вьюхи");
+        includeTablesViewsCheckbox.setSelected(config.isIncludeTablesViews());
+        includeTablesViewsCheckbox.addActionListener(e -> config.setIncludeTablesViews(includeTablesViewsCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeTablesViewsCheckbox,
                 "Выводить список всех таблиц (D_*) и представлений (D_V_*),\n" +
                         "используемых в SQL запросах формы"));
         contentPanel.add(Box.createVerticalStrut(5));
 
-        JCheckBox includeCompositionsCheckbox = new JCheckBox("Показывать композиции из JS");
-        includeCompositionsCheckbox.setSelected(config.isIncludeJsUnitCompositions());
-        includeCompositionsCheckbox.addActionListener(e -> config.setIncludeJsUnitCompositions(includeCompositionsCheckbox.isSelected()));
-        contentPanel.add(createCheckboxWithDescription(includeCompositionsCheckbox,
+        // Композиции из JS
+        includeJsUnitCompositionsCheckbox = new JCheckBox("Показывать композиции из JS");
+        includeJsUnitCompositionsCheckbox.setSelected(config.isIncludeJsUnitCompositions());
+        includeJsUnitCompositionsCheckbox.addActionListener(e -> config.setIncludeJsUnitCompositions(includeJsUnitCompositionsCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeJsUnitCompositionsCheckbox,
                 "Извлекать композиции UnitEdit из JS вызовов\n" +
                         "UniversalComposition в openWindow/openD3Form"));
         contentPanel.add(Box.createVerticalStrut(5));
 
-        JCheckBox includeBrokersCheckbox = new JCheckBox("Показывать брокеров");
-        includeBrokersCheckbox.setSelected(config.isIncludeBrokerFunctions());
-        includeBrokersCheckbox.addActionListener(e -> config.setIncludeBrokerFunctions(includeBrokersCheckbox.isSelected()));
-        contentPanel.add(createCheckboxWithDescription(includeBrokersCheckbox,
+        // Брокеры
+        includeBrokerFunctionsReportCheckbox = new JCheckBox("Показывать брокеров");
+        includeBrokerFunctionsReportCheckbox.setSelected(config.isIncludeBrokerFunctions());
+        includeBrokerFunctionsReportCheckbox.addActionListener(e -> config.setIncludeBrokerFunctions(includeBrokerFunctionsReportCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeBrokerFunctionsReportCheckbox,
                 "Извлекать брокеры (Action/SubAction с атрибутами unit/action)\n" +
                         "и соответствующие им функции из базы данных Oracle"));
+        contentPanel.add(Box.createVerticalStrut(5));
+
+        // Контекстное меню (ПКМ)
+        includePopupMenusCheckbox = new JCheckBox("Показывать контекстное меню (ПКМ)");
+        includePopupMenusCheckbox.setSelected(config.isIncludePopupMenus());
+        includePopupMenusCheckbox.addActionListener(e -> config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includePopupMenusCheckbox,
+                "Выводить в отчет дерево контекстного меню (PopupMenu),\n" +
+                        "включая пункты, добавленные через AutoPopupMenu,\n" +
+                        "а также отчеты из базы данных Oracle (D_REPORTS_LINKS)"));
+        contentPanel.add(Box.createVerticalStrut(5));
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
@@ -250,7 +269,6 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
-    // Полный исправленный метод createLLMPanel() с использованием createBlockCheckbox
     private JPanel createLLMPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -422,6 +440,24 @@ public class SettingsDialog extends JDialog {
         postgresPasswordField.setText(settings.getPostgresPassword());
         misUserField.setText(settings.getMisUser());
 
+        // Report settings
+        if (includeSqlContentCheckbox != null) {
+            includeSqlContentCheckbox.setSelected(config.isIncludeSqlContent());
+        }
+        if (includeTablesViewsCheckbox != null) {
+            includeTablesViewsCheckbox.setSelected(config.isIncludeTablesViews());
+        }
+        if (includeJsUnitCompositionsCheckbox != null) {
+            includeJsUnitCompositionsCheckbox.setSelected(config.isIncludeJsUnitCompositions());
+        }
+        if (includeBrokerFunctionsReportCheckbox != null) {
+            includeBrokerFunctionsReportCheckbox.setSelected(config.isIncludeBrokerFunctions());
+        }
+        if (includePopupMenusCheckbox != null) {
+            includePopupMenusCheckbox.setSelected(config.isIncludePopupMenus());
+        }
+
+        // LLM settings
         enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
         if ("per_form".equals(config.getLlmExportMode())) {
             perFormRadio.setSelected(true);
@@ -458,6 +494,24 @@ public class SettingsDialog extends JDialog {
         settings.setMisUser(misUserField.getText());
         settings.save();
 
+        // Report settings
+        if (includeSqlContentCheckbox != null) {
+            config.setIncludeSqlContent(includeSqlContentCheckbox.isSelected());
+        }
+        if (includeTablesViewsCheckbox != null) {
+            config.setIncludeTablesViews(includeTablesViewsCheckbox.isSelected());
+        }
+        if (includeJsUnitCompositionsCheckbox != null) {
+            config.setIncludeJsUnitCompositions(includeJsUnitCompositionsCheckbox.isSelected());
+        }
+        if (includeBrokerFunctionsReportCheckbox != null) {
+            config.setIncludeBrokerFunctions(includeBrokerFunctionsReportCheckbox.isSelected());
+        }
+        if (includePopupMenusCheckbox != null) {
+            config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected());
+        }
+
+        // LLM settings
         config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
         config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
         config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
@@ -533,15 +587,10 @@ public class SettingsDialog extends JDialog {
                 "- Системные опции из D_PKG_OPTIONS.GET\n";
     }
 
-    public boolean isSaved() { return saved; }
-    // Добавьте этот метод в класс SettingsDialog (нового проекта)
+    public boolean isSaved() {
+        return saved;
+    }
 
-    /**
-     * Создать панель с чекбоксом и описанием под ним (в стиле родительского проекта)
-     * @param checkBox Чекбокс
-     * @param description Текст описания (поддерживает многострочный текст с \n)
-     * @return Панель с компонентами
-     */
     private JPanel createCheckboxWithDescription(JCheckBox checkBox, String description) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -564,7 +613,6 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
-    // Добавьте этот метод в класс SettingsDialog для LLM блоков (как в родительском проекте)
     private JPanel createBlockCheckbox(JCheckBox checkBox, String description) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
