@@ -169,4 +169,58 @@ public class OracleService {
         }
         return -1;
     }
+    /**
+     * Получить тело функции/процедуры из Oracle пакета
+     * @param packageName имя пакета (например, 'D_PKG_PMC_DISP_PLAN')
+     * @param functionName имя функции/процедуры
+     * @return тело функции или null, если не найдена
+     */
+    public String getFunctionBody(String packageName, String functionName) {
+        String sql = "SELECT TEXT FROM ALL_SOURCE " +
+                "WHERE OWNER = ? AND TYPE = 'PACKAGE BODY' " +
+                "AND NAME = UPPER(?) ORDER BY LINE";
+
+        try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, user.toUpperCase());
+            pstmt.setString(2, packageName.toUpperCase());
+            pstmt.setQueryTimeout(30);
+            ResultSet rs = pstmt.executeQuery();
+
+            StringBuilder body = new StringBuilder();
+            while (rs.next()) {
+                body.append(rs.getString("TEXT"));
+            }
+            String fullBody = body.toString();
+            if (fullBody.isEmpty()) return null;
+
+            // Ищем блок функции/процедуры по имени
+            String pattern = "(?i)(FUNCTION|PROCEDURE)\\s+" + functionName + "\\s*\\([^)]*\\)\\s+(RETURN\\s+\\w+\\s+)?(IS|AS)\\s+(.*?)(END\\s+" + functionName + "\\s*;|END\\s*;)";
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern, java.util.regex.Pattern.DOTALL);
+            java.util.regex.Matcher m = p.matcher(fullBody);
+            if (m.find()) {
+                return formatFunctionBody(m.group(0), functionName, "PACKAGE", m.group(2));
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения тела функции " + packageName + "." + functionName + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+
+    private String formatFunctionBody(String body, String functionName, String type, String returnType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-- Oracle ").append(type).append(": ").append(functionName).append("\n");
+        if (returnType != null && !returnType.isEmpty()) {
+            sb.append("-- Возвращает: ").append(returnType.trim()).append("\n");
+        }
+        sb.append("--").append("=".repeat(70)).append("\n");
+        sb.append(body);
+        if (!body.endsWith("\n")) sb.append("\n");
+        return sb.toString();
+    }
+    public Connection getConnection() throws SQLException {
+        return DatabaseConnector.getOracleConnection(url, user, password);
+    }
 }

@@ -187,4 +187,21 @@ public class PostgresService {
         }
         return -1;
     }
+    public String getFunctionBody(String functionName) {
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT pg_get_functiondef(p.oid) as funcdef " +
+                    "FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid " +
+                    "WHERE n.nspname || '.' || p.proname = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, functionName.toLowerCase());
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("funcdef");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения тела функции " + functionName + " из PostgreSQL: " + e.getMessage());
+        }
+        return null;
+    }
 }

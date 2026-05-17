@@ -3,6 +3,8 @@ package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
+import ru.tmis.analyzer.core.llm.model.LLMReportContext;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
@@ -324,6 +326,23 @@ public class MainWindow extends JFrame {
         appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
         appendLog("Обработано форм: " + results.size());
         appendLog("Отчеты сохранены в: " + settings.getOutputDir());
+
+        if (config.isEnableLLMExport()) {
+            appendLog("=== ГЕНЕРАЦИЯ LLM ПРОМПТА ===");
+            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            llmGen.setStopCondition(() -> stopRequested);
+            LLMReportContext ctx = llmGen.prepareContext(results);
+            if (config.getLlmExportMode().equals("single_file")) {
+                String prompt = llmGen.generateSingleFile();
+                String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                Path llmPath = Paths.get(settings.getOutputDir(), "llm_prompt_all_forms.md");
+                Files.writeString(llmPath, prompt);
+                appendLog("LLM промпт сохранен: " + llmPath);
+            } else {
+                List<String> files = llmGen.generateForEachForm();
+                appendLog("Создано промптов для форм: " + files.size());
+            }
+        }
 
         SwingUtilities.invokeLater(() -> {
             int result = JOptionPane.showConfirmDialog(this,
