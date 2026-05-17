@@ -1,6 +1,6 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Sun May 17 12:44:50 GMT+07:00 2026
+Дата создания: Sun May 17 13:05:29 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
@@ -606,12 +606,15 @@ SubForm:
     ├── (AutoPopup "piReports") - REP_TYPE="WEB-форма"       - REP_CODE="obmen_card_113u_2"                   "113/y-20 Обменная карта беременной 2 стр" Form="Reports/Pregnancy/obmen_card_113u/obmen_card_113u_2.frm"
     └── (AutoPopup "piReports") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_13_MEDDEV_138933"       "Протокол анестезиологического пособия_530 обновленный по задаче 138933"
 
-SQL ЗАПРОСЫ (6):
+SQL ЗАПРОСЫ (9):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
     D_V_SERVICES_BASE
     D_V_PMC_DISP_PLAN_CONTROL
+    D_V_PMC_DISP_PLAN_BASE
+    D_V_USERPROCS
+    D_V_HIV_NR_PATIENTS_BASE
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
     D_SERVICES
@@ -624,6 +627,8 @@ SQL ЗАПРОСЫ (6):
     D_PMC_DISP_PLAN
     D_DIRECTION_SERVICES
     D_VISITS
+    D_USERPROCS
+    D_HIV_NR_PATIENTS
 
 ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
@@ -642,19 +647,47 @@ SQL ЗАПРОСЫ (6):
           D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
           D_VISITS (Oracle: 233,40 тыс) (PostgreSQL: 232,76 тыс)
 
+  D_V_PMC_DISP_PLAN_BASE (Oracle: 201,65 тыс) (PostgreSQL: 183,93 тыс):
+          D_PMC_DISP_PLAN (Oracle: 201,69 тыс) (PostgreSQL: 201,63 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+  D_V_USERPROCS (Oracle: 3,03 тыс) (PostgreSQL: 1,84 тыс):
+          D_USERPROCS (Oracle: 3,09 тыс) (PostgreSQL: 3,09 тыс)
+
+  D_V_HIV_NR_PATIENTS_BASE (Oracle: 822) (PostgreSQL: 805):
+          D_HIV_NR_PATIENTS (Oracle: 822) (PostgreSQL: 805)
+
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
     D_PKG_LABMED_ANALYZE.IS_LIS_ANALYZE_BY_DS
     D_PKG_DATE_TOOLS.END_OF_MONTH
     D_PKG_PMC_DISP_PLAN.SET_DISP_PLACE
+    D_PKG_PMC_DISP_PLAN.SET_REG
+    D_PKG_AMB_TALONS.WORK_IN_AT_ATTACH_DU
     D_PKG_CONTROL_CARD.RECOUNT_PLAN_DATES
     D_PKG_CONTROL_CARD.CLEAR_REG_FROM_DISP_PLAN
+    D_PKG_PMC_DISP_PLAN.DEL
+    D_PKG_R_ZNO_RISK_DATA_REASONS.DEL
+    D_PKG_R_ZNO_RISK_DATA_REASONS.ADD
 
 СИСТЕМНЫЕ ОПЦИИ:
+    CertCheckResult
+    CertProhibitPrintSpoiled
+    CertPrintDublicateAuto
     FindDuchTAP
+    CertShowPrintParam
+
+ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ:
+    HIVSendPatientManual
 
 БРОКЕРЫ:
     unit:PMC_DISP_PLAN  action:SET_REG;
     unit:DIRECTION_SERVICES  action:DELETE;
+    action:D_PKG_R_ZNO_RISK_DATA_REASONS.DEL;
+    action:D_PKG_R_ZNO_RISK_DATA_REASONS.ADD;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_P_EXC
 
 
 ====================================================================================================

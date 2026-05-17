@@ -197,8 +197,8 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // Пользовательские процедуры
-        if (!form.getUserProcedures().isEmpty()) {
+        // ========== ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ ==========
+        if (form.getUserProcedures() != null && !form.getUserProcedures().isEmpty()) {
             writer.println("ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ:");
             for (String proc : form.getUserProcedures()) {
                 writer.println("    " + proc);

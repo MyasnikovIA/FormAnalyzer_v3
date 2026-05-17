@@ -287,6 +287,7 @@ public class SqlExtractor {
             String prCode = matcher.group(1);
             if (prCode != null && !prCode.isEmpty()) {
                 sqlInfo.addUserProcedure(prCode);
+                System.out.println("[DEBUG] Найдена пользовательская процедура: " + prCode);
             }
         }
     }
@@ -381,7 +382,8 @@ public class SqlExtractor {
         String lower = content.toLowerCase().trim();
         return lower.startsWith("select") || lower.startsWith("insert") ||
                 lower.startsWith("update") || lower.startsWith("delete") ||
-                lower.startsWith("begin") || lower.startsWith("with");
+                lower.startsWith("begin") || lower.startsWith("with") ||
+                lower.startsWith("declare");
     }
 
     /**
