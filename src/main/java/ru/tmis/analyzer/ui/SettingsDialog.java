@@ -262,12 +262,13 @@ public class SettingsDialog extends JDialog {
         contentPanel.add(Box.createVerticalStrut(5));
 
         // В методе createReportPanel() добавить:
-        JCheckBox includeViewDetailsCheckbox = new JCheckBox("Детальное содержимое вьюх");
+        JCheckBox includeViewDetailsCheckbox = new JCheckBox("Детальное содержимое вьюх (с количеством записей)");
         includeViewDetailsCheckbox.setSelected(config.isIncludeViewDetails());
         includeViewDetailsCheckbox.addActionListener(e -> config.setIncludeViewDetails(includeViewDetailsCheckbox.isSelected()));
         contentPanel.add(createCheckboxWithDescription(includeViewDetailsCheckbox,
-                "Выводить для каждой вьюхи список таблиц, которые в ней используются.\n" +
-                        "Требует подключения к Oracle БД"));
+                "Выводить для каждой вьюхи список таблиц, которые в ней используются,\n" +
+                        "а также количество записей во вьюхе и в каждой таблице (Oracle и PostgreSQL).\n" +
+                        "Требует подключения к обеим базам данных."));
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);

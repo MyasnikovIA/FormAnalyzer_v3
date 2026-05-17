@@ -168,4 +168,23 @@ public class PostgresService {
             return false;
         }
     }
+    /**
+     * Получить количество записей в таблице/вьюхе PostgreSQL
+     * @param objectName имя таблицы или представления
+     * @return количество записей, -1 в случае ошибки
+     */
+    public long getTableCount(String objectName) {
+        String sql = "SELECT COUNT(*) FROM " + objectName;
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.setQueryTimeout(30);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка подсчёта записей в PostgreSQL " + objectName + ": " + e.getMessage());
+        }
+        return -1;
+    }
 }

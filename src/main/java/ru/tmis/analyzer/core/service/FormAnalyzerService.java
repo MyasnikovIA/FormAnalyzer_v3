@@ -138,6 +138,7 @@ public class FormAnalyzerService {
             }
         }
 
+
         // Загружаем зависимости вьюх
         if (!viewNames.isEmpty()) {
             Map<String, ViewTableDependencies> viewDeps = loadViewDependencies(viewNames);

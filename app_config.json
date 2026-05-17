@@ -10,7 +10,7 @@
   "includeTablesViews": true,
   "includeViewTables": true,
   "includeJsUnitCompositions": true,
-  "includeViewDetails": false,
+  "includeViewDetails": true,
   "includePopupMenus": true,
   "checkDbObjects": false,
   "checkDbData": false,

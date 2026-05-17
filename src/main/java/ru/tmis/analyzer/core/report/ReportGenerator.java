@@ -2,6 +2,9 @@
 package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
+import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.db.OracleService;
+import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
@@ -10,6 +13,7 @@ import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReportGenerator {
 
@@ -17,10 +21,40 @@ public class ReportGenerator {
     private final AppConfig config;
     private List<FormInfo> forms;
 
+    private final Map<String, Long> oracleCountCache = new ConcurrentHashMap<>();
+    private final Map<String, Long> postgresCountCache = new ConcurrentHashMap<>();
+
+    private OracleService oracleService;
+    private PostgresService postgresService;
+
+    // В конструкторе инициализируем сервисы (если ещё нет)
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
         this.config = config;
         this.forms = new ArrayList<>();
+        // Инициализация сервисов БД (потребуются настройки)
+        SettingsModel settings = SettingsModel.getInstance(); // или передать через конструктор
+        this.oracleService = new OracleService(settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword());
+        this.postgresService = new PostgresService(settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(), settings.getMisUser());
+    }
+
+    // Метод для получения количества записей в Oracle (с кэшированием)
+    private long getOracleCount(String objectName) {
+        return oracleCountCache.computeIfAbsent(objectName.toUpperCase(),
+                k -> oracleService.getTableCount(objectName));
+    }
+
+    // Метод для получения количества записей в PostgreSQL (с кэшированием)
+    private long getPostgresCount(String objectName) {
+        return postgresCountCache.computeIfAbsent(objectName.toLowerCase(),
+                k -> postgresService.getTableCount(objectName));
+    }
+    // Форматирование числа (тысячи, миллионы)
+    private String formatCount(long count) {
+        if (count < 0) return "ошибка";
+        if (count >= 1_000_000) return String.format("%.2f млн", count / 1_000_000.0);
+        if (count >= 1_000) return String.format("%.2f тыс", count / 1_000.0);
+        return String.valueOf(count);
     }
 
     public void addForm(FormInfo form) {
@@ -121,6 +155,7 @@ public class ReportGenerator {
             }
             writer.println();
         }
+
         // Таблицы, используемые через вьюхи
         System.out.println("[DEBUG] Checking viewDependencies: " + (form.getViewDependencies() != null ? form.getViewDependencies().size() : "null"));
         if (form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
@@ -129,6 +164,7 @@ public class ReportGenerator {
         } else {
             System.out.println("[DEBUG] viewDependencies is null or empty, skipping");
         }
+
         // Детальное содержимое вьюх
         if (config.isIncludeViewDetails() && form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
             writeViewDetailsSection(writer, form, form.getViewDependencies());
@@ -400,18 +436,13 @@ public class ReportGenerator {
      */
     private void writeViewDetailsSection(PrintWriter writer, FormInfo formInfo,
                                          Map<String, ViewTableDependencies> viewDependencies) {
-        if (viewDependencies == null || viewDependencies.isEmpty()) {
-            return;
-        }
+        if (viewDependencies == null || viewDependencies.isEmpty()) return;
 
-        // Собираем все вьюхи, используемые в этой форме
+        // Собираем вьюхи, используемые в форме
         Set<String> viewsUsed = new LinkedHashSet<>();
         for (String tv : formInfo.getTablesViews()) {
-            if (tv.startsWith("D_V_")) {
-                viewsUsed.add(tv);
-            }
+            if (tv.startsWith("D_V_")) viewsUsed.add(tv);
         }
-
         if (viewsUsed.isEmpty()) {
             writer.println("  (нет вьюх для детального анализа)");
             writer.println();
@@ -423,31 +454,38 @@ public class ReportGenerator {
 
         for (String viewName : viewsUsed) {
             ViewTableDependencies deps = viewDependencies.get(viewName);
-
-            if (deps != null && deps.isExistsInOracle()) {
-                writer.println("  " + viewName + ":");
-                Set<String> tables = deps.getOracleTables();
-
-                if (tables.isEmpty()) {
-                    writer.println("      (таблицы не найдены)");
-                } else {
-                    for (String table : tables) {
-                        // Пропускаем специальные вьюхи
-                        if ("D_V_URPRIVS".equals(table)) continue;
-                        writer.println("      - " + table);
-                    }
+            if (deps == null || !deps.isExistsInOracle()) {
+                if (deps != null && deps.getOracleError() != null) {
+                    writer.println("  " + viewName + ":");
+                    writer.println("      Ошибка: " + deps.getOracleError());
+                    writer.println();
                 }
-                writer.println();
-
-            } else if (deps != null && deps.getOracleError() != null) {
-                writer.println("  " + viewName + ":");
-                writer.println("      Ошибка: " + deps.getOracleError());
-                writer.println();
-            } else if (deps == null) {
-                writer.println("  " + viewName + ":");
-                writer.println("      (данные не загружены)");
-                writer.println();
+                continue;
             }
+
+            // Количество записей во вьюхе
+            long viewOracleCount = getOracleCount(viewName);
+            long viewPostgresCount = getPostgresCount(viewName);
+            String viewCountStr = String.format(" (Oracle: %s) (PostgreSQL: %s)",
+                    formatCount(viewOracleCount), formatCount(viewPostgresCount));
+
+            writer.print("  " + viewName + viewCountStr + ":");
+            writer.println();
+
+            Set<String> tables = deps.getOracleTables();
+            if (tables.isEmpty()) {
+                writer.println("      (таблицы не найдены)");
+            } else {
+                for (String table : tables) {
+                    if ("D_V_URPRIVS".equals(table)) continue;
+                    long oracleCount = getOracleCount(table);
+                    long postgresCount = getPostgresCount(table);
+                    String tableCountStr = String.format(" (Oracle: %s) (PostgreSQL: %s)",
+                            formatCount(oracleCount), formatCount(postgresCount));
+                    writer.println("          " + table + tableCountStr);
+                }
+            }
+            writer.println();
         }
     }
 

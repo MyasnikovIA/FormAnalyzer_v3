@@ -36,6 +36,7 @@ public class AppConfig {
     private boolean includeViewDetails = false;
     private boolean includePopupMenus = true;  // По умолчанию true
 
+
     // Проверка БД
     private boolean checkDbObjects = false;
     private boolean checkDbData = false;
