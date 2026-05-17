@@ -55,6 +55,19 @@ public class OracleService {
 
         try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password)) {
 
+            // Получаем комментарии к колонкам
+            String commentsSql = "SELECT COLUMN_NAME, COMMENTS FROM ALL_COL_COMMENTS " +
+                    "WHERE OWNER = ? AND TABLE_NAME = ?";
+            Map<String, String> columnComments = new LinkedHashMap<>();
+            try (PreparedStatement pstmt = conn.prepareStatement(commentsSql)) {
+                pstmt.setString(1, user.toUpperCase());
+                pstmt.setString(2, tableName.toUpperCase());
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    columnComments.put(rs.getString("COLUMN_NAME"), rs.getString("COMMENTS"));
+                }
+            }
+
             // Получаем колонки
             String columnsSql = "SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE " +
                     "FROM ALL_TAB_COLUMNS WHERE OWNER = ? AND TABLE_NAME = ? ORDER BY COLUMN_ID";
@@ -86,6 +99,14 @@ public class OracleService {
 
                     if ("N".equals(nullable)) {
                         colDef.append(" NOT NULL");
+                    }
+
+                    // Добавляем комментарий к колонке
+                    String comment = columnComments.get(colName);
+                    if (comment != null && !comment.trim().isEmpty()) {
+                        // Заменяем переносы строк на пробелы, чтобы не ломать форматирование
+                        String cleanComment = comment.replace("\n", " ").replace("\r", " ").trim();
+                        colDef.append("  -- ").append(cleanComment);
                     }
 
                     columns.add(colDef.toString());

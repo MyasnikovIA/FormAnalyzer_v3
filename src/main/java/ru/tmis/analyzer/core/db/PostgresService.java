@@ -73,9 +73,20 @@ public class PostgresService {
 
         try (Connection conn = getConnection()) {
 
-            String columnsSql = "SELECT column_name, data_type, character_maximum_length, " +
-                    "numeric_precision, numeric_scale, is_nullable, column_default " +
-                    "FROM information_schema.columns WHERE table_name = ? ORDER BY ordinal_position";
+            // Получаем колонки вместе с комментариями и default значениями
+            String columnsSql =
+                    "SELECT a.attname AS column_name, " +
+                            "       pg_catalog.format_type(a.atttypid, a.atttypmod) AS data_type, " +
+                            "       a.attnotnull AS not_null, " +
+                            "       pg_catalog.pg_get_expr(d.adbin, d.adrelid) AS default_value, " +
+                            "       pg_catalog.col_description(a.attrelid, a.attnum) AS comment " +
+                            "FROM pg_catalog.pg_class c " +
+                            "JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid " +
+                            "LEFT JOIN pg_catalog.pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum " +
+                            "WHERE c.relname = ? " +
+                            "  AND a.attnum > 0 " +
+                            "  AND NOT a.attisdropped " +
+                            "ORDER BY a.attnum";
 
             List<String> columns = new ArrayList<>();
             try (PreparedStatement pstmt = conn.prepareStatement(columnsSql)) {
@@ -85,29 +96,25 @@ public class PostgresService {
                 while (rs.next()) {
                     String colName = rs.getString("column_name");
                     String dataType = rs.getString("data_type");
-                    int maxLength = rs.getInt("character_maximum_length");
-                    int precision = rs.getInt("numeric_precision");
-                    int scale = rs.getInt("numeric_scale");
-                    String nullable = rs.getString("is_nullable");
-                    String defaultValue = rs.getString("column_default");
+                    boolean notNull = rs.getBoolean("not_null");
+                    String defaultValue = rs.getString("default_value");
+                    String comment = rs.getString("comment");
 
                     StringBuilder colDef = new StringBuilder();
                     colDef.append("    ").append(colName).append(" ").append(dataType);
 
-                    if ("character varying".equals(dataType) && maxLength > 0) {
-                        colDef.append("(").append(maxLength).append(")");
-                    } else if ("numeric".equals(dataType) && precision > 0) {
-                        colDef.append("(").append(precision);
-                        if (scale > 0) colDef.append(",").append(scale);
-                        colDef.append(")");
-                    }
-
-                    if ("NO".equals(nullable)) {
+                    if (notNull) {
                         colDef.append(" NOT NULL");
                     }
 
-                    if (defaultValue != null && !defaultValue.isEmpty()) {
+                    if (defaultValue != null && !defaultValue.isEmpty() && !defaultValue.equals("null")) {
                         colDef.append(" DEFAULT ").append(defaultValue);
+                    }
+
+                    // Добавляем комментарий к колонке
+                    if (comment != null && !comment.trim().isEmpty()) {
+                        String cleanComment = comment.replace("\n", " ").replace("\r", " ").trim();
+                        colDef.append("  -- ").append(cleanComment);
                     }
 
                     columns.add(colDef.toString());
@@ -115,9 +122,11 @@ public class PostgresService {
             }
 
             // Получаем первичный ключ
-            String pkSql = "SELECT kcu.column_name FROM information_schema.table_constraints tc " +
+            String pkSql = "SELECT kcu.column_name " +
+                    "FROM information_schema.table_constraints tc " +
                     "JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name " +
-                    "WHERE tc.table_name = ? AND tc.constraint_type = 'PRIMARY KEY' ORDER BY kcu.ordinal_position";
+                    "WHERE tc.table_name = ? AND tc.constraint_type = 'PRIMARY KEY' " +
+                    "ORDER BY kcu.ordinal_position";
 
             List<String> pkColumns = new ArrayList<>();
             try (PreparedStatement pstmt = conn.prepareStatement(pkSql)) {
