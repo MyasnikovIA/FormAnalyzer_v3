@@ -62,8 +62,11 @@ public class ExtractorManager {
         // 12. AutoPopupMenu (priority 80)
         processors.add(new AutoPopupMenuProcessor());
 
-        // 12.5. PopupMenu (priority 85)
+        // 12.5. PopupMenu (priority 85) - для Oracle
         processors.add(new PopupMenuProcessor(settings));
+
+        // 12.6. PopupMenuPg (priority 86) - для PostgreSQL
+        processors.add(new PopupMenuProcessorPg(settings));
 
         // 13. UnknownObjects (priority 200)
         processors.add(new UnknownObjectProcessor());

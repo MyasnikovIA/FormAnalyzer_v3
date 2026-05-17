@@ -1,11 +1,12 @@
-// core/extractor/processors/PopupMenuProcessor.java
+// core/extractor/processors/PopupMenuProcessorPg.java
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import ru.tmis.analyzer.core.db.ReportsFromDbService;
+import ru.tmis.analyzer.core.db.PostgresReportsService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.config.SettingsModel;
@@ -13,26 +14,28 @@ import ru.tmis.analyzer.config.SettingsModel;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class PopupMenuProcessor implements IXmlProcessor {
+public class PopupMenuProcessorPg implements IXmlProcessor {
 
     private static final Pattern SEPARATOR_PATTERN = Pattern.compile("^[-]+$");
 
     private final SettingsModel settings;
+    private final PostgresReportsService postgresReportsService;
     private final Map<String, PopupMenuInfo> menuMap = new LinkedHashMap<>();
     private final List<AutoPopupInfo> autoPopups = new ArrayList<>();
 
-    public PopupMenuProcessor(SettingsModel settings) {
+    public PopupMenuProcessorPg(SettingsModel settings) {
         this.settings = settings;
+        this.postgresReportsService = new PostgresReportsService(settings);
     }
 
     @Override
     public String getName() {
-        return "PopupMenuProcessor";
+        return "PopupMenuProcessorPg";
     }
 
     @Override
     public int getPriority() {
-        return 85;
+        return 86;
     }
 
     @Override
@@ -92,11 +95,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
             autoPopups.add(info);
         }
 
-        // core/extractor/processors/PopupMenuProcessor.java - исправленный фрагмент
-
-        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu
-        ReportsFromDbService dbService = new ReportsFromDbService(settings);
-
+        // 5. Объединяем AutoPopupMenu с целевыми PopupMenu (используем PostgreSQL)
         for (AutoPopupInfo autoPopup : autoPopups) {
             PopupMenuInfo targetMenu = menuMap.get(autoPopup.targetMenuName);
             if (targetMenu != null) {
@@ -107,18 +106,19 @@ public class PopupMenuProcessor implements IXmlProcessor {
                     targetMenu.addItem(item);
                 }
 
-                // Если есть unit, добавляем отчеты из БД
+                // Если есть unit, добавляем отчеты из PostgreSQL БД
                 if (autoPopup.unit != null && !autoPopup.unit.isEmpty()) {
-                    List<ReportsFromDbService.DbReportInfo> dbReports =
-                            dbService.getReportsByUnit(autoPopup.unit);
+                    List<DbReportInfo> dbReports = postgresReportsService.getReportsByUnit(autoPopup.unit);
 
                     if (!dbReports.isEmpty()) {
-                        // Форматируем отчеты с поддержкой дерева
-                        List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
+                        // Используем форматирование с правильной иерархией
+                        List<String> formattedReports = PostgresReportsService.formatReportsForDisplay(
                                 dbReports, autoPopup.autoPopupName, "", true);
+
                         for (String formattedReport : formattedReports) {
                             PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
-                            dbItem.setCaption(formattedReport);
+                            // Добавляем пометку PostgreSQL, но сохраняем полную строку с символами дерева
+                            dbItem.setCaption(formattedReport + " (PostgreSQL)");
                             dbItem.setDbReport(true);
                             targetMenu.addItem(dbItem);
                         }
@@ -127,7 +127,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
             }
         }
 
-        // 6. Сохраняем в FormInfo
+        // 6. Сохраняем в FormInfo в отдельное поле popupMenusPg
         List<PopupMenuInfo> result = new ArrayList<>();
         for (PopupMenuInfo menu : menuMap.values()) {
             if (!menu.getRootItems().isEmpty()) {
@@ -135,7 +135,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
             }
         }
 
-        formInfo.setPopupMenus(result);
+        formInfo.setPopupMenusPg(result);
     }
 
     /**
@@ -157,7 +157,6 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 String caption = child.attr("caption");
                 String name = child.attr("name");
 
-                // Пропускаем разделители
                 if (caption != null && SEPARATOR_PATTERN.matcher(caption).matches()) {
                     continue;
                 }

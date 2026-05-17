@@ -12,7 +12,7 @@
   "includeJsUnitCompositions": true,
   "includeViewDetails": true,
   "includePopupMenus": true,
-  "includePostgresPopupMenus": false,
+  "includePostgresPopupMenus": true,
   "checkDbObjects": false,
   "checkDbData": false,
   "checkPostgresPackages": false,

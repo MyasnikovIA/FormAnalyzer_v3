@@ -133,9 +133,13 @@ public class ReportGenerator {
         }
         writer.println();
 
-        // Контекстное меню (ПКМ)
-        if (config.isIncludePopupMenus()) {
-            writePopupMenusBlock(writer, form);
+        if (config.isIncludePopupMenus() && form.getPopupMenus() != null && !form.getPopupMenus().isEmpty()) {
+            writePopupMenusBlock(writer, form.getPopupMenus(), "OracleSQL");
+        }
+
+       // Контекстное меню (ПКМ) - PostgreSQL
+        if (config.isIncludePostgresPopupMenus() && form.getPopupMenusPg() != null && !form.getPopupMenusPg().isEmpty()) {
+            writePopupMenusBlock(writer, form.getPopupMenusPg(), "PostgreSQL");
         }
 
         // SQL запросы
@@ -378,16 +382,13 @@ public class ReportGenerator {
     /**
      * Вывод контекстного меню (PopupMenu) в виде дерева
      */
-    private void writePopupMenusBlock(PrintWriter writer, FormInfo form) {
-        List<PopupMenuInfo> menus = form.getPopupMenus();
+    private void writePopupMenusBlock(PrintWriter writer, List<PopupMenuInfo> menus, String source) {
         if (menus == null || menus.isEmpty()) {
             return;
         }
-
         writer.println();
-        writer.println("Контекстное меню используемое на форме (ПКМ):");
+        writer.println("Контекстное меню используемое на форме (ПКМ) – данные из " + source + ":");
         writer.println();
-
         for (int i = 0; i < menus.size(); i++) {
             PopupMenuInfo menu = menus.get(i);
             boolean isLast = (i == menus.size() - 1);

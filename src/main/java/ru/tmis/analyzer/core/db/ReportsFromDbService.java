@@ -15,6 +15,7 @@ public class ReportsFromDbService {
 
     private final SettingsModel settings;
 
+
     // Статический метод для преобразования типа отчета
     private static String getRepTypeNameStatic(int repType) {
         switch (repType) {

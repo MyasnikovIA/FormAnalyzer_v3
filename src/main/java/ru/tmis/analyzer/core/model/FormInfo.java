@@ -31,6 +31,7 @@ public class FormInfo {
     private Set<String> openD3FormCompositions;
     private Map<String, ViewTableDependencies> viewDependencies;
     private List<PopupMenuInfo> popupMenus;
+    private List<PopupMenuInfo> popupMenusPg;
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -121,6 +122,13 @@ public class FormInfo {
 
     public void setPopupMenus(List<PopupMenuInfo> popupMenus) {
         this.popupMenus = popupMenus;
+    }
+    public List<PopupMenuInfo> getPopupMenusPg() {
+        return popupMenusPg;
+    }
+
+    public void setPopupMenusPg(List<PopupMenuInfo> popupMenusPg) {
+        this.popupMenusPg = popupMenusPg;
     }
 
     /**
