@@ -603,6 +603,12 @@
                                       pnREG_ID   => null,
                                       pnSTATE    => null);
 
+          :CertShowPrintParam := D_PKG_OPTION_SPECS.GET('CertShowPrintParam', :LPU, 0);
+          :CERT_CHECK_RESULT := coalesce(D_PKG_OPTIONS.GET('CertCheckResult', :LPU, 0), 0);
+          :CertProhibitPrintSpoiled := coalesce(D_PKG_OPTIONS.GET('CertProhibitPrintSpoiled', :LPU, 0), '0');
+          :CertPrintDublicateAuto := coalesce(D_PKG_OPTIONS.GET('CertPrintDublicateAuto', :LPU, 0), '0');
+
+
           nSPEC_DU := to_number(D_PKG_OPTIONS.GET(psSO_CODE => 'FindDuchTAP',
                                                   pnLPU     => to_number(:pnLPU),
                                                   pnRAISE   => 0));
@@ -995,7 +1001,7 @@
                     </cmpPopupItem>
                 </cmpAutoPopupMenu>
             </div>
-                <cmpPopupMenu name="DISP_PLAN_POPUP333" popupobject="PLAN_GR" onpopup="Form.dispPlanOnPopup();">
+                <cmpPopupMenu name="DISP_PLAN_POPUP333" popupobject="PLAN_GR" onpopPLAN_DATEup="Form.dispPlanOnPopup();">
                     <cmpPopupItem name="piRefresh"                    caption="Обновить"                        onclick="Form.refreshDispPlan();"     icon="~CmpPopupMenu/Icons/refresh"/>
                     <cmpPopupItem name="piDel"                        caption="Удалить запись"                  onclick="Form.delDirectionService();" icon="~CmpPopupMenu/Icons/delete"/>
                 </cmpPopupMenu>
@@ -1019,18 +1025,50 @@
                     </cmpPopupItem>
                 </cmpAutoPopupMenu>
 
+            <cmpSubAction name="ZnoRiskDataReasons1DelAction" repeatername="RptZnoRiskDataReasons" execon="del" action="D_PKG_R_ZNO_RISK_DATA_REASONS.DEL">
+                <cmpActionVar name="pnLPU"                src="LPU"            srctype="session"/>
+                <cmpActionVar name="pnID"                 src="_clonedata_"    srctype="var"     property="ID" get="gID"/>
+            </cmpSubAction>
+            <cmpAction name="ZnoRiskDataReasons1DelAction" repeatername="RptAdd" execon="del" action="D_PKG_R_ZNO_RISK_DATA_REASONS.ADD">
+                <cmpActionVar name="pnLPU"                src="LPU"            srctype="session"/>
+                <cmpActionVar name="pnID"                 src="_clonedata_"    srctype="var"     property="ID" get="gID"/>
+            </cmpAction>
+
+<component cmptype="Action" name="sendFr">
+        <![CDATA[
+        declare
+          sSQL                  VARCHAR2(4000);
+          nAGENT                NUMBER(17);
+        begin
+          begin
+              select u.NNMBLOCK
+                into sSQL
+                from D_V_USERPROCS u
+               where u.PR_CODE = 'HIVSendPatientManual';
+          exception when no_data_found then null;
+          end;
+
+          begin
+            select np.AGENT
+              into nAGENT
+              from D_V_HIV_NR_PATIENTS_BASE np
+             where np.ID = to_number(:pnNR_PATIENT_ID);
+          exception when no_data_found then null;
+          end;
+
+          if sSQL is null then
+            D_P_EXC('Не найдена пользовательская процедура HIVSendPatientManual.');
+          else
+            execute immediate sSQL using nAGENT;
+          end if;
+        end;
+        ]]>
+        <component cmptype="ActionVar" name="pnNR_PATIENT_ID" src="hivRegistryGrid" srctype="ctrl"/>
+    </component>
 
         </div>
     </div>
 
-
-            "Обновить"
-            "Удалить запись"
-            "Добавить услугу"
-            "Связать с услугой в текущей МО"
-            "Связать с услугой в другой МО"
-            "Отменить связывание услуг"
-            "Удалить услугу из плана"
     <style>
         .dispensary-observation-plan .observation-tab .tree-cont {
             margin-top: 8px;
