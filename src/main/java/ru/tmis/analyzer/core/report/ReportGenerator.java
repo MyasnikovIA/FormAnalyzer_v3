@@ -291,10 +291,13 @@ public class ReportGenerator {
                 writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
                 writer.println();
                 DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+                int pkCount = 0;
                 for (String tableName : allTables) {
+                    pkCount++;
                     DatabaseObjectChecker.PrimaryKeyInfo pkInfo = checker.checkPrimaryKey(tableName);
                     writer.println("  " + tableName + ":");
                     writer.println("    Статус: " + pkInfo.getStatus());
+                    System.out.println("    [" + pkCount + "/" + allTables.size() + "] Проверка PK: " + tableName);
                     if (pkInfo.hasPKInOracle()) {
                         writer.println("    Oracle PK поля: " + String.join(", ", pkInfo.getOracleColumns()));
                     }
@@ -317,7 +320,10 @@ public class ReportGenerator {
                 writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
                 writer.println();
                 DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+                int nnCount = 0;
                 for (String tableName : allTables) {
+                    nnCount++;
+                    System.out.println("    [" + nnCount + "/" + allTables.size() + "] Проверка NOT NULL: " + tableName);
                     List<DatabaseObjectChecker.NotNullConstraintInfo> constraints = checker.checkNotNullConstraints(tableName);
                     boolean hasIssues = false;
                     for (DatabaseObjectChecker.NotNullConstraintInfo info : constraints) {

@@ -91,6 +91,7 @@ public class DatabaseObjectChecker {
     }
 
     public PrimaryKeyInfo checkPrimaryKey(String tableName) {
+        System.out.println("      Oracle PK query for " + tableName + "...");
         boolean oraclePK = false;
         boolean postgresPK = false;
         List<String> oracleCols = new ArrayList<>();
@@ -134,7 +135,7 @@ public class DatabaseObjectChecker {
         } catch (SQLException e) {
             System.err.println("PostgreSQL PK error for " + tableName + ": " + e.getMessage());
         }
-
+        System.out.println("      PostgreSQL PK query for " + tableName + "...");
         return new PrimaryKeyInfo(tableName, oraclePK, postgresPK, oracleCols, postgresCols,
                 oracleConstraintName, postgresConstraintName);
     }
