@@ -116,11 +116,8 @@ public class PopupMenuProcessor implements IXmlProcessor {
                         // Форматируем отчеты с поддержкой дерева
                         List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
                                 dbReports, autoPopup.autoPopupName, "", true);
-
                         for (String formattedReport : formattedReports) {
                             PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
-                            dbItem.setFromAutoPopup(true);
-                            dbItem.setAutoPopupName(autoPopup.autoPopupName);
                             dbItem.setCaption(formattedReport);
                             dbItem.setDbReport(true);
                             targetMenu.addItem(dbItem);

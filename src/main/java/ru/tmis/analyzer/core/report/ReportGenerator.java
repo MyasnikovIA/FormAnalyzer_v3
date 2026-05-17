@@ -375,20 +375,14 @@ public class ReportGenerator {
             String branch = isLast ? "└── " : "├── ";
             String childIndent = indent + (isLast ? "    " : "│   ");
 
-            String displayText;
             if (item.isDbReport()) {
-                // Для отчетов из БД используем уже отформатированный caption
-                // Убираем лишние пробелы в начале, если они есть
-                String caption = item.getCaption();
-                if (caption != null) {
-                    caption = caption.trim();
-                }
-                displayText = caption;
+                // caption уже содержит все символы дерева и отступы, но не содержит родительский indent
+                // Добавляем только родительский отступ, без branch
+                writer.println(indent + item.getCaption());
             } else {
-                displayText = item.getPrefix() + item.getDisplayCaption();
+                String displayText = item.getPrefix() + item.getDisplayCaption();
+                writer.println(indent + branch + displayText);
             }
-
-            writer.println(indent + branch + displayText);
 
             if (item.hasChildren()) {
                 writeMenuTree(writer, item.getChildren(), childIndent);

@@ -2,7 +2,9 @@
 package ru.tmis.analyzer.core.db;
 
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.model.PopupMenuInfo;
 
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 
@@ -189,53 +191,94 @@ public class ReportsFromDbService {
     }
 
     /**
-     * Форматированный вывод списка отчетов с выравниванием по колонкам
-     * @param reports список отчетов
-     * @param autoPopupName имя AutoPopup
-     * @param indent отступ перед каждой строкой
-     * @param isLastList является ли последним элементом в родительском списке
-     * @return список отформатированных строк
+     * Форматированный вывод списка отчетов с правильной иерархической версткой.
+     * Возвращает строки, уже содержащие все символы дерева (├──, └──, │) и отступы.
+     * Эти строки можно выводить напрямую, без дополнительных префиксов.
      */
     public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
                                                        String autoPopupName,
-                                                       String indent,
+                                                       String prefix,
                                                        boolean isLastList) {
         if (reports == null || reports.isEmpty()) {
             return Collections.emptyList();
         }
 
         String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
-
         List<String> result = new ArrayList<>();
 
         for (int i = 0; i < reports.size(); i++) {
             DbReportInfo report = reports.get(i);
             boolean isLast = (i == reports.size() - 1);
 
-            // Для корневых отчетов используем полный формат с AutoPopup
             String line;
-            if (indent.isEmpty()) {
-                // Корневой уровень
-                line = autoPopupPrefix + report.getDisplayString();
+            if (prefix.isEmpty()) {
+                // Корневой уровень: только символ ветки, без начальных пробелов
+                line = "├── " + autoPopupPrefix + report.getDisplayString();
             } else {
-                // Вложенный уровень
-                line = report.getShortDisplayString();
+                // Вложенный уровень: prefix уже содержит отступ (пробелы и вертикальные линии)
+                String connector = isLast ? "└── " : "├── ";
+                line = prefix + connector + report.getShortDisplayString();
             }
-
             result.add(line);
 
-            // Рекурсивно обрабатываем дочерние отчеты
             if (report.hasChildren()) {
-                String childIndent = indent + (isLast ? "    " : "│   ");
-                List<String> childLines = formatReportsForDisplay(
-                        report.getChildren(), autoPopupName, childIndent, isLast);
-                for (String childLine : childLines) {
-                    result.add(childIndent + "├── " + childLine);
+                // Рассчитываем отступ для детей
+                String childPrefix;
+                if (prefix.isEmpty()) {
+                    childPrefix = "    ";  // для корневого уровня дети будут с отступом 4 пробела
+                } else {
+                    childPrefix = prefix + (isLast ? "    " : "│   ");
                 }
+
+                // Для составного отчета добавляем выравнивание до позиции (AutoPopup ...
+                if (report.isComposite() && !prefix.isEmpty()) {
+                    int autoPopupIndex = line.indexOf(autoPopupPrefix);
+                    if (autoPopupIndex >= 0) {
+                        int needed = autoPopupIndex - childPrefix.length();
+                        if (needed > 0) {
+                            childPrefix = childPrefix + " ".repeat(needed);
+                        }
+                    } else {
+                        int repTypeIndex = line.indexOf("REP_TYPE=");
+                        if (repTypeIndex > 0) {
+                            int needed = repTypeIndex - childPrefix.length();
+                            if (needed > 0) {
+                                childPrefix = childPrefix + " ".repeat(needed);
+                            }
+                        }
+                    }
+                }
+
+                List<String> childrenLines = formatReportsForDisplay(
+                        report.getChildren(), autoPopupName, childPrefix, isLast);
+                result.addAll(childrenLines);
             }
         }
-
         return result;
+    }
+
+
+    private void writeMenuTree(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, String indent) {
+        for (int i = 0; i < items.size(); i++) {
+            PopupMenuInfo.MenuItem item = items.get(i);
+            boolean isLast = (i == items.size() - 1);
+
+            String branch = isLast ? "└── " : "├── ";
+            String childIndent = indent + (isLast ? "    " : "│   ");
+
+            if (item.isDbReport()) {
+                // Для отчётов из БД caption уже содержит полную строку с деревом
+                // Выводим как есть, без добавления indent и branch
+                writer.println(indent + item.getCaption());
+            } else {
+                String displayText = item.getPrefix() + item.getDisplayCaption();
+                writer.println(indent + branch + displayText);
+            }
+
+            if (item.hasChildren()) {
+                writeMenuTree(writer, item.getChildren(), childIndent);
+            }
+        }
     }
 
     /**

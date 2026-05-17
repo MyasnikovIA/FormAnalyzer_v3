@@ -81,3 +81,53 @@ PRIV_NAME                                                                       
 Тест_отчет_новорожденные2                                                                                                             |       5|[BLOB]  |                                                       |Тест_отчет_новорожденные2                                                                                                                       |test_novor2                   |
 
 ---------------------
+
+
+
+
+
+
+необходимо исправить верстку
+Сейаас в отчете выводиться:
+```
+***
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="TEST_BED_COUNT_STAT_CARDS" "Койко-дней, по статкарте"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="Составной" - REP_CODE="sost_test" "Тест 530"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="med_card_003" "Первичный осмотр врачом приемного отделения (дежурным врачом или лечащим врачом)" Form="Reports/HospPlan/initial_inspection.frm"
+    ├── │   ├── - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_09" "Предоперационный осмотр врачом анестезиологом-реаниматологом 530"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="REESTR_DEPS_SLUCH" "Аналитика случаев и сумм в реестрах в разбивке по отделениям" Form="Reports/Reestr/reestr_deps_sluch.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="hd_presc_list" "Лист назначений диализа"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="VIPISKA_ZNO1" "Выписка из медицинской карты стационарного больного злокачественным новообразованием(027-1/у)1" Form="Reports/Visit_1/VIPISKA_ZNO.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="Составной" - REP_CODE="MEDDEV-9232" "MEDDEV-9232"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_head_2" "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_head_2" "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card" "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card" "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm"
+    ├── │   ├── - REP_TYPE="WEB-форма" - REP_CODE="temperature_list" "Температурный лист" Form="Reports/ArmPatientsInDep/temperature_list.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp003u_7" "003/у Карта пациента (7 стр.)" Form="Reports/Pregnancy/dayhosp003_2u20/dayhosp003_2u20_7.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp003u_11(2)" "003/у Карта пациента дневного стационара акушерско-гинекологического профиля (11 стр)" Form="Reports/Pregnancy/dayhosp003_2u20/dayhosp003_2u20_11.frm"
+***
+```
+
+Необходимо выводить в отчет в таком формате:
+```
+***
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="TEST_BED_COUNT_STAT_CARDS" "Койко-дней, по статкарте"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="Составной" - REP_CODE="sost_test" "Тест 530"
+    │        │   ├── - REP_TYPE="WEB-форма" - REP_CODE="med_card_003" "Первичный осмотр врачом приемного отделения (дежурным врачом или лечащим врачом)" Form="Reports/HospPlan/initial_inspection.frm"
+    │        │   └── - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_09" "Предоперационный осмотр врачом анестезиологом-реаниматологом 530"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="REESTR_DEPS_SLUCH" "Аналитика случаев и сумм в реестрах в разбивке по отделениям" Form="Reports/Reestr/reestr_deps_sluch.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="hd_presc_list" "Лист назначений диализа"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="VIPISKA_ZNO1" "Выписка из медицинской карты стационарного больного злокачественным новообразованием(027-1/у)1" Form="Reports/Visit_1/VIPISKA_ZNO.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="Составной" - REP_CODE="MEDDEV-9232" "MEDDEV-9232"
+    │        │                                                    ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm"
+    │        │                                                    ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_head_2" "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm"
+    │        │                                                    ├── - REP_TYPE="WEB-форма" - REP_CODE="hosphistory_head_2" "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm"
+    │        │                                                    ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card" "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm"
+    │        │                                                    ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card" "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm"
+    │        │                                                    └── - REP_TYPE="WEB-форма" - REP_CODE="temperature_list" "Температурный лист" Form="Reports/ArmPatientsInDep/temperature_list.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp003u_7" "003/у Карта пациента (7 стр.)" Form="Reports/Pregnancy/dayhosp003_2u20/dayhosp003_2u20_7.frm"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp003u_11(2)" "003/у Карта пациента дневного стационара акушерско-гинекологического профиля (11 стр)" Form="Reports/Pregnancy/dayhosp003_2u20/dayhosp003_2u20_11.frm"
+***
+```
