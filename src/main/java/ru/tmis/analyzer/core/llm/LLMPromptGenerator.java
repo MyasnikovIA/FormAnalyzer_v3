@@ -40,6 +40,7 @@ public class LLMPromptGenerator {
     }
 
     public LLMReportContext prepareContext(List<FormInfo> forms) {
+        System.out.println("[LLM] Начало подготовки контекста для " + forms.size() + " форм...");
         context = new LLMReportContext();
         context.setAnalyzedForms(forms);
         context.setTotalForms(forms.size());
@@ -47,10 +48,12 @@ public class LLMPromptGenerator {
         List<SqlInfo> allSql = new ArrayList<>();
         Set<String> allViews = new LinkedHashSet<>();
         Map<String, Set<String>> viewUsage = new LinkedHashMap<>();
-
+        System.out.println("[LLM] Сбор SQL запросов и вьюх из форм...");
+        int sqlCount = 0;
         for (FormInfo form : forms) {
             for (SqlInfo sql : form.getSqlQueries()) {
                 allSql.add(sql);
+                sqlCount++;
                 for (String tv : sql.getTablesViews()) {
                     if (tv.startsWith("D_V_")) {
                         allViews.add(tv);
@@ -59,6 +62,9 @@ public class LLMPromptGenerator {
                 }
             }
         }
+        System.out.println("[LLM] Собрано SQL запросов: " + sqlCount);
+        System.out.println("[LLM] Найдено уникальных вьюх: " + allViews.size());
+
         context.setAllSqlQueries(allSql);
         context.setAllViews(allViews);
         context.setViewUsageInForms(viewUsage);
@@ -66,20 +72,32 @@ public class LLMPromptGenerator {
 
         // Загрузка данных из БД
         if (config.isIncludePostgresViews() || config.isIncludePostgresTables()) {
+            System.out.println("[LLM] Загрузка данных из PostgreSQL...");
             loadPostgresData();
+            System.out.println("[LLM] Загрузка данных из PostgreSQL завершена.");
         }
         if (config.isIncludeOracleViews() || config.isIncludeOracleTables()) {
+            System.out.println("[LLM] Загрузка данных из Oracle...");
             loadOracleData();
+            System.out.println("[LLM] Загрузка данных из Oracle завершена.");
         }
         if (config.isIncludeOracleFunctions()) {
+            System.out.println("[LLM] Загрузка тел функций Oracle...");
             loadOracleFunctions();
+            System.out.println("[LLM] Загрузка тел функций Oracle завершена.");
         }
         if (config.isIncludePostgresFunctions()) {
+            System.out.println("[LLM] Загрузка тел функций PostgreSQL...");
             loadPostgresFunctions();
+            System.out.println("[LLM] Загрузка тел функций PostgreSQL завершена.");
         }
         if (config.isIncludeBrokerFunctions()) {
+            System.out.println("[LLM] Загрузка брокеров...");
             loadBrokerFunctions();
+            System.out.println("[LLM] Загрузка брокеров завершена.");
         }
+
+        System.out.println("[LLM] Подготовка контекста завершена.");
         return context;
     }
 
@@ -88,66 +106,106 @@ public class LLMPromptGenerator {
         Map<String, Set<String>> pgViewTables = new LinkedHashMap<>();
         int count = 0;
         int total = context.getAllViews().size();
+        System.out.println("[PostgreSQL] Загрузка DDL вьюх (" + total + " шт.)...");
 
         for (String view : context.getAllViews()) {
-            if (stopCondition.getAsBoolean()) break;
+            if (stopCondition.getAsBoolean()) {
+                System.out.println("[PostgreSQL] Загрузка прервана пользователем");
+                break;
+            }
             count++;
+            System.out.println("[PostgreSQL]  [" + count + "/" + total + "] Загрузка вьюхи: " + view);
             String ddl = postgresService.getViewDDL(view);
             if (ddl != null) {
                 pgViewsDDL.put(view, ddl);
                 pgViewTables.put(view, extractTablesFromDDL(ddl));
+                System.out.println("[PostgreSQL]    OK (" + pgViewTables.get(view).size() + " таблиц)");
+            } else {
+                System.out.println("[PostgreSQL]    НЕ НАЙДЕНА");
             }
         }
         context.setPostgresViewDDL(pgViewsDDL);
         context.setPostgresViewTables(pgViewTables);
+        System.out.println("[PostgreSQL] Загружено DDL вьюх: " + pgViewsDDL.size());
 
         if (config.isIncludePostgresTables() && !pgViewTables.isEmpty()) {
             Set<String> allTables = new LinkedHashSet<>();
             for (Set<String> tables : pgViewTables.values()) {
                 allTables.addAll(tables);
             }
+            System.out.println("[PostgreSQL] Загрузка DDL таблиц (" + allTables.size() + " шт.)...");
             Map<String, String> tableDDL = new LinkedHashMap<>();
             int tableCount = 0;
             for (String table : allTables) {
                 if (stopCondition.getAsBoolean()) break;
                 tableCount++;
+                System.out.println("[PostgreSQL]   [" + tableCount + "/" + allTables.size() + "] Загрузка таблицы: " + table);
                 String ddl = postgresService.getTableDDL(table);
-                if (ddl != null) tableDDL.put(table, ddl);
+                if (ddl != null) {
+                    tableDDL.put(table, ddl);
+                    System.out.println("[PostgreSQL]      OK");
+                } else {
+                    System.out.println("[PostgreSQL]      НЕ НАЙДЕНА");
+                }
             }
             context.setPostgresTableDDL(tableDDL);
+            System.out.println("[PostgreSQL] Загружено DDL таблиц: " + tableDDL.size());
         }
     }
 
     private void loadOracleData() {
         Map<String, String> oraViewsDDL = new LinkedHashMap<>();
         Map<String, Set<String>> oraViewTables = new LinkedHashMap<>();
-        int count = 0;
-        int total = context.getAllViews().size();
 
-        for (String view : context.getAllViews()) {
-            if (stopCondition.getAsBoolean()) break;
+        Set<String> allViews = context.getAllViews();
+        int total = allViews.size();
+        int count = 0;
+
+        System.out.println("[Oracle] Загрузка DDL вьюх (" + total + " шт.)...");
+
+        for (String view : allViews) {
+            if (stopCondition.getAsBoolean()) {
+                System.out.println("[Oracle] Загрузка прервана пользователем");
+                break;
+            }
             count++;
+            System.out.println("[Oracle]  [" + count + "/" + total + "] Загрузка вьюхи: " + view);
             String ddl = oracleService.getViewDDL(view);
             if (ddl != null) {
                 oraViewsDDL.put(view, ddl);
                 oraViewTables.put(view, extractTablesFromDDL(ddl));
+                System.out.println("[Oracle]    OK (" + oraViewTables.get(view).size() + " таблиц)");
+            } else {
+                System.out.println("[Oracle]    НЕ НАЙДЕНА");
             }
         }
         context.setOracleViewDDL(oraViewsDDL);
         context.setOracleViewTables(oraViewTables);
+        System.out.println("[Oracle] Загружено DDL вьюх: " + oraViewsDDL.size());
 
         if (config.isIncludeOracleTables() && !oraViewTables.isEmpty()) {
             Set<String> allTables = new LinkedHashSet<>();
             for (Set<String> tables : oraViewTables.values()) {
                 allTables.addAll(tables);
             }
+            System.out.println("[Oracle] Загрузка DDL таблиц (" + allTables.size() + " шт.)...");
+
             Map<String, String> tableDDL = new LinkedHashMap<>();
+            int tableCount = 0;
             for (String table : allTables) {
                 if (stopCondition.getAsBoolean()) break;
+                tableCount++;
+                System.out.println("[Oracle]   [" + tableCount + "/" + allTables.size() + "] Загрузка таблицы: " + table);
                 String ddl = oracleService.getTableDDL(table);
-                if (ddl != null) tableDDL.put(table, ddl);
+                if (ddl != null) {
+                    tableDDL.put(table, ddl);
+                    System.out.println("[Oracle]      OK");
+                } else {
+                    System.out.println("[Oracle]      НЕ НАЙДЕНА");
+                }
             }
             context.setOracleTableDDL(tableDDL);
+            System.out.println("[Oracle] Загружено DDL таблиц: " + tableDDL.size());
         }
     }
 
@@ -162,11 +220,20 @@ public class LLMPromptGenerator {
             }
         }
 
+        if (funcs.isEmpty()) {
+            System.out.println("[Oracle] Нет функций для загрузки");
+            context.setOracleFunctionBodies(new LinkedHashMap<>());
+            return;
+        }
+
+        System.out.println("[Oracle] Загрузка тел функций (" + funcs.size() + " шт.)...");
+
         Map<String, String> bodies = new LinkedHashMap<>();
         int count = 0;
         for (String fullName : funcs) {
             if (stopCondition.getAsBoolean()) break;
             count++;
+            System.out.println("[Oracle]   [" + count + "/" + funcs.size() + "] Загрузка функции: " + fullName);
             int dot = fullName.lastIndexOf('.');
             if (dot > 0) {
                 String pkg = fullName.substring(0, dot);
@@ -174,10 +241,14 @@ public class LLMPromptGenerator {
                 String body = oracleService.getFunctionBody(pkg, func);
                 if (body != null && !body.isEmpty()) {
                     bodies.put(fullName, body);
+                    System.out.println("[Oracle]      OK (" + body.length() + " симв.)");
+                } else {
+                    System.out.println("[Oracle]      НЕ НАЙДЕНА");
                 }
             }
         }
         context.setOracleFunctionBodies(bodies);
+        System.out.println("[Oracle] Загружено тел функций: " + bodies.size());
     }
 
     private void loadPostgresFunctions() {
@@ -192,69 +263,132 @@ public class LLMPromptGenerator {
             }
         }
 
+        if (funcs.isEmpty()) {
+            System.out.println("[PostgreSQL] Нет функций для загрузки");
+            context.setPostgresFunctionBodies(new LinkedHashMap<>());
+            return;
+        }
+
+        System.out.println("[PostgreSQL] Загрузка тел функций (" + funcs.size() + " шт.)...");
+
         Map<String, String> bodies = new LinkedHashMap<>();
         int count = 0;
         for (String name : funcs) {
             if (stopCondition.getAsBoolean()) break;
             count++;
+            System.out.println("[PostgreSQL]   [" + count + "/" + funcs.size() + "] Загрузка функции: " + name);
             String body = postgresService.getFunctionBody(name);
             if (body != null && !body.isEmpty()) {
                 bodies.put(name, body);
+                System.out.println("[PostgreSQL]      OK (" + body.length() + " симв.)");
+            } else {
+                System.out.println("[PostgreSQL]      НЕ НАЙДЕНА");
             }
         }
         context.setPostgresFunctionBodies(bodies);
+        System.out.println("[PostgreSQL] Загружено тел функций: " + bodies.size());
     }
 
     private void loadBrokerFunctions() {
         Set<BrokerInfo> brokers = new LinkedHashSet<>();
 
-        // Собираем брокеров из форм
+        System.out.println("[Broker] Сбор брокеров из форм...");
         for (FormInfo form : context.getAnalyzedForms()) {
             for (String brokerStr : form.getBrokers()) {
                 if (brokerStr.contains("unit:") && brokerStr.contains("action:")) {
                     String unit = extractValue(brokerStr, "unit");
                     String action = extractValue(brokerStr, "action");
                     if (unit != null && action != null) {
-                        brokers.add(new BrokerInfo(unit, action));  // используем конструктор существующего класса
+                        brokers.add(new BrokerInfo(unit, action));
                     }
                 } else if (brokerStr.contains("action:") && brokerStr.contains("D_PKG_")) {
                     String functionName = extractValue(brokerStr, "action");
                     if (functionName != null && !functionName.isEmpty()) {
-                        brokers.add(new BrokerInfo(functionName));  // используем конструктор существующего класса
+                        brokers.add(new BrokerInfo(functionName));
                     }
                 }
             }
         }
 
         if (brokers.isEmpty()) {
+            System.out.println("[Broker] Брокеры не найдены");
             context.setBrokersMap(new LinkedHashMap<>());
             context.setOracleBrokerFunctions(new LinkedHashMap<>());
             context.setPostgresBrokerFunctions(new LinkedHashMap<>());
             return;
         }
 
-        // Разрешаем брокеров (ищем execProc для типа 1)
+        System.out.println("[Broker] Найдено брокеров: " + brokers.size());
+        System.out.println("[Broker] Разрешение брокеров (поиск execProc)...");
+
         Map<String, BrokerInfo> resolvedBrokers = new LinkedHashMap<>();
         Map<String, String> oracleBrokerFuncs = new LinkedHashMap<>();
         Map<String, String> postgresBrokerFuncs = new LinkedHashMap<>();
 
+        int count = 0;
         for (BrokerInfo broker : brokers) {
+            if (stopCondition.getAsBoolean()) break;
+            count++;
+
             if (broker.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION) {
+                System.out.println("[Broker]   [" + count + "/" + brokers.size() + "] Поиск: unit=" + broker.getUnit() + ", action=" + broker.getAction());
                 String execProc = findExecProc(broker.getUnit(), broker.getAction());
                 if (execProc != null) {
                     broker.setExecProc(execProc);
                     resolvedBrokers.put(broker.getUnit() + "_" + broker.getAction(), broker);
-                    // ... остальной код
+                    System.out.println("[Broker]      Найден execProc: " + execProc);
+
+                    if (config.isIncludeOracleFunctions() && execProc.contains(".")) {
+                        int dot = execProc.lastIndexOf('.');
+                        String pkg = execProc.substring(0, dot);
+                        String func = execProc.substring(dot + 1);
+                        String body = oracleService.getFunctionBody(pkg, func);
+                        if (body != null && !body.isEmpty()) {
+                            oracleBrokerFuncs.put(execProc, body);
+                            System.out.println("[Broker]        Oracle тело функции загружено");
+                        }
+                    }
+
+                    if (config.isIncludePostgresFunctions()) {
+                        String body = postgresService.getFunctionBody(execProc.toLowerCase());
+                        if (body != null && !body.isEmpty()) {
+                            postgresBrokerFuncs.put(execProc.toLowerCase(), body);
+                            System.out.println("[Broker]        PostgreSQL тело функции загружено");
+                        }
+                    }
+                } else {
+                    System.out.println("[Broker]      execProc НЕ НАЙДЕН");
                 }
             } else {
+                System.out.println("[Broker]   [" + count + "/" + brokers.size() + "] Прямая функция: " + broker.getDirectFunction());
                 resolvedBrokers.put(broker.getDirectFunction(), broker);
-                // ... остальной код
+                String execProc = broker.getDirectFunction();
+
+                if (config.isIncludeOracleFunctions() && execProc.contains(".")) {
+                    int dot = execProc.lastIndexOf('.');
+                    String pkg = execProc.substring(0, dot);
+                    String func = execProc.substring(dot + 1);
+                    String body = oracleService.getFunctionBody(pkg, func);
+                    if (body != null && !body.isEmpty()) {
+                        oracleBrokerFuncs.put(execProc, body);
+                        System.out.println("[Broker]        Oracle тело функции загружено");
+                    }
+                }
+
+                if (config.isIncludePostgresFunctions()) {
+                    String body = postgresService.getFunctionBody(execProc.toLowerCase());
+                    if (body != null && !body.isEmpty()) {
+                        postgresBrokerFuncs.put(execProc.toLowerCase(), body);
+                        System.out.println("[Broker]        PostgreSQL тело функции загружено");
+                    }
+                }
             }
         }
 
         context.setBrokersMap(resolvedBrokers);
         context.setOracleBrokerFunctions(oracleBrokerFuncs);
         context.setPostgresBrokerFunctions(postgresBrokerFuncs);
+        System.out.println("[Broker] Разрешено брокеров: " + resolvedBrokers.size());
     }
 
     private String extractValue(String str, String key) {
@@ -284,7 +418,7 @@ public class LLMPromptGenerator {
                 return rs.getString("execproc");
             }
         } catch (SQLException e) {
-            System.err.println("Ошибка поиска execproc для " + unit + "/" + action + ": " + e.getMessage());
+            System.err.println("[Broker] Ошибка поиска execproc для " + unit + "/" + action + ": " + e.getMessage());
         }
         return null;
     }
@@ -312,6 +446,8 @@ public class LLMPromptGenerator {
     }
 
     public String generateSingleFile() throws Exception {
+        System.out.println("[LLM] Генерация единого промпта...");
+
         StringBuilder sb = new StringBuilder();
 
         // Заголовок
@@ -321,6 +457,8 @@ public class LLMPromptGenerator {
         } else {
             sb.append("# ЗАПРОС К LLM: АНАЛИЗ ФОРМ T-MIS\n\n");
         }
+
+        sb.append("> **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL\n\n");
 
         sb.append("## Контекст задачи\n\n");
         sb.append("Перед тобой техническая документация по форме(ам) системы T-MIS. ");
@@ -346,13 +484,28 @@ public class LLMPromptGenerator {
         sb.append("---\n\n");
 
         // Генерация блоков
+        System.out.println("[LLM] Генерация блока: SQL запросы");
         sb.append(generateSqlQueriesBlock());
+
+        System.out.println("[LLM] Генерация блока: PostgreSQL вьюхи");
         sb.append(generatePostgresViewsBlock());
+
+        System.out.println("[LLM] Генерация блока: Oracle вьюхи");
         sb.append(generateOracleViewsBlock());
+
+        System.out.println("[LLM] Генерация блока: Брокеры");
         sb.append(generateBrokerFunctionsBlock());
+
+        System.out.println("[LLM] Генерация блока: PostgreSQL таблицы");
         sb.append(generatePostgresTablesBlock());
+
+        System.out.println("[LLM] Генерация блока: Oracle таблицы");
         sb.append(generateOracleTablesBlock());
+
+        System.out.println("[LLM] Генерация блока: Oracle функции");
         sb.append(generateOracleFunctionsBlock());
+
+        System.out.println("[LLM] Генерация блока: PostgreSQL функции");
         sb.append(generatePostgresFunctionsBlock());
 
         sb.append("\n\n---\n\n");
@@ -362,8 +515,10 @@ public class LLMPromptGenerator {
         }
         sb.append(instruction);
 
+        System.out.println("[LLM] Генерация промпта завершена. Размер: " + sb.length() + " симв.");
         return sb.toString();
     }
+
 
     private String generateSqlQueriesBlock() {
         StringBuilder sb = new StringBuilder();
@@ -858,7 +1013,10 @@ public class LLMPromptGenerator {
                 "- Системные опции из D_PKG_OPTIONS.GET\n\n";
     }
 
+
     public List<String> generateForEachForm() throws Exception {
+        System.out.println("[LLM] Генерация отдельных промптов для каждой формы...");
+
         String outputDir = settings.getOutputDir();
         if (outputDir == null || outputDir.trim().isEmpty()) {
             outputDir = "LLM_prompts";
@@ -874,8 +1032,12 @@ public class LLMPromptGenerator {
         int total = context.getAnalyzedForms().size();
 
         for (FormInfo form : context.getAnalyzedForms()) {
-            if (stopCondition.getAsBoolean()) break;
+            if (stopCondition.getAsBoolean()) {
+                System.out.println("[LLM] Генерация прервана пользователем");
+                break;
+            }
             processed++;
+            System.out.println("[LLM] [" + processed + "/" + total + "] Обработка формы: " + form.getFormPath());
 
             // Создаем временный контекст только для одной формы
             LLMReportContext singleContext = new LLMReportContext();
@@ -1035,8 +1197,9 @@ public class LLMPromptGenerator {
 
             Files.writeString(filePath, prompt);
             generatedFiles.add(filePath.toString());
+            System.out.println("[LLM]   Промпт сохранен");
         }
-
+        System.out.println("[LLM] Генерация отдельных промптов завершена. Создано файлов: " + generatedFiles.size());
         return generatedFiles;
     }
 }
