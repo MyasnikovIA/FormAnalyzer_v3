@@ -1,6 +1,6 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Sun May 17 15:31:13 GMT+07:00 2026
+Дата создания: Sun May 17 16:37:50 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
@@ -1274,6 +1274,50 @@ SQL ЗАПРОСЫ (9):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_CL_ID
     D_P_EXC
+
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_LABMED_ANALYZE.IS_LIS_ANALYZE_BY_DS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_labmed_analyze.is_lis_analyze_by_ds(numeric)
+
+  D_PKG_DATE_TOOLS.END_OF_MONTH:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_date_tools.end_of_month(timestamp)
+
+  D_PKG_PMC_DISP_PLAN.SET_DISP_PLACE:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_pmc_disp_plan.set_disp_place(numeric[], numeric, numeric[])
+
+  D_PKG_PMC_DISP_PLAN.SET_REG:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_pmc_disp_plan.set_reg(numeric, numeric, varchar, numeric, numeric)
+
+  D_PKG_AMB_TALONS.WORK_IN_AT_ATTACH_DU:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_amb_talons.work_in_at_attach_du(numeric, numeric, numeric, numeric, numeric, varchar, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:42804:254:assignment:target type is different type than source type
+
+  D_PKG_CONTROL_CARD.RECOUNT_PLAN_DATES:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_control_card.recount_plan_dates(numeric, numeric)
+
+  D_PKG_CONTROL_CARD.CLEAR_REG_FROM_DISP_PLAN:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_control_card.clear_reg_from_disp_plan(numeric, numeric)
+
+  D_PKG_PMC_DISP_PLAN.DEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_pmc_disp_plan.del(numeric, numeric)
+
+  D_PKG_R_ZNO_RISK_DATA_REASONS.DEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_r_zno_risk_data_reasons.del(numeric, numeric)
+
+  D_PKG_R_ZNO_RISK_DATA_REASONS.ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_r_zno_risk_data_reasons.add(numeric, numeric, numeric, numeric)
 
 
 ====================================================================================================

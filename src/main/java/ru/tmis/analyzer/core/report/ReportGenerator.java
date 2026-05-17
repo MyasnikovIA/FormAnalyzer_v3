@@ -1,14 +1,17 @@
-// core/report/ReportGenerator.java
 package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.db.OracleService;
+import ru.tmis.analyzer.core.db.PostgresPackageChecker;
 import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+
+import ru.tmis.analyzer.core.db.PostgresPackageChecker;
+import ru.tmis.analyzer.config.SettingsModel;
 
 import java.io.*;
 import java.nio.file.*;
@@ -20,6 +23,7 @@ public class ReportGenerator {
     private final String outputDir;
     private final AppConfig config;
     private List<FormInfo> forms;
+    private final SettingsModel settings;
 
     private final Map<String, Long> oracleCountCache = new ConcurrentHashMap<>();
     private final Map<String, Long> postgresCountCache = new ConcurrentHashMap<>();
@@ -28,12 +32,12 @@ public class ReportGenerator {
     private PostgresService postgresService;
 
     // В конструкторе инициализируем сервисы (если ещё нет)
+
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
         this.config = config;
         this.forms = new ArrayList<>();
-        // Инициализация сервисов БД (потребуются настройки)
-        SettingsModel settings = SettingsModel.getInstance(); // или передать через конструктор
+        this.settings = SettingsModel.getInstance();
         this.oracleService = new OracleService(settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword());
         this.postgresService = new PostgresService(settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(), settings.getMisUser());
     }
@@ -245,6 +249,42 @@ public class ReportGenerator {
             }
             writer.println();
         }
+
+// Проверка пакетов/функций в PostgreSQL
+        if (config.isCheckPostgresPackages() && !form.getPackagesFunctions().isEmpty()) {
+            writer.println("ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:");
+            writer.println();
+
+            PostgresPackageChecker checker = new PostgresPackageChecker(
+                    settings.getPostgresUrl(),
+                    settings.getPostgresUser(),
+                    settings.getPostgresPassword()
+            );
+            // Можно установить логгер
+            // checker.setLogCallback(...);
+
+            Map<String, PostgresPackageChecker.FunctionInfo> results = checker.checkFunctions(form.getPackagesFunctions());
+
+            for (Map.Entry<String, PostgresPackageChecker.FunctionInfo> entry : results.entrySet()) {
+                String funcName = entry.getKey();
+                PostgresPackageChecker.FunctionInfo info = entry.getValue();
+
+                writer.println("  " + funcName + ":");
+                writer.println("    Статус: " + info.getStatus());
+                if (info.getSignature() != null && !info.getSignature().isEmpty()) {
+                    writer.println("    Сигнатура: " + info.getSignature());
+                }
+                if (info.hasErrors()) {
+                    writer.println("    ОШИБКИ:");
+                    for (String err : info.getErrors()) writer.println("      " + err);
+                }
+                if (info.hasWarnings()) {
+                    writer.println("    ПРЕДУПРЕЖДЕНИЯ:");
+                    for (String warn : info.getWarnings()) writer.println("      " + warn);
+                }
+                writer.println();
+            }
+        }
     }
 
     private void writeSqlQueries(PrintWriter writer, FormInfo form) {
@@ -331,8 +371,6 @@ public class ReportGenerator {
      * @param formInfo информация о форме
      * @param viewDependencies карта зависимостей вьюх
      */
-    // core/report/ReportGenerator.java
-
     private void writeViewTablesBlock(PrintWriter writer, FormInfo formInfo,
                                       Map<String, ViewTableDependencies> viewDependencies) {
         if (viewDependencies == null || viewDependencies.isEmpty()) {
@@ -375,9 +413,6 @@ public class ReportGenerator {
 
         System.out.println("[DEBUG] writeViewTablesBlock: wrote " + allTables.size() + " tables");
     }
-
-
-    // core/report/ReportGenerator.java
 
     /**
      * Вывод контекстного меню (PopupMenu) в виде дерева

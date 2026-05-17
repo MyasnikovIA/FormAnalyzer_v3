@@ -50,6 +50,7 @@ public class SettingsDialog extends JDialog {
     private JCheckBox includeBrokerFunctionsReportCheckbox;
     private JCheckBox includePopupMenusCheckbox;
     private JCheckBox includePostgresPopupMenusCheckbox;
+    private JCheckBox checkPostgresPackagesCheckbox;
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -282,6 +283,14 @@ public class SettingsDialog extends JDialog {
                         "а также количество записей во вьюхе и в каждой таблице (Oracle и PostgreSQL).\n" +
                         "Требует подключения к обеим базам данных."));
 
+        JCheckBox checkPostgresPackagesCheckbox = new JCheckBox("Проверять пакеты/функции в PostgreSQL");
+        checkPostgresPackagesCheckbox.setSelected(config.isCheckPostgresPackages());
+        checkPostgresPackagesCheckbox.addActionListener(e -> config.setCheckPostgresPackages(checkPostgresPackagesCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(checkPostgresPackagesCheckbox,
+                "Проверять существование пакетов и функций D_PKG_* в PostgreSQL.\n" +
+                        "Использует расширение plpgsql_check_function для анализа.\n" +
+                        "Требует установленного расширения plpgsql_check в PostgreSQL."));
+
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -478,6 +487,10 @@ public class SettingsDialog extends JDialog {
             includePopupMenusCheckbox.setSelected(config.isIncludePopupMenus());
         }
 
+        if (checkPostgresPackagesCheckbox != null) {
+            checkPostgresPackagesCheckbox.setSelected(config.isCheckPostgresPackages());
+        }
+
         // LLM settings
         enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
         if ("per_form".equals(config.getLlmExportMode())) {
@@ -531,6 +544,9 @@ public class SettingsDialog extends JDialog {
         }
         if (includePopupMenusCheckbox != null) {
             config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected());
+        }
+        if (checkPostgresPackagesCheckbox != null) {
+            config.setCheckPostgresPackages(checkPostgresPackagesCheckbox.isSelected());
         }
 
         // LLM settings

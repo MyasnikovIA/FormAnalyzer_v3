@@ -22,6 +22,8 @@ public class SettingsModel {
     private String postgresUser = "postgres";
     private String postgresPassword = "postgres";
     private String misUser = "$TSTESTZON";
+    private boolean checkPostgresPackages = false;
+
 
     // Singleton
     private static SettingsModel instance;
@@ -85,4 +87,6 @@ public class SettingsModel {
 
     public String getMisUser() { return misUser; }
     public void setMisUser(String misUser) { this.misUser = misUser; }
+    public boolean isCheckPostgresPackages() { return checkPostgresPackages; }
+    public void setCheckPostgresPackages(boolean checkPostgresPackages) { this.checkPostgresPackages = checkPostgresPackages; }
 }

@@ -15,7 +15,7 @@
   "includePostgresPopupMenus": true,
   "checkDbObjects": false,
   "checkDbData": false,
-  "checkPostgresPackages": false,
+  "checkPostgresPackages": true,
   "checkPostgresTables": false,
   "checkPostgresPK": false,
   "checkNotNullConstraints": false,

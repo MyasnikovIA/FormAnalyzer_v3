@@ -7,5 +7,6 @@
   "postgresUrl": "jdbc:postgresql://192.168.241.137:5432/med2dev",
   "postgresUser": "postgres",
   "postgresPassword": "postgres",
-  "misUser": "$TSTESTZON"
+  "misUser": "$TSTESTZON",
+  "checkPostgresPackages": false
 }
