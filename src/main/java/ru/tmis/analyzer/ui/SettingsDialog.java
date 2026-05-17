@@ -49,6 +49,7 @@ public class SettingsDialog extends JDialog {
     private JCheckBox includeJsUnitCompositionsCheckbox;
     private JCheckBox includeBrokerFunctionsReportCheckbox;
     private JCheckBox includePopupMenusCheckbox;
+    private JCheckBox includePostgresPopupMenusCheckbox;
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -251,8 +252,8 @@ public class SettingsDialog extends JDialog {
                         "и соответствующие им функции из базы данных Oracle"));
         contentPanel.add(Box.createVerticalStrut(5));
 
-        // Контекстное меню (ПКМ)
-        includePopupMenusCheckbox = new JCheckBox("Показывать контекстное меню (ПКМ)");
+        // Контекстное меню (ПКМ) - Oracle
+        includePopupMenusCheckbox = new JCheckBox("Показывать контекстное меню (ПКМ) из Oracle");
         includePopupMenusCheckbox.setSelected(config.isIncludePopupMenus());
         includePopupMenusCheckbox.addActionListener(e -> config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected()));
         contentPanel.add(createCheckboxWithDescription(includePopupMenusCheckbox,
@@ -261,7 +262,18 @@ public class SettingsDialog extends JDialog {
                         "а также отчеты из базы данных Oracle (D_REPORTS_LINKS)"));
         contentPanel.add(Box.createVerticalStrut(5));
 
-        // В методе createReportPanel() добавить:
+        // Контекстное меню (ПКМ) - PostgreSQL
+        includePostgresPopupMenusCheckbox = new JCheckBox("Показывать контекстное меню из PostgreSQL");
+        includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
+        includePostgresPopupMenusCheckbox.addActionListener(e ->
+                config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includePostgresPopupMenusCheckbox,
+                "Выводить в отчет дерево контекстного меню (PopupMenu) с отчетами,\n" +
+                        "загруженными из базы данных PostgreSQL (аналогично Oracle).\n" +
+                        "Требует подключения к PostgreSQL и наличия представлений D_REPORTS_LINKS и D_REPORTS."));
+        contentPanel.add(Box.createVerticalStrut(5));
+
+        // Детальное содержимое вьюх
         JCheckBox includeViewDetailsCheckbox = new JCheckBox("Детальное содержимое вьюх (с количеством записей)");
         includeViewDetailsCheckbox.setSelected(config.isIncludeViewDetails());
         includeViewDetailsCheckbox.addActionListener(e -> config.setIncludeViewDetails(includeViewDetailsCheckbox.isSelected()));
@@ -482,6 +494,7 @@ public class SettingsDialog extends JDialog {
         includeOracleFunctionsCheckbox.setSelected(config.isIncludeOracleFunctions());
         includePostgresFunctionsCheckbox.setSelected(config.isIncludePostgresFunctions());
         includeBrokerFunctionsCheckbox.setSelected(config.isIncludeBrokerFunctions());
+        includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
 
         String instruction = config.getLlmInstructionText();
         if (instruction == null || instruction.isEmpty()) {
@@ -532,6 +545,7 @@ public class SettingsDialog extends JDialog {
         config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
         config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
         config.setLlmInstructionText(instructionTextArea.getText());
+        config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
         config.save();
 
         JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
