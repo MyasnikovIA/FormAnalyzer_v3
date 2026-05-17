@@ -195,119 +195,218 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
+    // Пример: переработанный метод createReportPanel() для настроек отчета
     private JPanel createReportPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+        // Заголовок
         JLabel titleLabel = new JLabel("Настройки отчета");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        content.add(titleLabel);
-        content.add(Box.createVerticalStrut(10));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(titleLabel);
+        contentPanel.add(Box.createVerticalStrut(15));
 
+        // Чекбоксы с описаниями (как в родительском проекте)
         JCheckBox includeSqlCheckbox = new JCheckBox("Показывать SQL запросы");
         includeSqlCheckbox.setSelected(config.isIncludeSqlContent());
         includeSqlCheckbox.addActionListener(e -> config.setIncludeSqlContent(includeSqlCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeSqlCheckbox,
+                "Выводить полное содержимое SQL запросов в отчете.\n" +
+                        "Включает: SELECT, INSERT, UPDATE, DELETE, BEGIN...END блоки"));
+        contentPanel.add(Box.createVerticalStrut(5));
 
         JCheckBox includeTablesCheckbox = new JCheckBox("Показывать таблицы и вьюхи");
         includeTablesCheckbox.setSelected(config.isIncludeTablesViews());
         includeTablesCheckbox.addActionListener(e -> config.setIncludeTablesViews(includeTablesCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeTablesCheckbox,
+                "Выводить список всех таблиц (D_*) и представлений (D_V_*),\n" +
+                        "используемых в SQL запросах формы"));
+        contentPanel.add(Box.createVerticalStrut(5));
 
         JCheckBox includeCompositionsCheckbox = new JCheckBox("Показывать композиции из JS");
         includeCompositionsCheckbox.setSelected(config.isIncludeJsUnitCompositions());
         includeCompositionsCheckbox.addActionListener(e -> config.setIncludeJsUnitCompositions(includeCompositionsCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeCompositionsCheckbox,
+                "Извлекать композиции UnitEdit из JS вызовов\n" +
+                        "UniversalComposition в openWindow/openD3Form"));
+        contentPanel.add(Box.createVerticalStrut(5));
 
         JCheckBox includeBrokersCheckbox = new JCheckBox("Показывать брокеров");
         includeBrokersCheckbox.setSelected(config.isIncludeBrokerFunctions());
         includeBrokersCheckbox.addActionListener(e -> config.setIncludeBrokerFunctions(includeBrokersCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeBrokersCheckbox,
+                "Извлекать брокеры (Action/SubAction с атрибутами unit/action)\n" +
+                        "и соответствующие им функции из базы данных Oracle"));
 
-        content.add(includeSqlCheckbox);
-        content.add(Box.createVerticalStrut(5));
-        content.add(includeTablesCheckbox);
-        content.add(Box.createVerticalStrut(5));
-        content.add(includeCompositionsCheckbox);
-        content.add(Box.createVerticalStrut(5));
-        content.add(includeBrokersCheckbox);
-
-        JScrollPane scroll = new JScrollPane(content);
+        JScrollPane scroll = new JScrollPane(contentPanel);
+        scroll.setBorder(null);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
         panel.add(scroll, BorderLayout.CENTER);
 
         return panel;
     }
 
+    // Полный исправленный метод createLLMPanel() с использованием createBlockCheckbox
     private JPanel createLLMPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        enableLLMExportCheckbox = new JCheckBox("Включить экспорт LLM промпта");
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+        JLabel titleLabel = new JLabel("Настройки экспорта LLM промпта");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(titleLabel);
+        contentPanel.add(Box.createVerticalStrut(10));
+
+        JLabel descLabel = new JLabel("<html>Экспорт данных в формате, готовом для передачи в LLM (ChatGPT, Claude и др.).<br>" +
+                "Будут включены: SQL запросы, DDL вьюх, DDL таблиц и тела функций из Oracle и PostgreSQL.</html>");
+        descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(descLabel);
+        contentPanel.add(Box.createVerticalStrut(20));
+
+        // Чекбокс включения экспорта
+        enableLLMExportCheckbox = new JCheckBox("Включить экспорт LLM промпта после анализа", false);
         enableLLMExportCheckbox.setFont(enableLLMExportCheckbox.getFont().deriveFont(Font.BOLD));
-        content.add(enableLLMExportCheckbox);
-        content.add(Box.createVerticalStrut(10));
+        enableLLMExportCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(enableLLMExportCheckbox);
+        contentPanel.add(Box.createVerticalStrut(15));
 
-        // Mode
+        // Режим генерации
         JPanel modePanel = new JPanel();
         modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
         modePanel.setBorder(BorderFactory.createTitledBorder("Режим генерации"));
+        modePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         ButtonGroup modeGroup = new ButtonGroup();
-        singleFileRadio = new JRadioButton("Один общий промпт", true);
+        singleFileRadio = new JRadioButton("Один общий промпт для всех форм", true);
         perFormRadio = new JRadioButton("Отдельный промпт для каждой формы");
+
+        singleFileRadio.setToolTipText("Все SQL запросы и DDL объектов из всех выбранных форм будут в одном файле");
+        perFormRadio.setToolTipText("Для каждой выбранной формы будет создан отдельный файл промпта");
+
         modeGroup.add(singleFileRadio);
         modeGroup.add(perFormRadio);
 
         modePanel.add(singleFileRadio);
         modePanel.add(perFormRadio);
-        content.add(modePanel);
-        content.add(Box.createVerticalStrut(10));
 
-        // Data selection
-        JPanel dataPanel = new JPanel();
-        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
-        dataPanel.setBorder(BorderFactory.createTitledBorder("Выбор данных"));
+        contentPanel.add(modePanel);
+        contentPanel.add(Box.createVerticalStrut(15));
 
-        includeSqlQueriesCheckbox = new JCheckBox("SQL запросы", true);
-        includePostgresViewsCheckbox = new JCheckBox("PostgreSQL вьюхи", true);
-        includeOracleViewsCheckbox = new JCheckBox("Oracle вьюхи", true);
-        includePostgresTablesCheckbox = new JCheckBox("PostgreSQL таблицы", true);
-        includeOracleTablesCheckbox = new JCheckBox("Oracle таблицы", true);
-        includeOracleFunctionsCheckbox = new JCheckBox("Oracle функции", true);
-        includePostgresFunctionsCheckbox = new JCheckBox("PostgreSQL функции", true);
-        includeBrokerFunctionsCheckbox = new JCheckBox("Брокеры", true);
+        // Выбор данных для экспорта
+        JPanel blocksPanel = new JPanel();
+        blocksPanel.setLayout(new BoxLayout(blocksPanel, BoxLayout.Y_AXIS));
+        blocksPanel.setBorder(BorderFactory.createTitledBorder("Выбор данных для экспорта"));
+        blocksPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        dataPanel.add(includeSqlQueriesCheckbox);
-        dataPanel.add(includePostgresViewsCheckbox);
-        dataPanel.add(includeOracleViewsCheckbox);
-        dataPanel.add(includePostgresTablesCheckbox);
-        dataPanel.add(includeOracleTablesCheckbox);
-        dataPanel.add(includeOracleFunctionsCheckbox);
-        dataPanel.add(includePostgresFunctionsCheckbox);
-        dataPanel.add(includeBrokerFunctionsCheckbox);
+        includeSqlQueriesCheckbox = new JCheckBox("SQL запросы с тэгами", true);
+        includePostgresViewsCheckbox = new JCheckBox("Текст вьюх из PostgreSQL", true);
+        includeOracleViewsCheckbox = new JCheckBox("Текст вьюх из Oracle", true);
+        includePostgresTablesCheckbox = new JCheckBox("DDL таблиц из PostgreSQL вьюх", true);
+        includeOracleTablesCheckbox = new JCheckBox("DDL таблиц из Oracle вьюх", true);
+        includeOracleFunctionsCheckbox = new JCheckBox("Тела функций из Oracle пакетов", true);
+        includePostgresFunctionsCheckbox = new JCheckBox("Тела функций и процедур из PostgreSQL", true);
+        includeBrokerFunctionsCheckbox = new JCheckBox("Брокеры (Action/SubAction с unit)", true);
 
-        content.add(dataPanel);
-        content.add(Box.createVerticalStrut(10));
+        blocksPanel.add(createBlockCheckbox(includeSqlQueriesCheckbox,
+                "Полные SQL запросы из всех DataSet и Action компонентов в формате XML с тэгами"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includePostgresViewsCheckbox,
+                "DDL определение всех вьюх (D_V_*), найденных в SQL запросах, из базы PostgreSQL"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includeOracleViewsCheckbox,
+                "DDL определение всех вьюх (D_V_*), найденных в SQL запросах, из базы Oracle"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includePostgresTablesCheckbox,
+                "Для каждой вьюхи из PostgreSQL - список используемых таблиц и их DDL"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includeOracleTablesCheckbox,
+                "Для каждой вьюхи из Oracle - список используемых таблиц и их DDL"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includeOracleFunctionsCheckbox,
+                "DDL определение тел функций из Oracle пакетов (D_PKG_*.FUNCTION_NAME)"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includePostgresFunctionsCheckbox,
+                "DDL определение тел функций и процедур из PostgreSQL"));
+        blocksPanel.add(Box.createVerticalStrut(5));
+        blocksPanel.add(createBlockCheckbox(includeBrokerFunctionsCheckbox,
+                "Извлечение брокеров из Action/SubAction компонентов с unit/action"));
 
-        // Instruction
+        // Кнопки выбора всех/снятия всех
+        JPanel blocksControlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton selectAllBlocksButton = new JButton("Выбрать все");
+        JButton deselectAllBlocksButton = new JButton("Снять все");
+
+        selectAllBlocksButton.addActionListener(e -> {
+            includeSqlQueriesCheckbox.setSelected(true);
+            includePostgresViewsCheckbox.setSelected(true);
+            includeOracleViewsCheckbox.setSelected(true);
+            includePostgresTablesCheckbox.setSelected(true);
+            includeOracleTablesCheckbox.setSelected(true);
+            includeOracleFunctionsCheckbox.setSelected(true);
+            includePostgresFunctionsCheckbox.setSelected(true);
+            includeBrokerFunctionsCheckbox.setSelected(true);
+        });
+
+        deselectAllBlocksButton.addActionListener(e -> {
+            includeSqlQueriesCheckbox.setSelected(false);
+            includePostgresViewsCheckbox.setSelected(false);
+            includeOracleViewsCheckbox.setSelected(false);
+            includePostgresTablesCheckbox.setSelected(false);
+            includeOracleTablesCheckbox.setSelected(false);
+            includeOracleFunctionsCheckbox.setSelected(false);
+            includePostgresFunctionsCheckbox.setSelected(false);
+            includeBrokerFunctionsCheckbox.setSelected(false);
+        });
+
+        blocksControlPanel.add(selectAllBlocksButton);
+        blocksControlPanel.add(deselectAllBlocksButton);
+        blocksPanel.add(Box.createVerticalStrut(10));
+        blocksPanel.add(blocksControlPanel);
+
+        contentPanel.add(blocksPanel);
+        contentPanel.add(Box.createVerticalStrut(15));
+
+        // Инструкция для LLM
         JPanel instructionPanel = new JPanel();
         instructionPanel.setLayout(new BoxLayout(instructionPanel, BoxLayout.Y_AXIS));
         instructionPanel.setBorder(BorderFactory.createTitledBorder("Инструкция для LLM"));
+        instructionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        instructionTextArea = new JTextArea(10, 60);
+        JLabel instructionLabel = new JLabel("Задача для LLM (будет добавлена в конец промпта):");
+        instructionLabel.setFont(new Font("Dialog", Font.BOLD, 11));
+        instructionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        instructionPanel.add(instructionLabel);
+        instructionPanel.add(Box.createVerticalStrut(5));
+
+        instructionTextArea = new JTextArea(15, 60);
+        instructionTextArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
         instructionTextArea.setLineWrap(true);
         instructionTextArea.setWrapStyleWord(true);
-        instructionTextArea.setText(getDefaultInstruction());
+        instructionTextArea.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        JScrollPane instructionScroll = new JScrollPane(instructionTextArea);
-        instructionPanel.add(instructionScroll);
+        JScrollPane instructionScrollPane = new JScrollPane(instructionTextArea);
+        instructionScrollPane.setPreferredSize(new Dimension(0, 200));
+        instructionPanel.add(instructionScrollPane);
 
-        JButton resetButton = new JButton("Стандартная инструкция");
-        resetButton.addActionListener(e -> instructionTextArea.setText(getDefaultInstruction()));
-        instructionPanel.add(resetButton);
+        JPanel instructionButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton resetInstructionButton = new JButton("Восстановить стандартную инструкцию");
+        resetInstructionButton.addActionListener(e -> instructionTextArea.setText(getDefaultInstruction()));
+        instructionButtonPanel.add(resetInstructionButton);
+        instructionPanel.add(instructionButtonPanel);
 
-        content.add(instructionPanel);
+        contentPanel.add(instructionPanel);
 
-        JScrollPane scroll = new JScrollPane(content);
-        panel.add(scroll, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
         return panel;
     }
@@ -435,4 +534,53 @@ public class SettingsDialog extends JDialog {
     }
 
     public boolean isSaved() { return saved; }
+    // Добавьте этот метод в класс SettingsDialog (нового проекта)
+
+    /**
+     * Создать панель с чекбоксом и описанием под ним (в стиле родительского проекта)
+     * @param checkBox Чекбокс
+     * @param description Текст описания (поддерживает многострочный текст с \n)
+     * @return Панель с компонентами
+     */
+    private JPanel createCheckboxWithDescription(JCheckBox checkBox, String description) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // Жирный шрифт для чекбокса
+        checkBox.setFont(checkBox.getFont().deriveFont(Font.BOLD));
+
+        // Текст описания (серый, с переносом строк)
+        JTextArea descArea = new JTextArea(description);
+        descArea.setEditable(false);
+        descArea.setBackground(panel.getBackground());
+        descArea.setFont(new Font("Dialog", Font.PLAIN, 11));
+        descArea.setForeground(Color.GRAY);
+        descArea.setWrapStyleWord(true);
+        descArea.setLineWrap(true);
+
+        panel.add(checkBox, BorderLayout.NORTH);
+        panel.add(descArea, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    // Добавьте этот метод в класс SettingsDialog для LLM блоков (как в родительском проекте)
+    private JPanel createBlockCheckbox(JCheckBox checkBox, String description) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        checkBox.setFont(checkBox.getFont().deriveFont(Font.PLAIN));
+
+        JTextArea descArea = new JTextArea(description);
+        descArea.setEditable(false);
+        descArea.setBackground(panel.getBackground());
+        descArea.setFont(new Font("Dialog", Font.PLAIN, 10));
+        descArea.setForeground(Color.GRAY);
+        descArea.setWrapStyleWord(true);
+        descArea.setLineWrap(true);
+        descArea.setRows(2);
+
+        panel.add(checkBox, BorderLayout.NORTH);
+        panel.add(descArea, BorderLayout.CENTER);
+        return panel;
+    }
 }
