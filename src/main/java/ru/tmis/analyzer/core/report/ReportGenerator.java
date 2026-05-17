@@ -376,9 +376,8 @@ public class ReportGenerator {
             String childIndent = indent + (isLast ? "    " : "│   ");
 
             if (item.isDbReport()) {
-                // caption уже содержит все символы дерева и отступы, но не содержит родительский indent
-                // Добавляем только родительский отступ, без branch
-                writer.println(indent + item.getCaption());
+                // caption уже содержит полный отступ и символы дерева
+                writer.println(item.getCaption());
             } else {
                 String displayText = item.getPrefix() + item.getDisplayCaption();
                 writer.println(indent + branch + displayText);

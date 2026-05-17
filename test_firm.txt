@@ -131,3 +131,23 @@ PRIV_NAME                                                                       
     ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp003u_11(2)" "003/у Карта пациента дневного стационара акушерско-гинекологического профиля (11 стр)" Form="Reports/Pregnancy/dayhosp003_2u20/dayhosp003_2u20_11.frm"
 ***
 ```
+
+
+
+```
+***
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(saratov)" "Форма 003/у (2 лист) (САРАТОВ)"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="Составной" - REP_CODE="vak1" "vak1"
+                                                                  ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+                                                                  ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+                                                                  ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+                                                                  ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+                                                                  ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+                                                                  ├── - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(saratov)" "Форма 003/у (2 лист) (САРАТОВ)"
+                                                                  ├── - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(saratov)" "Форма 003/у (2 лист) (САРАТОВ)"
+                                                                  └── - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(saratov)" "Форма 003/у (2 лист) (САРАТОВ)"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_7_8" "Осмотр лечащего врача, врача специалиста, заведующего отделением, совместные осмотры"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3" "Сведения о пациенте"
+    ├── (AutoPopup "piReports") (UNIT='HOSP_HISTORIES') - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+***
+```

@@ -212,33 +212,41 @@ public class ReportsFromDbService {
 
             String line;
             if (prefix.isEmpty()) {
-                // Корневой уровень: только символ ветки, без начальных пробелов
-                line = "├── " + autoPopupPrefix + report.getDisplayString();
+                // Корневой уровень: отступ 4 пробела + символ ветки
+                line = "    ├── " + autoPopupPrefix + report.getDisplayString();
             } else {
-                // Вложенный уровень: prefix уже содержит отступ (пробелы и вертикальные линии)
                 String connector = isLast ? "└── " : "├── ";
                 line = prefix + connector + report.getShortDisplayString();
             }
             result.add(line);
 
             if (report.hasChildren()) {
-                // Рассчитываем отступ для детей
+                // Вычисляем базовый отступ для детей
                 String childPrefix;
                 if (prefix.isEmpty()) {
-                    childPrefix = "    ";  // для корневого уровня дети будут с отступом 4 пробела
+                    // Для корневого уровня: 4 пробела + (вертикальная линия, если родитель не последний)
+                    childPrefix = "    " + (isLast ? "    " : "│   ");
                 } else {
                     childPrefix = prefix + (isLast ? "    " : "│   ");
                 }
 
-                // Для составного отчета добавляем выравнивание до позиции (AutoPopup ...
-                if (report.isComposite() && !prefix.isEmpty()) {
-                    int autoPopupIndex = line.indexOf(autoPopupPrefix);
-                    if (autoPopupIndex >= 0) {
-                        int needed = autoPopupIndex - childPrefix.length();
+                // Выравнивание для детей составного отчёта (под символ '=')
+                if (report.isComposite()) {
+                    int equalPos = -1;
+                    int idx = line.indexOf("REP_TYPE=\"");
+                    if (idx >= 0) {
+                        idx = line.indexOf('=', idx);
+                        if (idx >= 0) {
+                            equalPos = idx;
+                        }
+                    }
+                    if (equalPos >= 0) {
+                        int needed = equalPos - childPrefix.length();
                         if (needed > 0) {
                             childPrefix = childPrefix + " ".repeat(needed);
                         }
                     } else {
+                        // Запасной вариант: выравнивание по началу "REP_TYPE="
                         int repTypeIndex = line.indexOf("REP_TYPE=");
                         if (repTypeIndex > 0) {
                             int needed = repTypeIndex - childPrefix.length();
@@ -258,58 +266,6 @@ public class ReportsFromDbService {
     }
 
 
-    private void writeMenuTree(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, String indent) {
-        for (int i = 0; i < items.size(); i++) {
-            PopupMenuInfo.MenuItem item = items.get(i);
-            boolean isLast = (i == items.size() - 1);
-
-            String branch = isLast ? "└── " : "├── ";
-            String childIndent = indent + (isLast ? "    " : "│   ");
-
-            if (item.isDbReport()) {
-                // Для отчётов из БД caption уже содержит полную строку с деревом
-                // Выводим как есть, без добавления indent и branch
-                writer.println(indent + item.getCaption());
-            } else {
-                String displayText = item.getPrefix() + item.getDisplayCaption();
-                writer.println(indent + branch + displayText);
-            }
-
-            if (item.hasChildren()) {
-                writeMenuTree(writer, item.getChildren(), childIndent);
-            }
-        }
-    }
-
-    /**
-     * Вспомогательный класс для хранения данных строки
-     */
-    private static class ReportRowData {
-        String autoPopupPart;
-        String unitPart;
-        String typePart;
-        String codePart;
-        String namePart;
-        String formPart;
-    }
-
-    /**
-     * Дополнить строку пробелами справа до нужной длины
-     */
-    private static String padRight(String s, int length) {
-        if (s == null) s = "";
-        if (s.length() >= length) return s;
-        StringBuilder sb = new StringBuilder(s);
-        for (int i = s.length(); i < length; i++) {
-            sb.append(' ');
-        }
-        return sb.toString();
-    }
-    /**
-     * Загрузить составные части отчета (для REP_TYPE = 6)
-     * @param parentReportId ID родительского отчета
-     * @return список вложенных отчетов
-     */
     /**
      * Загрузить составные части отчета (для REP_TYPE = 6) с рекурсивным обходом
      * @param parentReportId ID родительского отчета
