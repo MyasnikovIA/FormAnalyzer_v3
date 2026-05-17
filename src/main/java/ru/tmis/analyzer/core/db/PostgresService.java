@@ -148,6 +148,11 @@ public class PostgresService {
 
             ddl.append("\n);\n");
 
+            String constraints = getTableConstraints(tableName);
+            if (constraints != null && !constraints.isEmpty()) {
+                ddl.append("\n").append(constraints);
+            }
+
             return ddl.toString();
 
         } catch (SQLException e) {
@@ -212,5 +217,79 @@ public class PostgresService {
             System.err.println("Ошибка получения тела функции " + functionName + " из PostgreSQL: " + e.getMessage());
         }
         return null;
+    }
+    public String getTableConstraints(String tableName) {
+        StringBuilder sb = new StringBuilder();
+
+        String sql =
+                "SELECT con.conname AS constraint_name,\n" +
+                        "       con.contype,\n" +
+                        "       a.attname AS column_name,\n" +
+                        "       cl2.relname AS ref_table_name,\n" +
+                        "       a2.attname AS ref_column_name,\n" +
+                        "       pg_get_constraintdef(con.oid) AS constraint_def\n" +
+                        "FROM pg_constraint con\n" +
+                        "JOIN pg_class cl ON con.conrelid = cl.oid\n" +
+                        "LEFT JOIN pg_attribute a ON a.attrelid = cl.oid AND a.attnum = ANY(con.conkey)\n" +
+                        "LEFT JOIN pg_class cl2 ON con.confrelid = cl2.oid\n" +
+                        "LEFT JOIN pg_attribute a2 ON a2.attrelid = cl2.oid AND a2.attnum = ANY(con.confkey)\n" +
+                        "WHERE cl.relname = ? AND con.contype IN ('f', 'c', 'u')\n" +
+                        "ORDER BY con.conname";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, tableName.toLowerCase());
+            ResultSet rs = pstmt.executeQuery();
+
+            Map<String, List<String>> fkColumns = new LinkedHashMap<>();
+            Map<String, String> fkRefs = new LinkedHashMap<>();
+            Set<String> uniqueConstraints = new LinkedHashSet<>();
+            Map<String, String> checkConstraints = new LinkedHashMap<>();
+
+            while (rs.next()) {
+                String constrName = rs.getString("constraint_name");
+                String constrType = rs.getString("contype");
+                String columnName = rs.getString("column_name");
+                String constraintDef = rs.getString("constraint_def");
+
+                if ("f".equals(constrType)) {
+                    String refTable = rs.getString("ref_table_name");
+                    String refColumn = rs.getString("ref_column_name");
+                    fkColumns.computeIfAbsent(constrName, k -> new ArrayList<>()).add(columnName);
+                    if (refTable != null && refColumn != null) {
+                        fkRefs.put(constrName, refTable + "(" + refColumn + ")");
+                    }
+                } else if ("u".equals(constrType)) {
+                    uniqueConstraints.add(constrName + "(" + columnName + ")");
+                } else if ("c".equals(constrType) && constraintDef != null) {
+                    checkConstraints.put(constrName, constraintDef);
+                }
+            }
+
+            // Вывод FOREIGN KEY
+            for (Map.Entry<String, List<String>> entry : fkColumns.entrySet()) {
+                String name = entry.getKey();
+                String columns = String.join(", ", entry.getValue());
+                String ref = fkRefs.get(name);
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(name)
+                        .append(" FOREIGN KEY (").append(columns).append(") REFERENCES ").append(ref).append(";\n");
+            }
+
+            // Вывод UNIQUE
+            for (String uk : uniqueConstraints) {
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(uk).append(";\n");
+            }
+
+            // Вывод CHECK
+            for (Map.Entry<String, String> entry : checkConstraints.entrySet()) {
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(entry.getKey())
+                        .append(" CHECK (").append(entry.getValue()).append(");\n");
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения констрейнтов для " + tableName + ": " + e.getMessage());
+        }
+
+        return sb.toString();
     }
 }

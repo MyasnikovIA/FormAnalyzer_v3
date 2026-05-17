@@ -139,6 +139,11 @@ public class OracleService {
             }
 
             ddl.append("\n);\n");
+           // Добавляем констрейнты
+            String constraints = getTableConstraints(tableName);
+            if (constraints != null && !constraints.isEmpty()) {
+                ddl.append("\n").append(constraints);
+            }
 
             return ddl.toString();
 
@@ -243,5 +248,93 @@ public class OracleService {
     }
     public Connection getConnection() throws SQLException {
         return DatabaseConnector.getOracleConnection(url, user, password);
+    }
+    public String getTableConstraints(String tableName) {
+        StringBuilder sb = new StringBuilder();
+
+        String sql =
+                "SELECT c.CONSTRAINT_NAME, c.CONSTRAINT_TYPE, c.DELETE_RULE,\n" +
+                        "       cols.COLUMN_NAME,\n" +
+                        "       rcols.TABLE_NAME AS REF_TABLE_NAME,\n" +
+                        "       rcols.COLUMN_NAME AS REF_COLUMN_NAME,\n" +
+                        "       c.SEARCH_CONDITION\n" +
+                        "FROM ALL_CONSTRAINTS c\n" +
+                        "JOIN ALL_CONS_COLUMNS cols ON c.CONSTRAINT_NAME = cols.CONSTRAINT_NAME\n" +
+                        "LEFT JOIN ALL_CONSTRAINTS rc ON c.R_CONSTRAINT_NAME = rc.CONSTRAINT_NAME\n" +
+                        "LEFT JOIN ALL_CONS_COLUMNS rcols ON rc.CONSTRAINT_NAME = rcols.CONSTRAINT_NAME \n" +
+                        "    AND rcols.POSITION = cols.POSITION\n" +
+                        "WHERE c.OWNER = ? AND c.TABLE_NAME = ? AND c.CONSTRAINT_TYPE IN ('R', 'C', 'U')\n" +
+                        "ORDER BY c.CONSTRAINT_TYPE, c.CONSTRAINT_NAME, cols.POSITION";
+
+        try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, user.toUpperCase());
+            pstmt.setString(2, tableName.toUpperCase());
+            ResultSet rs = pstmt.executeQuery();
+
+            Map<String, List<String>> fkColumns = new LinkedHashMap<>();
+            Map<String, String> fkRefs = new LinkedHashMap<>();
+            Map<String, String> fkDeleteRule = new LinkedHashMap<>();
+            Set<String> uniqueConstraints = new LinkedHashSet<>();
+            Map<String, String> checkConstraints = new LinkedHashMap<>();
+
+            while (rs.next()) {
+                String constrName = rs.getString("CONSTRAINT_NAME");
+                String constrType = rs.getString("CONSTRAINT_TYPE");
+                String columnName = rs.getString("COLUMN_NAME");
+
+                if ("R".equals(constrType)) {
+                    // FOREIGN KEY
+                    String refTable = rs.getString("REF_TABLE_NAME");
+                    String refColumn = rs.getString("REF_COLUMN_NAME");
+                    String deleteRule = rs.getString("DELETE_RULE");
+
+                    fkColumns.computeIfAbsent(constrName, k -> new ArrayList<>()).add(columnName);
+                    if (refTable != null) {
+                        fkRefs.put(constrName, refTable + "(" + refColumn + ")");
+                    }
+                    if (deleteRule != null) {
+                        fkDeleteRule.put(constrName, deleteRule);
+                    }
+                } else if ("U".equals(constrType)) {
+                    uniqueConstraints.add(constrName + "(" + columnName + ")");
+                } else if ("C".equals(constrType)) {
+                    String condition = rs.getString("SEARCH_CONDITION");
+                    if (condition != null) {
+                        checkConstraints.put(constrName, condition);
+                    }
+                }
+            }
+
+            // Вывод FOREIGN KEY
+            for (Map.Entry<String, List<String>> entry : fkColumns.entrySet()) {
+                String name = entry.getKey();
+                String columns = String.join(", ", entry.getValue());
+                String ref = fkRefs.get(name);
+                String deleteRule = fkDeleteRule.get(name);
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(name)
+                        .append(" FOREIGN KEY (").append(columns).append(") REFERENCES ").append(ref);
+                if (deleteRule != null && !"NO ACTION".equals(deleteRule)) {
+                    sb.append(" ON DELETE ").append(deleteRule);
+                }
+                sb.append(";\n");
+            }
+
+            // Вывод UNIQUE
+            for (String uk : uniqueConstraints) {
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(uk).append(";\n");
+            }
+
+            // Вывод CHECK
+            for (Map.Entry<String, String> entry : checkConstraints.entrySet()) {
+                sb.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ").append(entry.getKey())
+                        .append(" CHECK (").append(entry.getValue()).append(");\n");
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения констрейнтов для " + tableName + ": " + e.getMessage());
+        }
+
+        return sb.toString();
     }
 }
