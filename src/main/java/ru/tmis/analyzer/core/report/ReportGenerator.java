@@ -129,6 +129,10 @@ public class ReportGenerator {
         } else {
             System.out.println("[DEBUG] viewDependencies is null or empty, skipping");
         }
+        // Детальное содержимое вьюх
+        if (config.isIncludeViewDetails() && form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
+            writeViewDetailsSection(writer, form, form.getViewDependencies());
+        }
 
         // Используемые пакеты и функции
         if (!form.getPackagesFunctions().isEmpty()) {
@@ -392,22 +396,63 @@ public class ReportGenerator {
 
 
     /**
-     * Рекурсивный вывод пунктов меню
-     * @param writer PrintWriter
-     * @param items список пунктов меню
-     * @param level уровень вложенности (количество отступов)
+     * Вывод подробной информации о вьюхах (какие таблицы используются)
      */
-    private void writeMenuItems(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, int level) {
-        String indent = "    ".repeat(level + 1); // +1 для учета корневого отступа
+    private void writeViewDetailsSection(PrintWriter writer, FormInfo formInfo,
+                                         Map<String, ViewTableDependencies> viewDependencies) {
+        if (viewDependencies == null || viewDependencies.isEmpty()) {
+            return;
+        }
 
-        for (PopupMenuInfo.MenuItem item : items) {
-            writer.println(indent + item.getDisplayCaption());
+        // Собираем все вьюхи, используемые в этой форме
+        Set<String> viewsUsed = new LinkedHashSet<>();
+        for (String tv : formInfo.getTablesViews()) {
+            if (tv.startsWith("D_V_")) {
+                viewsUsed.add(tv);
+            }
+        }
 
-            if (item.hasChildren()) {
-                writeMenuItems(writer, item.getChildren(), level + 1);
+        if (viewsUsed.isEmpty()) {
+            writer.println("  (нет вьюх для детального анализа)");
+            writer.println();
+            return;
+        }
+
+        writer.println("ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):");
+        writer.println();
+
+        for (String viewName : viewsUsed) {
+            ViewTableDependencies deps = viewDependencies.get(viewName);
+
+            if (deps != null && deps.isExistsInOracle()) {
+                writer.println("  " + viewName + ":");
+                Set<String> tables = deps.getOracleTables();
+
+                if (tables.isEmpty()) {
+                    writer.println("      (таблицы не найдены)");
+                } else {
+                    for (String table : tables) {
+                        // Пропускаем специальные вьюхи
+                        if ("D_V_URPRIVS".equals(table)) continue;
+                        writer.println("      - " + table);
+                    }
+                }
+                writer.println();
+
+            } else if (deps != null && deps.getOracleError() != null) {
+                writer.println("  " + viewName + ":");
+                writer.println("      Ошибка: " + deps.getOracleError());
+                writer.println();
+            } else if (deps == null) {
+                writer.println("  " + viewName + ":");
+                writer.println("      (данные не загружены)");
+                writer.println();
             }
         }
     }
+
+
+
     /**
      * Вывод списка вызываемых форм в JS
      */

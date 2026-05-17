@@ -261,6 +261,14 @@ public class SettingsDialog extends JDialog {
                         "а также отчеты из базы данных Oracle (D_REPORTS_LINKS)"));
         contentPanel.add(Box.createVerticalStrut(5));
 
+        // В методе createReportPanel() добавить:
+        JCheckBox includeViewDetailsCheckbox = new JCheckBox("Детальное содержимое вьюх");
+        includeViewDetailsCheckbox.setSelected(config.isIncludeViewDetails());
+        includeViewDetailsCheckbox.addActionListener(e -> config.setIncludeViewDetails(includeViewDetailsCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(includeViewDetailsCheckbox,
+                "Выводить для каждой вьюхи список таблиц, которые в ней используются.\n" +
+                        "Требует подключения к Oracle БД"));
+
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
