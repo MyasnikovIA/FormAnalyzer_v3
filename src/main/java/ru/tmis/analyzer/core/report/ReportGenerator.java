@@ -520,7 +520,7 @@ public class ReportGenerator {
             boolean isLast = (i == items.size() - 1);
 
             String branch = isLast ? "└── " : "├── ";
-            String childIndent = indent + (isLast ? "    " : "│   ");
+            String childIndent = indent + (isLast ? "    " : "│   "); // Oracle
 
             if (item.isDbReport()) {
                 writer.println(item.getCaption());

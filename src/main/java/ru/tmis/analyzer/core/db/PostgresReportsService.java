@@ -96,8 +96,6 @@ public class PostgresReportsService {
         );
     }
 
-    // core/db/PostgresReportsService.java
-
     public static List<String> formatReportsForDisplay(List<DbReportInfo> reports,
                                                        String autoPopupName,
                                                        String prefix,
@@ -132,7 +130,7 @@ public class PostgresReportsService {
             result.add(line);
 
             if (report.hasChildren()) {
-                String childPrefix = prefix.isEmpty() ? (isLast ? "    " : "│   ") : prefix + (isLast ? "    " : "│   ");
+                String childPrefix = prefix.isEmpty() ? (isLast ? "    " : "    │   ") : prefix + (isLast ? "    " : "    │   "); // ???
                 List<String> childrenLines = formatReportsForDisplay(report.getChildren(), autoPopupName, childPrefix, isLast);
                 result.addAll(childrenLines);
             }

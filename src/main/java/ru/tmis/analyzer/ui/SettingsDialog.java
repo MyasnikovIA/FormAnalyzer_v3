@@ -9,12 +9,16 @@ import ru.tmis.analyzer.core.db.PostgresService;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.io.*;
+
 
 public class SettingsDialog extends JDialog {
 
     private final SettingsModel settings;
     private final AppConfig config;
     private boolean saved = false;
+    private String cachedInstructionM2 = null;
+    private String cachedInstructionD3 = null;
 
     // Connection fields
     private JTextField projectPathField;
@@ -70,7 +74,7 @@ public class SettingsDialog extends JDialog {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Подключения", createConnectionPanel());
         tabbedPane.addTab("Отчеты", createReportPanel());
-        tabbedPane.addTab("LLM Экспорт", createLLMPanel());
+        tabbedPane.addTab("Инструкция для LLM", createLLMPanel());
 
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -322,26 +326,14 @@ public class SettingsDialog extends JDialog {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-        JLabel titleLabel = new JLabel("Настройки экспорта LLM промпта");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contentPanel.add(titleLabel);
-        contentPanel.add(Box.createVerticalStrut(10));
-
-        JLabel descLabel = new JLabel("<html>Экспорт данных в формате, готовом для передачи в LLM (ChatGPT, Claude и др.).<br>" +
-                "Будут включены: SQL запросы, DDL вьюх, DDL таблиц и тела функций из Oracle и PostgreSQL.</html>");
-        descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contentPanel.add(descLabel);
-        contentPanel.add(Box.createVerticalStrut(20));
-
-        // Чекбокс включения экспорта
+        // ===== 1. ЧЕКБОКС ВКЛЮЧЕНИЯ ЭКСПОРТА =====
         enableLLMExportCheckbox = new JCheckBox("Включить экспорт LLM промпта после анализа", false);
         enableLLMExportCheckbox.setFont(enableLLMExportCheckbox.getFont().deriveFont(Font.BOLD));
         enableLLMExportCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(enableLLMExportCheckbox);
         contentPanel.add(Box.createVerticalStrut(15));
 
-        // Режим генерации
+        // ===== 2. РЕЖИМ ГЕНЕРАЦИИ =====
         JPanel modePanel = new JPanel();
         modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
         modePanel.setBorder(BorderFactory.createTitledBorder("Режим генерации"));
@@ -363,7 +355,7 @@ public class SettingsDialog extends JDialog {
         contentPanel.add(modePanel);
         contentPanel.add(Box.createVerticalStrut(15));
 
-        // Выбор данных для экспорта
+        // ===== 3. ВЫБОР ДАННЫХ ДЛЯ ЭКСПОРТА =====
         JPanel blocksPanel = new JPanel();
         blocksPanel.setLayout(new BoxLayout(blocksPanel, BoxLayout.Y_AXIS));
         blocksPanel.setBorder(BorderFactory.createTitledBorder("Выбор данных для экспорта"));
@@ -437,7 +429,7 @@ public class SettingsDialog extends JDialog {
         contentPanel.add(blocksPanel);
         contentPanel.add(Box.createVerticalStrut(15));
 
-        // Инструкция для LLM
+        // ===== 4. ИНСТРУКЦИЯ ДЛЯ LLM =====
         JPanel instructionPanel = new JPanel();
         instructionPanel.setLayout(new BoxLayout(instructionPanel, BoxLayout.Y_AXIS));
         instructionPanel.setBorder(BorderFactory.createTitledBorder("Инструкция для LLM"));
@@ -460,12 +452,46 @@ public class SettingsDialog extends JDialog {
         instructionPanel.add(instructionScrollPane);
 
         JPanel instructionButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton resetInstructionButton = new JButton("Восстановить стандартную инструкцию");
-        resetInstructionButton.addActionListener(e -> instructionTextArea.setText(getDefaultInstruction()));
-        instructionButtonPanel.add(resetInstructionButton);
+
+        JButton resetInstructionM2Button = new JButton("Восстановить стандартную инструкцию M2");
+        resetInstructionM2Button.addActionListener(e -> {
+            instructionTextArea.setText(getInstructionM2());
+            JOptionPane.showMessageDialog(this, "Инструкция для M2 восстановлена", "Инструкция восстановлена", JOptionPane.INFORMATION_MESSAGE);
+        });
+        instructionButtonPanel.add(resetInstructionM2Button);
+
+        JButton resetInstructionD3Button = new JButton("Восстановить стандартную инструкцию D3");
+        resetInstructionD3Button.addActionListener(e -> {
+            instructionTextArea.setText(getInstructionD3() );
+            JOptionPane.showMessageDialog(this, "Инструкция для D3 восстановлена", "Инструкция восстановлена", JOptionPane.INFORMATION_MESSAGE);
+        });
+        instructionButtonPanel.add(resetInstructionD3Button);
+
         instructionPanel.add(instructionButtonPanel);
+        instructionPanel.add(Box.createVerticalStrut(10));
 
         contentPanel.add(instructionPanel);
+        contentPanel.add(Box.createVerticalStrut(15));
+
+        // ===== 5. ПРИМЕЧАНИЕ =====
+        JPanel notePanel = new JPanel();
+        notePanel.setLayout(new BoxLayout(notePanel, BoxLayout.Y_AXIS));
+        notePanel.setBorder(BorderFactory.createTitledBorder("Примечание"));
+        notePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel noteLabel = new JLabel("<html>" +
+                "• Файл промпта сохраняется в формате Markdown (.md)<br>" +
+                "• Сохраняется в директории отчетов (как и основной отчет)<br>" +
+                "• Требует подключения к обеим базам данных (Oracle и PostgreSQL)<br>" +
+                "• Имя файла: llm_prompt_export_YYYYMMDD_HHMMSS.md<br>" +
+                "• При выборе режима 'отдельный промпт' файлы сохраняются в подпапку forms_prompts/<br>" +
+                "• Можно отправить в LLM для анализа бизнес-логики системы" +
+                "</html>");
+        noteLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
+        noteLabel.setForeground(new Color(0, 100, 200));
+        notePanel.add(noteLabel);
+
+        contentPanel.add(notePanel);
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
@@ -502,32 +528,44 @@ public class SettingsDialog extends JDialog {
         if (includePopupMenusCheckbox != null) {
             includePopupMenusCheckbox.setSelected(config.isIncludePopupMenus());
         }
-
         if (checkPostgresPackagesCheckbox != null) {
             checkPostgresPackagesCheckbox.setSelected(config.isCheckPostgresPackages());
         }
 
         // LLM settings
-        enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
+        if (enableLLMExportCheckbox != null) {
+            enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
+        }
+        if (singleFileRadio != null && perFormRadio != null) {
+            if ("per_form".equals(config.getLlmExportMode())) {
+                perFormRadio.setSelected(true);
+            } else {
+                singleFileRadio.setSelected(true);
+            }
+        }
+
+
         if ("per_form".equals(config.getLlmExportMode())) {
             perFormRadio.setSelected(true);
         } else {
             singleFileRadio.setSelected(true);
         }
 
-        includeSqlQueriesCheckbox.setSelected(config.isIncludeSqlQueries());
-        includePostgresViewsCheckbox.setSelected(config.isIncludePostgresViews());
-        includeOracleViewsCheckbox.setSelected(config.isIncludeOracleViews());
-        includePostgresTablesCheckbox.setSelected(config.isIncludePostgresTables());
-        includeOracleTablesCheckbox.setSelected(config.isIncludeOracleTables());
-        includeOracleFunctionsCheckbox.setSelected(config.isIncludeOracleFunctions());
-        includePostgresFunctionsCheckbox.setSelected(config.isIncludePostgresFunctions());
-        includeBrokerFunctionsCheckbox.setSelected(config.isIncludeBrokerFunctions());
-        includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
+        if (includeSqlQueriesCheckbox != null) {
+            includeSqlQueriesCheckbox.setSelected(config.isIncludeSqlQueries());
+            includePostgresViewsCheckbox.setSelected(config.isIncludePostgresViews());
+            includeOracleViewsCheckbox.setSelected(config.isIncludeOracleViews());
+            includePostgresTablesCheckbox.setSelected(config.isIncludePostgresTables());
+            includeOracleTablesCheckbox.setSelected(config.isIncludeOracleTables());
+            includeOracleFunctionsCheckbox.setSelected(config.isIncludeOracleFunctions());
+            includePostgresFunctionsCheckbox.setSelected(config.isIncludePostgresFunctions());
+            includeBrokerFunctionsCheckbox.setSelected(config.isIncludeBrokerFunctions());
+            includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
+        }
 
         String instruction = config.getLlmInstructionText();
         if (instruction == null || instruction.isEmpty()) {
-            instructionTextArea.setText(getDefaultInstruction());
+            instructionTextArea.setText(getInstructionM2());
         } else {
             instructionTextArea.setText(instruction);
         }
@@ -566,18 +604,28 @@ public class SettingsDialog extends JDialog {
         }
 
         // LLM settings
-        config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
+        if (enableLLMExportCheckbox != null) {
+            config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
+        }
+        if (singleFileRadio != null && perFormRadio != null) {
+            config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
+        }
+
         config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
-        config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
-        config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
-        config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
-        config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
-        config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
-        config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
-        config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
-        config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
+
+        if (includeSqlQueriesCheckbox != null) {
+            config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
+            config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
+            config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
+            config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
+            config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
+            config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
+            config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
+            config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
+            config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
+        }
+
         config.setLlmInstructionText(instructionTextArea.getText());
-        config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
         config.save();
 
         JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
@@ -685,5 +733,48 @@ public class SettingsDialog extends JDialog {
         panel.add(checkBox, BorderLayout.NORTH);
         panel.add(descArea, BorderLayout.CENTER);
         return panel;
+    }
+
+    private String loadInstructionFromFile(String filename) {
+        StringBuilder sb = new StringBuilder();
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("instructions/" + filename)) {
+            if (is == null) {
+                // Пробуем прочитать из файловой системы (для разработки)
+                File file = new File("src/main/resources/instructions/" + filename);
+                if (file.exists()) {
+                    return new String(java.nio.file.Files.readAllBytes(file.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+                }
+                System.err.println("Файл инструкции не найден: " + filename);
+                return getDefaultInstructionM2();
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка загрузки инструкции: " + e.getMessage());
+            return getDefaultInstructionM2();
+        }
+        return sb.toString();
+    }
+    private String getInstructionM2() {
+        if (cachedInstructionM2 == null) {
+            cachedInstructionM2 = loadInstructionFromFile("instruction_m2.txt");
+        }
+        return cachedInstructionM2;
+    }
+
+    private String getInstructionD3() {
+        if (cachedInstructionD3 == null) {
+            cachedInstructionD3 = loadInstructionFromFile("instruction_d3.txt");
+        }
+        return cachedInstructionD3;
+    }
+
+    private String getDefaultInstructionM2() {
+        return "## ИНСТРУКЦИЯ ДЛЯ АНАЛИЗА (M2)\n\n" +
+                "Пожалуйста, проанализируй предоставленную информацию...";
     }
 }

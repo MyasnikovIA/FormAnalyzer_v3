@@ -401,44 +401,4 @@ public class ReportsFromDbService {
 
         return result;
     }
-    /**
-     * Рекурсивное форматирование дерева отчетов
-     */
-    public static List<String> formatReportTree(List<DbReportInfo> reports,
-                                                String autoPopupName,
-                                                String indent,
-                                                boolean isLastList) {
-        List<String> result = new ArrayList<>();
-
-        String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
-
-        for (int i = 0; i < reports.size(); i++) {
-            DbReportInfo report = reports.get(i);
-            boolean isLast = (i == reports.size() - 1);
-
-            // Формируем строку отчета
-            String line;
-            if (indent.isEmpty()) {
-                // Корневой уровень
-                line = autoPopupPrefix + report.getDisplayString();
-            } else {
-                // Вложенный уровень
-                line = report.getShortDisplayString();
-            }
-
-            result.add(line);
-
-            // Рекурсивно обрабатываем дочерние отчеты
-            if (report.hasChildren()) {
-                String childIndent = indent + (isLast ? "    " : "│   ");
-                List<String> childLines = formatReportTree(
-                        report.getChildren(), autoPopupName, childIndent, isLast);
-                for (String childLine : childLines) {
-                    result.add(childIndent + "├── " + childLine);
-                }
-            }
-        }
-
-        return result;
-    }
 }
