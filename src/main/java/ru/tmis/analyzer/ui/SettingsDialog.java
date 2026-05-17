@@ -291,6 +291,22 @@ public class SettingsDialog extends JDialog {
                         "Использует расширение plpgsql_check_function для анализа.\n" +
                         "Требует установленного расширения plpgsql_check в PostgreSQL."));
 
+        // Проверка первичных ключей
+        JCheckBox checkPostgresPKCheckbox = new JCheckBox("Проверять первичные ключи (PK) в PostgreSQL");
+        checkPostgresPKCheckbox.setSelected(config.isCheckPostgresPK());
+        checkPostgresPKCheckbox.addActionListener(e -> config.setCheckPostgresPK(checkPostgresPKCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(checkPostgresPKCheckbox,
+                "Проверять наличие и состав первичных ключей в PostgreSQL по сравнению с Oracle.\n" +
+                        "Выводит предупреждения при несовпадении."));
+
+        // Проверка NOT NULL constraints
+        JCheckBox checkNotNullConstraintsCheckbox = new JCheckBox("Проверять NOT NULL constraints");
+        checkNotNullConstraintsCheckbox.setSelected(config.isCheckNotNullConstraints());
+        checkNotNullConstraintsCheckbox.addActionListener(e -> config.setCheckNotNullConstraints(checkNotNullConstraintsCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(checkNotNullConstraintsCheckbox,
+                "Проверять соответствие NOT NULL constraints между Oracle и PostgreSQL.\n" +
+                        "Выводит ошибки, если в Oracle NOT NULL, а в PostgreSQL NULL разрешен."));
+
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);

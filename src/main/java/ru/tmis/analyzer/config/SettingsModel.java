@@ -23,7 +23,8 @@ public class SettingsModel {
     private String postgresPassword = "postgres";
     private String misUser = "$TSTESTZON";
     private boolean checkPostgresPackages = false;
-
+    private boolean checkPostgresPK = false;
+    private boolean checkNotNullConstraints = false;
 
     // Singleton
     private static SettingsModel instance;
@@ -89,4 +90,10 @@ public class SettingsModel {
     public void setMisUser(String misUser) { this.misUser = misUser; }
     public boolean isCheckPostgresPackages() { return checkPostgresPackages; }
     public void setCheckPostgresPackages(boolean checkPostgresPackages) { this.checkPostgresPackages = checkPostgresPackages; }
+    // Геттеры/сеттеры
+    public boolean isCheckPostgresPK() { return checkPostgresPK; }
+    public void setCheckPostgresPK(boolean checkPostgresPK) { this.checkPostgresPK = checkPostgresPK; }
+    public boolean isCheckNotNullConstraints() { return checkNotNullConstraints; }
+    public void setCheckNotNullConstraints(boolean checkNotNullConstraints) { this.checkNotNullConstraints = checkNotNullConstraints; }
+
 }

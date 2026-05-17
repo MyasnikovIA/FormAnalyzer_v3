@@ -8,5 +8,7 @@
   "postgresUser": "postgres",
   "postgresPassword": "postgres",
   "misUser": "$TSTESTZON",
-  "checkPostgresPackages": false
+  "checkPostgresPackages": false,
+  "checkPostgresPK": false,
+  "checkNotNullConstraints": false
 }

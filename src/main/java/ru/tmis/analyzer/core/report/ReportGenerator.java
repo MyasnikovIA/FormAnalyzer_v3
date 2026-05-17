@@ -2,16 +2,15 @@ package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
-import ru.tmis.analyzer.core.db.OracleService;
-import ru.tmis.analyzer.core.db.PostgresPackageChecker;
-import ru.tmis.analyzer.core.db.PostgresService;
+import ru.tmis.analyzer.core.db.*;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
 import ru.tmis.analyzer.core.db.PostgresPackageChecker;
-import ru.tmis.analyzer.config.SettingsModel;
+
+
 
 import java.io.*;
 import java.nio.file.*;
@@ -250,7 +249,7 @@ public class ReportGenerator {
             writer.println();
         }
 
-// Проверка пакетов/функций в PostgreSQL
+        // Проверка пакетов/функций в PostgreSQL
         if (config.isCheckPostgresPackages() && !form.getPackagesFunctions().isEmpty()) {
             writer.println("ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:");
             writer.println();
@@ -282,6 +281,70 @@ public class ReportGenerator {
                     writer.println("    ПРЕДУПРЕЖДЕНИЯ:");
                     for (String warn : info.getWarnings()) writer.println("      " + warn);
                 }
+                writer.println();
+            }
+        }
+// Проверка первичных ключей
+        if (config.isCheckPostgresPK()) {
+            Set<String> allTables = getAllTablesForForm(form);
+            if (!allTables.isEmpty()) {
+                writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
+                writer.println();
+                DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+                for (String tableName : allTables) {
+                    DatabaseObjectChecker.PrimaryKeyInfo pkInfo = checker.checkPrimaryKey(tableName);
+                    writer.println("  " + tableName + ":");
+                    writer.println("    Статус: " + pkInfo.getStatus());
+                    if (pkInfo.hasPKInOracle()) {
+                        writer.println("    Oracle PK поля: " + String.join(", ", pkInfo.getOracleColumns()));
+                    }
+                    if (pkInfo.hasPKInPostgres()) {
+                        writer.println("    PostgreSQL PK поля: " + String.join(", ", pkInfo.getPostgresColumns()));
+                    }
+                    writer.println();
+                }
+            } else {
+                writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
+                writer.println("     (нет таблиц для проверки)");
+                writer.println();
+            }
+        }
+
+// Проверка NOT NULL constraints
+        if (config.isCheckNotNullConstraints()) {
+            Set<String> allTables = getAllTablesForForm(form);
+            if (!allTables.isEmpty()) {
+                writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
+                writer.println();
+                DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+                for (String tableName : allTables) {
+                    List<DatabaseObjectChecker.NotNullConstraintInfo> constraints = checker.checkNotNullConstraints(tableName);
+                    boolean hasIssues = false;
+                    for (DatabaseObjectChecker.NotNullConstraintInfo info : constraints) {
+                        if (!info.isMatch()) {
+                            if (!hasIssues) {
+                                writer.println("  " + tableName + ":");
+                                hasIssues = true;
+                            }
+                            writer.println("    Колонка: " + info.getColumnName());
+                            writer.println("      Oracle: " + (info.isNotNullInOracle() ? "NOT NULL" : "NULL разрешен"));
+                            writer.println("      PostgreSQL: " + (info.isNotNullInPostgres() ? "NOT NULL" : "NULL разрешен"));
+                            writer.println("      " + info.getStatus());
+                            String recommendation = info.getRecommendation();
+                            if (recommendation != null) {
+                                writer.println("      Рекомендация: " + recommendation);
+                            }
+                            writer.println();
+                        }
+                    }
+                    if (!hasIssues) {
+                        writer.println("  " + tableName + ": OK (все NULL constraints совпадают)");
+                        writer.println();
+                    }
+                }
+            } else {
+                writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
+                writer.println("     (нет таблиц для проверки)");
                 writer.println();
             }
         }
@@ -526,6 +589,25 @@ public class ReportGenerator {
     }
 
 
+    private Set<String> getAllTablesForForm(FormInfo formInfo) {
+        Set<String> allTables = new LinkedHashSet<>();
+        // Прямые таблицы (без префикса D_V_)
+        for (String tv : formInfo.getTablesViews()) {
+            if (!tv.startsWith("D_V_")) {
+                allTables.add(tv);
+            }
+        }
+        // Таблицы из вьюх
+        if (formInfo.getViewDependencies() != null) {
+            for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
+                allTables.addAll(entry.getValue().getOracleTables());
+            }
+        }
+        // Исключаем служебные
+        allTables.remove("D_V_URPRIVS");
+        return allTables;
+    }
+
 
     /**
      * Вывод списка вызываемых форм в JS
@@ -561,4 +643,5 @@ public class ReportGenerator {
             writer.println();
         }
     }
+
 }
