@@ -376,7 +376,6 @@ public class ReportGenerator {
             String childIndent = indent + (isLast ? "    " : "│   ");
 
             if (item.isDbReport()) {
-                // caption уже содержит полный отступ и символы дерева
                 writer.println(item.getCaption());
             } else {
                 String displayText = item.getPrefix() + item.getDisplayCaption();
@@ -388,7 +387,6 @@ public class ReportGenerator {
             }
         }
     }
-
 
 
     /**

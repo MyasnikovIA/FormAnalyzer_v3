@@ -203,6 +203,16 @@ public class ReportsFromDbService {
             return Collections.emptyList();
         }
 
+        // Сначала вычислим максимальную длину REP_TYPE и REP_CODE для текущего уровня
+        int maxTypeLen = 0;
+        int maxCodeLen = 0;
+        for (DbReportInfo report : reports) {
+            String typeName = report.getRepTypeName();
+            if (typeName.length() > maxTypeLen) maxTypeLen = typeName.length();
+            String code = report.getRepCode();
+            if (code != null && code.length() > maxCodeLen) maxCodeLen = code.length();
+        }
+
         String autoPopupPrefix = "(AutoPopup \"" + autoPopupName + "\") ";
         List<String> result = new ArrayList<>();
 
@@ -210,49 +220,45 @@ public class ReportsFromDbService {
             DbReportInfo report = reports.get(i);
             boolean isLast = (i == reports.size() - 1);
 
+            // Формируем строку с выравниванием
             String line;
             if (prefix.isEmpty()) {
-                // Корневой уровень: отступ 4 пробела + символ ветки
-                line = "    ├── " + autoPopupPrefix + report.getDisplayString();
+                // Корневой уровень: добавляем отступ 4 пробела, символ ветки, AutoPopupPrefix,
+                // а затем форматируем остальное
+                String formatted = formatReportLine(report, maxTypeLen, maxCodeLen);
+                line = "    ├── " + autoPopupPrefix + formatted;
             } else {
                 String connector = isLast ? "└── " : "├── ";
-                line = prefix + connector + report.getShortDisplayString();
+                String formatted = formatShortReportLine(report, maxTypeLen, maxCodeLen);
+                line = prefix + connector + formatted;
             }
             result.add(line);
 
             if (report.hasChildren()) {
-                // Вычисляем базовый отступ для детей
+                // Рассчитываем отступ для детей (как раньше)
                 String childPrefix;
                 if (prefix.isEmpty()) {
-                    // Для корневого уровня: 4 пробела + (вертикальная линия, если родитель не последний)
                     childPrefix = "    " + (isLast ? "    " : "│   ");
                 } else {
                     childPrefix = prefix + (isLast ? "    " : "│   ");
                 }
 
-                // Выравнивание для детей составного отчёта (под символ '=')
+                // Выравнивание для составных отчётов (под символ '=')
                 if (report.isComposite()) {
                     int equalPos = -1;
                     int idx = line.indexOf("REP_TYPE=\"");
                     if (idx >= 0) {
                         idx = line.indexOf('=', idx);
-                        if (idx >= 0) {
-                            equalPos = idx;
-                        }
+                        if (idx >= 0) equalPos = idx;
                     }
                     if (equalPos >= 0) {
                         int needed = equalPos - childPrefix.length();
-                        if (needed > 0) {
-                            childPrefix = childPrefix + " ".repeat(needed);
-                        }
+                        if (needed > 0) childPrefix = childPrefix + " ".repeat(needed);
                     } else {
-                        // Запасной вариант: выравнивание по началу "REP_TYPE="
                         int repTypeIndex = line.indexOf("REP_TYPE=");
                         if (repTypeIndex > 0) {
                             int needed = repTypeIndex - childPrefix.length();
-                            if (needed > 0) {
-                                childPrefix = childPrefix + " ".repeat(needed);
-                            }
+                            if (needed > 0) childPrefix = childPrefix + " ".repeat(needed);
                         }
                     }
                 }
@@ -263,6 +269,71 @@ public class ReportsFromDbService {
             }
         }
         return result;
+    }
+
+    /**
+     * Форматирует строку для корневого отчёта (с AutoPopupPrefix)
+     * Выравнивает REP_TYPE, REP_CODE и название
+     */
+    private static String formatReportLine(DbReportInfo report, int maxTypeLen, int maxCodeLen) {
+        String typeName = report.getRepTypeName();
+        String code = report.getRepCode() != null ? report.getRepCode() : "?";
+        String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String formPath = report.getFormPath();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("- REP_TYPE=\"");
+        sb.append(typeName);
+        sb.append("\"");
+        // Добавляем пробелы до maxTypeLen + 2 (кавычки уже есть)
+        int typeSpaces = maxTypeLen - typeName.length();
+        if (typeSpaces > 0) sb.append(" ".repeat(typeSpaces));
+
+        sb.append(" - REP_CODE=\"");
+        sb.append(code);
+        sb.append("\"");
+        int codeSpaces = maxCodeLen - code.length();
+        if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
+
+        sb.append(" \"");
+        sb.append(name);
+        sb.append("\"");
+        if (formPath != null) {
+            sb.append(" Form=\"").append(formPath).append("\"");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Форматирует строку для вложенного отчёта (без AutoPopupPrefix)
+     * Выравнивает REP_TYPE, REP_CODE и название
+     */
+    private static String formatShortReportLine(DbReportInfo report, int maxTypeLen, int maxCodeLen) {
+        String typeName = report.getRepTypeName();
+        String code = report.getRepCode() != null ? report.getRepCode() : "?";
+        String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String formPath = report.getFormPath();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("- REP_TYPE=\"");
+        sb.append(typeName);
+        sb.append("\"");
+        int typeSpaces = maxTypeLen - typeName.length();
+        if (typeSpaces > 0) sb.append(" ".repeat(typeSpaces));
+
+        sb.append(" - REP_CODE=\"");
+        sb.append(code);
+        sb.append("\"");
+        int codeSpaces = maxCodeLen - code.length();
+        if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
+
+        sb.append(" \"");
+        sb.append(name);
+        sb.append("\"");
+        if (formPath != null) {
+            sb.append(" Form=\"").append(formPath).append("\"");
+        }
+        return sb.toString();
     }
 
 
