@@ -27,13 +27,12 @@ public class FormsTreePanel extends JPanel {
     private Set<String> allForms = new LinkedHashSet<>();
     private List<String> filteredForms = new ArrayList<>();
     private Map<String, Set<String>> childrenCache = new HashMap<>();
+    private Map<String, DefaultMutableTreeNode> formNodeMap = new HashMap<>();
 
     private Runnable onFormsChanged;
     private Runnable onAnalysisRequested;
     private String outputDir = "SQL_info";
-
-    // Карта для хранения соответствия между узлами дерева и путями форм
-    private Map<String, DefaultMutableTreeNode> formNodeMap = new HashMap<>();
+    private String projectPath;
 
     public FormsTreePanel() {
         initUI();
@@ -42,6 +41,10 @@ public class FormsTreePanel extends JPanel {
 
     public void setOutputDir(String outputDir) {
         this.outputDir = outputDir;
+    }
+
+    public void setProjectPath(String projectPath) {
+        this.projectPath = projectPath;
     }
 
     private void initUI() {
@@ -105,82 +108,80 @@ public class FormsTreePanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * Добавляет слушатель выбора в дерево
-     */
     public void addTreeSelectionListener(TreeSelectionListener listener) {
         tree.addTreeSelectionListener(listener);
     }
 
-    /**
-     * Обновляет дочерние формы для конкретной формы
-     */
-    public void refreshChildForms(String formPath) {
-        // Очищаем кэш для этой формы
-        childrenCache.remove(formPath);
+    public List<String> getSelectedForms() {
+        List<String> selectedForms = new ArrayList<>();
+        TreePath[] selectedPaths = tree.getSelectionPaths();
 
-        // Находим узел в дереве
-        DefaultMutableTreeNode node = formNodeMap.get(formPath);
-        if (node != null) {
-            // Удаляем все дочерние узлы
-            node.removeAllChildren();
-
-            // Загружаем и добавляем дочерние формы
-            Set<String> childForms = loadChildFormsFromReport(formPath);
-            childrenCache.put(formPath, childForms);
-
-            for (String childForm : childForms) {
-                String childDisplayPath = childForm;
-                if (childDisplayPath.startsWith("/")) {
-                    childDisplayPath = childDisplayPath.substring(1);
+        if (selectedPaths != null) {
+            for (TreePath path : selectedPaths) {
+                String formPath = getFullFormPathFromTreePath(path);
+                if (formPath != null) {
+                    selectedForms.add(formPath);
                 }
-
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
-                childNode.setAllowsChildren(true);
-                node.add(childNode);
-                formNodeMap.put(childForm, childNode);
             }
-
-            // Обновляем модель дерева
-            treeModel.reload(node);
-
-            // Разворачиваем узел, чтобы показать дочерние элементы
-            TreePath nodePath = new TreePath(node.getPath());
-            tree.expandPath(nodePath);
         }
+
+        return selectedForms;
     }
 
-    /**
-     * Обновляет все дочерние формы для всех форм в дереве
-     */
-    public void refreshAllChildForms() {
-        for (String formPath : allForms) {
-            refreshChildForms(formPath);
+    public int getSelectedFormsCount() {
+        TreePath[] selectedPaths = tree.getSelectionPaths();
+        if (selectedPaths == null) return 0;
+
+        int count = 0;
+        for (TreePath path : selectedPaths) {
+            if (getFullFormPathFromTreePath(path) != null) {
+                count++;
+            }
         }
+        return count;
     }
 
-    /**
-     * Преобразует путь формы в безопасное имя файла для отчёта
-     */
-    private String getSafeFileNameForReport(String formPath) {
+    public String getFullFormPathFromTreePath(TreePath path) {
+        if (path == null) return null;
+        Object[] nodes = path.getPath();
+        if (nodes.length < 2) return null;
+
+        String fileName = nodes[nodes.length - 1].toString();
+
+        if (fileName.startsWith("Forms/") || fileName.startsWith("UserForms")) {
+            return fileName;
+        }
+
+        for (Map.Entry<String, DefaultMutableTreeNode> entry : formNodeMap.entrySet()) {
+            if (entry.getValue() == nodes[nodes.length - 1]) {
+                return entry.getKey();
+            }
+        }
+
+        if (fileName.endsWith(".frm") || fileName.endsWith(".dfrm")) {
+            return "Forms/" + fileName;
+        }
+
+        return null;
+    }
+
+    public String getFormPathFromTreePath(TreePath path) {
+        return getFullFormPathFromTreePath(path);
+    }
+
+    public TreePath getSelectedPath() {
+        return tree.getSelectionPath();
+    }
+
+    public String getReportFilePath(String formPath) {
         String normalized = formPath;
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
-    }
-
-    /**
-     * Возвращает полный путь к файлу отчёта для формы
-     */
-    public String getReportFilePath(String formPath) {
-        String safeName = getSafeFileNameForReport(formPath);
+        String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
         return outputDir + File.separator + safeName;
     }
 
-    /**
-     * Загружает дочерние формы из файла отчёта
-     */
     public Set<String> loadChildFormsFromReport(String formPath) {
         String reportPath = getReportFilePath(formPath);
         File reportFile = new File(reportPath);
@@ -192,7 +193,6 @@ public class FormsTreePanel extends JPanel {
                 String content = new String(Files.readAllBytes(reportFile.toPath()),
                         java.nio.charset.StandardCharsets.UTF_8);
 
-                // Ищем секцию "Список вызываемых форм в JS:"
                 int startIndex = content.indexOf("Список вызываемых форм в JS:");
                 if (startIndex != -1) {
                     int endIndex = content.indexOf("\n\n", startIndex);
@@ -211,14 +211,11 @@ public class FormsTreePanel extends JPanel {
                     }
 
                     String section = content.substring(startIndex, endIndex);
-
-                    // Ищем все строки с .frm
                     Pattern formPattern = Pattern.compile("\\s+([^\\s]+\\.frm)");
                     Matcher formMatcher = formPattern.matcher(section);
                     while (formMatcher.find()) {
                         String childForm = formMatcher.group(1).trim();
                         if (!childForm.isEmpty()) {
-                            // Формируем полный путь к дочерней форме
                             String childFullPath;
                             if (childForm.startsWith("Forms/") || childForm.startsWith("UserForms")) {
                                 childFullPath = childForm;
@@ -237,21 +234,19 @@ public class FormsTreePanel extends JPanel {
         return childForms;
     }
 
-    /**
-     * Рекурсивно добавляет форму и все её дочерние формы в дерево
-     */
     private void addFormWithChildrenToTree(String formPath, DefaultMutableTreeNode parentNode, Set<String> addedPaths) {
         if (addedPaths.contains(formPath)) {
             return;
         }
         addedPaths.add(formPath);
 
-        String displayPath = formPath;
-        if (displayPath.startsWith("/")) {
-            displayPath = displayPath.substring(1);
+        String displayPath;
+        if (formPath.contains("/")) {
+            displayPath = formPath.substring(formPath.lastIndexOf("/") + 1);
+        } else {
+            displayPath = formPath;
         }
 
-        // Проверяем, существует ли уже такой узел
         DefaultMutableTreeNode formNode = null;
         for (int i = 0; i < parentNode.getChildCount(); i++) {
             DefaultMutableTreeNode child = (DefaultMutableTreeNode) parentNode.getChildAt(i);
@@ -268,7 +263,6 @@ public class FormsTreePanel extends JPanel {
             formNodeMap.put(formPath, formNode);
         }
 
-        // Загружаем дочерние формы (только если файл отчёта существует)
         String reportPath = getReportFilePath(formPath);
         File reportFile = new File(reportPath);
 
@@ -282,6 +276,42 @@ public class FormsTreePanel extends JPanel {
         }
     }
 
+    public void refreshChildForms(String formPath) {
+        childrenCache.remove(formPath);
+
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            node.removeAllChildren();
+
+            Set<String> childForms = loadChildFormsFromReport(formPath);
+            childrenCache.put(formPath, childForms);
+
+            for (String childForm : childForms) {
+                String childDisplayPath;
+                if (childForm.contains("/")) {
+                    childDisplayPath = childForm.substring(childForm.lastIndexOf("/") + 1);
+                } else {
+                    childDisplayPath = childForm;
+                }
+
+                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
+                childNode.setAllowsChildren(true);
+                node.add(childNode);
+                formNodeMap.put(childForm, childNode);
+            }
+
+            treeModel.reload(node);
+            TreePath nodePath = new TreePath(node.getPath());
+            tree.expandPath(nodePath);
+        }
+    }
+
+    public void refreshAllChildForms() {
+        for (String formPath : allForms) {
+            refreshChildForms(formPath);
+        }
+    }
+
     private void createContextMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -291,8 +321,16 @@ public class FormsTreePanel extends JPanel {
         JMenuItem removeMenuItem = new JMenuItem("Удалить выбранные");
         removeMenuItem.addActionListener(e -> removeSelectedForms());
 
-        JMenuItem runAnalysisMenuItem = new JMenuItem("Запуск анализа");
+        JMenuItem runAnalysisMenuItem = new JMenuItem("Запуск анализа выбранных форм");
         runAnalysisMenuItem.addActionListener(e -> {
+            int selectedCount = getSelectedFormsCount();
+            if (selectedCount == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Не выбрано ни одной формы для анализа",
+                        "Нет выбранных форм",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             if (onAnalysisRequested != null) {
                 onAnalysisRequested.run();
             }
@@ -331,7 +369,9 @@ public class FormsTreePanel extends JPanel {
                 int row = tree.getClosestRowForLocation(e.getX(), e.getY());
                 TreePath path = tree.getPathForRow(row);
                 if (path != null) {
-                    tree.setSelectionPath(path);
+                    if (!tree.isPathSelected(path)) {
+                        tree.setSelectionPath(path);
+                    }
                 }
                 popupMenu.show(tree, e.getX(), e.getY());
             }
@@ -506,7 +546,7 @@ public class FormsTreePanel extends JPanel {
         Set<String> toRemove = new HashSet<>();
 
         for (TreePath path : selectedPaths) {
-            String formPath = getFormPathFromTreePath(path);
+            String formPath = getFullFormPathFromTreePath(path);
             if (formPath != null) {
                 String normalizedPath = formPath;
                 if (normalizedPath.startsWith("/")) {
@@ -546,36 +586,6 @@ public class FormsTreePanel extends JPanel {
                     "Формы удалены",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-    }
-
-    /**
-     * Извлекает полный путь формы из узла дерева
-     */
-    public String getFormPathFromTreePath(TreePath path) {
-        if (path == null) return null;
-        Object[] nodes = path.getPath();
-        if (nodes.length < 2) return null;
-
-        StringBuilder fullPath = new StringBuilder();
-        for (int i = 1; i < nodes.length; i++) {
-            if (i > 1) fullPath.append("/");
-            fullPath.append(nodes[i].toString());
-        }
-
-        String result = fullPath.toString();
-
-        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
-            if (!result.startsWith("UserForms") && !result.startsWith("Forms/") && !result.startsWith("/")) {
-                result = "Forms/" + result;
-            }
-            return result;
-        }
-
-        return null;
-    }
-
-    public TreePath getSelectedPath() {
-        return tree.getSelectionPath();
     }
 
     private void selectAllNodes() {

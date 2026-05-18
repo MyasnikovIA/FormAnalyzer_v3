@@ -262,23 +262,52 @@ public class MainWindow extends JFrame {
         return safeName + ".txt";
     }
 
+    // ui/MainWindow.java
+
+    /**
+     * Запускает анализ выбранных форм
+     */
     private void startAnalysis() {
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
             return;
         }
 
-        List<String> formsList = formsTreePanel.getFormsList();
-        if (formsList.isEmpty()) {
-            appendLog("Нет форм для анализа. Добавьте формы в список.");
+        // Получаем выбранные формы из дерева
+        List<String> selectedForms = formsTreePanel.getSelectedForms();
+
+        // Нормализуем пути - убираем возможные дублирования и формируем корректные пути
+        Set<String> normalizedForms = new LinkedHashSet<>();
+        for (String form : selectedForms) {
+            String normalized = form;
+            // Если путь содержит родительский путь, извлекаем только дочернюю часть
+            if (normalized.contains("/Forms/") && normalized.lastIndexOf("/Forms/") > 0) {
+                normalized = normalized.substring(normalized.lastIndexOf("/Forms/") + 1);
+            }
+            // Убираем ведущий слеш
+            if (normalized.startsWith("/")) {
+                normalized = normalized.substring(1);
+            }
+            // Убеждаемся, что путь начинается с Forms/ или UserForms
+            if (!normalized.startsWith("Forms/") && !normalized.startsWith("UserForms")) {
+                normalized = "Forms/" + normalized;
+            }
+            normalizedForms.add(normalized);
+        }
+
+        if (normalizedForms.isEmpty()) {
+            appendLog("Нет выбранных форм для анализа. Выберите формы в дереве.");
             JOptionPane.showMessageDialog(this,
-                    "Список форм пуст. Добавьте формы для анализа.",
-                    "Нет форм",
+                    "Нет выбранных форм для анализа.\nВыберите формы в дереве (можно несколько с Ctrl/Shift).",
+                    "Нет выбранных форм",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        saveFormsList();
+        appendLog("Выбрано форм для анализа: " + normalizedForms.size());
+        for (String form : normalizedForms) {
+            appendLog("  - " + form);
+        }
 
         stopRequested = false;
         isRunning.set(true);
@@ -315,7 +344,7 @@ public class MainWindow extends JFrame {
 
             currentTask = executorService.submit(() -> {
                 try {
-                    runAnalysis();
+                    runAnalysis(new ArrayList<>(normalizedForms));
                 } catch (Exception e) {
                     SwingUtilities.invokeLater(() -> appendLog("ОШИБКА: " + e.getMessage()));
                     e.printStackTrace();
@@ -346,6 +375,131 @@ public class MainWindow extends JFrame {
             stopButton.setEnabled(false);
             settingsButton.setEnabled(true);
         }
+    }
+
+    /**
+     * Сохраняет выбранные формы во временный файл для анализа
+     */
+    private void saveSelectedFormsToFile(List<String> selectedForms) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (String form : selectedForms) {
+                sb.append(form).append("\n");
+            }
+            Files.writeString(Paths.get("forms_list_selected.txt"), sb.toString(),
+                    java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            appendLog("Ошибка сохранения списка выбранных форм: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Запускает анализ с указанным списком форм
+     */
+    private void runAnalysis(List<String> formsToAnalyze) throws Exception {
+        appendLog("=".repeat(80));
+        appendLog("=== ЗАПУСК АНАЛИЗА ФОРМ ===");
+        appendLog("=".repeat(80));
+        appendLog("Путь к проекту: " + settings.getProjectPath());
+        appendLog("Всего форм для анализа: " + formsToAnalyze.size());
+        appendLog("");
+
+        FormAnalyzerService analyzer = new FormAnalyzerService(settings);
+
+        // Устанавливаем прямой список форм для анализа
+        Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
+        analyzer.setFormsToAnalyze(formsSet);
+
+        analyzer.setLogger(new ILogger() {
+            @Override
+            public void log(String message) { appendLog(message); }
+            @Override
+            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            @Override
+            public void debug(String message) { appendLog("[DEBUG] " + message); }
+        });
+
+        analyzer.setStopCondition(() -> stopRequested);
+        analyzer.setProgressCallback((processed, total, currentForm) -> {
+            SwingUtilities.invokeLater(() -> {
+                int percent = total > 0 ? (processed * 100 / total) : 0;
+                progressBar.setValue(percent);
+                progressBar.setString(String.format("%d из %d (%.1f%%)", processed, total, (double) percent));
+                statusLabel.setText("Статус: " + currentForm);
+            });
+        });
+
+        analyzer.setFormAnalyzedCallback(formInfo -> {
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+
+                SwingUtilities.invokeLater(() -> {
+                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                });
+
+            } catch (IOException e) {
+                appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
+            }
+        });
+
+        List<FormInfo> results = analyzer.analyzeAllForms();
+        analyzer.clearFormsToAnalyze();
+        if (stopRequested) {
+            appendLog("Анализ остановлен пользователем");
+            if (!results.isEmpty()) {
+                appendLog("Сохранено частичных результатов: " + results.size() + " форм");
+            }
+            return;
+        }
+
+        appendLog("");
+        appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
+
+        ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+        reportGen.addAllForms(results);
+        reportGen.generateMainReport();
+        reportGen.generateSummaryReport();
+        reportGen.createMainReportHeader();
+
+        appendLog("");
+        appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
+        appendLog("Обработано форм: " + results.size());
+        appendLog("Отчеты сохранены в: " + settings.getOutputDir());
+
+        // Обновляем все дочерние формы после завершения анализа
+        SwingUtilities.invokeLater(() -> {
+            formsTreePanel.refreshAllChildForms();
+        });
+
+        if (config.isEnableLLMExport()) {
+            appendLog("=== ГЕНЕРАЦИЯ LLM ПРОМПТА ===");
+            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            llmGen.setStopCondition(() -> stopRequested);
+            LLMReportContext ctx = llmGen.prepareContext(results);
+            if (config.getLlmExportMode().equals("single_file")) {
+                String prompt = llmGen.generateSingleFile();
+                Path llmPath = Paths.get(settings.getOutputDir(), "llm_prompt_all_forms.md");
+                Files.writeString(llmPath, prompt);
+                appendLog("LLM промпт сохранен: " + llmPath);
+            } else {
+                List<String> files = llmGen.generateForEachForm();
+                appendLog("Создано промптов для форм: " + files.size());
+            }
+        }
+
+        // Удаляем временный файл
+        Files.deleteIfExists(Paths.get("forms_list_temp.txt"));
+
+        SwingUtilities.invokeLater(() -> {
+            int result = JOptionPane.showConfirmDialog(this,
+                    "Анализ завершен! Открыть папку с отчетами?",
+                    "Завершено", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                openOutputDirectory();
+            }
+        });
     }
 
     private void stopAnalysis() {

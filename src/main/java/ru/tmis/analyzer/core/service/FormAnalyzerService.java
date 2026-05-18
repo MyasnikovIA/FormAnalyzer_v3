@@ -33,6 +33,7 @@ public class FormAnalyzerService {
     private final FileScannerService scannerService;
     private final UserFormsResolver userFormsResolver;
     private final ExtractorManager extractorManager;
+    private Set<String> formsToAnalyze;
 
     private BooleanSupplier stopCondition = () -> false;
     private ProgressCallback progressCallback;
@@ -75,15 +76,15 @@ public class FormAnalyzerService {
     }
 
     public List<FormInfo> analyzeAllForms() throws IOException {
-        Set<String> formsToAnalyze = getFormsToAnalyze();
+        Set<String> formsToAnalyzeList = getFormsToAnalyze();
         List<FormInfo> results = new ArrayList<>();
 
-        System.out.println("Найдено форм для анализа: " + formsToAnalyze.size());
+        System.out.println("Найдено форм для анализа: " + formsToAnalyzeList.size());
 
         int processed = 0;
-        int total = formsToAnalyze.size();
+        int total = formsToAnalyzeList.size();
 
-        for (String formPath : formsToAnalyze) {
+        for (String formPath : formsToAnalyzeList) {
             if (stopCondition.getAsBoolean()) {
                 System.out.println("Анализ остановлен пользователем");
                 break;
@@ -172,6 +173,13 @@ public class FormAnalyzerService {
     }
 
     private Set<String> getFormsToAnalyze() throws IOException {
+        // Если установлен прямой список, используем его
+        if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {
+            System.out.println("Используем прямой список форм (" + formsToAnalyze.size() + " шт.)");
+            return formsToAnalyze;
+        }
+
+        // Иначе читаем из файла как обычно
         Set<String> forms = new LinkedHashSet<>();
         Path listFile = Paths.get("forms_list.txt");
 
@@ -180,7 +188,6 @@ public class FormAnalyzerService {
             for (String line : lines) {
                 String trimmed = line.trim();
                 if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
-                    // Нормализуем путь
                     String normalized = FormPathUtils.normalizeFormPath(trimmed);
                     forms.add(normalized);
                     System.out.println("  Добавлена форма из списка: " + normalized);
@@ -191,7 +198,7 @@ public class FormAnalyzerService {
             }
         }
 
-        // Если список пуст - сканируем все формы (и Forms, и UserForms)
+        // Если список пуст - сканируем все формы
         System.out.println("Список форм пуст, сканируем проект...");
         return scanAllForms();
     }
@@ -380,5 +387,18 @@ public class FormAnalyzerService {
         }
 
         System.out.println("  [AutoPopupMenu] Всего найдено unit: " + foundUnits.size());
+    }
+    /**
+     * Устанавливает список форм для анализа напрямую (без чтения из файла)
+     */
+    public void setFormsToAnalyze(Set<String> forms) {
+        this.formsToAnalyze = forms;
+    }
+
+    /**
+     * Очищает прямой список форм
+     */
+    public void clearFormsToAnalyze() {
+        this.formsToAnalyze = null;
     }
 }

@@ -1,4 +1,4 @@
-# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/HospitPlanning/hospit_planning.frm
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/Schedules/schedules_edit_hp.frm
 
 > **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
 
@@ -6,13 +6,12 @@
 
 Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
 
-**Анализируемая форма:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
-**Статус:** ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+**Анализируемая форма:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Mon May 18 23:38:49 GMT+07:00 2026
+**Дата генерации:** Tue May 19 00:03:50 GMT+07:00 2026
 
 ---
 
@@ -22,7 +21,7 @@
 Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
 
 **Статистика:**
-- Всего SQL запросов: 12
+- Всего SQL запросов: 13
 - Всего форм: 1
 
 ---
@@ -30,632 +29,1528 @@
 ### Запрос №1
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** DS_HOSP_PLAN_KINDS
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** DS_WEEKS
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="DS_HOSP_PLAN_KINDS" mode="Range">
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                select hpk.ID,
-                       hpk.HP_CODE,
-                       hpk.HP_NAME,
-                       hpk.MAX_PRIOR,
-                       hpk.DEPS,
-                       hpk.MIN_AGE,
-                       hpk.MAX_AGE,
-                       hpk.HAS_MKB_CONSTRAINTS,
-                       hpk.SHAS_MKB_CONSTRAINTS,
-                       hpk.SHAS_LIMITS,
-                       hpk.SHAS_PAYMENT_CONSTRAINTS,
-                       hpk.NUMB_GROUP,
-                       hpk.JOURNAL_TYPE_MNEMO,
-                       hpk.OPER_MNEMO,
-                       to_char(hpk.OPEN_DATE, 'DD.MM.YYYY') as OPEN_DATE,
-                       to_char(hpk.CLOSE_DATE, 'DD.MM.YYYY') as CLOSE_DATE
-                  from D_V_HOSP_PLAN_KINDS hpk
-                 where hpk.LPU = to_number(:pnLPU)
-                   and (D_PKG_CSE_ACCESSES.CHECK_RIGHT(pnLPU      => to_number(:pnLPU),
-                                                       psUNITCODE => 'HOSP_PLAN_KINDS',
-                                                       pnUNIT_ID  => hpk.ID,
-                                                       psRIGHT    => 11,
-                                                       pnCABLAB   => to_number(:pnCABLAB),
-                                                       pnSERVICE  => null) = 1
-                    or to_number(:pnSHOW_CSE) = 1)
-                ]]>
-            </component>
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                select hpk.ID,
-                       hpk.HP_CODE,
-                       hpk.HP_NAME,
-                       hpk.MAX_PRIOR,
-                       hpk.DEPS,
-                       hpk.MIN_AGE,
-                       hpk.MAX_AGE,
-                       hpk.HAS_MKB_CONSTRAINTS,
-                       hpk.SHAS_MKB_CONSTRAINTS,
-                       hpk.SHAS_LIMITS,
-                       hpk.SHAS_PAYMENT_CONSTRAINTS,
-                       hpk.NUMB_GROUP,
-                       hpk.JOURNAL_TYPE_MNEMO,
-                       hpk.OPER_MNEMO,
-                       to_char(hpk.OPEN_DATE, 'DD.MM.YYYY') as OPEN_DATE,
-                       to_char(hpk.CLOSE_DATE, 'DD.MM.YYYY') as CLOSE_DATE
-                  from D_V_HOSP_PLAN_KINDS hpk
-                 where hpk.LPU = (:pnLPU)::numeric
-                   and (D_PKG_CSE_ACCESSES.CHECK_RIGHT(pnLPU      => (:pnLPU)::numeric,
-                                                       psUNITCODE => 'HOSP_PLAN_KINDS',
-                                                       pnUNIT_ID  => hpk.ID,
-                                                       psRIGHT    => 11,
-                                                       pnCABLAB   => (:pnCABLAB)::numeric,
-                                                       pnSERVICE  => null) = 1
-                    or (:pnSHOW_CSE)::numeric = 1)
-                ]]>
-            </component>
-            <component cmptype="Variable" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="Variable" name="pnCABLAB" src="CABLAB" srctype="session" />
-            <component cmptype="Variable" name="pnSHOW_CSE" src="SHOW_CSE" srctype="var" />
-            <component cmptype="Variable" name="r1c" src="r1c" srctype="var" default="10" />
-            <component cmptype="Variable" name="r1s" src="r1s" srctype="var" default="1" />
-        </component>
+<component cmptype="DataSet" name="DS_WEEKS" activateoncreate="false" compile="true">
+		<![CDATA[
+		select level week_num,
+			@if (:s_type==2) {
+               case when level=1 then 'Для нечетных дней' else 'Для четных дней' end week_num_caption
+            @} else {
+               'Неделя №'||level week_num_caption
+            @}
+          from DUAL
+		 connect by level <= (select ceil(max(DAY_NUMBER) / 7)
+	                		    from D_V_SCHEDULESP ss
+	                           where ss.PID = :sch_id)
+		]]>
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="s_type" get="s_type" src="schedule_type" srctype="ctrl" />
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HOSP_PLAN_KINDS
-**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.CHECK_RIGHT
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP
 
 ---
 
 ### Запрос №2
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** DS_HPK_PLANS
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** DS_DAYS
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="DS_HPK_PLANS" activateoncreate="false" mode="Range">
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                select hp.ID,
-                       trunc(hp.PLAN_DATE) as PLAN_DATE,
-                       hp.PLAN_DAY_RUS,
-                       trim(hp.PLAN_DAY_ENG) as PLAN_DAY_ENG,
-                       to_char(hp.PLAN_DATE, 'D') as PLAN_DAY_NUMBER,
-                       hp.MALE_COUNT_S,
-                       hp.FEMALE_COUNT_S,
-                       hp.OPER_COUNT_S,
-                       hp.CON_COUNT_S,
-                       hp.GEN_COUNT_S
-                  from D_V_HPK_PLANS hp
-                 where hp.PID = to_number(:pnHOSP_PLAN_KINDS)
-                   and (hp.PLAN_DATE >= to_date(:pdPLAN_DATE_FROM, 'DD.MM.YYYY') or :pdPLAN_DATE_FROM is null)
-                   and (hp.PLAN_DATE <= to_date(:pdPLAN_DATE_TO, 'DD.MM.YYYY') or :pdPLAN_DATE_TO is null)
-                ]]>
-            </component>
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                select hp.ID,
-                       date_trunc('day', hp.PLAN_DATE) as PLAN_DATE,
-                       hp.PLAN_DAY_RUS,
-                       trim(hp.PLAN_DAY_ENG) as PLAN_DAY_ENG,
-                       to_char(hp.PLAN_DATE, 'D') as PLAN_DAY_NUMBER,
-                       hp.MALE_COUNT_S,
-                       hp.FEMALE_COUNT_S,
-                       hp.OPER_COUNT_S,
-                       hp.CON_COUNT_S,
-                       hp.GEN_COUNT_S
-                  from D_V_HPK_PLANS hp
-                 where hp.PID = (:pnHOSP_PLAN_KINDS)::numeric
-                   and (hp.PLAN_DATE >= (:pdPLAN_DATE_FROM)::date or :pdPLAN_DATE_FROM is null)
-                   and (hp.PLAN_DATE <= (:pdPLAN_DATE_TO)::date or :pdPLAN_DATE_TO is null)
-                ]]>
-            </component>
-            <component cmptype="Variable" name="pnHOSP_PLAN_KINDS" src="HOSP_PLAN_KINDS" srctype="ctrl" />
-            <component cmptype="Variable" name="pdPLAN_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" />
-            <component cmptype="Variable" name="pdPLAN_DATE_TO" src="PLAN_DATE_TO" srctype="ctrl" />
-            <component cmptype="Variable" name="r1c" src="r1c" srctype="var" default="10" />
-            <component cmptype="Variable" name="r1s" src="r1s" srctype="var" default="1" />
-        </component>
+<component cmptype="DataSet" name="DS_DAYS" activateoncreate="false">
+		<![CDATA[
+		select level day_num,
+		       case level
+                     when 1 then 'Пн.'
+                     when 2 then 'Вт.'
+                     when 3 then 'Ср.'
+                     when 4 then 'Чт.'
+                     when 5 then 'Пт.'
+                     when 6 then 'Сб.'
+                     when 7 then 'Вс.'
+                end day_name
+		  from DUAL
+		 connect by level <= 7
+		]]>
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_PLANS
 
 ---
 
 ### Запрос №3
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** dsHPKSchedule
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** DS_DAYS_CHN
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="dsHPKSchedule" activateoncreate="false" mode="Range">
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                select hs.ID,
-                       hs.DATE_BEGIN,
-                       hs.DATE_END,
-                       sc.CODE,
-                       sc.NAME,
-                       hs.IS_ACTIVE,
-                       hs.IS_PRIORITY,
-                       hs.OVER_LIMITS,
-                       hs.HOSP_PLAN_KINDS,
-                       hs.SCHEDULE
-                  from D_V_HPK_SCHEDULE_BASE hs
-                  join D_V_SCHEDULE_BASE sc on hs.SCHEDULE = sc.ID
-                 where hs.HOSP_PLAN_KINDS = to_number(:pnHOSP_PLAN_KINDS)
-                   and (hs.DATE_BEGIN >= to_date(:pdDATE_FROM, 'DD.MM.YYYY') or :pdDATE_FROM is null)
-                   and (hs.DATE_BEGIN <= to_date(:pdDATE_TO, 'DD.MM.YYYY') or :pdDATE_TO is null)
-                ]]>
-            </component>
-            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                select hs.ID,
-                       hs.DATE_BEGIN,
-                       hs.DATE_END,
-                       sc.CODE,
-                       sc.NAME,
-                       hs.IS_ACTIVE,
-                       hs.IS_PRIORITY,
-                       hs.OVER_LIMITS,
-                       hs.HOSP_PLAN_KINDS,
-                       hs.SCHEDULE
-                  from D_V_HPK_SCHEDULE_BASE hs
-                  join D_V_SCHEDULE_BASE sc on hs.SCHEDULE = sc.ID
-                 where hs.HOSP_PLAN_KINDS = (:pnHOSP_PLAN_KINDS)::numeric
-                   and (hs.DATE_BEGIN >= (:pdDATE_FROM)::date or :pdDATE_FROM is null)
-                   and (hs.DATE_BEGIN <= (:pdDATE_TO)::date or :pdDATE_TO is null)
-                ]]>
-            </component>
-            <component cmptype="Variable" name="pnHOSP_PLAN_KINDS" src="HOSP_PLAN_KINDS" srctype="ctrl" />
-            <component cmptype="Variable" name="pdDATE_FROM" src="deSchDateFrom" srctype="ctrl" />
-            <component cmptype="Variable" name="pdDATE_TO" src="deSchDateTo" srctype="ctrl" />
-            <component cmptype="Variable" name="r1c" src="r1c" srctype="var" default="10" />
-            <component cmptype="Variable" name="r1s" src="r1s" srctype="var" default="1" />
-        </component>
+<component cmptype="DataSet" name="DS_DAYS_CHN" activateoncreate="false">
+		<![CDATA[
+		select level day_num,1 week_num,
+        		   case level
+                  when 1 then 'Нечет.'
+                  when 2 then 'Чет.'
+               end day_name
+          from DUAL
+        connect by level <= 2
+		]]>
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_SCHEDULE_BASE, D_V_SCHEDULE_BASE
 
 ---
 
 ### Запрос №4
 
-**Тип компонента:** M2 Action
-**Имя компонента:** acSetPlanForDay
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAYS_MONTH
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acSetPlanForDay">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
-                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
-                  end if;
-                  D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY(pnLPU        => to_number(:pnLPU),
-                                                   pnPLAN       => to_number(:pnHPK_PLANS),
-                                                   psDAY        => :psPLAN_DAY_ENG,
-                                                   pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'),
-                                                   pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
-                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
-                  end if;
-                  call D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY(pnLPU        => (:pnLPU)::numeric,
-                                                        pnPLAN       => (:pnHPK_PLANS)::numeric,
-                                                        psDAY        => (:psPLAN_DAY_ENG)::text,
-                                                        pdSTART_DATE => (:pdDATE_FROM)::date,
-                                                        pdEND_DATE   => (:pdDATE_TO)::date);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnHPK_PLANS" src="HPK_PLANS" srctype="ctrl" />
-            <component cmptype="ActionVar" name="psPLAN_DAY_ENG" src="PLAN_DAY_ENG" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_FROM" src="return_from_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_TO" src="return_to_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
-            <component cmptype="ActionVar" name="psHP_NAME" src="HP_NAME" srctype="var" />
-        </component>
+<component cmptype="DataSet" name="DS_DAYS_MONTH" activateoncreate="false">
+		select sp.DAY_NUMBER DAY_NUM,
+               1 WEEK_NUM,
+			   sp.ID DAY_ID
+		  from D_V_SCHEDULESP sp
+		 where sp.PID = :sch_id
+		order by sp.day_number
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="schedule_type" get="schedule_type" src="schedule_type" srctype="ctrl" />
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP
 
 ---
 
 ### Запрос №5
 
-**Тип компонента:** M2 Action
-**Имя компонента:** acSetPlanForWeek
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_WEEK
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acSetPlanForWeek">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
-                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
-                  end if;
-                  D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK(pnLPU        => to_number(:pnLPU),
-                                                    pnHOSP_PLAN  => to_number(:pnHPK_PLANS),
-                                                    pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'),
-                                                    pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
-                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
-                  end if;
-                  call D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK(pnLPU        => (:pnLPU)::numeric,
-                                                         pnHOSP_PLAN  => (:pnHPK_PLANS)::numeric,
-                                                         pdSTART_DATE => (:pdDATE_FROM)::date,
-                                                         pdEND_DATE   => (:pdDATE_TO)::date);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnHPK_PLANS" src="HPK_PLANS" srctype="ctrl" />
-            <component cmptype="ActionVar" name="pdDATE_FROM" src="return_from_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_TO" src="return_to_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
-            <component cmptype="ActionVar" name="psHP_NAME" src="HP_NAME" srctype="var" />
-        </component>
+<component cmptype="DataSet" name="DS_WEEK" activateoncreate="false">
+            select 1 week_num
+            from dual
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
 
 ---
 
 ### Запрос №6
 
-**Тип компонента:** M2 Action
-**Имя компонента:** acDelHpkPlan
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAY_TIMES
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acDelHpkPlan">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_PLANS" action="DELETE" />
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  call D_PKG_HPK_PLANS.DEL(pnID  => (:pnID)::numeric,
-                                           pnLPU => (:pnLPU)::numeric);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnID" src="HPK_PLANS" srctype="ctrl" />
-        </component>
+<component cmptype="DataSet" name="DS_DAY_TIMES" activateoncreate="false" compile="true">
+		select
+			@if ( (:schedule_type==4)||(:schedule_type==3)) {
+		       sp.day_number
+            @} else {
+               mod(sp.day_number-1, 7)+1
+            @}
+               day_num,
+            @if ((:schedule_type==4)||(:schedule_type==3)) {
+               1
+            @} else {
+               ceil(sp.day_number/7)
+            @}
+               week_num,
+		       sp.ID DAY_ID,
+               nvl(dt.TIME_TYPE, -1) TIME_TYPE,
+               nvl(dt.TIME_NAME,'Интервал Квотирования') TIME_NAME,
+               dt.ID,
+		       to_char(dt.TIME_BEGIN, 'hh24:mi') TIME_BEGIN,
+               to_char(dt.TIME_END, 'hh24:mi') TIME_END,
+               dt.STEP,
+               dt.LIMITS
+		  from D_V_SCHEDULESP_TIMES dt
+		       join D_V_SCHEDULESP sp on sp.ID = dt.PID
+		 where sp.PID = :sch_id
+	  order by sp.DAY_NUMBER, TIME_BEGIN
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="schedule_type" get="schedule_type" src="schedule_type" srctype="ctrl" />
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_PLANS.DEL
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP_TIMES, D_V_SCHEDULESP
 
 ---
 
 ### Запрос №7
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acDelHospPlanKind
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** Init
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acDelHospPlanKind">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HOSP_PLAN_KINDS" action="DELETE" />
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  call D_PKG_HOSP_PLAN_KINDS.DEL(pnID  => (:pnID)::numeric,
-                                                 pnLPU => (:pnLPU)::numeric);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnID" src="HOSP_PLAN_KINDS" srctype="ctrl" />
-        </component>
+<component cmptype="Action" name="Init">
+		<![CDATA[
+			begin
+			  begin
+			  	select sch.ID,
+			  		   sch.NAME,
+			  		   sch.CODE,
+			  		   to_char(sch.START_DATE, 'dd.mm.yyyy'),
+			  		   sch.sch_type,
+			  		   sch.QUOTING
+			  	  into :sch_id,
+			  		   :sch_name,
+			  		   :sch_code,
+			  		   :sch_start_date,
+			  		   :sch_type,
+			  		   :QUOTING
+			  	  from D_V_SCHEDULE sch
+			  	 where sch.ID = :sch_id;
+			  exception when NO_DATA_FOUND then
+				:sch_name       := '';
+				:sch_code       := '';
+				:sch_start_date := '';
+				:sch_type	    := '';
+			  end;
+
+			  if :sch_type=3 then
+			    select count(1)
+				  into :PERIOD
+				  from D_V_schedulesp t
+				 where t.pid = :sch_id;
+              else
+                :PERIOD := null;
+              end if;
+			end;
+		]]>
+		<component cmptype="ActionVar" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="sch_name" put="sch_name" len="256" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_code" put="sch_code" len="60" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_start_date" put="sch_start_date" len="10" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_start_date" put="sch_st_d2" len="10" src="start_date" srctype="var" />
+		<component cmptype="ActionVar" name="sch_type" put="sch_type" len="1" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" put="QUOTING" len="1" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="PERIOD" put="PERIOD" len="2" src="PERIOD" srctype="ctrl" />
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HOSP_PLAN_KINDS.DEL
+**Используемые таблицы/вьюхи:** D_V_SCHEDULE, D_V_SCHEDULESP
 
 ---
 
 ### Запрос №8
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acGetNewMonth
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** TimeName
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acGetNewMonth">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                declare
-                  ndNEW_DATE DATE;
-                begin
-                  ndNEW_DATE := ADD_MONTHS(to_date(:pdPLAN_DATE_FROM_S, 'dd.mm.yyyy'), :pnSEARCH_DIRECTION);
-                  :pdPLAN_DATE_FROM := '01.' || to_char(ndNEW_DATE, 'mm.yyyy');
-                  :pdPLAN_DATE_TO := to_char(LAST_DAY(ndNEW_DATE), 'DD.MM.YYYY');
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                declare
-                  ndNEW_DATE date;
-                begin
-                  ndNEW_DATE := (:pdPLAN_DATE_FROM_S)::date + ((:pnSEARCH_DIRECTION)::integer || ' months')::interval;
-                  :pdPLAN_DATE_FROM := '01.' || to_char(ndNEW_DATE, 'MM.YYYY');
-                  :pdPLAN_DATE_TO := to_char(date_trunc('month', ndNEW_DATE) + interval '1 month - 1 day', 'DD.MM.YYYY');
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pdPLAN_DATE_FROM_S" src="PLAN_DATE_FROM" srctype="ctrl" />
-            <component cmptype="ActionVar" name="pnSEARCH_DIRECTION" src="SEARCH_DIRECTION" srctype="var" />
-            <component cmptype="ActionVar" name="pdPLAN_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" put="" len="15" />
-            <component cmptype="ActionVar" name="pdPLAN_DATE_TO" src="PLAN_DATE_TO" srctype="ctrl" put="" len="15" />
-        </component>
+<component cmptype="Action" name="TimeName" mode="post">
+        <![CDATA[
+            begin
+                :WEEKDAY := D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM(:pdstart_date);
+            end;
+        ]]>
+        <component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+        <component cmptype="ActionVar" name="WEEKDAY" put="WEEKDAY" src="WEEKDAY" srctype="var" />
+    </component>
 ```
 
+**Используемые пакеты/функции:** D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM
 
 ---
 
 ### Запрос №9
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acGetDefParams
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** AddEditSchedule
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acGetDefParams">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  :pdSYS_DATE := to_char(sysdate, 'DD.MM.YYYY');
-                  :pdFILTER_DATE_FROM := '01.' || to_char(sysdate, 'MM.YYYY');
-                  :pdFILTER_DATE_TO := to_char(last_day(sysdate), 'DD.MM.YYYY');
+<component cmptype="Action" name="AddEditSchedule" mode="post">
+		<![CDATA[
+			declare sholidays  varchar2(7);
+			begin
+			  sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			  begin
+			    select sch.id
+			      into :ScheduleId
+			      from D_V_SCHEDULE sch
+			     where sch.id = :updScheduleId;
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
-                    into :pnSHOW_CSE
-                    from dual;
+				D_PKG_SCHEDULE.UPD(pnID         => :updScheduleId,
+				  				   pnLPU        => :pnlpu,
+				  				   psCODE       => :pscode,
+				  				   psNAME       => :psname,
+				  		           pdSTART_DATE => :pdstart_date,
+                                   pnSCH_TYPE   => :sch_type,
+                                   psHOLIDAYS   => sholidays,
+                                   pnQUOTING    => :QUOTING);
 
-                  D_PKG_CATALOGS.FIND_ROOT_CATALOG(1, :pnLPU, 'HOSP_PLAN_KINDS', :pnCID);
+			  exception when NO_DATA_FOUND then
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_INSERT', null, 0)
-                    into :pnSCH_ADD
-                    from dual;
+			  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID => :ScheduleId,
+		 		  				 pnLPU         => :pnlpu,
+				  				 pnCID         => :pncid,
+				  				 psCODE        => :pscode,
+				  			     psNAME        => :psname,
+				  				 pdSTART_DATE  => :pdstart_date,
+				  				 pnSCH_TYPE    => :sch_type,
+				  				 psHOLIDAYS    => sholidays,
+				  				 pnQUOTING     => :QUOTING,
+                                 pnSCH_KIND    => 1);
+		      end;
+            end;
+		]]>
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		
+		<component cmptype="SubAction" name="UpdWeek" groupname="weeks" type="upd">
+			<component cmptype="SubActionVar" name="week_num" get="week_num" src="weeks" srctype="ctrl" />
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_UPDATE', null, 0)
-                    into :pnSCH_UPD
-                    from dual;
+			<component cmptype="SubAction" name="AddDay" groupname="days" type="upd">
+				<![CDATA[
+					begin
+				  		begin
+				   			select sp.id
+				   			  into :day_id
+				              from D_V_SCHEDULESP sp
+				             where sp.pid = :pnsch_id
+				               and sp.day_number = (:week_num - 1) * 7 + to_number(:day_num);
+				  			exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id => :day_id,
+				                                          pnlpu => :pnlpu,
+				                                          pnpid => :pnsch_id,
+				                                   pnday_number => (:week_num - 1) * 7 + to_number(:day_num),
+				                                   pdtime_begin => null,
+				                                     pdtime_end => null);
+				  		end;
+					end;
+			 	]]>
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="week_num" get="week_num" put="week_num" src="week_num" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_DELETE', null, 0)
-                    into :pnSCH_DEL
-                    from dual;
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                declare
-                  nCID numeric;
-                begin
-                  :pdSYS_DATE := to_char(current_date, 'DD.MM.YYYY');
-                  :pdFILTER_DATE_FROM := '01.' || to_char(current_date, 'MM.YYYY');
-                  :pdFILTER_DATE_TO := to_char(date_trunc('month', current_date) + interval '1 month - 1 day', 'DD.MM.YYYY');
+				<component cmptype="SubAction" name="DelTimeType" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
-                    into :pnSHOW_CSE;
+					<component cmptype="SubAction" name="DelTime" groupname="day_times" type="del">
+						begin
+						  D_PKG_SCHEDULESP_TIMES.DEL(pnID =&gt; :pnid,
+						                             pnLPU =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
 
-                  nCID := :pnCID;
+				<component cmptype="SubAction" name="UpdTimeType" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
 
-                  call D_PKG_CATALOGS.FIND_ROOT_CATALOG(pnRAISE    => 1,
-                                                        pnLPU      => (:pnLPU)::numeric,
-                                                        psUNITCODE => 'HOSP_PLAN_KINDS',
-                                                        pnCATALOG  => nCID);
+					<component cmptype="SubAction" name="DelTime" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                            pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
 
-                  :pnCID := nCID;
+					<component cmptype="SubAction" name="UpdTime" groupname="day_times" type="upd">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+					   		if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type := :pntime_type;
+						    end if;
+							D_PKG_SCHEDULESP_TIMES.UPD_S(pnID        => :pnid,
+						                                pnLPU        => :pnlpu,
+						                                psTIME_BEGIN => :pstime_begin,
+						                                psTIME_END   => :pstime_end,
+						                                pnTIME_TYPE  => nTime_type,
+						                                pnGEN_ERROR  => 0,
+                                                        vAPI_VERSION => 2,
+                                                        pnSTEP       => :STEP,
+                                                        pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+					</component>
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_INSERT', null, 0)
-                    into :pnSCH_ADD;
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						 	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type:=:pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="day_times" srctype="ctrl" put="" len="17" />
+					</component>
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_UPDATE', null, 0)
-                    into :pnSCH_UPD;
+				</component>
+				<component cmptype="SubAction" name="AddTimeType" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
 
-                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_DELETE', null, 0)
-                    into :pnSCH_DEL;
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" put="" len="15" />
-            <component cmptype="ActionVar" name="pdFILTER_DATE_TO" src="PLAN_DATE_TO" srctype="ctrl" put="" len="15" />
-            <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="deSchDateFrom" srctype="ctrl" put="" len="15" />
-            <component cmptype="ActionVar" name="pdFILTER_DATE_TO" src="deSchDateTo" srctype="ctrl" put="" len="15" />
-            <component cmptype="ActionVar" name="pnSHOW_CSE" src="SHOW_CSE" srctype="var" put="" len="10" />
-            <component cmptype="ActionVar" name="pnCID" src="MAIN_CID" srctype="var" put="" len="17" />
-            <component cmptype="ActionVar" name="pdSYS_DATE" src="SYS_DATE" srctype="var" put="" len="15" />
-            <component cmptype="ActionVar" name="pnSCH_ADD" src="SCH_ADD" srctype="var" put="" len="1" />
-            <component cmptype="ActionVar" name="pnSCH_UPD" src="SCH_UPD" srctype="var" put="" len="1" />
-            <component cmptype="ActionVar" name="pnSCH_DEL" src="SCH_DEL" srctype="var" put="" len="1" />
-        </component>
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						  	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type:=:pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+		</component>
+
+		
+		<component cmptype="SubAction" name="AddWeek" groupname="weeks" type="add">
+			<![CDATA[
+            declare
+            	nDAY_NUMBER NUMBER;
+            begin
+                select ceil(max(ss.DAY_NUMBER)/7)
+                  into nDAY_NUMBER
+                  from D_V_SCHEDULESP ss
+                 where ss.PID = :SCHEDULEID;
+
+            	if (nDAY_NUMBER is null) then
+            		:week_num := 1;
+            	else
+            		:week_num := nDAY_NUMBER + 1;
+            	end if;
+            end;
+			]]>
+			<component cmptype="SubActionVar" name="week_num" put="week_num" src="week_num" srctype="var" len="5" />
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+			<component cmptype="SubAction" name="AddDay" groupname="days" type="upd">
+				begin
+				  	begin
+				   		select sp.id
+				          into :day_id
+				          from d_v_schedulesp sp
+				         where sp.pid = :pnsch_id
+				           and sp.day_number = (:week_num - 1) * 7 + to_number(:day_num);
+				  		exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id =&gt; :day_id,
+				                                          pnlpu =&gt; :pnlpu,
+				                                          pnpid =&gt; :pnsch_id,
+				                                   pnday_number =&gt; (:week_num - 1) * 7 + to_number(:day_num),
+				                                   pdtime_begin =&gt; null,
+				                                     pdtime_end =&gt; null);
+				  	end;
+				end;
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="week_num" get="week_num" src="week_num" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+			   	<component cmptype="SubAction" name="AddTimeType" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						  	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type := :pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+		</component>
+
+		
+		<component cmptype="SubAction" name="DelWeek" groupname="weeks" type="del">
+			begin
+			  d_pkg_schedule.del_last_week(pnid =&gt; :ScheduleId,
+			                              pnlpu =&gt; :pnlpu,
+			                           pnnumber =&gt; :week_num);
+			end;
+			<component cmptype="SubActionVar" name="week_num" src="weeks" get="week_num" srctype="ctrl" />
+			<component cmptype="SubActionVar" name="ScheduleId" src="ScheduleId" get="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+		</component>
+
+		
+		<component cmptype="SubAction" name="CheckSchedule" mode="execlast">
+			  begin
+				D_PKG_SCHEDULE.CHECK_INTERVAL(:sch_id, :lpu_id);
+			    for schedule in (select c.ID,
+			                            c.IS_SUBST,
+			                            c.LPU,
+			                            c.EMPLOYER,
+			                            c.CABLAB,
+			                            c.DBEGIN,
+			                            c.DEND
+			                       from D_V_CLSCHS_BASE c
+			                      where c.SCHEDULE = :sch_id
+			                        and c.LPU = :lpu_id)
+			    loop
+			      if schedule.IS_SUBST in (0,2) then
+				    for subst in (select cl.ID
+			                        from D_V_CLSCHS_BASE cl
+			                       where cl.LPU = schedule.LPU
+			                         and cl.CABLAB = schedule.CABLAB
+			                         and cl.EMPLOYER = schedule.EMPLOYER
+			                         and cl.CLSCH_TYPE = 0
+			                         and cl.IS_SUBST = 1
+			                         and schedule.DEND  between cl.DBEGIN and coalesce(cl.DEND, to_date('31.12.2999', 'DD.MM.YYYY'))
+			                     )
+			        loop
+			          D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, subst.ID, 1);
+			          D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, subst.ID);
+			        end loop;
+			        D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, schedule.ID, 1);
+			        D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, schedule.ID);
+			      end if;
+			    end loop;
+			  end;
+			<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+		</component>
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_URPRIVS.CHECK_BPPRIV, D_PKG_CATALOGS.FIND_ROOT_CATALOG
+**Используемые таблицы/вьюхи:** D_V_SCHEDULE
+**Используемые пакеты/функции:** D_PKG_SCHEDULE.UPD, D_PKG_SCHEDULE.ADD
 
 ---
 
 ### Запрос №10
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acCopyPlanForDay
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** AddEditSchedule_chn
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acCopyPlanForDay">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
-                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
-                  end if;
-                  D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY(pnLPU        => to_number(:pnLPU),
-                                                    pnPLAN       => to_number(:pnHPK_PLANS),
-                                                    psDAY        => :psPLAN_DAY_ENG,
-                                                    pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'),
-                                                    pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
-                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
-                  end if;
-                  call D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY(pnLPU        => (:pnLPU)::numeric,
-                                                         pnPLAN       => (:pnHPK_PLANS)::numeric,
-                                                         psDAY        => (:psPLAN_DAY_ENG)::text,
-                                                         pdSTART_DATE => (:pdDATE_FROM)::date,
-                                                         pdEND_DATE   => (:pdDATE_TO)::date);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnHPK_PLANS" src="HPK_PLANS" srctype="ctrl" />
-            <component cmptype="ActionVar" name="psPLAN_DAY_ENG" src="PLAN_DAY_ENG" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_FROM" src="return_from_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_TO" src="return_to_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
-            <component cmptype="ActionVar" name="psHP_NAME" src="HP_NAME" srctype="var" />
-        </component>
+<component cmptype="Action" name="AddEditSchedule_chn" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+				  from d_v_schedule sch
+				 where sch.id = :updScheduleId;
+
+			    D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+
+				  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_CHN" groupname="week_chn">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="AddDay_CHN" groupname="days_chn" type="upd">
+				begin
+			  		begin
+			    		select sp.id
+				          into :day_id
+				          from d_v_schedulesp sp
+				         where sp.pid = :pnsch_id
+				           and sp.day_number = :day_num;
+				   		exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id =&gt; :day_id,
+				                                          pnlpu =&gt; :pnlpu,
+				                                          pnpid =&gt; :pnsch_id,
+				                                   pnday_number =&gt; :day_num,
+				                                   pdtime_begin =&gt; null,
+				                                     pdtime_end =&gt; null);
+			  		end;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days_chn" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_CHN" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" get="nid" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_CHN" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+													  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="insert_id" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_CHN" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_CHN1" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                             pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				  begin
+					D_PKG_SCHEDULE.CHECK_INTERVAL(:sch_id, :lpu_id);
+				    for schedule in (select c.ID,
+				                            c.IS_SUBST,
+				                            c.LPU,
+				                            c.EMPLOYER,
+				                            c.CABLAB,
+				                            c.DBEGIN,
+				                            c.DEND
+				                       from D_V_CLSCHS_BASE c
+				                      where c.SCHEDULE = :sch_id
+				                        and c.LPU = :lpu_id)
+				    loop
+				      if schedule.IS_SUBST in (0,2) then
+				        for subst in (select cl.ID
+				                        from D_V_CLSCHS_BASE cl
+				                       where cl.LPU = schedule.LPU
+				                         and cl.CABLAB = schedule.CABLAB
+				                         and cl.EMPLOYER = schedule.EMPLOYER
+				                         and cl.CLSCH_TYPE = 0
+				                         and cl.IS_SUBST = 1
+				                         and schedule.DEND between cl.DBEGIN and coalesce(cl.DEND, to_date('31.12.2999', 'DD.MM.YYYY'))
+				                     )
+				        loop
+				          D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, subst.ID, 1);
+				          D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, subst.ID);
+				        end loop;
+				        D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, schedule.ID, 1);
+				        D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, schedule.ID);
+				      end if;
+				    end loop;
+				  end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
 
 ---
 
 ### Запрос №11
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acCopyPlanForWeek
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** AddEditScheduleMonth
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acCopyPlanForWeek">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
-                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
-                  end if;
-                  D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK(pnLPU        => to_number(:pnLPU),
-                                                     pnHOSP_PLAN  => to_number(:pnHPK_PLANS),
-                                                     pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'),
-                                                     pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
-                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
-                  end if;
-                  call D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK(pnLPU        => (:pnLPU)::numeric,
-                                                          pnHOSP_PLAN  => (:pnHPK_PLANS)::numeric,
-                                                          pdSTART_DATE => (:pdDATE_FROM)::date,
-                                                          pdEND_DATE   => (:pdDATE_TO)::date);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-            <component cmptype="ActionVar" name="pnHPK_PLANS" src="HPK_PLANS" srctype="ctrl" />
-            <component cmptype="ActionVar" name="pdDATE_FROM" src="return_from_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdDATE_TO" src="return_to_value" srctype="var" />
-            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
-            <component cmptype="ActionVar" name="psHP_NAME" src="HP_NAME" srctype="var" />
-        </component>
+<component cmptype="Action" name="AddEditScheduleMonth" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+				  from d_v_schedule sch
+				 where sch.id = :updScheduleId;
+
+			    D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+				  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_MON" groupname="week_for_mon">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="UpdDay_MON" groupname="days_for_mon" type="upd">
+				begin
+			    	select sp.id
+				      into :day_id
+				      from d_v_schedulesp sp
+				     where sp.pid = :pnsch_id
+				       and sp.day_number = :day_old;
+
+				       d_pkg_schedulesp.upd(pnid =&gt; :day_id,
+				                         pnlpu =&gt; :pnlpu,
+				                 		 pnday_number =&gt; :day_num,
+				                 		 pdtime_begin =&gt; null,
+				                    	 pdtime_end =&gt; null);
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_old" get="day_old" src="DAY_NUM_FOR_MON_OLD" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" src="DAY_NUM_FOR_MON" srctype="ctrl" />
+
+				<component cmptype="SubAction" name="AddTimeType_MON" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="insert_id" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_MON" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_MON" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+                                                      pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_MON" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_MON" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_MON" groupname="time_types" type="del">
+
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_MON1" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                              pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="AddDay_MON" groupname="days_for_mon" type="add">
+				begin
+					if :day_num is not null then
+						d_pkg_schedulesp.add(pnd_insert_id =&gt; :day_id,
+                                                     pnlpu =&gt; :pnlpu,
+                                                     pnpid =&gt; :pnsch_id,
+                                              pnday_number =&gt; :day_num,
+                                              pdtime_begin =&gt; null,
+                                                pdtime_end =&gt; null);
+				   else
+						:day_id:=null;
+				   end if;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM_FOR_MON" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_MON" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+							if :pnpid is not null then
+								D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                             pnLPU         => :pnlpu,
+                                                             pnPID         => :pnpid,
+                                                             psTIME_BEGIN  => :pstime_begin,
+                                                             psTIME_END    => :pstime_end,
+                                                             pnTIME_TYPE   => :pntime_type,
+                                                             pnGEN_ERROR   => 0,
+                                                             pnSTEP        => :STEP,
+                                                             pnLIMITS      => :LIMITS);
+							end if;
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="DelDay_MON" groupname="days_for_mon" type="del">
+				declare day_id NUMBER(17);
+				begin
+				 	select sp.id
+				      into day_id
+				      from d_v_schedulesp sp
+				     where sp.pid = :pnsch_id
+				       and sp.day_number = :day_num;
+					d_pkg_schedulesp.del(day_id,:pnlpu);
+				end;
+				<component cmptype="SubActionVar" name="day_num" get="day_num" src="days_for_mon" srctype="ctrl" len="17" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+			 </component>
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				begin
+					d_pkg_schedule.check_interval(:sch_id, :lpu_id);
+				end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
 
 ---
 
 ### Запрос №12
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acDelSchedule
-**Источник:** Forms/HospitPlanning/hospit_planning.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+**Имя компонента:** AddEditScheduleSk
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acDelSchedule">
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-                <![CDATA[
-                begin
-                  D_PKG_HPK_SCHEDULE.DEL(:pnID, :pnLPU);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-                <![CDATA[
-                begin
-                  call D_PKG_HPK_SCHEDULE.DEL(pnID  => (:pnID)::numeric,
-                                              pnLPU => (:pnLPU)::numeric);
-                end;
-                ]]>
-            </component>
-            <component cmptype="ActionVar" name="pnID" src="gridSchedule" srctype="ctrl" />
-            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-        </component>
+<component cmptype="Action" name="AddEditScheduleSk" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+			  	  from d_v_schedule sch
+			 	 where sch.id = :updScheduleId;
+
+			   	D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+                  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_SK" groupname="week_for_sk">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="DelDay_SK" groupname="days_for_sk" type="del">
+				begin
+					d_pkg_schedulesp.del(:day_id,:pnlpu);
+				end;
+				<component cmptype="SubActionVar" name="day_id" get="day_id" src="days_for_sk" srctype="ctrl" len="17" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+			 </component>
+			<component cmptype="SubAction" name="UpdDay_SK" groupname="days_for_sk" type="upd">
+				begin
+				   d_pkg_schedulesp.upd(pnid =&gt; :day_id,
+				                       pnlpu =&gt; :pnlpu,
+				                pnday_number =&gt; :day_num,
+				                pdtime_begin =&gt; null,
+				                  pdtime_end =&gt; null);
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" get="days_for_sk" src="days_for_sk" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM" srctype="ctrlcaption" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_SK" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_SK" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_SK" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                       pnLPU         => :pnlpu,
+                                                       pnPID         => :pnpid,
+                                                       psTIME_BEGIN  => :pstime_begin,
+                                                       psTIME_END    => :pstime_end,
+                                                       pnTIME_TYPE   => :pntime_type,
+                                                       pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_SK" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_MON" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+													  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_SK" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                       pnLPU         => :pnlpu,
+                                                       pnPID         => :pnpid,
+                                                       psTIME_BEGIN  => :pstime_begin,
+                                                       psTIME_END    => :pstime_end,
+                                                       pnTIME_TYPE   => :pntime_type,
+                                                       pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" en="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_SK" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_SK1" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                            pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="AddDay_SK" groupname="days_for_sk" type="add">
+				begin
+					if :day_num is not null then
+						d_pkg_schedulesp.add(pnd_insert_id =&gt; :day_id,
+                                                     pnlpu =&gt; :pnlpu,
+                                                     pnpid =&gt; :pnsch_id,
+                                              pnday_number =&gt; :day_num,
+                                              pdtime_begin =&gt; null,
+                                                pdtime_end =&gt; null);
+				   else
+						:day_id := null;
+				   end if;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM" srctype="ctrlcaption" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_SK" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+							if :pnpid is not null then
+								D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                             pnLPU         => :pnlpu,
+                                                             pnPID         => :pnpid,
+                                                             psTIME_BEGIN  => :pstime_begin,
+                                                             psTIME_END    => :pstime_end,
+                                                             pnTIME_TYPE   => :pntime_type,
+                                                             pnGEN_ERROR   => 0,
+                                                             pnSTEP        => :STEP,
+                                                             pnLIMITS      => :LIMITS);
+							end if;
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				begin
+					d_pkg_schedule.check_interval(:sch_id, :lpu_id);
+				end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
 ```
 
-**Используемые пакеты/функции:** D_PKG_HPK_SCHEDULE.DEL
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
+
+---
+
+### Запрос №13
+
+**Тип компонента:** M2 Action
+**Имя компонента:** checkForWarning
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="checkForWarning">
+        <![CDATA[
+        begin
+            select case
+                       when exists(
+                               select null
+                                 from D_V_CLSCHS_BASE cb
+                                      join D_V_DIRECTION_SERVICES_BASE ds on ds.CABLAB_TO = cb.CABLAB
+                                                                         and ds.REC_DATE >= cb.DBEGIN
+                                                                         and (ds.REC_DATE <= cb.DEND or cb.DEND is null)
+                                                                         and (cb.EMPLOYER is null or cb.EMPLOYER = ds.EMPLOYER_TO)
+                                                                         and (cb.SERVICE is null or cb.SERVICE = ds.SERVICE)
+                                where cb.SCHEDULE = :SCHEDULE_ID) then 1
+                       else 0
+                       end SERVICES_COUNT
+              into :SERVICES_COUNT
+              from dual;
+        end;
+        ]]>
+        <component cmptype="ActionVar" name="SCHEDULE_ID" src="ScheduleId" srctype="var" get="sch_id" />
+        <component cmptype="ActionVar" name="SERVICES_COUNT" src="SERVICES_COUNT" srctype="var" put="pSERVICES_COUNT" len="17" />
+    </component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_CLSCHS_BASE, D_V_DIRECTION_SERVICES_BASE
 
 
 ## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
@@ -663,165 +1558,77 @@
 Ниже представлены определения всех вьюх (D_V_*), найденных в SQL запросах форм, извлеченные из базы данных PostgreSQL.
 
 **Статистика:**
-- Всего вьюх: 4
+- Всего вьюх: 5
 
 ---
 
-### Вьюха №1: D_V_HOSP_PLAN_KINDS
+### Вьюха №1: D_V_SCHEDULESP
 
 **Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
+- Forms/Schedules/schedules_edit_hp.frm
 
 **DDL определение:**
 
 ```sql
--- PostgreSQL View: D_V_HOSP_PLAN_KINDS
- SELECT t.id,
-    t.hp_code,
-    t.hp_name,
-    t.max_prior,
-    t.lpu,
-    t.cid,
-    d_pkg_hosp_plan_deps.get_deps(t.id::numeric) AS deps,
-    t.min_age,
-    t.max_age,
-    t.has_mkb_constraints,
-        CASE
-            WHEN t.has_mkb_constraints = 0::numeric OR check_null(t.has_mkb_constraints::character varying, 0::character varying) THEN 'Нет'::character varying
-            WHEN t.has_mkb_constraints = 1::numeric OR check_null(t.has_mkb_constraints::character varying, 1::character varying) THEN 'Да'::character varying
-            ELSE ''::character varying
-        END AS shas_mkb_constraints,
-    t.has_limits,
-        CASE
-            WHEN t.has_limits = 0::numeric OR check_null(t.has_limits::character varying, 0::character varying) THEN 'Нет'::character varying
-            WHEN t.has_limits = 1::numeric OR check_null(t.has_limits::character varying, 1::character varying) THEN 'Да'::character varying
-            ELSE ''::character varying
-        END AS shas_limits,
-    t.has_payment_constraints,
-        CASE
-            WHEN t.has_payment_constraints = 0::numeric OR check_null(t.has_payment_constraints::character varying, 0::character varying) THEN 'Нет'::character varying
-            WHEN t.has_payment_constraints = 1::numeric OR check_null(t.has_payment_constraints::character varying, 1::character varying) THEN 'Да'::character varying
-            ELSE ''::character varying
-        END AS shas_payment_constraints,
-    t.numb_group,
-    t.journal_type,
-    t1.jt_name AS journal_type_mnemo,
-    t.is_oper,
-        CASE
-            WHEN t.is_oper = 0::numeric THEN 'Консервативный'::character varying
-            WHEN t.is_oper = 1::numeric THEN 'Оперативный'::character varying
-            ELSE NULL::character varying
-        END AS oper_mnemo,
-    t.hp_block,
-        CASE
-            WHEN t.hp_block = 1::numeric OR check_null(t.hp_block::character varying, 1::character varying) THEN 'Журнал заблокирован'::character varying
-            ELSE NULL::character varying
-        END AS hp_block_mnemo,
-    t.open_date,
-    t.close_date
-   FROM d_hosp_plan_kinds t
-     CROSS JOIN d_hpk_journal_types t1
-  WHERE t1.jt_code = t.journal_type AND (EXISTS ( SELECT NULL::text AS "null"
-           FROM d_v_urprivs ur
-          WHERE ur.catalog = t.cid AND ur.unitcode::text = 'HOSP_PLAN_KINDS'::text));
-```
-
----
-
-### Вьюха №2: D_V_HPK_PLANS
-
-**Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
-
-**DDL определение:**
-
-```sql
--- PostgreSQL View: D_V_HPK_PLANS
- SELECT t.id,
-    t.lpu,
-    t.pid,
-    t1.hp_name AS plan_kind,
-    t.plan_date,
-    to_char(t.plan_date, 'DAY'::text, 'NLS_DATE_LANGUAGE=AMERICAN'::text) AS plan_day_eng,
-    initcap(to_char(t.plan_date, 'DAY'::text, 'NLS_DATE_LANGUAGE=RUSSIAN'::text)) AS plan_day_rus,
-    t.male_count,
-        CASE
-            WHEN t.male_count = NULL::numeric OR check_null(t.male_count::character varying, NULL::character varying) THEN NULL::numeric
-            ELSE t.gen_count - t.male_count
-        END AS female_count,
-    t.oper_count,
-        CASE
-            WHEN t.oper_count = NULL::numeric OR check_null(t.oper_count::character varying, NULL::character varying) THEN NULL::numeric
-            ELSE t.gen_count - t.oper_count
-        END AS cons_count,
-    t.gen_count,
-        CASE
-            WHEN t.gen_count = NULL::numeric OR check_null(t.gen_count::character varying, NULL::character varying) THEN concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 0::numeric), '(неогр.)')::character varying
-            ELSE concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 0::numeric), '(', t.gen_count, ')')::character varying
-        END AS gen_count_s,
-        CASE
-            WHEN t.male_count = NULL::numeric OR check_null(t.male_count::character varying, NULL::character varying) THEN concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 1::numeric), '(неогр.)')::character varying
-            ELSE concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 1::numeric), '(', t.male_count, ')')::character varying
-        END AS male_count_s,
-        CASE
-            WHEN t.male_count = NULL::numeric OR check_null(t.male_count::character varying, NULL::character varying) THEN concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 2::numeric), '(неогр.)')::character varying
-            ELSE concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 2::numeric), '(', t.gen_count - t.male_count, ')')::character varying
-        END AS female_count_s,
-        CASE
-            WHEN t.oper_count = NULL::numeric OR check_null(t.oper_count::character varying, NULL::character varying) THEN concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 3::numeric), '(неогр.)')::character varying
-            ELSE concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 3::numeric), '(', t.oper_count, ')')::character varying
-        END AS oper_count_s,
-        CASE
-            WHEN t.oper_count = NULL::numeric OR check_null(t.oper_count::character varying, NULL::character varying) THEN concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 4::numeric), '(неогр.)')::character varying
-            ELSE concat(d_pkg_hpk_plan_journals.get_info(t.lpu::numeric, t1.id::numeric, t.plan_date::timestamp without time zone, 1::numeric, 4::numeric), '(', t.gen_count - t.oper_count, ')')::character varying
-        END AS con_count_s,
-    t.cid
-   FROM d_hpk_plans t
-     CROSS JOIN d_hosp_plan_kinds t1
-  WHERE t1.id = t.pid AND (EXISTS ( SELECT NULL::text AS "null"
-           FROM d_v_urprivs ur
-          WHERE ur.catalog = t.cid AND ur.unitcode::text = 'HPK_PLANS'::text));
-```
-
----
-
-### Вьюха №3: D_V_HPK_SCHEDULE_BASE
-
-**Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
-
-**DDL определение:**
-
-```sql
--- PostgreSQL View: D_V_HPK_SCHEDULE_BASE
+-- PostgreSQL View: D_V_SCHEDULESP
  SELECT id,
     lpu,
-    hosp_plan_kinds,
-    schedule,
-    date_begin,
-    date_create,
-    is_active,
-    is_priority,
-    date_end,
-    over_limits
-   FROM d_hpk_schedule hse
+    cid,
+    pid,
+    day_number,
+    to_char(time_begin, 'hh24:mi'::text) AS time_begin,
+    to_char(time_end, 'hh24:mi'::text) AS time_end
+   FROM d_schedulesp sp
   WHERE (EXISTS ( SELECT NULL::text AS "null"
            FROM d_v_urprivs ur
-          WHERE ur.lpu = hse.lpu AND ur.unitcode::text = 'HPK_SCHEDULE'::text
+          WHERE ur.catalog = sp.cid AND ur.unitcode::text = 'SCHEDULESP'::text
          LIMIT 1));
 ```
 
 ---
 
-### Вьюха №4: D_V_SCHEDULE_BASE
+### Вьюха №2: D_V_SCHEDULESP_TIMES
 
 **Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
+- Forms/Schedules/schedules_edit_hp.frm
 
 **DDL определение:**
 
 ```sql
--- PostgreSQL View: D_V_SCHEDULE_BASE
+-- PostgreSQL View: D_V_SCHEDULESP_TIMES
+ SELECT t.id,
+    t.lpu,
+    t.cid,
+    t.pid,
+    t.time_begin,
+    t.time_end,
+    t.time_type,
+    t1.time_code,
+    t1.time_name,
+    to_char(t.time_begin, 'hh24:mi'::text) AS time_begin_s,
+    to_char(t.time_end, 'hh24:mi'::text) AS time_end_s,
+    t1.er_view,
+    t.step,
+    t.limits
+   FROM d_schedulesp_times t
+     LEFT JOIN d_schedule_time_types t1 ON t1.id = t.time_type
+  WHERE true = true AND (EXISTS ( SELECT NULL::text AS "null"
+           FROM d_v_urprivs ur
+          WHERE ur.catalog = t.cid AND ur.unitcode::text = 'SCHEDULESP_TIMES'::text
+         LIMIT 1));
+```
+
+---
+
+### Вьюха №3: D_V_SCHEDULE
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- PostgreSQL View: D_V_SCHEDULE
  SELECT id,
     lpu,
     cid,
@@ -829,13 +1636,182 @@
     name,
     start_date,
     sch_type,
+        CASE
+            WHEN sch_type = 0::numeric THEN 'Обычный'::character varying
+            WHEN sch_type = 1::numeric THEN 'Чет/нечет'::character varying
+            WHEN sch_type = 2::numeric THEN 'Чет/нечет по дням недели'::character varying
+            WHEN sch_type = 3::numeric THEN 'Скользящий'::character varying
+            WHEN sch_type = 4::numeric THEN 'По дням месяца'::character varying
+            ELSE ''::character varying
+        END AS sch_type_mnemo,
     quoting,
     holidays,
-    sch_kind
+        CASE
+            WHEN substr2(holidays, 1::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 1::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 1::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 1::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 1::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 1::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS mon_holiday,
+        CASE
+            WHEN substr2(holidays, 2::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 2::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 2::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 2::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 2::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 2::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS tue_holiday,
+        CASE
+            WHEN substr2(holidays, 3::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 3::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 3::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 3::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 3::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 3::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS wed_holiday,
+        CASE
+            WHEN substr2(holidays, 4::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 4::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 4::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 4::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 4::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 4::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS thu_holiday,
+        CASE
+            WHEN substr2(holidays, 5::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 5::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 5::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 5::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 5::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 5::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS fri_holiday,
+        CASE
+            WHEN substr2(holidays, 6::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 6::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 6::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 6::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 6::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 6::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS sat_holiday,
+        CASE
+            WHEN substr2(holidays, 7::numeric, 1::numeric) = NULL::text OR check_null(substr2(holidays, 7::numeric, 1::numeric)::character varying, NULL::character varying) THEN 0
+            WHEN substr2(holidays, 7::numeric, 1::numeric) = 0::numeric OR check_null(substr2(holidays, 7::numeric, 1::numeric)::character varying, 0::character varying) THEN 0
+            WHEN substr2(holidays, 7::numeric, 1::numeric) = 1::numeric OR check_null(substr2(holidays, 7::numeric, 1::numeric)::character varying, 1::character varying) THEN 1
+            ELSE 0
+        END AS sun_holiday,
+    sch_kind,
+        CASE
+            WHEN sch_kind = 1::numeric THEN 'Для госпитализации'::character varying
+            WHEN sch_kind = 2::numeric THEN 'Маршрутизация'::character varying
+            ELSE 'Обычный'::character varying
+        END AS sch_kind_mnemo
    FROM d_schedule d
   WHERE (EXISTS ( SELECT NULL::text AS "null"
            FROM d_v_urprivs ur
           WHERE ur.catalog = d.cid AND ur.unitcode::text = 'SCHEDULE'::text
+         LIMIT 1));
+```
+
+---
+
+### Вьюха №4: D_V_CLSCHS_BASE
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- PostgreSQL View: D_V_CLSCHS_BASE
+ SELECT id,
+    lpu,
+    cablab,
+    employer,
+    service,
+    schedule,
+    dbegin,
+    dend,
+    rtime_prim,
+    rtime_sec,
+    rcount,
+    rcountmax,
+    rcount_cito,
+    time_or_count,
+    use_cito,
+    use_direction,
+    schedule_type,
+    use_work_calendar,
+    clsch_type,
+    is_subst,
+    is_strictordr,
+    sch_start_date,
+    sch_resource,
+    export_yo,
+    profil_yo_id,
+    purpose
+   FROM d_clschs t
+  WHERE (EXISTS ( SELECT NULL::text AS "null"
+           FROM d_v_urprivs ur
+          WHERE ur.lpu = t.lpu AND ur.unitcode::text = 'CLSCHS'::text
+         LIMIT 1));
+```
+
+---
+
+### Вьюха №5: D_V_DIRECTION_SERVICES_BASE
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- PostgreSQL View: D_V_DIRECTION_SERVICES_BASE
+ SELECT id,
+    lpu,
+    pid,
+    hid,
+    rpid,
+    is_combined_payment,
+    is_necessary,
+    service,
+    employer_to,
+    cablab_to,
+    rec_date,
+    visit_purpose,
+    ref_kind,
+    visit_kind,
+    diseasecase,
+    reg_type,
+    serv_status,
+    is_primary,
+    s_commnet,
+    hh_dep,
+        CASE
+            WHEN serv_status <> 1::numeric THEN 'Записать'::character varying
+            ELSE NULL::character varying
+        END AS hyperlink,
+    rec_type,
+    ser_count,
+    time_type AS time_type_id,
+    irid,
+    payment_kind AS payment_kind_id,
+    serv_status_reason,
+    dc_diagnosis,
+    lpu_service AS lpu_service_id,
+    rec_duration,
+    ticket_n,
+    ticket_s,
+    rqs_limit,
+    ex_system,
+    purchase_order,
+    is_confirmed,
+    confirm_date,
+    nurse_user_templates,
+    employer_cancel,
+    conference,
+    serv_desc,
+    localization,
+    to_char(rec_date, 'HH24:MI'::text) AS rec_time,
+    complid,
+    compstr,
+    important,
+    patient,
+    guid,
+    attendance_state
+   FROM d_direction_services t
+  WHERE (EXISTS ( SELECT NULL::text AS "null"
+           FROM d_v_urprivs ur
+          WHERE ur.lpu = t.lpu AND ur.unitcode::text = 'DIRECTION_SERVICES'::text
          LIMIT 1));
 ```
 
@@ -845,140 +1821,78 @@
 Ниже представлены определения всех вьюх (D_V_*), найденных в SQL запросах форм, извлеченные из базы данных Oracle.
 
 **Статистика:**
-- Всего вьюх: 4
+- Всего вьюх: 5
 
 ---
 
-### Вьюха №1: D_V_HOSP_PLAN_KINDS
+### Вьюха №1: D_V_SCHEDULESP
 
 **Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
+- Forms/Schedules/schedules_edit_hp.frm
 
 **DDL определение:**
 
 ```sql
--- Oracle View: D_V_HOSP_PLAN_KINDS
-select --Представление для раздела : Виды планов госпитализации
+-- Oracle View: D_V_SCHEDULESP
+select -- Представление для раздела : Графики : состав
+       sp.ID,
+       sp.LPU,
+       sp.CID,
+       sp.PID,
+       sp.DAY_NUMBER,
+       to_char(sp.TIME_BEGIN,'hh24:mi')      TIME_BEGIN,
+       to_char(sp.TIME_END,'hh24:mi')        TIME_END
+   from D_SCHEDULESP sp   -- Графики : состав
+  where exists (select null
+                  from D_V_URPRIVS ur
+                 where ur.CATALOG = sp.CID
+                   and ur.UNITCODE = 'SCHEDULESP'
+                   and rownum = 1)
+```
+
+---
+
+### Вьюха №2: D_V_SCHEDULESP_TIMES
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- Oracle View: D_V_SCHEDULESP_TIMES
+select --Представление для раздела: Графики : состав дня по временам
        t.ID,
-       t.HP_CODE,
-       t.HP_NAME,
-       t.MAX_PRIOR,
        t.LPU,
        t.CID,
-       D_PKG_HOSP_PLAN_DEPS.GET_DEPS(t.ID) DEPS,
-       t.MIN_AGE,
-       t.MAX_AGE,
-       t.HAS_MKB_CONSTRAINTS,
-       decode(t.HAS_MKB_CONSTRAINTS,0,'Нет',1,'Да','') sHAS_MKB_CONSTRAINTS,
-       t.HAS_LIMITS,
-       decode(t.HAS_LIMITS,0,'Нет',1,'Да','') sHAS_LIMITS,
-       t.HAS_PAYMENT_CONSTRAINTS,
-       decode(t.HAS_PAYMENT_CONSTRAINTS,0,'Нет',1,'Да','') sHAS_PAYMENT_CONSTRAINTS,
-       t.NUMB_GROUP,
-       t.JOURNAL_TYPE,
-       t1.JT_NAME      JOURNAL_TYPE_MNEMO,
-       t.IS_OPER,
-       case when t.IS_OPER = 0 then 'Консервативный'
-            when t.IS_OPER = 1 then 'Оперативный'
-        end            OPER_MNEMO,
-        t.HP_BLOCK,
-        decode(t.HP_BLOCK,1,'Журнал заблокирован',null) HP_BLOCK_MNEMO,
-        t.OPEN_DATE,
-        t.CLOSE_DATE
-  from D_HOSP_PLAN_KINDS   t,     --Виды планов госпитализации
-       D_HPK_JOURNAL_TYPES t1     --Типы журналов записей пациентов
- where t1.JT_CODE = t.JOURNAL_TYPE
-   and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t.CID and ur.UNITCODE = 'HOSP_PLAN_KINDS')
-```
-
----
-
-### Вьюха №2: D_V_HPK_PLANS
-
-**Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
-
-**DDL определение:**
-
-```sql
--- Oracle View: D_V_HPK_PLANS
-select --Представление для раздела: Планы госпитализации
-       t.ID,
-       t.LPU,
        t.PID,
-       t1.HP_NAME PLAN_KIND,
-       t.PLAN_DATE,
-       to_char(t.PLAN_DATE,'DAY','NLS_DATE_LANGUAGE=AMERICAN') PLAN_DAY_ENG,
-       --case
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'MONDAY' then 'Понедельник'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'TUESDAY' then 'Вторник'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'WEDNESDAY' then 'Среда'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'THURSDAY' then 'Четверг'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'FRIDAY' then 'Пятница'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'SATURDAY' then 'Суббота'
---         when trim(to_char(t.PLAN_DATE,'DAY')) = 'SUNDAY' then 'Воскресение'
---       end
-       initcap(to_char(t.PLAN_DATE,'DAY','NLS_DATE_LANGUAGE=RUSSIAN')) PLAN_DAY_RUS,
-       t.MALE_COUNT,
-       decode(t.MALE_COUNT,null,null,(t.GEN_COUNT - t.MALE_COUNT))     FEMALE_COUNT,
-       t.OPER_COUNT,
-       decode(t.OPER_COUNT,null,null,(t.GEN_COUNT - t.OPER_COUNT))     CONS_COUNT,
-       t.GEN_COUNT,
-       decode(t.GEN_COUNT,null,D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,0)||'(неогр.)',D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,0)||'('||t.GEN_COUNT||')') GEN_COUNT_S,
-       decode(t.MALE_COUNT,null,D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,1)||'(неогр.)',D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,1)||'('||t.MALE_COUNT||')') MALE_COUNT_S,
-       decode(t.MALE_COUNT,null,D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,2)||'(неогр.)',D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,2)||'('||(t.GEN_COUNT - t.MALE_COUNT)||')') FEMALE_COUNT_S,
-       decode(t.OPER_COUNT,null,D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,3)||'(неогр.)',D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,3)||'('||t.OPER_COUNT||')') OPER_COUNT_S,
-       decode(t.OPER_COUNT,null,D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,4)||'(неогр.)',D_PKG_HPK_PLAN_JOURNALS.GET_INFO(t.LPU,t1.ID,t.PLAN_DATE,1,4)||'('||(t.GEN_COUNT - t.OPER_COUNT)||')') CON_COUNT_S,
-       t.CID
-  from D_HPK_PLANS       t,  -- Планы госпитализации
-       D_HOSP_PLAN_KINDS t1  -- Виды планов госпитализации
- where t1.ID        = t.PID
-   and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t.CID and ur.UNITCODE = 'HPK_PLANS')
-
- 
+       t.TIME_BEGIN,
+       t.TIME_END,
+       t.TIME_TYPE,
+       t1.TIME_CODE,
+       t1.TIME_NAME,
+       to_char(t.TIME_BEGIN,'hh24:mi')      TIME_BEGIN_S,
+       to_char(t.TIME_END,'hh24:mi')        TIME_END_S,
+       t1.ER_VIEW,
+       t.STEP,
+       t.LIMITS
+  from D_SCHEDULESP_TIMES t,  --Графики : состав дня по временам
+       D_SCHEDULE_TIME_TYPES t1
+  where t1.ID(+) = t.TIME_TYPE
+    and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t.CID and ur.UNITCODE = 'SCHEDULESP_TIMES' and rownum = 1)
 ```
 
 ---
 
-### Вьюха №3: D_V_HPK_SCHEDULE_BASE
+### Вьюха №3: D_V_SCHEDULE
 
 **Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
+- Forms/Schedules/schedules_edit_hp.frm
 
 **DDL определение:**
 
 ```sql
--- Oracle View: D_V_HPK_SCHEDULE_BASE
-select -- Представление для раздела: Виды планов госпитализации : графики (базовое)
-       hse.ID,
-       hse.LPU,
-       hse.HOSP_PLAN_KINDS,
-       hse.SCHEDULE,
-       hse.DATE_BEGIN,
-       hse.DATE_CREATE,
-       hse.IS_ACTIVE,
-       hse.IS_PRIORITY,
-       hse.DATE_END,
-       hse.OVER_LIMITS
-  from D_HPK_SCHEDULE hse     -- Виды планов госпитализации : графики
- where exists (select null
-                 from D_V_URPRIVS ur
-                where ur.LPU = hse.LPU
-                  and ur.UNITCODE = 'HPK_SCHEDULE'
-                  and rownum = 1)
-```
-
----
-
-### Вьюха №4: D_V_SCHEDULE_BASE
-
-**Используется в формах:**
-- Forms/HospitPlanning/hospit_planning.frm
-
-**DDL определение:**
-
-```sql
--- Oracle View: D_V_SCHEDULE_BASE
+-- Oracle View: D_V_SCHEDULE
 select --Представление для раздела: Графики
        d.ID,
        d.LPU,
@@ -987,11 +1901,139 @@ select --Представление для раздела: Графики
        d.NAME,
        d.START_DATE,
        d.SCH_TYPE,
+       case when d.SCH_TYPE = 0 then 'Обычный'
+            when d.SCH_TYPE = 1 then 'Чет/нечет'
+            when d.SCH_TYPE = 2 then 'Чет/нечет по дням недели'
+            when d.SCH_TYPE = 3 then 'Скользящий'
+            when d.SCH_TYPE = 4 then 'По дням месяца'
+       else '' end SCH_TYPE_MNEMO,
        d.QUOTING,
        d.HOLIDAYS,
-       d.SCH_KIND
+       decode(substr(d.HOLIDAYS,1,1),null,0,0,0,1,1,0) MON_HOLIDAY,
+       decode(substr(d.HOLIDAYS,2,1),null,0,0,0,1,1,0) TUE_HOLIDAY,
+       decode(substr(d.HOLIDAYS,3,1),null,0,0,0,1,1,0) WED_HOLIDAY,
+       decode(substr(d.HOLIDAYS,4,1),null,0,0,0,1,1,0) THU_HOLIDAY,
+       decode(substr(d.HOLIDAYS,5,1),null,0,0,0,1,1,0) FRI_HOLIDAY,
+       decode(substr(d.HOLIDAYS,6,1),null,0,0,0,1,1,0) SAT_HOLIDAY,
+       decode(substr(d.HOLIDAYS,7,1),null,0,0,0,1,1,0) SUN_HOLIDAY,
+       d.SCH_KIND,
+       case when d.SCH_KIND = 1 then 'Для госпитализации'
+            when d.SCH_KIND = 2 then 'Маршрутизация'
+            else 'Обычный'
+       end SCH_KIND_MNEMO
   from D_SCHEDULE d   --Графики
- where exists (select null from D_V_URPRIVS ur where ur.CATALOG = d.CID and ur.UNITCODE = 'SCHEDULE' and rownum = 1)
+ where exists (select null
+                 from D_V_URPRIVS ur
+                where ur.CATALOG = d.CID
+                  and ur.UNITCODE = 'SCHEDULE'
+                  and rownum = 1)
+```
+
+---
+
+### Вьюха №4: D_V_CLSCHS_BASE
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- Oracle View: D_V_CLSCHS_BASE
+select -- Представление для раздела : Назначенные графики
+       t.ID,
+       t.LPU,
+       t.CABLAB,
+       t.EMPLOYER,
+       t.SERVICE,
+       t.SCHEDULE,
+       t.DBEGIN,
+       t.DEND,
+       t.RTIME_PRIM,
+       t.RTIME_SEC,
+       t.RCOUNT,
+       t.RCOUNTMAX,
+       t.RCOUNT_CITO,
+       t.TIME_OR_COUNT,
+       t.USE_CITO,
+       t.USE_DIRECTION,
+       t.SCHEDULE_TYPE,
+       t.USE_WORK_CALENDAR,
+       t.CLSCH_TYPE,
+       t.IS_SUBST,
+       t.IS_STRICTORDR,
+       t.SCH_START_DATE,
+       t.SCH_RESOURCE,
+       t.EXPORT_YO,
+       t.PROFIL_YO_ID,
+       t.PURPOSE
+  from D_CLSCHS       t
+ where exists (select null from D_V_URPRIVS ur where ur.LPU = t.LPU and ur.UNITCODE = 'CLSCHS' and rownum = 1)
+```
+
+---
+
+### Вьюха №5: D_V_DIRECTION_SERVICES_BASE
+
+**Используется в формах:**
+- Forms/Schedules/schedules_edit_hp.frm
+
+**DDL определение:**
+
+```sql
+-- Oracle View: D_V_DIRECTION_SERVICES_BASE
+select --Представление для раздела : Направления : услуги (базовое)
+       t.ID,
+       t.LPU,
+       t.PID,
+       t.HID,
+       t.RPID,
+       t.IS_COMBINED_PAYMENT,
+       t.IS_NECESSARY,
+       t.SERVICE,
+       t.EMPLOYER_TO,
+       t.CABLAB_TO,
+       t.REC_DATE,
+       t.VISIT_PURPOSE,
+       t.REF_KIND,
+       t.VISIT_KIND,
+       t.DISEASECASE,
+       t.REG_TYPE,
+       t.SERV_STATUS,
+       t.IS_PRIMARY,
+       t.S_COMMNET,
+       t.HH_DEP,
+       case when t.SERV_STATUS <> 1 then 'Записать' end HYPERLINK,
+       t.REC_TYPE,
+       t.SER_COUNT,
+       t.TIME_TYPE TIME_TYPE_ID,
+       t.IRID,
+       t.PAYMENT_KIND PAYMENT_KIND_ID,
+       t.SERV_STATUS_REASON,
+       t.DC_DIAGNOSIS,
+       t.LPU_SERVICE LPU_SERVICE_ID,
+       t.REC_DURATION,
+       t.TICKET_N,
+       t.TICKET_S,
+       t.RQS_LIMIT,
+       t.EX_SYSTEM,
+       t.PURCHASE_ORDER,
+       t.IS_CONFIRMED,
+       t.CONFIRM_DATE,
+       t.NURSE_USER_TEMPLATES,
+       t.EMPLOYER_CANCEL,
+       t.CONFERENCE,
+       t.SERV_DESC,
+       t.LOCALIZATION,
+       to_char(t.REC_DATE, 'HH24:MI') REC_TIME,
+       t.COMPLID,
+       t.COMPSTR,
+       t.IMPORTANT,
+       t.PATIENT,
+       t.GUID,
+       t.ATTENDANCE_STATE
+  from D_DIRECTION_SERVICES t    --Направления : услуги
+ where exists(select null from D_V_URPRIVS ur where ur.LPU = t.LPU and ur.UNITCODE = 'DIRECTION_SERVICES' and rownum = 1)
 ```
 
 
@@ -1005,156 +2047,127 @@ select --Представление для раздела: Графики
 Ниже представлен список всех таблиц, которые используются внутри вьюх PostgreSQL, а также их DDL определения.
 
 **Статистика:**
-- Всего вьюх с таблицами: 4
-- Всего уникальных таблиц: 5
+- Всего вьюх с таблицами: 5
+- Всего уникальных таблиц: 6
 
 ### Связь вьюх и таблиц
 
-**D_V_HOSP_PLAN_KINDS** использует таблицы:
-- D_HOSP_PLAN_KINDS
-- D_HPK_JOURNAL_TYPES
+**D_V_SCHEDULESP** использует таблицы:
+- D_SCHEDULESP
 
-**D_V_HPK_PLANS** использует таблицы:
-- D_HPK_PLANS
-- D_HOSP_PLAN_KINDS
+**D_V_SCHEDULESP_TIMES** использует таблицы:
+- D_SCHEDULESP_TIMES
+- D_SCHEDULE_TIME_TYPES
 
-**D_V_HPK_SCHEDULE_BASE** использует таблицы:
-- D_HPK_SCHEDULE
-
-**D_V_SCHEDULE_BASE** использует таблицы:
+**D_V_SCHEDULE** использует таблицы:
 - D_SCHEDULE
+
+**D_V_CLSCHS_BASE** использует таблицы:
+- D_CLSCHS
+
+**D_V_DIRECTION_SERVICES_BASE** использует таблицы:
+- D_DIRECTION_SERVICES
 
 ### DDL определения таблиц
 
 ---
 
-#### Таблица №1: D_HOSP_PLAN_KINDS
+#### Таблица №1: D_SCHEDULESP
 
 ```sql
-CREATE TABLE D_HOSP_PLAN_KINDS (
+CREATE TABLE D_SCHEDULESP (
     id bigint,
-    hp_code character varying(20),
-    hp_name character varying(160),
-    max_prior numeric(5),
-    lpu bigint,
-    cid bigint,
-    min_age numeric(3),
-    max_age numeric(3),
-    has_mkb_constraints numeric(1) DEFAULT 0,
-    has_limits numeric(1) DEFAULT 1,
-    has_payment_constraints numeric(1) DEFAULT 0,
-    numb_group numeric(2) DEFAULT 0,
-    journal_type numeric(1) DEFAULT 0,
-    is_oper numeric(1) DEFAULT 0,
-    hp_block numeric(1) DEFAULT 0,
-    close_date timestamp without time zone,
-    open_date timestamp without time zone DEFAULT to_timestamp_simple('01.01.1990'::text, 'dd.mm.yyyy'::text)
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.id IS 'ID';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.hp_code IS 'Код';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.hp_name IS 'Наименование';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.max_prior IS 'На сколько дней вперед можно записывать в план';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.lpu IS 'ЛПУ';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.cid IS 'Каталог';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.min_age IS 'Минимальное ограничение по возрасту';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.max_age IS 'Максимальное ограничение по возрасту';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.has_mkb_constraints IS 'Имеется ли ограничения по диагнозу : 0 - нет; 1- да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.has_limits IS 'Накладываются ли ограничения на данный план : 0 - нет; 1 - да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.has_payment_constraints IS 'Имеются ли ограничения по видам оплаты: 0-нет;1-да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.numb_group IS 'Группа сквозной нумерации';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.journal_type IS 'Тип журнала';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.is_oper IS 'Тип оперативности: 0 - консервативный; 1 - оперативный';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.hp_block IS 'Журнал заблокирован: 0-нет, 1-да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.close_date IS 'Дата окончания действия плана';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.open_date IS 'Дата начала дейтсвия плана';
-
-COMMENT ON TABLE D_HOSP_PLAN_KINDS IS 'Виды планов госпитализации';
-```
-
----
-
-#### Таблица №2: D_HPK_JOURNAL_TYPES
-
-```sql
-CREATE TABLE D_HPK_JOURNAL_TYPES (
-    jt_code numeric(1),
-    jt_name character varying(60)
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_HPK_JOURNAL_TYPES.jt_code IS 'Код';
-COMMENT ON COLUMN D_HPK_JOURNAL_TYPES.jt_name IS 'Наименование';
-
-COMMENT ON TABLE D_HPK_JOURNAL_TYPES IS 'Типы журналов записей пациентов';
-```
-
----
-
-#### Таблица №3: D_HPK_PLANS
-
-```sql
-CREATE TABLE D_HPK_PLANS (
-    id bigint,
-    lpu bigint,
     pid bigint,
-    plan_date timestamp without time zone,
-    male_count numeric(5),
-    oper_count numeric(5),
-    gen_count numeric(5),
-    cid bigint
+    day_number bigint,
+    time_begin timestamp without time zone,
+    time_end timestamp without time zone,
+    cid bigint,
+    lpu bigint
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_HPK_PLANS.id IS 'ID';
-COMMENT ON COLUMN D_HPK_PLANS.lpu IS 'ЛПУ';
-COMMENT ON COLUMN D_HPK_PLANS.pid IS 'Вид плана госпитализации';
-COMMENT ON COLUMN D_HPK_PLANS.plan_date IS 'Дата плана';
-COMMENT ON COLUMN D_HPK_PLANS.male_count IS 'Максимальное кол-во мужских мест';
-COMMENT ON COLUMN D_HPK_PLANS.oper_count IS 'Максимальное кол-во оперативных больных';
-COMMENT ON COLUMN D_HPK_PLANS.gen_count IS 'Общее количество';
-COMMENT ON COLUMN D_HPK_PLANS.cid IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP.id IS 'ID';
+COMMENT ON COLUMN D_SCHEDULESP.pid IS 'График';
+COMMENT ON COLUMN D_SCHEDULESP.day_number IS 'Номер дня в графике';
+COMMENT ON COLUMN D_SCHEDULESP.time_begin IS 'Время начала дня';
+COMMENT ON COLUMN D_SCHEDULESP.time_end IS 'Время окончания дня';
+COMMENT ON COLUMN D_SCHEDULESP.cid IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP.lpu IS 'ЛПУ';
 
-COMMENT ON TABLE D_HPK_PLANS IS 'Планы госпитализации';
+COMMENT ON TABLE D_SCHEDULESP IS 'Графики : состав';
 ```
 
 ---
 
-#### Таблица №4: D_HPK_SCHEDULE
+#### Таблица №2: D_SCHEDULESP_TIMES
 
 ```sql
-CREATE TABLE D_HPK_SCHEDULE (
+CREATE TABLE D_SCHEDULESP_TIMES (
     id bigint,
+    pid bigint,
+    time_begin timestamp without time zone,
+    time_end timestamp without time zone,
+    time_type bigint,
+    cid bigint,
     lpu bigint,
-    hosp_plan_kinds bigint,
-    is_active numeric(1) DEFAULT 0,
-    is_priority numeric(1) DEFAULT 0,
-    schedule bigint,
-    date_begin timestamp without time zone,
-    date_end timestamp without time zone,
-    over_limits numeric(1) DEFAULT 0,
-    date_create timestamp without time zone
+    step numeric(4),
+    limits numeric(3)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_HPK_SCHEDULE.id IS 'ID';
-COMMENT ON COLUMN D_HPK_SCHEDULE.lpu IS 'ЛПУ';
-COMMENT ON COLUMN D_HPK_SCHEDULE.hosp_plan_kinds IS 'План госпитализации';
-COMMENT ON COLUMN D_HPK_SCHEDULE.is_active IS 'Действующий: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.is_priority IS 'Приоритетный: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.schedule IS 'Шаблон графика';
-COMMENT ON COLUMN D_HPK_SCHEDULE.date_begin IS 'Дата начала действия';
-COMMENT ON COLUMN D_HPK_SCHEDULE.date_end IS 'Дата окончания действия';
-COMMENT ON COLUMN D_HPK_SCHEDULE.over_limits IS 'Разрешать превышать лимит: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.date_create IS 'Дата создания';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.id IS 'ID';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.pid IS 'Состав графика';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.time_begin IS 'Начало';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.time_end IS 'Окончание';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.time_type IS 'Тип интервала';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.cid IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.lpu IS 'ЛПУ';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.step IS 'Шаг графика (для госпитализации)';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.limits IS 'Количество записываемых человек (для госпитализации)';
 
-COMMENT ON TABLE D_HPK_SCHEDULE IS 'Виды планов госпитализации : графики';
+COMMENT ON TABLE D_SCHEDULESP_TIMES IS 'Графики : состав дня по временам';
 ```
 
 ---
 
-#### Таблица №5: D_SCHEDULE
+#### Таблица №3: D_SCHEDULE_TIME_TYPES
+
+```sql
+CREATE TABLE D_SCHEDULE_TIME_TYPES (
+    id bigint,
+    time_code numeric(3),
+    time_name character varying(250),
+    version bigint,
+    time_color bigint,
+    er_view numeric DEFAULT 0,
+    use_in_waitlist numeric(1) DEFAULT 0,
+    infoboard_name character varying(250),
+    is_primary numeric(1),
+    fer_view numeric(1) DEFAULT 0,
+    ker_view numeric(1) DEFAULT 0,
+    other_view numeric(1) DEFAULT 0
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.id IS 'ID';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.time_code IS 'Тип интервала';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.time_name IS 'Содержание интервала';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.version IS 'Версия';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.time_color IS 'Цвет интервала';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.er_view IS 'Выгружать интервал в ЕР: 1 - да, 0-  нет';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.use_in_waitlist IS 'Признак использования интервала для записи пациентов из очереди ожидания: 1 – да, 0 – нет';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.infoboard_name IS 'Наименование интервала для вывода на инфотабло';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.is_primary IS 'Признак первичности: 1 - первичный, 2 - повторный, null - не определен';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.fer_view IS 'Выгружать интервал в ФЭР (Нетрика)';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.ker_view IS 'Выгружать интервал в КЭР (Нетрика)';
+COMMENT ON COLUMN D_SCHEDULE_TIME_TYPES.other_view IS 'Выгружать интервал в другие источники (Нетрика)';
+
+COMMENT ON TABLE D_SCHEDULE_TIME_TYPES IS 'Словарь типов интервалов графиков';
+```
+
+---
+
+#### Таблица №4: D_SCHEDULE
 
 ```sql
 CREATE TABLE D_SCHEDULE (
@@ -1185,146 +2198,275 @@ COMMENT ON COLUMN D_SCHEDULE.sch_kind IS 'Вид графика: NULL - обыч
 COMMENT ON TABLE D_SCHEDULE IS 'Графики';
 ```
 
+---
+
+#### Таблица №5: D_CLSCHS
+
+```sql
+CREATE TABLE D_CLSCHS (
+    id bigint,
+    lpu bigint,
+    cablab bigint,
+    employer bigint,
+    service bigint,
+    schedule bigint,
+    dbegin timestamp without time zone,
+    dend timestamp without time zone,
+    rtime_sec bigint,
+    rcount bigint,
+    rcountmax bigint,
+    time_or_count numeric(1) DEFAULT 0,
+    use_cito numeric(1) DEFAULT 0,
+    use_direction numeric(1) DEFAULT 0,
+    schedule_type numeric(1) DEFAULT 0,
+    use_work_calendar numeric(1) DEFAULT 1,
+    rcount_cito bigint,
+    clsch_type numeric(1) DEFAULT 0,
+    is_subst numeric(1) DEFAULT 0,
+    is_strictordr numeric(1),
+    sch_start_date timestamp without time zone,
+    sch_resource bigint,
+    export_yo numeric(1) DEFAULT 0,
+    profil_yo_id bigint,
+    purpose numeric(1) DEFAULT 0,
+    rtime_prim numeric(5)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_CLSCHS.id IS 'ID';
+COMMENT ON COLUMN D_CLSCHS.lpu IS 'ЛПУ';
+COMMENT ON COLUMN D_CLSCHS.cablab IS 'Кабинет';
+COMMENT ON COLUMN D_CLSCHS.employer IS 'Сотрудник';
+COMMENT ON COLUMN D_CLSCHS.service IS 'Услуга';
+COMMENT ON COLUMN D_CLSCHS.schedule IS 'График';
+COMMENT ON COLUMN D_CLSCHS.dbegin IS 'Дата начала действия';
+COMMENT ON COLUMN D_CLSCHS.dend IS 'Дата окончания';
+COMMENT ON COLUMN D_CLSCHS.rtime_sec IS 'Время повторного оказания';
+COMMENT ON COLUMN D_CLSCHS.rcount IS 'Количество на время оказания';
+COMMENT ON COLUMN D_CLSCHS.rcountmax IS 'Максимальное количество на день';
+COMMENT ON COLUMN D_CLSCHS.time_or_count IS 'Тип формирования графика. 0 - по времени оказания, 1 - по количеству, 2 - по количеству с ограничением';
+COMMENT ON COLUMN D_CLSCHS.use_cito IS 'Признак возможности записи срочников. 0 - Запрещено, 1 - Разрешено в рабочие дни, 2 - Разрешено при наличии интервала для записи.';
+COMMENT ON COLUMN D_CLSCHS.use_direction IS 'Признак возможности создания направлений (назначений) : 0 - нет; 1 - да';
+COMMENT ON COLUMN D_CLSCHS.schedule_type IS 'Тип графика: 0 - основной, 1 - по кабинету';
+COMMENT ON COLUMN D_CLSCHS.use_work_calendar IS 'Учитывать календарь рабочих\выходных дней:1-да,0-нет';
+COMMENT ON COLUMN D_CLSCHS.rcount_cito IS 'Максимальное количество срочников в день';
+COMMENT ON COLUMN D_CLSCHS.clsch_type IS 'Тип построения: 0 - обычный, 1 - динамический, 2 - живая очередь';
+COMMENT ON COLUMN D_CLSCHS.is_subst IS 'Тип влияния на другие графики: 0 - обычный, 1 - замещение, 2 - дополнение';
+COMMENT ON COLUMN D_CLSCHS.is_strictordr IS 'График строгой очередности: null - нет, 1 - да';
+COMMENT ON COLUMN D_CLSCHS.sch_start_date IS 'Дата отсчета периода графика (если требуется отличная от настроенной в графике)';
+COMMENT ON COLUMN D_CLSCHS.sch_resource IS 'Ресурс расписания';
+COMMENT ON COLUMN D_CLSCHS.export_yo IS 'Передавать в сервис УО (1- да, 0 - нет)';
+COMMENT ON COLUMN D_CLSCHS.profil_yo_id IS 'ID профиля услуги УО';
+COMMENT ON COLUMN D_CLSCHS.purpose IS 'Целевое назначение графика расписания: 0 - для регистратуры, 1 - для лаборатории, 2 - для опер.блока';
+COMMENT ON COLUMN D_CLSCHS.rtime_prim IS 'Длительность';
+
+COMMENT ON TABLE D_CLSCHS IS 'Назначенные графики';
+```
+
+---
+
+#### Таблица №6: D_DIRECTION_SERVICES
+
+```sql
+CREATE TABLE D_DIRECTION_SERVICES (
+    id bigint,
+    lpu bigint,
+    pid bigint,
+    hid bigint,
+    is_combined_payment numeric(1),
+    is_necessary numeric(1),
+    service bigint,
+    employer_to bigint,
+    cablab_to bigint,
+    rec_date timestamp without time zone,
+    visit_purpose bigint,
+    ref_kind bigint,
+    visit_kind bigint,
+    diseasecase bigint,
+    reg_type numeric(1),
+    serv_status numeric(1),
+    is_primary numeric(1),
+    s_commnet character varying(1200),
+    hh_dep bigint,
+    rec_type numeric(1),
+    ser_count numeric(21,2),
+    time_type bigint,
+    rpid bigint,
+    irid bigint,
+    payment_kind bigint,
+    serv_status_reason character varying(250),
+    quota_q bigint,
+    uk_hash character varying(75),
+    dc_diagnosis bigint,
+    lpu_service bigint,
+    rec_duration numeric(5),
+    ticket_n numeric(5),
+    ticket_s character varying(75),
+    rqs_limit bigint,
+    ex_system bigint,
+    purchase_order bigint,
+    is_confirmed numeric(1),
+    nurse_user_templates bigint,
+    confirm_date timestamp without time zone,
+    conference_type numeric(1),
+    conference character varying(200),
+    employer_cancel bigint,
+    localization bigint,
+    serv_desc character varying(2000),
+    complid bigint,
+    compstr bigint,
+    important numeric(1) DEFAULT 0,
+    patient bigint,
+    guid character varying(36),
+    attendance_state numeric(1) DEFAULT 0
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_DIRECTION_SERVICES.id IS 'ID';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.lpu IS 'ЛПУ';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.pid IS 'Направления';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.hid IS 'Иерархия';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.is_combined_payment IS 'Используется ли комбинированная оплата : 0 - нет; 1 - да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.is_necessary IS 'Обязательна ли услуга для закрытия направления : 0-нет ; 1-да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.service IS 'Услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.employer_to IS 'Врач, которому назначена услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.cablab_to IS 'Кабинет, которому назначена услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.rec_date IS 'Время назначения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.visit_purpose IS 'Цель посещения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ref_kind IS 'Вид обращения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.visit_kind IS 'Вид посещения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.diseasecase IS 'Случай заболевания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.reg_type IS 'Тип регистрации';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.serv_status IS 'Статус услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.is_primary IS 'Услуга первичная : 0- нет; 1- да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.s_commnet IS 'Комментарий';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.hh_dep IS 'Истоия болезни : отделения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.rec_type IS 'Тип регистратуры : 0 - врачей, 1 - услуг';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ser_count IS 'Кратность';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.time_type IS 'Тип интевала, на который произведена запись';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.rpid IS 'Направление на услугу, явл. точкой отсчета';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.irid IS 'Направление на услугу, инициирующее внесение результата';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.payment_kind IS 'Вид оплаты';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.serv_status_reason IS 'Причина смены статуса услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.quota_q IS 'Ограничение по квоте';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.uk_hash IS 'Уникальный ключ записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.dc_diagnosis IS 'Диагноз случая заболевания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.lpu_service IS 'Услуга ЛПУ';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.rec_duration IS 'Длительность оказания в минутах';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ticket_n IS 'Номер квитка расписания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ticket_s IS 'Номер,описание квитка расписания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.rqs_limit IS 'Ресурс квоты записи в расписание';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ex_system IS 'Источник записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.purchase_order IS 'Заказ-наряд';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.is_confirmed IS 'Признак подтверждения записи на прием пациентом: 0 - не подтверждена, 1 - подтверждена, 2 - запись отменена, 3 - запись перенесена, 4 - явка, 5 - не дозвонились';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.nurse_user_templates IS 'Шаблон медсестры';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.confirm_date IS 'Дата подтверждения записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.conference_type IS 'Выбор из дополнительного словаря - TM_TYPE - Тип консультации';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.conference IS 'Консультация';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.employer_cancel IS 'Врач, отменивший направление';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.localization IS 'Группы локализаций';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.serv_desc IS 'Описание услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.complid IS 'Ссылка на запись головной комплексной услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.compstr IS 'Ссылка на настройку состава комплексной услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.important IS 'Важное: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.patient IS 'Пациент';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.guid IS 'GUID';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.attendance_state IS 'Cостояние посещаемости: 0 – Не определено, 1 – Явка, 2 – Неявка';
+
+COMMENT ON TABLE D_DIRECTION_SERVICES IS 'Направления : услуги';
+```
+
 
 ## 5. DDL ТАБЛИЦ ИЗ ORACLE ВЬЮХ
 
 Ниже представлен список всех таблиц, которые используются внутри вьюх Oracle, а также их DDL определения.
 
 **Статистика:**
-- Всего вьюх с таблицами: 4
-- Всего уникальных таблиц: 4
+- Всего вьюх с таблицами: 5
+- Всего уникальных таблиц: 5
 
 ### Связь вьюх и таблиц
 
-**D_V_HOSP_PLAN_KINDS** использует таблицы:
-- D_HOSP_PLAN_KINDS
+**D_V_SCHEDULESP** использует таблицы:
+- D_SCHEDULESP
 
-**D_V_HPK_PLANS** использует таблицы:
-- D_HPK_PLANS
+**D_V_SCHEDULESP_TIMES** использует таблицы:
+- D_SCHEDULESP_TIMES
 
-**D_V_HPK_SCHEDULE_BASE** использует таблицы:
-- D_HPK_SCHEDULE
-
-**D_V_SCHEDULE_BASE** использует таблицы:
+**D_V_SCHEDULE** использует таблицы:
 - D_SCHEDULE
+
+**D_V_CLSCHS_BASE** использует таблицы:
+- D_CLSCHS
+
+**D_V_DIRECTION_SERVICES_BASE** использует таблицы:
+- D_DIRECTION_SERVICES
 
 ### DDL определения таблиц
 
 ---
 
-#### Таблица №1: D_HOSP_PLAN_KINDS
+#### Таблица №1: D_SCHEDULESP
 
 ```sql
-CREATE TABLE D_HOSP_PLAN_KINDS (
+CREATE TABLE D_SCHEDULESP (
     ID NUMBER(17) NOT NULL,
-    HP_CODE VARCHAR2(20) NOT NULL,
-    HP_NAME VARCHAR2(160) NOT NULL,
-    MAX_PRIOR NUMBER(5),
-    LPU NUMBER(17) NOT NULL,
-    CID NUMBER(17) NOT NULL,
-    MIN_AGE NUMBER(3),
-    MAX_AGE NUMBER(3),
-    HAS_MKB_CONSTRAINTS NUMBER(1) NOT NULL,
-    HAS_LIMITS NUMBER(1) NOT NULL,
-    HAS_PAYMENT_CONSTRAINTS NUMBER(1) NOT NULL,
-    NUMB_GROUP NUMBER(2) NOT NULL,
-    JOURNAL_TYPE NUMBER(1) NOT NULL,
-    IS_OPER NUMBER(1) NOT NULL,
-    HP_BLOCK NUMBER(1) NOT NULL,
-    CLOSE_DATE DATE,
-    OPEN_DATE DATE NOT NULL,
-    CONSTRAINT PK_D_HOSP_PLAN_KINDS PRIMARY KEY (ID)
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.ID IS 'ID';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HP_CODE IS 'Код';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HP_NAME IS 'Наименование';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.MAX_PRIOR IS 'На сколько дней вперед можно записывать в план';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.LPU IS 'ЛПУ';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.CID IS 'Каталог';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.MIN_AGE IS 'Минимальное ограничение по возрасту';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.MAX_AGE IS 'Максимальное ограничение по возрасту';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HAS_MKB_CONSTRAINTS IS 'Имеется ли ограничения по диагнозу : 0 - нет; 1- да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HAS_LIMITS IS 'Накладываются ли ограничения на данный план : 0 - нет; 1 - да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HAS_PAYMENT_CONSTRAINTS IS 'Имеются ли ограничения по видам оплаты: 0-нет;1-да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.NUMB_GROUP IS 'Группа сквозной нумерации';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.JOURNAL_TYPE IS 'Тип журнала';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.IS_OPER IS 'Тип оперативности: 0 - консервативный; 1 - оперативный';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.HP_BLOCK IS 'Журнал заблокирован: 0-нет, 1-да';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.CLOSE_DATE IS 'Дата окончания действия плана';
-COMMENT ON COLUMN D_HOSP_PLAN_KINDS.OPEN_DATE IS 'Дата начала дейтсвия плана';
-
-COMMENT ON TABLE D_HOSP_PLAN_KINDS IS 'Виды планов госпитализации';
-```
-
----
-
-#### Таблица №2: D_HPK_PLANS
-
-```sql
-CREATE TABLE D_HPK_PLANS (
-    ID NUMBER(17) NOT NULL,
-    LPU NUMBER(17) NOT NULL,
     PID NUMBER(17) NOT NULL,
-    PLAN_DATE DATE NOT NULL,
-    MALE_COUNT NUMBER(5),
-    OPER_COUNT NUMBER(5),
-    GEN_COUNT NUMBER(5),
+    DAY_NUMBER NUMBER(17) NOT NULL,
+    TIME_BEGIN DATE,
+    TIME_END DATE,
     CID NUMBER(17) NOT NULL,
-    CONSTRAINT PK_D_HPK_PLANS PRIMARY KEY (ID)
+    LPU NUMBER(17) NOT NULL,
+    CONSTRAINT PK_D_SCHEDULESP PRIMARY KEY (ID)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_HPK_PLANS.ID IS 'ID';
-COMMENT ON COLUMN D_HPK_PLANS.LPU IS 'ЛПУ';
-COMMENT ON COLUMN D_HPK_PLANS.PID IS 'Вид плана госпитализации';
-COMMENT ON COLUMN D_HPK_PLANS.PLAN_DATE IS 'Дата плана';
-COMMENT ON COLUMN D_HPK_PLANS.MALE_COUNT IS 'Максимальное кол-во мужских мест';
-COMMENT ON COLUMN D_HPK_PLANS.OPER_COUNT IS 'Максимальное кол-во оперативных больных';
-COMMENT ON COLUMN D_HPK_PLANS.GEN_COUNT IS 'Общее количество';
-COMMENT ON COLUMN D_HPK_PLANS.CID IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP.PID IS 'График';
+COMMENT ON COLUMN D_SCHEDULESP.DAY_NUMBER IS 'Номер дня в графике';
+COMMENT ON COLUMN D_SCHEDULESP.TIME_BEGIN IS 'Время начала дня';
+COMMENT ON COLUMN D_SCHEDULESP.TIME_END IS 'Время окончания дня';
+COMMENT ON COLUMN D_SCHEDULESP.CID IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_SCHEDULESP.ID IS 'ID';
 
-COMMENT ON TABLE D_HPK_PLANS IS 'Планы госпитализации';
+COMMENT ON TABLE D_SCHEDULESP IS 'Графики : состав';
 ```
 
 ---
 
-#### Таблица №3: D_HPK_SCHEDULE
+#### Таблица №2: D_SCHEDULESP_TIMES
 
 ```sql
-CREATE TABLE D_HPK_SCHEDULE (
+CREATE TABLE D_SCHEDULESP_TIMES (
     ID NUMBER(17) NOT NULL,
+    PID NUMBER(17) NOT NULL,
+    TIME_BEGIN DATE NOT NULL,
+    TIME_END DATE NOT NULL,
+    TIME_TYPE NUMBER(17),
+    CID NUMBER(17) NOT NULL,
     LPU NUMBER(17) NOT NULL,
-    HOSP_PLAN_KINDS NUMBER(17) NOT NULL,
-    IS_ACTIVE NUMBER(1),
-    IS_PRIORITY NUMBER(1),
-    SCHEDULE NUMBER(17) NOT NULL,
-    DATE_BEGIN DATE NOT NULL,
-    DATE_END DATE,
-    OVER_LIMITS NUMBER(1),
-    DATE_CREATE DATE NOT NULL,
-    CONSTRAINT PK_D_HPK_SCHEDULE PRIMARY KEY (ID)
+    STEP NUMBER(4),
+    LIMITS NUMBER(3),
+    CONSTRAINT PK_D_SCHEDULESP_TIMES PRIMARY KEY (ID)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_HPK_SCHEDULE.ID IS 'ID';
-COMMENT ON COLUMN D_HPK_SCHEDULE.LPU IS 'ЛПУ';
-COMMENT ON COLUMN D_HPK_SCHEDULE.HOSP_PLAN_KINDS IS 'План госпитализации';
-COMMENT ON COLUMN D_HPK_SCHEDULE.IS_ACTIVE IS 'Действующий: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.IS_PRIORITY IS 'Приоритетный: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.SCHEDULE IS 'Шаблон графика';
-COMMENT ON COLUMN D_HPK_SCHEDULE.DATE_BEGIN IS 'Дата начала действия';
-COMMENT ON COLUMN D_HPK_SCHEDULE.DATE_END IS 'Дата окончания действия';
-COMMENT ON COLUMN D_HPK_SCHEDULE.OVER_LIMITS IS 'Разрешать превышать лимит: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_HPK_SCHEDULE.DATE_CREATE IS 'Дата создания';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.ID IS 'ID';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.PID IS 'Состав графика';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.TIME_BEGIN IS 'Начало';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.TIME_END IS 'Окончание';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.TIME_TYPE IS 'Тип интервала';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.CID IS 'Каталог';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.STEP IS 'Шаг графика (для госпитализации)';
+COMMENT ON COLUMN D_SCHEDULESP_TIMES.LIMITS IS 'Количество записываемых человек (для госпитализации)';
 
-COMMENT ON TABLE D_HPK_SCHEDULE IS 'Виды планов госпитализации : графики';
+COMMENT ON TABLE D_SCHEDULESP_TIMES IS 'Графики : состав дня по временам';
 ```
 
 ---
 
-#### Таблица №4: D_SCHEDULE
+#### Таблица №3: D_SCHEDULE
 
 ```sql
 CREATE TABLE D_SCHEDULE (
@@ -1356,456 +2498,340 @@ COMMENT ON COLUMN D_SCHEDULE.SCH_KIND IS 'Вид графика: NULL - обыч
 COMMENT ON TABLE D_SCHEDULE IS 'Графики';
 ```
 
+---
+
+#### Таблица №4: D_CLSCHS
+
+```sql
+CREATE TABLE D_CLSCHS (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    CABLAB NUMBER(17) NOT NULL,
+    EMPLOYER NUMBER(17),
+    SERVICE NUMBER(17),
+    SCHEDULE NUMBER(17) NOT NULL,
+    DBEGIN DATE NOT NULL,
+    DEND DATE,
+    RTIME_SEC NUMBER(17),
+    RCOUNT NUMBER(17),
+    RCOUNTMAX NUMBER(17),
+    TIME_OR_COUNT NUMBER(1),
+    USE_CITO NUMBER(1) NOT NULL,
+    USE_DIRECTION NUMBER(1) NOT NULL,
+    SCHEDULE_TYPE NUMBER(1) NOT NULL,
+    USE_WORK_CALENDAR NUMBER(1) NOT NULL,
+    RCOUNT_CITO NUMBER(17),
+    CLSCH_TYPE NUMBER(1) NOT NULL,
+    IS_SUBST NUMBER(1) NOT NULL,
+    IS_STRICTORDR NUMBER(1),
+    SCH_START_DATE DATE,
+    SCH_RESOURCE NUMBER(17) NOT NULL,
+    EXPORT_YO NUMBER(1),
+    PROFIL_YO_ID NUMBER(17),
+    PURPOSE NUMBER(1) NOT NULL,
+    RTIME_PRIM NUMBER(5),
+    CONSTRAINT PK_D_CLSCHS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_CLSCHS.ID IS 'ID';
+COMMENT ON COLUMN D_CLSCHS.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_CLSCHS.CABLAB IS 'Кабинет';
+COMMENT ON COLUMN D_CLSCHS.EMPLOYER IS 'Сотрудник';
+COMMENT ON COLUMN D_CLSCHS.SERVICE IS 'Услуга';
+COMMENT ON COLUMN D_CLSCHS.SCHEDULE IS 'График';
+COMMENT ON COLUMN D_CLSCHS.DBEGIN IS 'Дата начала действия';
+COMMENT ON COLUMN D_CLSCHS.DEND IS 'Дата окончания';
+COMMENT ON COLUMN D_CLSCHS.RTIME_SEC IS 'Время повторного оказания';
+COMMENT ON COLUMN D_CLSCHS.RCOUNT IS 'Количество на время оказания';
+COMMENT ON COLUMN D_CLSCHS.RCOUNTMAX IS 'Максимальное количество на день';
+COMMENT ON COLUMN D_CLSCHS.TIME_OR_COUNT IS 'Тип формирования графика. 0 - по времени оказания, 1 - по количеству, 2 - по количеству с ограничением';
+COMMENT ON COLUMN D_CLSCHS.USE_CITO IS 'Признак возможности записи срочников. 0 - Запрещено, 1 - Разрешено в рабочие дни, 2 - Разрешено при наличии интервала для записи.';
+COMMENT ON COLUMN D_CLSCHS.USE_DIRECTION IS 'Признак возможности создания направлений (назначений) : 0 - нет; 1 - да';
+COMMENT ON COLUMN D_CLSCHS.SCHEDULE_TYPE IS 'Тип графика: 0 - основной, 1 - по кабинету';
+COMMENT ON COLUMN D_CLSCHS.USE_WORK_CALENDAR IS 'Учитывать календарь рабочих\выходных дней:1-да,0-нет';
+COMMENT ON COLUMN D_CLSCHS.RCOUNT_CITO IS 'Максимальное количество срочников в день';
+COMMENT ON COLUMN D_CLSCHS.CLSCH_TYPE IS 'Тип построения: 0 - обычный, 1 - динамический, 2 - живая очередь';
+COMMENT ON COLUMN D_CLSCHS.IS_SUBST IS 'Тип влияния на другие графики: 0 - обычный, 1 - замещение, 2 - дополнение';
+COMMENT ON COLUMN D_CLSCHS.IS_STRICTORDR IS 'График строгой очередности: null - нет, 1 - да';
+COMMENT ON COLUMN D_CLSCHS.SCH_START_DATE IS 'Дата отсчета периода графика (если требуется отличная от настроенной в графике)';
+COMMENT ON COLUMN D_CLSCHS.SCH_RESOURCE IS 'Ресурс расписания';
+COMMENT ON COLUMN D_CLSCHS.EXPORT_YO IS 'Передавать в сервис УО (1- да, 0 - нет)';
+COMMENT ON COLUMN D_CLSCHS.PROFIL_YO_ID IS 'ID профиля услуги УО';
+COMMENT ON COLUMN D_CLSCHS.PURPOSE IS 'Целевое назначение графика расписания: 0 - для регистратуры, 1 - для лаборатории, 2 - для опер.блока';
+COMMENT ON COLUMN D_CLSCHS.RTIME_PRIM IS 'Длительность';
+
+COMMENT ON TABLE D_CLSCHS IS 'Назначенные графики';
+```
+
+---
+
+#### Таблица №5: D_DIRECTION_SERVICES
+
+```sql
+CREATE TABLE D_DIRECTION_SERVICES (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    PID NUMBER(17) NOT NULL,
+    HID NUMBER(17),
+    IS_COMBINED_PAYMENT NUMBER(1) NOT NULL,
+    IS_NECESSARY NUMBER(1) NOT NULL,
+    SERVICE NUMBER(17) NOT NULL,
+    EMPLOYER_TO NUMBER(17),
+    CABLAB_TO NUMBER(17),
+    REC_DATE DATE,
+    VISIT_PURPOSE NUMBER(17),
+    REF_KIND NUMBER(17),
+    VISIT_KIND NUMBER(17),
+    DISEASECASE NUMBER(17),
+    REG_TYPE NUMBER(1) NOT NULL,
+    SERV_STATUS NUMBER(1) NOT NULL,
+    IS_PRIMARY NUMBER(1) NOT NULL,
+    S_COMMNET VARCHAR2(1200),
+    HH_DEP NUMBER(17),
+    REC_TYPE NUMBER(1),
+    SER_COUNT NUMBER(19,2) NOT NULL,
+    TIME_TYPE NUMBER(17),
+    RPID NUMBER(17),
+    IRID NUMBER(17),
+    PAYMENT_KIND NUMBER(17),
+    SERV_STATUS_REASON VARCHAR2(250),
+    QUOTA_Q NUMBER(17),
+    UK_HASH VARCHAR2(75) NOT NULL,
+    DC_DIAGNOSIS NUMBER(17),
+    LPU_SERVICE NUMBER(17),
+    REC_DURATION NUMBER(5),
+    TICKET_N NUMBER(5),
+    TICKET_S VARCHAR2(75),
+    RQS_LIMIT NUMBER(17),
+    EX_SYSTEM NUMBER(17),
+    PURCHASE_ORDER NUMBER(17),
+    IS_CONFIRMED NUMBER(1) NOT NULL,
+    NURSE_USER_TEMPLATES NUMBER(17),
+    CONFIRM_DATE DATE,
+    CONFERENCE_TYPE NUMBER(1),
+    CONFERENCE VARCHAR2(200),
+    EMPLOYER_CANCEL NUMBER(17),
+    LOCALIZATION NUMBER(17),
+    SERV_DESC VARCHAR2(2000),
+    COMPLID NUMBER(17),
+    COMPSTR NUMBER(17),
+    IMPORTANT NUMBER(1) NOT NULL,
+    PATIENT NUMBER(17),
+    GUID VARCHAR2(36),
+    ATTENDANCE_STATE NUMBER(1) NOT NULL,
+    CONSTRAINT PK_D_DIRECTION_SERVICES PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ID IS 'ID';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.PID IS 'Направления';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.HID IS 'Иерархия';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IS_COMBINED_PAYMENT IS 'Используется ли комбинированная оплата : 0 - нет; 1 - да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IS_NECESSARY IS 'Обязательна ли услуга для закрытия направления : 0-нет ; 1-да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.SERVICE IS 'Услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.EMPLOYER_TO IS 'Врач, которому назначена услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.CABLAB_TO IS 'Кабинет, которому назначена услуга';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.REC_DATE IS 'Время назначения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.VISIT_PURPOSE IS 'Цель посещения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.REF_KIND IS 'Вид обращения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.VISIT_KIND IS 'Вид посещения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.DISEASECASE IS 'Случай заболевания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.REG_TYPE IS 'Тип регистрации';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.SERV_STATUS IS 'Статус услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IS_PRIMARY IS 'Услуга первичная : 0- нет; 1- да';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.S_COMMNET IS 'Комментарий';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.HH_DEP IS 'Истоия болезни : отделения';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.REC_TYPE IS 'Тип регистратуры : 0 - врачей, 1 - услуг';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.SER_COUNT IS 'Кратность';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.TIME_TYPE IS 'Тип интевала, на который произведена запись';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.RPID IS 'Направление на услугу, явл. точкой отсчета';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IRID IS 'Направление на услугу, инициирующее внесение результата';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.PAYMENT_KIND IS 'Вид оплаты';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.SERV_STATUS_REASON IS 'Причина смены статуса услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.QUOTA_Q IS 'Ограничение по квоте';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.UK_HASH IS 'Уникальный ключ записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.DC_DIAGNOSIS IS 'Диагноз случая заболевания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.LPU_SERVICE IS 'Услуга ЛПУ';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.REC_DURATION IS 'Длительность оказания в минутах';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.TICKET_N IS 'Номер квитка расписания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.TICKET_S IS 'Номер,описание квитка расписания';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.RQS_LIMIT IS 'Ресурс квоты записи в расписание';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.EX_SYSTEM IS 'Источник записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.PURCHASE_ORDER IS 'Заказ-наряд';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IS_CONFIRMED IS 'Признак подтверждения записи на прием пациентом: 0 - не подтверждена, 1 - подтверждена, 2 - запись отменена, 3 - запись перенесена, 4 - явка, 5 - не дозвонились';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.NURSE_USER_TEMPLATES IS 'Шаблон медсестры';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.CONFIRM_DATE IS 'Дата подтверждения записи';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.CONFERENCE_TYPE IS 'Выбор из дополнительного словаря - TM_TYPE - Тип консультации';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.EMPLOYER_CANCEL IS 'Врач, отменивший направление';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.LOCALIZATION IS 'Группы локализаций';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.SERV_DESC IS 'Описание услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.CONFERENCE IS 'Консультация';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.IMPORTANT IS 'Важное: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.COMPLID IS 'Ссылка на запись головной комплексной услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.COMPSTR IS 'Ссылка на настройку состава комплексной услуги';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.GUID IS 'GUID';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.ATTENDANCE_STATE IS 'Cостояние посещаемости: 0 – Не определено, 1 – Явка, 2 – Неявка';
+COMMENT ON COLUMN D_DIRECTION_SERVICES.PATIENT IS 'Пациент';
+
+COMMENT ON TABLE D_DIRECTION_SERVICES IS 'Направления : услуги';
+```
+
 
 ## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠
 
 Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
 
 **Статистика:**
-- Всего уникальных пакетных функций: 10
-- Загружено тел функций: 10
+- Всего уникальных пакетных функций: 4
+- Загружено тел функций: 3
 
 ---
 
-### Функция №1: D_PKG_CSE_ACCESSES.CHECK_RIGHT
+### Функция №1: D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM
 
 ```sql
--- Oracle PACKAGE: CHECK_RIGHT
--- Возвращает: return number
+-- Oracle PACKAGE: GET_WEEK_DAY_NUM
+-- Возвращает: return NUMBER
 --======================================================================
-function CHECK_RIGHT
+function GET_WEEK_DAY_NUM
 (
-  pnLPU                                in NUMBER,          --ЛПУ
-  psUNITCODE                           in VARCHAR2,        --Код раздела
-  pnUNIT_ID                            in NUMBER,          --ID записи в разделе
-  psRIGHT                              in VARCHAR2,        --Код действия в разделе
-  pnCABLAB                             in NUMBER default null, --Кабинет
-  pnSERVICE                            in NUMBER default null, --Услуга
-  pnRAISE                              in NUMBER default 0 --Генерировать ошибку    1 - да,0 - нет
-)
-return number
-as
-begin
-  return CHECK_EMPLOYER_RIGHT(pnLPU,D_PKG_EMPLOYERS.GET_ID(pnLPU),psUNITCODE,pnUNIT_ID,psRIGHT,pnCABLAB,pnSERVICE,pnRAISE);
-end CHECK_RIGHT;
-```
-
----
-
-### Функция №2: D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
-
-```sql
--- Oracle PACKAGE: SET_PLAN_FOR_DAY
---======================================================================
-procedure SET_PLAN_FOR_DAY
-(
-  pnLPU                                in NUMBER,
-  pnPLAN                               in NUMBER,
-  psDAY                                in VARCHAR2,
-  pdSTART_DATE                         in DATE,
-  pdEND_DATE                           in DATE
-)
+  pdDATE                               DATE
+) return NUMBER 
 is
-  rPLAN                 D_HPK_PLANS%rowtype;
-  nLOOP_FLAG            NUMBER(1) := 0;
-  dPLAN_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nID                   D_HPK_PLANS.ID%type;
 begin
-  if psDAY is not null and lower(psDAY) not in ('monday','tuesday','wednesday','thursday','friday','saturday','sunday') then
-    D_P_EXC('Не верно задан день недели.');
-  end if;
-  --тащим план
-  select t.*
-    into rPLAN
-    from D_HPK_PLANS t
-   where t.ID  = pnPLAN
-     and t.LPU = pnLPU;
-  --making new plans for incoming dates
-  if psDAY is not null then
-    dPLAN_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(pdSTART_DATE,lower(psDAY)));
-  else
-    dPLAN_DATE := pdSTART_DATE;
-  end if;
-  loop
-    exit when nLOOP_FLAG = 1;
-    if dPLAN_DATE >= trunc(pdSTART_DATE) and dPLAN_DATE <= trunc(pdEND_DATE) then
-      begin
-        ADD(nID,pnLPU,rPLAN.PID,dPLAN_DATE,rPLAN.MALE_COUNT,rPLAN.OPER_COUNT,rPLAN.GEN_COUNT);
-      exception
-        when others then null;
-      end;
+  case trim(lower(to_char(pdDATE,'Day')))
+    when 'monday' then return 1;
+    when 'понедельник' then return 1;
+    when 'tuesday' then return 2;
+    when 'вторник' then return 2;
+    when 'wednesday' then return 3;
+    when 'среда' then return 3;
+    when 'thursday' then return 4;
+    when 'четверг' then return 4;
+    when 'friday' then return 5;
+    when 'пятница' then return 5;
+    when 'saturday' then return 6;
+    when 'суббота' then return 6;
+    when 'sunday' then return 7;
+    when 'воскресенье' then return 7;
+    else return null;
+  end case;      
+end GET_WEEK_DAY_NUM;
 ```
 
 ---
 
-### Функция №3: D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+### Функция №2: D_PKG_SCHEDULE.UPD
 
 ```sql
--- Oracle PACKAGE: SET_PLAN_FOR_WEEK
+-- Oracle PACKAGE: UPD
 --======================================================================
-procedure SET_PLAN_FOR_WEEK
+procedure UPD
 (
-  pnLPU                                in NUMBER,
-  pnHOSP_PLAN                          in NUMBER,
-  pdSTART_DATE                         in DATE,
-  pdEND_DATE                           in DATE
-)
-is
-  nHPK                  D_HOSP_PLAN_KINDS.ID%type;
-  dPLAN_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nMALE_COUNT           D_HPK_PLANS.MALE_COUNT%type;
-  nOPER_COUNT           D_HPK_PLANS.OPER_COUNT%type;
-  nGEN_COUNT            D_HPK_PLANS.GEN_COUNT%type;
-  dCURR_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nIND                  NUMBER(1);
-  nNEW_PLAN_ID          D_HPK_PLANS.ID%type;
-  nFLAG                 NUMBER(1);
-begin
-  if pnHOSP_PLAN is null then
-    return;
-  end if;
-  if pdSTART_DATE >= pdEND_DATE or pdEND_DATE is null or pdSTART_DATE is null then
-    D_P_EXC('Неверно указан временной интервал');
-  end if; 
-  --Выборка вида плана
-  select PID,
-         PLAN_DATE
-    into nHPK,
-         dPLAN_DATE
-    from D_HPK_PLANS 
-   where ID  = pnHOSP_PLAN
-     and LPU = pnLPU;
-  --Нахождение первого дня источника 
-  dPLAN_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(trunc(dPLAN_DATE - 7),'monday'));
-  if to_char(pdSTART_DATE,'day') <> 'monday' then 
-    dCURR_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(trunc(pdSTART_DATE - 7),'monday'));
-  else
-    dCURR_DATE := trunc(pdSTART_DATE);
-  end if;
-  --Цикл по дням
-  loop
-    --Понедельный цикл
-    for nIND in 0..6 
-    loop
-      begin
-        select 1,
-               MALE_COUNT,
-               OPER_COUNT,
-               GEN_COUNT
-          into nFLAG,
-               nMALE_COUNT,       
-               nOPER_COUNT,  
-               nGEN_COUNT 
-          from D_HPK_PLANS
-         where PID              = nHPK
-           and trunc(PLAN_DATE) = trunc(dPLAN_DATE + nIND) 
-           and LPU              = pnLPU;
-      exception
-        when NO_DATA_FOUND then nFLAG := 0;
-      end;
-```
-
----
-
-### Функция №4: D_PKG_HPK_PLANS.DEL
-
-```sql
--- Oracle PACKAGE: DEL
---======================================================================
-procedure DEL
-(
-  pnID                                 in NUMBER,
-  pnLPU                                in NUMBER
+  pnID                                 in NUMBER,          --id
+  pnLPU                                in NUMBER,          --МО
+  psCODE                               in VARCHAR2,        --код
+  psNAME                               in VARCHAR2,        --наименование
+  pdSTART_DATE                         in DATE,            --дата отсчета
+  pnSCH_TYPE                           in NUMBER,          --тип графика
+  psHOLIDAYS                           in VARCHAR2,        --выходные
+  pnQUOTING                            in NUMBER,          --для квотирования
+  vAPI_VERSION                         in NUMBER default 1, -- Версионность API
+  pnSCH_KIND                           in NUMBER default null --Вид графика: NULL - обычный, 1 - для госпитализации, 2 - маршрутизация
 )
 is
   nCID                  D_PKG_STD.tREF;
+  nSCH_KIND             D_SCHEDULE.SCH_KIND%type := pnSCH_KIND;
 begin
   -- Поиск каталога --
-  EXIST(pnID, pnLPU, nCID);
+  EXIST(pnID,pnLPU,nCID);
   -- Инициализация бизнес-процесса --
-  D_PKG_BPENV.BEFOREBP(pnLPU,null,nCID,null,'HPK_PLANS_DELETE',pnID);
+  D_PKG_BPENV.BEFOREBP(pnLPU,null,nCID,null,'SCHEDULE_UPDATE',pnID);
+  CHECKS(pnID, pnLPU, pnSCH_TYPE, psNAME, psCODE, 'UPD');
+  if vAPI_VERSION < gvAPI_CURRENT_VERSION then
+    select case when vAPI_VERSION < 2 then coalesce(nSCH_KIND, t.SCH_KIND) else nSCH_KIND end
+      into nSCH_KIND
+      from D_SCHEDULE t
+     where t.ID = pnID;
+  end if;
   begin
-    delete D_HPK_PLANS t
-     where t.ID            = pnID
-       and t.LPU           = pnLPU;
-  exception when others then D_PKG_MSG.IUD_ERRORS(sqlerrm, 'D', sqlcode);
+    update D_SCHEDULE d
+       set d.CODE       = psCODE,
+           d.NAME       = psNAME,
+           d.START_DATE = trunc(pdSTART_DATE),
+           d.SCH_TYPE   = pnSCH_TYPE,
+           d.HOLIDAYS   = psHOLIDAYS,
+           d.QUOTING    = pnQUOTING,
+           d.SCH_KIND   = nSCH_KIND
+     where d.ID         = pnID
+       and d.LPU        = pnLPU;
+  exception when others then D_PKG_MSG.IUD_ERRORS(sqlerrm, 'U', sqlcode);
   end;
 ```
 
 ---
 
-### Функция №5: D_PKG_HOSP_PLAN_KINDS.DEL
+### Функция №3: D_PKG_SCHEDULE.ADD
 
 ```sql
--- Oracle PACKAGE: DEL
+-- Oracle PACKAGE: ADD
 --======================================================================
-procedure DEL
+procedure ADD
 (
-  pnID                                 in NUMBER,
-  pnLPU                                in NUMBER
-)
-is
-  nCID                  D_PKG_STD.tREF;
-begin
-  -- Поиск каталога --
-  EXIST(pnID, pnLPU, nCID);
-  -- Инициализация бизнес-процесса --
-  D_PKG_BPENV.BEFOREBP(pnLPU,null,nCID,null,'HOSP_PLAN_KINDS_DELETE',pnID);
-  begin
-    delete D_HOSP_PLAN_KINDS t
-     where t.ID            = pnID
-       and t.LPU           = pnLPU;
-  exception when others then D_PKG_MSG.IUD_ERRORS(sqlerrm, 'D', sqlcode);
-  end;
-```
-
----
-
-### Функция №6: D_PKG_URPRIVS.CHECK_BPPRIV
-
-```sql
--- Oracle PACKAGE: CHECK_BPPRIV
--- Возвращает: return boolean
---======================================================================
-function CHECK_BPPRIV
-(
-  pnLPU                                in NUMBER,
-  pnVERSION                            in NUMBER,
-  psUNITCODE                           in VARCHAR2,
-  pnCATALOG                            in NUMBER,
-  psUNITBP                             in VARCHAR2,        --Действие в разделе
-  pnRAISE                              in NUMBER default 1,--Генерировать ошибку    1 - да,0 - нет
-  pnVER_LPU                            in NUMBER default 1 -- 0-запись на версию, 1-запись на ЛПУ+верия
-)
-return boolean
-as
-  iRESULT               integer;
-  rUNIT                 D_UNITLIST%ROWTYPE;
-  nUSER                 D_USERS.ID%type;
-  sMESSAGE              D_PKG_STD.tLSTR;
-  nVERSION              D_VERSIONS.ID%type;
-  sCURRENT_USER         VARCHAR2(40) := D_F_GET_USERS();
-begin
-  -- инициализация результата
-  iRESULT  := 1;
-  -- считывание параметров раздела
-  begin
-    select u.UNITCODE,
-           u.USE_CATALOGS,
-           u.VER_LPU
-      into rUNIT.UNITCODE,
-           rUNIT.USE_CATALOGS,
-           rUNIT.VER_LPU
-      from D_UNITLIST u
-     where u.UNITCODE = psUNITCODE;
-  exception when NO_DATA_FOUND then
-    D_PKG_MSG.UNIT_NOT_FOUND(psUNITCODE);
-  end;
-```
-
----
-
-### Функция №7: D_PKG_CATALOGS.FIND_ROOT_CATALOG
-
-```sql
--- Oracle PACKAGE: FIND_ROOT_CATALOG
---======================================================================
-procedure FIND_ROOT_CATALOG
-(
-  pnRAISE                              in NUMBER,          --1 отобразить сообщение при ошибке, 0 - не сообщать
-  pnLPU                                in NUMBER,          --ЛПУ
-  psUNITCODE                           in VARCHAR2,        --Раздел
-  pnCATALOG                            out NUMBER          --ID найденного каталога
-)
-is
-  nVERSION              D_PKG_STD.tREF;
-  nVER_LPU              D_UNITLIST.VER_LPU%type;
-begin
-  nVER_LPU := D_PKG_UNITLIST.GET_PARAM(psUNITCODE, 'VER_LPU');
-  begin
-    if nVER_LPU = 0 then
-      D_PKG_VERSIONS.GET_VERSION_BY_LPU(1, pnLPU, psUNITCODE, nVERSION);
-      select t.ID
-       into pnCATALOG
-       from D_CATALOGS t
-      where t.C_UNITCODE = psUNITCODE
-        and t.VERSION    = nVERSION
-        and t.LPU        is null
-        and t.C_LEVEL    = 0;
-    elsif nVER_LPU = 1 then
-      select t.ID
-        into pnCATALOG
-        from D_CATALOGS t
-       where t.C_UNITCODE = psUNITCODE
-         and t.LPU        = pnLPU
-         and t.VERSION    is null
-         and t.C_LEVEL    = 0;
-    else
-      select t.ID
-        into pnCATALOG
-        from D_CATALOGS t
-       where t.C_UNITCODE = psUNITCODE
-         and t.LPU        is null
-         and t.VERSION    is null
-         and t.C_LEVEL    = 0;
-    end if;
-  exception when NO_DATA_FOUND then
-    if pnRAISE = 1 then
-      D_P_EXC('2.1. Не найден корневой каталог для раздела "'||psUNITCODE||'".');
-    else
-      pnCATALOG := null;
-    end if;
-  when TOO_MANY_ROWS then
-    if pnRAISE = 1 then
-      D_P_EXC('2.2. Найдено более одного корневого каталога для раздела "'||psUNITCODE||'".');
-    else
-      pnCATALOG := null;
-    end if;
-  end;
-```
-
----
-
-### Функция №8: D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
-
-```sql
--- Oracle PACKAGE: COPY_PLAN_FOR_DAY
---======================================================================
-procedure COPY_PLAN_FOR_DAY
-(
-  pnLPU                                in NUMBER,
-  pnPLAN                               in NUMBER,
-  psDAY                                in VARCHAR2,
-  pdSTART_DATE                         in DATE,
-  pdEND_DATE                           in DATE
-)
-is
-  rSAMPLE_PLAN          D_HPK_PLANS%rowtype;
-  nLOOP_FLAG            NUMBER(1) := 0;
-  dPLAN_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nID                   D_HPK_PLANS.ID%type;
-begin
-  if psDAY is not null and lower(psDAY) not in ('monday','tuesday','wednesday','thursday','friday','saturday','sunday') then
-    D_P_EXC('Не верно задан день недели.');
-  end if;
-  --тащим план
-  select t.*
-    into rSAMPLE_PLAN
-    from D_HPK_PLANS t
-   where t.ID  = pnPLAN
-     and t.LPU = pnLPU;
-  --making new plans for incoming dates
-  if psDAY is not null then
-    dPLAN_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(pdSTART_DATE,lower(psDAY)));
-  else
-    dPLAN_DATE := pdSTART_DATE;
-  end if;
-  loop
-    exit when nLOOP_FLAG = 1;
-    if dPLAN_DATE >= trunc(pdSTART_DATE) and dPLAN_DATE <= trunc(pdEND_DATE) then
-      begin
-        select hp.ID
-          into nID
-          from D_HPK_PLANS hp
-         where hp.LPU       = pnLPU
-           and hp.PID       = rSAMPLE_PLAN.PID
-           and hp.PLAN_DATE = dPLAN_DATE;
-        UPD(nID,pnLPU,dPLAN_DATE,rSAMPLE_PLAN.MALE_COUNT, rSAMPLE_PLAN.OPER_COUNT, rSAMPLE_PLAN.GEN_COUNT);
-      exception
-        when others then null;
-      end;
-```
-
----
-
-### Функция №9: D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
-
-```sql
--- Oracle PACKAGE: COPY_PLAN_FOR_WEEK
---======================================================================
-procedure COPY_PLAN_FOR_WEEK
-(
-  pnLPU                                in NUMBER,
-  pnHOSP_PLAN                          in NUMBER,
-  pdSTART_DATE                         in DATE,
-  pdEND_DATE                           in DATE
-)
-is
-  nHPK                  D_HOSP_PLAN_KINDS.ID%type;
-  dPLAN_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nMALE_COUNT           D_HPK_PLANS.MALE_COUNT%type;
-  nOPER_COUNT           D_HPK_PLANS.OPER_COUNT%type;
-  nGEN_COUNT            D_HPK_PLANS.GEN_COUNT%type;
-  dCURR_DATE            D_HPK_PLANS.PLAN_DATE%type;
-  nIND                  NUMBER(1);
-  nID                   D_HPK_PLANS.ID%type;
-  nFLAG                 NUMBER(1);
-begin
-  if pnHOSP_PLAN is null then
-    return;
-  end if;
-  if pdSTART_DATE >= pdEND_DATE or pdEND_DATE is null or pdSTART_DATE is null then
-    D_P_EXC('Неверно указан временной интервал');
-  end if; 
-  --Выборка вида плана
-  select PID,
-         PLAN_DATE
-    into nHPK,
-         dPLAN_DATE
-    from D_HPK_PLANS 
-   where ID  = pnHOSP_PLAN
-     and LPU = pnLPU;
-  --Нахождение первого дня источника 
-  dPLAN_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(trunc(dPLAN_DATE - 7),'monday'));
-  if to_char(pdSTART_DATE,'day') <> 'monday' then 
-    dCURR_DATE := trunc(D_PKG_DAT_TOOLS.NEXT_WEEK_DAY(trunc(pdSTART_DATE - 7),'monday'));
-  else
-    dCURR_DATE := trunc(pdSTART_DATE);
-  end if;
-  --Цикл по дням
-  loop
-    --Понедельный цикл
-    for nIND in 0..6 
-    loop
-      begin
-        select 1,
-               MALE_COUNT,
-               OPER_COUNT,
-               GEN_COUNT
-          into nFLAG,
-               nMALE_COUNT,       
-               nOPER_COUNT,  
-               nGEN_COUNT 
-          from D_HPK_PLANS
-         where PID              = nHPK
-           and trunc(PLAN_DATE) = trunc(dPLAN_DATE + nIND) 
-           and LPU              = pnLPU;
-      exception
-        when NO_DATA_FOUND then nFLAG := 0;
-      end;
-```
-
----
-
-### Функция №10: D_PKG_HPK_SCHEDULE.DEL
-
-```sql
--- Oracle PACKAGE: DEL
---======================================================================
-procedure DEL
-(
-  pnID                                 in NUMBER,
-  pnLPU                                in NUMBER
+  pnD_INSERT_ID                        out NUMBER,         --id
+  pnLPU                                in NUMBER,          --МО
+  pnCID                                in NUMBER,          --Каталог
+  psCODE                               in VARCHAR2,        --код
+  psNAME                               in VARCHAR2,        --наименование
+  pdSTART_DATE                         in DATE,            --дата отсчета
+  pnSCH_TYPE                           in NUMBER,          --тип графика
+  psHOLIDAYS                           in VARCHAR2,        --выходные
+  pnQUOTING                            in NUMBER,          --для квотирования
+  pnSCH_KIND                           in NUMBER default null --Вид графика: NULL - обычный, 1 - для госпитализации, 2 - маршрутизация
 )
 is
 begin
   -- Инициализация бизнес-процесса --
-  D_PKG_BPENV.BEFOREBP(pnLPU, null, null, null, 'HPK_SCHEDULE_DELETE', pnID);
+  D_PKG_BPENV.BEFOREBP(pnLPU,null,pnCID,null,'SCHEDULE_INSERT',null);
+  CHECKS(null, pnLPU, pnSCH_TYPE, psNAME, psCODE, 'INS');
   begin
-    delete D_HPK_SCHEDULE hse where hse.ID = pnID;
-  exception when others then D_PKG_MSG.IUD_ERRORS(sqlerrm, 'D', sqlcode);
+    insert into D_SCHEDULE d
+    (
+      ID,
+      CODE,
+      NAME,
+      START_DATE,
+      LPU,
+      CID,
+      SCH_TYPE,
+      HOLIDAYS,
+      QUOTING,
+      SCH_KIND
+    )
+      values
+    (
+      D_GEN_ID,
+      psCODE,
+      psNAME,
+      trunc(pdSTART_DATE),
+      pnLPU,
+      pnCID,
+      pnSCH_TYPE,
+      psHOLIDAYS,
+      pnQUOTING,
+      pnSCH_KIND
+    ) returning ID into pnD_INSERT_ID;
+  exception when others then D_PKG_MSG.IUD_ERRORS(sqlerrm, 'I', sqlcode);
   end;
 ```
+
+---
+
+### Функция №4: D_PKG_SCHEDULESP_TIMES.UPD_S
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
 
 
 ## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘
@@ -1813,577 +2839,211 @@ begin
 Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
 
 **Статистика:**
-- Всего уникальных функций/процедур: 10
-- Загружено тел функций: 10
+- Всего уникальных функций/процедур: 4
+- Загружено тел функций: 4
 
 ---
 
-### Функция №1: d_pkg_cse_accesses.check_right
+### Функция №1: d_pkg_dat_tools.get_week_day_num
 
 ```sql
-CREATE OR REPLACE FUNCTION d_pkg_cse_accesses.check_right(pnlpu numeric, psunitcode character varying, pnunit_id numeric, psright character varying, pncablab numeric DEFAULT NULL::numeric, pnservice numeric DEFAULT NULL::numeric, pnraise numeric DEFAULT 0)
+CREATE OR REPLACE FUNCTION d_pkg_dat_tools.get_week_day_num(pddate timestamp without time zone)
  RETURNS numeric
  LANGUAGE plpgsql
  STABLE SECURITY DEFINER
 AS $function$
 BEGIN
-    return d_pkg_cse_accesses.check_employer_right(pnlpu,d_pkg_employers.get_id(pnlpu)::numeric,psunitcode,pnunit_id,psright,pncablab,pnservice,pnraise);
+    IF trim(lower(to_char(pddate,'TMDay'))::text) = 'monday' THEN
+        return 1;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'понедельник' THEN
+        return 1;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'tuesday' THEN
+        return 2;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'вторник' THEN
+        return 2;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'wednesday' THEN
+        return 3;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'среда' THEN
+        return 3;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'thursday' THEN
+        return 4;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'четверг' THEN
+        return 4;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'friday' THEN
+        return 5;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'пятница' THEN
+        return 5;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'saturday' THEN
+        return 6;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'суббота' THEN
+        return 6;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'sunday' THEN
+        return 7;
+
+    ELSIF trim(lower(to_char(pddate,'TMDay'))::text) = 'воскресенье' THEN
+        return 7;
+
+    ELSE
+        return null;
+
+    END IF;
 END
 $function$
 ```
 
 ---
 
-### Функция №2: d_pkg_hpk_plans.set_plan_for_day
+### Функция №2: d_pkg_schedule.upd
 
 ```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_plans.set_plan_for_day(IN pnlpu numeric, IN pnplan numeric, IN psday character varying, IN pdstart_date timestamp without time zone, IN pdend_date timestamp without time zone)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    rPLAN d_hpk_plans;
-    nLOOP_FLAG NUMERIC(1) := 0;
-    dPLAN_DATE d_hpk_plans.plan_date%TYPE;
-    nID d_hpk_plans.id%TYPE;
-    or2pgTmpVar0_1 numeric;
-BEGIN
-    IF nullif(psday,'') IS NOT NULL
-     AND lower(psday) NOT  IN ( 'monday' , 'tuesday' , 'wednesday' , 'thursday' , 'friday' , 'saturday' , 'sunday' ) THEN
-        PERFORM d_p_exc(1,'Не верно задан день недели.');
-
-    END IF;
-    -- тащим план
-    SELECT
-        t.*
-    INTO STRICT rplan
-    FROM
-        d_hpk_plans t
-    WHERE
-        t.id = pnplan::bigint
-             AND t.lpu = pnlpu::bigint;
-    -- making new plans for incoming dates
-        IF nullif(psday,'') IS NOT NULL THEN
-        dplan_date := trunc(d_pkg_dat_tools.next_week_day(pdstart_date,lower(psday)::varchar));
-
-    ELSE
-        dplan_date := pdstart_date;
-
-    END IF;
-    
-    LOOP
-        EXIT WHEN nloop_flag = 1;
-        IF dplan_date >= trunc(pdstart_date)
-     AND dplan_date <= trunc(pdend_date) THEN
-            BEGIN
-                or2pgTmpVar0_1 := (nid)::numeric;
-                 CALL d_pkg_hpk_plans.add(or2pgTmpVar0_1, pnlpu, (rplan.pid)::numeric, dplan_date, rplan.male_count, rplan.oper_count, rplan.gen_count);
-                nid := (or2pgTmpVar0_1)::bigint;
-                EXCEPTION
-                    WHEN others THEN
-                                null;
-
-            END;
-            IF nullif(psday,'') IS NOT NULL THEN
-                dplan_date := trunc(d_pkg_dat_tools.next_week_day(dplan_date,lower(psday)::varchar));
-
-            ELSE
-                dplan_date := dplan_date + 1;
-
-            END IF;
-
-        ELSE
-            nloop_flag := 1;
-
-        END IF;
-    END LOOP;
-END
-$procedure$
-```
-
----
-
-### Функция №3: d_pkg_hpk_plans.set_plan_for_week
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_plans.set_plan_for_week(IN pnlpu numeric, IN pnhosp_plan numeric, IN pdstart_date timestamp without time zone, IN pdend_date timestamp without time zone)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    nHPK d_hosp_plan_kinds.id%TYPE;
-    dPLAN_DATE d_hpk_plans.plan_date%TYPE;
-    nMALE_COUNT d_hpk_plans.male_count%TYPE;
-    nOPER_COUNT d_hpk_plans.oper_count%TYPE;
-    nGEN_COUNT d_hpk_plans.gen_count%TYPE;
-    dCURR_DATE d_hpk_plans.plan_date%TYPE;
-    nIND NUMERIC(1);
-    nNEW_PLAN_ID d_hpk_plans.id%TYPE;
-    nFLAG NUMERIC(1);
-    or2pgTmpVar0_1 numeric;
-BEGIN
-    IF pnhosp_plan IS NULL THEN
-        return;
-
-    END IF;
-    IF pdstart_date >= pdend_date
-     OR pdend_date IS NULL
-     OR pdstart_date IS NULL THEN
-        PERFORM d_p_exc(1,'Неверно указан временной интервал');
-
-    END IF;
-    -- Выборка вида плана
-    SELECT
-        pid,
-        plan_date
-    INTO STRICT nhpk, dplan_date
-    FROM
-        d_hpk_plans
-    WHERE
-        id = pnhosp_plan::bigint
-             AND lpu = pnlpu::bigint;
-    dplan_date := trunc(d_pkg_dat_tools.next_week_day(trunc(dplan_date - 7)::timestamp,'monday'));
-    IF to_char(pdstart_date,'TMday') <> 'monday' THEN
-        dcurr_date := trunc(d_pkg_dat_tools.next_week_day(trunc(pdstart_date - 7)::timestamp,'monday'));
-
-    ELSE
-        dcurr_date := trunc(pdstart_date);
-
-    END IF;
-    -- Цикл по дням
-    
-    LOOP
-        -- Понедельный цикл
-         FOR nind IN 0 .. 6
-        LOOP
-            SELECT
-                1  "1",
-                male_count,
-                oper_count,
-                gen_count
-            INTO nflag, nmale_count, noper_count, ngen_count
-            FROM
-                d_hpk_plans
-            WHERE
-                pid = nhpk
-                     AND trunc(plan_date) = trunc(dplan_date + nind)
-                     AND lpu = pnlpu::bigint;
-            IF NOT FOUND THEN
-                nflag := 0;
-
-            END IF;
-            -- Добавление плана
-                        IF nflag = 1 THEN
-                BEGIN
-                    or2pgTmpVar0_1 := (nnew_plan_id)::numeric;
-                     CALL d_pkg_hpk_plans.add(or2pgTmpVar0_1, pnlpu, (nhpk)::numeric, trunc(dcurr_date)::timestamp, nmale_count, noper_count, ngen_count);
-                    nnew_plan_id := (or2pgTmpVar0_1)::bigint;
-                    EXCEPTION
-                        WHEN others THEN
-                                    null;
-
-                END;
-
-            END IF;
-            dcurr_date := dcurr_date + 1;
-        END LOOP;
-        EXIT WHEN trunc(dcurr_date) > trunc(pdend_date);
-    END LOOP;
-END
-$procedure$
-```
-
----
-
-### Функция №4: d_pkg_hpk_plans.del
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_plans.del(IN pnid numeric, IN pnlpu numeric)
+CREATE OR REPLACE PROCEDURE d_pkg_schedule.upd(IN pnid numeric, IN pnlpu numeric, IN pscode character varying, IN psname character varying, IN pdstart_date timestamp without time zone, IN pnsch_type numeric, IN psholidays character varying, IN pnquoting numeric, IN vapi_version numeric DEFAULT 1, IN pnsch_kind numeric DEFAULT NULL::numeric)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $procedure$
 DECLARE
     nCID numeric(17);
+    nSCH_KIND d_schedule.sch_kind%TYPE := pnsch_kind;
 BEGIN
-    CALL d_pkg_hpk_plans.exist(pnid, pnlpu, ncid);
-    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'HPK_PLANS_DELETE', pnid);
-    BEGIN
-        DELETE FROM d_hpk_plans t where t.id = pnid::bigint
-     AND t.lpu = pnlpu::bigint;
-        EXCEPTION
-            WHEN others THEN
-                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'D',(SQLSTATE)::varchar);
-
-    END;
-    IF ( NOT FOUND ) THEN
-        PERFORM d_pkg_msg.record_not_found(1,pnid,'HPK_PLANS');
-
-    END IF;
-    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'HPK_PLANS_DELETE', pnid);
-END
-$procedure$
-```
-
----
-
-### Функция №5: d_pkg_hosp_plan_kinds.del
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hosp_plan_kinds.del(IN pnid numeric, IN pnlpu numeric)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    nCID numeric(17);
-BEGIN
-    CALL d_pkg_hosp_plan_kinds.exist(pnid, pnlpu, ncid);
-    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'HOSP_PLAN_KINDS_DELETE', pnid);
-    BEGIN
-        DELETE FROM d_hosp_plan_kinds t where t.id = pnid::bigint
-     AND t.lpu = pnlpu::bigint;
-        EXCEPTION
-            WHEN others THEN
-                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'D',(SQLSTATE)::varchar);
-
-    END;
-    IF ( NOT FOUND ) THEN
-        PERFORM d_pkg_msg.record_not_found(1,pnid,'HOSP_PLAN_KINDS');
-
-    END IF;
-    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'HOSP_PLAN_KINDS_DELETE', pnid);
-END
-$procedure$
-```
-
----
-
-### Функция №6: d_pkg_urprivs.check_bppriv
-
-```sql
-CREATE OR REPLACE FUNCTION d_pkg_urprivs.check_bppriv(pnlpu numeric, psunitbp character varying, pncatalog numeric, pnraise numeric DEFAULT 1)
- RETURNS numeric
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-DECLARE
-    nVER_LPU d_unitlist.ver_lpu%TYPE;
-    nVERSION d_versions.id%TYPE;
-    sUNITCODE d_unitlist.unitcode%TYPE;
-    nRES NUMERIC(1);
-    or2pgTmpVar0_1 numeric;
-BEGIN
-    SELECT
-        t.ver_lpu,
-        t.unitcode
-    INTO nver_lpu, sunitcode
-    FROM
-        d_unitbps u
-        CROSS JOIN         d_unitlist t
-    WHERE
-        u.unitbpcode = psunitbp
-             AND t.unitcode = u.unitcode;
-    IF NOT FOUND THEN
-        IF pnraise = 1 THEN
-            PERFORM d_pkg_msg.record_not_found(1,'UNITBPS','Действие над разделом',psunitbp);
-
-        ELSE
-            return 0;
-
-        END IF;
-
-    END IF;
-    IF nver_lpu = 0 THEN
-        or2pgTmpVar0_1 := (nversion)::numeric;
-         CALL d_pkg_versions.get_version_by_lpu(pnraise, pnlpu, sunitcode, or2pgTmpVar0_1);
-        nversion := (or2pgTmpVar0_1)::bigint;
-
-    END IF;
-    IF d_pkg_urprivs.check_bppriv(pnlpu,(nversion)::numeric,sunitcode,pncatalog,psunitbp,pnraise) = true THEN
-        nres := 1;
-
-    ELSE
-        nres := 0;
-
-    END IF;
-    return nres;
-END
-$function$
-```
-
----
-
-### Функция №7: d_pkg_catalogs.find_root_catalog
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_catalogs.find_root_catalog(IN pnraise numeric, IN pnlpu numeric, IN psunitcode character varying, INOUT pncatalog numeric)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    nVERSION numeric(17);
-    nVER_LPU d_unitlist.ver_lpu%TYPE;
-BEGIN
-    pncatalog := null;
-    nver_lpu := d_pkg_unitlist.get_param(psunitcode,'VER_LPU')::numeric;
-    BEGIN
-        IF nver_lpu = 0 THEN
-            CALL d_pkg_versions.get_version_by_lpu(1, pnlpu, psunitcode, nversion);
-            SELECT
-                t.id
-            INTO STRICT pncatalog
-            FROM
-                d_catalogs t
-            WHERE
-                t.c_unitcode = psunitcode
-                     AND t.version = nversion::bigint
-                     AND t.lpu IS NULL
-                     AND t.c_level = 0;
-
-        ELSIF nver_lpu = 1 THEN
-            SELECT
-            t.id
-        INTO STRICT pncatalog
+    CALL d_pkg_schedule.exist(pnid, pnlpu, ncid);
+    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'SCHEDULE_UPDATE', pnid);
+    CALL d_pkg_schedule.checks(pnid, pnlpu, pnsch_type, psname, pscode, 'UPD');
+    IF vapi_version < (d_pkg_schedule.GET_gvapi_current_version()) THEN
+        SELECT
+            (CASE
+                WHEN vapi_version < 2 THEN coalesce(nsch_kind,t.sch_kind)
+                ELSE nsch_kind
+            END)
+        INTO STRICT nsch_kind
         FROM
-            d_catalogs t
+            d_schedule t
         WHERE
-            t.c_unitcode = psunitcode
-                 AND t.lpu = pnlpu::bigint
-                 AND t.version IS NULL
-                 AND t.c_level = 0;
-
-        ELSE
-            SELECT
-                t.id
-            INTO STRICT pncatalog
-            FROM
-                d_catalogs t
-            WHERE
-                t.c_unitcode = psunitcode
-                     AND t.lpu IS NULL
-                     AND t.version IS NULL
-                     AND t.c_level = 0;
-
-        END IF;
-        EXCEPTION
-            WHEN no_data_found THEN
-                        IF pnraise = 1 THEN
-                    PERFORM d_p_exc(1,(concat('2.1. Не найден корневой каталог для раздела "', psunitcode, '".'))::varchar);
-
-                ELSE
-                    pncatalog := null;
-
-                END IF;
-
-            WHEN too_many_rows THEN
-                        IF pnraise = 1 THEN
-                    PERFORM d_p_exc(1,(concat('2.2. Найдено более одного корневого каталога для раздела "', psunitcode, '".'))::varchar);
-
-                ELSE
-                    pncatalog := null;
-
-                END IF;
-
-    END;
-END
-$procedure$
-```
-
----
-
-### Функция №8: d_pkg_hpk_plans.copy_plan_for_day
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_plans.copy_plan_for_day(IN pnlpu numeric, IN pnplan numeric, IN psday character varying, IN pdstart_date timestamp without time zone, IN pdend_date timestamp without time zone)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    rSAMPLE_PLAN d_hpk_plans;
-    nLOOP_FLAG NUMERIC(1) := 0;
-    dPLAN_DATE d_hpk_plans.plan_date%TYPE;
-    nID d_hpk_plans.id%TYPE;
-BEGIN
-    IF nullif(psday,'') IS NOT NULL
-     AND lower(psday) NOT  IN ( 'monday' , 'tuesday' , 'wednesday' , 'thursday' , 'friday' , 'saturday' , 'sunday' ) THEN
-        PERFORM d_p_exc(1,'Не верно задан день недели.');
+            t.id = pnid::bigint;
 
     END IF;
-    -- тащим план
-    SELECT
-        t.*
-    INTO STRICT rsample_plan
-    FROM
-        d_hpk_plans t
-    WHERE
-        t.id = pnplan::bigint
-             AND t.lpu = pnlpu::bigint;
-    -- making new plans for incoming dates
-        IF nullif(psday,'') IS NOT NULL THEN
-        dplan_date := trunc(d_pkg_dat_tools.next_week_day(pdstart_date,lower(psday)::varchar));
-
-    ELSE
-        dplan_date := pdstart_date;
-
-    END IF;
-    
-    LOOP
-        EXIT WHEN nloop_flag = 1;
-        IF dplan_date >= trunc(pdstart_date)
-     AND dplan_date <= trunc(pdend_date) THEN
-            BEGIN
-                SELECT
-                    hp.id
-                INTO STRICT nid
-                FROM
-                    d_hpk_plans hp
-                WHERE
-                    hp.lpu = pnlpu::bigint
-                         AND hp.pid = rsample_plan.pid
-                         AND hp.plan_date = dplan_date;
-                CALL d_pkg_hpk_plans.upd((nid)::numeric, pnlpu, dplan_date, rsample_plan.male_count, rsample_plan.oper_count, rsample_plan.gen_count);
-                EXCEPTION
-                    WHEN others THEN
-                                null;
-
-            END;
-            IF nullif(psday,'') IS NOT NULL THEN
-                dplan_date := trunc(d_pkg_dat_tools.next_week_day(dplan_date,lower(psday)::varchar));
-
-            ELSE
-                dplan_date := dplan_date + 1;
-
-            END IF;
-
-        ELSE
-            nloop_flag := 1;
-
-        END IF;
-    END LOOP;
-END
-$procedure$
-```
-
----
-
-### Функция №9: d_pkg_hpk_plans.copy_plan_for_week
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_plans.copy_plan_for_week(IN pnlpu numeric, IN pnhosp_plan numeric, IN pdstart_date timestamp without time zone, IN pdend_date timestamp without time zone)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-DECLARE
-    nHPK d_hosp_plan_kinds.id%TYPE;
-    dPLAN_DATE d_hpk_plans.plan_date%TYPE;
-    nMALE_COUNT d_hpk_plans.male_count%TYPE;
-    nOPER_COUNT d_hpk_plans.oper_count%TYPE;
-    nGEN_COUNT d_hpk_plans.gen_count%TYPE;
-    dCURR_DATE d_hpk_plans.plan_date%TYPE;
-    nIND NUMERIC(1);
-    nID d_hpk_plans.id%TYPE;
-    nFLAG NUMERIC(1);
-BEGIN
-    IF pnhosp_plan IS NULL THEN
-        return;
-
-    END IF;
-    IF pdstart_date >= pdend_date
-     OR pdend_date IS NULL
-     OR pdstart_date IS NULL THEN
-        PERFORM d_p_exc(1,'Неверно указан временной интервал');
-
-    END IF;
-    -- Выборка вида плана
-    SELECT
-        pid,
-        plan_date
-    INTO STRICT nhpk, dplan_date
-    FROM
-        d_hpk_plans
-    WHERE
-        id = pnhosp_plan::bigint
-             AND lpu = pnlpu::bigint;
-    dplan_date := trunc(d_pkg_dat_tools.next_week_day(trunc(dplan_date - 7)::timestamp,'monday'));
-    IF to_char(pdstart_date,'TMday') <> 'monday' THEN
-        dcurr_date := trunc(d_pkg_dat_tools.next_week_day(trunc(pdstart_date - 7)::timestamp,'monday'));
-
-    ELSE
-        dcurr_date := trunc(pdstart_date);
-
-    END IF;
-    -- Цикл по дням
-    
-    LOOP
-        -- Понедельный цикл
-         FOR nind IN 0 .. 6
-        LOOP
-            SELECT
-                1  "1",
-                male_count,
-                oper_count,
-                gen_count
-            INTO nflag, nmale_count, noper_count, ngen_count
-            FROM
-                d_hpk_plans
-            WHERE
-                pid = nhpk
-                     AND trunc(plan_date) = trunc(dplan_date + nind)
-                     AND lpu = pnlpu::bigint;
-            IF NOT FOUND THEN
-                nflag := 0;
-
-            END IF;
-            -- Добавление плана
-                        IF nflag = 1 THEN
-                BEGIN
-                    SELECT
-                        hp.id
-                    INTO STRICT nid
-                    FROM
-                        d_hpk_plans hp
-                    WHERE
-                        hp.lpu = pnlpu::bigint
-                             AND hp.pid = nhpk
-                             AND hp.plan_date = trunc(dcurr_date);
-                    CALL d_pkg_hpk_plans.upd((nid)::numeric, pnlpu, trunc(dcurr_date)::timestamp, nmale_count, noper_count, ngen_count);
-                    EXCEPTION
-                        WHEN others THEN
-                                    null;
-
-                END;
-
-            END IF;
-            dcurr_date := dcurr_date + 1;
-        END LOOP;
-        EXIT WHEN trunc(dcurr_date) > trunc(pdend_date);
-    END LOOP;
-END
-$procedure$
-```
-
----
-
-### Функция №10: d_pkg_hpk_schedule.del
-
-```sql
-CREATE OR REPLACE PROCEDURE d_pkg_hpk_schedule.del(IN pnid numeric, IN pnlpu numeric)
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $procedure$
-BEGIN
-    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, (null)::numeric, (null)::numeric, 'HPK_SCHEDULE_DELETE', pnid);
     BEGIN
-        DELETE FROM d_hpk_schedule hse where hse.id = pnid::bigint;
+        update d_schedule d set code = pscode , "name" = psname , start_date = trunc(pdstart_date) , sch_type = pnsch_type , holidays = psholidays , quoting = pnquoting , sch_kind = nsch_kind where d.id = pnid::bigint
+             AND d.lpu = pnlpu::bigint;
         EXCEPTION
             WHEN others THEN
-                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'D',(SQLSTATE)::varchar);
+                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'U',(SQLSTATE)::varchar);
 
     END;
     IF ( NOT FOUND ) THEN
-        PERFORM d_pkg_msg.record_not_found(1,pnid,'HPK_SCHEDULE');
+        PERFORM d_pkg_msg.record_not_found(1,pnid,'SCHEDULE');
 
     END IF;
-    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, (null)::numeric, (null)::numeric, 'HPK_SCHEDULE_DELETE', pnid);
+    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'SCHEDULE_UPDATE', pnid);
+END
+$procedure$
+```
+
+---
+
+### Функция №3: d_pkg_schedule.add
+
+```sql
+CREATE OR REPLACE PROCEDURE d_pkg_schedule.add(INOUT pnd_insert_id numeric, IN pnlpu numeric, IN pncid numeric, IN pscode character varying, IN psname character varying, IN pdstart_date timestamp without time zone, IN pnsch_type numeric, IN psholidays character varying, IN pnquoting numeric, IN pnsch_kind numeric DEFAULT NULL::numeric)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $procedure$
+BEGIN
+    pnd_insert_id := null;
+    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, pncid, (null)::numeric, 'SCHEDULE_INSERT', (null)::numeric);
+    CALL d_pkg_schedule.checks((null)::numeric, pnlpu, pnsch_type, psname, pscode, 'INS');
+    BEGIN
+        INSERT INTO d_schedule AS d ( "id" , "code" , "name" , "start_date" , "lpu" , "cid" , "sch_type" , "holidays" , "quoting" , "sch_kind" ) VALUES ( d_gen_id(),pscode,psname,trunc(pdstart_date),pnlpu,pncid,pnsch_type,psholidays,pnquoting,pnsch_kind ) RETURNING id INTO pnd_insert_id;
+        EXCEPTION
+            WHEN others THEN
+                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'I',(SQLSTATE)::varchar);
+
+    END;
+    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, pncid, (null)::numeric, 'SCHEDULE_INSERT', pnd_insert_id);
+END
+$procedure$
+```
+
+---
+
+### Функция №4: d_pkg_schedulesp_times.upd_s
+
+```sql
+CREATE OR REPLACE PROCEDURE d_pkg_schedulesp_times.upd_s(IN pnid numeric, IN pnlpu numeric, IN pstime_begin character varying, IN pstime_end character varying, IN pntime_type numeric, IN pngen_error numeric DEFAULT 1, IN vapi_version numeric DEFAULT 1, IN pnstep numeric DEFAULT NULL::numeric, IN pnlimits numeric DEFAULT NULL::numeric)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $procedure$
+DECLARE
+    dTIME_BEGIN timestamp(0);
+    dTIME_END timestamp(0);
+    nCID numeric(17);
+    nPID numeric(17);
+    nTIME_TYPE NUMERIC;
+    sREGION varchar(50);
+    nSTEP d_schedulesp_times.step%TYPE := pnstep;
+    nLIMITS d_schedulesp_times.limits%TYPE := pnlimits;
+BEGIN
+    sregion := d_pkg_options.get(psSO_CODE => 'Region',pnLPU => pnlpu,pnRAISE => 0);
+    CALL d_pkg_schedulesp_times.exist(pnid, pnlpu, ncid, npid);
+    CALL d_pkg_bpenv.beforebp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'SCHEDULESP_TIMES_UPDATE', pnid);
+    dtime_begin := to_timestamp_simple(concat('01.01.0001 ', pstime_begin),d_pkg_std.frm_dt());
+    dtime_end := to_timestamp_simple(concat('01.01.0001 ', pstime_end),d_pkg_std.frm_dt());
+    IF nullif(sregion,'') IS NOT NULL
+     AND sregion = '54' THEN
+        IF pntime_type = - 1::numeric THEN
+            ntime_type := null;
+
+        ELSE
+            ntime_type := pntime_type;
+
+        END IF;
+
+    ELSE
+        ntime_type := pntime_type;
+
+    END IF;
+    CALL d_pkg_schedulesp_times.checks(pnid, pnlpu, npid, dtime_begin, dtime_end, ntime_type, pngen_error);
+    IF vapi_version < (d_pkg_schedulesp_times.GET_gvapi_current_version()) THEN
+        SELECT
+            (CASE
+                WHEN vapi_version < 2 THEN coalesce(nstep,t.step)
+                ELSE nstep
+            END),
+            (CASE
+                WHEN vapi_version < 2 THEN coalesce(nlimits,t.limits)
+                ELSE nlimits
+            END)
+        INTO STRICT nstep, nlimits
+        FROM
+            d_schedulesp_times t
+        WHERE
+            t.id = pnid::bigint;
+
+    END IF;
+    BEGIN
+        update d_schedulesp_times t set time_begin = dtime_begin , time_end = dtime_end , time_type = ntime_type , step = nstep , limits = nlimits where t.id = pnid::bigint
+             AND t.lpu = pnlpu::bigint;
+        EXCEPTION
+            WHEN others THEN
+                        PERFORM d_pkg_msg.iud_errors(1,(sqlerrm)::varchar,'U',(SQLSTATE)::varchar);
+
+    END;
+    IF ( NOT FOUND ) THEN
+        PERFORM d_pkg_msg.record_not_found(1,pnid,'SCHEDULESP_TIMES');
+
+    END IF;
+    CALL d_pkg_schedulesp.remake_interval(npid, pnlpu);
+    CALL d_pkg_bpenv.afterbp(pnlpu, (null)::numeric, ncid, (null)::numeric, 'SCHEDULESP_TIMES_UPDATE', pnid);
 END
 $procedure$
 ```
