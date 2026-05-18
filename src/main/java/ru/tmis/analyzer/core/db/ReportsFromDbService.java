@@ -58,8 +58,7 @@ public class ReportsFromDbService {
                         "       rep.LPU\n" +  // Добавляем LPU
                         "  FROM D_REPORTS_LINKS drl\n" +
                         "  JOIN D_REPORTS rep ON drl.PID = rep.ID\n" +
-                        " WHERE drl.UNITCODE = ?\n" +
-                        " ORDER BY drl.SORT_ORDER, rep.REP_NAME";  // Добавляем сортировку
+                        " WHERE drl.UNITCODE = ?\n";  // Добавляем сортировку
 
         Properties props = new Properties();
         props.setProperty("user", settings.getOracleUser());

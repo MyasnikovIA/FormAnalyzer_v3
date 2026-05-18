@@ -19,11 +19,13 @@ public class PopupMenuProcessor implements IXmlProcessor {
     private static final Pattern SEPARATOR_PATTERN = Pattern.compile("^[-]+$");
 
     private final SettingsModel settings;
+    private final ReportsFromDbService reportsService;
     private final Map<String, PopupMenuInfo> menuMap = new LinkedHashMap<>();
     private final List<AutoPopupInfo> autoPopups = new ArrayList<>();
 
     public PopupMenuProcessor(SettingsModel settings) {
         this.settings = settings;
+        this.reportsService = new ReportsFromDbService(settings);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
             menuMap.put(name, menu);
         }
 
-        // 1.1. Поиск D3 PopupMenu (cmpPopup) - ДОБАВЛЕНО
+        // 1.1. Поиск D3 PopupMenu (cmpPopup)
         Elements d3CmpPopups = doc.select("cmpPopup");
         for (Element popup : d3CmpPopups) {
             String name = popup.attr("name");
@@ -61,7 +63,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
             menuMap.put(name, menu);
         }
 
-        // 2. Поиск M2 PopupMenu (component cmptype=Popup)
+        // 2. Поиск M2 PopupMenu
         Elements m2Popups = doc.select("component[cmptype=Popup]");
         for (Element popup : m2Popups) {
             String name = popup.attr("name");
@@ -106,8 +108,6 @@ public class PopupMenuProcessor implements IXmlProcessor {
         }
 
         // 5. Объединяем AutoPopupMenu с целевыми PopupMenu
-        ReportsFromDbService dbService = new ReportsFromDbService(settings);
-
         for (AutoPopupInfo autoPopup : autoPopups) {
             PopupMenuInfo targetMenu = menuMap.get(autoPopup.targetMenuName);
             if (targetMenu != null) {
@@ -118,18 +118,23 @@ public class PopupMenuProcessor implements IXmlProcessor {
                     targetMenu.addItem(item);
                 }
 
-                // Если есть unit, добавляем отчеты из БД
+                // ========== ДОБАВЛЯЕМ ОТЧЁТЫ ИЗ ORACLE ==========
                 if (autoPopup.unit != null && !autoPopup.unit.isEmpty()) {
                     System.out.println("[PopupMenuProcessor] Обработка AutoPopup для unit=" + autoPopup.unit);
-                    List<ReportsFromDbService.DbReportInfo> dbReports = dbService.getReportsByUnit(autoPopup.unit);
-                    System.out.println("[PopupMenuProcessor] Найдено отчётов в БД: " + dbReports.size());
+                    List<ReportsFromDbService.DbReportInfo> dbReports = reportsService.getReportsByUnit(autoPopup.unit);
+                    System.out.println("[PopupMenuProcessor] Найдено отчётов в БД Oracle: " + dbReports.size());
 
                     if (!dbReports.isEmpty()) {
-                        for (ReportsFromDbService.DbReportInfo rep : dbReports) {
-                            System.out.println("  - " + rep.getRepCode() + ": " + rep.getRepName());
+                        // Форматируем отчёты в виде дерева
+                        List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
+                                dbReports, autoPopup.autoPopupName, "", true);
+
+                        for (String formattedReport : formattedReports) {
+                            PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
+                            dbItem.setCaption(formattedReport);
+                            dbItem.setDbReport(true);
+                            targetMenu.addItem(dbItem);
                         }
-                    } else {
-                        System.out.println("[PopupMenuProcessor] Отчёты не найдены для unit=" + autoPopup.unit);
                     }
                 }
             }
@@ -153,7 +158,6 @@ public class PopupMenuProcessor implements IXmlProcessor {
             String tagName = child.tagName().toLowerCase();
             boolean isPopupItem = false;
 
-            // ИСПРАВЛЕНО: добавлено cmpPopupItem с игнорированием регистра
             if (tagName.equalsIgnoreCase("cmpPopupItem") ||
                     (tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype")))) {
                 isPopupItem = true;
@@ -179,7 +183,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 items.add(item);
             } else if (tagName.equals("cmppopupmenu") ||
                     (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype"))) ||
-                    tagName.equals("cmppopup")) {  // ДОБАВЛЕНО: поддержка вложенных cmpPopup
+                    tagName.equals("cmppopup")) {
                 parseMenuItems(child, items);
             } else {
                 parseMenuItems(child, items);
