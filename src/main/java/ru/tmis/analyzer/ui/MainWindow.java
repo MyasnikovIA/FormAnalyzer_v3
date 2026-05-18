@@ -1,8 +1,6 @@
-// ui/MainWindow.java (только изменённые части)
-// Файл полностью, но показаны только изменения
-
+// ui/MainWindow.java
 package ru.tmis.analyzer.ui;
-
+import javax.swing.Timer;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
@@ -15,6 +13,7 @@ import ru.tmis.analyzer.core.report.ReportGenerator;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.List;
@@ -26,9 +25,9 @@ public class MainWindow extends JFrame {
     private final SettingsModel settings;
     private final AppConfig config;
 
-    // Заменяем JTextArea на FormsTreePanel
-    private FormsTreePanel formsTreePanel;  // вместо JTextArea formsListArea
+    private FormsTreePanel formsTreePanel;
     private JTextArea logArea;
+    private JTextArea resultArea;
     private JProgressBar progressBar;
     private JLabel statusLabel;
     private JButton startButton;
@@ -39,9 +38,12 @@ public class MainWindow extends JFrame {
     private Future<?> currentTask;
     private volatile boolean stopRequested = false;
 
-
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private ExecutorService executorService;
+
+    // Для отслеживания последней прочитанной позиции в файле
+    private long lastFilePosition = 0;
+    private Timer fileWatcherTimer;
 
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
@@ -55,13 +57,14 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+                stopFileWatcher();
                 saveState();
             }
         });
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.2 (от 18-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.3 (от 18-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -69,14 +72,8 @@ public class MainWindow extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Top panel
         mainPanel.add(createTopPanel(), BorderLayout.NORTH);
-
-        // Center split pane
-        JSplitPane splitPane = createCenterPanel();
-        mainPanel.add(splitPane, BorderLayout.CENTER);
-
-        // Bottom panel
+        mainPanel.add(createCenterPanel(), BorderLayout.CENTER);
         mainPanel.add(createBottomPanel(), BorderLayout.SOUTH);
 
         add(mainPanel);
@@ -117,40 +114,67 @@ public class MainWindow extends JFrame {
     }
 
     private JSplitPane createCenterPanel() {
-        // Left panel - forms tree (заменяем formsListArea на formsTreePanel)
+        // Left panel - forms tree
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBorder(BorderFactory.createTitledBorder("Список форм для анализа"));
 
         formsTreePanel = new FormsTreePanel();
-
-        // Устанавливаем обработчик изменения списка форм для сохранения
-        formsTreePanel.setOnFormsChanged(() -> {
-            // Данные уже сохранены в FormsTreePanel, дополнительных действий не требуется
-        });
+        formsTreePanel.setOnFormsChanged(() -> {});
 
         leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
-        // Right panel - log (без изменений)
+        // Right panel with tabs
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Лог процесса"));
+        rightPanel.setBorder(BorderFactory.createTitledBorder("Результаты"));
 
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Tab 1: Лог процесса
+        JPanel logPanel = new JPanel(new BorderLayout());
         logArea = new JTextArea();
         logArea.setEditable(false);
         logArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
         logArea.setBackground(new Color(30, 30, 30));
         logArea.setForeground(new Color(0, 255, 0));
-
         JScrollPane logScroll = new JScrollPane(logArea);
-        rightPanel.add(logScroll, BorderLayout.CENTER);
+        logPanel.add(logScroll, BorderLayout.CENTER);
 
         JPanel logButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton clearLogBtn = new JButton("Очистить");
+        JButton clearLogBtn = new JButton("Очистить лог");
         clearLogBtn.addActionListener(e -> logArea.setText(""));
         JButton saveLogBtn = new JButton("Сохранить лог");
         saveLogBtn.addActionListener(e -> saveLog());
         logButtons.add(saveLogBtn);
         logButtons.add(clearLogBtn);
-        rightPanel.add(logButtons, BorderLayout.NORTH);
+        logPanel.add(logButtons, BorderLayout.NORTH);
+
+        tabbedPane.addTab("Лог процесса", logPanel);
+
+        // Tab 2: Результат (содержимое forms_report.txt с实时 обновлением)
+        JPanel resultPanel = new JPanel(new BorderLayout());
+        resultArea = new JTextArea();
+        resultArea.setEditable(false);
+        resultArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        resultArea.setBackground(Color.WHITE);
+        resultArea.setForeground(Color.BLACK);
+        JScrollPane resultScroll = new JScrollPane(resultArea);
+        resultPanel.add(resultScroll, BorderLayout.CENTER);
+
+        JPanel resultButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton clearResultBtn = new JButton("Очистить результат");
+        clearResultBtn.addActionListener(e -> resultArea.setText(""));
+        JButton saveResultBtn = new JButton("Сохранить результат в файл");
+        saveResultBtn.addActionListener(e -> saveResultToFile());
+        JButton refreshResultBtn = new JButton("Обновить результат");
+        refreshResultBtn.addActionListener(e -> loadAllResultFromFile());
+        resultButtons.add(refreshResultBtn);
+        resultButtons.add(saveResultBtn);
+        resultButtons.add(clearResultBtn);
+        resultPanel.add(resultButtons, BorderLayout.NORTH);
+
+        tabbedPane.addTab("Результат", resultPanel);
+
+        rightPanel.add(tabbedPane, BorderLayout.CENTER);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(400);
@@ -180,7 +204,6 @@ public class MainWindow extends JFrame {
             return;
         }
 
-        // Проверяем, есть ли формы для анализа
         List<String> formsList = formsTreePanel.getFormsList();
         if (formsList.isEmpty()) {
             appendLog("Нет форм для анализа. Добавьте формы в список.");
@@ -191,8 +214,14 @@ public class MainWindow extends JFrame {
             return;
         }
 
-        // Сохраняем формы в файл перед началом анализа
         saveFormsList();
+
+        // Очищаем результат перед новым анализом
+        resultArea.setText("");
+        lastFilePosition = 0;
+
+        // Запускаем наблюдатель за файлом отчета
+        startFileWatcher();
 
         stopRequested = false;
         isRunning.set(true);
@@ -202,7 +231,6 @@ public class MainWindow extends JFrame {
         progressBar.setValue(0);
         statusLabel.setText("Статус: Анализ запущен");
 
-        // Сохраняем оригинальные потоки
         PrintStream originalOut = System.out;
         PrintStream originalErr = System.err;
 
@@ -213,7 +241,6 @@ public class MainWindow extends JFrame {
             System.setOut(customOut);
             System.setErr(customOut);
 
-            // Поток для чтения вывода и записи в лог
             Thread logReader = new Thread(() -> {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(pipeIn))) {
                     String line;
@@ -229,7 +256,6 @@ public class MainWindow extends JFrame {
             });
             logReader.start();
 
-            // Запуск анализа
             currentTask = executorService.submit(() -> {
                 try {
                     runAnalysis();
@@ -237,7 +263,6 @@ public class MainWindow extends JFrame {
                     SwingUtilities.invokeLater(() -> appendLog("ОШИБКА: " + e.getMessage()));
                     e.printStackTrace();
                 } finally {
-                    // Восстанавливаем потоки
                     System.setOut(originalOut);
                     System.setErr(originalErr);
                     logReader.interrupt();
@@ -249,8 +274,13 @@ public class MainWindow extends JFrame {
                         statusLabel.setText("Статус: Готов");
                         if (!stopRequested) {
                             progressBar.setString("Анализ завершен");
+                            // Останавливаем наблюдатель за файлом
+                            stopFileWatcher();
+                            // Загружаем полный результат
+                            loadAllResultFromFile();
                         } else {
                             progressBar.setString("Анализ остановлен");
+                            stopFileWatcher();
                         }
                     });
                 }
@@ -285,7 +315,6 @@ public class MainWindow extends JFrame {
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings);
 
-        // Устанавливаем логгер
         analyzer.setLogger(new ILogger() {
             @Override
             public void log(String message) { appendLog(message); }
@@ -307,7 +336,7 @@ public class MainWindow extends JFrame {
         analyzer.setFormAnalyzedCallback(formInfo -> {
             try {
                 ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();  // Создаёт заголовок, если файла нет
+                reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
             } catch (IOException e) {
                 appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
@@ -345,7 +374,6 @@ public class MainWindow extends JFrame {
             LLMReportContext ctx = llmGen.prepareContext(results);
             if (config.getLlmExportMode().equals("single_file")) {
                 String prompt = llmGen.generateSingleFile();
-                String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 Path llmPath = Paths.get(settings.getOutputDir(), "llm_prompt_all_forms.md");
                 Files.writeString(llmPath, prompt);
                 appendLog("LLM промпт сохранен: " + llmPath);
@@ -363,6 +391,82 @@ public class MainWindow extends JFrame {
                 openOutputDirectory();
             }
         });
+    }
+
+    /**
+     * Запускает таймер для отслеживания изменений в файле отчета
+     */
+    private void startFileWatcher() {
+        stopFileWatcher();
+        lastFilePosition = 0;
+        fileWatcherTimer = new Timer(500, e -> checkFileUpdate());
+        fileWatcherTimer.start();
+    }
+
+    /**
+     * Останавливает таймер наблюдения за файлом
+     */
+    private void stopFileWatcher() {
+        if (fileWatcherTimer != null) {
+            fileWatcherTimer.stop();
+            fileWatcherTimer = null;
+        }
+    }
+
+    /**
+     * Проверяет обновление файла и добавляет новые строки в результат
+     */
+    private void checkFileUpdate() {
+        String reportPath = settings.getOutputDir() + File.separator + "forms_report.txt";
+        File reportFile = new File(reportPath);
+
+        if (reportFile.exists() && reportFile.length() > lastFilePosition) {
+            try (RandomAccessFile raf = new RandomAccessFile(reportFile, "r")) {
+                raf.seek(lastFilePosition);
+                String line;
+                StringBuilder newContent = new StringBuilder();
+                while ((line = raf.readLine()) != null) {
+                    // Преобразуем из Windows-1251 в UTF-8
+                    byte[] bytes = line.getBytes("ISO-8859-1");
+                    String utf8Line = new String(bytes, StandardCharsets.UTF_8);
+                    newContent.append(utf8Line).append("\n");
+                }
+                lastFilePosition = raf.getFilePointer();
+
+                if (newContent.length() > 0) {
+                    final String newText = newContent.toString();
+                    SwingUtilities.invokeLater(() -> {
+                        resultArea.append(newText);
+                        resultArea.setCaretPosition(resultArea.getDocument().getLength());
+                    });
+                }
+            } catch (IOException e) {
+                // Игнорируем ошибки чтения
+            }
+        }
+    }
+
+    /**
+     * Загружает всё содержимое forms_report.txt в панель результата
+     */
+    private void loadAllResultFromFile() {
+        String reportPath = settings.getOutputDir() + File.separator + "forms_report.txt";
+        File reportFile = new File(reportPath);
+
+        if (reportFile.exists()) {
+            try {
+                // Используем UTF-8 кодировку
+                String content = new String(Files.readAllBytes(reportFile.toPath()), StandardCharsets.UTF_8);
+                SwingUtilities.invokeLater(() -> {
+                    resultArea.setText(content);
+                    resultArea.setCaretPosition(0);
+                });
+                lastFilePosition = reportFile.length();
+                appendLog("Результат загружен из файла: " + reportPath);
+            } catch (IOException e) {
+                appendLog("Ошибка загрузки результата: " + e.getMessage());
+            }
+        }
     }
 
     private void openSettings() {
@@ -383,11 +487,8 @@ public class MainWindow extends JFrame {
         }
     }
 
-    // Удаляем методы loadFormsList() и saveFormsList() так как они перенесены в FormsTreePanel
-    // Но оставляем saveFormsList() как обёртку для совместимости
     private void saveFormsList() {
         // Данные уже сохраняются в FormsTreePanel при изменениях
-        // Этот метод оставлен для совместимости
     }
 
     private void appendLog(String message) {
@@ -409,9 +510,25 @@ public class MainWindow extends JFrame {
         }
     }
 
+    private void saveResultToFile() {
+        String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String filename = "analysis_result_" + timestamp + ".txt";
 
-
-
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.print(resultArea.getText());
+            appendLog("Результат сохранен: " + filename);
+            JOptionPane.showMessageDialog(this,
+                    "Результат сохранен в файл: " + filename,
+                    "Сохранение результата",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            appendLog("Ошибка сохранения результата: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                    "Ошибка сохранения результата: " + e.getMessage(),
+                    "Ошибка",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void loadWindowState() {
         setSize(config.getWindowWidth(), config.getWindowHeight());

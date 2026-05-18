@@ -117,7 +117,12 @@ public class FormsTreePanel extends JPanel {
         if (filter.isEmpty()) {
             // Без фильтра - показываем все формы (плоский список)
             for (String formPath : allForms) {
-                DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(formPath);
+                // Убираем ведущий слеш для отображения в дереве
+                String displayPath = formPath;
+                if (displayPath.startsWith("/")) {
+                    displayPath = displayPath.substring(1);
+                }
+                DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(displayPath);
                 formNode.setAllowsChildren(false);
                 rootNode.add(formNode);
             }
@@ -127,7 +132,11 @@ public class FormsTreePanel extends JPanel {
             for (String formPath : allForms) {
                 if (formPath.toLowerCase().contains(filter)) {
                     filteredForms.add(formPath);
-                    DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(formPath);
+                    String displayPath = formPath;
+                    if (displayPath.startsWith("/")) {
+                        displayPath = displayPath.substring(1);
+                    }
+                    DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(displayPath);
                     formNode.setAllowsChildren(false);
                     rootNode.add(formNode);
                 }
@@ -230,6 +239,12 @@ public class FormsTreePanel extends JPanel {
      * - UserFormsRegion/Path/To/Form.frm -> UserFormsRegion/Path/To/Form.frm
      * - Path/To/Form.frm -> /Forms/Path/To/Form.frm (если не начинается с UserForms)
      */
+    /**
+     * Нормализует путь формы
+     * - /Forms/Path/To/Form.frm -> Forms/Path/To/Form.frm (удаляем первый слеш)
+     * - UserFormsRegion/Path/To/Form.frm -> UserFormsRegion/Path/To/Form.frm
+     * - Path/To/Form.frm -> Forms/Path/To/Form.frm (если не начинается с UserForms)
+     */
     private String normalizeFormPath(String path) {
         if (path == null || path.isEmpty()) return null;
 
@@ -245,7 +260,7 @@ public class FormsTreePanel extends JPanel {
         boolean isUserForm = normalized.matches("^UserForms[A-Za-z0-9_]*/.*");
 
         if (!isUserForm) {
-            // Если не UserForms, то это обычная форма - добавляем /Forms/ если нужно
+            // Если не UserForms, то это обычная форма - добавляем Forms/ если нужно
             if (!normalized.startsWith("Forms/")) {
                 normalized = "Forms/" + normalized;
             }
@@ -253,7 +268,7 @@ public class FormsTreePanel extends JPanel {
             if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
                 normalized = normalized + ".frm";
             }
-            normalized = "/" + normalized;
+            // НЕ добавляем ведущий слеш - путь должен быть без первого слеша
         } else {
             // Для UserForms - просто убеждаемся, что есть расширение
             if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
@@ -270,7 +285,12 @@ public class FormsTreePanel extends JPanel {
     private void addForms(Set<String> newForms) {
         int addedCount = 0;
         for (String form : newForms) {
-            if (allForms.add(form)) {
+            // Удаляем ведущий слеш если есть перед добавлением в allForms
+            String normalizedForm = form;
+            if (normalizedForm.startsWith("/")) {
+                normalizedForm = normalizedForm.substring(1);
+            }
+            if (allForms.add(normalizedForm)) {
                 addedCount++;
             }
         }
@@ -355,10 +375,6 @@ public class FormsTreePanel extends JPanel {
 
         // Проверяем, что это форма (имеет расширение .frm или .dfrm)
         if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
-            // Добавляем ведущий слеш если это не UserForms
-            if (!result.startsWith("UserForms") && !result.startsWith("/")) {
-                result = "/" + result;
-            }
             return result;
         }
 

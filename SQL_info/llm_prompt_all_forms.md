@@ -11,7 +11,7 @@
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Mon May 18 18:14:16 GMT+07:00 2026
+**Дата генерации:** Mon May 18 19:41:35 GMT+07:00 2026
 
 ---
 
@@ -37,23 +37,44 @@
 
 ```xml
 <component cmptype="DataSet" name="DS_RELATIVES" mode="Range">
-		select rel.ID,
-		       rel.SURNAME,
-		       rel.FIRSTNAME,
-		       rel.LASTNAME,
-		       rel.BIRTHDATE,
-		       rel.RELATIONSHIP_NAME,
-		       rel.SURNAME||' '||rel.FIRSTNAME||' '||rel.LASTNAME REL_FIO,
-		       rel.PID,
-                       rel.AGENT_ID
-		  from d_v_agents_persmedcard pmc,
-		       d_v_agent_relatives rel
-		 where pmc.ID_PERSMEDCARD = :PATIENTID
-		   and pmc.ID = rel.PID
-		<component cmptype="Variable" type="count" srctype="var" src="ds8count" default="5" />
-		<component cmptype="Variable" type="start" srctype="var" src="ds8start" default="1" />
-		<component cmptype="Variable" name="PATIENTID" srctype="var" src="PATIENT_ID" get="v2" />
-	</component>
+        <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            select rel.ID,
+                   rel.SURNAME,
+                   rel.FIRSTNAME,
+                   rel.LASTNAME,
+                   rel.BIRTHDATE,
+                   rel.RELATIONSHIP_NAME,
+                   rel.SURNAME || ' ' || rel.FIRSTNAME || ' ' || rel.LASTNAME as REL_FIO,
+                   rel.PID,
+                   rel.AGENT_ID
+              from D_V_AGENTS_PERSMEDCARD pmc,
+                   D_V_AGENT_RELATIVES rel
+             where pmc.ID_PERSMEDCARD = to_number(:pnPATIENTID)
+               and pmc.ID = rel.PID
+            ]]>
+        </component>
+        <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            select rel.ID,
+                   rel.SURNAME,
+                   rel.FIRSTNAME,
+                   rel.LASTNAME,
+                   rel.BIRTHDATE,
+                   rel.RELATIONSHIP_NAME,
+                   rel.SURNAME || ' ' || rel.FIRSTNAME || ' ' || rel.LASTNAME as REL_FIO,
+                   rel.PID,
+                   rel.AGENT_ID
+              from D_V_AGENTS_PERSMEDCARD pmc,
+                   D_V_AGENT_RELATIVES rel
+             where pmc.ID_PERSMEDCARD = (:pnPATIENTID)::numeric
+               and pmc.ID = rel.PID
+            ]]>
+        </component>
+        <component cmptype="Variable" name="pnPATIENTID" src="PATIENT_ID" srctype="var" />
+        <component cmptype="Variable" type="count" src="ds8count" default="5" />
+        <component cmptype="Variable" type="start" src="ds8start" default="1" />
+    </component>
 ```
 
 **Используемые таблицы/вьюхи:** D_V_AGENTS_PERSMEDCARD
@@ -63,23 +84,37 @@
 ### Запрос №2
 
 **Тип компонента:** M2 Action
-**Имя компонента:** getAgentId
+**Имя компонента:** acGetAgentId
 **Источник:** /Forms/HospPlan/hp_relativechoise.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="getAgentId">
-		begin
-			select t.AGENT
-			  into :AGENT
-			  from D_V_PERSMEDCARD t
-			 where t.ID = :PATIENT;
-		end;
-		<component cmptype="ActionVar" name="PATIENT" src="PATIENT_ID" srctype="var" get="v1" />
-		<component cmptype="ActionVar" name="AGENT" src="AGENT" srctype="var" put="v2" len="17" />
-	</component>
+<component cmptype="Action" name="acGetAgentId">
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            begin
+              select t.AGENT
+                into :pnAGENT
+                from D_V_PERSMEDCARD t
+               where t.ID = to_number(:pnPATIENT);
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            begin
+              select t.AGENT
+                into :pnAGENT
+                from D_V_PERSMEDCARD t
+               where t.ID = (:pnPATIENT)::numeric;
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionVar" name="pnPATIENT" src="PATIENT_ID" srctype="var" />
+        <component cmptype="ActionVar" name="pnAGENT" src="AGENT" srctype="var" put="" len="17" />
+    </component>
 ```
 
 **Используемые таблицы/вьюхи:** D_V_PERSMEDCARD
@@ -89,20 +124,39 @@
 ### Запрос №3
 
 **Тип компонента:** M2 Action
-**Имя компонента:** delRelative
+**Имя компонента:** acDelRelative
 **Источник:** /Forms/HospPlan/hp_relativechoise.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="delRelative">
-		begin
-			d_pkg_agent_relatives.del(:IDD,:LPU);
-		end;
-		<component cmptype="ActionVar" name="LPU" src="LPU" srctype="session" />
-		<component cmptype="ActionVar" name="IDD" src="GR_RELATIVES" srctype="ctrl" get="v1" />
-	</component>
+<component cmptype="Action" name="acDelRelative">
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            begin
+              D_PKG_AGENT_RELATIVES.DEL(pnID  => to_number(:pnIDD),
+                                        pnLPU => to_number(:pnLPU));
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            declare
+              nIDD numeric;
+            begin
+              nIDD := (:pnIDD)::numeric;
+
+              call D_PKG_AGENT_RELATIVES.DEL(pnID  => nIDD,
+                                            pnLPU => (:pnLPU)::numeric);
+
+              :pnIDD := nIDD;
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="pnIDD" src="GR_RELATIVES" srctype="ctrl" />
+    </component>
 ```
 
 **Используемые пакеты/функции:** D_PKG_AGENT_RELATIVES.DEL
