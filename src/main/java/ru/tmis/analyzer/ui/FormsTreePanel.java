@@ -12,11 +12,12 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Панель для отображения списка форм в виде дерева (плоский список)
- * - фильтрация по поисковому запросу
- * - множественный выбор
- * - добавление форм через модальное окно
- * - удаление выбранных форм
+ * Панель для отображения списка форм в виде дерева с поддержкой:
+ * - фильтрации по поисковому запросу
+ * - множественного выбора
+ * - добавления форм через модальное окно
+ * - удаления выбранных форм
+ * - контекстного меню
  */
 public class FormsTreePanel extends JPanel {
 
@@ -35,6 +36,7 @@ public class FormsTreePanel extends JPanel {
     private List<String> filteredForms = new ArrayList<>();
 
     private Runnable onFormsChanged;
+    private Runnable onAnalysisRequested;
 
     public FormsTreePanel() {
         initUI();
@@ -78,6 +80,9 @@ public class FormsTreePanel extends JPanel {
             }
         });
 
+        // Добавляем контекстное меню
+        createContextMenu();
+
         JScrollPane treeScroll = new JScrollPane(tree);
         treeScroll.setBorder(BorderFactory.createTitledBorder("Список форм"));
         add(treeScroll, BorderLayout.CENTER);
@@ -108,6 +113,79 @@ public class FormsTreePanel extends JPanel {
     }
 
     /**
+     * Создаёт контекстное меню для дерева
+     */
+    private void createContextMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem addMenuItem = new JMenuItem("Добавить формы");
+        addMenuItem.addActionListener(e -> showAddFormsDialog());
+
+        JMenuItem removeMenuItem = new JMenuItem("Удалить выбранные");
+        removeMenuItem.addActionListener(e -> removeSelectedForms());
+
+        JMenuItem runAnalysisMenuItem = new JMenuItem("Запуск анализа");
+        runAnalysisMenuItem.addActionListener(e -> {
+            if (onAnalysisRequested != null) {
+                onAnalysisRequested.run();
+            }
+        });
+
+        JMenuItem selectAllMenuItem = new JMenuItem("Выбрать всё");
+        selectAllMenuItem.addActionListener(e -> selectAllNodes());
+
+        JMenuItem deselectAllMenuItem = new JMenuItem("Снять выделение");
+        deselectAllMenuItem.addActionListener(e -> tree.clearSelection());
+
+        popupMenu.add(addMenuItem);
+        popupMenu.add(removeMenuItem);
+        popupMenu.addSeparator();
+        popupMenu.add(runAnalysisMenuItem);
+        popupMenu.addSeparator();
+        popupMenu.add(selectAllMenuItem);
+        popupMenu.add(deselectAllMenuItem);
+
+        tree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showContextMenu(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showContextMenu(e);
+                }
+            }
+
+            private void showContextMenu(MouseEvent e) {
+                int row = tree.getClosestRowForLocation(e.getX(), e.getY());
+                if (row != -1) {
+                    TreePath path = tree.getPathForRow(row);
+                    if (tree.isPathSelected(path)) {
+                        popupMenu.show(tree, e.getX(), e.getY());
+                    } else {
+                        tree.setSelectionPath(path);
+                        popupMenu.show(tree, e.getX(), e.getY());
+                    }
+                } else {
+                    tree.clearSelection();
+                    popupMenu.show(tree, e.getX(), e.getY());
+                }
+            }
+        });
+    }
+
+    /**
+     * Устанавливает обработчик запроса на запуск анализа
+     */
+    public void setOnAnalysisRequested(Runnable callback) {
+        this.onAnalysisRequested = callback;
+    }
+
+    /**
      * Применяет фильтр к дереву на основе текста поиска
      */
     private void applyFilter() {
@@ -118,7 +196,6 @@ public class FormsTreePanel extends JPanel {
         if (filter.isEmpty()) {
             // Без фильтра - показываем все формы (плоский список)
             for (String formPath : allForms) {
-                // Убираем ведущий слеш для отображения в дереве
                 String displayPath = formPath;
                 if (displayPath.startsWith("/")) {
                     displayPath = displayPath.substring(1);
@@ -177,12 +254,11 @@ public class FormsTreePanel extends JPanel {
         textArea.setRows(15);
         textArea.setLineWrap(false);
 
-        // Загружаем примеры
         StringBuilder examples = new StringBuilder();
         examples.append("# Примеры:\n");
-        examples.append("# /Forms/Path/To/Form.frm\n");
+        examples.append("# Forms/Path/To/Form.frm\n");
         examples.append("# UserFormsRegion/Path/To/Form.frm\n");
-        examples.append("# /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm\n");
+        examples.append("# Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm\n");
         textArea.setText(examples.toString());
         textArea.selectAll();
 
@@ -190,23 +266,23 @@ public class FormsTreePanel extends JPanel {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addButton = new JButton("Добавить");
+        JButton addBtn = new JButton("Добавить");
         JButton cancelButton = new JButton("Отмена");
 
-        addButton.addActionListener(e -> {
+        addBtn.addActionListener(e -> {
             String input = textArea.getText();
             Set<String> newForms = parseFormPaths(input);
             if (!newForms.isEmpty()) {
                 addForms(newForms);
                 saveFormsToFile();
-                applyFilter(); // Обновляем дерево
+                applyFilter();
             }
             dialog.dispose();
         });
 
         cancelButton.addActionListener(e -> dialog.dispose());
 
-        buttonPanel.add(addButton);
+        buttonPanel.add(addBtn);
         buttonPanel.add(cancelButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -236,43 +312,27 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Нормализует путь формы
-     * - /Forms/Path/To/Form.frm -> /Forms/Path/To/Form.frm
-     * - UserFormsRegion/Path/To/Form.frm -> UserFormsRegion/Path/To/Form.frm
-     * - Path/To/Form.frm -> /Forms/Path/To/Form.frm (если не начинается с UserForms)
-     */
-    /**
-     * Нормализует путь формы
-     * - /Forms/Path/To/Form.frm -> Forms/Path/To/Form.frm (удаляем первый слеш)
-     * - UserFormsRegion/Path/To/Form.frm -> UserFormsRegion/Path/To/Form.frm
-     * - Path/To/Form.frm -> Forms/Path/To/Form.frm (если не начинается с UserForms)
      */
     private String normalizeFormPath(String path) {
         if (path == null || path.isEmpty()) return null;
 
         String normalized = path.trim();
 
-        // Убираем ведущий слеш для обработки
-        boolean hadLeadingSlash = normalized.startsWith("/");
-        if (hadLeadingSlash) {
+        if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
 
-        // Проверяем, начинается ли с UserForms
         boolean isUserForm = normalized.matches("^UserForms[A-Za-z0-9_]*/.*");
 
         if (!isUserForm) {
-            // Если не UserForms, то это обычная форма - добавляем Forms/ если нужно
             if (!normalized.startsWith("Forms/")) {
                 normalized = "Forms/" + normalized;
             }
-            // Добавляем .frm если нет расширения
             if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
                 normalized = normalized + ".frm";
             }
-            // НЕ добавляем ведущий слеш - путь должен быть без первого слеша
         } else {
-            // Для UserForms - просто убеждаемся, что есть расширение
-            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm") && !normalized.contains(".d/")) {
                 normalized = normalized + ".frm";
             }
         }
@@ -286,7 +346,6 @@ public class FormsTreePanel extends JPanel {
     private void addForms(Set<String> newForms) {
         int addedCount = 0;
         for (String form : newForms) {
-            // Удаляем ведущий слеш если есть перед добавлением в allForms
             String normalizedForm = form;
             if (normalizedForm.startsWith("/")) {
                 normalizedForm = normalizedForm.substring(1);
@@ -331,7 +390,12 @@ public class FormsTreePanel extends JPanel {
         for (TreePath path : selectedPaths) {
             String formPath = getFormPathFromTreePath(path);
             if (formPath != null) {
-                toRemove.add(formPath);
+                // Нормализуем путь для удаления из allForms
+                String normalizedPath = formPath;
+                if (normalizedPath.startsWith("/")) {
+                    normalizedPath = normalizedPath.substring(1);
+                }
+                toRemove.add(normalizedPath);
             }
         }
 
@@ -349,19 +413,68 @@ public class FormsTreePanel extends JPanel {
                 JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
+            // Удаляем формы из набора
             allForms.removeAll(toRemove);
-            saveFormsToFile();
-            applyFilter(); // Обновляем дерево
 
+            // Сохраняем в файл
+            saveFormsToFile();
+
+            // Обновляем дерево (применяем фильтр заново)
+            applyFilter();
+
+            // Очищаем выделение
+            tree.clearSelection();
+
+            // Уведомляем об изменении
             if (onFormsChanged != null) {
                 onFormsChanged.run();
             }
 
             JOptionPane.showMessageDialog(this,
-                    "Удалено форм: " + toRemove.size(),
+                    "Удалено форм: " + toRemove.size() + "\nОсталось форм: " + allForms.size(),
                     "Формы удалены",
                     JOptionPane.INFORMATION_MESSAGE);
+
+            // Для отладки - выводим оставшиеся формы в консоль
+            System.out.println("Осталось форм в allForms: " + allForms.size());
+            for (String f : allForms) {
+                System.out.println("  " + f);
+            }
         }
+    }
+
+    /**
+     * Извлекает полный путь формы из узла дерева
+     */
+    public String getFormPathFromTreePath(TreePath path) {
+        if (path == null) return null;
+        Object[] nodes = path.getPath();
+        if (nodes.length < 2) return null;
+
+        String result = nodes[nodes.length - 1].toString();
+
+        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
+            if (!result.startsWith("UserForms") && !result.startsWith("/")) {
+                result = "/" + result;
+            }
+            return result;
+        }
+
+        return null;
+    }
+
+    /**
+     * Возвращает выбранный путь в дереве
+     */
+    public TreePath getSelectedPath() {
+        return tree.getSelectionPath();
+    }
+
+    /**
+     * Добавляет слушатель выбора в дерево
+     */
+    public void addTreeSelectionListener(TreeSelectionListener listener) {
+        tree.addTreeSelectionListener(listener);
     }
 
     /**
@@ -397,14 +510,18 @@ public class FormsTreePanel extends JPanel {
         File file = new File("forms_list.txt");
         if (file.exists()) {
             try {
-                String content = new String(Files.readAllBytes(file.toPath()));
+                String content = new String(Files.readAllBytes(file.toPath()),
+                        java.nio.charset.StandardCharsets.UTF_8);
                 Set<String> loadedForms = parseFormPaths(content);
                 allForms.clear();
                 allForms.addAll(loadedForms);
                 applyFilter();
+                System.out.println("Загружено форм из файла: " + allForms.size());
             } catch (IOException e) {
                 System.err.println("Ошибка загрузки списка форм: " + e.getMessage());
             }
+        } else {
+            System.out.println("Файл forms_list.txt не найден, создан новый список");
         }
     }
 
@@ -417,9 +534,12 @@ public class FormsTreePanel extends JPanel {
             for (String form : allForms) {
                 sb.append(form).append("\n");
             }
-            Files.writeString(Paths.get("forms_list.txt"), sb.toString());
+            Files.writeString(Paths.get("forms_list.txt"), sb.toString(),
+                    java.nio.charset.StandardCharsets.UTF_8);
+            System.out.println("Сохранено форм в файл: " + allForms.size());
         } catch (IOException e) {
             System.err.println("Ошибка сохранения списка форм: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -435,36 +555,5 @@ public class FormsTreePanel extends JPanel {
      */
     public void setOnFormsChanged(Runnable callback) {
         this.onFormsChanged = callback;
-    }
-
-    /**
-     * Возвращает выбранный путь в дереве
-     */
-    public TreePath getSelectedPath() {
-        return tree.getSelectionPath();
-    }
-
-    /**
-     * Извлекает полный путь формы из узла дерева
-     */
-    public String getFormPathFromTreePath(TreePath path) {
-        if (path == null) return null;
-        Object[] nodes = path.getPath();
-        if (nodes.length < 2) return null;
-
-        String result = nodes[nodes.length - 1].toString();
-
-        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
-            return result;
-        }
-
-        return null;
-    }
-
-    /**
-     * Добавляет слушатель выбора в дерево
-     */
-    public void addTreeSelectionListener(TreeSelectionListener listener) {
-        tree.addTreeSelectionListener(listener);
     }
 }

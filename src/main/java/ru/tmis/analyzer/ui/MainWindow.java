@@ -136,6 +136,17 @@ public class MainWindow extends JFrame {
                 }
             }
         });
+        formsTreePanel.setOnAnalysisRequested(() -> {
+            if (!isRunning.get()) {
+                startAnalysis();
+            } else {
+                appendLog("Анализ уже выполняется");
+                JOptionPane.showMessageDialog(this,
+                        "Анализ уже выполняется. Дождитесь завершения.",
+                        "Анализ запущен",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
 
         leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
