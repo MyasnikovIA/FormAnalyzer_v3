@@ -1,3 +1,4 @@
+// core/report/ReportGenerator.java
 package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
@@ -69,7 +70,49 @@ public class ReportGenerator {
         this.forms.addAll(forms);
     }
 
-    public void generateMainReport() throws IOException {
+    /**
+     * Генерирует безопасное имя файла из пути формы
+     * Заменяет все разделители пути на '#'
+     * Пример: Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm -> Forms#ArmPatientsInDep#SubForms#hh_mp_prescribes.frm.txt
+     */
+    private String getSafeFileName(String formPath) {
+        String normalized = formPath;
+        // Убираем ведущий слеш если есть
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        // Заменяем все разделители на '#'
+        String safeName = normalized.replace("/", "#").replace("\\", "#");
+        return safeName + ".txt";
+    }
+
+    /**
+     * Сохраняет отчет для отдельной формы в отдельный файл
+     */
+    public void saveFormReportToFile(FormInfo formInfo) throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path formReportPath = outputPath.resolve(fileName);
+
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(formReportPath))) {
+            writeFormReport(writer, formInfo);
+        }
+
+        System.out.println("Отчет для формы сохранен: " + formReportPath);
+    }
+
+    /**
+     * Сохраняет отдельный отчет для формы и добавляет в общий отчет
+     */
+    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
+        // 1. Сохраняем отдельный файл для формы
+        saveFormReportToFile(formInfo);
+
+        // 2. Добавляем в общий отчет
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
@@ -77,6 +120,23 @@ public class ReportGenerator {
 
         Path reportPath = outputPath.resolve("forms_report.txt");
 
+        if (!Files.exists(reportPath)) {
+            createMainReportHeader();
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
+            writeFormReport(writer, formInfo);
+        }
+    }
+
+    public void generateMainReport() throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        // 1. Сохраняем общий отчет
+        Path reportPath = outputPath.resolve("forms_report.txt");
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(reportPath))) {
             writeHeader(writer);
 
@@ -86,8 +146,12 @@ public class ReportGenerator {
 
             writeFooter(writer);
         }
+        System.out.println("Общий отчет сохранен: " + reportPath);
 
-        System.out.println("Отчет сохранен: " + reportPath);
+        // 2. Сохраняем отдельные файлы для каждой формы
+        for (FormInfo form : forms) {
+            saveFormReportToFile(form);
+        }
     }
 
     private void writeHeader(PrintWriter writer) {
@@ -139,9 +203,6 @@ public class ReportGenerator {
         }
         writer.println();
 
-        // Вывод отчетов, вызываемых на форме
-        //writeReportsBlock(writer, form);
-
         // Отчеты вызываемые на форме
         if (!form.getReports().isEmpty()) {
             writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
@@ -163,7 +224,7 @@ public class ReportGenerator {
             writePopupMenusBlock(writer, form.getPopupMenus(), "OracleSQL");
         }
 
-       // Контекстное меню (ПКМ) - PostgreSQL
+        // Контекстное меню (ПКМ) - PostgreSQL
         if (config.isIncludePostgresPopupMenus() && form.getPopupMenusPg() != null && !form.getPopupMenusPg().isEmpty()) {
             writePopupMenusBlock(writer, form.getPopupMenusPg(), "PostgreSQL");
         }
@@ -238,7 +299,7 @@ public class ReportGenerator {
 
         // unitCompositions
         if (!form.getUnitCompositions().isEmpty()) {
-            writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (тэги):");
+            writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):");
             for (String comp : form.getUnitCompositions()) {
                 writer.println("    " + comp);
             }
@@ -307,7 +368,8 @@ public class ReportGenerator {
                 writer.println();
             }
         }
-// Проверка первичных ключей
+
+        // Проверка первичных ключей
         if (config.isCheckPostgresPK()) {
             Set<String> allTables = getAllTablesForForm(form);
             if (!allTables.isEmpty()) {
@@ -336,7 +398,7 @@ public class ReportGenerator {
             }
         }
 
-// Проверка NOT NULL constraints
+        // Проверка NOT NULL constraints
         if (config.isCheckNotNullConstraints()) {
             Set<String> allTables = getAllTablesForForm(form);
             if (!allTables.isEmpty()) {
@@ -727,24 +789,6 @@ public class ReportGenerator {
             writer.println("Дата создания: " + new Date());
             writer.println("=".repeat(100));
             writer.println();
-        }
-    }
-    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        Path outputPath = Paths.get(outputDir);
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
-
-        Path reportPath = outputPath.resolve("forms_report.txt");
-
-        // Если файл не существует, создаём с заголовком
-        if (!Files.exists(reportPath)) {
-            createMainReportHeader();
-        }
-
-        // Дописываем форму в конец файла
-        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
-            writeFormReport(writer, formInfo);
         }
     }
 }

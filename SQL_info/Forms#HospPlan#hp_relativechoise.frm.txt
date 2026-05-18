@@ -1,0 +1,379 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: /Forms/HospPlan/hp_relativechoise.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_relatives/agent_relatives_add.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_RELATIVES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pRELS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    └── "Удалить"
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из PostgreSQL:
+
+└── name="pRELS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENTS_PERSMEDCARD
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_AGENTS_PERSMEDCARD (Oracle: ошибка) (PostgreSQL: ошибка):
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+
+  D_V_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 585,56 тыс):
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_BLOODGROUPE (Oracle: 10) (PostgreSQL: 10)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_RHESUS (Oracle: 5) (PostgreSQL: 5)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_RELATIVES.DEL
+
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_AGENT_RELATIVES.DEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_agent_relatives.del(numeric, numeric)
+
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_AGENTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_PERSMEDCARD:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_BLOODGROUPE:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DIVISIONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_RHESUS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: RH_CODE
+
+  D_EMPLOYERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_CABLAB:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+
+  D_AGENTS:
+    Колонка: IS_EMPLOYER
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_employer SET NOT NULL;
+
+    Колонка: IS_ANONYM
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_anonym SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN id SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN cid SET NOT NULL;
+
+    Колонка: AGN_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_code SET NOT NULL;
+
+    Колонка: ACCORDING_RELATIVES
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN according_relatives SET NOT NULL;
+
+    Колонка: IS_HOME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_home SET NOT NULL;
+
+    Колонка: AGN_TYPE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_type SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN version SET NOT NULL;
+
+    Колонка: AGN_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_name SET NOT NULL;
+
+  D_PERSMEDCARD:
+    Колонка: SMS_AGREE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN sms_agree SET NOT NULL;
+
+    Колонка: IA_PRINTED
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN ia_printed SET NOT NULL;
+
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: AGENT
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN agent SET NOT NULL;
+
+    Колонка: EMAIL_AGREE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN email_agree SET NOT NULL;
+
+    Колонка: OUTNUMB
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN outnumb SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN id SET NOT NULL;
+
+    Колонка: TP_PRINTED
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN tp_printed SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN cid SET NOT NULL;
+
+  D_BLOODGROUPE:
+    Колонка: BG_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_bloodgroupe ALTER COLUMN bg_name SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_bloodgroupe ALTER COLUMN version SET NOT NULL;
+
+    Колонка: BG_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_bloodgroupe ALTER COLUMN bg_code SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_bloodgroupe ALTER COLUMN id SET NOT NULL;
+
+  D_DIVISIONS:
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_divisions ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: DIV_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_divisions ALTER COLUMN div_code SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_divisions ALTER COLUMN id SET NOT NULL;
+
+    Колонка: DIV_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_divisions ALTER COLUMN div_name SET NOT NULL;
+
+  D_RHESUS:
+    Колонка: RH_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_rhesus ALTER COLUMN rh_code SET NOT NULL;
+
+    Колонка: RH_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_rhesus ALTER COLUMN rh_name SET NOT NULL;
+
+  D_EMPLOYERS:
+    Колонка: REGDATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN regdate SET NOT NULL;
+
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: AGENT
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN agent SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN id SET NOT NULL;
+
+    Колонка: IS_DISMISSED
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN is_dismissed SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_employers ALTER COLUMN cid SET NOT NULL;
+
+  D_CABLAB:
+    Колонка: IS_COMM
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN is_comm SET NOT NULL;
+
+    Колонка: DEPARTMENT
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN department SET NOT NULL;
+
+    Колонка: CL_BEGIN_DATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_begin_date SET NOT NULL;
+
+    Колонка: DIVISION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN division SET NOT NULL;
+
+    Колонка: CL_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_code SET NOT NULL;
+
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: CL_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_name SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN id SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cid SET NOT NULL;
+

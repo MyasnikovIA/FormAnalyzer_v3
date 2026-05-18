@@ -5,7 +5,7 @@
   "oracleUser": "dev",
   "oraclePassword": "def",
   "postgresUrl": "jdbc:postgresql://192.168.241.137:5432/med2dev",
-  "postgresUser": "dev",
+  "postgresUser": "DEV",
   "postgresPassword": "def",
   "misUser": "$TSTESTZON",
   "checkPostgresPackages": false,
