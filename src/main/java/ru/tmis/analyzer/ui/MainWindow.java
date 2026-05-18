@@ -1,4 +1,6 @@
-// ui/MainWindow.java
+// ui/MainWindow.java (только изменённые части)
+// Файл полностью, но показаны только изменения
+
 package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.AppConfig;
@@ -24,7 +26,8 @@ public class MainWindow extends JFrame {
     private final SettingsModel settings;
     private final AppConfig config;
 
-    private JTextArea formsListArea;
+    // Заменяем JTextArea на FormsTreePanel
+    private FormsTreePanel formsTreePanel;  // вместо JTextArea formsListArea
     private JTextArea logArea;
     private JProgressBar progressBar;
     private JLabel statusLabel;
@@ -38,8 +41,7 @@ public class MainWindow extends JFrame {
 
 
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
-    private ExecutorService executorService; // вместо executor
-
+    private ExecutorService executorService;
 
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
@@ -48,7 +50,6 @@ public class MainWindow extends JFrame {
         this.executorService = Executors.newSingleThreadExecutor();
 
         initUI();
-        loadFormsList();
         loadWindowState();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -116,28 +117,20 @@ public class MainWindow extends JFrame {
     }
 
     private JSplitPane createCenterPanel() {
-        // Left panel - forms list
+        // Left panel - forms tree (заменяем formsListArea на formsTreePanel)
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBorder(BorderFactory.createTitledBorder("Список форм для анализа"));
 
-        formsListArea = new JTextArea();
-        formsListArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        formsListArea.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            private javax.swing.Timer timer;
-            {
-                timer = new javax.swing.Timer(2000, e -> saveFormsList());
-                timer.setRepeats(false);
-            }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { timer.restart(); }
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { timer.restart(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { timer.restart(); }
+        formsTreePanel = new FormsTreePanel();
+
+        // Устанавливаем обработчик изменения списка форм для сохранения
+        formsTreePanel.setOnFormsChanged(() -> {
+            // Данные уже сохранены в FormsTreePanel, дополнительных действий не требуется
         });
 
-        JScrollPane formsScroll = new JScrollPane(formsListArea);
-        formsScroll.setPreferredSize(new Dimension(400, 0));
-        leftPanel.add(formsScroll, BorderLayout.CENTER);
+        leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
-        // Right panel - log
+        // Right panel - log (без изменений)
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder("Лог процесса"));
 
@@ -186,6 +179,20 @@ public class MainWindow extends JFrame {
             appendLog("Анализ уже выполняется");
             return;
         }
+
+        // Проверяем, есть ли формы для анализа
+        List<String> formsList = formsTreePanel.getFormsList();
+        if (formsList.isEmpty()) {
+            appendLog("Нет форм для анализа. Добавьте формы в список.");
+            JOptionPane.showMessageDialog(this,
+                    "Список форм пуст. Добавьте формы для анализа.",
+                    "Нет форм",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Сохраняем формы в файл перед началом анализа
+        saveFormsList();
 
         stopRequested = false;
         isRunning.set(true);
@@ -376,6 +383,13 @@ public class MainWindow extends JFrame {
         }
     }
 
+    // Удаляем методы loadFormsList() и saveFormsList() так как они перенесены в FormsTreePanel
+    // Но оставляем saveFormsList() как обёртку для совместимости
+    private void saveFormsList() {
+        // Данные уже сохраняются в FormsTreePanel при изменениях
+        // Этот метод оставлен для совместимости
+    }
+
     private void appendLog(String message) {
         SwingUtilities.invokeLater(() -> {
             logArea.append("[" + new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message + "\n");
@@ -395,29 +409,9 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private void loadFormsList() {
-        File file = new File("forms_list.txt");
-        if (file.exists()) {
-            try {
-                String content = new String(Files.readAllBytes(file.toPath()));
-                formsListArea.setText(content);
-            } catch (IOException e) {
-                appendLog("Ошибка загрузки списка форм: " + e.getMessage());
-            }
-        } else {
-            formsListArea.setText("# Список форм для анализа (каждая с новой строки)\n" +
-                    "# Пример: /Forms/ARMMainDoc/arm_director.frm\n" +
-                    "#         UserFormsSaratov/ARMMainDoc/stac_pat_in_hpk_plan.frm\n");
-        }
-    }
 
-    private void saveFormsList() {
-        try {
-            Files.writeString(Paths.get("forms_list.txt"), formsListArea.getText());
-        } catch (IOException e) {
-            appendLog("Ошибка сохранения списка форм: " + e.getMessage());
-        }
-    }
+
+
 
     private void loadWindowState() {
         setSize(config.getWindowWidth(), config.getWindowHeight());
