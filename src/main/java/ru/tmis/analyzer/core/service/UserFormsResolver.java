@@ -23,11 +23,19 @@ public class UserFormsResolver {
     public FormInfo resolveOverrides(String formPath) {
         FormInfo formInfo = new FormInfo(formPath);
 
+        // Проверяем, является ли это UserForms
+        boolean isUserForm = formPath.matches("^UserForms[A-Za-z0-9_]*/.*");
+
+        if (isUserForm) {
+            // Для UserForms - это уже готовая форма, не нужно искать переопределения
+            formInfo.setBaseFormPath(formPath);
+            return formInfo;
+        }
+
         // Приводим путь к относительному от каталога Forms
         String relativePath = formPath;
         if (relativePath.startsWith("/")) relativePath = relativePath.substring(1);
         if (relativePath.startsWith("Forms/")) relativePath = relativePath.substring(6);
-        // Если остался префикс Forms без слеша
         if (relativePath.startsWith("Forms")) relativePath = relativePath.substring(5);
         if (relativePath.startsWith("/")) relativePath = relativePath.substring(1);
 
@@ -47,7 +55,6 @@ public class UserFormsResolver {
                         region, regionFullOverride.toString(),
                         FormInfo.OverrideInfo.OverrideType.FULL_OVERRIDE
                 ));
-                System.out.println("Найдены регионы UserForms: " + regions+' '+relativePath);
             }
 
             // 2. .d каталог
@@ -84,6 +91,14 @@ public class UserFormsResolver {
     }
 
     public String getFinalFormContent(FormInfo formInfo) {
+        // Если это UserForms, читаем файл напрямую
+        boolean isUserForm = formInfo.getFormPath().matches("^UserForms[A-Za-z0-9_]*/.*");
+
+        if (isUserForm) {
+            Path formPath = scannerService.getBaseFormPath(formInfo.getFormPath());
+            return scannerService.readFileContent(formPath);
+        }
+
         if (formInfo.isFullyReplaced() && formInfo.getReplacementPath() != null) {
             Path replacementPath = Path.of(formInfo.getReplacementPath());
             return scannerService.readFileContent(replacementPath);

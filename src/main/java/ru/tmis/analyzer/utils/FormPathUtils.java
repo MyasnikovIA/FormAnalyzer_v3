@@ -1,6 +1,7 @@
 // utils/FormPathUtils.java
 package ru.tmis.analyzer.utils;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -8,6 +9,11 @@ public class FormPathUtils {
 
     /**
      * Нормализация пути формы для отображения в отчете
+     * Поддерживает:
+     * - /Forms/Path/To/Form.frm
+     * - UserFormsXXX/Path/To/Form.frm
+     * - UserFormsXXX/Path/To/Form.dfrm
+     * - UserFormsXXX/Path/To/Form.d/something.dfrm
      */
     public static String normalizeFormPath(String path) {
         if (path == null || path.trim().isEmpty()) {
@@ -20,16 +26,27 @@ public class FormPathUtils {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        // Убираем префикс Forms/ если есть
-        if (normalized.startsWith("Forms/")) {
-            normalized = normalized.substring(6);
-        }
-        // Добавляем .frm если нет расширения
-        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
-            normalized = normalized + ".frm";
+
+        // Проверяем, является ли это UserForms
+        boolean isUserForm = normalized.matches("^UserForms[A-Za-z0-9_]*/.*");
+
+        if (!isUserForm) {
+            // Обычная форма - добавляем префикс Forms/ если нужно
+            if (!normalized.startsWith("Forms/")) {
+                normalized = "Forms/" + normalized;
+            }
+            // Добавляем .frm если нет расширения
+            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+                normalized = normalized + ".frm";
+            }
+        } else {
+            // UserForms - просто убеждаемся, что есть расширение
+            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm") && !normalized.contains(".d/")) {
+                normalized = normalized + ".frm";
+            }
         }
 
-        return "/Forms/" + normalized;
+        return normalized;
     }
 
     /**
@@ -54,18 +71,26 @@ public class FormPathUtils {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        // Убираем префикс Forms/ если есть
-        if (normalized.startsWith("Forms/")) {
-            normalized = normalized.substring(6);
-        } else if (normalized.startsWith("Forms")) {
-            normalized = normalized.substring(5);
-        }
-        // Добавляем .frm если нет расширения
-        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
-            normalized = normalized + ".frm";
+
+        // Проверяем, является ли это UserForms
+        boolean isUserForm = normalized.matches("^UserForms[A-Za-z0-9_]*/.*");
+
+        if (!isUserForm) {
+            // Обычная форма
+            if (!normalized.startsWith("Forms/")) {
+                normalized = "Forms/" + normalized;
+            }
+            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+                normalized = normalized + ".frm";
+            }
+        } else {
+            // UserForms - не добавляем префикс Forms
+            if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm") && !normalized.contains(".d/")) {
+                normalized = normalized + ".frm";
+            }
         }
 
-        return "Forms" + java.io.File.separator + normalized;
+        return normalized.replace("/", File.separator);
     }
 
     public static String getRelativePath(String projectRoot, String absolutePath) {

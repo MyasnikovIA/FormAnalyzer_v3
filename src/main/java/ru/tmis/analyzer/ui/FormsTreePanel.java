@@ -2,6 +2,7 @@
 package ru.tmis.analyzer.ui;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -364,24 +365,6 @@ public class FormsTreePanel extends JPanel {
     }
 
     /**
-     * Извлекает полный путь формы из узла дерева
-     */
-    private String getFormPathFromTreePath(TreePath path) {
-        Object[] nodes = path.getPath();
-        if (nodes.length < 2) return null; // корневой узел
-
-        // В плоском списке последний узел - это полный путь к форме
-        String result = nodes[nodes.length - 1].toString();
-
-        // Проверяем, что это форма (имеет расширение .frm или .dfrm)
-        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
-            return result;
-        }
-
-        return null;
-    }
-
-    /**
      * Выделяет все узлы дерева
      */
     private void selectAllNodes() {
@@ -452,5 +435,36 @@ public class FormsTreePanel extends JPanel {
      */
     public void setOnFormsChanged(Runnable callback) {
         this.onFormsChanged = callback;
+    }
+
+    /**
+     * Возвращает выбранный путь в дереве
+     */
+    public TreePath getSelectedPath() {
+        return tree.getSelectionPath();
+    }
+
+    /**
+     * Извлекает полный путь формы из узла дерева
+     */
+    public String getFormPathFromTreePath(TreePath path) {
+        if (path == null) return null;
+        Object[] nodes = path.getPath();
+        if (nodes.length < 2) return null;
+
+        String result = nodes[nodes.length - 1].toString();
+
+        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
+            return result;
+        }
+
+        return null;
+    }
+
+    /**
+     * Добавляет слушатель выбора в дерево
+     */
+    public void addTreeSelectionListener(TreeSelectionListener listener) {
+        tree.addTreeSelectionListener(listener);
     }
 }

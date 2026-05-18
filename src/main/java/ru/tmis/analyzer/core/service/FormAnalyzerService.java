@@ -98,14 +98,16 @@ public class FormAnalyzerService {
 
             try {
                 FormInfo formInfo = analyzeForm(formPath);
-                if (formInfo != null && formInfo.getSqlQueries() != null && !formInfo.getSqlQueries().isEmpty()) {
+                if (formInfo != null) {
                     results.add(formInfo);
                     if (formAnalyzedCallback != null) {
-                        formAnalyzedCallback.onFormAnalyzed(formInfo);  // Сохраняем сразу
+                        formAnalyzedCallback.onFormAnalyzed(formInfo);
                     }
-                    System.out.println("OK (SQL: " + formInfo.getSqlQueries().size() + ")");
-                } else if (formInfo != null) {
-                    System.out.println("OK (SQL: 0)");
+                    if (formInfo.getSqlQueries() != null && !formInfo.getSqlQueries().isEmpty()) {
+                        System.out.println("OK (SQL: " + formInfo.getSqlQueries().size() + ")");
+                    } else {
+                        System.out.println("OK (SQL: 0)");
+                    }
                 } else {
                     System.out.println("ПРОПУЩЕН");
                 }
@@ -189,7 +191,7 @@ public class FormAnalyzerService {
             }
         }
 
-        // Если список пуст - сканируем все формы
+        // Если список пуст - сканируем все формы (и Forms, и UserForms)
         System.out.println("Список форм пуст, сканируем проект...");
         return scanAllForms();
     }
@@ -197,25 +199,45 @@ public class FormAnalyzerService {
     private Set<String> scanAllForms() throws IOException {
         Set<String> allForms = new LinkedHashSet<>();
         Path rootPath = Paths.get(settings.getProjectPath());
-        Path formsPath = rootPath.resolve("Forms");
 
+        // Сканируем Forms
+        Path formsPath = rootPath.resolve("Forms");
         if (Files.exists(formsPath)) {
             try (Stream<Path> walk = Files.walk(formsPath)) {
                 walk.filter(Files::isRegularFile)
                         .filter(p -> p.toString().endsWith(".frm"))
                         .forEach(p -> {
                             String relativePath = formsPath.relativize(p).toString().replace("\\", "/");
-                            allForms.add("/Forms/" + relativePath);
-                            System.out.println("  Найдена форма: /Forms/" + relativePath);
+                            allForms.add("Forms/" + relativePath);
+                            System.out.println("  Найдена форма: Forms/" + relativePath);
                         });
             }
-        } else {
-            System.err.println("Каталог Forms не найден: " + formsPath);
+        }
+
+        // Сканируем UserForms
+        try (Stream<Path> list = Files.list(rootPath)) {
+            list.filter(Files::isDirectory)
+                    .filter(p -> p.getFileName().toString().startsWith("UserForms"))
+                    .forEach(userFormsDir -> {
+                        String dirName = userFormsDir.getFileName().toString();
+                        try (Stream<Path> walk = Files.walk(userFormsDir)) {
+                            walk.filter(Files::isRegularFile)
+                                    .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
+                                    .forEach(p -> {
+                                        String relativePath = userFormsDir.relativize(p).toString().replace("\\", "/");
+                                        allForms.add(dirName + "/" + relativePath);
+                                        System.out.println("  Найдена форма: " + dirName + "/" + relativePath);
+                                    });
+                        } catch (IOException e) {
+                            System.err.println("Ошибка сканирования " + dirName + ": " + e.getMessage());
+                        }
+                    });
         }
 
         System.out.println("Всего найдено форм: " + allForms.size());
         return allForms;
     }
+
 
     /**
      * Загрузка зависимостей вьюх (какие таблицы используются внутри каждой вьюхи)

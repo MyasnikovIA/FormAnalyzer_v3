@@ -11,6 +11,9 @@ import ru.tmis.analyzer.core.service.FormAnalyzerService;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -41,10 +44,6 @@ public class MainWindow extends JFrame {
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private ExecutorService executorService;
 
-    // Для отслеживания последней прочитанной позиции в файле
-    private long lastFilePosition = 0;
-    private Timer fileWatcherTimer;
-
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
@@ -57,7 +56,6 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                stopFileWatcher();
                 saveState();
             }
         });
@@ -121,6 +119,24 @@ public class MainWindow extends JFrame {
         formsTreePanel = new FormsTreePanel();
         formsTreePanel.setOnFormsChanged(() -> {});
 
+        // Добавляем слушатель выбора формы в дереве
+        formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                TreePath selectedPath = formsTreePanel.getSelectedPath();
+                if (selectedPath != null) {
+                    String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
+                    if (formPath != null) {
+                        loadFormResultToPanel(formPath);
+                    } else {
+                        resultArea.setText("");
+                    }
+                } else {
+                    resultArea.setText("");
+                }
+            }
+        });
+
         leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
         // Right panel with tabs
@@ -150,7 +166,7 @@ public class MainWindow extends JFrame {
 
         tabbedPane.addTab("Лог процесса", logPanel);
 
-        // Tab 2: Результат (содержимое forms_report.txt с实时 обновлением)
+        // Tab 2: Результат
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultArea = new JTextArea();
         resultArea.setEditable(false);
@@ -165,9 +181,6 @@ public class MainWindow extends JFrame {
         clearResultBtn.addActionListener(e -> resultArea.setText(""));
         JButton saveResultBtn = new JButton("Сохранить результат в файл");
         saveResultBtn.addActionListener(e -> saveResultToFile());
-        JButton refreshResultBtn = new JButton("Обновить результат");
-        refreshResultBtn.addActionListener(e -> loadAllResultFromFile());
-        resultButtons.add(refreshResultBtn);
         resultButtons.add(saveResultBtn);
         resultButtons.add(clearResultBtn);
         resultPanel.add(resultButtons, BorderLayout.NORTH);
@@ -198,6 +211,41 @@ public class MainWindow extends JFrame {
         return panel;
     }
 
+    /**
+     * Загружает сохранённый отчёт для выбранной формы в панель результата
+     */
+    private void loadFormResultToPanel(String formPath) {
+        String safeFileName = getSafeFileName(formPath);
+        String reportPath = settings.getOutputDir() + File.separator + safeFileName;
+        File reportFile = new File(reportPath);
+
+        if (reportFile.exists()) {
+            try {
+                String content = new String(Files.readAllBytes(reportFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+                resultArea.setText(content);
+                resultArea.setCaretPosition(0);
+                appendLog("Загружен отчёт для формы: " + formPath);
+            } catch (IOException e) {
+                resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
+                appendLog("Ошибка загрузки отчёта для " + formPath + ": " + e.getMessage());
+            }
+        } else {
+            resultArea.setText("Отчёт для формы не найден.\n\nПуть: " + reportPath + "\n\nЗапустите анализ для создания отчёта.");
+        }
+    }
+
+    /**
+     * Преобразует путь формы в безопасное имя файла
+     */
+    private String getSafeFileName(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        String safeName = normalized.replace("/", "#").replace("\\", "#");
+        return safeName + ".txt";
+    }
+
     private void startAnalysis() {
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
@@ -215,13 +263,6 @@ public class MainWindow extends JFrame {
         }
 
         saveFormsList();
-
-        // Очищаем результат перед новым анализом
-        resultArea.setText("");
-        lastFilePosition = 0;
-
-        // Запускаем наблюдатель за файлом отчета
-        startFileWatcher();
 
         stopRequested = false;
         isRunning.set(true);
@@ -274,13 +315,8 @@ public class MainWindow extends JFrame {
                         statusLabel.setText("Статус: Готов");
                         if (!stopRequested) {
                             progressBar.setString("Анализ завершен");
-                            // Останавливаем наблюдатель за файлом
-                            stopFileWatcher();
-                            // Загружаем полный результат
-                            loadAllResultFromFile();
                         } else {
                             progressBar.setString("Анализ остановлен");
-                            stopFileWatcher();
                         }
                     });
                 }
@@ -391,82 +427,6 @@ public class MainWindow extends JFrame {
                 openOutputDirectory();
             }
         });
-    }
-
-    /**
-     * Запускает таймер для отслеживания изменений в файле отчета
-     */
-    private void startFileWatcher() {
-        stopFileWatcher();
-        lastFilePosition = 0;
-        fileWatcherTimer = new Timer(500, e -> checkFileUpdate());
-        fileWatcherTimer.start();
-    }
-
-    /**
-     * Останавливает таймер наблюдения за файлом
-     */
-    private void stopFileWatcher() {
-        if (fileWatcherTimer != null) {
-            fileWatcherTimer.stop();
-            fileWatcherTimer = null;
-        }
-    }
-
-    /**
-     * Проверяет обновление файла и добавляет новые строки в результат
-     */
-    private void checkFileUpdate() {
-        String reportPath = settings.getOutputDir() + File.separator + "forms_report.txt";
-        File reportFile = new File(reportPath);
-
-        if (reportFile.exists() && reportFile.length() > lastFilePosition) {
-            try (RandomAccessFile raf = new RandomAccessFile(reportFile, "r")) {
-                raf.seek(lastFilePosition);
-                String line;
-                StringBuilder newContent = new StringBuilder();
-                while ((line = raf.readLine()) != null) {
-                    // Преобразуем из Windows-1251 в UTF-8
-                    byte[] bytes = line.getBytes("ISO-8859-1");
-                    String utf8Line = new String(bytes, StandardCharsets.UTF_8);
-                    newContent.append(utf8Line).append("\n");
-                }
-                lastFilePosition = raf.getFilePointer();
-
-                if (newContent.length() > 0) {
-                    final String newText = newContent.toString();
-                    SwingUtilities.invokeLater(() -> {
-                        resultArea.append(newText);
-                        resultArea.setCaretPosition(resultArea.getDocument().getLength());
-                    });
-                }
-            } catch (IOException e) {
-                // Игнорируем ошибки чтения
-            }
-        }
-    }
-
-    /**
-     * Загружает всё содержимое forms_report.txt в панель результата
-     */
-    private void loadAllResultFromFile() {
-        String reportPath = settings.getOutputDir() + File.separator + "forms_report.txt";
-        File reportFile = new File(reportPath);
-
-        if (reportFile.exists()) {
-            try {
-                // Используем UTF-8 кодировку
-                String content = new String(Files.readAllBytes(reportFile.toPath()), StandardCharsets.UTF_8);
-                SwingUtilities.invokeLater(() -> {
-                    resultArea.setText(content);
-                    resultArea.setCaretPosition(0);
-                });
-                lastFilePosition = reportFile.length();
-                appendLog("Результат загружен из файла: " + reportPath);
-            } catch (IOException e) {
-                appendLog("Ошибка загрузки результата: " + e.getMessage());
-            }
-        }
     }
 
     private void openSettings() {

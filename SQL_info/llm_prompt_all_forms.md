@@ -8,7 +8,7 @@
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Mon May 18 20:30:12 GMT+07:00 2026
+**Дата генерации:** Mon May 18 22:01:16 GMT+07:00 2026
 
 ---
 
@@ -19,7 +19,7 @@
 
 **Статистика:**
 - Всего SQL запросов: 5
-- Всего форм: 2
+- Всего форм: 3
 
 ---
 
@@ -27,7 +27,7 @@
 
 **Тип компонента:** M2 DataSet
 **Имя компонента:** DS_RELATIVES
-**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Источник:** Forms/HospPlan/hp_relativechoise.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
@@ -82,7 +82,7 @@
 
 **Тип компонента:** M2 Action
 **Имя компонента:** acGetAgentId
-**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Источник:** Forms/HospPlan/hp_relativechoise.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
@@ -122,7 +122,7 @@
 
 **Тип компонента:** M2 Action
 **Имя компонента:** acDelRelative
-**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Источник:** Forms/HospPlan/hp_relativechoise.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
@@ -164,7 +164,7 @@
 
 **Тип компонента:** M2 Action
 **Имя компонента:** getOptionValue
-**Источник:** /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
+**Источник:** Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ArmPatientsInDep\SubForms\hh_mp_prescribes.frm
 
 **SQL код:**
@@ -196,7 +196,7 @@
 
 **Тип компонента:** M2 Action
 **Имя компонента:** cancelConfirmationPrescr
-**Источник:** /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
+**Источник:** Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
 **Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ArmPatientsInDep\SubForms\hh_mp_prescribes.frm
 
 **SQL код:**
@@ -234,7 +234,7 @@
 ### Вьюха №1: D_V_AGENTS_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/hp_relativechoise.frm
+- Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
@@ -284,7 +284,7 @@ UNION
 ### Вьюха №2: D_V_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/hp_relativechoise.frm
+- Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
@@ -375,7 +375,7 @@ UNION
 ### Вьюха №3: D_V_MP_PRESCRIBES
 
 **Используется в формах:**
-- /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
+- Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
 
 **DDL определение:**
 
@@ -504,7 +504,7 @@ UNION
 ### Вьюха №1: D_V_AGENTS_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/hp_relativechoise.frm
+- Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
@@ -555,7 +555,7 @@ where t1.AGN_TYPE  = 1
 ### Вьюха №2: D_V_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/hp_relativechoise.frm
+- Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
@@ -638,7 +638,7 @@ select --Представление для раздела : Персональн
 ### Вьюха №3: D_V_MP_PRESCRIBES
 
 **Используется в формах:**
-- /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
+- Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
 
 **DDL определение:**
 
