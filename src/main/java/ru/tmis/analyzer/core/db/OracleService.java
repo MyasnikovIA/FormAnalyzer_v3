@@ -94,6 +94,8 @@ public class OracleService {
             String columnsSql = "SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE " +
                     "FROM ALL_TAB_COLUMNS WHERE OWNER = ? AND TABLE_NAME = ? ORDER BY COLUMN_ID";
             List<String> columns = new ArrayList<>();
+            Map<String, String> columnComments = new LinkedHashMap<>();
+
             try (PreparedStatement pstmt = conn.prepareStatement(columnsSql)) {
                 pstmt.setString(1, user.toUpperCase());
                 pstmt.setString(2, tableName.toUpperCase());
@@ -120,6 +122,19 @@ public class OracleService {
                     columns.add(colDef.toString());
                 }
             }
+
+            // Получаем комментарии к колонкам
+            String commentsSql = "SELECT COLUMN_NAME, COMMENTS FROM ALL_COL_COMMENTS " +
+                    "WHERE OWNER = ? AND TABLE_NAME = ? AND COMMENTS IS NOT NULL";
+            try (PreparedStatement pstmt = conn.prepareStatement(commentsSql)) {
+                pstmt.setString(1, user.toUpperCase());
+                pstmt.setString(2, tableName.toUpperCase());
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    columnComments.put(rs.getString("COLUMN_NAME"), rs.getString("COMMENTS"));
+                }
+            }
+
             // Получаем первичный ключ
             String pkSql = "SELECT cols.COLUMN_NAME FROM ALL_CONSTRAINTS cons " +
                     "JOIN ALL_CONS_COLUMNS cols ON cons.CONSTRAINT_NAME = cols.CONSTRAINT_NAME " +
@@ -134,6 +149,7 @@ public class OracleService {
                     pkColumns.add(rs.getString("COLUMN_NAME"));
                 }
             }
+
             ddl.append("CREATE TABLE ").append(tableName).append(" (\n");
             ddl.append(String.join(",\n", columns));
             if (!pkColumns.isEmpty()) {
@@ -142,6 +158,30 @@ public class OracleService {
                 ddl.append(")");
             }
             ddl.append("\n);\n");
+
+            // Добавляем комментарии к колонкам
+            if (!columnComments.isEmpty()) {
+                ddl.append("\n-- Комментарии к колонкам:\n");
+                for (Map.Entry<String, String> entry : columnComments.entrySet()) {
+                    String comment = entry.getValue().replace("'", "''");
+                    ddl.append("COMMENT ON COLUMN ").append(tableName).append(".").append(entry.getKey())
+                            .append(" IS '").append(comment).append("';\n");
+                }
+            }
+
+            // Добавляем комментарий к таблице
+            String tableCommentSql = "SELECT COMMENTS FROM ALL_TAB_COMMENTS " +
+                    "WHERE OWNER = ? AND TABLE_NAME = ? AND COMMENTS IS NOT NULL";
+            try (PreparedStatement pstmt = conn.prepareStatement(tableCommentSql)) {
+                pstmt.setString(1, user.toUpperCase());
+                pstmt.setString(2, tableName.toUpperCase());
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    String tableComment = rs.getString("COMMENTS").replace("'", "''");
+                    ddl.append("\nCOMMENT ON TABLE ").append(tableName).append(" IS '").append(tableComment).append("';\n");
+                }
+            }
+
             return ddl.toString();
         } catch (SQLException e) {
             System.err.println("Ошибка получения DDL таблицы " + tableName + ": " + e.getMessage());

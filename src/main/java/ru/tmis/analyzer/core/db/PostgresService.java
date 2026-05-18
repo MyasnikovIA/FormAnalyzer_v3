@@ -106,9 +106,16 @@ public class PostgresService {
         StringBuilder ddl = new StringBuilder();
         try (Connection conn = getConnection()) {
             String columnsSql = "SELECT column_name, data_type, character_maximum_length, " +
-                    "numeric_precision, numeric_scale, is_nullable, column_default " +
-                    "FROM information_schema.columns WHERE table_name = ? ORDER BY ordinal_position";
+                    "numeric_precision, numeric_scale, is_nullable, column_default, " +
+                    "pg_catalog.col_description(c.oid, cols.ordinal_position) as column_comment " +
+                    "FROM information_schema.columns cols " +
+                    "JOIN pg_class c ON c.relname = cols.table_name " +
+                    "JOIN pg_namespace n ON n.oid = c.relnamespace AND n.nspname = cols.table_schema " +
+                    "WHERE cols.table_name = ? ORDER BY cols.ordinal_position";
+
             List<String> columns = new ArrayList<>();
+            Map<String, String> columnComments = new LinkedHashMap<>();
+
             try (PreparedStatement pstmt = conn.prepareStatement(columnsSql)) {
                 pstmt.setString(1, tableName.toLowerCase());
                 ResultSet rs = pstmt.executeQuery();
@@ -120,6 +127,8 @@ public class PostgresService {
                     int scale = rs.getInt("numeric_scale");
                     String nullable = rs.getString("is_nullable");
                     String defaultValue = rs.getString("column_default");
+                    String comment = rs.getString("column_comment");
+
                     StringBuilder colDef = new StringBuilder();
                     colDef.append("    ").append(colName).append(" ").append(dataType);
                     if ("character varying".equals(dataType) && maxLength > 0) {
@@ -136,8 +145,13 @@ public class PostgresService {
                         colDef.append(" DEFAULT ").append(defaultValue);
                     }
                     columns.add(colDef.toString());
+
+                    if (comment != null && !comment.isEmpty()) {
+                        columnComments.put(colName, comment);
+                    }
                 }
             }
+
             String pkSql = "SELECT kcu.column_name FROM information_schema.table_constraints tc " +
                     "JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name " +
                     "WHERE tc.table_name = ? AND tc.constraint_type = 'PRIMARY KEY' " +
@@ -150,6 +164,7 @@ public class PostgresService {
                     pkColumns.add(rs.getString("column_name"));
                 }
             }
+
             ddl.append("CREATE TABLE ").append(tableName).append(" (\n");
             ddl.append(String.join(",\n", columns));
             if (!pkColumns.isEmpty()) {
@@ -158,6 +173,33 @@ public class PostgresService {
                 ddl.append(")");
             }
             ddl.append("\n);\n");
+
+            // Добавляем комментарии к колонкам
+            if (!columnComments.isEmpty()) {
+                ddl.append("\n-- Комментарии к колонкам:\n");
+                for (Map.Entry<String, String> entry : columnComments.entrySet()) {
+                    String comment = entry.getValue().replace("'", "''");
+                    ddl.append("COMMENT ON COLUMN ").append(tableName).append(".").append(entry.getKey())
+                            .append(" IS '").append(comment).append("';\n");
+                }
+            }
+
+            // Добавляем комментарий к таблице
+            String tableCommentSql = "SELECT obj_description(c.oid) as table_comment " +
+                    "FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid " +
+                    "WHERE c.relname = ? AND n.nspname = current_schema()";
+            try (PreparedStatement pstmt = conn.prepareStatement(tableCommentSql)) {
+                pstmt.setString(1, tableName.toLowerCase());
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    String tableComment = rs.getString("table_comment");
+                    if (tableComment != null && !tableComment.isEmpty()) {
+                        ddl.append("\nCOMMENT ON TABLE ").append(tableName).append(" IS '")
+                                .append(tableComment.replace("'", "''")).append("';\n");
+                    }
+                }
+            }
+
             return ddl.toString();
         } catch (SQLException e) {
             System.err.println("Ошибка получения DDL таблицы " + tableName + ": " + e.getMessage());

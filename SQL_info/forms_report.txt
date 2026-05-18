@@ -1,13 +1,160 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Mon May 18 12:45:31 GMT+07:00 2026
-Всего форм: 1
+Дата создания: Mon May 18 13:45:20 GMT+07:00 2026
+Всего форм: 2
 ====================================================================================================
 
 ----------------------------------------------------------------------------------------------------
-ФОРМА: /Forms/HospitPlanning/hosp_plan_mkbs.frm
+ФОРМА: /Forms/HospPlan/select_lpu_outer_hosp.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_mkbs.frm
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\select_lpu_outer_hosp.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospPlan\select_lpu_outer_hosp.d\chg_return.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPUDICT
+    D_V_LPU
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPUDICT
+    D_LPU
+    D_GEOGRAFY
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 14,52 тыс):
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AllowSelectAllLpu
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_cse_accesses.check_employer_right(numeric, numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_cse_accesses.check_employer_right(numeric,numeric,character varying,numeric,character varying,numeric,numeric,numeric) is not a plpgsql function
+
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_LPUDICT:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_LPU:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_GEOGRAFY:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+
+  D_LPUDICT:
+    Колонка: LPU_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN lpu_code SET NOT NULL;
+
+    Колонка: IS_RESP
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN is_resp SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN version SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN id SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN cid SET NOT NULL;
+
+  D_LPU:
+    Колонка: IS_TECH_LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN is_tech_lpu SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN id SET NOT NULL;
+
+    Колонка: FULLNAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN fullname SET NOT NULL;
+
+  D_GEOGRAFY:
+    Колонка: GEOLOCTYPE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN geoloctype SET NOT NULL;
+
+    Колонка: GEONAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN geoname SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN version SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN id SET NOT NULL;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Pregnancy\preg_card_subforms\HospPlan\select_lpu_outer_hosp.frm
 СТАТУС: БАЗОВАЯ ФОРМА
 
 ЮЗЕРФОРМЫ:
@@ -17,71 +164,141 @@ SubForm:
      (не найдено)
 
 Список вызываемых форм в JS:
-     HospitPlanning/hpk_mkbs_edit.frm
+     (не найдено)
 
-Коды подключаемого AutoPopUp меню на форме:
-        HPK_MKBS;
-
-SQL ЗАПРОСЫ (3):
+SQL ЗАПРОСЫ (2):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
-    D_V_HPK_MKBS
+    D_V_LPUDICT
+    D_V_LPU
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
-    D_HPK_MKBS
+    D_LPUDICT
+    D_LPU
+    D_GEOGRAFY
 
 ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
-  D_V_HPK_MKBS (Oracle: 67) (PostgreSQL: 57):
-          D_HPK_MKBS (Oracle: 67) (PostgreSQL: 66)
+  D_V_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 14,52 тыс):
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
 
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
-    D_PKG_HPK_MKBS.ADD
-    D_PKG_HPK_MKBS.DEL
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+    D_PKG_EMPLOYERS.GET_ID
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AllowSelectAllLpu
 
 ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
 
-  D_PKG_HPK_MKBS.ADD:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_mkbs.add(numeric, numeric, numeric, numeric, varchar, numeric, numeric, numeric)
+  D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_cse_accesses.check_employer_right(numeric, numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_cse_accesses.check_employer_right(numeric,numeric,character varying,numeric,character varying,numeric,numeric,numeric) is not a plpgsql function
 
-  D_PKG_HPK_MKBS.DEL:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_mkbs.del(numeric, numeric)
+  D_PKG_EMPLOYERS.GET_ID:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_employers.get_id(numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:00000:23:PERFORM:routine is marked as STABLE, but expression is VOLATILE
 
 ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
 
-  D_HPK_MKBS:
+  D_LPUDICT:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_LPU:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_GEOGRAFY:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
 ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
 
-  D_HPK_MKBS:
-    Колонка: LPU
+  D_LPUDICT:
+    Колонка: LPU_CODE
       Oracle: NOT NULL
       PostgreSQL: NULL разрешен
       ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN lpu SET NOT NULL;
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN lpu_code SET NOT NULL;
 
-    Колонка: PID
+    Колонка: IS_RESP
       Oracle: NOT NULL
       PostgreSQL: NULL разрешен
       ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN pid SET NOT NULL;
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN is_resp SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN version SET NOT NULL;
 
     Колонка: ID
       Oracle: NOT NULL
       PostgreSQL: NULL разрешен
       ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN id SET NOT NULL;
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN id SET NOT NULL;
 
     Колонка: CID
       Oracle: NOT NULL
       PostgreSQL: NULL разрешен
       ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN cid SET NOT NULL;
+      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN cid SET NOT NULL;
+
+  D_LPU:
+    Колонка: IS_TECH_LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN is_tech_lpu SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN id SET NOT NULL;
+
+    Колонка: FULLNAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_lpu ALTER COLUMN fullname SET NOT NULL;
+
+  D_GEOGRAFY:
+    Колонка: GEOLOCTYPE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN geoloctype SET NOT NULL;
+
+    Колонка: GEONAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN geoname SET NOT NULL;
+
+    Колонка: VERSION
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN version SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_geografy ALTER COLUMN id SET NOT NULL;
 
 
 ====================================================================================================

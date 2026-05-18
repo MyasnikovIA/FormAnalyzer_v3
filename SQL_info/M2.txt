@@ -398,7 +398,7 @@
 47.6 Преобразовать имена переменных: `pnLPU`, `pnID` и т.д. (первые две буквы указывают тип: pn - число, ps - строка, pd - дата)
 47.7 Атрибуты `put=""` и `len` переместить в конец
 47.8 Удалить атрибуты `get=""` (если нет Fetch компонента на форме)
-47.9 Имена Action должны начинаться с `ac` и дальше в camelCase
+
 
 48) Отступы внутри блоков CDATA для SQL/PLSQL
 
@@ -1262,9 +1262,7 @@ function getFormStyle(formCode) {
             });
         ========================================================================
     -->
-    <component cmptype="ProtectedBlock" alert="true" modcode="HospitalIncome">
-        <!-- ... остальной код формы ... -->
-    </component>
+    <!-- ... остальной код формы ... -->
 </div>
 ```
 
@@ -2628,17 +2626,15 @@ D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID, ...)
 Форма должна иметь следующую структуру компонентов (сверху вниз):
 
 1. **Блок комментария формы** (документация)
-2. **ProtectedBlock** (при наличии) - оборачивает весь основной контент формы
+2. **Script компонент** (весь JavaScript код)
 3. **Action компоненты** (все SQL/PLSQL блоки)
 4. **DataSet компоненты** (все SQL/PLSQL блоки)
-5. **Script компонент** (весь JavaScript код)
-6. **HTML/таблицы и визуальные компоненты** (Grid, Edit, Button, и т.д.)
-7. **Все остальные компоненты** (MaskInspector, DepControls, SubForm и др.) - могут находиться в любом месте
+5. **HTML/таблицы и визуальные компоненты** (Grid, Edit, Button, и т.д.)
+6. **Все остальные компоненты** (MaskInspector, DepControls, SubForm и др.) - могут находиться в любом месте
 
 ### 76.2 Важные замечания
 
 - **SubForm**, **MaskInspector**, **DepControls** и другие вспомогательные компоненты **не подчиняются** данному правилу группировки и могут находиться в любом месте формы
-- **ProtectedBlock** при наличии оборачивает **весь основной контент формы** (все компоненты, кроме самого ProtectedBlock и комментария)
 - **Комментарий формы** всегда должен быть первым элементом после открывающего тега `<div cmptype="form">`
 
 ### 76.3 Детальная схема группировки
@@ -2734,47 +2730,45 @@ D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID, ...)
         ОПИСАНИЕ: Форма редактирования периодов планов госпитализации
         ========================================================================
     -->
-
-    <component cmptype="ProtectedBlock" alert="true" modcode="HospitalIncome">
-        <!-- ===== ACTION КОМПОНЕНТЫ ===== -->
-        <component cmptype="Action" name="acSelect">
-            <!-- ... -->
-        </component>
-
-        <component cmptype="Action" name="acInsert">
-            <!-- ... -->
-        </component>
-
-        <component cmptype="Action" name="acUpdate">
-            <!-- ... -->
-        </component>
-
-        <component cmptype="Action" name="acGetCurrentLPU">
-            <!-- ... -->
-        </component>
-
-        <!-- ===== SCRIPT ===== -->
-        <component cmptype="Script">
-            <![CDATA[
-            Form.onCreate = function() { ... };
-            Form.onShow = function() { ... };
-            Form.onButtonOKClick = function() { ... };
-            ]]>
-        </component>
-
-        <!-- ===== ВИЗУАЛЬНЫЕ КОМПОНЕНТЫ ===== -->
-        <table style="width: 100%;">
-            <tr>
-                <td><component cmptype="label" caption="Дата:"/></td>
-                <td><component cmptype="DateEdit" name="PLAN_DATE"/></td>
-            </tr>
-            <!-- ... -->
-        </table>
-
-        <!-- ===== ОСТАЛЬНЫЕ КОМПОНЕНТЫ (могут быть в любом месте) ===== -->
-        <component cmptype="SubForm" path="CheckCseAccess"/>
-        <component cmptype="MaskInspector" controls="PLAN_DATE;GEN_COUNT" effectControls="ButtonOk"/>
+    <!-- ===== SCRIPT ===== -->
+    <component cmptype="Script">
+        <![CDATA[
+        Form.onCreate = function() { ... };
+        Form.onShow = function() { ... };
+        Form.onButtonOKClick = function() { ... };
+        ]]>
     </component>
+
+    <!-- ===== ACTION КОМПОНЕНТЫ ===== -->
+    <component cmptype="Action" name="acSelect">
+        <!-- ... -->
+    </component>
+
+    <component cmptype="Action" name="acInsert">
+        <!-- ... -->
+    </component>
+
+    <component cmptype="Action" name="acUpdate">
+        <!-- ... -->
+    </component>
+
+    <component cmptype="Action" name="acGetCurrentLPU">
+        <!-- ... -->
+    </component>
+
+
+    <!-- ===== ВИЗУАЛЬНЫЕ КОМПОНЕНТЫ ===== -->
+    <table style="width: 100%;">
+        <tr>
+            <td><component cmptype="label" caption="Дата:"/></td>
+            <td><component cmptype="DateEdit" name="PLAN_DATE"/></td>
+        </tr>
+        <!-- ... -->
+    </table>
+
+    <!-- ===== ОСТАЛЬНЫЕ КОМПОНЕНТЫ (могут быть в любом месте) ===== -->
+    <component cmptype="SubForm" path="CheckCseAccess"/>
+    <component cmptype="MaskInspector" controls="PLAN_DATE;GEN_COUNT" effectControls="ButtonOk"/>
 </div>
 ```
 
@@ -2814,11 +2808,10 @@ D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID, ...)
 ### 76.8 Проверочный список группировки
 
 - [ ] Блок комментария в начале формы
-- [ ] ProtectedBlock оборачивает основной контент (при наличии)
+- [ ] Script компонент расположен после всех SQL/PLSQL компонентов
 - [ ] Все Action компоненты сгруппированы вместе
 - [ ] Action отсортированы по функциональному назначению (Select → Insert → Update → Delete → Check)
 - [ ] Все DataSet компоненты сгруппированы вместе после Action
-- [ ] Script компонент расположен после всех SQL/PLSQL компонентов
 - [ ] Визуальные компоненты (таблицы) расположены после Script
 - [ ] SubForm, MaskInspector, DepControls могут быть в любом месте (не требуют перемещения)
 

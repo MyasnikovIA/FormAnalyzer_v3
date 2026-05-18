@@ -1,1 +1,2 @@
-HospitPlanning/hosp_plan_mkbs
+HospPlan/select_lpu_outer_hosp
+UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
