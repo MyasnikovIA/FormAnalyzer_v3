@@ -1,3 +1,710 @@
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ /Forms/HospPlan/hp_relativechoise.frm
+
+> **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
+
+## Контекст задачи
+
+Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
+
+**Анализируемая форма:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+
+**Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
+
+**Дата генерации:** Mon May 18 18:14:16 GMT+07:00 2026
+
+---
+
+
+## 1. SQL ЗАПРОСЫ С ТЭГАМИ
+
+Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
+
+**Статистика:**
+- Всего SQL запросов: 3
+- Всего форм: 1
+
+---
+
+### Запрос №1
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_RELATIVES
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DS_RELATIVES" mode="Range">
+		select rel.ID,
+		       rel.SURNAME,
+		       rel.FIRSTNAME,
+		       rel.LASTNAME,
+		       rel.BIRTHDATE,
+		       rel.RELATIONSHIP_NAME,
+		       rel.SURNAME||' '||rel.FIRSTNAME||' '||rel.LASTNAME REL_FIO,
+		       rel.PID,
+                       rel.AGENT_ID
+		  from d_v_agents_persmedcard pmc,
+		       d_v_agent_relatives rel
+		 where pmc.ID_PERSMEDCARD = :PATIENTID
+		   and pmc.ID = rel.PID
+		<component cmptype="Variable" type="count" srctype="var" src="ds8count" default="5" />
+		<component cmptype="Variable" type="start" srctype="var" src="ds8start" default="1" />
+		<component cmptype="Variable" name="PATIENTID" srctype="var" src="PATIENT_ID" get="v2" />
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_AGENTS_PERSMEDCARD
+
+---
+
+### Запрос №2
+
+**Тип компонента:** M2 Action
+**Имя компонента:** getAgentId
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="getAgentId">
+		begin
+			select t.AGENT
+			  into :AGENT
+			  from D_V_PERSMEDCARD t
+			 where t.ID = :PATIENT;
+		end;
+		<component cmptype="ActionVar" name="PATIENT" src="PATIENT_ID" srctype="var" get="v1" />
+		<component cmptype="ActionVar" name="AGENT" src="AGENT" srctype="var" put="v2" len="17" />
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_PERSMEDCARD
+
+---
+
+### Запрос №3
+
+**Тип компонента:** M2 Action
+**Имя компонента:** delRelative
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="delRelative">
+		begin
+			d_pkg_agent_relatives.del(:IDD,:LPU);
+		end;
+		<component cmptype="ActionVar" name="LPU" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="IDD" src="GR_RELATIVES" srctype="ctrl" get="v1" />
+	</component>
+```
+
+**Используемые пакеты/функции:** D_PKG_AGENT_RELATIVES.DEL
+
+
+## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
+
+Вьюхи в PostgreSQL не найдены или не удалось получить DDL.
+
+
+## 3. ТЕКСТ ВЬЮХ ИЗ ORACLE 🟠
+
+Ниже представлены определения всех вьюх (D_V_*), найденных в SQL запросах форм, извлеченные из базы данных Oracle.
+
+**Статистика:**
+- Всего вьюх: 2
+
+---
+
+### Вьюха №1: D_V_AGENTS_PERSMEDCARD
+
+**Используется в формах:**
+- /Forms/HospPlan/hp_relativechoise.frm
+
+**DDL определение:**
+
+```sql
+-- Oracle View: D_V_AGENTS_PERSMEDCARD
+select --Представление для раздела : персональные медицинские карты контрагентов
+       t1.ID,
+       t1.SURNAME,
+       t1.FIRSTNAME,
+       t1.LASTNAME,
+       t1.BIRTHDATE,
+       t1.SEX,
+       t2.ID        ID_PERSMEDCARD,
+       t2.CARD_NUMB,
+       t1.SNILS,
+       t2.LPU,
+       t1.VERSION,
+       t1.ENP
+  from D_AGENTS      t1,      -- Контрагенты
+       D_PERSMEDCARD t2       -- Карта пациента
+where t1.ID        = t2.AGENT
+  and t1.AGN_TYPE  = 1
+  and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t2.CID and ur.UNITCODE = 'PERSMEDCARD')
+union
+select t1.ID,
+       t1.SURNAME,
+       t1.FIRSTNAME,
+       t1.LASTNAME,
+       t1.BIRTHDATE,
+       t1.SEX,
+       null  ID_PERSMEDCARD,
+       null  CARD_NUMB,
+       null  SNILS,
+       t2.ID LPU,
+       t1.VERSION,
+       t1.ENP
+  from D_AGENTS      t1,      -- Контрагенты
+       D_LPU         t2       -- ЛПУ
+where t1.AGN_TYPE  = 1
+  and not exists (select null from D_PERSMEDCARD pmc where pmc.AGENT = t1.ID and pmc.LPU = t2.ID)
+  and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t1.CID and ur.UNITCODE = 'AGENTS')
+
+ 
+```
+
+---
+
+### Вьюха №2: D_V_PERSMEDCARD
+
+**Используется в формах:**
+- /Forms/HospPlan/hp_relativechoise.frm
+
+**DDL определение:**
+
+```sql
+-- Oracle View: D_V_PERSMEDCARD
+select --Представление для раздела : Персональные медицинские карты
+       p.ID,
+       p.CID,
+       p.LPU,
+       p.CARD_NUMB,
+       p.AGENT,
+       a.FIRSTNAME,
+       a.SURNAME,
+       a.LASTNAME,
+       a.BIRTHDATE,
+       a.DEATHDATE,
+       decode(a.SEX,0,'Женский',1,'Мужской','')                   SEX,
+       a.SEX                                                      nSEX,
+       a.BIRTHPLACE,
+       p.CREATEDATE,
+       p.MODDATE,
+       p.NOTE,
+       r.RH_NAME                                                  RHESUS,
+       p.RHESUS                                                   nRHESUS,
+       p.BLOODGROUPE                                              BLOODGROUPE_ID,
+       b.BG_CODE                                                  BLOODGROUPE,
+       p.ECOLOR,
+       a.SNILS,
+       p.REG_DIVISION                                             REG_DIVISION_ID,
+       d.DIV_CODE                                                 REG_DIVISION,
+       p.TP_PRINTED,
+       case when p.TP_PRINTED = 0 then 'Нет'
+            when p.TP_PRINTED = 1 then 'Да'
+       end                                                        TP_PRINTED_MNEMO,
+       p.PMC_TYPE,
+       case when p.PMC_TYPE = 1     then 'аноним'
+            when p.PMC_TYPE = 2     then 'новорожденный'
+            when p.PMC_TYPE = 3     then 'неизвестный'
+            when p.PMC_TYPE is null then 'пациент'
+       end                                                        PMC_TYPE_NAME,
+       a.ENP,
+       p.OUTNUMB,
+       p.IA_PRINTED,
+       case when p.IA_PRINTED = 0 then 'Нет'
+            else 'Да'
+       end                                                        IA_PRINTED_MNEMO,
+       p.SMS_AGREE,
+       case when p.SMS_AGREE = 0 then 'Нет'
+            else 'Да'
+       end                                                        SMS_AGREE_MNEMO,
+       D_PKG_STR_TOOLS.FIO(ae.SURNAME, ae.FIRSTNAME, ae.LASTNAME) EMP_FIO,
+       p.EMP_ID,
+       null MARKER_ID, --Не используется
+       null MARKER_CODE,--Не используется
+       null MARKER_NAME,--Не используется
+       null MARKER_DESCRIPTION,--Не используется
+       p.EMAIL_AGREE,
+       p.PHENOTYPE,
+       a.EDUCATION                                                EDUCATION_ID,
+       c.CL_NAME,
+       a.ACCORDING_RELATIVES,
+       a.NATION                                                   AGENT_NATION
+  from D_PERSMEDCARD           p                           --Персональные медицинские карты
+       join D_AGENTS           a  on a.ID = p.AGENT        --Контрагенты
+       left join D_BLOODGROUPE b  on b.ID = p.BLOODGROUPE  --Справочник : Группы крови
+       left join D_DIVISIONS   d  on d.ID = p.REG_DIVISION --Подразделения ЛПУ
+       left join D_RHESUS      r  on r.RH_CODE = p.RHESUS  --Резус-фактор
+       left join D_EMPLOYERS   e  on e.ID = p.EMP_ID       --Персонал
+       left join D_AGENTS      ae on ae.ID = e.AGENT       --Контрагенты
+       left join D_CABLAB      c  on c.ID = p.CABLAB       --Кабинет
+ where exists (select null
+                 from D_V_URPRIVS ur
+                where ur.CATALOG = p.CID
+                  and ur.UNITCODE = 'PERSMEDCARD'
+                  and rownum = 1)
+```
+
+
+## 4.5. БРОКЕРЫ И ВЫЗЫВАЕМЫЕ ФУНКЦИИ
+
+Брокеры для анализа не найдены.
+
+
+## 4. DDL ТАБЛИЦ ИЗ POSTGRESQL ВЬЮХ
+
+Таблицы из PostgreSQL вьюх не найдены.
+
+
+## 5. DDL ТАБЛИЦ ИЗ ORACLE ВЬЮХ
+
+Ниже представлен список всех таблиц, которые используются внутри вьюх Oracle, а также их DDL определения.
+
+**Статистика:**
+- Всего вьюх с таблицами: 2
+- Всего уникальных таблиц: 7
+
+### Связь вьюх и таблиц
+
+**D_V_AGENTS_PERSMEDCARD** использует таблицы:
+- D_AGENTS
+- D_PERSMEDCARD
+
+**D_V_PERSMEDCARD** использует таблицы:
+- D_PERSMEDCARD
+- D_AGENTS
+- D_BLOODGROUPE
+- D_DIVISIONS
+- D_RHESUS
+- D_EMPLOYERS
+- D_CABLAB
+
+### DDL определения таблиц
+
+---
+
+#### Таблица №1: D_AGENTS
+
+```sql
+CREATE TABLE D_AGENTS (
+    ID NUMBER(17) NOT NULL,
+    VERSION NUMBER(17) NOT NULL,
+    CID NUMBER(17) NOT NULL,
+    AGN_CODE VARCHAR2(40) NOT NULL,
+    AGN_NAME VARCHAR2(250) NOT NULL,
+    AGN_TYPE NUMBER(1) NOT NULL,
+    AGN_INN NUMBER(12),
+    AGN_KPP NUMBER(17),
+    NOTE VARCHAR2(250),
+    FIRSTNAME VARCHAR2(40),
+    SURNAME VARCHAR2(40),
+    LASTNAME VARCHAR2(40),
+    BIRTHDATE DATE,
+    SEX NUMBER(1),
+    OKVED NUMBER(17),
+    EDUCATION NUMBER(17),
+    IS_EMPLOYER NUMBER(1) NOT NULL,
+    SNILS VARCHAR2(11),
+    AGN_OGRN VARCHAR2(13),
+    AGN_OKPO VARCHAR2(10),
+    DEATHDATE DATE,
+    DEATHDOCTYPE NUMBER(17),
+    DEATHDOCDATE DATE,
+    DEATHDOCNUM VARCHAR2(20),
+    AGN_OKFS NUMBER(17),
+    ENP VARCHAR2(16),
+    BIRTHPLACE VARCHAR2(400),
+    NATION NUMBER(17),
+    IS_HOME NUMBER(1) NOT NULL,
+    GEST_AGE_MOTHER NUMBER(3,1),
+    IS_ANONYM NUMBER(1) NOT NULL,
+    DEATHPLACE VARCHAR2(4000),
+    FULL_CLASSES NUMBER(2),
+    ACCURACY_DATE_DEATH NUMBER(1),
+    ACCURACY_DATE_BIRTH NUMBER(1),
+    IND_ENTERP NUMBER(1),
+    AGN_OGRN_IND VARCHAR2(15),
+    CONVICT_AMOUNT NUMBER(3),
+    ALLERG_DATE DATE,
+    ACCORDING_RELATIVES NUMBER(1) NOT NULL,
+    BIRTHPLACE_GEO NUMBER(17),
+    WEBIOMED_GUID VARCHAR2(36),
+    WEBIOMED_URL VARCHAR2(2048),
+    MEDICBK_GUID VARCHAR2(36),
+    MEDICBK_URL VARCHAR2(2048),
+    BIRTHPLACE_GAR_ADDRESS_ID NUMBER(17),
+    MAX_INFO NUMBER(1),
+    EPGU NUMBER(1),
+    CONSTRAINT PK_D_AGENTS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_AGENTS.ID IS 'ID';
+COMMENT ON COLUMN D_AGENTS.VERSION IS 'Версия';
+COMMENT ON COLUMN D_AGENTS.CID IS 'Каталог';
+COMMENT ON COLUMN D_AGENTS.AGN_CODE IS 'Код';
+COMMENT ON COLUMN D_AGENTS.AGN_NAME IS 'Наименование';
+COMMENT ON COLUMN D_AGENTS.AGN_TYPE IS 'Тип : 0 - юридический, 1 - физический';
+COMMENT ON COLUMN D_AGENTS.AGN_INN IS 'ИНН';
+COMMENT ON COLUMN D_AGENTS.AGN_KPP IS 'КПП';
+COMMENT ON COLUMN D_AGENTS.NOTE IS 'Примечание';
+COMMENT ON COLUMN D_AGENTS.FIRSTNAME IS 'Имя';
+COMMENT ON COLUMN D_AGENTS.SURNAME IS 'Фамилия';
+COMMENT ON COLUMN D_AGENTS.LASTNAME IS 'Отчество';
+COMMENT ON COLUMN D_AGENTS.BIRTHDATE IS 'Дата рождения';
+COMMENT ON COLUMN D_AGENTS.SEX IS 'Пол : 0 - женский, 1 - мужской';
+COMMENT ON COLUMN D_AGENTS.OKVED IS 'Код по ОКВЕД';
+COMMENT ON COLUMN D_AGENTS.EDUCATION IS 'Образование';
+COMMENT ON COLUMN D_AGENTS.IS_EMPLOYER IS 'Сотрудник: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_AGENTS.SNILS IS 'СНИЛС';
+COMMENT ON COLUMN D_AGENTS.AGN_OGRN IS 'Код ОГРН';
+COMMENT ON COLUMN D_AGENTS.AGN_OKPO IS 'Код ОКПО';
+COMMENT ON COLUMN D_AGENTS.DEATHDATE IS 'Дата и время смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCTYPE IS 'Тип документа о смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCDATE IS 'Дата оформления документа о смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCNUM IS 'Номер документа о смерти';
+COMMENT ON COLUMN D_AGENTS.AGN_OKFS IS 'Код по ОКФС';
+COMMENT ON COLUMN D_AGENTS.ENP IS 'ЕНП';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE IS 'Место рождения';
+COMMENT ON COLUMN D_AGENTS.NATION IS 'Национальность';
+COMMENT ON COLUMN D_AGENTS.IS_HOME IS 'Лежачий пациент';
+COMMENT ON COLUMN D_AGENTS.GEST_AGE_MOTHER IS 'Срок гестации матери(в неделях) при родах';
+COMMENT ON COLUMN D_AGENTS.IS_ANONYM IS 'Аноним: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.DEATHPLACE IS 'Место смерти';
+COMMENT ON COLUMN D_AGENTS.FULL_CLASSES IS 'Количество полных классов/курсов';
+COMMENT ON COLUMN D_AGENTS.ACCURACY_DATE_DEATH IS 'Точность даты смерти: 0 - неизвестно время; 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
+COMMENT ON COLUMN D_AGENTS.ACCURACY_DATE_BIRTH IS 'Точность даты рождения: 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
+COMMENT ON COLUMN D_AGENTS.IND_ENTERP IS 'Индивидуальный предприниматель: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.AGN_OGRN_IND IS 'Код ОГРН ИП';
+COMMENT ON COLUMN D_AGENTS.CONVICT_AMOUNT IS 'Общее число судимостей';
+COMMENT ON COLUMN D_AGENTS.ALLERG_DATE IS 'Дата опроса о наличии аллергии';
+COMMENT ON COLUMN D_AGENTS.ACCORDING_RELATIVES IS 'Заполнено со слов родственников: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.EPGU IS 'Признак: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_AGENTS.MEDICBK_GUID IS 'Идентификатор для MedicBK';
+COMMENT ON COLUMN D_AGENTS.MEDICBK_URL IS 'Ссылка на результаты MedicBK';
+COMMENT ON COLUMN D_AGENTS.MAX_INFO IS 'Информирование в MAX: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE_GAR_ADDRESS_ID IS 'Место рождения : географическое понятие (ГАР)';
+COMMENT ON COLUMN D_AGENTS.WEBIOMED_GUID IS 'Идентификатор от МИС НП для мониторинга Webiomed';
+COMMENT ON COLUMN D_AGENTS.WEBIOMED_URL IS 'Ссылка на результаты "Мониторинг Webiomed"';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE_GEO IS 'Место рождения: географическое понятие';
+
+COMMENT ON TABLE D_AGENTS IS 'Контрагенты';
+```
+
+---
+
+#### Таблица №2: D_PERSMEDCARD
+
+```sql
+CREATE TABLE D_PERSMEDCARD (
+    ID NUMBER(17) NOT NULL,
+    BLOODGROUPE NUMBER(17),
+    RHESUS NUMBER(1),
+    ECOLOR VARCHAR2(40),
+    CREATEDATE DATE,
+    MODDATE DATE,
+    CARD_NUMB VARCHAR2(26),
+    LPU NUMBER(17) NOT NULL,
+    AGENT NUMBER(17) NOT NULL,
+    NOTE VARCHAR2(4000),
+    CID NUMBER(17) NOT NULL,
+    REG_DIVISION NUMBER(17),
+    TP_PRINTED NUMBER(1) NOT NULL,
+    OUTNUMB VARCHAR2(12) NOT NULL,
+    PMC_TYPE NUMBER(1),
+    IA_PRINTED NUMBER(1) NOT NULL,
+    SMS_AGREE NUMBER(1) NOT NULL,
+    EMP_ID NUMBER(17),
+    EMAIL_AGREE NUMBER(1) NOT NULL,
+    PHENOTYPE VARCHAR2(10),
+    CABLAB NUMBER(17),
+    CONSTRAINT PK_D_PERSMEDCARD PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_PERSMEDCARD.BLOODGROUPE IS 'Группа крови (ссылка на справочник)';
+COMMENT ON COLUMN D_PERSMEDCARD.RHESUS IS 'Резус фактор';
+COMMENT ON COLUMN D_PERSMEDCARD.ECOLOR IS 'Цвет глаз';
+COMMENT ON COLUMN D_PERSMEDCARD.CREATEDATE IS 'Дата создания карты';
+COMMENT ON COLUMN D_PERSMEDCARD.MODDATE IS 'Дата внесения последних изменений';
+COMMENT ON COLUMN D_PERSMEDCARD.CARD_NUMB IS 'Код карты';
+COMMENT ON COLUMN D_PERSMEDCARD.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_PERSMEDCARD.AGENT IS 'Контрагент';
+COMMENT ON COLUMN D_PERSMEDCARD.NOTE IS 'Примечание';
+COMMENT ON COLUMN D_PERSMEDCARD.CID IS 'Каталог';
+COMMENT ON COLUMN D_PERSMEDCARD.REG_DIVISION IS 'Место регистрации карты';
+COMMENT ON COLUMN D_PERSMEDCARD.TP_PRINTED IS 'Информация о печати титульного листа';
+COMMENT ON COLUMN D_PERSMEDCARD.OUTNUMB IS 'Код карты для выгрузок';
+COMMENT ON COLUMN D_PERSMEDCARD.PMC_TYPE IS 'Тип карты пациента: null - пациент, 1 - аноним, 2 - новорожденный, 3 - неизвестный';
+COMMENT ON COLUMN D_PERSMEDCARD.IA_PRINTED IS 'Информация о печати информированного согласия на обработку персональных данных';
+COMMENT ON COLUMN D_PERSMEDCARD.SMS_AGREE IS 'Согласие на получение СМС';
+COMMENT ON COLUMN D_PERSMEDCARD.EMP_ID IS 'Идентификатор регистратора, добавившего карту';
+COMMENT ON COLUMN D_PERSMEDCARD.EMAIL_AGREE IS 'Согласие на отправку результатов по эл. почте: 0- нет, 1 - да';
+COMMENT ON COLUMN D_PERSMEDCARD.PHENOTYPE IS 'Фенотип (комбинированное значение из четырех групп антигенов -  D_PHENOTYPES.PH_NAME)
+
+';
+COMMENT ON COLUMN D_PERSMEDCARD.ID IS 'ID';
+COMMENT ON COLUMN D_PERSMEDCARD.CABLAB IS 'Кабинет, в котором создали карту';
+
+COMMENT ON TABLE D_PERSMEDCARD IS 'Карта пациента';
+```
+
+---
+
+#### Таблица №3: D_BLOODGROUPE
+
+```sql
+CREATE TABLE D_BLOODGROUPE (
+    ID NUMBER(17) NOT NULL,
+    BG_CODE VARCHAR2(20) NOT NULL,
+    BG_NAME VARCHAR2(160) NOT NULL,
+    VERSION NUMBER(17) NOT NULL,
+    CONSTRAINT PK_D_BLOODGROUPE PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_BLOODGROUPE.BG_CODE IS 'Код';
+COMMENT ON COLUMN D_BLOODGROUPE.BG_NAME IS 'Наименование';
+COMMENT ON COLUMN D_BLOODGROUPE.VERSION IS 'Версия';
+COMMENT ON COLUMN D_BLOODGROUPE.ID IS 'ID';
+
+COMMENT ON TABLE D_BLOODGROUPE IS 'Группы крови';
+```
+
+---
+
+#### Таблица №4: D_DIVISIONS
+
+```sql
+CREATE TABLE D_DIVISIONS (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    DIV_CODE VARCHAR2(40) NOT NULL,
+    DIV_NAME VARCHAR2(256) NOT NULL,
+    LPU_BRANCH NUMBER(17),
+    REC_SER_PRIV VARCHAR2(10),
+    HID NUMBER(17),
+    REC_SER_PRIV_88 VARCHAR2(10),
+    PAT_RESTRICTION NUMBER(17),
+    VERSION NUMBER(17),
+    DIV_OID_FRMO VARCHAR2(50),
+    CONSTRAINT PK_D_DIVISIONS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_DIVISIONS.ID IS 'ID';
+COMMENT ON COLUMN D_DIVISIONS.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_DIVISIONS.DIV_CODE IS 'Код';
+COMMENT ON COLUMN D_DIVISIONS.DIV_NAME IS 'Наименование';
+COMMENT ON COLUMN D_DIVISIONS.LPU_BRANCH IS 'Филиал ЛПУ';
+COMMENT ON COLUMN D_DIVISIONS.REC_SER_PRIV IS 'Серия для выписки рецептов 04
+на льготные медикаменты';
+COMMENT ON COLUMN D_DIVISIONS.HID IS 'Ссылка на верхний уровень иерархии';
+COMMENT ON COLUMN D_DIVISIONS.REC_SER_PRIV_88 IS 'Серия для выписки рецептов 88
+на льготные медикаменты 
+';
+COMMENT ON COLUMN D_DIVISIONS.PAT_RESTRICTION IS 'Ограничения по пациентам';
+COMMENT ON COLUMN D_DIVISIONS.VERSION IS 'Версия';
+COMMENT ON COLUMN D_DIVISIONS.DIV_OID_FRMO IS 'OID в ФРМО';
+
+COMMENT ON TABLE D_DIVISIONS IS 'Подразделения ЛПУ';
+```
+
+---
+
+#### Таблица №5: D_RHESUS
+
+```sql
+CREATE TABLE D_RHESUS (
+    RH_CODE NUMBER(1) NOT NULL,
+    RH_NAME VARCHAR2(10) NOT NULL,
+    CONSTRAINT PK_D_RHESUS PRIMARY KEY (RH_CODE)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_RHESUS.RH_CODE IS 'Код наименование';
+COMMENT ON COLUMN D_RHESUS.RH_NAME IS 'Наименование';
+
+COMMENT ON TABLE D_RHESUS IS 'Резус-фактор';
+```
+
+---
+
+#### Таблица №6: D_EMPLOYERS
+
+```sql
+CREATE TABLE D_EMPLOYERS (
+    ID NUMBER(17) NOT NULL,
+    JOBTITLE NUMBER(17),
+    REGDATE DATE NOT NULL,
+    SPECIALITY NUMBER(17),
+    KOD_VRACHA VARCHAR2(11),
+    REGISTR_KOD VARCHAR2(10),
+    LPU NUMBER(17) NOT NULL,
+    SPECIALITY_ED NUMBER(17),
+    SKILL_CATEGORY NUMBER(17),
+    IS_DISMISSED NUMBER(1) NOT NULL,
+    DISMISS_DATE DATE,
+    DEPARTMENT NUMBER(17),
+    SYSUSER NUMBER(17),
+    AGENT NUMBER(17) NOT NULL,
+    CID NUMBER(17) NOT NULL,
+    REPORT_SIGN VARCHAR2(400),
+    EMP_NUMB VARCHAR2(50),
+    QUOT_RESOURCE NUMBER(17),
+    RATE NUMBER(5,2),
+    PERSONAL_CARD_GUID VARCHAR2(36),
+    CONSTRAINT PK_D_EMPLOYERS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_EMPLOYERS.ID IS 'ID';
+COMMENT ON COLUMN D_EMPLOYERS.JOBTITLE IS 'Должность';
+COMMENT ON COLUMN D_EMPLOYERS.REGDATE IS 'Дата регистрации';
+COMMENT ON COLUMN D_EMPLOYERS.SPECIALITY IS 'Специальность';
+COMMENT ON COLUMN D_EMPLOYERS.KOD_VRACHA IS 'Код врача';
+COMMENT ON COLUMN D_EMPLOYERS.REGISTR_KOD IS 'Регистрационный код';
+COMMENT ON COLUMN D_EMPLOYERS.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_EMPLOYERS.SPECIALITY_ED IS 'Специальность по образованию';
+COMMENT ON COLUMN D_EMPLOYERS.SKILL_CATEGORY IS 'Квалификационная категория';
+COMMENT ON COLUMN D_EMPLOYERS.IS_DISMISSED IS 'Сотрудник уволен ';
+COMMENT ON COLUMN D_EMPLOYERS.DISMISS_DATE IS 'Дата увольнения';
+COMMENT ON COLUMN D_EMPLOYERS.DEPARTMENT IS 'Отделение';
+COMMENT ON COLUMN D_EMPLOYERS.SYSUSER IS 'Пользователь';
+COMMENT ON COLUMN D_EMPLOYERS.AGENT IS 'Контрагент';
+COMMENT ON COLUMN D_EMPLOYERS.CID IS 'Каталог';
+COMMENT ON COLUMN D_EMPLOYERS.REPORT_SIGN IS 'Подпись врача в отчетах';
+COMMENT ON COLUMN D_EMPLOYERS.EMP_NUMB IS 'Табельный номер';
+COMMENT ON COLUMN D_EMPLOYERS.QUOT_RESOURCE IS 'Ресурс квотирования';
+COMMENT ON COLUMN D_EMPLOYERS.PERSONAL_CARD_GUID IS 'Идентификатор записи личного дела';
+COMMENT ON COLUMN D_EMPLOYERS.RATE IS 'Занимаемое количество ставок';
+
+COMMENT ON TABLE D_EMPLOYERS IS 'Персонал';
+```
+
+---
+
+#### Таблица №7: D_CABLAB
+
+```sql
+CREATE TABLE D_CABLAB (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    DEPARTMENT NUMBER(17) NOT NULL,
+    CL_CODE VARCHAR2(20) NOT NULL,
+    CL_NAME VARCHAR2(160) NOT NULL,
+    CID NUMBER(17) NOT NULL,
+    PID NUMBER(17),
+    SCHEDULE_TYPE NUMBER(1),
+    DIVISION NUMBER(17) NOT NULL,
+    BUILDING NUMBER(17),
+    FLOOR NUMBER(17),
+    IS_COMM NUMBER(1) NOT NULL,
+    BEGIN_DATE DATE,
+    END_DATE DATE,
+    CABLAB_TYPE NUMBER(17),
+    CL_BEGIN_DATE DATE NOT NULL,
+    CL_END_DATE DATE,
+    CONSTRAINT PK_D_CABLAB PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_CABLAB.ID IS 'ID';
+COMMENT ON COLUMN D_CABLAB.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_CABLAB.DEPARTMENT IS 'Отделение';
+COMMENT ON COLUMN D_CABLAB.CL_CODE IS 'Код';
+COMMENT ON COLUMN D_CABLAB.CL_NAME IS 'Наименование';
+COMMENT ON COLUMN D_CABLAB.CID IS 'Каталог';
+COMMENT ON COLUMN D_CABLAB.PID IS 'Кабинет';
+COMMENT ON COLUMN D_CABLAB.SCHEDULE_TYPE IS 'Тип назначенного графика(поддерживается автоматически)';
+COMMENT ON COLUMN D_CABLAB.DIVISION IS 'Подразделение';
+COMMENT ON COLUMN D_CABLAB.BUILDING IS 'Здание';
+COMMENT ON COLUMN D_CABLAB.FLOOR IS 'Этаж';
+COMMENT ON COLUMN D_CABLAB.IS_COMM IS 'Кабинет платных услуг';
+COMMENT ON COLUMN D_CABLAB.BEGIN_DATE IS 'Начало функционирования кабинета платных услуг';
+COMMENT ON COLUMN D_CABLAB.END_DATE IS 'Окончание функционирования кабинета платных услуг';
+COMMENT ON COLUMN D_CABLAB.CABLAB_TYPE IS 'Тип кабинета';
+COMMENT ON COLUMN D_CABLAB.CL_BEGIN_DATE IS 'Дата начала действия';
+COMMENT ON COLUMN D_CABLAB.CL_END_DATE IS 'Дата окончания действия';
+
+COMMENT ON TABLE D_CABLAB IS 'Кабинеты и лаборатории';
+```
+
+
+## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠
+
+Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных пакетных функций: 1
+- Загружено тел функций: 1
+
+---
+
+### Функция №1: D_PKG_AGENT_RELATIVES.DEL
+
+```sql
+-- Oracle PACKAGE: DEL
+--======================================================================
+procedure DEL
+(
+  pnID                                 in NUMBER,
+  pnLPU                                in NUMBER
+)
+is
+  nVERSION               D_PKG_STD.tREF;
+  nCID                   D_PKG_STD.tREF;
+  nPERSMEDCARD           D_PKG_STD.tREF;
+begin
+  -- Поиск версии по ЛПУ --
+  D_PKG_VERSIONS.GET_VERSION_BY_LPU(1,pnLPU,'AGENT_RELATIVES',nVERSION);
+  -- Поиск каталога --
+  begin
+    select t.CID, t3.ID
+      into nCID, nPERSMEDCARD
+      from D_AGENT_RELATIVES t,
+           D_AGENTS t1,
+           (select t2.ID, t2.AGENT from D_PERSMEDCARD t2 where t2.LPU = pnLPU) t3
+     where t.ID        = pnID
+       and t.VERSION   = nVERSION
+       and t1.ID       = t.PID
+       and t3.AGENT(+) = t1.ID;
+  exception 
+    when NO_DATA_FOUND then
+      D_PKG_MSG.RECORD_NOT_FOUND(pnID,'AGENT_RELATIVES');
+    when TOO_MANY_ROWS then
+      D_P_EXC('Найдено несколько карт пациента в текущем МО.');
+  end;
+```
+
+
+## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘
+
+Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных функций/процедур: 1
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: d_pkg_agent_relatives.del
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+
+
+---
+
 1) все переменные в SQL запросах должны  писаться в верхнем регистре, кроме  первых двух букв, которые обозначают тип переменной pnLPU, psCODE
    не правильно:   cmptype="ActionVar"  name="id"
    правильно   :   cmptype="ActionVar"  name="pnID"
@@ -2962,6 +3669,172 @@ end;
 
 Исходник формы, который необходимо переработать:
 ```
+<div
+	cmptype="bogus"
+	oncreate="base().OnCreate();"
+	onshow="base().OnShow();"
+	class="hp_relativechoise"
+>
+  	<div cmptype="title">Родственники пациента</div>
+
+  	<component cmptype="Script">
+	Form.OnCreate = function()
+	{
+		setVar('ModalResult', 'cancel', 1);
+		setVar('LOCATE_ID',getVar('LOCATE_ID',1));
+		setVar('PATIENT_ID', getVar('PMC_ID', 1));
+		if (!empty(getVar('LOCATE_ID')))
+		{
+			setControlProperty('GR_RELATIVES','locate',getVar('LOCATE_ID'));
+		}
+	}
+	Form.OnShow = function()
+	{
+		executeAction('getAgentId');
+	}
+	Form.OnButtonOKClick = function()
+	{
+		setVar('return', getControlProperty('GR_RELATIVES','data')['REL_FIO'], 1);
+		setVar('relative_agent_id', getControlProperty('GR_RELATIVES','data')['AGENT_ID'], 1);
+		setVar('return_id', getValue('GR_RELATIVES'), 1);
+		setVar('ModalResult', 'ok', 1);
+		closeWindow(0,null,{ModalResult:'ok',agent_relative:getValue('GR_RELATIVES'),
+                    agent_relative_fio:getControlProperty('GR_RELATIVES','data')['REL_FIO'],
+                    relative_agent_id:getControlProperty('GR_RELATIVES','data')['AGENT_ID']});
+	}
+	Form.ONPP = function()
+	{
+		if(empty(getValue('GR_RELATIVES')))
+		{
+			PopUpItem_SetHide(getControlByName('pRELS'),'pEDIT',true);
+			PopUpItem_SetHide(getControlByName('pRELS'),'pDEL',true);
+		}
+		else
+		{
+			PopUpItem_SetHide(getControlByName('pRELS'),'pEDIT',false);
+			PopUpItem_SetHide(getControlByName('pRELS'),'pDEL',false);
+		}
+	}
+	Form.AddEditRel = function(type)
+	{
+		var _data = getControlProperty('GR_RELATIVES', 'data');
+		if (type == 'edit'){
+                    setVar('AGENT_REL_ID', getValue('GR_RELATIVES'));
+                    setVar('PRIMARY', _data['ID']);
+                }
+                else {
+                    setVar('AGENT_REL_ID', '');
+                    setVar('PRIMARY', null);
+                }
+                openWindow({name: 'Agents/agent_relatives/agent_relatives_add', vars: {AGENT_PID: getVar('AGENT'), AGENT_REL_ID: getVar('AGENT_REL_ID')}}, true)
+			.addListener('onafterclose', function()
+				{
+					if(getVar('ModalResult') == 1)
+					{
+                                            if (type == 'edit')
+						setControlProperty('GR_RELATIVES', 'locate', getVar('AGENT_REL_ID'));
+                                            else setControlProperty('GR_RELATIVES', 'locate', getVar('newid'));
+                                            refreshDataSet('DS_RELATIVES');
+					}
+				});
+	}
+	Form.DelRel = function()
+	{
+		if(confirm('Удалить запись?'))
+			executeAction('delRelative', function()
+				{
+					refreshDataSet('DS_RELATIVES');
+				});
+	}
+  </component>
+
+	<component cmptype="Action" name="getAgentId">
+		begin
+			select t.AGENT
+			  into :AGENT
+			  from D_V_PERSMEDCARD t
+			 where t.ID = :PATIENT;
+		end;
+		<component cmptype="ActionVar" name="PATIENT" src="PATIENT_ID" srctype="var" get="v1"/>
+		<component cmptype="ActionVar" name="AGENT" src="AGENT" srctype="var" put="v2" len="17"/>
+	</component>
+	<component cmptype="Action" name="delRelative">
+		begin
+			d_pkg_agent_relatives.del(:IDD,:LPU);
+		end;
+		<component cmptype="ActionVar" name="LPU" src="LPU" srctype="session"/>
+		<component cmptype="ActionVar" name="IDD" src="GR_RELATIVES" srctype="ctrl" get="v1"/>
+	</component>
+	<component cmptype="DataSet" name="DS_RELATIVES" mode="Range">
+		select rel.ID,
+		       rel.SURNAME,
+		       rel.FIRSTNAME,
+		       rel.LASTNAME,
+		       rel.BIRTHDATE,
+		       rel.RELATIONSHIP_NAME,
+		       rel.SURNAME||' '||rel.FIRSTNAME||' '||rel.LASTNAME REL_FIO,
+		       rel.PID,
+                       rel.AGENT_ID
+		  from d_v_agents_persmedcard pmc,
+		       d_v_agent_relatives rel
+		 where pmc.ID_PERSMEDCARD = :PATIENTID
+		   and pmc.ID = rel.PID
+		<component cmptype="Variable" type="count" srctype="var" src="ds8count" default="5"/>
+		<component cmptype="Variable" type="start" srctype="var" src="ds8start" default="1"/>
+		<component cmptype="Variable" name="PATIENTID" srctype="var" src="PATIENT_ID" get="v2"/>
+	</component>
+
+	<div class="main">
+		<div class="form-container">
+			<component
+				cmptype="Grid"
+				name="GR_RELATIVES"
+				dataset="DS_RELATIVES"
+				field="ID"
+				height="100%"
+				ondblclick="base().OnButtonOKClick();"
+			>
+				<component cmptype="Column" filter="SURNAME" caption="Фамилия" field="SURNAME" upper="true"/>
+				<component cmptype="Column" filter="FIRSTNAME" caption="Имя" field="FIRSTNAME" upper="true"/>
+				<component cmptype="Column" filter="LASTNAME" caption="Отчество"  field="LASTNAME" upper="true"/>
+				<component cmptype="Column" filter="BIRTHDATE" caption="Дата рождения"    field="BIRTHDATE"/>
+				<component cmptype="Column" caption="Степень родства" field="RELATIONSHIP_NAME"/>
+				<component cmptype="GridFooter" separate="false">
+					<component insteadrefresh="InsteadRefresh(this);" count="10" cmptype="Range" varstart="ds8start" varcount="ds8count" valuecount="10" valuestart="1"/>
+				</component>
+			</component>
+			<component cmptype="Popup" name="pRELS" popupobject="GR_RELATIVES" onpopup="base().ONPP();">
+				<component cmptype="PopupItem" name="pREF" caption="Обновить" onclick="refreshDataSet('DS_RELATIVES');" cssimg="refresh"/>
+				<component cmptype="PopupItem" caption="-"/>
+				<component cmptype="PopupItem" name="pADD" unitbp="AGENT_RELATIVES_INSERT" caption="Добавить" onclick="base().AddEditRel();" cssimg="insert"/>
+				<component cmptype="PopupItem" name="pEDIT" unitbp="AGENT_RELATIVES_UPDATE" caption="Изменить" onclick="base().AddEditRel('edit');" cssimg="edit"/>
+				<component cmptype="PopupItem" name="pDEL" unitbp="AGENT_RELATIVES_DELETE" caption="Удалить" onclick="base().DelRel();" cssimg="delete"/>
+			</component>
+			<component cmptype="AutoPopupMenu" unit="AGENT_RELATIVES" all="true" join_menu="pRELS" popupobject="GR_RELATIVES"/>
+		</div>
+		<div class="buttons">
+			<component cmptype="Button" name="ButtonOk" onclick="base().OnButtonOKClick();" caption="OK" style="width:86px"/>
+			<component cmptype="Button" name="ButtonCancel" onclick="closeWindow();" caption="Отмена" style="width:86px"/>
+		</div>
+	</div>
+
+	<style>
+		.hp_relativechoise > .main {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		.hp_relativechoise > .main > .form-container {
+			flex-grow: 1;
+			overflow: auto;
+			margin-bottom: 8px;
+		}
+		.hp_relativechoise > .main > .buttons {
+			text-align: right;
+		}
+	</style>
+</div>
 
 ```
 Покажи только текст  переработанный  формы

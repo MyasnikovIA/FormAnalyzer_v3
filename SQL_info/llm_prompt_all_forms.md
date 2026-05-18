@@ -1,4 +1,4 @@
-# ЗАПРОС К LLM: АНАЛИЗ ФОРМ T-MIS
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ /Forms/HospPlan/hp_relativechoise.frm
 
 > **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
 
@@ -6,9 +6,12 @@
 
 Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
 
+**Анализируемая форма:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Mon May 18 13:45:47 GMT+07:00 2026
+**Дата генерации:** Mon May 18 18:14:16 GMT+07:00 2026
 
 ---
 
@@ -18,319 +21,96 @@
 Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
 
 **Статистика:**
-- Всего SQL запросов: 4
-- Всего форм: 2
+- Всего SQL запросов: 3
+- Всего форм: 1
 
 ---
 
 ### Запрос №1
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** dsLpu
-**Источник:** /Forms/HospPlan/select_lpu_outer_hosp.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\select_lpu_outer_hosp.frm
+**Имя компонента:** DS_RELATIVES
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="dsLpu" activateoncreate="false" mode="Range" compile="true">
-        <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
-            <![CDATA[
-            SELECT t2.ID,
-                   t2.LPU_CODE,
-                   t2.LPU_FULLNAME,
-                   t2.LPU_NAME
-              FROM D_V_LPUDICT t2
-            @if(:psAllowSelectAllLpu == "0"){
-                   LEFT JOIN D_V_LPUDICT t3 ON t3.ID = t2.HID
-                   JOIN D_V_LPU t ON t.LPUDICT_ID = t2.ID OR t.LPUDICT_ID = t3.ID
-             WHERE INSTR(';' || :psLPU_RIGHT || ';', ';' || t.ID || ';') > 0
-            @} elseif(:psAllowSelectAllLpu == "2"){
-                   JOIN D_V_LPU t ON t.LPUDICT_ID = t2.ID
-             WHERE INSTR(';' || :psLPU_RIGHT || ';', ';' || t.ID || ';') > 0
-            @}
-            ]]>
-        </component>
-        <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-            <![CDATA[
-            SELECT t2.ID,
-                   t2.LPU_CODE,
-                   t2.LPU_FULLNAME,
-                   t2.LPU_NAME
-              FROM D_V_LPUDICT t2
-            @if(:psAllowSelectAllLpu == "0"){
-                   LEFT JOIN D_V_LPUDICT t3 ON t3.ID = t2.HID
-                   JOIN D_V_LPU t ON t.LPUDICT_ID = t2.ID OR t.LPUDICT_ID = t3.ID
-             WHERE POSITION(';' || t.ID::text || ';' IN ';' || :psLPU_RIGHT || ';') > 0
-            @} elseif(:psAllowSelectAllLpu == "2"){
-                   JOIN D_V_LPU t ON t.LPUDICT_ID = t2.ID
-             WHERE POSITION(';' || t.ID::text || ';' IN ';' || :psLPU_RIGHT || ';') > 0
-            @}
-            ]]>
-        </component>
-        <component cmptype="Variable" name="psLPU_RIGHT" src="LPU_RIGHT" srctype="var" />
-        <component cmptype="Variable" name="psAllowSelectAllLpu" src="AllowSelectAllLpu" srctype="var" />
-        <component cmptype="Variable" name="r1c" src="r1c" srctype="var" default="10" />
-        <component cmptype="Variable" name="r1s" src="r1s" srctype="var" default="1" />
-    </component>
+<component cmptype="DataSet" name="DS_RELATIVES" mode="Range">
+		select rel.ID,
+		       rel.SURNAME,
+		       rel.FIRSTNAME,
+		       rel.LASTNAME,
+		       rel.BIRTHDATE,
+		       rel.RELATIONSHIP_NAME,
+		       rel.SURNAME||' '||rel.FIRSTNAME||' '||rel.LASTNAME REL_FIO,
+		       rel.PID,
+                       rel.AGENT_ID
+		  from d_v_agents_persmedcard pmc,
+		       d_v_agent_relatives rel
+		 where pmc.ID_PERSMEDCARD = :PATIENTID
+		   and pmc.ID = rel.PID
+		<component cmptype="Variable" type="count" srctype="var" src="ds8count" default="5" />
+		<component cmptype="Variable" type="start" srctype="var" src="ds8start" default="1" />
+		<component cmptype="Variable" name="PATIENTID" srctype="var" src="PATIENT_ID" get="v2" />
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_LPUDICT, D_V_LPU
+**Используемые таблицы/вьюхи:** D_V_AGENTS_PERSMEDCARD
 
 ---
 
 ### Запрос №2
 
 **Тип компонента:** M2 Action
-**Имя компонента:** acGetLpuRight
-**Источник:** /Forms/HospPlan/select_lpu_outer_hosp.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\select_lpu_outer_hosp.frm
+**Имя компонента:** getAgentId
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="acGetLpuRight">
-        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
-            <![CDATA[
-            begin
-                select D_STRAgg(t.ID)
-                  into :psLPU_RIGHT
-                  from D_V_LPU t
-                 where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT(t.ID, :pnEMPLOYER, 'LPU', :pnLPU, 7, :pnCABLAB, 0) > 0;
-
-                :psAllowSelectAllLpu := D_PKG_OPTIONS.GET('AllowSelectAllLpu', :pnLPU);
-            end;
-            ]]>
-        </component>
-        <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
-            <![CDATA[
-            begin
-                select string_agg(t.ID::text, ',')
-                  into :psLPU_RIGHT
-                  from D_V_LPU t
-                 where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT((:pnEMPLOYER)::numeric,
-                                                                'LPU',
-                                                                (:pnLPU)::numeric,
-                                                                7,
-                                                                (:pnCABLAB)::numeric,
-                                                                0) > 0;
-
-                select D_PKG_OPTIONS.GET('AllowSelectAllLpu', (:pnLPU)::numeric)
-                  into :psAllowSelectAllLpu;
-            end;
-            ]]>
-        </component>
-        <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session" />
-        <component cmptype="ActionVar" name="pnCABLAB" src="CABLAB" srctype="session" />
-        <component cmptype="ActionVar" name="pnEMPLOYER" src="EMPLOYER" srctype="session" />
-        <component cmptype="ActionVar" name="psLPU_RIGHT" src="LPU_RIGHT" srctype="var" put="" len="4000" />
-        <component cmptype="ActionVar" name="psAllowSelectAllLpu" src="AllowSelectAllLpu" srctype="var" put="" len="1" />
-    </component>
+<component cmptype="Action" name="getAgentId">
+		begin
+			select t.AGENT
+			  into :AGENT
+			  from D_V_PERSMEDCARD t
+			 where t.ID = :PATIENT;
+		end;
+		<component cmptype="ActionVar" name="PATIENT" src="PATIENT_ID" srctype="var" get="v1" />
+		<component cmptype="ActionVar" name="AGENT" src="AGENT" srctype="var" put="v2" len="17" />
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_LPU
-**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+**Используемые таблицы/вьюхи:** D_V_PERSMEDCARD
 
 ---
 
 ### Запрос №3
 
-**Тип компонента:** M2 DataSet
-**Имя компонента:** DS_LPU
-**Источник:** /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Pregnancy\preg_card_subforms\HospPlan\select_lpu_outer_hosp.frm
-
-**SQL код:**
-
-```xml
-<component cmptype="DataSet" name="DS_LPU" activateoncreate="false" mode="Range" compile="true">
-    <![CDATA[
-            SELECT t2.ID,
-                   t2.lpu_code,
-                   t2.lpu_fullname,
-                   t2.LPU_NAME
-            FROM usr70_v_lpudict_kind t2
-        @if(:AllowSelectAllLpu=="0"){
-                    left join d_v_lpudict t3 on t3.ID = t2.HID
-                    join d_v_lpu t on t.LPUDICT_ID = t2.ID or t.LPUDICT_ID = t3.ID
-            WHERE 
-                instr(';'||:LPU_RIGHT||';',';'||t.ID||';') > 0
-        @}
-    ]]>
-    <component cmptype="Variable" name="LPU_RIGHT" src="LPU_RIGHT" srctype="var" get="g0" />
-    <component cmptype="Variable" name="AllowSelectAllLpu" src="AllowSelectAllLpu" get="AllowSelectAllLpu" srctype="var" />
-    <component cmptype="Variable" type="count" srctype="var" src="r1c" default="10" />
-    <component cmptype="Variable" type="start" srctype="var" src="r1s" default="1" />
-</component>
-```
-
-**Используемые таблицы/вьюхи:** D_V_LPUDICT, D_V_LPU
-
----
-
-### Запрос №4
-
 **Тип компонента:** M2 Action
-**Имя компонента:** getLpuRight
-**Источник:** /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Pregnancy\preg_card_subforms\HospPlan\select_lpu_outer_hosp.frm
+**Имя компонента:** delRelative
+**Источник:** /Forms/HospPlan/hp_relativechoise.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="getLpuRight">
-    DECLARE sLPU VARCHAR2(4000);
-    begin
-        FOR r IN (SELECT t.ID FROM d_v_lpu t)
-        loop
-            if d_pkg_cse_accesses.CHECK_EMPLOYER_RIGHT(r.ID,d_pkg_employers.GET_ID(:LPU),'LPU',:LPU,7,:CABLAB,0) &gt; 0 then
-                if sLPU is null then
-                    sLPU := ''||r.ID;
-                else
-                    sLPU := sLPU||';'||r.ID;
-                end if;
-            end if;
-        END loop;
-        :LPU_RIGHT := sLPU;
-        :AllowSelectAllLpu  := D_PKG_OPTIONS.GET('AllowSelectAllLpu',:LPU);
-    end;
-    <component cmptype="ActionVar" name="AllowSelectAllLpu" src="AllowSelectAllLpu" srctype="var" put="p1" len="1" />
-    <component cmptype="ActionVar" name="LPU" src="LPU" srctype="session" get="g0" />
-    <component cmptype="ActionVar" name="CABLAB" src="CABLAB" srctype="session" get="g1" />
-    <component cmptype="ActionVar" name="LPU_RIGHT" src="LPU_RIGHT" srctype="var" put="p0" len="4000" />
-</component>
+<component cmptype="Action" name="delRelative">
+		begin
+			d_pkg_agent_relatives.del(:IDD,:LPU);
+		end;
+		<component cmptype="ActionVar" name="LPU" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="IDD" src="GR_RELATIVES" srctype="ctrl" get="v1" />
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_LPU
-**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT, D_PKG_EMPLOYERS.GET_ID
+**Используемые пакеты/функции:** D_PKG_AGENT_RELATIVES.DEL
 
 
 ## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
 
-Ниже представлены определения всех вьюх (D_V_*), найденных в SQL запросах форм, извлеченные из базы данных PostgreSQL.
-
-**Статистика:**
-- Всего вьюх: 2
-
----
-
-### Вьюха №1: D_V_LPUDICT
-
-**Используется в формах:**
-- /Forms/HospPlan/select_lpu_outer_hosp.frm
-- /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
-
-**DDL определение:**
-
-```sql
--- PostgreSQL View: D_V_LPUDICT
- SELECT t.id,
-    t.version,
-    t.agent,
-    t.lpu_code,
-    t2.agn_code AS lpu_agent_code,
-    t2.agn_name AS lpu_agent_name,
-    t.lpu_name,
-    t.lpu_fullname,
-    t.headdoct,
-    t.is_resp,
-        CASE
-            WHEN t.is_resp = 0::numeric OR check_null(t.is_resp::character varying, 0::character varying) THEN 'Нет'::character varying
-            WHEN t.is_resp = 1::numeric OR check_null(t.is_resp::character varying, 1::character varying) THEN 'Да'::character varying
-            ELSE NULL::character varying
-        END AS sis_resp,
-    t.bookkeeper,
-    t.date_b,
-    t.date_e,
-    t.priv_date_b,
-    t.priv_date_e,
-    t.has_priv_rec,
-        CASE
-            WHEN t.has_priv_rec = 0::numeric OR check_null(t.has_priv_rec::character varying, 0::character varying) THEN 'Нет'::character varying
-            WHEN t.has_priv_rec = 1::numeric OR check_null(t.has_priv_rec::character varying, 1::character varying) THEN 'Да'::character varying
-            ELSE NULL::character varying
-        END AS shas_priv_rec,
-    t1.lk_code AS lpukind,
-    t.lpukind AS lpukind_id,
-    t.hid,
-    tt.lpu_code AS hid_lpu_code,
-    t2.agn_ogrn,
-    t.cid,
-    concat(t.lpu_code, ' ', t.lpu_name) AS lpu_code_name
-   FROM d_lpudict t
-     LEFT JOIN d_lpukinds t1 ON t1.id = t.lpukind
-     LEFT JOIN d_agents t2 ON t2.id = t.agent
-     LEFT JOIN d_lpudict tt ON tt.id = t.hid
-  WHERE true = true AND true = true AND true = true AND (EXISTS ( SELECT NULL::text AS "null"
-           FROM d_v_urprivs ur
-          WHERE ur.version = t.version AND ur.unitcode::text = 'LPUDICT'::text
-         LIMIT 1));
-```
-
----
-
-### Вьюха №2: D_V_LPU
-
-**Используется в формах:**
-- /Forms/HospPlan/select_lpu_outer_hosp.frm
-- /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
-
-**DDL определение:**
-
-```sql
--- PostgreSQL View: D_V_LPU
- SELECT l.id,
-    l.fullname,
-    l.headdoctor_fullname AS headdoctor_fullname_old,
-    d_pkg_headdoctor.get_actual_on_date(l.id::numeric, sysdate()) AS headdoctor_id,
-    COALESCE(d_pkg_headdoctor.get_actual_on_date(l.id::numeric, sysdate(), 'SURNAME FIRSTNAME LASTNAME'::character varying), l.headdoctor_fullname) AS headdoctor_fullname,
-    d_pkg_headdoctor.get_actual_on_date(l.id::numeric, sysdate(), 'FIO'::character varying) AS headdoctor_fio,
-    l.fulladdress,
-    l.phones,
-    l.website,
-    l.rec_ser_priv,
-    l.rec_ser,
-    l.code_lpu,
-    l.code_ogrn,
-    l.code_okpo,
-    l.code_okdp,
-    l.code_okonh,
-    l.code_okato,
-    l.code_okogu,
-    l.code_ocopph,
-    l.code_okfs,
-    l.bookkeeper_fullname,
-    l.headeconomist_fullname,
-    ld.headdoct AS lpudict_headdoct,
-    ld.bookkeeper AS lpudict_bookkeeper,
-    ld.lpu_code AS lpudict,
-    ld.id AS lpudict_id,
-    ld.lpu_name AS lpudict_name,
-    ld.lpu_fullname AS lpudict_fullname,
-    l.geografy AS geografy_id,
-    g.geoname AS geografy,
-    g.geofull,
-    ld.agent AS agent_id,
-    l.userforms,
-    l.gennumb_group,
-    l.exec_authority,
-    l.rec_ser_priv_88,
-    l.ip_addr,
-    ld.version,
-    ld.is_resp,
-    l.by_es_only,
-    ld.date_b AS lpudict_date_b,
-    ld.date_e AS lpudict_date_e,
-    COALESCE(ld.date_e, sysdate()) AS lpudict_date_e_sysdate,
-    l.address
-   FROM d_lpu l
-     LEFT JOIN d_lpudict ld ON ld.id = l.lpudict
-     LEFT JOIN d_geografy g ON g.id = l.geografy
-  WHERE (EXISTS ( SELECT NULL::text AS "null"
-           FROM d_v_urprivs ur
-          WHERE COALESCE(ur.lpu, - 1::bigint) = (- 1::bigint) AND COALESCE(ur.version, - 1::bigint) = (- 1::bigint) AND ur.unitcode::text = 'LPU'::text
-         LIMIT 1));
-```
+Вьюхи в PostgreSQL не найдены или не удалось получить DDL.
 
 
 ## 3. ТЕКСТ ВЬЮХ ИЗ ORACLE 🟠
@@ -342,119 +122,135 @@
 
 ---
 
-### Вьюха №1: D_V_LPUDICT
+### Вьюха №1: D_V_AGENTS_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/select_lpu_outer_hosp.frm
-- /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
+- /Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
 ```sql
--- Oracle View: D_V_LPUDICT
-select -- Представление для раздела: Список ЛПУ
-       t.ID,
-       t.VERSION,
-       t.AGENT,
-       t.LPU_CODE,
-       t2.AGN_CODE LPU_AGENT_CODE,
-       t2.AGN_NAME LPU_AGENT_NAME,
-       t.LPU_NAME,
-       t.LPU_FULLNAME,
-       t.HEADDOCT,
-       t.IS_RESP,
-       decode(t.IS_RESP, 0, 'Нет', 1, 'Да') sIS_RESP,
-       t.BOOKKEEPER,
-       t.DATE_B,
-       t.DATE_E,
-       t.PRIV_DATE_B,
-       t.PRIV_DATE_E,
-       t.HAS_PRIV_REC,
-       decode(t.HAS_PRIV_REC, 0, 'Нет', 1, 'Да') sHAS_PRIV_REC,
-       t1.LK_CODE LPUKIND,
-       t.LPUKIND  LPUKIND_ID,
-       t.HID,
-       tt.LPU_CODE HID_LPU_CODE,
-       t2.AGN_OGRN,
-       t.CID,
-       t.LPU_CODE || ' ' || t.LPU_NAME LPU_CODE_NAME
-  from D_LPUDICT  t,   --Список ЛПУ
-       D_LPUKINDS t1,  --Виды ЛПУ
-       D_AGENTS   t2,  --Контрагенты
-       D_LPUDICT  tt
- where t1.ID(+)   = t.LPUKIND
-   and t2.ID(+)   = t.AGENT
-   and tt.ID(+)   = t.HID
-   and exists (select null from D_V_URPRIVS ur where ur.VERSION = t.VERSION and ur.UNITCODE = 'LPUDICT' and rownum = 1)
+-- Oracle View: D_V_AGENTS_PERSMEDCARD
+select --Представление для раздела : персональные медицинские карты контрагентов
+       t1.ID,
+       t1.SURNAME,
+       t1.FIRSTNAME,
+       t1.LASTNAME,
+       t1.BIRTHDATE,
+       t1.SEX,
+       t2.ID        ID_PERSMEDCARD,
+       t2.CARD_NUMB,
+       t1.SNILS,
+       t2.LPU,
+       t1.VERSION,
+       t1.ENP
+  from D_AGENTS      t1,      -- Контрагенты
+       D_PERSMEDCARD t2       -- Карта пациента
+where t1.ID        = t2.AGENT
+  and t1.AGN_TYPE  = 1
+  and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t2.CID and ur.UNITCODE = 'PERSMEDCARD')
+union
+select t1.ID,
+       t1.SURNAME,
+       t1.FIRSTNAME,
+       t1.LASTNAME,
+       t1.BIRTHDATE,
+       t1.SEX,
+       null  ID_PERSMEDCARD,
+       null  CARD_NUMB,
+       null  SNILS,
+       t2.ID LPU,
+       t1.VERSION,
+       t1.ENP
+  from D_AGENTS      t1,      -- Контрагенты
+       D_LPU         t2       -- ЛПУ
+where t1.AGN_TYPE  = 1
+  and not exists (select null from D_PERSMEDCARD pmc where pmc.AGENT = t1.ID and pmc.LPU = t2.ID)
+  and exists (select null from D_V_URPRIVS ur where ur.CATALOG = t1.CID and ur.UNITCODE = 'AGENTS')
+
+ 
 ```
 
 ---
 
-### Вьюха №2: D_V_LPU
+### Вьюха №2: D_V_PERSMEDCARD
 
 **Используется в формах:**
-- /Forms/HospPlan/select_lpu_outer_hosp.frm
-- /Forms/UserFormsEgis3Tomsk/Pregnancy/preg_card_subforms/HospPlan/select_lpu_outer_hosp.frm
+- /Forms/HospPlan/hp_relativechoise.frm
 
 **DDL определение:**
 
 ```sql
--- Oracle View: D_V_LPU
-select --Представление для раздела: Основная таблица ЛПУ
-       l.ID,
-       l.FULLNAME,
-       l.HEADDOCTOR_FULLNAME                                   HEADDOCTOR_FULLNAME_OLD,
-       D_PKG_HEADDOCTOR.GET_ACTUAL_ON_DATE(l.ID,sysdate)       HEADDOCTOR_ID,
-       coalesce(
-         D_PKG_HEADDOCTOR.GET_ACTUAL_ON_DATE(l.ID,sysdate,'SURNAME FIRSTNAME LASTNAME'),
-         l.HEADDOCTOR_FULLNAME)                                HEADDOCTOR_FULLNAME,
-       D_PKG_HEADDOCTOR.GET_ACTUAL_ON_DATE(l.ID,sysdate,'FIO') HEADDOCTOR_FIO,
-       l.FULLADDRESS,
-       l.PHONES,
-       l.WEBSITE,
-       l.REC_SER_PRIV,
-       l.REC_SER,
-       l.CODE_LPU,
-       l.CODE_OGRN,
-       l.CODE_OKPO,
-       l.CODE_OKDP,
-       l.CODE_OKONH,
-       l.CODE_OKATO,
-       l.CODE_OKOGU,
-       l.CODE_OCOPPH,
-       l.CODE_OKFS,
-       l.BOOKKEEPER_FULLNAME,
-       l.HEADECONOMIST_FULLNAME,
-       ld.HEADDOCT                                              LPUDICT_HEADDOCT,
-       ld.BOOKKEEPER                                            LPUDICT_BOOKKEEPER,
-       ld.LPU_CODE                                              LPUDICT,
-       ld.ID                                                    LPUDICT_ID,
-       ld.LPU_NAME                                              LPUDICT_NAME,
-       ld.LPU_FULLNAME                                          LPUDICT_FULLNAME,
-       l.GEOGRAFY                                               GEOGRAFY_ID,
-       g.GEONAME                                                GEOGRAFY,
-       g.GEOFULL,
-       ld.AGENT                                                 AGENT_ID,
-       l.USERFORMS,
-       l.GENNUMB_GROUP,
-       l.EXEC_AUTHORITY,
-       l.REC_SER_PRIV_88,
-       l.IP_ADDR,
-       ld.VERSION,
-       ld.IS_RESP,
-       l.BY_ES_ONLY,
-       ld.DATE_B as LPUDICT_DATE_B,
-       ld.DATE_E as LPUDICT_DATE_E,
-       coalesce(ld.DATE_E, sysdate) as LPUDICT_DATE_E_SYSDATE,
-       l.ADDRESS
-  from D_LPU l  --Основная таблица ЛПУ
-       left join D_LPUDICT ld on ld.ID = l.LPUDICT  --Список ЛПУ
-       left join D_GEOGRAFY g on g.ID = l.GEOGRAFY --Географические понятия
+-- Oracle View: D_V_PERSMEDCARD
+select --Представление для раздела : Персональные медицинские карты
+       p.ID,
+       p.CID,
+       p.LPU,
+       p.CARD_NUMB,
+       p.AGENT,
+       a.FIRSTNAME,
+       a.SURNAME,
+       a.LASTNAME,
+       a.BIRTHDATE,
+       a.DEATHDATE,
+       decode(a.SEX,0,'Женский',1,'Мужской','')                   SEX,
+       a.SEX                                                      nSEX,
+       a.BIRTHPLACE,
+       p.CREATEDATE,
+       p.MODDATE,
+       p.NOTE,
+       r.RH_NAME                                                  RHESUS,
+       p.RHESUS                                                   nRHESUS,
+       p.BLOODGROUPE                                              BLOODGROUPE_ID,
+       b.BG_CODE                                                  BLOODGROUPE,
+       p.ECOLOR,
+       a.SNILS,
+       p.REG_DIVISION                                             REG_DIVISION_ID,
+       d.DIV_CODE                                                 REG_DIVISION,
+       p.TP_PRINTED,
+       case when p.TP_PRINTED = 0 then 'Нет'
+            when p.TP_PRINTED = 1 then 'Да'
+       end                                                        TP_PRINTED_MNEMO,
+       p.PMC_TYPE,
+       case when p.PMC_TYPE = 1     then 'аноним'
+            when p.PMC_TYPE = 2     then 'новорожденный'
+            when p.PMC_TYPE = 3     then 'неизвестный'
+            when p.PMC_TYPE is null then 'пациент'
+       end                                                        PMC_TYPE_NAME,
+       a.ENP,
+       p.OUTNUMB,
+       p.IA_PRINTED,
+       case when p.IA_PRINTED = 0 then 'Нет'
+            else 'Да'
+       end                                                        IA_PRINTED_MNEMO,
+       p.SMS_AGREE,
+       case when p.SMS_AGREE = 0 then 'Нет'
+            else 'Да'
+       end                                                        SMS_AGREE_MNEMO,
+       D_PKG_STR_TOOLS.FIO(ae.SURNAME, ae.FIRSTNAME, ae.LASTNAME) EMP_FIO,
+       p.EMP_ID,
+       null MARKER_ID, --Не используется
+       null MARKER_CODE,--Не используется
+       null MARKER_NAME,--Не используется
+       null MARKER_DESCRIPTION,--Не используется
+       p.EMAIL_AGREE,
+       p.PHENOTYPE,
+       a.EDUCATION                                                EDUCATION_ID,
+       c.CL_NAME,
+       a.ACCORDING_RELATIVES,
+       a.NATION                                                   AGENT_NATION
+  from D_PERSMEDCARD           p                           --Персональные медицинские карты
+       join D_AGENTS           a  on a.ID = p.AGENT        --Контрагенты
+       left join D_BLOODGROUPE b  on b.ID = p.BLOODGROUPE  --Справочник : Группы крови
+       left join D_DIVISIONS   d  on d.ID = p.REG_DIVISION --Подразделения ЛПУ
+       left join D_RHESUS      r  on r.RH_CODE = p.RHESUS  --Резус-фактор
+       left join D_EMPLOYERS   e  on e.ID = p.EMP_ID       --Персонал
+       left join D_AGENTS      ae on ae.ID = e.AGENT       --Контрагенты
+       left join D_CABLAB      c  on c.ID = p.CABLAB       --Кабинет
  where exists (select null
                  from D_V_URPRIVS ur
-                where coalesce(ur.LPU, -1) = -1
-                  and coalesce(ur.VERSION, -1) = -1
-                  and ur.UNITCODE = 'LPU'
+                where ur.CATALOG = p.CID
+                  and ur.UNITCODE = 'PERSMEDCARD'
                   and rownum = 1)
 ```
 
@@ -466,315 +262,7 @@ select --Представление для раздела: Основная та
 
 ## 4. DDL ТАБЛИЦ ИЗ POSTGRESQL ВЬЮХ
 
-Ниже представлен список всех таблиц, которые используются внутри вьюх PostgreSQL, а также их DDL определения.
-
-**Статистика:**
-- Всего вьюх с таблицами: 2
-- Всего уникальных таблиц: 5
-
-### Связь вьюх и таблиц
-
-**D_V_LPUDICT** использует таблицы:
-- D_LPUDICT
-- D_LPUKINDS
-- D_AGENTS
-
-**D_V_LPU** использует таблицы:
-- D_LPU
-- D_LPUDICT
-- D_GEOGRAFY
-
-### DDL определения таблиц
-
----
-
-#### Таблица №1: D_LPUDICT
-
-```sql
-CREATE TABLE D_LPUDICT (
-    id bigint,
-    lpu_code character varying(20),
-    lpu_fullname character varying(300),
-    headdoct character varying(160),
-    is_resp numeric(1) DEFAULT 0,
-    bookkeeper character varying(150),
-    date_b timestamp without time zone,
-    date_e timestamp without time zone,
-    priv_date_b timestamp without time zone,
-    priv_date_e timestamp without time zone,
-    has_priv_rec numeric(1),
-    version bigint,
-    lpukind bigint,
-    agent bigint,
-    lpu_name character varying(100),
-    hid bigint,
-    cid bigint
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_LPUDICT.id IS 'ID';
-COMMENT ON COLUMN D_LPUDICT.lpu_code IS 'Код';
-COMMENT ON COLUMN D_LPUDICT.lpu_fullname IS 'Полное наименование';
-COMMENT ON COLUMN D_LPUDICT.headdoct IS 'Главврач';
-COMMENT ON COLUMN D_LPUDICT.is_resp IS 'Тип ЛПУ :  0 - Районное, 1 - Областное,  2-Городское';
-COMMENT ON COLUMN D_LPUDICT.bookkeeper IS 'Главбух';
-COMMENT ON COLUMN D_LPUDICT.date_b IS 'Дата включения в справочник';
-COMMENT ON COLUMN D_LPUDICT.date_e IS 'Дата исключения из справочника';
-COMMENT ON COLUMN D_LPUDICT.priv_date_b IS 'Дата начала выписки льготных рецептов';
-COMMENT ON COLUMN D_LPUDICT.priv_date_e IS 'Дата конца выписки льготных рецептов';
-COMMENT ON COLUMN D_LPUDICT.has_priv_rec IS 'Имеет ли право на выписку льготных рецептов: 0 - нет, 1- да';
-COMMENT ON COLUMN D_LPUDICT.version IS 'Версия';
-COMMENT ON COLUMN D_LPUDICT.lpukind IS 'Вид ЛПУ';
-COMMENT ON COLUMN D_LPUDICT.agent IS 'Контрагент';
-COMMENT ON COLUMN D_LPUDICT.lpu_name IS 'Краткое наименование';
-COMMENT ON COLUMN D_LPUDICT.hid IS 'Главное ЛПУ';
-COMMENT ON COLUMN D_LPUDICT.cid IS 'Каталог';
-
-COMMENT ON TABLE D_LPUDICT IS 'Список ЛПУ';
-```
-
----
-
-#### Таблица №2: D_LPUKINDS
-
-```sql
-CREATE TABLE D_LPUKINDS (
-    id bigint,
-    lk_code numeric(2),
-    lk_name character varying(200),
-    main_lvl bigint
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_LPUKINDS.id IS 'ID';
-COMMENT ON COLUMN D_LPUKINDS.lk_code IS 'Код';
-COMMENT ON COLUMN D_LPUKINDS.lk_name IS 'Наименование';
-COMMENT ON COLUMN D_LPUKINDS.main_lvl IS 'Основной уровень';
-
-COMMENT ON TABLE D_LPUKINDS IS 'Виды ЛПУ';
-```
-
----
-
-#### Таблица №3: D_AGENTS
-
-```sql
-CREATE TABLE D_AGENTS (
-    id bigint,
-    version bigint,
-    cid bigint,
-    agn_code character varying(40),
-    agn_name character varying(250),
-    agn_type numeric(1),
-    agn_inn numeric(12),
-    agn_kpp bigint,
-    note character varying(250),
-    firstname character varying(40),
-    surname character varying(40),
-    lastname character varying(40),
-    birthdate timestamp without time zone,
-    sex numeric(1),
-    okved bigint,
-    education bigint,
-    is_employer numeric(1) DEFAULT 0,
-    snils character varying(11),
-    agn_ogrn character varying(13),
-    agn_okpo character varying(10),
-    deathdate timestamp without time zone,
-    deathdoctype bigint,
-    deathdocdate timestamp without time zone,
-    deathdocnum character varying(20),
-    agn_okfs bigint,
-    enp character varying(16),
-    birthplace character varying(400),
-    nation bigint,
-    is_home numeric(1) DEFAULT 0,
-    gest_age_mother numeric(4,1),
-    is_anonym numeric(1) DEFAULT 0,
-    deathplace character varying(4000),
-    full_classes numeric(2),
-    accuracy_date_death numeric(1),
-    accuracy_date_birth numeric(1),
-    ind_enterp numeric(1),
-    agn_ogrn_ind character varying(15),
-    convict_amount numeric(3),
-    allerg_date timestamp without time zone,
-    according_relatives numeric(1) DEFAULT 0,
-    birthplace_geo bigint,
-    webiomed_guid character varying(36),
-    webiomed_url character varying(2048),
-    medicbk_guid character varying(36),
-    medicbk_url character varying(2048),
-    birthplace_gar_address_id bigint,
-    max_info numeric(1) DEFAULT 0,
-    epgu numeric(1) DEFAULT 0
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_AGENTS.id IS 'ID';
-COMMENT ON COLUMN D_AGENTS.version IS 'Версия';
-COMMENT ON COLUMN D_AGENTS.cid IS 'Каталог';
-COMMENT ON COLUMN D_AGENTS.agn_code IS 'Код';
-COMMENT ON COLUMN D_AGENTS.agn_name IS 'Наименование';
-COMMENT ON COLUMN D_AGENTS.agn_type IS 'Тип : 0 - юридический, 1 - физический';
-COMMENT ON COLUMN D_AGENTS.agn_inn IS 'ИНН';
-COMMENT ON COLUMN D_AGENTS.agn_kpp IS 'КПП';
-COMMENT ON COLUMN D_AGENTS.note IS 'Примечание';
-COMMENT ON COLUMN D_AGENTS.firstname IS 'Имя';
-COMMENT ON COLUMN D_AGENTS.surname IS 'Фамилия';
-COMMENT ON COLUMN D_AGENTS.lastname IS 'Отчество';
-COMMENT ON COLUMN D_AGENTS.birthdate IS 'Дата рождения';
-COMMENT ON COLUMN D_AGENTS.sex IS 'Пол : 0 - женский, 1 - мужской';
-COMMENT ON COLUMN D_AGENTS.okved IS 'Код по ОКВЕД';
-COMMENT ON COLUMN D_AGENTS.education IS 'Образование';
-COMMENT ON COLUMN D_AGENTS.is_employer IS 'Сотрудник: 1 - да, 0 - нет';
-COMMENT ON COLUMN D_AGENTS.snils IS 'СНИЛС';
-COMMENT ON COLUMN D_AGENTS.agn_ogrn IS 'Код ОГРН';
-COMMENT ON COLUMN D_AGENTS.agn_okpo IS 'Код ОКПО';
-COMMENT ON COLUMN D_AGENTS.deathdate IS 'Дата и время смерти';
-COMMENT ON COLUMN D_AGENTS.deathdoctype IS 'Тип документа о смерти';
-COMMENT ON COLUMN D_AGENTS.deathdocdate IS 'Дата оформления документа о смерти';
-COMMENT ON COLUMN D_AGENTS.deathdocnum IS 'Номер документа о смерти';
-COMMENT ON COLUMN D_AGENTS.agn_okfs IS 'Код по ОКФС';
-COMMENT ON COLUMN D_AGENTS.enp IS 'ЕНП';
-COMMENT ON COLUMN D_AGENTS.birthplace IS 'Место рождения';
-COMMENT ON COLUMN D_AGENTS.nation IS 'Национальность';
-COMMENT ON COLUMN D_AGENTS.is_home IS 'Лежачий пациент';
-COMMENT ON COLUMN D_AGENTS.gest_age_mother IS 'Срок гестации матери(в неделях) при родах';
-COMMENT ON COLUMN D_AGENTS.is_anonym IS 'Аноним: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_AGENTS.deathplace IS 'Место смерти';
-COMMENT ON COLUMN D_AGENTS.full_classes IS 'Количество полных классов/курсов';
-COMMENT ON COLUMN D_AGENTS.accuracy_date_death IS 'Точность даты смерти: 0 - неизвестно время; 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
-COMMENT ON COLUMN D_AGENTS.accuracy_date_birth IS 'Точность даты рождения: 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
-COMMENT ON COLUMN D_AGENTS.ind_enterp IS 'Индивидуальный предприниматель: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_AGENTS.agn_ogrn_ind IS 'Код ОГРН ИП';
-COMMENT ON COLUMN D_AGENTS.convict_amount IS 'Общее число судимостей';
-COMMENT ON COLUMN D_AGENTS.allerg_date IS 'Дата опроса о наличии аллергии';
-COMMENT ON COLUMN D_AGENTS.according_relatives IS 'Заполнено со слов родственников: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_AGENTS.birthplace_geo IS 'Место рождения: географическое понятие';
-COMMENT ON COLUMN D_AGENTS.webiomed_guid IS 'Идентификатор от МИС НП для мониторинга Webiomed';
-COMMENT ON COLUMN D_AGENTS.webiomed_url IS 'Ссылка на результаты "Мониторинг Webiomed"';
-COMMENT ON COLUMN D_AGENTS.medicbk_guid IS 'Идентификатор для MedicBK';
-COMMENT ON COLUMN D_AGENTS.medicbk_url IS 'Ссылка на результаты MedicBK';
-COMMENT ON COLUMN D_AGENTS.birthplace_gar_address_id IS 'Место рождения : географическое понятие (ГАР)';
-COMMENT ON COLUMN D_AGENTS.max_info IS 'Информирование в MAX: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_AGENTS.epgu IS 'Признак: 1 - да, 0 - нет';
-
-COMMENT ON TABLE D_AGENTS IS 'Контрагенты';
-```
-
----
-
-#### Таблица №4: D_LPU
-
-```sql
-CREATE TABLE D_LPU (
-    id bigint,
-    fullname character varying(300),
-    headdoctor_fullname character varying(160),
-    fulladdress character varying(160),
-    phones character varying(80),
-    rec_ser_priv character varying(10),
-    rec_ser character varying(10),
-    code_lpu character varying(20),
-    code_ogrn character varying(15),
-    code_okpo character varying(10),
-    code_okdp character varying(8),
-    code_okonh character varying(5),
-    code_okato character varying(11),
-    code_okogu character varying(10),
-    code_ocopph character varying(5),
-    code_okfs character varying(2),
-    lpudict bigint,
-    bookkeeper_fullname character varying(160),
-    headeconomist_fullname character varying(160),
-    geografy bigint,
-    userforms character varying(64),
-    gennumb_group bigint,
-    exec_authority character varying(150),
-    rec_ser_priv_88 character varying(10),
-    ip_addr character varying(250),
-    by_es_only numeric(1),
-    website character varying(250),
-    is_tech_lpu numeric(1) DEFAULT 0,
-    address bigint
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_LPU.id IS 'ID';
-COMMENT ON COLUMN D_LPU.fullname IS 'Полное наименование ЛПУ';
-COMMENT ON COLUMN D_LPU.headdoctor_fullname IS 'ФИО главврача';
-COMMENT ON COLUMN D_LPU.fulladdress IS 'Адрес ЛПУ';
-COMMENT ON COLUMN D_LPU.phones IS 'Телефоны ЛПУ';
-COMMENT ON COLUMN D_LPU.rec_ser_priv IS 'Серия для выписки рецептов 148-1/у-04
-на льготные медикаменты';
-COMMENT ON COLUMN D_LPU.rec_ser IS 'Серия для выписки рецептов
-на нельготные медикаменты';
-COMMENT ON COLUMN D_LPU.code_lpu IS 'Код ЛПУ';
-COMMENT ON COLUMN D_LPU.code_ogrn IS 'Код ЛПУ по ОГРН';
-COMMENT ON COLUMN D_LPU.code_okpo IS 'Код ЛПУ по ОКПО';
-COMMENT ON COLUMN D_LPU.code_okdp IS 'Код ЛПУ по ОКДП';
-COMMENT ON COLUMN D_LPU.code_okonh IS 'Код ЛПУ по ОКОНХ';
-COMMENT ON COLUMN D_LPU.code_okato IS 'Код ЛПУ по ОКАТО';
-COMMENT ON COLUMN D_LPU.code_okogu IS 'Код ЛПУ по ОКОГУ';
-COMMENT ON COLUMN D_LPU.code_ocopph IS 'Код ЛПУ по ОКОПФ';
-COMMENT ON COLUMN D_LPU.code_okfs IS 'Код ЛПУ по ОКФС';
-COMMENT ON COLUMN D_LPU.lpudict IS 'АПУ';
-COMMENT ON COLUMN D_LPU.bookkeeper_fullname IS 'ФИО главбуха';
-COMMENT ON COLUMN D_LPU.headeconomist_fullname IS 'ФИО главного экономиста';
-COMMENT ON COLUMN D_LPU.geografy IS 'Регион ЛПУ';
-COMMENT ON COLUMN D_LPU.userforms IS 'Каталог пользовательских форм';
-COMMENT ON COLUMN D_LPU.gennumb_group IS 'Группа нумерации карт';
-COMMENT ON COLUMN D_LPU.exec_authority IS 'Орган исполнительной власти субъекта РФ';
-COMMENT ON COLUMN D_LPU.rec_ser_priv_88 IS 'Серия для выписки рецептов 148-1/у-88
-на льготные медикаменты';
-COMMENT ON COLUMN D_LPU.ip_addr IS 'Доступные IP';
-COMMENT ON COLUMN D_LPU.by_es_only IS 'Вход в ЛПУ осуществляется только по электронной подписи: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_LPU.website IS 'Сайт МО';
-COMMENT ON COLUMN D_LPU.is_tech_lpu IS 'Техническая УЗ';
-COMMENT ON COLUMN D_LPU.address IS 'Адрес ГАР';
-
-COMMENT ON TABLE D_LPU IS 'Основная таблица ЛПУ';
-```
-
----
-
-#### Таблица №5: D_GEOGRAFY
-
-```sql
-CREATE TABLE D_GEOGRAFY (
-    id bigint,
-    pid bigint,
-    geoname character varying(60),
-    geoloctype bigint,
-    kladr_code character varying(20),
-    kladr_index character varying(6),
-    kladr_gninmb character varying(4),
-    kladr_ocatd character varying(11),
-    kladr_status numeric(1),
-    version bigint,
-    geofull character varying(4000),
-    fias_code character varying(36),
-    address bigint
-);
-
--- Комментарии к колонкам:
-COMMENT ON COLUMN D_GEOGRAFY.id IS 'ID';
-COMMENT ON COLUMN D_GEOGRAFY.pid IS 'Ссылка на родителя (географическое понятие более высокого уровня)';
-COMMENT ON COLUMN D_GEOGRAFY.geoname IS 'Наименование';
-COMMENT ON COLUMN D_GEOGRAFY.geoloctype IS 'Тип географического понятия';
-COMMENT ON COLUMN D_GEOGRAFY.kladr_code IS 'Код по справочнику КЛАДР';
-COMMENT ON COLUMN D_GEOGRAFY.kladr_index IS 'Индекс';
-COMMENT ON COLUMN D_GEOGRAFY.kladr_gninmb IS 'Код ИФНС';
-COMMENT ON COLUMN D_GEOGRAFY.kladr_ocatd IS 'Код ОКАТО';
-COMMENT ON COLUMN D_GEOGRAFY.kladr_status IS 'Статус';
-COMMENT ON COLUMN D_GEOGRAFY.version IS 'Версия';
-COMMENT ON COLUMN D_GEOGRAFY.geofull IS 'Полное наименование';
-COMMENT ON COLUMN D_GEOGRAFY.fias_code IS 'Код по справочнику ФИАС';
-COMMENT ON COLUMN D_GEOGRAFY.address IS 'Адрес ГАР';
-
-COMMENT ON TABLE D_GEOGRAFY IS 'Географические понятия';
-```
+Таблицы из PostgreSQL вьюх не найдены.
 
 
 ## 5. DDL ТАБЛИЦ ИЗ ORACLE ВЬЮХ
@@ -783,181 +271,372 @@ COMMENT ON TABLE D_GEOGRAFY IS 'Географические понятия';
 
 **Статистика:**
 - Всего вьюх с таблицами: 2
-- Всего уникальных таблиц: 3
+- Всего уникальных таблиц: 7
 
 ### Связь вьюх и таблиц
 
-**D_V_LPUDICT** использует таблицы:
-- D_LPUDICT
+**D_V_AGENTS_PERSMEDCARD** использует таблицы:
+- D_AGENTS
+- D_PERSMEDCARD
 
-**D_V_LPU** использует таблицы:
-- D_LPU
-- D_LPUDICT
-- D_GEOGRAFY
+**D_V_PERSMEDCARD** использует таблицы:
+- D_PERSMEDCARD
+- D_AGENTS
+- D_BLOODGROUPE
+- D_DIVISIONS
+- D_RHESUS
+- D_EMPLOYERS
+- D_CABLAB
 
 ### DDL определения таблиц
 
 ---
 
-#### Таблица №1: D_LPUDICT
+#### Таблица №1: D_AGENTS
 
 ```sql
-CREATE TABLE D_LPUDICT (
+CREATE TABLE D_AGENTS (
     ID NUMBER(17) NOT NULL,
-    LPU_CODE VARCHAR2(20) NOT NULL,
-    LPU_FULLNAME VARCHAR2(300),
-    HEADDOCT VARCHAR2(160),
-    IS_RESP NUMBER(1) NOT NULL,
-    BOOKKEEPER VARCHAR2(150),
-    DATE_B DATE,
-    DATE_E DATE,
-    PRIV_DATE_B DATE,
-    PRIV_DATE_E DATE,
-    HAS_PRIV_REC NUMBER(1),
     VERSION NUMBER(17) NOT NULL,
-    LPUKIND NUMBER(17),
-    AGENT NUMBER(17),
-    LPU_NAME VARCHAR2(100),
-    HID NUMBER(17),
     CID NUMBER(17) NOT NULL,
-    CONSTRAINT PK_D_LPUDICT PRIMARY KEY (ID)
+    AGN_CODE VARCHAR2(40) NOT NULL,
+    AGN_NAME VARCHAR2(250) NOT NULL,
+    AGN_TYPE NUMBER(1) NOT NULL,
+    AGN_INN NUMBER(12),
+    AGN_KPP NUMBER(17),
+    NOTE VARCHAR2(250),
+    FIRSTNAME VARCHAR2(40),
+    SURNAME VARCHAR2(40),
+    LASTNAME VARCHAR2(40),
+    BIRTHDATE DATE,
+    SEX NUMBER(1),
+    OKVED NUMBER(17),
+    EDUCATION NUMBER(17),
+    IS_EMPLOYER NUMBER(1) NOT NULL,
+    SNILS VARCHAR2(11),
+    AGN_OGRN VARCHAR2(13),
+    AGN_OKPO VARCHAR2(10),
+    DEATHDATE DATE,
+    DEATHDOCTYPE NUMBER(17),
+    DEATHDOCDATE DATE,
+    DEATHDOCNUM VARCHAR2(20),
+    AGN_OKFS NUMBER(17),
+    ENP VARCHAR2(16),
+    BIRTHPLACE VARCHAR2(400),
+    NATION NUMBER(17),
+    IS_HOME NUMBER(1) NOT NULL,
+    GEST_AGE_MOTHER NUMBER(3,1),
+    IS_ANONYM NUMBER(1) NOT NULL,
+    DEATHPLACE VARCHAR2(4000),
+    FULL_CLASSES NUMBER(2),
+    ACCURACY_DATE_DEATH NUMBER(1),
+    ACCURACY_DATE_BIRTH NUMBER(1),
+    IND_ENTERP NUMBER(1),
+    AGN_OGRN_IND VARCHAR2(15),
+    CONVICT_AMOUNT NUMBER(3),
+    ALLERG_DATE DATE,
+    ACCORDING_RELATIVES NUMBER(1) NOT NULL,
+    BIRTHPLACE_GEO NUMBER(17),
+    WEBIOMED_GUID VARCHAR2(36),
+    WEBIOMED_URL VARCHAR2(2048),
+    MEDICBK_GUID VARCHAR2(36),
+    MEDICBK_URL VARCHAR2(2048),
+    BIRTHPLACE_GAR_ADDRESS_ID NUMBER(17),
+    MAX_INFO NUMBER(1),
+    EPGU NUMBER(1),
+    CONSTRAINT PK_D_AGENTS PRIMARY KEY (ID)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_LPUDICT.ID IS 'ID';
-COMMENT ON COLUMN D_LPUDICT.LPU_CODE IS 'Код';
-COMMENT ON COLUMN D_LPUDICT.LPU_FULLNAME IS 'Полное наименование';
-COMMENT ON COLUMN D_LPUDICT.HEADDOCT IS 'Главврач';
-COMMENT ON COLUMN D_LPUDICT.IS_RESP IS 'Тип ЛПУ :  0 - Районное, 1 - Областное,  2-Городское';
-COMMENT ON COLUMN D_LPUDICT.BOOKKEEPER IS 'Главбух';
-COMMENT ON COLUMN D_LPUDICT.DATE_B IS 'Дата включения в справочник';
-COMMENT ON COLUMN D_LPUDICT.DATE_E IS 'Дата исключения из справочника';
-COMMENT ON COLUMN D_LPUDICT.PRIV_DATE_B IS 'Дата начала выписки льготных рецептов';
-COMMENT ON COLUMN D_LPUDICT.PRIV_DATE_E IS 'Дата конца выписки льготных рецептов';
-COMMENT ON COLUMN D_LPUDICT.HAS_PRIV_REC IS 'Имеет ли право на выписку льготных рецептов: 0 - нет, 1- да';
-COMMENT ON COLUMN D_LPUDICT.VERSION IS 'Версия';
-COMMENT ON COLUMN D_LPUDICT.LPUKIND IS 'Вид ЛПУ';
-COMMENT ON COLUMN D_LPUDICT.AGENT IS 'Контрагент';
-COMMENT ON COLUMN D_LPUDICT.LPU_NAME IS 'Краткое наименование';
-COMMENT ON COLUMN D_LPUDICT.HID IS 'Главное ЛПУ';
-COMMENT ON COLUMN D_LPUDICT.CID IS 'Каталог';
+COMMENT ON COLUMN D_AGENTS.ID IS 'ID';
+COMMENT ON COLUMN D_AGENTS.VERSION IS 'Версия';
+COMMENT ON COLUMN D_AGENTS.CID IS 'Каталог';
+COMMENT ON COLUMN D_AGENTS.AGN_CODE IS 'Код';
+COMMENT ON COLUMN D_AGENTS.AGN_NAME IS 'Наименование';
+COMMENT ON COLUMN D_AGENTS.AGN_TYPE IS 'Тип : 0 - юридический, 1 - физический';
+COMMENT ON COLUMN D_AGENTS.AGN_INN IS 'ИНН';
+COMMENT ON COLUMN D_AGENTS.AGN_KPP IS 'КПП';
+COMMENT ON COLUMN D_AGENTS.NOTE IS 'Примечание';
+COMMENT ON COLUMN D_AGENTS.FIRSTNAME IS 'Имя';
+COMMENT ON COLUMN D_AGENTS.SURNAME IS 'Фамилия';
+COMMENT ON COLUMN D_AGENTS.LASTNAME IS 'Отчество';
+COMMENT ON COLUMN D_AGENTS.BIRTHDATE IS 'Дата рождения';
+COMMENT ON COLUMN D_AGENTS.SEX IS 'Пол : 0 - женский, 1 - мужской';
+COMMENT ON COLUMN D_AGENTS.OKVED IS 'Код по ОКВЕД';
+COMMENT ON COLUMN D_AGENTS.EDUCATION IS 'Образование';
+COMMENT ON COLUMN D_AGENTS.IS_EMPLOYER IS 'Сотрудник: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_AGENTS.SNILS IS 'СНИЛС';
+COMMENT ON COLUMN D_AGENTS.AGN_OGRN IS 'Код ОГРН';
+COMMENT ON COLUMN D_AGENTS.AGN_OKPO IS 'Код ОКПО';
+COMMENT ON COLUMN D_AGENTS.DEATHDATE IS 'Дата и время смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCTYPE IS 'Тип документа о смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCDATE IS 'Дата оформления документа о смерти';
+COMMENT ON COLUMN D_AGENTS.DEATHDOCNUM IS 'Номер документа о смерти';
+COMMENT ON COLUMN D_AGENTS.AGN_OKFS IS 'Код по ОКФС';
+COMMENT ON COLUMN D_AGENTS.ENP IS 'ЕНП';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE IS 'Место рождения';
+COMMENT ON COLUMN D_AGENTS.NATION IS 'Национальность';
+COMMENT ON COLUMN D_AGENTS.IS_HOME IS 'Лежачий пациент';
+COMMENT ON COLUMN D_AGENTS.GEST_AGE_MOTHER IS 'Срок гестации матери(в неделях) при родах';
+COMMENT ON COLUMN D_AGENTS.IS_ANONYM IS 'Аноним: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.DEATHPLACE IS 'Место смерти';
+COMMENT ON COLUMN D_AGENTS.FULL_CLASSES IS 'Количество полных классов/курсов';
+COMMENT ON COLUMN D_AGENTS.ACCURACY_DATE_DEATH IS 'Точность даты смерти: 0 - неизвестно время; 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
+COMMENT ON COLUMN D_AGENTS.ACCURACY_DATE_BIRTH IS 'Точность даты рождения: 1 - неизвестно число; 2 - неизвестно число и месяц; 3 - неизвестна дата полностью';
+COMMENT ON COLUMN D_AGENTS.IND_ENTERP IS 'Индивидуальный предприниматель: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.AGN_OGRN_IND IS 'Код ОГРН ИП';
+COMMENT ON COLUMN D_AGENTS.CONVICT_AMOUNT IS 'Общее число судимостей';
+COMMENT ON COLUMN D_AGENTS.ALLERG_DATE IS 'Дата опроса о наличии аллергии';
+COMMENT ON COLUMN D_AGENTS.ACCORDING_RELATIVES IS 'Заполнено со слов родственников: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.EPGU IS 'Признак: 1 - да, 0 - нет';
+COMMENT ON COLUMN D_AGENTS.MEDICBK_GUID IS 'Идентификатор для MedicBK';
+COMMENT ON COLUMN D_AGENTS.MEDICBK_URL IS 'Ссылка на результаты MedicBK';
+COMMENT ON COLUMN D_AGENTS.MAX_INFO IS 'Информирование в MAX: 0 - нет, 1 - да';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE_GAR_ADDRESS_ID IS 'Место рождения : географическое понятие (ГАР)';
+COMMENT ON COLUMN D_AGENTS.WEBIOMED_GUID IS 'Идентификатор от МИС НП для мониторинга Webiomed';
+COMMENT ON COLUMN D_AGENTS.WEBIOMED_URL IS 'Ссылка на результаты "Мониторинг Webiomed"';
+COMMENT ON COLUMN D_AGENTS.BIRTHPLACE_GEO IS 'Место рождения: географическое понятие';
 
-COMMENT ON TABLE D_LPUDICT IS 'Список ЛПУ';
+COMMENT ON TABLE D_AGENTS IS 'Контрагенты';
 ```
 
 ---
 
-#### Таблица №2: D_LPU
+#### Таблица №2: D_PERSMEDCARD
 
 ```sql
-CREATE TABLE D_LPU (
+CREATE TABLE D_PERSMEDCARD (
     ID NUMBER(17) NOT NULL,
-    FULLNAME VARCHAR2(300) NOT NULL,
-    HEADDOCTOR_FULLNAME VARCHAR2(160),
-    FULLADDRESS VARCHAR2(160),
-    PHONES VARCHAR2(80),
-    REC_SER_PRIV VARCHAR2(10),
-    REC_SER VARCHAR2(10),
-    CODE_LPU VARCHAR2(20),
-    CODE_OGRN VARCHAR2(15),
-    CODE_OKPO VARCHAR2(10),
-    CODE_OKDP VARCHAR2(8),
-    CODE_OKONH VARCHAR2(5),
-    CODE_OKATO VARCHAR2(11),
-    CODE_OKOGU VARCHAR2(10),
-    CODE_OCOPPH VARCHAR2(5),
-    CODE_OKFS VARCHAR2(2),
-    LPUDICT NUMBER(17),
-    BOOKKEEPER_FULLNAME VARCHAR2(160),
-    HEADECONOMIST_FULLNAME VARCHAR2(160),
-    GEOGRAFY NUMBER(17),
-    USERFORMS VARCHAR2(64),
-    GENNUMB_GROUP NUMBER(17),
-    EXEC_AUTHORITY VARCHAR2(150),
-    REC_SER_PRIV_88 VARCHAR2(10),
-    IP_ADDR VARCHAR2(250),
-    BY_ES_ONLY NUMBER(1),
-    WEBSITE VARCHAR2(250),
-    IS_TECH_LPU NUMBER(1) NOT NULL,
-    ADDRESS NUMBER(17),
-    CONSTRAINT PK_D_LPU PRIMARY KEY (ID)
+    BLOODGROUPE NUMBER(17),
+    RHESUS NUMBER(1),
+    ECOLOR VARCHAR2(40),
+    CREATEDATE DATE,
+    MODDATE DATE,
+    CARD_NUMB VARCHAR2(26),
+    LPU NUMBER(17) NOT NULL,
+    AGENT NUMBER(17) NOT NULL,
+    NOTE VARCHAR2(4000),
+    CID NUMBER(17) NOT NULL,
+    REG_DIVISION NUMBER(17),
+    TP_PRINTED NUMBER(1) NOT NULL,
+    OUTNUMB VARCHAR2(12) NOT NULL,
+    PMC_TYPE NUMBER(1),
+    IA_PRINTED NUMBER(1) NOT NULL,
+    SMS_AGREE NUMBER(1) NOT NULL,
+    EMP_ID NUMBER(17),
+    EMAIL_AGREE NUMBER(1) NOT NULL,
+    PHENOTYPE VARCHAR2(10),
+    CABLAB NUMBER(17),
+    CONSTRAINT PK_D_PERSMEDCARD PRIMARY KEY (ID)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_LPU.FULLNAME IS 'Полное наименование ЛПУ';
-COMMENT ON COLUMN D_LPU.HEADDOCTOR_FULLNAME IS 'ФИО главврача';
-COMMENT ON COLUMN D_LPU.FULLADDRESS IS 'Адрес ЛПУ';
-COMMENT ON COLUMN D_LPU.PHONES IS 'Телефоны ЛПУ';
-COMMENT ON COLUMN D_LPU.REC_SER_PRIV IS 'Серия для выписки рецептов 148-1/у-04
-на льготные медикаменты';
-COMMENT ON COLUMN D_LPU.REC_SER IS 'Серия для выписки рецептов
-на нельготные медикаменты';
-COMMENT ON COLUMN D_LPU.CODE_LPU IS 'Код ЛПУ';
-COMMENT ON COLUMN D_LPU.CODE_OGRN IS 'Код ЛПУ по ОГРН';
-COMMENT ON COLUMN D_LPU.CODE_OKPO IS 'Код ЛПУ по ОКПО';
-COMMENT ON COLUMN D_LPU.CODE_OKDP IS 'Код ЛПУ по ОКДП';
-COMMENT ON COLUMN D_LPU.CODE_OKONH IS 'Код ЛПУ по ОКОНХ';
-COMMENT ON COLUMN D_LPU.CODE_OKATO IS 'Код ЛПУ по ОКАТО';
-COMMENT ON COLUMN D_LPU.CODE_OKOGU IS 'Код ЛПУ по ОКОГУ';
-COMMENT ON COLUMN D_LPU.CODE_OCOPPH IS 'Код ЛПУ по ОКОПФ';
-COMMENT ON COLUMN D_LPU.CODE_OKFS IS 'Код ЛПУ по ОКФС';
-COMMENT ON COLUMN D_LPU.LPUDICT IS 'АПУ';
-COMMENT ON COLUMN D_LPU.BOOKKEEPER_FULLNAME IS 'ФИО главбуха';
-COMMENT ON COLUMN D_LPU.HEADECONOMIST_FULLNAME IS 'ФИО главного экономиста';
-COMMENT ON COLUMN D_LPU.GEOGRAFY IS 'Регион ЛПУ';
-COMMENT ON COLUMN D_LPU.USERFORMS IS 'Каталог пользовательских форм';
-COMMENT ON COLUMN D_LPU.GENNUMB_GROUP IS 'Группа нумерации карт';
-COMMENT ON COLUMN D_LPU.EXEC_AUTHORITY IS 'Орган исполнительной власти субъекта РФ';
-COMMENT ON COLUMN D_LPU.REC_SER_PRIV_88 IS 'Серия для выписки рецептов 148-1/у-88
-на льготные медикаменты';
-COMMENT ON COLUMN D_LPU.IP_ADDR IS 'Доступные IP';
-COMMENT ON COLUMN D_LPU.BY_ES_ONLY IS 'Вход в ЛПУ осуществляется только по электронной подписи: 0 - нет, 1 - да';
-COMMENT ON COLUMN D_LPU.IS_TECH_LPU IS 'Техническая УЗ';
-COMMENT ON COLUMN D_LPU.ID IS 'ID';
-COMMENT ON COLUMN D_LPU.WEBSITE IS 'Сайт МО';
-COMMENT ON COLUMN D_LPU.ADDRESS IS 'Адрес ГАР';
+COMMENT ON COLUMN D_PERSMEDCARD.BLOODGROUPE IS 'Группа крови (ссылка на справочник)';
+COMMENT ON COLUMN D_PERSMEDCARD.RHESUS IS 'Резус фактор';
+COMMENT ON COLUMN D_PERSMEDCARD.ECOLOR IS 'Цвет глаз';
+COMMENT ON COLUMN D_PERSMEDCARD.CREATEDATE IS 'Дата создания карты';
+COMMENT ON COLUMN D_PERSMEDCARD.MODDATE IS 'Дата внесения последних изменений';
+COMMENT ON COLUMN D_PERSMEDCARD.CARD_NUMB IS 'Код карты';
+COMMENT ON COLUMN D_PERSMEDCARD.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_PERSMEDCARD.AGENT IS 'Контрагент';
+COMMENT ON COLUMN D_PERSMEDCARD.NOTE IS 'Примечание';
+COMMENT ON COLUMN D_PERSMEDCARD.CID IS 'Каталог';
+COMMENT ON COLUMN D_PERSMEDCARD.REG_DIVISION IS 'Место регистрации карты';
+COMMENT ON COLUMN D_PERSMEDCARD.TP_PRINTED IS 'Информация о печати титульного листа';
+COMMENT ON COLUMN D_PERSMEDCARD.OUTNUMB IS 'Код карты для выгрузок';
+COMMENT ON COLUMN D_PERSMEDCARD.PMC_TYPE IS 'Тип карты пациента: null - пациент, 1 - аноним, 2 - новорожденный, 3 - неизвестный';
+COMMENT ON COLUMN D_PERSMEDCARD.IA_PRINTED IS 'Информация о печати информированного согласия на обработку персональных данных';
+COMMENT ON COLUMN D_PERSMEDCARD.SMS_AGREE IS 'Согласие на получение СМС';
+COMMENT ON COLUMN D_PERSMEDCARD.EMP_ID IS 'Идентификатор регистратора, добавившего карту';
+COMMENT ON COLUMN D_PERSMEDCARD.EMAIL_AGREE IS 'Согласие на отправку результатов по эл. почте: 0- нет, 1 - да';
+COMMENT ON COLUMN D_PERSMEDCARD.PHENOTYPE IS 'Фенотип (комбинированное значение из четырех групп антигенов -  D_PHENOTYPES.PH_NAME)
 
-COMMENT ON TABLE D_LPU IS 'Основная таблица ЛПУ';
+';
+COMMENT ON COLUMN D_PERSMEDCARD.ID IS 'ID';
+COMMENT ON COLUMN D_PERSMEDCARD.CABLAB IS 'Кабинет, в котором создали карту';
+
+COMMENT ON TABLE D_PERSMEDCARD IS 'Карта пациента';
 ```
 
 ---
 
-#### Таблица №3: D_GEOGRAFY
+#### Таблица №3: D_BLOODGROUPE
 
 ```sql
-CREATE TABLE D_GEOGRAFY (
+CREATE TABLE D_BLOODGROUPE (
     ID NUMBER(17) NOT NULL,
-    PID NUMBER(17),
-    GEONAME VARCHAR2(60) NOT NULL,
-    GEOLOCTYPE NUMBER(17) NOT NULL,
-    KLADR_CODE VARCHAR2(20),
-    KLADR_INDEX VARCHAR2(6),
-    KLADR_GNINMB VARCHAR2(4),
-    KLADR_OCATD VARCHAR2(11),
-    KLADR_STATUS NUMBER(1),
+    BG_CODE VARCHAR2(20) NOT NULL,
+    BG_NAME VARCHAR2(160) NOT NULL,
     VERSION NUMBER(17) NOT NULL,
-    GEOFULL VARCHAR2(4000),
-    FIAS_CODE VARCHAR2(36),
-    ADDRESS NUMBER(17),
-    CONSTRAINT PK_D_GEOGRAFY PRIMARY KEY (ID)
+    CONSTRAINT PK_D_BLOODGROUPE PRIMARY KEY (ID)
 );
 
 -- Комментарии к колонкам:
-COMMENT ON COLUMN D_GEOGRAFY.PID IS 'Ссылка на родителя (географическое понятие более высокого уровня)';
-COMMENT ON COLUMN D_GEOGRAFY.GEONAME IS 'Наименование';
-COMMENT ON COLUMN D_GEOGRAFY.GEOLOCTYPE IS 'Тип географического понятия';
-COMMENT ON COLUMN D_GEOGRAFY.KLADR_CODE IS 'Код по справочнику КЛАДР';
-COMMENT ON COLUMN D_GEOGRAFY.KLADR_INDEX IS 'Индекс';
-COMMENT ON COLUMN D_GEOGRAFY.KLADR_GNINMB IS 'Код ИФНС';
-COMMENT ON COLUMN D_GEOGRAFY.KLADR_OCATD IS 'Код ОКАТО';
-COMMENT ON COLUMN D_GEOGRAFY.KLADR_STATUS IS 'Статус';
-COMMENT ON COLUMN D_GEOGRAFY.VERSION IS 'Версия';
-COMMENT ON COLUMN D_GEOGRAFY.GEOFULL IS 'Полное наименование';
-COMMENT ON COLUMN D_GEOGRAFY.FIAS_CODE IS 'Код по справочнику ФИАС';
-COMMENT ON COLUMN D_GEOGRAFY.ID IS 'ID';
-COMMENT ON COLUMN D_GEOGRAFY.ADDRESS IS 'Адрес ГАР';
+COMMENT ON COLUMN D_BLOODGROUPE.BG_CODE IS 'Код';
+COMMENT ON COLUMN D_BLOODGROUPE.BG_NAME IS 'Наименование';
+COMMENT ON COLUMN D_BLOODGROUPE.VERSION IS 'Версия';
+COMMENT ON COLUMN D_BLOODGROUPE.ID IS 'ID';
 
-COMMENT ON TABLE D_GEOGRAFY IS 'Географические понятия';
+COMMENT ON TABLE D_BLOODGROUPE IS 'Группы крови';
+```
+
+---
+
+#### Таблица №4: D_DIVISIONS
+
+```sql
+CREATE TABLE D_DIVISIONS (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    DIV_CODE VARCHAR2(40) NOT NULL,
+    DIV_NAME VARCHAR2(256) NOT NULL,
+    LPU_BRANCH NUMBER(17),
+    REC_SER_PRIV VARCHAR2(10),
+    HID NUMBER(17),
+    REC_SER_PRIV_88 VARCHAR2(10),
+    PAT_RESTRICTION NUMBER(17),
+    VERSION NUMBER(17),
+    DIV_OID_FRMO VARCHAR2(50),
+    CONSTRAINT PK_D_DIVISIONS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_DIVISIONS.ID IS 'ID';
+COMMENT ON COLUMN D_DIVISIONS.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_DIVISIONS.DIV_CODE IS 'Код';
+COMMENT ON COLUMN D_DIVISIONS.DIV_NAME IS 'Наименование';
+COMMENT ON COLUMN D_DIVISIONS.LPU_BRANCH IS 'Филиал ЛПУ';
+COMMENT ON COLUMN D_DIVISIONS.REC_SER_PRIV IS 'Серия для выписки рецептов 04
+на льготные медикаменты';
+COMMENT ON COLUMN D_DIVISIONS.HID IS 'Ссылка на верхний уровень иерархии';
+COMMENT ON COLUMN D_DIVISIONS.REC_SER_PRIV_88 IS 'Серия для выписки рецептов 88
+на льготные медикаменты 
+';
+COMMENT ON COLUMN D_DIVISIONS.PAT_RESTRICTION IS 'Ограничения по пациентам';
+COMMENT ON COLUMN D_DIVISIONS.VERSION IS 'Версия';
+COMMENT ON COLUMN D_DIVISIONS.DIV_OID_FRMO IS 'OID в ФРМО';
+
+COMMENT ON TABLE D_DIVISIONS IS 'Подразделения ЛПУ';
+```
+
+---
+
+#### Таблица №5: D_RHESUS
+
+```sql
+CREATE TABLE D_RHESUS (
+    RH_CODE NUMBER(1) NOT NULL,
+    RH_NAME VARCHAR2(10) NOT NULL,
+    CONSTRAINT PK_D_RHESUS PRIMARY KEY (RH_CODE)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_RHESUS.RH_CODE IS 'Код наименование';
+COMMENT ON COLUMN D_RHESUS.RH_NAME IS 'Наименование';
+
+COMMENT ON TABLE D_RHESUS IS 'Резус-фактор';
+```
+
+---
+
+#### Таблица №6: D_EMPLOYERS
+
+```sql
+CREATE TABLE D_EMPLOYERS (
+    ID NUMBER(17) NOT NULL,
+    JOBTITLE NUMBER(17),
+    REGDATE DATE NOT NULL,
+    SPECIALITY NUMBER(17),
+    KOD_VRACHA VARCHAR2(11),
+    REGISTR_KOD VARCHAR2(10),
+    LPU NUMBER(17) NOT NULL,
+    SPECIALITY_ED NUMBER(17),
+    SKILL_CATEGORY NUMBER(17),
+    IS_DISMISSED NUMBER(1) NOT NULL,
+    DISMISS_DATE DATE,
+    DEPARTMENT NUMBER(17),
+    SYSUSER NUMBER(17),
+    AGENT NUMBER(17) NOT NULL,
+    CID NUMBER(17) NOT NULL,
+    REPORT_SIGN VARCHAR2(400),
+    EMP_NUMB VARCHAR2(50),
+    QUOT_RESOURCE NUMBER(17),
+    RATE NUMBER(5,2),
+    PERSONAL_CARD_GUID VARCHAR2(36),
+    CONSTRAINT PK_D_EMPLOYERS PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_EMPLOYERS.ID IS 'ID';
+COMMENT ON COLUMN D_EMPLOYERS.JOBTITLE IS 'Должность';
+COMMENT ON COLUMN D_EMPLOYERS.REGDATE IS 'Дата регистрации';
+COMMENT ON COLUMN D_EMPLOYERS.SPECIALITY IS 'Специальность';
+COMMENT ON COLUMN D_EMPLOYERS.KOD_VRACHA IS 'Код врача';
+COMMENT ON COLUMN D_EMPLOYERS.REGISTR_KOD IS 'Регистрационный код';
+COMMENT ON COLUMN D_EMPLOYERS.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_EMPLOYERS.SPECIALITY_ED IS 'Специальность по образованию';
+COMMENT ON COLUMN D_EMPLOYERS.SKILL_CATEGORY IS 'Квалификационная категория';
+COMMENT ON COLUMN D_EMPLOYERS.IS_DISMISSED IS 'Сотрудник уволен ';
+COMMENT ON COLUMN D_EMPLOYERS.DISMISS_DATE IS 'Дата увольнения';
+COMMENT ON COLUMN D_EMPLOYERS.DEPARTMENT IS 'Отделение';
+COMMENT ON COLUMN D_EMPLOYERS.SYSUSER IS 'Пользователь';
+COMMENT ON COLUMN D_EMPLOYERS.AGENT IS 'Контрагент';
+COMMENT ON COLUMN D_EMPLOYERS.CID IS 'Каталог';
+COMMENT ON COLUMN D_EMPLOYERS.REPORT_SIGN IS 'Подпись врача в отчетах';
+COMMENT ON COLUMN D_EMPLOYERS.EMP_NUMB IS 'Табельный номер';
+COMMENT ON COLUMN D_EMPLOYERS.QUOT_RESOURCE IS 'Ресурс квотирования';
+COMMENT ON COLUMN D_EMPLOYERS.PERSONAL_CARD_GUID IS 'Идентификатор записи личного дела';
+COMMENT ON COLUMN D_EMPLOYERS.RATE IS 'Занимаемое количество ставок';
+
+COMMENT ON TABLE D_EMPLOYERS IS 'Персонал';
+```
+
+---
+
+#### Таблица №7: D_CABLAB
+
+```sql
+CREATE TABLE D_CABLAB (
+    ID NUMBER(17) NOT NULL,
+    LPU NUMBER(17) NOT NULL,
+    DEPARTMENT NUMBER(17) NOT NULL,
+    CL_CODE VARCHAR2(20) NOT NULL,
+    CL_NAME VARCHAR2(160) NOT NULL,
+    CID NUMBER(17) NOT NULL,
+    PID NUMBER(17),
+    SCHEDULE_TYPE NUMBER(1),
+    DIVISION NUMBER(17) NOT NULL,
+    BUILDING NUMBER(17),
+    FLOOR NUMBER(17),
+    IS_COMM NUMBER(1) NOT NULL,
+    BEGIN_DATE DATE,
+    END_DATE DATE,
+    CABLAB_TYPE NUMBER(17),
+    CL_BEGIN_DATE DATE NOT NULL,
+    CL_END_DATE DATE,
+    CONSTRAINT PK_D_CABLAB PRIMARY KEY (ID)
+);
+
+-- Комментарии к колонкам:
+COMMENT ON COLUMN D_CABLAB.ID IS 'ID';
+COMMENT ON COLUMN D_CABLAB.LPU IS 'ЛПУ';
+COMMENT ON COLUMN D_CABLAB.DEPARTMENT IS 'Отделение';
+COMMENT ON COLUMN D_CABLAB.CL_CODE IS 'Код';
+COMMENT ON COLUMN D_CABLAB.CL_NAME IS 'Наименование';
+COMMENT ON COLUMN D_CABLAB.CID IS 'Каталог';
+COMMENT ON COLUMN D_CABLAB.PID IS 'Кабинет';
+COMMENT ON COLUMN D_CABLAB.SCHEDULE_TYPE IS 'Тип назначенного графика(поддерживается автоматически)';
+COMMENT ON COLUMN D_CABLAB.DIVISION IS 'Подразделение';
+COMMENT ON COLUMN D_CABLAB.BUILDING IS 'Здание';
+COMMENT ON COLUMN D_CABLAB.FLOOR IS 'Этаж';
+COMMENT ON COLUMN D_CABLAB.IS_COMM IS 'Кабинет платных услуг';
+COMMENT ON COLUMN D_CABLAB.BEGIN_DATE IS 'Начало функционирования кабинета платных услуг';
+COMMENT ON COLUMN D_CABLAB.END_DATE IS 'Окончание функционирования кабинета платных услуг';
+COMMENT ON COLUMN D_CABLAB.CABLAB_TYPE IS 'Тип кабинета';
+COMMENT ON COLUMN D_CABLAB.CL_BEGIN_DATE IS 'Дата начала действия';
+COMMENT ON COLUMN D_CABLAB.CL_END_DATE IS 'Дата окончания действия';
+
+COMMENT ON TABLE D_CABLAB IS 'Кабинеты и лаборатории';
 ```
 
 
@@ -966,80 +645,45 @@ COMMENT ON TABLE D_GEOGRAFY IS 'Географические понятия';
 Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
 
 **Статистика:**
-- Всего уникальных пакетных функций: 2
-- Загружено тел функций: 2
+- Всего уникальных пакетных функций: 1
+- Загружено тел функций: 1
 
 ---
 
-### Функция №1: D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+### Функция №1: D_PKG_AGENT_RELATIVES.DEL
 
 ```sql
--- Oracle PACKAGE: CHECK_EMPLOYER_RIGHT
--- Возвращает: return number
+-- Oracle PACKAGE: DEL
 --======================================================================
-function CHECK_EMPLOYER_RIGHT
+procedure DEL
 (
-  pnLPU                                in NUMBER,          --ЛПУ
-  pnEMPLOYER                           in NUMBER,
-  psUNITCODE                           in VARCHAR2,        --Код раздела
-  pnUNIT_ID                            in NUMBER,          --ID записи в разделе
-  psRIGHT                              in VARCHAR2,        --Код действия в разделе
-  pnCABLAB                             in NUMBER default null, --Кабинет
-  pnSERVICE                            in NUMBER default null, --Услуга
-  pnRAISE                              in NUMBER default 0 --Генерировать ошибку    1 - да,0 - нет
+  pnID                                 in NUMBER,
+  pnLPU                                in NUMBER
 )
-return number
-as
-  iRESULT               INTEGER;
-  nSPECIALITY           D_PKG_STD.tREF;
-  nSYSUSER              D_PKG_STD.tREF;
-  nACCESS               D_PKG_STD.tREF;
-  nRIGHT                D_PKG_STD.tREF;
-begin
-  -- Поиск всех прав для всех пользователей
-  begin
-    select t.ALL_RIGHTS, t.ID
-      into iRESULT, nACCESS
-      from D_CSE_ACCESSES t
-     where t.UNITCODE         = psUNITCODE
-       and t.UNIT_ID          = pnUNIT_ID
-       and t.LPU              = pnLPU;
-  exception when NO_DATA_FOUND then
-    iRESULT := null;
-    nACCESS := null;
-  end;
-```
-
----
-
-### Функция №2: D_PKG_EMPLOYERS.GET_ID
-
-```sql
--- Oracle PACKAGE: GET_ID
--- Возвращает: return number
---======================================================================
-function GET_ID
-(
-  pnLPU                                NUMBER              --ID ЛПУ
-) 
-return number
 is
- nRES                   D_EMPLOYERS.ID%type;               --ID сотрудника
+  nVERSION               D_PKG_STD.tREF;
+  nCID                   D_PKG_STD.tREF;
+  nPERSMEDCARD           D_PKG_STD.tREF;
 begin
-  nRES := D_PKG_SES.GETCONTEXT('MED','EMPLOYER');
-  if nRES is null then
-    begin
-      select d.ID
-        into nRES
-        from D_EMPLOYERS d
-             join D_USERS u
-               on u.ID        = d.SYSUSER
-              and u.USERNAME  = upper(D_F_GET_USERS())
-       where d.LPU       = pnLPU
-         and rownum = 1;
-    exception when NO_DATA_FOUND then nRES := null;
-              when TOO_MANY_ROWS then D_P_EXC('1. Найдено несколько сотрудников в данном МО связанных с пользователем: '||upper(D_F_GET_USERS()));
-    end;
+  -- Поиск версии по ЛПУ --
+  D_PKG_VERSIONS.GET_VERSION_BY_LPU(1,pnLPU,'AGENT_RELATIVES',nVERSION);
+  -- Поиск каталога --
+  begin
+    select t.CID, t3.ID
+      into nCID, nPERSMEDCARD
+      from D_AGENT_RELATIVES t,
+           D_AGENTS t1,
+           (select t2.ID, t2.AGENT from D_PERSMEDCARD t2 where t2.LPU = pnLPU) t3
+     where t.ID        = pnID
+       and t.VERSION   = nVERSION
+       and t1.ID       = t.PID
+       and t3.AGENT(+) = t1.ID;
+  exception 
+    when NO_DATA_FOUND then
+      D_PKG_MSG.RECORD_NOT_FOUND(pnID,'AGENT_RELATIVES');
+    when TOO_MANY_ROWS then
+      D_P_EXC('Найдено несколько карт пациента в текущем МО.');
+  end;
 ```
 
 
@@ -1048,138 +692,14 @@ begin
 Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
 
 **Статистика:**
-- Всего уникальных функций/процедур: 2
-- Загружено тел функций: 2
+- Всего уникальных функций/процедур: 1
+- Загружено тел функций: 0
 
 ---
 
-### Функция №1: d_pkg_cse_accesses.check_employer_right
+### Функция №1: d_pkg_agent_relatives.del
 
-```sql
-CREATE OR REPLACE FUNCTION d_pkg_cse_accesses.check_employer_right(pnlpu numeric, pnemployer numeric, psunitcode character varying, pnunit_id numeric, psright character varying, pncablab numeric DEFAULT NULL::numeric, pnservice numeric DEFAULT NULL::numeric, pnraise numeric DEFAULT 0)
- RETURNS numeric
- LANGUAGE sql
- STABLE SECURITY DEFINER
-AS $function$
-
-WITH cse_accesses as (
-  SELECT t.id 
-  FROM  d_cse_accesses t 
-  WHERE t.unitcode = psunitcode 
-    AND t.unit_id = pnunit_id 
-    AND t.lpu = pnlpu), 
-cse_rights as (
-  SELECT t.id 
-  FROM d_cse_rights t 
-  WHERE t.r_code = psright 
-    AND t.unitcode = psunitcode),
-emp_rights as (
-  SELECT speciality, sysuser
-  FROM ( SELECT speciality, sysuser
-         FROM  d_employers t
-         WHERE t.id = pnemployer
-         UNION ALL
-         SELECT NULL, min(t.id)
-         FROM d_users t
-         WHERE t.username = upper(utl.get_curr_user())
-         ) a
-   limit 1
-) 
-	SELECT 1
-	FROM d_cse_acs_all_rights t, cse_accesses, cse_rights 
-	WHERE t.pid = cse_accesses.id 
-	  AND t.right = cse_rights.id 
-	  AND t.lpu = pnlpu 
-	UNION ALL 
-	SELECT 1 
-	FROM  d_cse_acs_cablabs t, d_cse_acs_cl_rights t1, cse_accesses, cse_rights 
-	WHERE t.lpu = pnlpu 
-	  AND t.pid = cse_accesses.id 
-	  AND t.cablab = pncablab 
-	  AND t1.lpu = pnlpu 
-	  AND t1.pid = t.id 
-	  AND t1.right = cse_rights.id 
-	UNION ALL 
-	SELECT 1 
-	FROM d_cse_acs_servs t, d_cse_acs_serv_rights t1, cse_accesses, cse_rights 
-	WHERE t.lpu = pnlpu 
-	  AND t.pid = cse_accesses.id 
-	  AND t.service = pnservice 
-	  AND t1.lpu = pnlpu 
-	  AND t1.pid = t.id 
-	  AND t1.right = cse_rights.id 
-	UNION ALL 
-	SELECT 1 
-	FROM d_cse_acs_emps t, d_cse_acs_emp_rights t1, cse_accesses, cse_rights 
-	WHERE t.pid = cse_accesses.id 
-	  AND t.employer = pnemployer 
-	  AND t.lpu = pnlpu 
-	  AND t1.pid = t.id 
-	  AND t1.right = cse_rights.id 
-	UNION ALL 
-	SELECT 1 
-	FROM  d_cse_acs_specs t, d_cse_acs_spec_rights t1, cse_accesses, cse_rights, emp_rights
-	WHERE t.pid = cse_accesses.id 
-	  AND t.lpu = pnlpu 
-	  AND t.speciality = emp_rights.speciality 
-	  AND t1.pid = t.id 
-	  AND t1.right = cse_rights.id 
-	UNION ALL 
-	SELECT 1 
-	FROM  d_cse_acs_roles t,  d_cse_acs_role_rights t1, d_userroles t2, d_users t3, cse_accesses, cse_rights, emp_rights
-	WHERE t.pid = cse_accesses.id 
-	  AND t.lpu = pnlpu 
-	  AND t1.pid = t.id 
-	  AND t1.right = cse_rights.id 
-	  AND t2.roleid = t.role 
-	  AND t2.sysuser = emp_rights.sysuser
-	  AND t3.id = t2.sysuser
-	UNION ALL
-   SELECT 0
-    LIMIT 1;
-$function$
-```
-
----
-
-### Функция №2: d_pkg_employers.get_id
-
-```sql
-CREATE OR REPLACE FUNCTION d_pkg_employers.get_id(pnlpu numeric)
- RETURNS numeric
- LANGUAGE plpgsql
- STABLE SECURITY DEFINER
-AS $function$
-DECLARE
-    nRES d_employers.id%TYPE;   /* ID сотрудника */
-BEGIN
-    nres := d_pkg_ses.getcontext('MED','EMPLOYER')::bigint;
-    IF nres IS NULL THEN
-        BEGIN
-            SELECT
-                d.id
-            INTO STRICT nres
-            FROM
-                d_employers d 
-                        JOIN     d_users u ON u.id = d.sysuser
-     AND u.username = upper(d_f_get_users()) 
-            WHERE
-                d.lpu = pnlpu::bigint
-                 LIMIT 1;
-            EXCEPTION
-                WHEN no_data_found THEN
-                            nres := null;
-
-                WHEN too_many_rows THEN
-                            PERFORM d_p_exc(1,(concat('1. Найдено несколько сотрудников в данном МО связанных с пользователем: ', upper(d_f_get_users())))::varchar);
-
-        END;
-
-    END IF;
-    return nres;
-END
-$function$
-```
+Тело функции/процедуры не найдено в PostgreSQL.
 
 
 
