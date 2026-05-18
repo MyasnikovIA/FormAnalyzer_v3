@@ -1,178 +1,1289 @@
-====================================================================================================
-=== ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Mon May 18 09:51:36 GMT+07:00 2026
-Всего форм: 1
-====================================================================================================
-
 ----------------------------------------------------------------------------------------------------
-ФОРМА: /Forms/Certificate/certificate_forms.frm
+ФОРМА: /Forms/HospPlan/hospplan.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\4_mis_MEDDEV-151437\Forms\Certificate\certificate_forms.frm
-СТАТУС: БАЗОВАЯ ФОРМА
+Базовая форма: C:\AppServ\www\4_mis_MEDDEV-151437\Forms\HospPlan\hospplan.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsFNKC\HospPlan\hospplan.frm
 
 ЮЗЕРФОРМЫ:
-     (не найдено)
+     ===== UserFormsAlania =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsAlania\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsAlania\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsAlaniaSKMMC =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsAlaniaSKMMC\HospPlan\hospplan.frm
+
+     ===== UserFormsChechnya =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsChechnya\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsChechnya\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsDemoMis =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsDemoMis\HospPlan\hospplan.d\report.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Novosib\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Novosib\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Novosib\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Tomsk\HospPlan\hospplan.frm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Tomsk\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Tomsk\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsEgis3Tomsk\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsFNKC =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsFNKC\HospPlan\hospplan.frm
+
+     ===== UserFormsHosp =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsHosp\HospPlan\hospplan.d\Script.dfrm
+
+     ===== UserFormsInst =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsInst\HospPlan\hospplan.d\report.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsKaliningrad\HospPlan\hospplan.d\popup.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsKhabarovsk\HospPlan\hospplan.d\hospplan.dfrm
+
+     ===== UserFormsMagadan =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsMagadan\HospPlan\hospplan.d\report.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsMoscowNIIBlohina\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsMoscowNIIBlohina\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsPrimorie\HospPlan\hospplan.d\hospplan.dfrm
+
+     ===== UserFormsRKB3 =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsRKB3\HospPlan\hospplan.d\popup.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsRKOD\HospPlan\hospplan.d\popup.dfrm
+
+     ===== UserFormsRkob =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsRkob\HospPlan\hospplan.d\reports.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsRostov\HospPlan\hospplan.d\er_package.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsRostov\HospPlan\hospplan.d\popup.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSamRMC\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSamRMC\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSamRMC\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSaratov\HospPlan\hospplan.d\callstatrepKF.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSaratov\HospPlan\hospplan.d\call_reports.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsSaratov\HospPlan\hospplan.d\sodkb.dfrm
+
+     ===== UserFormsTver =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsTver\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsTver\HospPlan\hospplan.d\view.dfrm
+
+     ===== UserFormsVOKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsVOKOD\HospPlan\hospplan.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsVOKOD\HospPlan\hospplan.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\4_mis_MEDDEV-151437\UserFormsVOKOD\HospPlan\hospplan.d\view.dfrm
+
 
 SubForm:
-     Certificate/subforms/log_popup
+     Markers/subscripts/subscript_markers
+     ArmPatientsInDep/SubForms/sep_calculation
+     Markers/subforms/subforms_markers
 
 Список вызываемых форм в JS:
+     HospPlan/hp_view_joined_docs.frm
+     HospPlan/hosp_hist.frm
+     HospPlan/hospplanperiod.frm
+     Registry/reg_short.frm
+     HospPlan/move_history.frm
+     HospPlan/showQuotes.frm
+     HospPlan/showLoadKF.frm
+     HospPlan/showPlaning.frm
      Persmedcard/persmedcard_edit.frm
+     DiseaseCase/diseasecase.frm
+     PersonalAccount/patient_contracts.frm
+     HospPlan/patient_analyze.frm
+     Directions/direction_cancel_reason.frm
+     HospPlanJournal/hp_add_direction.frm
+     GenRegistry/reg_full.frm
+     HospPlan/hospitalisation.frm
+     HospPlan/setPrivilege.frm
+     ArmPatientsInDep/Wrappers/direction_operations.frm
+     HospPlan/Dirs/hh_direction_service_control.frm
+     InformedAgreement/Patient/patient_ia_window.frm
+     Persmedcard/search_patient_change.frm
+     HospPlan/hospplan_ehrs.frm
 
 Коды подключаемого AutoPopUp меню на форме:
-        CERTIFICATE_FORMS;
+        HPK_PLAN_JOURNALS;
 
 
 Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
 
-└── name="pmCERTIFICATE_FORMS"
+└── name="P_HPK_PLAN"
     ├── "Обновить"
-    ├── "Редактировать свидетельство"
-    ├── "Изменить состояние"
-    │   ├── "В наличии"
-    │   ├── "Утерян"
-    │   ├── "Похищен (в МО)"
-    │   └── "Испорчен"
-    └── (AutoPopup "CERTIFICATE_FORMS") - REP_TYPE="WEB-форма" - REP_CODE="CERT_DEATH" "Мед свидетельство о смерти" Form="Reports/CertificateForms/cf_death_new.frm"
+    ├── "Информированные согласия и отказы"
+    ├── "Перенести на другую дату"
+    ├── "Добавить"
+    ├── "Изменить"
+    ├── "Удалить"
+    ├── "Оформить отказ от госпитализации"
+    ├── "Отменить отказ от госпитализации"
+    ├── "Записать"
+    ├── "История перемещений"
+    ├── "Госпитализировать"
+    ├── "Госпитализировать повторно"
+    ├── "Отменить госпитализацию"
+    ├── "Открыть ИБ"
+    ├── "Отправлен на создание ИБ"
+    ├── "Отправлен на создание ИБ"
+    ├── "Аннулировать ИБ"
+    ├── "Отменить аннулирование ИБ"
+    ├── "Подтвердить аннулирование ИБ"
+    ├── "ВМП"
+    ├── "Хронология госпитализаций"
+    ├── "Операции"
+    ├── "Направления на услуги"
+    ├── "Направления на услуги"
+    │   ├── "Пациент"
+    │   └── "Сопровождающее лицо"
+    ├── "Анализы"
+    ├── "Лицевой счет"
+    ├── "Просмотр прикрепленных документов"
+    ├── "Отчеты"
+    │   ├── "Первый лист ИБ (действителен до 1 марта 2023 г.)"
+    │   ├── "Карта прерывания беременности"
+    │   ├── "Статистическая карта"
+    │   ├── "Акт на стационарную помощь"
+    │   ├── "Информационное согласие"
+    │   │   ├── "Информационное согласие"
+    │   │   ├── "Инф. согл. на обработку перс. данных"
+    │   │   ├── "Инф. Согласие на лечение и обследование на сифилис"
+    │   │   └── "Вкладыш Обследование больного на сифилис"
+    │   ├── "Массовая печать"
+    │   │   ├── "Форма № 2 - Адресный листок прибытия"
+    │   │   └── "Форма № 7 - Адресный листок убытия"
+    │   ├── "Протокол заседания врачебной комиссии для оказания ВМП"
+    │   ├── "План госпитализации на день"
+    │   ├── "Поступившие в стационар за день"
+    │   ├── "Список поступивших в стационар"
+    │   ├── "Форма № 2 - Адресный листок прибытия"
+    │   ├── "Форма № 7 - Адресный листок убытия"
+    │   ├── "Список больных стационара"
+    │   ├── "Журнал учета приема больных и отказов"
+    │   ├── "Журнал учета приема больных и отказов (530Н)"
+    │   ├── "Алфавитный журнал"
+    │   ├── "Листок ежедневного учета движения больных и коечного фонда стационара"
+    │   ├── "Листок ежедневного учета движения больных и коечного фонда дневного стационара"
+    │   ├── "Очередь пациентов на госпитализацию"
+    │   ├── "Журнал учета приема беременных, рожениц и родильниц"
+    │   ├── "Работа приемного отделения"
+    │   ├── "114/у «Сопроводительный лист»"
+    │   ├── "Сводный отчет по стационару"
+    │   ├── "096/у-20 Медицинская карта беременной, роженицы и родильницы, получающей медицинскую помощь в стационарных условиях"
+    │   └── "Направление 057/у"
+    ├── "Документы"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") "Сводная заявка на питание (№22-МЗ)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="agreement_transfusion"                    "Согласие пациента на операцию переливания компонентов крови"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="list_prib_multi"                          "Форма № 2 -  Адресный листок прибытия двухсторонний для отчета adr_list_mass"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_pkpc"                       "История родов Приморье" Form="Reports/HospPlan/birth_history_pkpc.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="med_karta_stac"                           "Медицинская карта стационарного больного 1 лиcт (НИИ Блохина)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HPKReport"                                "Журнал регистрации (НИИ Блохина)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_SOGL_RKOB"                            "Информированное добровольное согласие  на медицинское вмешательство"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="PlannedHospKSG"                           "Планируемая госпитализация в разрезе КСГ" Form="Reports/PlannedHospKSG/PlannedHospKSG.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="n_protolol_na_gospit"                     "Протокол решения ВК на госпитализацию"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="PROT_BMP_RKOB"                            "Протокол заседания комиссии для оказания ВМП"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST_RKOB_2"                       "Лист Экспертной оценки (РКОБ)_2"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history"                            "096/у История родов (1 лист)" Form="Reports/HospPlan/birth_history.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory"                              "ИБ" Form="Reports/HospPlan/hosphistory.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card"                        "Статистическая карта выбывшего из стационара. Выписанный." Form="Reports/HospPlan/outhost_stat_card.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_2"                          "096/у История родов (2-й лист)" Form="Reports/HospPlan/birth_history_2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_ELN"                  "Информированное добровольное согласие на формирование ЛН в форме электронного документа"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="adr_list_mass"                            "Форма № 2 -  Адресный листок прибытия двухсторонний (массовая печать)" Form="Reports/HospPlan/adr_list_mass.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="066_1_y_02"                               "066-1-у-02 Статистическая карта выбывшего из психиатрического (наркологического) стационара" Form="Reports/HospPlan/066_1_y_02.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_agreement"                        "Информационное согласие на манипуляцию_" Form="Reports/HospPlan/patient_agreement.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_5_6"                        "096/у История родов (5-6 лист)" Form="Reports/HospPlan/birth_history_5_6.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_wristband2"                       "Браслета пациента" Form="Reports/HospPlan/patient_wristband2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_PERV_DOK"                          "Первичная документация" Form="Reports/Visit/Stac/B_STAC_PERV_DOK.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="OPB_096u20"                               "096/1у-20 Мед.карта ОПБ"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_1"   "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_1"   "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_5"   "096/1у-20 Мед.карта ОПБ (5 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_5.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_11"  "096/1у-20 Мед.карта ОПБ (11 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_11.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_12"  "096/1у-20 Мед.карта ОПБ (12 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_12.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_3_4" "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_3_4" "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_6"   "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm"
+    │                                             └── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_6"   "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_1"                             "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="list_prib"                                "Форма № 2 -  Адресный листок прибытия двухсторонний"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="comission_vmp_protocol"                   "Протокол заседания врачебной комиссии для оказания ВМП" Form="Reports/HospPlan/comission_vmp_protocol.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_report"                          "Сводный отчет по стационару" Form="Reports/HospitalRep/HospitalRep.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_nso"                        "096/у История родов (НСО)" Form="Reports/HospPlan/birth_history_nso.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="list_ubyt_for_mass"                       "Форма № 7 - Адресный листок убытия (mass)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5"                             "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5" Form="Reports/AmbReps/Order274/amb_talon_A5.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_kod"                    "066/у-02 Переводная карта (КОД)" Form="Reports/HospPlan/outhost_stat_card_kod.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="soglasie_na_med_vmesh_DZ_dp"              "(Томск)ИС на медицинское вмешательство (ДЗ ТО) пакет документов" Form="Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="notice_road_accidents"                    "ИЗВЕЩЕНИЕ О РАНЕНОМ, СКОНЧАВШЕМСЯ ОТ ПОСЛЕДСТВИЙ ДОРОЖНО-ТРАНСПОРТНОГО ПРОИСШЕСТВИЯ в течение последующих 7 и 30 суток после него" Form="Reports/EmergencyRep/notice_road_accidents.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="emergency_notification_dtp"               "Извещение о раненом в ДТП" Form="Reports/EmergencyRep/emergency_notification_dtp.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_7"                          "096/у История родов (7-й лист)" Form="Reports/HospPlan/birth_history_7.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_TER_OTKAZ"                         "Отказ от госпитализации2" Form="Reports/Visit/Stac/STAC_TER_OTKAZ.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_old_2"                  "Статистическая карта выбывшего из стационара. Выписанный. (old)" Form="Reports/HospPlan/outhost_stat_card_old.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="med_pregnant_card_096y20"                 "096/у-20 Медицинская карта беременной, роженицы и родильницы, получающей медицинскую помощь в стационарных условиях" Form="Reports/096-y20/med_pregnant_card_096y20.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="HPK_JOURNAL"                              "Журнал" Form="Reports/Visit_1/hpk_journal.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 123 TEST TEST"                  "Движение за даты. Взрослые TEST TEST"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="066/y-02_statcard"                        "Статкарта " Form="Reports/HospPlan/outhost_stat_card2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient"                      "Журнал учета больных и отказов от госпитализации" Form="Reports/HospPlan/journal_hpk_patient.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_NEOTL"                "Информационное согласие на манипуляцию (Неотложка)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_talon2"                           "Талон пациента (Москва. ФНКЦ ФХМ)" Form="Reports/HospPlan/patient_talon2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="066_1_y_02"                               "066-1-у-02 Статистическая карта выбывшего из психиатрического (наркологического) стационара" Form="Reports/HospPlan/066_1_y_02.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_20"                             "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_25"                             "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_3_4"                            "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_6"                             "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_OBSLED_VICH_VISIT"                    "ИС на проведение обследования на ВИЧ-инфекцию"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="003/у-м"                                  "Первый лист ИБ для ЛПУ, не имеющих узкой специальности"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_PRIEM"                "Информационное согласие на манипуляцию (Приемник)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="VOKB_IDS_SOSTAV"                          "Составной ВОКБ"
+    │                                             ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm"
+    │                                             └── - REP_TYPE="WEB-конструктор" - REP_CODE="CASH_IDS_PLAT"     "Информированное добровольное согласие на виды мед.вмешательств касса"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_for_blank"              "Форма 66/у. Статистическая карта выбывшего из стационара" Form="Reports/HospPlan/outhost_stat_card_for_blank.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_3_4"                        "096/у История родов (3-4 лист)" Form="Reports/HospPlan/birth_history_3_4.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 1"                              "Движение за даты. Взрослые"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="okb_direction"                            "Направление на операцию (ОКБ) Томск" Form="Reports/HospPlan/okb_direction.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="bh_096u20"                                "096/1у-20 История родов"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_1"     "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_1"     "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_2"     "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_2"     "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_3_4"   "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_3_4"   "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_5"     "096/1у-20 История родов (5 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_5.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_7"     "История родов 096/1у-20 (7 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_7.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_8"     "История родов 096/1у-20 (8 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_8.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_15_16" "История родов 096/1у-20 (15, 16 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_15_16.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_20"    "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_20"    "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_21"    "История родов 096/1у-20 (21 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_21.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_25"    "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_25"    "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_6"     "История родов 096/1у-20 (6 стр)_2.0" Form="partogram/report.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_22"    "История родов 096/1у-20 (22 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_22.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_19"    "096/1у-20 История родов (19 стр)." Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_19.frm"
+    │                                             └── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_11_12" "096/1у-20 История родов (11, 12 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_11_12.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_1"                              "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_3_4"                           "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="ExpertListRkobPP2"                        "Чек -лист оценки критериев качества стационарной медицинской помощи" Form="Reports/Hosp/ExpertListRkobPP2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head_2"                       "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_23_24"                          "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="reception_agreement_personal_info_prim"   "Инф согласие приморье"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="003"                                      "003"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="PROTOKOL_RESH_VMP1"                       "Протокол решения комиссии СМП (новый)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="PROT_RESH_VMP2"                           "Протокол решения комиссии СамГМУ на оказание ВМП (ВМП бюджет субъекта СО)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="agent_skud_qr_code_patient"               "Пропуск СКУД "
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head"                         "Первый лист ИБ" Form="Reports/HospPlan/hosphistory_head.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosp_history_second_list"                 "Второй лист ИБ (ТОМСК)" Form="Reports/ArmPatientsInDep/hosp_history_second_list.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="reception_agreement_personal_info"        "Информированное согласие на обработку персональных данных." Form="Reports/Reception/agreement_personal_info.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosp_history_head_530n"                   "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3"                           "Сведения о пациенте"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(msch2)"                      "amb_talon_A5(msch2)" Form="Reports/AmbReps/amb_talon_A5(msch2).frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(mvb)"                        "amb_talon_A5(mvb)" Form="Reports/AmbReps/amb_talon_A5(mvb).frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3_11/22"                     "Сведения о пациенте_11/22"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_incom_date"                       "Список поступивших в стационар" Form="Reports/HospPlan/patient_incom_date.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="PRIEM_POKOI_VMP"                          "Приемный покой ВМП"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="informed_consent"                         "Информированное добровольное согласие на медицинское вмешательство"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_tver"                 "ТВЕР"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_new2"                           "amb_talon_new2" Form="Reports/AmbReps/amb_talon_new.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_2"                              "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="mmc_hosphistory_head_v1.2"                "Первый лист ИБ v1.2" Form="Reports/HospPlan/mmc_hosphistory_head.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="Blohina_titul"                            "Блохина Титульник взрослые"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_FL_SAMGMU_DOP"                         "Первый лист ИБ СамГМУ доп "
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="PRIEM_POKOI"                              "Приемный покой"
+    │                                             ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_PI_st" "Согласие на обработку ПД стационар"
+    │                                             └── - REP_TYPE="WEB-конструктор" - REP_CODE="TESTTTT"                   "просто"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="emergency"                                "Пакет приемного покоя"
+    │                                             ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm"
+    │                                             ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head3" "Первый лист ИБ 003/у3" Form="Reports/KLD39/HospPlan/hosphistory_head.frm"
+    │                                             ├── - REP_TYPE="WEB-форма"       - REP_CODE="MED_STAC_INSPECT"  "Дневник врача_" Form="Reports/Visit/Stac/STAC_TER_INSPECT.frm"
+    │                                             ├── - REP_TYPE="WEB-форма"       - REP_CODE="list_measuring"    "Лист измерений" Form="Reports/ArmPatientsInDep/list_measuring.frm"
+    │                                             ├── - REP_TYPE="WEB-конструктор" - REP_CODE="HOSP_EPICRIS"      "Выписной эпикриз"
+    │                                             └── - REP_TYPE="WEB-форма"       - REP_CODE="patient_dir_serv"  "Маршрутный лист" Form="Reports/ArmPatientsInDep/patient_dir_serv.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="134_fst_sh_medhist"                       "ГДКБСМП Первый лист ИБ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(odb)"                        "amb_talon_A5(odb)" Form="Reports/AmbReps/amb_talon_A5(odb).frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="hosp_history_head_530n_vk"                "Первый лист ИБ 530н(ВК)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_wristband_lite"                   "Браслета пациента(Приморье)" Form="Reports/HospPlan/patient_wristband_lite.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="FIO_CONTROL"                              "ФИО пациента веб-конструктор"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="003_7_8"                                  "Лист 7-8_тест"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_PRIEM"                "Информационное согласие на манипуляцию (Приемник)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_NEOTL"                "Информационное согласие на манипуляцию (Неотложка)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_nso"                        "096/у История родов (НСО)" Form="Reports/HospPlan/birth_history_nso.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_talon2"                           "Талон пациента (Москва. ФНКЦ ФХМ)" Form="Reports/HospPlan/patient_talon2.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_PERV_DOK"                          "Первичная документация" Form="Reports/Visit/Stac/B_STAC_PERV_DOK.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="VOKB_IDS_SOSTAV"                          "Составной ВОКБ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="HPK_JOURNAL"                              "Журнал" Form="Reports/Visit_1/hpk_journal.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="okb_direction"                            "Направление на операцию (ОКБ) Томск" Form="Reports/HospPlan/okb_direction.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 123 TEST TEST"                  "Движение за даты. Взрослые TEST TEST"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_S_P23"                                "Информированное согласие на медицинское вмешательство (приложение №23)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient_with_lpu_attachments" "Журнал учёта больных и отказов госпитализации С ЛПУ прикрепления" Form="Reports/HospPlan/journal_hpk_patient_with_lpu_attachments.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="hosp003u_20"                              "003/у История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="out_history_card"                         "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="agreement_personal_info_tomsk_2"          "Согласие на обработку персональных данных_2" Form="Reports/PatientAgreement/agreement_personal_info_tomsk(rd4).frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_FL_SAMGMU"                             "Первый лист ИБ СамГМУ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_SL_SAMGMU"                             "Второй лист ИБ СамГМУ"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="journal_childbirth"                       "002/у Журнал учета приема беременных ,рожениц и родильниц" Form="Reports/ArmPatientsInDep/journal_childbirth.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_O_T_SAMGMU"                            "Первый и второй листы ИБ СамГМУ  "
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="066/у-02"                                 "Форма № 066/у-02 Статкарта выбывшего из стационара круглосуточного пребывания, дневного  стационара, стационара на дому   "
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="list_hh"                                  "Листы ИБ: Первый и Второй" Form="Reports/HospPlan/list_hh.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3_for530"                    "Сведения о пациенте 530"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServNew"                            "057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ" Form="Reports/Visit/OutDirServNew.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="HOSPITALISATION_DIR"                      "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="med_card_003_3_represent"                 "Сведения о пациенте(данные представителя)" Form="Reports/HospPlan/530/med_card_003_3.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5_order274"                    "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 (приказ 274)" Form="Reports/AmbReps/Order274/amb_talon_A5.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient_530n"                 "Журнал госпитализации и отказов" Form="Reports/HospPlan/journal_hpk_patient_530n.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_testTver"               "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 (версия 0251)" Form="Reports/AmbReps/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="DIRECTION_CHIM_TO_452/y_06"               "Направление на химико-токсилогическое исследование 452/у - 06"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="out_history_card_530n_test_sdg"           "Статистическая карта выбывшего из стационара (приказ 530н) проверка оттиска"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="fedlist_dep_patient"                      "007/у-02. Листок ежедневного учета движения больных и коечного фонда стационара" Form="Reports/ArmPatientsInDep/fedlist_dep_patient.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="movement_daily_beds_patients_new_old"     "Форма №007/у-02 Листок ежедневного учета движения больных и коечного фонда стационара_old" Form="Reports/Statistic/movement_daily_beds_patients_new.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(orig)"                      "Форма 003/у (2 лист)(Оригинал)"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2_Verstka"                    "2 лист. Титульный лист"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="Составной"       - REP_CODE="119656"                                   "задача 119656 составной отчет"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm"
+    │                                             ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card_530n"  "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm"
+    │                                             └── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card_530n"  "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm"
+    ├── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement"                      "Информированное добровольное согласие на медицинское вмешательство"
+    └── (AutoPopup "HPK_PLAN_JOURNALS") - REP_TYPE="WEB-форма"       - REP_CODE="out_history_card_530n"                    "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm"
 
 
 Контекстное меню используемое на форме (ПКМ) – данные из PostgreSQL:
 
-└── name="pmCERTIFICATE_FORMS"
+└── name="P_HPK_PLAN"
     ├── "Обновить"
-    ├── "Редактировать свидетельство"
-    ├── "Изменить состояние"
-    │   ├── "В наличии"
-    │   ├── "Утерян"
-    │   ├── "Похищен (в МО)"
-    │   └── "Испорчен"
-    └── (AutoPopup "") - REP_TYPE="WEB-форма" - REP_CODE="CERT_DEATH" "Мед свидетельство о смерти" Form="Reports/CertificateForms/cf_death_new.frm" (PostgreSQL)
+    ├── "Информированные согласия и отказы"
+    ├── "Перенести на другую дату"
+    ├── "Добавить"
+    ├── "Изменить"
+    ├── "Удалить"
+    ├── "Оформить отказ от госпитализации"
+    ├── "Отменить отказ от госпитализации"
+    ├── "Записать"
+    ├── "История перемещений"
+    ├── "Госпитализировать"
+    ├── "Госпитализировать повторно"
+    ├── "Отменить госпитализацию"
+    ├── "Открыть ИБ"
+    ├── "Отправлен на создание ИБ"
+    ├── "Отправлен на создание ИБ"
+    ├── "Аннулировать ИБ"
+    ├── "Отменить аннулирование ИБ"
+    ├── "Подтвердить аннулирование ИБ"
+    ├── "ВМП"
+    ├── "Хронология госпитализаций"
+    ├── "Операции"
+    ├── "Направления на услуги"
+    ├── "Направления на услуги"
+    │   ├── "Пациент"
+    │   └── "Сопровождающее лицо"
+    ├── "Анализы"
+    ├── "Лицевой счет"
+    ├── "Просмотр прикрепленных документов"
+    ├── "Отчеты"
+    │   ├── "Первый лист ИБ (действителен до 1 марта 2023 г.)"
+    │   ├── "Карта прерывания беременности"
+    │   ├── "Статистическая карта"
+    │   ├── "Акт на стационарную помощь"
+    │   ├── "Информационное согласие"
+    │   │   ├── "Информационное согласие"
+    │   │   ├── "Инф. согл. на обработку перс. данных"
+    │   │   ├── "Инф. Согласие на лечение и обследование на сифилис"
+    │   │   └── "Вкладыш Обследование больного на сифилис"
+    │   ├── "Массовая печать"
+    │   │   ├── "Форма № 2 - Адресный листок прибытия"
+    │   │   └── "Форма № 7 - Адресный листок убытия"
+    │   ├── "Протокол заседания врачебной комиссии для оказания ВМП"
+    │   ├── "План госпитализации на день"
+    │   ├── "Поступившие в стационар за день"
+    │   ├── "Список поступивших в стационар"
+    │   ├── "Форма № 2 - Адресный листок прибытия"
+    │   ├── "Форма № 7 - Адресный листок убытия"
+    │   ├── "Список больных стационара"
+    │   ├── "Журнал учета приема больных и отказов"
+    │   ├── "Журнал учета приема больных и отказов (530Н)"
+    │   ├── "Алфавитный журнал"
+    │   ├── "Листок ежедневного учета движения больных и коечного фонда стационара"
+    │   ├── "Листок ежедневного учета движения больных и коечного фонда дневного стационара"
+    │   ├── "Очередь пациентов на госпитализацию"
+    │   ├── "Журнал учета приема беременных, рожениц и родильниц"
+    │   ├── "Работа приемного отделения"
+    │   ├── "114/у «Сопроводительный лист»"
+    │   ├── "Сводный отчет по стационару"
+    │   ├── "096/у-20 Медицинская карта беременной, роженицы и родильницы, получающей медицинскую помощь в стационарных условиях"
+    │   └── "Направление 057/у"
+    ├── "Документы"
+    ├── (AutoPopup "") "Сводная заявка на питание (№22-МЗ)"
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="agreement_transfusion"                    "Согласие пациента на операцию переливания компонентов крови" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="list_prib_multi"                          "Форма № 2 -  Адресный листок прибытия двухсторонний для отчета adr_list_mass" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_pkpc"                       "История родов Приморье" Form="Reports/HospPlan/birth_history_pkpc.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="med_karta_stac"                           "Медицинская карта стационарного больного 1 лиcт (НИИ Блохина)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HPKReport"                                "Журнал регистрации (НИИ Блохина)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_SOGL_RKOB"                            "Информированное добровольное согласие  на медицинское вмешательство" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="PlannedHospKSG"                           "Планируемая госпитализация в разрезе КСГ" Form="Reports/PlannedHospKSG/PlannedHospKSG.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="n_protolol_na_gospit"                     "Протокол решения ВК на госпитализацию" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="PROT_BMP_RKOB"                            "Протокол заседания комиссии для оказания ВМП" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST_RKOB_2"                       "Лист Экспертной оценки (РКОБ)_2" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history"                            "096/у История родов (1 лист)" Form="Reports/HospPlan/birth_history.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory"                              "ИБ" Form="Reports/HospPlan/hosphistory.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card"                        "Статистическая карта выбывшего из стационара. Выписанный." Form="Reports/HospPlan/outhost_stat_card.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_2"                          "096/у История родов (2-й лист)" Form="Reports/HospPlan/birth_history_2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_ELN"                  "Информированное добровольное согласие на формирование ЛН в форме электронного документа" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="adr_list_mass"                            "Форма № 2 -  Адресный листок прибытия двухсторонний (массовая печать)" Form="Reports/HospPlan/adr_list_mass.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="066_1_y_02"                               "066-1-у-02 Статистическая карта выбывшего из психиатрического (наркологического) стационара" Form="Reports/HospPlan/066_1_y_02.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_agreement"                        "Информационное согласие на манипуляцию_" Form="Reports/HospPlan/patient_agreement.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_5_6"                        "096/у История родов (5-6 лист)" Form="Reports/HospPlan/birth_history_5_6.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_wristband2"                       "Браслета пациента" Form="Reports/HospPlan/patient_wristband2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_PERV_DOK"                          "Первичная документация" Form="Reports/Visit/Stac/B_STAC_PERV_DOK.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="OPB_096u20"                               "096/1у-20 Мед.карта ОПБ" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_1"   "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_1"   "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_5"   "096/1у-20 Мед.карта ОПБ (5 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_5.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_11"  "096/1у-20 Мед.карта ОПБ (11 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_11.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_12"  "096/1у-20 Мед.карта ОПБ (12 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_12.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_3_4" "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_3_4" "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_6"   "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-форма" - REP_CODE="OPB_096u20_6"   "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_1"                             "096/1у-20 Мед.карта ОПБ (1 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="list_prib"                                "Форма № 2 -  Адресный листок прибытия двухсторонний" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="comission_vmp_protocol"                   "Протокол заседания врачебной комиссии для оказания ВМП" Form="Reports/HospPlan/comission_vmp_protocol.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_report"                          "Сводный отчет по стационару" Form="Reports/HospitalRep/HospitalRep.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_nso"                        "096/у История родов (НСО)" Form="Reports/HospPlan/birth_history_nso.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="list_ubyt_for_mass"                       "Форма № 7 - Адресный листок убытия (mass)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5"                             "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5" Form="Reports/AmbReps/Order274/amb_talon_A5.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_kod"                    "066/у-02 Переводная карта (КОД)" Form="Reports/HospPlan/outhost_stat_card_kod.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="soglasie_na_med_vmesh_DZ_dp"              "(Томск)ИС на медицинское вмешательство (ДЗ ТО) пакет документов" Form="Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="notice_road_accidents"                    "ИЗВЕЩЕНИЕ О РАНЕНОМ, СКОНЧАВШЕМСЯ ОТ ПОСЛЕДСТВИЙ ДОРОЖНО-ТРАНСПОРТНОГО ПРОИСШЕСТВИЯ в течение последующих 7 и 30 суток после него" Form="Reports/EmergencyRep/notice_road_accidents.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="emergency_notification_dtp"               "Извещение о раненом в ДТП" Form="Reports/EmergencyRep/emergency_notification_dtp.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_7"                          "096/у История родов (7-й лист)" Form="Reports/HospPlan/birth_history_7.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_TER_OTKAZ"                         "Отказ от госпитализации2" Form="Reports/Visit/Stac/STAC_TER_OTKAZ.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_old_2"                  "Статистическая карта выбывшего из стационара. Выписанный. (old)" Form="Reports/HospPlan/outhost_stat_card_old.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="med_pregnant_card_096y20"                 "096/у-20 Медицинская карта беременной, роженицы и родильницы, получающей медицинскую помощь в стационарных условиях" Form="Reports/096-y20/med_pregnant_card_096y20.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="HPK_JOURNAL"                              "Журнал" Form="Reports/Visit_1/hpk_journal.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 123 TEST TEST"                  "Движение за даты. Взрослые TEST TEST" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="066/y-02_statcard"                        "Статкарта " Form="Reports/HospPlan/outhost_stat_card2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient"                      "Журнал учета больных и отказов от госпитализации" Form="Reports/HospPlan/journal_hpk_patient.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_NEOTL"                "Информационное согласие на манипуляцию (Неотложка)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_talon2"                           "Талон пациента (Москва. ФНКЦ ФХМ)" Form="Reports/HospPlan/patient_talon2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="066_1_y_02"                               "066-1-у-02 Статистическая карта выбывшего из психиатрического (наркологического) стационара" Form="Reports/HospPlan/066_1_y_02.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_20"                             "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_25"                             "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_3_4"                            "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_6"                             "096/1у-20 Мед.карта ОПБ (6 стр.)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_OBSLED_VICH_VISIT"                    "ИС на проведение обследования на ВИЧ-инфекцию" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="003/у-м"                                  "Первый лист ИБ для ЛПУ, не имеющих узкой специальности" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_PRIEM"                "Информационное согласие на манипуляцию (Приемник)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="VOKB_IDS_SOSTAV"                          "Составной ВОКБ" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-конструктор" - REP_CODE="CASH_IDS_PLAT"     "Информированное добровольное согласие на виды мед.вмешательств касса" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="outhost_stat_card_for_blank"              "Форма 66/у. Статистическая карта выбывшего из стационара" Form="Reports/HospPlan/outhost_stat_card_for_blank.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_3_4"                        "096/у История родов (3-4 лист)" Form="Reports/HospPlan/birth_history_3_4.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 1"                              "Движение за даты. Взрослые" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="okb_direction"                            "Направление на операцию (ОКБ) Томск" Form="Reports/HospPlan/okb_direction.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="bh_096u20"                                "096/1у-20 История родов" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_1"     "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_1"     "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_2"     "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_2"     "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_3_4"   "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_3_4"   "096/1у-20 История родов (3,4 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_3_4.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_5"     "096/1у-20 История родов (5 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_5.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_7"     "История родов 096/1у-20 (7 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_7.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_8"     "История родов 096/1у-20 (8 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_8.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_15_16" "История родов 096/1у-20 (15, 16 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_15_16.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_20"    "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_20"    "096/1у-20 История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_21"    "История родов 096/1у-20 (21 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_21.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_25"    "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_25"    "История родов 096/1у-20 (25 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_6"     "История родов 096/1у-20 (6 стр)_2.0" Form="partogram/report.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_23_24" "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_22"    "История родов 096/1у-20 (22 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_22.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_19"    "096/1у-20 История родов (19 стр)." Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_19.frm" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-форма" - REP_CODE="bh_096u20_11_12" "096/1у-20 История родов (11, 12 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_11_12.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_1"                              "История родов 096/1у-20 (1 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_3_4"                           "Медицинская карта беременной, находящейся в отделении патологии беременности" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_3_4.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="ExpertListRkobPP2"                        "Чек -лист оценки критериев качества стационарной медицинской помощи" Form="Reports/Hosp/ExpertListRkobPP2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head_2"                       "Второй лист ИБ" Form="Reports/HospPlan/hosphistory_head_2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_23_24"                          "096/1у-20 История родов (23, 24 стр)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_23_24.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="reception_agreement_personal_info_prim"   "Инф согласие приморье" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="003"                                      "003" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="PROTOKOL_RESH_VMP1"                       "Протокол решения комиссии СМП (новый)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="PROT_RESH_VMP2"                           "Протокол решения комиссии СамГМУ на оказание ВМП (ВМП бюджет субъекта СО)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="agent_skud_qr_code_patient"               "Пропуск СКУД " (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head"                         "Первый лист ИБ" Form="Reports/HospPlan/hosphistory_head.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosp_history_second_list"                 "Второй лист ИБ (ТОМСК)" Form="Reports/ArmPatientsInDep/hosp_history_second_list.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="reception_agreement_personal_info"        "Информированное согласие на обработку персональных данных." Form="Reports/Reception/agreement_personal_info.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosp_history_head_530n"                   "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3"                           "Сведения о пациенте" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(msch2)"                      "amb_talon_A5(msch2)" Form="Reports/AmbReps/amb_talon_A5(msch2).frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(mvb)"                        "amb_talon_A5(mvb)" Form="Reports/AmbReps/amb_talon_A5(mvb).frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3_11/22"                     "Сведения о пациенте_11/22" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_incom_date"                       "Список поступивших в стационар" Form="Reports/HospPlan/patient_incom_date.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="PRIEM_POKOI_VMP"                          "Приемный покой ВМП" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="informed_consent"                         "Информированное добровольное согласие на медицинское вмешательство" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_tver"                 "ТВЕР" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_new2"                           "amb_talon_new2" Form="Reports/AmbReps/amb_talon_new.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="bh_096u20_2"                              "История родов 096/1у-20 (2 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="mmc_hosphistory_head_v1.2"                "Первый лист ИБ v1.2" Form="Reports/HospPlan/mmc_hosphistory_head.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="Blohina_titul"                            "Блохина Титульник взрослые" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_FL_SAMGMU_DOP"                         "Первый лист ИБ СамГМУ доп " (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="PRIEM_POKOI"                              "Приемный покой" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_PI_st" "Согласие на обработку ПД стационар" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-конструктор" - REP_CODE="TESTTTT"                   "просто" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="emergency"                                "Пакет приемного покоя" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_headd" "Первый лист ИББ" Form="Reports/HospPlan/hosphistory_head.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма"       - REP_CODE="hosphistory_head3" "Первый лист ИБ 003/у3" Form="Reports/KLD39/HospPlan/hosphistory_head.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма"       - REP_CODE="MED_STAC_INSPECT"  "Дневник врача_" Form="Reports/Visit/Stac/STAC_TER_INSPECT.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма"       - REP_CODE="list_measuring"    "Лист измерений" Form="Reports/ArmPatientsInDep/list_measuring.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-конструктор" - REP_CODE="HOSP_EPICRIS"      "Выписной эпикриз" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-форма"       - REP_CODE="patient_dir_serv"  "Маршрутный лист" Form="Reports/ArmPatientsInDep/patient_dir_serv.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="134_fst_sh_medhist"                       "ГДКБСМП Первый лист ИБ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="out_history_card_530n"                    "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5(odb)"                        "amb_talon_A5(odb)" Form="Reports/AmbReps/amb_talon_A5(odb).frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="hosp_history_head_530n_vk"                "Первый лист ИБ 530н(ВК)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_wristband_lite"                   "Браслета пациента(Приморье)" Form="Reports/HospPlan/patient_wristband_lite.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="FIO_CONTROL"                              "ФИО пациента веб-конструктор" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="003_7_8"                                  "Лист 7-8_тест" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="amb_talon_rkob_А4"                        "Медицинская карта амбулаторного пациента в формате А4" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hospital_leavers_card"                    "Карта выбывшего из стационара" Form="Reports/HospPlan/hospital_leavers_card.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"         "Инф согл и заявление (Саранск РКОБ)2" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"          "Инф согл и заявление Составной" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="OTKAZ_HOSPITAL"                           "Отказ пациента от госпитализации" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HospPlan_Income"                          "Сводка о движении больных по приемному отделению" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="hosphistory_head2"                        "Первый лист ИБ_Мой" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="test_agr222"                              "Тест_соглас222" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="EXPERT_LIST"                              "Лист экспертной оценки РКОБ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="LIST_SECURITY"                            "Контрольный лист безопасности пациента" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_prescribes_exec_1"                "Лист врачебных назначений" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_PRIEM"                "Информационное согласие на манипуляцию (Приемник)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="patient_agreement_H_NEOTL"                "Информационное согласие на манипуляцию (Неотложка)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="birth_history_nso"                        "096/у История родов (НСО)" Form="Reports/HospPlan/birth_history_nso.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="patient_talon2"                           "Талон пациента (Москва. ФНКЦ ФХМ)" Form="Reports/HospPlan/patient_talon2.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="B_STAC_PERV_DOK"                          "Первичная документация" Form="Reports/Visit/Stac/B_STAC_PERV_DOK.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="VOKB_IDS_SOSTAV"                          "Составной ВОКБ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="HPK_JOURNAL"                              "Журнал" Form="Reports/Visit_1/hpk_journal.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="okb_direction"                            "Направление на операцию (ОКБ) Томск" Form="Reports/HospPlan/okb_direction.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="Statistic 123 TEST TEST"                  "Движение за даты. Взрослые TEST TEST" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OPB_096u20_7_10"                          "096/1у-20 Мед.карта ОПБ (7-10 стр)" Form="Reports/Pregnancy/OPB_096u20/OPB_096u20_7_10.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_S_P23"                                "Информированное согласие на медицинское вмешательство (приложение №23)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient_with_lpu_attachments" "Журнал учёта больных и отказов госпитализации С ЛПУ прикрепления" Form="Reports/HospPlan/journal_hpk_patient_with_lpu_attachments.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="hosp003u_20"                              "003/у История родов (20 стр.)" Form="Reports/Pregnancy/birth_history_096-y20/bh_096u20_20.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="out_history_card"                         "Статистическая карта выбывшего из стационара." Form="Reports/HospPlan/out_history_card.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="agreement_personal_info_tomsk_2"          "Согласие на обработку персональных данных_2" Form="Reports/PatientAgreement/agreement_personal_info_tomsk(rd4).frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_FL_SAMGMU"                             "Первый лист ИБ СамГМУ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_SL_SAMGMU"                             "Второй лист ИБ СамГМУ" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="journal_childbirth"                       "002/у Журнал учета приема беременных ,рожениц и родильниц" Form="Reports/ArmPatientsInDep/journal_childbirth.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="HH_O_T_SAMGMU"                            "Первый и второй листы ИБ СамГМУ  " (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="066/у-02"                                 "Форма № 066/у-02 Статкарта выбывшего из стационара круглосуточного пребывания, дневного  стационара, стационара на дому   " (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="list_hh"                                  "Листы ИБ: Первый и Второй" Form="Reports/HospPlan/list_hh.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="med_card_003_3_for530"                    "Сведения о пациенте 530" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServNew"                            "057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ" Form="Reports/Visit/OutDirServNew.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="HOSPITALISATION_DIR"                      "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="med_card_003_3_represent"                 "Сведения о пациенте(данные представителя)" Form="Reports/HospPlan/530/med_card_003_3.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5_order274"                    "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 (приказ 274)" Form="Reports/AmbReps/Order274/amb_talon_A5.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="journal_hpk_patient_530n"                 "Журнал госпитализации и отказов" Form="Reports/HospPlan/journal_hpk_patient_530n.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_testTver"               "025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 (версия 0251)" Form="Reports/AmbReps/amb_talon_0251_A5.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="DIRECTION_CHIM_TO_452/y_06"               "Направление на химико-токсилогическое исследование 452/у - 06" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="out_history_card_530n_test_sdg"           "Статистическая карта выбывшего из стационара (приказ 530н) проверка оттиска" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="fedlist_dep_patient"                      "007/у-02. Листок ежедневного учета движения больных и коечного фонда стационара" Form="Reports/ArmPatientsInDep/fedlist_dep_patient.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-форма"       - REP_CODE="movement_daily_beds_patients_new_old"     "Форма №007/у-02 Листок ежедневного учета движения больных и коечного фонда стационара_old" Form="Reports/Statistic/movement_daily_beds_patients_new.frm" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2(orig)"                      "Форма 003/у (2 лист)(Оригинал)" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="medcart_003_2_Verstka"                    "2 лист. Титульный лист" (PostgreSQL)
+    ├── (AutoPopup "") - REP_TYPE="Составной"       - REP_CODE="119656"                                   "задача 119656 составной отчет" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR"    "057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию" Form="Reports/Visit_1/HOSPITALISATION_DIR.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="hosp_history_head_530n" "Первый лист ИБ 530н" Form="Reports/HospPlan/530/hosp_history_head_530n.frm" (PostgreSQL)
+    │   ├── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card_530n"  "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm" (PostgreSQL)
+    │   └── - REP_TYPE="WEB-форма" - REP_CODE="out_history_card_530n"  "Статистическая карта выбывшего из стационара (приказ 530н)" Form="Reports/HospPlan/530/out_history_card_530n.frm" (PostgreSQL)
+    └── (AutoPopup "") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement"                      "Информированное добровольное согласие на медицинское вмешательство" (PostgreSQL)
 
-SQL ЗАПРОСЫ (4):
+SQL ЗАПРОСЫ (40):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
-    D_V_CERTIFICATE_MOVING
-    D_V_CERTIFICATE_MOVING_SP
-    D_V_CERTIFICATE_FORMS
-    D_V_CF_BIRTH_CONTENTS_BASE
-    D_V_CF_DEATH_CONTENTS_BASE
-    D_V_CF_PERDEATH_CONTENTS_BASE
-    D_V_PERSMEDCARD_FIO
-    D_V_CERTIFICATE_FORMS_BASE
-    D_V_EHRS_BASE
-    D_V_EHR_STATES_BASE
+    D_V_HPK_PLAN_JOURNALS_BASE
+    D_V_HOSP_HISTORIES_BASE
+    D_V_HOSP_PLAN_KINDS
+    D_V_AGENT_FLU_BASE
+    D_V_AGENT_FLU_PMC_LAST
+    D_V_HPK_PLAN_JOURNALS_GRID
+    D_V_WL_RECORDS74
+    D_V_VMP_LINKS
+    D_V_HPK_PLAN_JOURNALS
+    D_V_DIRECTIONS_BASE
+    D_V_HPK_PLANS
+    D_V_HPK_PLANS_BASE
+    D_V_PERSMEDCARD
+    D_V_LPU
+    D_V_CABLAB
+    D_V_DIRECTIONS
+    D_V_OUTER_DIRECTIONS
+    D_V_HOSP_HISTORY_DEPS
+    D_V_HOSP_HISTORIES
+    D_V_HPK_SCHEDULE_REG
+    D_V_HOSP_HISTORY_DEPS_BASE
+    D_V_CONTRACTS_BASE
+    D_V_SMP_CALL_EX_SYSTEM
+    D_V_LPU_BASE
+    D_V_SMP_CALL_EX_SYSTEM_BASE
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
-    D_CERTIFICATE_MOVING
-    D_CERTIFICATE_MOVING_SP
-    D_CERTIFICATE_FORMS
-    D_CERTIFICATE_JOURNALS
-    D_CERTIFICATE_STATES
-    D_LPUDICT
-    D_CF_BIRTH_CONTENTS
-    D_CF_DEATH_CONTENTS
-    D_CF_PERDEATH_CONTENTS
-    D_AGENTS
-    D_PERSMEDCARD
+    D_HPK_PLAN_JOURNALS
+    D_HOSP_HISTORIES
+    D_HOSP_PLAN_KINDS
+    D_AGENT_FLU
+    D_PMC_FLU
     D_EMPLOYERS
-    D_EHRS
-    D_EHR_STATES
+    D_AGENTS
+    D_SERVICES
+    D_PAYMENT_KIND
+    D_HPK_SCHEDULE_REG
+    D_SCH_RESOURCES
+    D_CABLAB
+    D_HOSP_HISTORY_DEPS
+    D_DEP_BEDS
+    D_HH_DEP_BEDS
+    D_DEPS
+    D_HOSP_RESULTS
+    D_PMC_MARKERS
+    D_MARKERS
+    D_SCHEDULE_COLORS
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_AGENT_ADDRS
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_AGENT_WORK_PLACES
+    D_AGENT_CATEGORIES
+    D_CATEGORIES
+    D_AGENT_PERSDOCS
+    D_OUTER_DIRECTIONS
+    D_DIR_THERAPY_SCHEMES
+    D_MED_THERAPY_SCHEMES_DESC
+    D_MED_THERAPY_SCHEMES
+    D_DIRECTIONS
+    D_MKB10
+    D_PERSMEDCARD
+    D_HPK_PLANS
+    D_HOSPITALIZATION_TYPES
+    D_LPUDICT
+    D_HH_CANC_REASON
+    D_CANC_REASON
+    D_HPKPJ_VMP_STATES
+    D_DIRECTION_KINDS
+    D_DIR_CANC_REASONS
+    D_WL_RECORDS74
+    D_DIRECTION_SERVICES
+    D_VMP_LINKS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_LPU
+    D_GEOGRAFY
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_MESES
+    D_HOSP_HOURS
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DEPDICT
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_REASON_DIRECTION
+    D_EX_SYSTEMS
+    D_JOBTITLES
+    D_ER_PROFILES
+    D_AGENT_NAMES
+    D_DEPS_TYPES
+    D_KSGCODES
+    D_VMP
+    D_HOSP_OUTCOMES
+    D_ALV
+    D_SCALE_REHAB
+    D_AGENT_RELATIVES
+    D_HH_TRANSFER_REASONS
+    D_ABILITY_STATUS
+    D_DIRECTORIES_DATA_VER
+    D_HOSP_INCOMES
+    D_DIRECTION_HOSP
+    D_CONTRACTS
+    D_SMP_CALL_EX_SYSTEM
 
 ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
-  D_V_CERTIFICATE_MOVING (Oracle: 610) (PostgreSQL: 422):
-          D_CERTIFICATE_MOVING (Oracle: 764) (PostgreSQL: 772)
+  D_V_HPK_PLAN_JOURNALS_BASE (Oracle: 19,73 тыс) (PostgreSQL: 16,30 тыс):
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
 
-  D_V_CERTIFICATE_MOVING_SP (Oracle: 1,19 млн) (PostgreSQL: 1,09 млн):
-          D_CERTIFICATE_MOVING_SP (Oracle: 1,19 млн) (PostgreSQL: 1,19 млн)
+  D_V_HOSP_HISTORIES_BASE (Oracle: 121,91 тыс) (PostgreSQL: 119,26 тыс):
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
 
-  D_V_CERTIFICATE_FORMS (Oracle: 1,19 млн) (PostgreSQL: 1,09 млн):
-          D_CERTIFICATE_FORMS (Oracle: 1,19 млн) (PostgreSQL: 1,19 млн)
-          D_CERTIFICATE_JOURNALS (Oracle: 1,92 тыс) (PostgreSQL: 1,92 тыс)
-          D_CERTIFICATE_STATES (Oracle: 5) (PostgreSQL: 5)
-          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
 
-  D_V_CF_BIRTH_CONTENTS_BASE (Oracle: 1,87 тыс) (PostgreSQL: 1,73 тыс):
-          D_CF_BIRTH_CONTENTS (Oracle: 1,87 тыс) (PostgreSQL: 1,87 тыс)
+  D_V_AGENT_FLU_BASE (Oracle: 1,86 тыс) (PostgreSQL: 1,85 тыс):
+          D_AGENT_FLU (Oracle: 1,86 тыс) (PostgreSQL: 1,86 тыс)
 
-  D_V_CF_DEATH_CONTENTS_BASE (Oracle: 4,31 тыс) (PostgreSQL: 4,02 тыс):
-          D_CF_DEATH_CONTENTS (Oracle: 4,31 тыс) (PostgreSQL: 4,30 тыс)
+  D_V_AGENT_FLU_PMC_LAST (Oracle: 1,05 тыс) (PostgreSQL: 1,05 тыс):
+          D_AGENT_FLU (Oracle: 1,86 тыс) (PostgreSQL: 1,86 тыс)
+          D_PMC_FLU (Oracle: 1,76 тыс) (PostgreSQL: 1,76 тыс)
 
-  D_V_CF_PERDEATH_CONTENTS_BASE (Oracle: 2,03 тыс) (PostgreSQL: 1,91 тыс):
-          D_CF_PERDEATH_CONTENTS (Oracle: 2,03 тыс) (PostgreSQL: 2,03 тыс)
-
-  D_V_PERSMEDCARD_FIO (Oracle: 607,14 тыс) (PostgreSQL: 585,56 тыс):
-          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
-          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+  D_V_HPK_PLAN_JOURNALS_GRID (Oracle: 20,06 тыс) (PostgreSQL: 16,61 тыс):
           D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+          D_HPK_SCHEDULE_REG (Oracle: 32) (PostgreSQL: 32)
+          D_SCH_RESOURCES (Oracle: 21,86 тыс) (PostgreSQL: 21,80 тыс)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+          D_HOSP_HISTORY_DEPS (Oracle: 127,91 тыс) (PostgreSQL: 127,79 тыс)
+          D_DEP_BEDS (Oracle: 11,28 тыс) (PostgreSQL: 11,26 тыс)
+          D_HH_DEP_BEDS (Oracle: 3,05 тыс) (PostgreSQL: 3,04 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_HOSP_RESULTS (Oracle: 54) (PostgreSQL: 53)
+          D_PMC_MARKERS (Oracle: 40,51 тыс) (PostgreSQL: 40,45 тыс)
+          D_MARKERS (Oracle: 161) (PostgreSQL: 161)
+          D_SCHEDULE_COLORS (Oracle: 55) (PostgreSQL: 54)
+          D_AGENT_CONTACTS (Oracle: 64,59 тыс) (PostgreSQL: 64,55 тыс)
+          D_CONTACT_TYPES (Oracle: 105) (PostgreSQL: 105)
+          D_AGENT_ADDRS (Oracle: 587,98 тыс) (PostgreSQL: 587,91 тыс)
+          D_AGENT_SOCIAL_STATES (Oracle: 182,82 тыс) (PostgreSQL: 182,60 тыс)
+          D_SOCIALSTATES (Oracle: 117) (PostgreSQL: 117)
+          D_AGENT_WORK_PLACES (Oracle: 72,09 тыс) (PostgreSQL: 72,07 тыс)
+          D_AGENT_CATEGORIES (Oracle: 1,32 тыс) (PostgreSQL: 1,30 тыс)
+          D_CATEGORIES (Oracle: 107) (PostgreSQL: 107)
+          D_AGENT_PERSDOCS (Oracle: 291,89 тыс) (PostgreSQL: 291,68 тыс)
+          D_OUTER_DIRECTIONS (Oracle: 36,14 тыс) (PostgreSQL: 36,04 тыс)
+          D_DIR_THERAPY_SCHEMES (Oracle: 500) (PostgreSQL: 496)
+          D_MED_THERAPY_SCHEMES_DESC (Oracle: 22,85 тыс) (PostgreSQL: 22,85 тыс)
+          D_MED_THERAPY_SCHEMES (Oracle: 11,40 тыс) (PostgreSQL: 11,40 тыс)
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_HOSPITALIZATION_TYPES (Oracle: 20) (PostgreSQL: 20)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_HH_CANC_REASON (Oracle: 20) (PostgreSQL: 0)
+          D_CANC_REASON (Oracle: 2) (PostgreSQL: ошибка)
+          D_HPKPJ_VMP_STATES (Oracle: 3) (PostgreSQL: 3)
+          D_DIRECTION_KINDS (Oracle: 110) (PostgreSQL: 110)
+          D_DIR_CANC_REASONS (Oracle: 18) (PostgreSQL: 18)
 
-  D_V_CERTIFICATE_FORMS_BASE (Oracle: 1,19 млн) (PostgreSQL: 1,09 млн):
-          D_CERTIFICATE_FORMS (Oracle: 1,19 млн) (PostgreSQL: 1,19 млн)
+  D_V_WL_RECORDS74 (Oracle: 65) (PostgreSQL: 65):
+          D_WL_RECORDS74 (Oracle: 65) (PostgreSQL: 65)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
 
-  D_V_EHRS_BASE (Oracle: 109,59 тыс) (PostgreSQL: 108,25 тыс):
-          D_EHRS (Oracle: 109,59 тыс) (PostgreSQL: 109,20 тыс)
+  D_V_VMP_LINKS (Oracle: 214) (PostgreSQL: 213):
+          D_VMP_LINKS (Oracle: 214) (PostgreSQL: 213)
 
-  D_V_EHR_STATES_BASE (Oracle: 169,23 тыс) (PostgreSQL: 167,14 тыс):
-          D_EHR_STATES (Oracle: 169,23 тыс) (PostgreSQL: 168,51 тыс)
+  D_V_HPK_PLAN_JOURNALS (Oracle: 19,59 тыс) (PostgreSQL: 16,16 тыс):
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+
+  D_V_DIRECTIONS_BASE (Oracle: 373,52 тыс) (PostgreSQL: 340,75 тыс):
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_PLANS_BASE (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_PERSMEDCARD (Oracle: 607,14 тыс) (PostgreSQL: 585,56 тыс):
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_BLOODGROUPE (Oracle: 10) (PostgreSQL: 10)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_RHESUS (Oracle: 5) (PostgreSQL: 5)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+
+  D_V_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+
+  D_V_CABLAB (Oracle: 5,32 тыс) (PostgreSQL: 2,54 тыс):
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_BUILDINGS (Oracle: 754) (PostgreSQL: 754)
+          D_BUILD_FLOORS (Oracle: 4,32 тыс) (PostgreSQL: 4,32 тыс)
+          D_CABLAB_TYPE (Oracle: 41) (PostgreSQL: 41)
+
+  D_V_DIRECTIONS (Oracle: 373,52 тыс) (PostgreSQL: 340,75 тыс):
+          D_VISITPLACES (Oracle: 25) (PostgreSQL: 25)
+          D_VISITS (Oracle: 233,40 тыс) (PostgreSQL: 232,76 тыс)
+          D_DIR_REG_TYPES (Oracle: 7) (PostgreSQL: 7)
+          D_SPECIALITIES (Oracle: 698) (PostgreSQL: 698)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_MESES (Oracle: 105) (PostgreSQL: 105)
+          D_HOSP_HOURS (Oracle: 14) (PostgreSQL: 14)
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_OUTER_DIRECTIONS (Oracle: 36,14 тыс) (PostgreSQL: 36,04 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_HOSPITALIZATIONKINDS (Oracle: 22) (PostgreSQL: 22)
+          D_INJURE_KINDS (Oracle: 12) (PostgreSQL: 12)
+          D_DIRECTION_KINDS (Oracle: 110) (PostgreSQL: 110)
+          D_BED_TYPES (Oracle: 745) (PostgreSQL: 745)
+          D_HOSP_REASONS (Oracle: 32) (PostgreSQL: 32)
+          D_DIR_CANC_REASONS (Oracle: 18) (PostgreSQL: 18)
+          D_DEPDICT (Oracle: 57) (PostgreSQL: 57)
+          D_HOSPITALIZATION_TYPES (Oracle: 20) (PostgreSQL: 20)
+          D_HOSP_DIRECT_TYPES (Oracle: 5) (PostgreSQL: 5)
+          D_TRANSPORTATION_KINDS (Oracle: 13) (PostgreSQL: 13)
+          D_MED_THERAPY_SCHEMES (Oracle: 11,40 тыс) (PostgreSQL: 11,40 тыс)
+          D_DIRECTION_FORMS (Oracle: 4) (PostgreSQL: 4)
+          D_TYPE_MED_HELP (Oracle: 12) (PostgreSQL: 12)
+          D_DIRECTION_CONDITIONS (Oracle: 4) (PostgreSQL: 4)
+
+  D_V_OUTER_DIRECTIONS (Oracle: 36,13 тыс) (PostgreSQL: 28,73 тыс):
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+          D_OUTER_DIRECTIONS (Oracle: 36,14 тыс) (PostgreSQL: 36,04 тыс)
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_SPECIALITIES (Oracle: 698) (PostgreSQL: 698)
+          D_REASON_DIRECTION (Oracle: 29) (PostgreSQL: 29)
+          D_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_JOBTITLES (Oracle: 8,19 тыс) (PostgreSQL: 8,19 тыс)
+          D_ER_PROFILES (Oracle: 1,82 тыс) (PostgreSQL: 1,82 тыс)
+          D_DIRECTION_FORMS (Oracle: 4) (PostgreSQL: 4)
+          D_TYPE_MED_HELP (Oracle: 12) (PostgreSQL: 12)
+          D_DIRECTION_CONDITIONS (Oracle: 4) (PostgreSQL: 4)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+
+  D_V_HOSP_HISTORY_DEPS (Oracle: 127,90 тыс) (PostgreSQL: 124,29 тыс):
+          D_AGENT_NAMES (Oracle: 1,45 млн) (PostgreSQL: 1,45 млн)
+          D_HOSP_HISTORY_DEPS (Oracle: 127,91 тыс) (PostgreSQL: 127,79 тыс)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DEPS_TYPES (Oracle: 83) (PostgreSQL: 83)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_HOSP_RESULTS (Oracle: 54) (PostgreSQL: 53)
+          D_KSGCODES (Oracle: 25,18 тыс) (PostgreSQL: 25,18 тыс)
+          D_BED_TYPES (Oracle: 745) (PostgreSQL: 745)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_VMP (Oracle: 26,91 тыс) (PostgreSQL: 26,91 тыс)
+          D_HOSP_OUTCOMES (Oracle: 29) (PostgreSQL: 29)
+          D_MED_THERAPY_SCHEMES_DESC (Oracle: 22,85 тыс) (PostgreSQL: 22,85 тыс)
+          D_MED_THERAPY_SCHEMES (Oracle: 11,40 тыс) (PostgreSQL: 11,40 тыс)
+          D_ALV (Oracle: 12) (PostgreSQL: 12)
+          D_SCALE_REHAB (Oracle: 73) (PostgreSQL: 73)
+
+  D_V_HOSP_HISTORIES (Oracle: 121,91 тыс) (PostgreSQL: 119,26 тыс):
+          D_AGENT_RELATIVES (Oracle: 7,54 тыс) (PostgreSQL: 7,51 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: 606,78 тыс)
+          D_HOSP_REASONS (Oracle: 32) (PostgreSQL: 32)
+          D_HOSPITALIZATION_TYPES (Oracle: 20) (PostgreSQL: 20)
+          D_TRANSPORTATION_KINDS (Oracle: 13) (PostgreSQL: 13)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_HOSP_RESULTS (Oracle: 54) (PostgreSQL: 53)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_HPKPJ_VMP_STATES (Oracle: 3) (PostgreSQL: 3)
+          D_HOSP_OUTCOMES (Oracle: 29) (PostgreSQL: 29)
+          D_HOSP_HOURS (Oracle: 14) (PostgreSQL: 14)
+          D_HH_TRANSFER_REASONS (Oracle: 2) (PostgreSQL: 2)
+          D_ABILITY_STATUS (Oracle: 5) (PostgreSQL: 5)
+          D_DIRECTORIES_DATA_VER (Oracle: 48,97 тыс) (PostgreSQL: 48,97 тыс)
+          D_HOSP_INCOMES (Oracle: 132) (PostgreSQL: 132)
+          D_DIRECTION_HOSP (Oracle: 102) (PostgreSQL: 102)
+
+  D_V_HPK_SCHEDULE_REG (Oracle: 32) (PostgreSQL: 32):
+          D_HPK_SCHEDULE_REG (Oracle: 32) (PostgreSQL: 32)
+
+  D_V_HOSP_HISTORY_DEPS_BASE (Oracle: 127,90 тыс) (PostgreSQL: 124,29 тыс):
+          D_HOSP_HISTORY_DEPS (Oracle: 127,91 тыс) (PostgreSQL: 127,79 тыс)
+
+  D_V_CONTRACTS_BASE (Oracle: 12,18 тыс) (PostgreSQL: 10,77 тыс):
+          D_CONTRACTS (Oracle: 12,19 тыс) (PostgreSQL: 12,13 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс):
+          D_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+          D_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+
+  D_V_LPU_BASE (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+
+  D_V_SMP_CALL_EX_SYSTEM_BASE (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс):
+          D_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс)
 
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
-    D_PKG_CERTIFICATE_FORMS.SET_STATE
-    D_PKG_CERTIFICATE_FORMS.CLEAR
+    D_PKG_SIGNAL_INFO_SETS.GET_FULL_SIGNAL_INFORMATION
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_STD.FRM_DT
+    D_PKG_HPK_PLAN_JOURNALS.GET_HOSP_HISTORY_STATUS
+    D_PKG_STD.FRM_D
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.ADD
+    D_PKG_VMP_LINKS.UPD
+    D_PKG_HPK_PLAN_JOURNALS.DEL
+    D_PKG_HPK_PLAN_JOURNALS.SET_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_NEXT_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_PREV_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_HH_DIRECTION_DATE
+    D_PKG_HPK_PLAN_JOURNALS.NEAREST_DATE_SEARCH
+    D_PKG_HPK_PLAN_JOURNALS.GET_QUANT_BEDS_PROFILES_NEW
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_URPRIVS.GET_STANDART_PRIVS
+    D_PKG_HOSP_HISTORIES.SET_DISCARD_STATUS
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_SET_DISCARD
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE_DISCARD
+    D_PKG_HOSP_HISTORIES.CHECK_HOSP_ONE_TIME
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_ADD
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL
+    D_PKG_HPK_SCHEDULE_REG.DEL
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_SMP_CALL_EX_SYSTEM.SET_HOSP_HISTORY
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE
+    D_PKG_HOSP_HISTORIES.DEL
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REVERSE_CANCEL
+    D_PKG_DIRECTIONS.SET_CANCELED
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_HPK_PLAN_JOURNALS.SET_IS_READY
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ADMISSION_HOSP
+    TherapySchemesField
+    GenDirNumbToDirKinds
+    ActualFLG
+    CABLAB_OUTER_DIRECTIONS
+    SchRegDepDefault
+
+КОМПОЗИЦИИ UnitEdit:
+    unit="PERSMEDCARD" composition="PMC_WITH_REG"
+    unit="HPK_PLAN_JOURNALS" composition="PMC_WITH_REG"
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        Reports/HospPlan/journal_hpk_patient_530n_call.frm;
+        Reports/HospPlan/stationary_act.frm;
+        Reports/HospPlan/comission_vmp_protocol_call.frm;
+        Reports/HospPlan/journal_hpk_patient_call.frm;
+        Reports/HospPlan/patient_indept_sys_hpk_call.frm;
+        Reports/HospPlan/patient_incom_date_call.frm;
+        Reports/HospPlan/adr_list_mass_call.frm;
+        Reports/HospitalRep/HospitalRep_call.frm;
+        Reports/HospPlan/patient_leave_date_call.frm;
+        Reports/Statistic/movement_daily_beds_patients_call.frm;
+        Reports/Statistic/movement_daily_beds_patients_day_call.frm;
+        Reports/HospPlan/turn_on_hospitalization_call.frm;
+        Reports/InformationConsistingNutrition/SummaryInformation_call.frm;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_C_ID
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
 
 ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
 
-  D_PKG_CERTIFICATE_FORMS.SET_STATE:
+  D_PKG_SIGNAL_INFO_SETS.GET_FULL_SIGNAL_INFORMATION:
     Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_certificate_forms.set_state(numeric, numeric, numeric, numeric)
+    Сигнатура: d_pkg_signal_info_sets.get_full_signal_information(numeric, numeric, numeric, numeric, numeric)
 
-  D_PKG_CERTIFICATE_FORMS.CLEAR:
+  D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS:
     Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_certificate_forms.clear(numeric, numeric)
+    Сигнатура: d_pkg_cse_accesses.get_id_with_rights(numeric, varchar, varchar, numeric, numeric)
+
+  D_PKG_STD.FRM_DT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_std.frm_dt()
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_std.frm_dt() is not a plpgsql function
+
+  D_PKG_HPK_PLAN_JOURNALS.GET_HOSP_HISTORY_STATUS:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hpk_plan_journals.get_hosp_history_status(numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:00000:3:DECLARE:unused variable "rstatus_data"
+
+  D_PKG_STD.FRM_D:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_std.frm_d()
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_std.frm_d() is not a plpgsql function
+
+  D_PKG_DAT_TOOLS.FULL_YEARS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_dat_tools.full_years(timestamp, timestamp)
+
+  D_PKG_CSE_ACCESSES.CHECK_RIGHT:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_cse_accesses.check_right(numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLANS.ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plans.add(numeric, numeric, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_VMP_LINKS.UPD:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_vmp_links.upd(numeric, numeric, numeric, numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:unused parameter "vapi_version"
+
+  D_PKG_HPK_PLAN_JOURNALS.DEL:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hpk_plan_journals.del(numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:5:DECLARE:never read variable "ntmp"
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_record(numeric, numeric, numeric, timestamp, numeric, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_NEXT_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_next_record(numeric, numeric, timestamp, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_PREV_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_prev_record(numeric, numeric, timestamp, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_HH_DIRECTION_DATE:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_hh_direction_date(numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.NEAREST_DATE_SEARCH:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.nearest_date_search(numeric, numeric, timestamp, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.GET_QUANT_BEDS_PROFILES_NEW:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.get_quant_beds_profiles_new(numeric, numeric)
+
+  D_PKG_CATALOGS.FIND_ROOT_CATALOG:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_catalogs.find_root_catalog(numeric, numeric, varchar, numeric)
+
+  D_PKG_URPRIVS.GET_STANDART_PRIVS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_urprivs.get_standart_privs(numeric, varchar, numeric, int, int, int, int)
+
+  D_PKG_HOSP_HISTORIES.SET_DISCARD_STATUS:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hosp_histories.set_discard_status(numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:12:DECLARE:never read variable "nhsc_result"
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_SET_DISCARD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_set_discard(numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE_DISCARD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_remove_discard(numeric, numeric)
+
+  D_PKG_HOSP_HISTORIES.CHECK_HOSP_ONE_TIME:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hosp_histories.check_hosp_one_time(numeric, numeric, timestamp, timestamp, varchar, varchar)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_add(numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_cancel(numeric, numeric)
+
+  D_PKG_HPK_SCHEDULE_REG.DEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_schedule_reg.del(numeric, numeric)
+
+  D_PKG_TOOLS.STR_SEPARATE_TO_IDS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_tools.str_separate_to_ids(varchar)
+
+  D_PKG_SMP_CALL_EX_SYSTEM.SET_HOSP_HISTORY:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_smp_call_ex_system.set_hosp_history(numeric, numeric, numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_remove(numeric, numeric)
+
+  D_PKG_HOSP_HISTORIES.DEL:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_hosp_histories.del(numeric, numeric)
+    ОШИБКИ:
+      error:42883:308:CALL:procedure d_pkg_visits.work_in_at(numeric, numeric, numeric) does not exist
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REVERSE_CANCEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_reverse_cancel(numeric, numeric)
+
+  D_PKG_DIRECTIONS.SET_CANCELED:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_directions.set_canceled(numeric, numeric, numeric, numeric, numeric, timestamp, varchar)
+
+  D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_cse_accesses.check_employer_right(numeric, numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_cse_accesses.check_employer_right(numeric,numeric,character varying,numeric,character varying,numeric,numeric,numeric) is not a plpgsql function
+
+  D_PKG_EMPLOYERS.GET_ID:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_employers.get_id(numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:00000:23:PERFORM:routine is marked as STABLE, but expression is VOLATILE
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_IS_READY:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_is_ready(numeric, numeric, numeric)
 
 ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
 
-  D_CERTIFICATE_MOVING:
+  D_HPK_PLAN_JOURNALS:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
-  D_CERTIFICATE_MOVING_SP:
+  D_HOSP_HISTORIES:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
-  D_CERTIFICATE_FORMS:
+  D_HOSP_PLAN_KINDS:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
-  D_CERTIFICATE_JOURNALS:
+  D_AGENT_FLU:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
-  D_CERTIFICATE_STATES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: CS_CODE
-
-  D_LPUDICT:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CF_BIRTH_CONTENTS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CF_DEATH_CONTENTS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CF_PERDEATH_CONTENTS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_AGENTS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_PERSMEDCARD:
+  D_PMC_FLU:
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
@@ -180,841 +1291,253 @@ SQL ЗАПРОСЫ (4):
     Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
     Oracle PK поля: ID
 
-  D_EHRS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_EHR_STATES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_CERTIFICATE_MOVING:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CJ_TO
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN cj_to SET NOT NULL;
-
-    Колонка: MOVING_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN moving_date SET NOT NULL;
-
-    Колонка: EMPLOYER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN employer SET NOT NULL;
-
-    Колонка: IS_ACTUAL
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN is_actual SET NOT NULL;
-
-    Колонка: RANGE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN range_begin SET NOT NULL;
-
-    Колонка: RANGE_END
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN range_end SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN id SET NOT NULL;
-
-    Колонка: MOVING_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving ALTER COLUMN moving_type SET NOT NULL;
-
-  D_CERTIFICATE_MOVING_SP:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving_sp ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CERTIFICATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving_sp ALTER COLUMN certificate SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving_sp ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_moving_sp ALTER COLUMN id SET NOT NULL;
-
-  D_CERTIFICATE_FORMS:
-    Колонка: CF_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN cf_type SET NOT NULL;
-
-    Колонка: BLOCKED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN blocked SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CF_FORM352
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN cf_form352 SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN id SET NOT NULL;
-
-    Колонка: C_KIND
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN c_kind SET NOT NULL;
-
-    Колонка: C_STATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN c_state SET NOT NULL;
-
-    Колонка: ANOTHER_LPU_CERT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN another_lpu_cert SET NOT NULL;
-
-    Колонка: PRINT_COUNT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN print_count SET NOT NULL;
-
-    Колонка: SPINE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN spine SET NOT NULL;
-
-    Колонка: IS_ACTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_forms ALTER COLUMN is_acts SET NOT NULL;
-
-  D_CERTIFICATE_JOURNALS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CF_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cf_type SET NOT NULL;
-
-    Колонка: CJ_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cj_name SET NOT NULL;
-
-    Колонка: CJ_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cj_type SET NOT NULL;
-
-    Колонка: CJ_KIND
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cj_kind SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CJ_FORM352
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cj_form352 SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_journals ALTER COLUMN cid SET NOT NULL;
-
-  D_CERTIFICATE_STATES:
-    Колонка: CS_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_states ALTER COLUMN cs_code SET NOT NULL;
-
-    Колонка: CS_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_certificate_states ALTER COLUMN cs_name SET NOT NULL;
-
-  D_LPUDICT:
-    Колонка: LPU_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN lpu_code SET NOT NULL;
-
-    Колонка: IS_RESP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN is_resp SET NOT NULL;
-
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN version SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_lpudict ALTER COLUMN cid SET NOT NULL;
-
-  D_CF_BIRTH_CONTENTS:
-    Колонка: DIR_EMPLOYMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN dir_employment SET NOT NULL;
-
-    Колонка: BIRTH_PLACE_IS_CITY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN birth_place_is_city SET NOT NULL;
-
-    Колонка: DIR_EDUCATION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN dir_education SET NOT NULL;
-
-    Колонка: WRITTEN_FROM_WORDS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN written_from_words SET NOT NULL;
-
-    Колонка: CF_FORM352
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN cf_form352 SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN id SET NOT NULL;
-
-    Колонка: DIR_MARITAL_S
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN dir_marital_s SET NOT NULL;
-
-    Колонка: RECEIVER_AGREEMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN receiver_agreement SET NOT NULL;
-
-    Колонка: POLY_ALL
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN poly_all SET NOT NULL;
-
-    Колонка: PRINT_CHILD_SURNAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN print_child_surname SET NOT NULL;
-
-    Колонка: POLY_ACCOUNT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN poly_account SET NOT NULL;
-
-    Колонка: DIR_PERSON_BIRTHS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN dir_person_births SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN agent SET NOT NULL;
-
-    Колонка: DIR_CHILDBIRTH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN dir_childbirth SET NOT NULL;
-
-    Колонка: GIVEN_OUT_EMP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_birth_contents ALTER COLUMN given_out_emp SET NOT NULL;
-
-  D_CF_DEATH_CONTENTS:
-    Колонка: IS_CHILD_UNDER_ONE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN is_child_under_one SET NOT NULL;
-
-    Колонка: STATUS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN status SET NOT NULL;
-
-    Колонка: CF_FORM352
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN cf_form352 SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN id SET NOT NULL;
-
-    Колонка: PL_DEATH_IS_CITY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN pl_death_is_city SET NOT NULL;
-
-    Колонка: RECEIVER_AGREEMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN receiver_agreement SET NOT NULL;
-
-    Колонка: ACCURACY_DATE_DEATH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN accuracy_date_death SET NOT NULL;
-
-    Колонка: DIR_DEATH_FROM
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN dir_death_from SET NOT NULL;
-
-    Колонка: DIR_REASON_SET
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN dir_reason_set SET NOT NULL;
-
-    Колонка: DATE_DEATH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN date_death SET NOT NULL;
-
-    Колонка: DIR_BASIS_EST
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN dir_basis_est SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN agent SET NOT NULL;
-
-    Колонка: DIR_PLACE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN dir_place SET NOT NULL;
-
-    Колонка: LAW_RESULT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_death_contents ALTER COLUMN law_result SET NOT NULL;
-
-  D_CF_PERDEATH_CONTENTS:
-    Колонка: DIR_EMPLOYMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_employment SET NOT NULL;
-
-    Колонка: DIR_EDUCATION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_education SET NOT NULL;
-
-    Колонка: STATUS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN status SET NOT NULL;
-
-    Колонка: CF_FORM352
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN cf_form352 SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN id SET NOT NULL;
-
-    Колонка: BORN_IS_LIVE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN born_is_live SET NOT NULL;
-
-    Колонка: DIR_MARITAL_S
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_marital_s SET NOT NULL;
-
-    Колонка: PL_DEATH_IS_CITY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN pl_death_is_city SET NOT NULL;
-
-    Колонка: RECEIVER_AGREEMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN receiver_agreement SET NOT NULL;
-
-    Колонка: POLY_ALL
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN poly_all SET NOT NULL;
-
-    Колонка: CHILD_WEIGHT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN child_weight SET NOT NULL;
-
-    Колонка: ACCURACY_DATE_DEATH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN accuracy_date_death SET NOT NULL;
-
-    Колонка: DIR_DEATH_FROM
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_death_from SET NOT NULL;
-
-    Колонка: DIR_REASON_SET
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_reason_set SET NOT NULL;
-
-    Колонка: PRINT_CHILD_SURNAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN print_child_surname SET NOT NULL;
-
-    Колонка: POLY_ACCOUNT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN poly_account SET NOT NULL;
-
-    Колонка: DIR_PERSON_BIRTHS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_person_births SET NOT NULL;
-
-    Колонка: DATE_DEATH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN date_death SET NOT NULL;
-
-    Колонка: DIR_BASIS_EST
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_basis_est SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN agent SET NOT NULL;
-
-    Колонка: GIVEN_OUT_EMP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN given_out_emp SET NOT NULL;
-
-    Колонка: DIR_PLACE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_place SET NOT NULL;
-
-    Колонка: CHILD_LENGTH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN child_length SET NOT NULL;
-
-    Колонка: DIR_DEATH_CAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN dir_death_came SET NOT NULL;
-
-    Колонка: LAW_RESULT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cf_perdeath_contents ALTER COLUMN law_result SET NOT NULL;
-
   D_AGENTS:
-    Колонка: IS_EMPLOYER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_employer SET NOT NULL;
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: IS_ANONYM
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_anonym SET NOT NULL;
+  D_SERVICES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN id SET NOT NULL;
+  D_PAYMENT_KIND:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN cid SET NOT NULL;
+  D_HPK_SCHEDULE_REG:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: AGN_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_code SET NOT NULL;
+  D_SCH_RESOURCES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ACCORDING_RELATIVES
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN according_relatives SET NOT NULL;
+  D_CABLAB:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: IS_HOME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_home SET NOT NULL;
+  D_HOSP_HISTORY_DEPS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: AGN_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_type SET NOT NULL;
+  D_DEP_BEDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN version SET NOT NULL;
+  D_HH_DEP_BEDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: AGN_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_name SET NOT NULL;
+  D_DEPS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_RESULTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_PMC_MARKERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_MARKERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_SCHEDULE_COLORS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_CONTACTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_CONTACT_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_ADDRS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_SOCIAL_STATES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_SOCIALSTATES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_WORK_PLACES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_CATEGORIES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_CATEGORIES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_PERSDOCS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_OUTER_DIRECTIONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DIR_THERAPY_SCHEMES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_MED_THERAPY_SCHEMES_DESC:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_MED_THERAPY_SCHEMES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DIRECTIONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_MKB10:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
   D_PERSMEDCARD:
-    Колонка: SMS_AGREE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN sms_agree SET NOT NULL;
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: IA_PRINTED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN ia_printed SET NOT NULL;
+  D_HPK_PLANS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN lpu SET NOT NULL;
+  D_HOSPITALIZATION_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN agent SET NOT NULL;
+  D_LPUDICT:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: EMAIL_AGREE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN email_agree SET NOT NULL;
+  D_HH_CANC_REASON:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: OUTNUMB
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN outnumb SET NOT NULL;
+  D_CANC_REASON:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN id SET NOT NULL;
+  D_HPKPJ_VMP_STATES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: VS_CODE
 
-    Колонка: TP_PRINTED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN tp_printed SET NOT NULL;
+  D_DIRECTION_KINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_persmedcard ALTER COLUMN cid SET NOT NULL;
+  D_DIR_CANC_REASONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-  D_EMPLOYERS:
-    Колонка: REGDATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN regdate SET NOT NULL;
+  D_WL_RECORDS74:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN lpu SET NOT NULL;
+  D_DIRECTION_SERVICES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN agent SET NOT NULL;
+  D_VMP_LINKS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN id SET NOT NULL;
+  D_BLOODGROUPE:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: IS_DISMISSED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN is_dismissed SET NOT NULL;
+  D_DIVISIONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN cid SET NOT NULL;
+  D_RHESUS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: RH_CODE
 
-  D_EHRS:
-    Колонка: CREATED_BY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN created_by SET NOT NULL;
+  D_LPU:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: UNIT_ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN unit_id SET NOT NULL;
+  D_GEOGRAFY:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: UNIT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN unit SET NOT NULL;
+  D_BUILDINGS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN lpu SET NOT NULL;
+  D_BUILD_FLOORS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: DOC_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN doc_type SET NOT NULL;
+  D_CABLAB_TYPE:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: CREATE_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN create_date SET NOT NULL;
+  D_VISITPLACES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehrs ALTER COLUMN id SET NOT NULL;
+  D_VISITS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-  D_EHR_STATES:
-    Колонка: CREATED_BY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN created_by SET NOT NULL;
+  D_DIR_REG_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: DRT_CODE
 
-    Колонка: IS_LOCKED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN is_locked SET NOT NULL;
+  D_SPECIALITIES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN pid SET NOT NULL;
+  D_MESES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN lpu SET NOT NULL;
+  D_HOSP_HOURS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: HOUR_CODE
 
-    Колонка: CREATE_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN create_date SET NOT NULL;
+  D_HOSPITALIZATIONKINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: VERS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN vers SET NOT NULL;
+  D_INJURE_KINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_ehr_states ALTER COLUMN id SET NOT NULL;
+  D_BED_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
+  D_HOSP_REASONS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
 
-====================================================================================================
-=== КОНЕЦ ОТЧЕТА ===
-====================================================================================================
+  D_DEPDICT:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_DIRECT_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_TRANSPORTATION_KINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DIRECTION_FORMS:
+    Статус: ОШИБКА: PK есть в Oracle, 

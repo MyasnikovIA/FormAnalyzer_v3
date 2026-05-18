@@ -23,6 +23,14 @@ public class UserFormsResolver {
     public FormInfo resolveOverrides(String formPath) {
         FormInfo formInfo = new FormInfo(formPath);
 
+        // Приводим путь к относительному от каталога Forms
+        String relativePath = formPath;
+        if (relativePath.startsWith("/")) relativePath = relativePath.substring(1);
+        if (relativePath.startsWith("Forms/")) relativePath = relativePath.substring(6);
+        // Если остался префикс Forms без слеша
+        if (relativePath.startsWith("Forms")) relativePath = relativePath.substring(5);
+        if (relativePath.startsWith("/")) relativePath = relativePath.substring(1);
+
         Path projectRoot = scannerService.getProjectRoot();
         List<String> regions = scannerService.findAllUserFormsRegions();
         regions.sort(String::compareTo);
@@ -30,21 +38,21 @@ public class UserFormsResolver {
         for (String region : regions) {
             Path regionPath = projectRoot.resolve(region);
 
-            // Полное переопределение (.frm файл)
-            Path regionFullOverride = regionPath.resolve(formPath);
-            if (Files.exists(regionFullOverride) && formPath.endsWith(".frm")) {
+            // 1. Полное переопределение (.frm файл)
+            Path regionFullOverride = regionPath.resolve(relativePath);
+            if (Files.exists(regionFullOverride) && relativePath.endsWith(".frm")) {
                 formInfo.setFullyReplaced(true);
                 formInfo.setReplacementPath(regionFullOverride.toString());
                 formInfo.addOverride(new FormInfo.OverrideInfo(
                         region, regionFullOverride.toString(),
                         FormInfo.OverrideInfo.OverrideType.FULL_OVERRIDE
                 ));
+                System.out.println("Найдены регионы UserForms: " + regions+' '+relativePath);
             }
 
-            // .d каталог
-            String formPathWithoutExt = formPath.replace(".frm", "");
+            // 2. .d каталог
+            String formPathWithoutExt = relativePath.replace(".frm", "");
             Path dotDPath = regionPath.resolve(formPathWithoutExt + ".d");
-
             if (Files.exists(dotDPath) && Files.isDirectory(dotDPath)) {
                 try (Stream<Path> walk = Files.walk(dotDPath)) {
                     walk.filter(Files::isRegularFile)
@@ -61,8 +69,8 @@ public class UserFormsResolver {
                 }
             }
 
-            // Прямой .dfrm файл
-            Path directDfrm = regionPath.resolve(formPath.replace(".frm", ".dfrm"));
+            // 3. Прямой .dfrm файл
+            Path directDfrm = regionPath.resolve(relativePath.replace(".frm", ".dfrm"));
             if (Files.exists(directDfrm) && Files.isRegularFile(directDfrm)) {
                 formInfo.addOverride(new FormInfo.OverrideInfo(
                         region, directDfrm.toString(),
