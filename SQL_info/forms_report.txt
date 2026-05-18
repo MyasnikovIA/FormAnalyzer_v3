@@ -1,85 +1,78 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Mon May 18 18:00:48 GMT+07:00 2026
+Дата создания: Mon May 18 18:14:04 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
 ----------------------------------------------------------------------------------------------------
-ФОРМА: /Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm
+ФОРМА: /Forms/HospPlan/hp_relativechoise.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ArmPatientsInDep\SubForms\hh_mp_prescribes.frm
-СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_relativechoise.frm
+СТАТУС: БАЗОВАЯ ФОРМА
 
 ЮЗЕРФОРМЫ:
-     ===== UserFormsEgis3Novosib =====
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\data.dfrm
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\script.dfrm
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\view.dfrm
-
-     ===== UserFormsKaliningrad =====
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\prescribes.dfrm
-
-     ===== UserFormsKrasnodarOD =====
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\view.dfrm
-
-     ===== UserFormsSamRMC =====
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\data.dfrm
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\script.dfrm
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\view.dfrm
-
-     ===== UserFormsVOKOD =====
-        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVOKOD\ArmPatientsInDep\SubForms\hh_mp_prescribes.d\hh_mp_prescribes.dfrm
-
+     (не найдено)
 
 SubForm:
      (не найдено)
 
 Список вызываемых форм в JS:
-     (не найдено)
+     Agents/agent_relatives/agent_relatives_add.frm
 
-SQL ЗАПРОСЫ (2):
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_RELATIVES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pRELS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    └── "Удалить"
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из PostgreSQL:
+
+└── name="pRELS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (3):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
-    D_V_MP_PRESCRIBES
+    D_V_AGENTS_PERSMEDCARD
+    D_V_PERSMEDCARD
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
-    D_MP_TYPES
-    D_DOSE_MEASURES
-    D_MP_CONDITIONES
-    D_MP_ADD_ATTRIBUTES
-    D_MEASURES
-    D_REASON_CANCEL_PRESCRIBE
-    D_NOMBASE_MNN
-    D_HOSP_HISTORY_DEPS
-    D_MP_PRESCRIBES
-    D_EMPLOYERS
     D_AGENTS
-    D_NOMMODIF
-    D_MP_DESCRIBES
-    D_MED_USE_METHODS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_AGENTS_PERSMEDCARD (Oracle: ошибка) (PostgreSQL: ошибка):
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: ошибка)
+          D_PERSMEDCARD (Oracle: 607,17 тыс) (PostgreSQL: ошибка)
+
+  D_V_PERSMEDCARD (Oracle: 607,16 тыс) (PostgreSQL: ошибка):
+          D_PERSMEDCARD (Oracle: 607,17 тыс) (PostgreSQL: ошибка)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: ошибка)
+          D_BLOODGROUPE (Oracle: 10) (PostgreSQL: ошибка)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: ошибка)
+          D_RHESUS (Oracle: 5) (PostgreSQL: ошибка)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: ошибка)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: ошибка)
 
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
-    D_PKG_MP_PRESCRIBES.SET_MP_CONDITION
-
-СИСТЕМНЫЕ ОПЦИИ:
-    AddMedNaznFromHH
-    AddDirBedProfile
-    CheckHospOnkoPrescribesEdit
-    RegOKSCode
-    RegStrokeCode
-    PKOMS
-
-ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
-    unit="MKB10" composition="DEFAULT"
-    unit="AGENTS" composition="SUPPLIER_NAME"
-    unit="GEOGRAFY" composition="DEFAULT"
-    unit="FINANSOURCES" composition="DEFAULT"
-
-JS Unit Compositions (только из вызовов openWindow/openD3Form):
-    unit:dom.getAttribute('unit')  composition:DEFAULT;
-    unit:MEDS_PRICES  method:DEFAULT;
-    unit:VIS_OPER_OUTCOMES  method:DEFAULT;
+    D_PKG_AGENT_RELATIVES.DEL
 
 
 ====================================================================================================

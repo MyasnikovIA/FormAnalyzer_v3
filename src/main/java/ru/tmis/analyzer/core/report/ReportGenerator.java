@@ -238,7 +238,7 @@ public class ReportGenerator {
 
         // unitCompositions
         if (!form.getUnitCompositions().isEmpty()) {
-            writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):");
+            writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (тэги):");
             for (String comp : form.getUnitCompositions()) {
                 writer.println("    " + comp);
             }
