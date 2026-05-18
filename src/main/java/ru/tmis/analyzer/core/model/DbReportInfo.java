@@ -22,7 +22,7 @@ public class DbReportInfo {
         this.children = new ArrayList<>();
     }
 
-    // Getters and Setters
+    // ---------- Getters and Setters ----------
     public String getPrivName() { return privName; }
     public void setPrivName(String privName) { this.privName = privName; }
 
@@ -53,6 +53,7 @@ public class DbReportInfo {
     public boolean hasChildren() { return !children.isEmpty(); }
     public boolean isComposite() { return repType == 6; }
 
+    // ---------- Методы для отображения ----------
     public String getRepTypeName() {
         switch (repType) {
             case 0: return "Crystal Reports";
@@ -72,6 +73,9 @@ public class DbReportInfo {
         return null;
     }
 
+    /**
+     * Полная строка для отображения отчёта (с UNIT и Form)
+     */
     public String getDisplayString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(UNIT='");
@@ -89,6 +93,9 @@ public class DbReportInfo {
         return sb.toString();
     }
 
+    /**
+     * Краткая строка для вложенных отчётов (без UNIT)
+     */
     public String getShortDisplayString() {
         StringBuilder sb = new StringBuilder();
         sb.append("- REP_TYPE=\"");

@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.db.ReportsFromDbService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.config.SettingsModel;
@@ -121,7 +122,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 // ========== ДОБАВЛЯЕМ ОТЧЁТЫ ИЗ ORACLE ==========
                 if (autoPopup.unit != null && !autoPopup.unit.isEmpty()) {
                     System.out.println("[PopupMenuProcessor] Обработка AutoPopup для unit=" + autoPopup.unit);
-                    List<ReportsFromDbService.DbReportInfo> dbReports = reportsService.getReportsByUnit(autoPopup.unit);
+                    List<DbReportInfo> dbReports = reportsService.getReportsByUnit(autoPopup.unit);
                     System.out.println("[PopupMenuProcessor] Найдено отчётов в БД Oracle: " + dbReports.size());
 
                     if (!dbReports.isEmpty()) {

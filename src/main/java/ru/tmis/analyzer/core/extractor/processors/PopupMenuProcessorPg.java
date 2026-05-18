@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.db.PostgresReportsService;
+import ru.tmis.analyzer.core.db.ReportsFromDbService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -84,7 +85,9 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            info.autoPopupName = name;
+            // Исправлено: fallback на unit, если name отсутствует
+            info.autoPopupName = (name != null && !name.isEmpty()) ? name :
+                    (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);
@@ -100,7 +103,9 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            info.autoPopupName = name;
+            // Исправлено: fallback на unit, если name отсутствует
+            info.autoPopupName = (name != null && !name.isEmpty()) ? name :
+                    (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);

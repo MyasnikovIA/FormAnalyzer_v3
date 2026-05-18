@@ -40,7 +40,7 @@ public class PopupMenuInfo {
         private boolean fromAutoPopup;
         private String autoPopupName;
         private boolean dbReport;
-        private ReportsFromDbService.DbReportInfo dbReportInfo;
+        private DbReportInfo dbReportInfo;
         private final List<MenuItem> children;
 
         public MenuItem() {
@@ -89,11 +89,11 @@ public class PopupMenuInfo {
             this.dbReport = dbReport;
         }
 
-        public ReportsFromDbService.DbReportInfo getDbReportInfo() {
+        public DbReportInfo getDbReportInfo() {
             return dbReportInfo;
         }
 
-        public void setDbReportInfo(ReportsFromDbService.DbReportInfo dbReportInfo) {
+        public void setDbReportInfo(DbReportInfo dbReportInfo) {
             this.dbReportInfo = dbReportInfo;
         }
 
