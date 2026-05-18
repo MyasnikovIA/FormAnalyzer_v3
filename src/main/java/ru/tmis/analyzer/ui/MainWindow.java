@@ -4,7 +4,7 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
-import ru.tmis.analyzer.core.llm.model.LLMReportContext;
+import ru.tmis.analyzer.core.model.LLMReportContext;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
@@ -278,23 +278,14 @@ public class MainWindow extends JFrame {
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings);
 
-        // Устанавливаем логгер для вывода в UI
+        // Устанавливаем логгер
         analyzer.setLogger(new ILogger() {
             @Override
-            public void log(String message) {
-                appendLog(message);
-            }
-
+            public void log(String message) { appendLog(message); }
             @Override
-            public void error(String message) {
-                appendLog("ОШИБКА: " + message);
-            }
-
+            public void error(String message) { appendLog("ОШИБКА: " + message); }
             @Override
-            public void debug(String message) {
-                // Для отладки - можно закомментировать
-                appendLog("[DEBUG] " + message);
-            }
+            public void debug(String message) { appendLog("[DEBUG] " + message); }
         });
 
         analyzer.setStopCondition(() -> stopRequested);
@@ -306,11 +297,23 @@ public class MainWindow extends JFrame {
                 statusLabel.setText("Статус: " + currentForm);
             });
         });
+        analyzer.setFormAnalyzedCallback(formInfo -> {
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();  // Создаёт заголовок, если файла нет
+                reportGen.appendFormToMainReport(formInfo);
+            } catch (IOException e) {
+                appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
+            }
+        });
 
         List<FormInfo> results = analyzer.analyzeAllForms();
 
         if (stopRequested) {
             appendLog("Анализ остановлен пользователем");
+            if (!results.isEmpty()) {
+                appendLog("Сохранено частичных результатов: " + results.size() + " форм");
+            }
             return;
         }
 
@@ -321,6 +324,7 @@ public class MainWindow extends JFrame {
         reportGen.addAllForms(results);
         reportGen.generateMainReport();
         reportGen.generateSummaryReport();
+        reportGen.createMainReportHeader();
 
         appendLog("");
         appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");

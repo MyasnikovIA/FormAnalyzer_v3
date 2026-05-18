@@ -1,4 +1,5 @@
 // core/extractor/processors/PopupMenuProcessorPg.java
+
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
@@ -43,9 +44,19 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
         menuMap.clear();
         autoPopups.clear();
 
-        // 1. Поиск D3 PopupMenu
+        // 1. Поиск D3 PopupMenu (cmpPopupMenu)
         Elements d3Popups = doc.select("cmpPopupMenu");
         for (Element popup : d3Popups) {
+            String name = popup.attr("name");
+            if (name == null || name.isEmpty()) continue;
+            PopupMenuInfo menu = new PopupMenuInfo(name);
+            parseMenuItems(popup, menu.getRootItems());
+            menuMap.put(name, menu);
+        }
+
+        // 1.1. Поиск D3 PopupMenu (cmpPopup) - ДОБАВЛЕНО
+        Elements d3CmpPopups = doc.select("cmpPopup");
+        for (Element popup : d3CmpPopups) {
             String name = popup.attr("name");
             if (name == null || name.isEmpty()) continue;
             PopupMenuInfo menu = new PopupMenuInfo(name);
@@ -148,7 +159,8 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
             String tagName = child.tagName().toLowerCase();
             boolean isPopupItem = false;
 
-            if (tagName.equals("cmppopupitem") ||
+            // ИСПРАВЛЕНО: добавлено cmpPopupItem с игнорированием регистра
+            if (tagName.equalsIgnoreCase("cmpPopupItem") ||
                     (tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype")))) {
                 isPopupItem = true;
             }
@@ -172,7 +184,8 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
                 parseMenuItems(child, item.getChildren());
                 items.add(item);
             } else if (tagName.equals("cmppopupmenu") ||
-                    (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype")))) {
+                    (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype"))) ||
+                    tagName.equals("cmppopup")) {  // ДОБАВЛЕНО: поддержка вложенных cmpPopup
                 parseMenuItems(child, items);
             } else {
                 parseMenuItems(child, items);

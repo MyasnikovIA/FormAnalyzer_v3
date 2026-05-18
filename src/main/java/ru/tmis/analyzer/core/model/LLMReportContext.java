@@ -1,10 +1,4 @@
-package ru.tmis.analyzer.core.llm.model;
-
-import ru.tmis.analyzer.core.model.BrokerInfo;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.SqlInfo;
-
-import java.util.*;
+package ru.tmis.analyzer.core.model;
 
 import java.util.*;
 

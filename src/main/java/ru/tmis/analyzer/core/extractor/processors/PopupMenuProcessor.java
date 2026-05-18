@@ -1,4 +1,5 @@
 // core/extractor/processors/PopupMenuProcessor.java
+
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
@@ -40,7 +41,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
         menuMap.clear();
         autoPopups.clear();
 
-        // 1. Поиск D3 PopupMenu
+        // 1. Поиск D3 PopupMenu (cmpPopupMenu)
         Elements d3Popups = doc.select("cmpPopupMenu");
         for (Element popup : d3Popups) {
             String name = popup.attr("name");
@@ -50,7 +51,17 @@ public class PopupMenuProcessor implements IXmlProcessor {
             menuMap.put(name, menu);
         }
 
-        // 2. Поиск M2 PopupMenu
+        // 1.1. Поиск D3 PopupMenu (cmpPopup) - ДОБАВЛЕНО
+        Elements d3CmpPopups = doc.select("cmpPopup");
+        for (Element popup : d3CmpPopups) {
+            String name = popup.attr("name");
+            if (name == null || name.isEmpty()) continue;
+            PopupMenuInfo menu = new PopupMenuInfo(name);
+            parseMenuItems(popup, menu.getRootItems());
+            menuMap.put(name, menu);
+        }
+
+        // 2. Поиск M2 PopupMenu (component cmptype=Popup)
         Elements m2Popups = doc.select("component[cmptype=Popup]");
         for (Element popup : m2Popups) {
             String name = popup.attr("name");
@@ -70,7 +81,8 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            info.autoPopupName = name;
+            info.autoPopupName = (name != null && !name.isEmpty()) ? name :
+                    (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);
@@ -86,13 +98,12 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            info.autoPopupName = name;
+            info.autoPopupName = (name != null && !name.isEmpty()) ? name :
+                    (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
             parseMenuItems(autoPopup, info.items);
             autoPopups.add(info);
         }
-
-        // core/extractor/processors/PopupMenuProcessor.java - исправленный фрагмент
 
         // 5. Объединяем AutoPopupMenu с целевыми PopupMenu
         ReportsFromDbService dbService = new ReportsFromDbService(settings);
@@ -109,19 +120,16 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
                 // Если есть unit, добавляем отчеты из БД
                 if (autoPopup.unit != null && !autoPopup.unit.isEmpty()) {
-                    List<ReportsFromDbService.DbReportInfo> dbReports =
-                            dbService.getReportsByUnit(autoPopup.unit);
+                    System.out.println("[PopupMenuProcessor] Обработка AutoPopup для unit=" + autoPopup.unit);
+                    List<ReportsFromDbService.DbReportInfo> dbReports = dbService.getReportsByUnit(autoPopup.unit);
+                    System.out.println("[PopupMenuProcessor] Найдено отчётов в БД: " + dbReports.size());
 
                     if (!dbReports.isEmpty()) {
-                        // Форматируем отчеты с поддержкой дерева
-                        List<String> formattedReports = ReportsFromDbService.formatReportsForDisplay(
-                                dbReports, autoPopup.autoPopupName, "", true);
-                        for (String formattedReport : formattedReports) {
-                            PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
-                            dbItem.setCaption(formattedReport);
-                            dbItem.setDbReport(true);
-                            targetMenu.addItem(dbItem);
+                        for (ReportsFromDbService.DbReportInfo rep : dbReports) {
+                            System.out.println("  - " + rep.getRepCode() + ": " + rep.getRepName());
                         }
+                    } else {
+                        System.out.println("[PopupMenuProcessor] Отчёты не найдены для unit=" + autoPopup.unit);
                     }
                 }
             }
@@ -138,9 +146,6 @@ public class PopupMenuProcessor implements IXmlProcessor {
         formInfo.setPopupMenus(result);
     }
 
-    /**
-     * Рекурсивный парсинг пунктов меню
-     */
     private void parseMenuItems(Element parent, List<PopupMenuInfo.MenuItem> items) {
         Elements children = parent.children();
 
@@ -148,7 +153,8 @@ public class PopupMenuProcessor implements IXmlProcessor {
             String tagName = child.tagName().toLowerCase();
             boolean isPopupItem = false;
 
-            if (tagName.equals("cmppopupitem") ||
+            // ИСПРАВЛЕНО: добавлено cmpPopupItem с игнорированием регистра
+            if (tagName.equalsIgnoreCase("cmpPopupItem") ||
                     (tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype")))) {
                 isPopupItem = true;
             }
@@ -157,7 +163,6 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 String caption = child.attr("caption");
                 String name = child.attr("name");
 
-                // Пропускаем разделители
                 if (caption != null && SEPARATOR_PATTERN.matcher(caption).matches()) {
                     continue;
                 }
@@ -173,7 +178,8 @@ public class PopupMenuProcessor implements IXmlProcessor {
                 parseMenuItems(child, item.getChildren());
                 items.add(item);
             } else if (tagName.equals("cmppopupmenu") ||
-                    (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype")))) {
+                    (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype"))) ||
+                    tagName.equals("cmppopup")) {  // ДОБАВЛЕНО: поддержка вложенных cmpPopup
                 parseMenuItems(child, items);
             } else {
                 parseMenuItems(child, items);

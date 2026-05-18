@@ -1,7 +1,7 @@
-package ru.tmis.analyzer.core.llm.blocks;
+package ru.tmis.analyzer.core.blocks;
 
 import ru.tmis.analyzer.config.AppConfig;
-import ru.tmis.analyzer.core.llm.model.LLMReportContext;
+import ru.tmis.analyzer.core.model.LLMReportContext;
 
 public interface IReportBlock {
     String getBlockName();

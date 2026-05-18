@@ -14,10 +14,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BooleanSupplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class FormAnalyzerService {
+
+    public interface FormAnalyzedCallback {
+        void onFormAnalyzed(FormInfo formInfo);
+    }
+    private FormAnalyzedCallback formAnalyzedCallback;
+    private final Map<String, ViewTableDependencies> viewDependenciesCache = new ConcurrentHashMap<>();
+
 
     private final SettingsModel settings;
     private final FileScannerService scannerService;
@@ -90,6 +100,9 @@ public class FormAnalyzerService {
                 FormInfo formInfo = analyzeForm(formPath);
                 if (formInfo != null && formInfo.getSqlQueries() != null && !formInfo.getSqlQueries().isEmpty()) {
                     results.add(formInfo);
+                    if (formAnalyzedCallback != null) {
+                        formAnalyzedCallback.onFormAnalyzed(formInfo);  // Сохраняем сразу
+                    }
                     System.out.println("OK (SQL: " + formInfo.getSqlQueries().size() + ")");
                 } else if (formInfo != null) {
                     System.out.println("OK (SQL: 0)");
@@ -130,6 +143,10 @@ public class FormAnalyzerService {
 
         extractorManager.process(baseContent, formInfo);
 
+        // ========== ДОБАВИТЬ ВЫЗОВ extractAutoPopupMenus ЗДЕСЬ ==========
+        extractAutoPopupMenus(baseContent, formInfo);
+        // ================================================================
+
         // Собираем все вьюхи, используемые в этой форме
         Set<String> viewNames = new LinkedHashSet<>();
         for (String tv : formInfo.getTablesViews()) {
@@ -138,14 +155,12 @@ public class FormAnalyzerService {
             }
         }
 
-
         // Загружаем зависимости вьюх
         if (!viewNames.isEmpty()) {
             Map<String, ViewTableDependencies> viewDeps = loadViewDependencies(viewNames);
             formInfo.setViewDependencies(viewDeps);
             log("  Сохранено зависимостей вьюх: " + viewDeps.size() + " шт.");
 
-            // Отладочный вывод: какие таблицы найдены
             for (Map.Entry<String, ViewTableDependencies> entry : viewDeps.entrySet()) {
                 log("    Вьюха " + entry.getKey() + " содержит " + entry.getValue().getOracleTables().size() + " таблиц");
             }
@@ -205,6 +220,7 @@ public class FormAnalyzerService {
     /**
      * Загрузка зависимостей вьюх (какие таблицы используются внутри каждой вьюхи)
      */
+
     private Map<String, ViewTableDependencies> loadViewDependencies(Set<String> viewNames) {
         if (viewNames.isEmpty()) {
             return Collections.emptyMap();
@@ -213,7 +229,7 @@ public class FormAnalyzerService {
         Map<String, ViewTableDependencies> result = new LinkedHashMap<>();
         ViewDependencyAnalyzer analyzer = new ViewDependencyAnalyzer(settings);
 
-        log("  Загрузка зависимостей для " + viewNames.size() + " вьюх...");
+        System.out.println("  Загрузка зависимостей для " + viewNames.size() + " вьюх...");
 
         int count = 0;
         for (String viewName : viewNames) {
@@ -221,22 +237,126 @@ public class FormAnalyzerService {
                 break;
             }
             count++;
-            log("    [" + count + "/" + viewNames.size() + "] Анализ вьюхи: " + viewName + " ... ");
+
+            // Проверяем глобальный кэш
+            if (ViewDependencyAnalyzer.isInCache(viewName)) {
+                System.out.println("    [" + count + "/" + viewNames.size() + "] " + viewName + " (из кэша)");
+                ViewTableDependencies deps = analyzer.analyzeViewPublic(viewName);
+                result.put(viewName, deps);
+                continue;
+            }
+
+            // Проверяем локальный кэш формы
+            if (viewDependenciesCache.containsKey(viewName)) {
+                System.out.println("    [" + count + "/" + viewNames.size() + "] " + viewName + " (из локального кэша)");
+                result.put(viewName, viewDependenciesCache.get(viewName));
+                continue;
+            }
+
+            System.out.print("    Анализ вьюхи [" + count + "/" + viewNames.size() + "]: " + viewName + " ... ");
 
             try {
                 ViewTableDependencies deps = analyzer.analyzeView(viewName);
                 result.put(viewName, deps);
-                log("      OK (таблиц: " + deps.getOracleTables().size() + ")");
+                viewDependenciesCache.put(viewName, deps);
+                System.out.println("OK (таблиц: " + deps.getOracleTables().size() + ")");
             } catch (Exception e) {
-                error("      ОШИБКА: " + e.getMessage());
+                System.err.println("ОШИБКА: " + e.getMessage());
                 ViewTableDependencies errorDeps = new ViewTableDependencies(viewName);
                 errorDeps.setExistsInOracle(false);
                 errorDeps.setOracleError(e.getMessage());
                 result.put(viewName, errorDeps);
+                viewDependenciesCache.put(viewName, errorDeps);
             }
         }
 
-        log("  Загружено зависимостей: " + result.size() + " вьюх");
         return result;
+    }
+
+    public void setFormAnalyzedCallback(FormAnalyzedCallback callback) {
+        this.formAnalyzedCallback = callback;
+    }
+
+
+    //Вынести в отдельный класс  AutoPopupMenuExtractorService
+    /**
+     * Извлечь unit из AutoPopupMenu компонентов
+     * Поддерживает:
+     * - D3: <cmpAutoPopupMenu unit="..."/>
+     * - M2: <component cmptype="AutoPopupMenu" unit="..."/>
+     * - D3 с пробелами: <cmpAutoPopupMenu ... unit="..." .../>
+     * - M2 с другими атрибутами: <component cmptype="AutoPopupMenu" name="..." unit="..." .../>
+     */
+    private void extractAutoPopupMenus(String content, FormInfo formInfo) {
+        if (content == null || content.isEmpty()) return;
+
+        Set<String> foundUnits = new LinkedHashSet<>();
+
+        // Паттерн 1: D3 синтаксис - cmpAutoPopupMenu с unit
+        // Пример: <cmpAutoPopupMenu unit="DIRECTION_SERVICES"/>
+        //         <cmpAutoPopupMenu name="someName" unit="DIRECTION_SERVICES"/>
+        Pattern d3Pattern = Pattern.compile(
+                "<cmpAutoPopupMenu\\s+[^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*/?>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher d3Matcher = d3Pattern.matcher(content);
+        while (d3Matcher.find()) {
+            String unit = d3Matcher.group(1);
+            if (unit != null && !unit.isEmpty()) {
+                foundUnits.add(unit);
+                System.out.println("  [AutoPopupMenu] D3: unit=" + unit);
+            }
+        }
+
+        // Паттерн 2: M2 синтаксис - component с cmptype="AutoPopupMenu" и unit
+        // Пример: <component cmptype="AutoPopupMenu" unit="DIRECTION_SERVICES"/>
+        //         <component name="pm" cmptype="AutoPopupMenu" unit="DIRECTION_SERVICES"/>
+        Pattern m2Pattern = Pattern.compile(
+                "<component\\s+[^>]*?cmptype\\s*=\\s*['\"]AutoPopupMenu['\"][^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*/?>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m2Matcher = m2Pattern.matcher(content);
+        while (m2Matcher.find()) {
+            String unit = m2Matcher.group(1);
+            if (unit != null && !unit.isEmpty()) {
+                foundUnits.add(unit);
+                System.out.println("  [AutoPopupMenu] M2: unit=" + unit);
+            }
+        }
+
+        // Паттерн 3: Обратный порядок (unit может быть до cmptype)
+        Pattern m2PatternReverse = Pattern.compile(
+                "<component\\s+[^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*?cmptype\\s*=\\s*['\"]AutoPopupMenu['\"][^>]*/?>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m2ReverseMatcher = m2PatternReverse.matcher(content);
+        while (m2ReverseMatcher.find()) {
+            String unit = m2ReverseMatcher.group(1);
+            if (unit != null && !unit.isEmpty()) {
+                foundUnits.add(unit);
+                System.out.println("  [AutoPopupMenu] M2 (reverse): unit=" + unit);
+            }
+        }
+
+        // Паттерн 4: Сокращенная форма D3 (без пробелов между атрибутами)
+        Pattern d3CompactPattern = Pattern.compile(
+                "<cmpAutoPopupMenu\\s+unit\\s*=\\s*['\"]([^'\"]+)['\"]\\s*/?>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher d3CompactMatcher = d3CompactPattern.matcher(content);
+        while (d3CompactMatcher.find()) {
+            String unit = d3CompactMatcher.group(1);
+            if (unit != null && !unit.isEmpty()) {
+                foundUnits.add(unit);
+                System.out.println("  [AutoPopupMenu] D3 compact: unit=" + unit);
+            }
+        }
+
+        // Добавляем все найденные unit в FormInfo
+        for (String unit : foundUnits) {
+            formInfo.addAutoPopupMenu(unit);
+        }
+
+        System.out.println("  [AutoPopupMenu] Всего найдено unit: " + foundUnits.size());
     }
 }

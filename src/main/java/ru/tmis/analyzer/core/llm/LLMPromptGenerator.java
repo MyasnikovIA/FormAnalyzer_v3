@@ -5,11 +5,10 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.model.BrokerInfo;
-import ru.tmis.analyzer.core.llm.model.LLMReportContext;
+import ru.tmis.analyzer.core.model.LLMReportContext;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
-import java.io.*;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
@@ -17,7 +16,6 @@ import java.util.Date;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class LLMPromptGenerator {
 

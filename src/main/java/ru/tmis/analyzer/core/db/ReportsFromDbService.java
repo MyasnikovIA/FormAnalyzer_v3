@@ -39,22 +39,28 @@ public class ReportsFromDbService {
      * @return список отчетов
      */
     public List<DbReportInfo> getReportsByUnit(String unitCode) {
+        // --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
         List<DbReportInfo> result = new ArrayList<>();
 
         if (unitCode == null || unitCode.trim().isEmpty()) {
             return result;
         }
 
-        String sql = "SELECT rep.ID,\n" +
-                     "       drl.PRIV_NAME,\n" +
-                     "       rep.REP_TYPE, --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
-                     "       rep.REP_DATA,\n" +
-                     "       rep.REP_FILENAME ,\n" +
-                     "       rep.REP_NAME,\n" +
-                     "       rep.REP_CODE\n" +
-                     "  from D_REPORTS_LINKS drl\n" +
-                     "       join d_reports rep on drl.pid = rep.id\n" +
-                     "  where drl.unitcode = ?\n";
+        // Исправленный SQL запрос для Oracle
+        String sql =
+                "SELECT rep.ID,\n" +
+                        "       drl.PRIV_NAME,\n" +
+                        "       rep.REP_TYPE,\n" +
+                        "       rep.REP_DATA,\n" +
+                        "       rep.REP_FILENAME,\n" +
+                        "       rep.REP_NAME,\n" +
+                        "       rep.REP_CODE,\n" +
+                        "       rep.LPU\n" +  // Добавляем LPU
+                        "  FROM D_REPORTS_LINKS drl\n" +
+                        "  JOIN D_REPORTS rep ON drl.PID = rep.ID\n" +
+                        " WHERE drl.UNITCODE = ?\n" +
+                        " ORDER BY drl.SORT_ORDER, rep.REP_NAME";  // Добавляем сортировку
+
         Properties props = new Properties();
         props.setProperty("user", settings.getOracleUser());
         props.setProperty("password", settings.getOraclePassword());
@@ -69,6 +75,8 @@ public class ReportsFromDbService {
             pstmt.setQueryTimeout(30);
             ResultSet rs = pstmt.executeQuery();
 
+            System.out.println("[ReportsFromDbService] Загрузка отчётов для unit=" + unitCode);
+
             while (rs.next()) {
                 DbReportInfo report = new DbReportInfo();
                 report.setPrivName(rs.getString("PRIV_NAME"));
@@ -79,9 +87,15 @@ public class ReportsFromDbService {
                 report.setRepName(rs.getString("REP_NAME"));
                 report.setRepCode(rs.getString("REP_CODE"));
                 report.setRepID(rs.getInt("ID"));
+
+                // Устанавливаем LPU (если нужно для контекста)
+                String lpu = rs.getString("LPU");
+                if (lpu != null) {
+                    report.setUnitCode(lpu); // или другое поле
+                }
+
                 // Если отчет составной, загружаем его структуру
                 if (report.isComposite()) {
-                     int tmp = report.getRepID();
                     List<DbReportInfo> children = getCompositeReports(report.getRepID());
                     for (DbReportInfo child : children) {
                         report.addChild(child);
@@ -89,10 +103,14 @@ public class ReportsFromDbService {
                 }
 
                 result.add(report);
+                System.out.println("  [ReportsFromDbService] Найден отчёт: " + report.getRepCode() + " - " + report.getRepName());
             }
 
+            System.out.println("[ReportsFromDbService] Всего найдено отчётов: " + result.size());
+
         } catch (SQLException e) {
-            System.err.println("Ошибка получения отчетов по unit=" + unitCode + ": " + e.getMessage());
+            System.err.println("[ReportsFromDbService] Ошибка получения отчетов по unit=" + unitCode + ": " + e.getMessage());
+            e.printStackTrace();
         }
 
         return result;

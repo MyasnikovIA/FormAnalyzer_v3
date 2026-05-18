@@ -2,6 +2,7 @@ package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.*;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
@@ -43,14 +44,14 @@ public class ReportGenerator {
 
     // Метод для получения количества записей в Oracle (с кэшированием)
     private long getOracleCount(String objectName) {
-        return oracleCountCache.computeIfAbsent(objectName.toUpperCase(),
-                k -> oracleService.getTableCount(objectName));
+        return DatabaseCacheManager.getOracleCount(objectName, () ->
+                oracleService.getTableCount(objectName));
     }
 
     // Метод для получения количества записей в PostgreSQL (с кэшированием)
     private long getPostgresCount(String objectName) {
-        return postgresCountCache.computeIfAbsent(objectName.toLowerCase(),
-                k -> postgresService.getTableCount(objectName));
+        return DatabaseCacheManager.getPostgresCount(objectName, () ->
+                postgresService.getTableCount(objectName));
     }
     // Форматирование числа (тысячи, миллионы)
     private String formatCount(long count) {
@@ -114,6 +115,8 @@ public class ReportGenerator {
         }
         writer.println();
 
+        writeUserFormsSection(writer, form);
+
         // SubForm
         writer.println("SubForm:");
         if (form.getSubForms().isEmpty()) {
@@ -135,6 +138,14 @@ public class ReportGenerator {
             }
         }
         writer.println();
+
+        if (!form.getAutoPopupMenus().isEmpty()) {
+            writer.println("Коды подключаемого AutoPopUp меню на форме:");
+            for (String unit : form.getAutoPopupMenus()) {
+                writer.println("        " + unit + ";");
+            }
+            writer.println();
+        }
 
         if (config.isIncludePopupMenus() && form.getPopupMenus() != null && !form.getPopupMenus().isEmpty()) {
             writePopupMenusBlock(writer, form.getPopupMenus(), "OracleSQL");
@@ -512,6 +523,77 @@ public class ReportGenerator {
     }
 
     /**
+     * Вывод информации о переопределениях из UserForms
+     */
+    private void writeUserFormsSection(PrintWriter writer, FormInfo formInfo) {
+        writer.println("ЮЗЕРФОРМЫ:");
+
+        if (formInfo.getOverrides().isEmpty() && !formInfo.isFullyReplaced()) {
+            writer.println("     (не найдено)");
+            writer.println();
+            return;
+        }
+
+        Map<String, List<FormInfo.OverrideInfo>> overridesByRegion = new LinkedHashMap<>();
+        for (FormInfo.OverrideInfo override : formInfo.getOverrides()) {
+            overridesByRegion.computeIfAbsent(override.getRegionName(), k -> new ArrayList<>()).add(override);
+        }
+
+        for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
+            String region = entry.getKey();
+            List<FormInfo.OverrideInfo> overrides = entry.getValue();
+
+            writer.println("     ===== " + region + " =====");
+
+            Set<String> fullReplacements = new LinkedHashSet<>();
+            Set<String> partialDfrm = new LinkedHashSet<>();
+            Map<String, Set<String>> dotDCatalogs = new LinkedHashMap<>();
+
+            for (FormInfo.OverrideInfo override : overrides) {
+                String path = override.getOverridePath();
+                String fileName = path.substring(path.lastIndexOf("/") + 1);
+
+                switch (override.getType()) {
+                    case FULL_OVERRIDE:
+                        fullReplacements.add(path);
+                        break;
+                    case PARTIAL_OVERRIDE:
+                        partialDfrm.add(path);
+                        break;
+                    case DOT_D_OVERRIDE:
+                        if (path.contains(".d/")) {
+                            String catalogPath = path.substring(0, path.indexOf(".d/") + 2);
+                            dotDCatalogs.computeIfAbsent(catalogPath, k -> new LinkedHashSet<>()).add(fileName);
+                        } else {
+                            partialDfrm.add(path);
+                        }
+                        break;
+                }
+            }
+
+            for (String path : fullReplacements) {
+                writer.println("        ПОЛНАЯ ЗАМЕНА: " + path);
+            }
+
+            for (Map.Entry<String, Set<String>> catalogEntry : dotDCatalogs.entrySet()) {
+                String catalogPath = catalogEntry.getKey();
+                writer.println("        КАТАЛОГ: " + catalogPath);
+                for (String fileName : catalogEntry.getValue()) {
+                    writer.println("            └── " + fileName);
+                }
+            }
+
+            for (String path : partialDfrm) {
+                writer.println("        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: " + path);
+            }
+
+            writer.println();
+        }
+
+        writer.println();
+    }
+
+    /**
      * Рекурсивный вывод дерева пунктов меню
      */
     private void writeMenuTree(PrintWriter writer, List<PopupMenuInfo.MenuItem> items, String indent) {
@@ -614,6 +696,45 @@ public class ReportGenerator {
         return allTables;
     }
 
+    public void createMainReportHeader() throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        Path reportPath = outputPath.resolve("forms_report.txt");
+
+        // Если файл уже существует, не перезаписываем заголовок
+        if (Files.exists(reportPath)) {
+            return;
+        }
+
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(reportPath))) {
+            writer.println("=".repeat(100));
+            writer.println("=== ОТЧЕТ ПО ФОРМАМ T-MIS ===");
+            writer.println("Дата создания: " + new Date());
+            writer.println("=".repeat(100));
+            writer.println();
+        }
+    }
+    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        Path reportPath = outputPath.resolve("forms_report.txt");
+
+        // Если файл не существует, создаём с заголовком
+        if (!Files.exists(reportPath)) {
+            createMainReportHeader();
+        }
+
+        // Дописываем форму в конец файла
+        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
+            writeFormReport(writer, formInfo);
+        }
+    }
 
     /**
      * Вывод списка вызываемых форм в JS

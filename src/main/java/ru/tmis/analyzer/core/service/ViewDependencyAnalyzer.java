@@ -2,16 +2,20 @@
 package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ViewDependencyAnalyzer {
 
     private final SettingsModel settings;
+    private static final Map<String, ViewTableDependencies> globalViewCache = new ConcurrentHashMap<>();
+
 
     private static final Pattern TABLE_PATTERN = Pattern.compile(
             "\\bFROM\\s+([A-Za-z0-9_]+)\\b|\\bJOIN\\s+([A-Za-z0-9_]+)\\b",
@@ -23,8 +27,26 @@ public class ViewDependencyAnalyzer {
     }
 
     public ViewTableDependencies analyzeView(String viewName) {
+        return DatabaseCacheManager.getViewDependencies(viewName, () -> {
+            ViewTableDependencies deps = new ViewTableDependencies(viewName);
+
+            String ddl = getViewDDL(viewName);
+            if (ddl != null && !ddl.isEmpty()) {
+                deps.setExistsInOracle(true);
+                extractTablesFromDDL(ddl, deps);
+            } else {
+                deps.setExistsInOracle(false);
+                deps.setOracleError("Вьюха не найдена в Oracle");
+            }
+
+            return doAnalyzeView(viewName);
+        });
+    }
+
+    private ViewTableDependencies doAnalyzeView(String viewName) {
         ViewTableDependencies deps = new ViewTableDependencies(viewName);
 
+        // Получаем DDL вьюхи из Oracle
         String ddl = getViewDDL(viewName);
         if (ddl != null && !ddl.isEmpty()) {
             deps.setExistsInOracle(true);
@@ -34,7 +56,90 @@ public class ViewDependencyAnalyzer {
             deps.setOracleError("Вьюха не найдена в Oracle");
         }
 
+        // Получаем DDL вьюхи из PostgreSQL
+        String postgresDDL = getPostgresViewDDL(viewName);
+        if (postgresDDL != null && !postgresDDL.isEmpty()) {
+            deps.setExistsInPostgres(true);
+            Set<String> postgresTables = extractTablesFromPostgresDDL(postgresDDL);
+            deps.addAllPostgresTables(postgresTables);
+        } else {
+            deps.setExistsInPostgres(false);
+            deps.setPostgresError("Вьюха не найдена в PostgreSQL");
+        }
+
         return deps;
+    }
+
+    private String getPostgresViewDDL(String viewName) {
+        String sql = "SELECT pg_get_viewdef(p.oid, true) as viewdef " +
+                "FROM pg_class p " +
+                "WHERE p.relname = ? AND p.relkind = 'v'";
+
+        try (Connection conn = getPostgresConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, viewName.toLowerCase());
+            pstmt.setQueryTimeout(30);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("viewdef");
+            }
+        } catch (SQLException e) {
+            System.err.println("  Ошибка получения DDL вьюхи " + viewName + " из PostgreSQL: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    private Connection getPostgresConnection() throws SQLException {
+        DriverManager.setLoginTimeout(10);
+        Connection conn = DriverManager.getConnection(
+                settings.getPostgresUrl(),
+                settings.getPostgresUser(),
+                settings.getPostgresPassword()
+        );
+        conn.setAutoCommit(true);
+
+        // Устанавливаем контекст МИС
+        String misUser = settings.getMisUser();
+        if (misUser != null && !misUser.trim().isEmpty()) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("SELECT set_config('mis.user', '" + misUser + "', false)");
+            } catch (SQLException e) {
+                System.err.println("  [PostgreSQL] Ошибка установки контекста: " + e.getMessage());
+            }
+        }
+
+        return conn;
+    }
+
+    private Set<String> extractTablesFromPostgresDDL(String ddl) {
+        Set<String> tables = new LinkedHashSet<>();
+        if (ddl == null) return tables;
+
+        String upperDdl = ddl.toUpperCase();
+        Matcher matcher = TABLE_PATTERN.matcher(upperDdl);
+
+        Set<String> sqlKeywords = Set.of(
+                "SELECT", "FROM", "WHERE", "JOIN", "ON", "AND", "OR", "NOT",
+                "IN", "EXISTS", "AS", "LEFT", "RIGHT", "INNER", "OUTER", "CROSS",
+                "UNION", "INTERSECT", "MINUS", "WITH", "RECURSIVE"
+        );
+
+        while (matcher.find()) {
+            String table = matcher.group(1);
+            if (table == null) table = matcher.group(2);
+
+            if (table != null &&
+                    !sqlKeywords.contains(table) &&
+                    !table.startsWith("D_V_") &&
+                    table.startsWith("D_")) {
+                tables.add(table);
+            }
+        }
+
+        return tables;
     }
 
     private String getViewDDL(String viewName) {
@@ -95,4 +200,26 @@ public class ViewDependencyAnalyzer {
             }
         }
     }
+
+    public ViewTableDependencies analyzeViewPublic(String viewName) {
+        String key = viewName.toUpperCase();
+
+        // Проверяем глобальный кэш
+        if (globalViewCache.containsKey(key)) {
+            System.out.println("[КЭШ] Вьюха " + viewName + " взята из глобального кэша");
+            return globalViewCache.get(key);
+        }
+
+        ViewTableDependencies deps = analyzeView(viewName);
+        if (deps != null) {
+            globalViewCache.put(key, deps);
+            System.out.println("[КЭШ] Вьюха " + viewName + " сохранена в глобальный кэш");
+        }
+        return deps;
+    }
+
+    public static boolean isInCache(String viewName) {
+        return globalViewCache.containsKey(viewName.toUpperCase());
+    }
+
 }
