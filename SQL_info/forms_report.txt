@@ -1008,4 +1008,356 @@ SQL ЗАПРОСЫ (40):
           D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
           D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
           D_HPKPJ_VMP_STATES (Oracle: 3) (PostgreSQL: 3)
-          D_HOSP_OUTCOMES (Oracle: 29) 
+          D_HOSP_OUTCOMES (Oracle: 29) (PostgreSQL: 29)
+          D_HOSP_HOURS (Oracle: 14) (PostgreSQL: 14)
+          D_HH_TRANSFER_REASONS (Oracle: 2) (PostgreSQL: 2)
+          D_ABILITY_STATUS (Oracle: 5) (PostgreSQL: 5)
+          D_DIRECTORIES_DATA_VER (Oracle: 48,97 тыс) (PostgreSQL: 48,97 тыс)
+          D_HOSP_INCOMES (Oracle: 132) (PostgreSQL: 132)
+          D_DIRECTION_HOSP (Oracle: 102) (PostgreSQL: 102)
+
+  D_V_HPK_SCHEDULE_REG (Oracle: 32) (PostgreSQL: 32):
+          D_HPK_SCHEDULE_REG (Oracle: 32) (PostgreSQL: 32)
+
+  D_V_HOSP_HISTORY_DEPS_BASE (Oracle: 127,90 тыс) (PostgreSQL: 124,29 тыс):
+          D_HOSP_HISTORY_DEPS (Oracle: 127,91 тыс) (PostgreSQL: 127,79 тыс)
+
+  D_V_CONTRACTS_BASE (Oracle: 12,18 тыс) (PostgreSQL: 10,77 тыс):
+          D_CONTRACTS (Oracle: 12,19 тыс) (PostgreSQL: 12,13 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс):
+          D_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_DIRECTIONS (Oracle: 373,56 тыс) (PostgreSQL: 372,03 тыс)
+          D_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+
+  D_V_LPU_BASE (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+
+  D_V_SMP_CALL_EX_SYSTEM_BASE (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс):
+          D_SMP_CALL_EX_SYSTEM (Oracle: 1,33 тыс) (PostgreSQL: 1,33 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_SIGNAL_INFO_SETS.GET_FULL_SIGNAL_INFORMATION
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_STD.FRM_DT
+    D_PKG_HPK_PLAN_JOURNALS.GET_HOSP_HISTORY_STATUS
+    D_PKG_STD.FRM_D
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.ADD
+    D_PKG_VMP_LINKS.UPD
+    D_PKG_HPK_PLAN_JOURNALS.DEL
+    D_PKG_HPK_PLAN_JOURNALS.SET_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_NEXT_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_PREV_RECORD
+    D_PKG_HPK_PLAN_JOURNALS.SET_HH_DIRECTION_DATE
+    D_PKG_HPK_PLAN_JOURNALS.NEAREST_DATE_SEARCH
+    D_PKG_HPK_PLAN_JOURNALS.GET_QUANT_BEDS_PROFILES_NEW
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_URPRIVS.GET_STANDART_PRIVS
+    D_PKG_HOSP_HISTORIES.SET_DISCARD_STATUS
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_SET_DISCARD
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE_DISCARD
+    D_PKG_HOSP_HISTORIES.CHECK_HOSP_ONE_TIME
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_ADD
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL
+    D_PKG_HPK_SCHEDULE_REG.DEL
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_SMP_CALL_EX_SYSTEM.SET_HOSP_HISTORY
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE
+    D_PKG_HOSP_HISTORIES.DEL
+    D_PKG_WLH_REQUESTS.UPD_BY_HH_REVERSE_CANCEL
+    D_PKG_DIRECTIONS.SET_CANCELED
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_HPK_PLAN_JOURNALS.SET_IS_READY
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ADMISSION_HOSP
+    TherapySchemesField
+    GenDirNumbToDirKinds
+    ActualFLG
+    CABLAB_OUTER_DIRECTIONS
+    SchRegDepDefault
+
+КОМПОЗИЦИИ UnitEdit:
+    unit="PERSMEDCARD" composition="PMC_WITH_REG"
+    unit="HPK_PLAN_JOURNALS" composition="PMC_WITH_REG"
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        Reports/HospPlan/journal_hpk_patient_530n_call.frm;
+        Reports/HospPlan/stationary_act.frm;
+        Reports/HospPlan/comission_vmp_protocol_call.frm;
+        Reports/HospPlan/journal_hpk_patient_call.frm;
+        Reports/HospPlan/patient_indept_sys_hpk_call.frm;
+        Reports/HospPlan/patient_incom_date_call.frm;
+        Reports/HospPlan/adr_list_mass_call.frm;
+        Reports/HospitalRep/HospitalRep_call.frm;
+        Reports/HospPlan/patient_leave_date_call.frm;
+        Reports/Statistic/movement_daily_beds_patients_call.frm;
+        Reports/Statistic/movement_daily_beds_patients_day_call.frm;
+        Reports/HospPlan/turn_on_hospitalization_call.frm;
+        Reports/InformationConsistingNutrition/SummaryInformation_call.frm;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_C_ID
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
+
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_SIGNAL_INFO_SETS.GET_FULL_SIGNAL_INFORMATION:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_signal_info_sets.get_full_signal_information(numeric, numeric, numeric, numeric, numeric)
+
+  D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_cse_accesses.get_id_with_rights(numeric, varchar, varchar, numeric, numeric)
+
+  D_PKG_STD.FRM_DT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_std.frm_dt()
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_std.frm_dt() is not a plpgsql function
+
+  D_PKG_HPK_PLAN_JOURNALS.GET_HOSP_HISTORY_STATUS:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hpk_plan_journals.get_hosp_history_status(numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:00000:3:DECLARE:unused variable "rstatus_data"
+
+  D_PKG_STD.FRM_D:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_std.frm_d()
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_std.frm_d() is not a plpgsql function
+
+  D_PKG_DAT_TOOLS.FULL_YEARS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_dat_tools.full_years(timestamp, timestamp)
+
+  D_PKG_CSE_ACCESSES.CHECK_RIGHT:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_cse_accesses.check_right(numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLANS.ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plans.add(numeric, numeric, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_VMP_LINKS.UPD:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_vmp_links.upd(numeric, numeric, numeric, numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:unused parameter "vapi_version"
+
+  D_PKG_HPK_PLAN_JOURNALS.DEL:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hpk_plan_journals.del(numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:5:DECLARE:never read variable "ntmp"
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_record(numeric, numeric, numeric, timestamp, numeric, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_NEXT_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_next_record(numeric, numeric, timestamp, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_PREV_RECORD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_prev_record(numeric, numeric, timestamp, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_HH_DIRECTION_DATE:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_hh_direction_date(numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.NEAREST_DATE_SEARCH:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.nearest_date_search(numeric, numeric, timestamp, numeric, numeric)
+
+  D_PKG_HPK_PLAN_JOURNALS.GET_QUANT_BEDS_PROFILES_NEW:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.get_quant_beds_profiles_new(numeric, numeric)
+
+  D_PKG_CATALOGS.FIND_ROOT_CATALOG:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_catalogs.find_root_catalog(numeric, numeric, varchar, numeric)
+
+  D_PKG_URPRIVS.GET_STANDART_PRIVS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_urprivs.get_standart_privs(numeric, varchar, numeric, int, int, int, int)
+
+  D_PKG_HOSP_HISTORIES.SET_DISCARD_STATUS:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_hosp_histories.set_discard_status(numeric, numeric, numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning extra:00000:12:DECLARE:never read variable "nhsc_result"
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_SET_DISCARD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_set_discard(numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE_DISCARD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_remove_discard(numeric, numeric)
+
+  D_PKG_HOSP_HISTORIES.CHECK_HOSP_ONE_TIME:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hosp_histories.check_hosp_one_time(numeric, numeric, timestamp, timestamp, varchar, varchar)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_add(numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_cancel(numeric, numeric)
+
+  D_PKG_HPK_SCHEDULE_REG.DEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_schedule_reg.del(numeric, numeric)
+
+  D_PKG_TOOLS.STR_SEPARATE_TO_IDS:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_tools.str_separate_to_ids(varchar)
+
+  D_PKG_SMP_CALL_EX_SYSTEM.SET_HOSP_HISTORY:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_smp_call_ex_system.set_hosp_history(numeric, numeric, numeric, numeric)
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REMOVE:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_remove(numeric, numeric)
+
+  D_PKG_HOSP_HISTORIES.DEL:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_hosp_histories.del(numeric, numeric)
+    ОШИБКИ:
+      error:42883:308:CALL:procedure d_pkg_visits.work_in_at(numeric, numeric, numeric) does not exist
+
+  D_PKG_WLH_REQUESTS.UPD_BY_HH_REVERSE_CANCEL:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_wlh_requests.upd_by_hh_reverse_cancel(numeric, numeric)
+
+  D_PKG_DIRECTIONS.SET_CANCELED:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_directions.set_canceled(numeric, numeric, numeric, numeric, numeric, timestamp, varchar)
+
+  D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT:
+    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
+    Сигнатура: d_pkg_cse_accesses.check_employer_right(numeric, numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+    ОШИБКИ:
+      Ошибка проверки: ERROR: d_pkg_cse_accesses.check_employer_right(numeric,numeric,character varying,numeric,character varying,numeric,numeric,numeric) is not a plpgsql function
+
+  D_PKG_EMPLOYERS.GET_ID:
+    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
+    Сигнатура: d_pkg_employers.get_id(numeric)
+    ПРЕДУПРЕЖДЕНИЯ:
+      warning:00000:23:PERFORM:routine is marked as STABLE, but expression is VOLATILE
+
+  D_PKG_HPK_PLAN_JOURNALS.SET_IS_READY:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plan_journals.set_is_ready(numeric, numeric, numeric)
+
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_HPK_PLAN_JOURNALS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_HISTORIES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_PLAN_KINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_FLU:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_PMC_FLU:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_EMPLOYERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_SERVICES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_PAYMENT_KIND:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HPK_SCHEDULE_REG:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_SCH_RESOURCES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_CABLAB:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_HISTORY_DEPS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DEP_BEDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HH_DEP_BEDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_DEPS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_RESULTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_PMC_MARKERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_MARKERS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_SCHEDULE_COLORS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_CONTACTS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_CONTACT_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_ADDRS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_AGENT_SOCIAL_STATES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
