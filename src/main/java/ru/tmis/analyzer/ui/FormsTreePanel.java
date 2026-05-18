@@ -32,8 +32,8 @@ public class FormsTreePanel extends JPanel {
     private Runnable onAnalysisRequested;
     private String outputDir = "SQL_info";
 
-    // Слушатель для загрузки отчёта при выборе формы
-    private TreeSelectionListener treeSelectionListener;
+    // Карта для хранения соответствия между узлами дерева и путями форм
+    private Map<String, DefaultMutableTreeNode> formNodeMap = new HashMap<>();
 
     public FormsTreePanel() {
         initUI();
@@ -106,20 +106,6 @@ public class FormsTreePanel extends JPanel {
     }
 
     /**
-     * Устанавливает слушатель выбора формы в дереве
-     */
-    public void setTreeSelectionListener(TreeSelectionListener listener) {
-        if (treeSelectionListener != null) {
-            tree.removeTreeSelectionListener(treeSelectionListener);
-        }
-        this.treeSelectionListener = listener;
-        if (listener != null) {
-            tree.addTreeSelectionListener(listener);
-        }
-    }
-
-
-    /**
      * Добавляет слушатель выбора в дерево
      */
     public void addTreeSelectionListener(TreeSelectionListener listener) {
@@ -127,40 +113,61 @@ public class FormsTreePanel extends JPanel {
     }
 
     /**
-     * Удаляет слушатель выбора из дерева
+     * Обновляет дочерние формы для конкретной формы
      */
-    public void removeTreeSelectionListener(TreeSelectionListener listener) {
-        tree.removeTreeSelectionListener(listener);
+    public void refreshChildForms(String formPath) {
+        // Очищаем кэш для этой формы
+        childrenCache.remove(formPath);
+
+        // Находим узел в дереве
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            // Удаляем все дочерние узлы
+            node.removeAllChildren();
+
+            // Загружаем и добавляем дочерние формы
+            Set<String> childForms = loadChildFormsFromReport(formPath);
+            childrenCache.put(formPath, childForms);
+
+            for (String childForm : childForms) {
+                String childDisplayPath = childForm;
+                if (childDisplayPath.startsWith("/")) {
+                    childDisplayPath = childDisplayPath.substring(1);
+                }
+
+                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
+                childNode.setAllowsChildren(true);
+                node.add(childNode);
+                formNodeMap.put(childForm, childNode);
+            }
+
+            // Обновляем модель дерева
+            treeModel.reload(node);
+
+            // Разворачиваем узел, чтобы показать дочерние элементы
+            TreePath nodePath = new TreePath(node.getPath());
+            tree.expandPath(nodePath);
+        }
     }
 
     /**
-     * Возвращает выбранный путь в дереве
+     * Обновляет все дочерние формы для всех форм в дереве
      */
-    public TreePath getSelectedPath() {
-        return tree.getSelectionPath();
+    public void refreshAllChildForms() {
+        for (String formPath : allForms) {
+            refreshChildForms(formPath);
+        }
     }
 
     /**
-     * Извлекает полный путь формы из узла дерева
+     * Преобразует путь формы в безопасное имя файла для отчёта
      */
-    public String getFormPathFromTreePath(TreePath path) {
-        if (path == null) return null;
-        Object[] nodes = path.getPath();
-        if (nodes.length < 2) return null;
-
-        StringBuilder fullPath = new StringBuilder();
-        for (int i = 1; i < nodes.length; i++) {
-            if (i > 1) fullPath.append("/");
-            fullPath.append(nodes[i].toString());
+    private String getSafeFileNameForReport(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
         }
-
-        String result = fullPath.toString();
-
-        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
-            return result;
-        }
-
-        return null;
+        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
     }
 
     /**
@@ -171,32 +178,12 @@ public class FormsTreePanel extends JPanel {
         return outputDir + File.separator + safeName;
     }
 
-
-    /**
-     * Преобразует путь формы в безопасное имя файла для отчёта
-     * Пример: Forms/HospitPlanning/hospit_planning.frm -> Forms#HospitPlanning#hospit_planning.frm.txt
-     */
-    private String getSafeFileNameForReport(String formPath) {
-        String normalized = formPath;
-        // Убираем ведущий слеш если есть
-        if (normalized.startsWith("/")) {
-            normalized = normalized.substring(1);
-        }
-        // НЕ убираем префикс Forms/ - сохраняем его для правильного поиска файла
-        // Заменяем разделители на #
-        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
-    }
-
     /**
      * Загружает дочерние формы из файла отчёта
      */
     public Set<String> loadChildFormsFromReport(String formPath) {
         String reportPath = getReportFilePath(formPath);
         File reportFile = new File(reportPath);
-
-        System.out.println("[DEBUG] Загрузка дочерних форм для: " + formPath);
-        System.out.println("[DEBUG] Путь к файлу отчёта: " + reportPath);
-        System.out.println("[DEBUG] Файл существует: " + reportFile.exists());
 
         Set<String> childForms = new LinkedHashSet<>();
 
@@ -208,7 +195,6 @@ public class FormsTreePanel extends JPanel {
                 // Ищем секцию "Список вызываемых форм в JS:"
                 int startIndex = content.indexOf("Список вызываемых форм в JS:");
                 if (startIndex != -1) {
-                    // Ищем конец секции (следующий заголовок)
                     int endIndex = content.indexOf("\n\n", startIndex);
                     if (endIndex == -1) {
                         String[] nextHeaders = {"Коды подключаемого", "SQL ЗАПРОСЫ", "ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ"};
@@ -232,20 +218,25 @@ public class FormsTreePanel extends JPanel {
                     while (formMatcher.find()) {
                         String childForm = formMatcher.group(1).trim();
                         if (!childForm.isEmpty()) {
-                            childForms.add(childForm);
-                            System.out.println("[DEBUG] Найдена дочерняя форма: " + childForm);
+                            // Формируем полный путь к дочерней форме
+                            String childFullPath;
+                            if (childForm.startsWith("Forms/") || childForm.startsWith("UserForms")) {
+                                childFullPath = childForm;
+                            } else {
+                                childFullPath = "Forms/" + childForm;
+                            }
+                            childForms.add(childFullPath);
                         }
                     }
                 }
             } catch (IOException e) {
                 System.err.println("Ошибка чтения файла отчёта: " + e.getMessage());
             }
-        } else {
-            System.out.println("[DEBUG] Файл отчёта не найден: " + reportPath);
         }
 
         return childForms;
     }
+
     /**
      * Рекурсивно добавляет форму и все её дочерние формы в дерево
      */
@@ -255,7 +246,6 @@ public class FormsTreePanel extends JPanel {
         }
         addedPaths.add(formPath);
 
-        // Формируем отображаемый путь
         String displayPath = formPath;
         if (displayPath.startsWith("/")) {
             displayPath = displayPath.substring(1);
@@ -275,6 +265,7 @@ public class FormsTreePanel extends JPanel {
             formNode = new DefaultMutableTreeNode(displayPath);
             formNode.setAllowsChildren(true);
             parentNode.add(formNode);
+            formNodeMap.put(formPath, formNode);
         }
 
         // Загружаем дочерние формы (только если файл отчёта существует)
@@ -285,16 +276,8 @@ public class FormsTreePanel extends JPanel {
             Set<String> childForms = loadChildFormsFromReport(formPath);
             childrenCache.put(formPath, childForms);
 
-            // Добавляем дочерние формы с правильным путём
             for (String childForm : childForms) {
-                // Формируем полный путь к дочерней форме
-                String childFullPath;
-                if (childForm.startsWith("Forms/") || childForm.startsWith("UserForms")) {
-                    childFullPath = childForm;
-                } else {
-                    childFullPath = "Forms/" + childForm;
-                }
-                addFormWithChildrenToTree(childFullPath, formNode, addedPaths);
+                addFormWithChildrenToTree(childForm, formNode, addedPaths);
             }
         }
     }
@@ -358,6 +341,7 @@ public class FormsTreePanel extends JPanel {
     private void applyFilter() {
         String filter = searchField.getText().trim().toLowerCase();
         rootNode.removeAllChildren();
+        formNodeMap.clear();
         Set<String> addedPaths = new HashSet<>();
 
         if (filter.isEmpty()) {
@@ -548,6 +532,7 @@ public class FormsTreePanel extends JPanel {
         if (confirm == JOptionPane.YES_OPTION) {
             allForms.removeAll(toRemove);
             childrenCache.clear();
+            formNodeMap.clear();
             saveFormsToFile();
             applyFilter();
             tree.clearSelection();
@@ -561,6 +546,36 @@ public class FormsTreePanel extends JPanel {
                     "Формы удалены",
                     JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    /**
+     * Извлекает полный путь формы из узла дерева
+     */
+    public String getFormPathFromTreePath(TreePath path) {
+        if (path == null) return null;
+        Object[] nodes = path.getPath();
+        if (nodes.length < 2) return null;
+
+        StringBuilder fullPath = new StringBuilder();
+        for (int i = 1; i < nodes.length; i++) {
+            if (i > 1) fullPath.append("/");
+            fullPath.append(nodes[i].toString());
+        }
+
+        String result = fullPath.toString();
+
+        if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
+            if (!result.startsWith("UserForms") && !result.startsWith("Forms/") && !result.startsWith("/")) {
+                result = "Forms/" + result;
+            }
+            return result;
+        }
+
+        return null;
+    }
+
+    public TreePath getSelectedPath() {
+        return tree.getSelectionPath();
     }
 
     private void selectAllNodes() {

@@ -227,7 +227,6 @@ public class MainWindow extends JFrame {
      * Загружает сохранённый отчёт для выбранной формы в панель результата
      */
     private void loadFormResultToPanel(String formPath) {
-        // Получаем правильный путь к файлу отчёта через FormsTreePanel
         String reportPath = formsTreePanel.getReportFilePath(formPath);
         File reportFile = new File(reportPath);
 
@@ -238,6 +237,10 @@ public class MainWindow extends JFrame {
                 resultArea.setText(content);
                 resultArea.setCaretPosition(0);
                 appendLog("Загружен отчёт для формы: " + formPath);
+
+                // ОБНОВЛЯЕМ ДОЧЕРНИЕ ФОРМЫ ПОСЛЕ ЗАГРУЗКИ ОТЧЁТА
+                formsTreePanel.refreshChildForms(formPath);
+
             } catch (IOException e) {
                 resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
                 appendLog("Ошибка загрузки отчёта для " + formPath + ": " + e.getMessage());
@@ -387,11 +390,16 @@ public class MainWindow extends JFrame {
                 ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
+
+                // Обновляем дочерние формы для проанализированной формы
+                SwingUtilities.invokeLater(() -> {
+                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                });
+
             } catch (IOException e) {
                 appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
             }
         });
-
         List<FormInfo> results = analyzer.analyzeAllForms();
 
         if (stopRequested) {
