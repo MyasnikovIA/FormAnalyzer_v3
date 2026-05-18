@@ -236,10 +236,19 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // Композиции UnitEdit
+        // unitCompositions
         if (!form.getUnitCompositions().isEmpty()) {
-            writer.println("КОМПОЗИЦИИ UnitEdit:");
+            writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):");
             for (String comp : form.getUnitCompositions()) {
+                writer.println("    " + comp);
+            }
+            writer.println();
+        }
+
+        // блок для jsUnitCompositions
+        if (!form.getJsUnitCompositions().isEmpty()) {
+            writer.println("JS Unit Compositions (только из вызовов openWindow/openD3Form):");
+            for (String comp : form.getJsUnitCompositions()) {
                 writer.println("    " + comp);
             }
             writer.println();

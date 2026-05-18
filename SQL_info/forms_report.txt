@@ -1,6 +1,6 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Mon May 18 15:53:18 GMT+07:00 2026
+Дата создания: Mon May 18 18:00:48 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
@@ -69,6 +69,17 @@ SQL ЗАПРОСЫ (2):
     RegOKSCode
     RegStrokeCode
     PKOMS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+    unit="AGENTS" composition="SUPPLIER_NAME"
+    unit="GEOGRAFY" composition="DEFAULT"
+    unit="FINANSOURCES" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:dom.getAttribute('unit')  composition:DEFAULT;
+    unit:MEDS_PRICES  method:DEFAULT;
+    unit:VIS_OPER_OUTCOMES  method:DEFAULT;
 
 
 ====================================================================================================

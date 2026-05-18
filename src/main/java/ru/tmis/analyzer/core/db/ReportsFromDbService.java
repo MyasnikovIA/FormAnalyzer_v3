@@ -84,7 +84,7 @@ public class ReportsFromDbService {
                 report.setRepType(rs.getInt("REP_TYPE"));
                 report.setRepData(rs.getBytes("REP_DATA"));
                 report.setRepFilename(rs.getString("REP_FILENAME"));
-                report.setRepName(rs.getString("REP_NAME"));
+                report.setRepName(rs.getString("REP_NAME") );
                 report.setRepCode(rs.getString("REP_CODE"));
                 report.setRepID(rs.getInt("ID"));
 
@@ -205,6 +205,7 @@ public class ReportsFromDbService {
         String typeName = report.getRepTypeName();
         String code = report.getRepCode() != null ? report.getRepCode() : "?";
         String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String privName = report.getPrivName() != null ? report.getPrivName() : "";
         String formPath = report.getFormPath();
 
         StringBuilder sb = new StringBuilder();
@@ -220,10 +221,7 @@ public class ReportsFromDbService {
         sb.append("\"");
         int codeSpaces = maxCodeLen - code.length();
         if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
-
-        sb.append(" \"");
-        sb.append(name);
-        sb.append("\"");
+        sb.append(" \"").append(privName).append("\" (\"").append(name).append("\") ").append(" ");
         if (formPath != null) {
             sb.append(" Form=\"").append(formPath).append("\"");
         }
@@ -238,6 +236,7 @@ public class ReportsFromDbService {
         String typeName = report.getRepTypeName();
         String code = report.getRepCode() != null ? report.getRepCode() : "?";
         String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String privName = report.getPrivName() != null ? report.getPrivName() : "";
         String formPath = report.getFormPath();
 
         StringBuilder sb = new StringBuilder();
@@ -253,9 +252,7 @@ public class ReportsFromDbService {
         int codeSpaces = maxCodeLen - code.length();
         if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
 
-        sb.append(" \"");
-        sb.append(name);
-        sb.append("\"");
+        sb.append(" \"").append(privName).append("\" (\"").append(name).append("\") ").append(" ");
         if (formPath != null) {
             sb.append(" Form=\"").append(formPath).append("\"");
         }

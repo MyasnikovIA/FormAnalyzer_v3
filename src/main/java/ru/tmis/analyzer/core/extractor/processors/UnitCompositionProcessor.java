@@ -23,16 +23,6 @@ public class UnitCompositionProcessor implements IXmlProcessor {
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    private static final Pattern SIMPLE_UNIT_PATTERN = Pattern.compile(
-            "\\b(?:unit|UNIT)\\s*=\\s*['\"]([^'\"]+)['\"]\\s*.*?\\b(?:composition|COMPOSITION)\\s*=\\s*['\"]([^'\"]+)['\"]",
-            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
-    );
-
-    private static final Pattern SIMPLE_COMPOSITION_PATTERN = Pattern.compile(
-            "\\b(?:composition|COMPOSITION)\\s*=\\s*['\"]([^'\"]+)['\"]\\s*.*?\\b(?:unit|UNIT)\\s*=\\s*['\"]([^'\"]+)['\"]",
-            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
-    );
-
     @Override
     public String getName() {
         return "UnitCompositionProcessor";
@@ -63,27 +53,8 @@ public class UnitCompositionProcessor implements IXmlProcessor {
                 }
             }
             if (unit != null && !unit.isEmpty()) {
+                System.out.println(String.format("[DEBUG] unit=\"%s\" composition=\"%s\"", unit, composition != null ? composition : "DEFAULT"));
                 compositions.add(String.format("unit=\"%s\" composition=\"%s\"", unit, composition != null ? composition : "DEFAULT"));
-            }
-        }
-
-        // Метод 2: Упрощенный паттерн
-        Matcher simpleMatcher = SIMPLE_UNIT_PATTERN.matcher(html);
-        while (simpleMatcher.find()) {
-            String unit = simpleMatcher.group(1);
-            String composition = simpleMatcher.group(2);
-            if (unit != null && !unit.isEmpty()) {
-                compositions.add(String.format("unit=\"%s\" composition=\"%s\"", unit, composition));
-            }
-        }
-
-        // Метод 3: Обратный порядок
-        Matcher simpleMatcher2 = SIMPLE_COMPOSITION_PATTERN.matcher(html);
-        while (simpleMatcher2.find()) {
-            String composition = simpleMatcher2.group(1);
-            String unit = simpleMatcher2.group(2);
-            if (unit != null && !unit.isEmpty()) {
-                compositions.add(String.format("unit=\"%s\" composition=\"%s\"", unit, composition));
             }
         }
 

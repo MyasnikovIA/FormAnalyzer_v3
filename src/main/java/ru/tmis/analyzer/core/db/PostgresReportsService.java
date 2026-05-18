@@ -143,6 +143,7 @@ public class PostgresReportsService {
         String typeName = report.getRepTypeName();
         String code = report.getRepCode() != null ? report.getRepCode() : "?";
         String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String privName = report.getPrivName() != null ? report.getPrivName() : "";
         String formPath = report.getFormPath();
         StringBuilder sb = new StringBuilder();
         sb.append("- REP_TYPE=\"").append(typeName).append("\"");
@@ -151,7 +152,7 @@ public class PostgresReportsService {
         sb.append(" - REP_CODE=\"").append(code).append("\"");
         int codeSpaces = maxCodeLen - code.length();
         if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
-        sb.append(" \"").append(name).append("\"");
+        sb.append(" \"").append(privName).append("\" (\"").append(name).append("\") ").append(" ");
         if (formPath != null) sb.append(" Form=\"").append(formPath).append("\"");
         return sb.toString();
     }
@@ -160,6 +161,7 @@ public class PostgresReportsService {
         String typeName = report.getRepTypeName();
         String code = report.getRepCode() != null ? report.getRepCode() : "?";
         String name = report.getRepName() != null ? report.getRepName() : "без названия";
+        String privName = report.getPrivName() != null ? report.getPrivName() : "";
         String formPath = report.getFormPath();
         StringBuilder sb = new StringBuilder();
         sb.append("- REP_TYPE=\"").append(typeName).append("\"");
@@ -168,7 +170,7 @@ public class PostgresReportsService {
         sb.append(" - REP_CODE=\"").append(code).append("\"");
         int codeSpaces = maxCodeLen - code.length();
         if (codeSpaces > 0) sb.append(" ".repeat(codeSpaces));
-        sb.append(" \"").append(name).append("\"");
+        sb.append(" \"").append(privName).append("\" (\"").append(name).append("\") ").append(" ");
         if (formPath != null) sb.append(" Form=\"").append(formPath).append("\"");
         return sb.toString();
     }
