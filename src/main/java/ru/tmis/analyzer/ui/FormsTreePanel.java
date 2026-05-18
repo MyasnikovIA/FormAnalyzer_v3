@@ -11,11 +11,11 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Панель для отображения списка форм в виде дерева с поддержкой:
- * - фильтрации по поисковому запросу
- * - множественного выбора
- * - добавления форм через модальное окно
- * - удаления выбранных форм
+ * Панель для отображения списка форм в виде дерева (плоский список)
+ * - фильтрация по поисковому запросу
+ * - множественный выбор
+ * - добавление форм через модальное окно
+ * - удаление выбранных форм
  */
 public class FormsTreePanel extends JPanel {
 
@@ -61,7 +61,7 @@ public class FormsTreePanel extends JPanel {
 
         add(searchPanel, BorderLayout.NORTH);
 
-        // Дерево форм
+        // Дерево форм (плоский список - все формы на одном уровне)
         rootNode = new DefaultMutableTreeNode("Формы для анализа");
         treeModel = new DefaultTreeModel(rootNode);
         tree = new JTree(treeModel);
@@ -115,9 +115,11 @@ public class FormsTreePanel extends JPanel {
         rootNode.removeAllChildren();
 
         if (filter.isEmpty()) {
-            // Без фильтра - показываем все формы
+            // Без фильтра - показываем все формы (плоский список)
             for (String formPath : allForms) {
-                addFormToTree(formPath);
+                DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(formPath);
+                formNode.setAllowsChildren(false);
+                rootNode.add(formNode);
             }
         } else {
             // С фильтром - показываем только подходящие формы
@@ -125,50 +127,15 @@ public class FormsTreePanel extends JPanel {
             for (String formPath : allForms) {
                 if (formPath.toLowerCase().contains(filter)) {
                     filteredForms.add(formPath);
-                    addFormToTree(formPath);
+                    DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(formPath);
+                    formNode.setAllowsChildren(false);
+                    rootNode.add(formNode);
                 }
             }
         }
 
         treeModel.reload(rootNode);
         expandAllNodes();
-    }
-
-    /**
-     * Добавляет форму в дерево с разбивкой по путям
-     */
-    private void addFormToTree(String formPath) {
-        String[] parts = formPath.split("/");
-        DefaultMutableTreeNode current = rootNode;
-
-        for (int i = 0; i < parts.length; i++) {
-            String part = parts[i];
-            if (part.isEmpty()) continue;
-
-            // Для последнего элемента - это файл
-            boolean isFile = (i == parts.length - 1);
-
-            DefaultMutableTreeNode found = null;
-            for (int j = 0; j < current.getChildCount(); j++) {
-                DefaultMutableTreeNode child = (DefaultMutableTreeNode) current.getChildAt(j);
-                if (child.getUserObject().toString().equals(part)) {
-                    found = child;
-                    break;
-                }
-            }
-
-            if (found == null) {
-                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(part);
-                if (isFile) {
-                    // Помечаем, что это лист (форма)
-                    newNode.setAllowsChildren(false);
-                }
-                current.add(newNode);
-                current = newNode;
-            } else {
-                current = found;
-            }
-        }
     }
 
     /**
@@ -349,7 +316,7 @@ public class FormsTreePanel extends JPanel {
 
         if (toRemove.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Выберите конкретные формы для удаления (не папки)",
+                    "Выберите конкретные формы для удаления",
                     "Ошибка",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -383,18 +350,13 @@ public class FormsTreePanel extends JPanel {
         Object[] nodes = path.getPath();
         if (nodes.length < 2) return null; // корневой узел
 
-        StringBuilder fullPath = new StringBuilder();
-        for (int i = 1; i < nodes.length; i++) {
-            if (i > 1) fullPath.append("/");
-            fullPath.append(nodes[i].toString());
-        }
-
-        String result = fullPath.toString();
+        // В плоском списке последний узел - это полный путь к форме
+        String result = nodes[nodes.length - 1].toString();
 
         // Проверяем, что это форма (имеет расширение .frm или .dfrm)
         if (result.endsWith(".frm") || result.endsWith(".dfrm")) {
             // Добавляем ведущий слеш если это не UserForms
-            if (!result.startsWith("UserForms")) {
+            if (!result.startsWith("UserForms") && !result.startsWith("/")) {
                 result = "/" + result;
             }
             return result;
