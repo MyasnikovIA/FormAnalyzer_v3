@@ -194,6 +194,9 @@ public class SqlExtractor {
 
         // 6. Все остальные D_* объекты - в UNKNOWN
         extractUnknownObjects(upperSql, sqlInfo);
+
+        // 7.
+        extractSystemOptions(sql, sqlInfo);
     }
 
     /**
@@ -527,4 +530,75 @@ public class SqlExtractor {
 
         return false;
     }
+
+    /**
+     * Извлечь системные опции из D_PKG_OPTIONS.GET и D_PKG_OPTION_SPECS.GET
+     * Поддерживает:
+     * - D_PKG_OPTIONS.GET('OPTION_NAME', ...)
+     * - D_PKG_OPTIONS.GET(psSO_CODE => 'OPTION_NAME', ...)
+     * - D_PKG_OPTIONS.GET(psSO_CODE =&gt; 'OPTION_NAME', ...) - HTML-сущность
+     * - D_PKG_OPTION_SPECS.GET('OPTION_NAME', ...)
+     * - D_PKG_OPTION_SPECS.GET(psSO_CODE => 'OPTION_NAME', ...)
+     * - D_PKG_OPTION_SPECS.GET(psSO_CODE =&gt; 'OPTION_NAME', ...) - HTML-сущность
+     */
+    private void extractSystemOptions(String sql, SqlInfo sqlInfo) {
+        if (sql == null || sql.isEmpty()) return;
+
+        Set<String> options = new LinkedHashSet<>();
+
+        // Паттерн 1: D_PKG_OPTIONS.GET('OPTION', ...) - позиционные параметры
+        Pattern optPattern1 = Pattern.compile(
+                "D_PKG_OPTIONS\\.GET\\s*\\(\\s*'([^']+)'",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m1 = optPattern1.matcher(sql);
+        while (m1.find()) addOption(m1.group(1), options);
+
+        // Паттерн 2: D_PKG_OPTIONS.GET с => или =&gt; (именованные параметры)
+        Pattern optPattern2 = Pattern.compile(
+                "D_PKG_OPTIONS\\.GET[\\s\\S]*?(?:psSO_CODE|PS_SO_CODE|PSSO_CODE|PS_SO_CD)\\s*(?:=>|=&gt;)\\s*'([^']+)'",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m2 = optPattern2.matcher(sql);
+        while (m2.find()) addOption(m2.group(1), options);
+
+        // Паттерн 3: D_PKG_OPTION_SPECS.GET('OPTION', ...) - позиционные
+        Pattern optSpecPattern1 = Pattern.compile(
+                "D_PKG_OPTION_SPECS\\.GET\\s*\\(\\s*'([^']+)'",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m3 = optSpecPattern1.matcher(sql);
+        while (m3.find()) addOption(m3.group(1), options);
+
+        // Паттерн 4: D_PKG_OPTION_SPECS.GET с => или =&gt; (именованные параметры)
+        Pattern optSpecPattern2 = Pattern.compile(
+                "D_PKG_OPTION_SPECS\\.GET[\\s\\S]*?(?:psSO_CODE|PS_SO_CODE|PSSO_CODE|PS_SO_CD)\\s*(?:=>|=&gt;)\\s*'([^']+)'",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m4 = optSpecPattern2.matcher(sql);
+        while (m4.find()) addOption(m4.group(1), options);
+
+        // Паттерн 5: Универсальный (запасной) - ищем любую строку в кавычках после => или =&gt;
+        Pattern universalPattern = Pattern.compile(
+                "(?:D_PKG_OPTIONS|D_PKG_OPTION_SPECS)\\.GET[\\s\\S]*?(?:=>|=&gt;)\\s*'([^']+)'",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher m5 = universalPattern.matcher(sql);
+        while (m5.find()) addOption(m5.group(1), options);
+
+        for (String option : options) {
+            sqlInfo.addSystemOption(option);
+        }
+
+        if (!options.isEmpty()) {
+            System.out.println("      [DEBUG] Найдено системных опций: " + options);
+        }
+    }
+
+    private void addOption(String value, Set<String> options) {
+        if (value != null && !value.isEmpty()) {
+            options.add(value);
+        }
+    }
+
 }

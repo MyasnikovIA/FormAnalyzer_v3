@@ -31,6 +31,7 @@ public class UniversalCompositionProcessor implements IXmlProcessor {
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
+
     // Альтернативный паттерн для поиска в любом JS коде
     private static final Pattern JS_UNIVERSAL_PATTERN = Pattern.compile(
             "(?:unit|UNIT)\\s*:\\s*['\"]([^'\"]+)['\"][^}]*?(?:composition|COMPOSITION|method|METHOD)\\s*:\\s*['\"]([^'\"]+)['\"]",
