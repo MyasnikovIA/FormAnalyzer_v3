@@ -1,5 +1,5 @@
 // core/service/ViewDependencyAnalyzer.java
-package ru.tmis.analyzer.core.service;
+package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
