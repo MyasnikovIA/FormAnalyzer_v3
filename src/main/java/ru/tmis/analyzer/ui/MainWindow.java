@@ -136,6 +136,7 @@ public class MainWindow extends JFrame {
                 }
             }
         });
+        formsTreePanel.setOutputDir(settings.getOutputDir());
         formsTreePanel.setOnAnalysisRequested(() -> {
             if (!isRunning.get()) {
                 startAnalysis();
@@ -226,13 +227,14 @@ public class MainWindow extends JFrame {
      * Загружает сохранённый отчёт для выбранной формы в панель результата
      */
     private void loadFormResultToPanel(String formPath) {
-        String safeFileName = getSafeFileName(formPath);
-        String reportPath = settings.getOutputDir() + File.separator + safeFileName;
+        // Получаем правильный путь к файлу отчёта через FormsTreePanel
+        String reportPath = formsTreePanel.getReportFilePath(formPath);
         File reportFile = new File(reportPath);
 
         if (reportFile.exists()) {
             try {
-                String content = new String(Files.readAllBytes(reportFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+                String content = new String(Files.readAllBytes(reportFile.toPath()),
+                        java.nio.charset.StandardCharsets.UTF_8);
                 resultArea.setText(content);
                 resultArea.setCaretPosition(0);
                 appendLog("Загружен отчёт для формы: " + formPath);
