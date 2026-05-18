@@ -139,6 +139,18 @@ public class ReportGenerator {
         }
         writer.println();
 
+        // Вывод отчетов, вызываемых на форме
+        //writeReportsBlock(writer, form);
+
+        // Отчеты вызываемые на форме
+        if (!form.getReports().isEmpty()) {
+            writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
+            for (String report : form.getReports()) {
+                writer.println("        " + report + ";");
+            }
+            writer.println();
+        }
+
         if (!form.getAutoPopupMenus().isEmpty()) {
             writer.println("Коды подключаемого AutoPopUp меню на форме:");
             for (String unit : form.getAutoPopupMenus()) {
@@ -229,15 +241,6 @@ public class ReportGenerator {
             writer.println("КОМПОЗИЦИИ UnitEdit:");
             for (String comp : form.getUnitCompositions()) {
                 writer.println("    " + comp);
-            }
-            writer.println();
-        }
-
-        // Отчеты вызываемые на форме
-        if (!form.getReports().isEmpty()) {
-            writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
-            for (String report : form.getReports()) {
-                writer.println("        " + report + ";");
             }
             writer.println();
         }
@@ -735,40 +738,4 @@ public class ReportGenerator {
             writeFormReport(writer, formInfo);
         }
     }
-
-    /**
-     * Вывод списка вызываемых форм в JS
-     */
-    private void writeJsFormsBlock(PrintWriter writer, FormInfo form) {
-        if (!form.getJsForms().isEmpty()) {
-            writer.println("Список вызываемых форм в JS:");
-            for (String jsForm : form.getJsForms()) {
-                writer.println("     " + jsForm);
-            }
-            writer.println();
-        }
-    }
-    /**
-     * Вывод отчетов, вызываемых на форме
-     */
-    private void writeReportsBlock(PrintWriter writer, FormInfo form) {
-        if (!form.getReports().isEmpty()) {
-            writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
-            for (String report : form.getReports()) {
-                writer.println("        " + report + ";");
-            }
-            writer.println();
-        }
-    }
-
-    private void writeConstantsBlock(PrintWriter writer, FormInfo form) {
-        if (!form.getConstants().isEmpty()) {
-            writer.println("КОНСТАНТЫ:");
-            for (String constant : form.getConstants()) {
-                writer.println("    " + constant);
-            }
-            writer.println();
-        }
-    }
-
 }
