@@ -23,6 +23,7 @@ public class FormsTreePanel extends JPanel {
     private JButton removeButton;
     private JButton selectAllButton;
     private JButton deselectAllButton;
+    private Runnable onRecursiveAnalysisRequested;
 
     private Set<String> allForms = new LinkedHashSet<>();
     private List<String> filteredForms = new ArrayList<>();
@@ -343,6 +344,13 @@ public class FormsTreePanel extends JPanel {
             }
         });
 
+        JMenuItem recursiveAnalysisMenuItem = new JMenuItem("Рекурсивный анализ всех форм");
+        recursiveAnalysisMenuItem.addActionListener(e -> {
+            if (onRecursiveAnalysisRequested != null) {
+                onRecursiveAnalysisRequested.run();
+            }
+        });
+
         JMenuItem selectAllMenuItem = new JMenuItem("Выбрать всё");
         selectAllMenuItem.addActionListener(e -> selectAllNodes());
 
@@ -353,9 +361,11 @@ public class FormsTreePanel extends JPanel {
         popupMenu.add(removeMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(runAnalysisMenuItem);
+        popupMenu.add(recursiveAnalysisMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(selectAllMenuItem);
         popupMenu.add(deselectAllMenuItem);
+
 
         tree.addMouseListener(new MouseAdapter() {
             @Override
@@ -385,7 +395,7 @@ public class FormsTreePanel extends JPanel {
         });
     }
 
-    private void applyFilter() {
+   private void applyFilter() {
         String filter = searchField.getText().trim().toLowerCase();
         rootNode.removeAllChildren();
         formNodeMap.clear();
@@ -652,5 +662,18 @@ public class FormsTreePanel extends JPanel {
 
     public void setOnAnalysisRequested(Runnable callback) {
         this.onAnalysisRequested = callback;
+    }
+    /**
+     * Получить все формы на текущем уровне дерева (корневые формы)
+     */
+    public List<String> getAllRootForms() {
+        List<String> allRootForms = new ArrayList<>();
+        for (String formPath : allForms) {
+            allRootForms.add(formPath);
+        }
+        return allRootForms;
+    }
+    public void setOnRecursiveAnalysisRequested(Runnable callback) {
+        this.onRecursiveAnalysisRequested = callback;
     }
 }

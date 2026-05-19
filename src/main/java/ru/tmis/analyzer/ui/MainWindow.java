@@ -9,6 +9,7 @@ import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
 import ru.tmis.analyzer.core.report.ReportGenerator;
+import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -43,6 +44,7 @@ public class MainWindow extends JFrame {
 
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private ExecutorService executorService;
+    private RecursiveReportBuilder recursiveBuilder;
 
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
@@ -151,6 +153,62 @@ public class MainWindow extends JFrame {
 
         leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
+        formsTreePanel.setOnRecursiveAnalysisRequested(() -> {
+            if (!recursiveBuilder.isRunning()) {
+                startRecursiveAnalysis();
+            } else {
+                appendLog("Рекурсивный анализ уже выполняется");
+                JOptionPane.showMessageDialog(this,
+                        "Рекурсивный анализ уже выполняется. Дождитесь завершения или нажмите Стоп.",
+                        "Анализ запущен",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+       // В конструкторе или initUI() после создания formsTreePanel
+        recursiveBuilder = new RecursiveReportBuilder(settings, config, formsTreePanel);
+        recursiveBuilder.setLogger(new ILogger() {
+            @Override
+            public void log(String message) { appendLog(message); }
+            @Override
+            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            @Override
+            public void debug(String message) { appendLog("[DEBUG] " + message); }
+        });
+
+        recursiveBuilder.setOnLevelStart(message -> {
+            appendLog(message);
+            statusLabel.setText("Статус: " + message);
+        });
+
+        recursiveBuilder.setOnLevelComplete(count -> {
+            appendLog("  Уровень завершён. Обработано форм: " + count);
+            progressBar.setValue(0);
+        });
+
+        recursiveBuilder.setOnFormAnalyzed(formPath -> {
+            appendLog("  Анализ формы: " + formPath);
+        });
+
+        recursiveBuilder.setOnComplete(() -> {
+            appendLog("Рекурсивное построение завершено!");
+            statusLabel.setText("Статус: Готов");
+            progressBar.setValue(100);
+            progressBar.setString("Готово");
+            startButton.setEnabled(true);
+            settingsButton.setEnabled(true);
+            stopButton.setEnabled(false);
+            formsTreePanel.refreshAllChildForms();
+        });
+
+        recursiveBuilder.setOnError(message -> {
+            appendLog("ОШИБКА: " + message);
+            statusLabel.setText("Статус: Ошибка");
+            startButton.setEnabled(true);
+            settingsButton.setEnabled(true);
+            stopButton.setEnabled(false);
+        });
+
         // Right panel with tabs
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder("Результаты"));
@@ -206,7 +264,45 @@ public class MainWindow extends JFrame {
 
         return splitPane;
     }
+// MainWindow.java - добавить этот метод
 
+    private void startRecursiveAnalysis() {
+        if (recursiveBuilder.isRunning()) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Рекурсивный анализ уже выполняется. Остановить?",
+                    "Анализ запущен",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                recursiveBuilder.stop();
+            }
+            return;
+        }
+
+        // Получаем выбранные формы или все корневые
+        List<String> selectedForms = formsTreePanel.getSelectedForms();
+        List<String> startForms;
+
+        if (selectedForms.isEmpty()) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Не выбрано ни одной формы.\nЗапустить рекурсивный анализ для всех форм?",
+                    "Нет выбранных форм",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+            startForms = null; // будет использовать getAllRootForms()
+        } else {
+            startForms = selectedForms;
+        }
+
+        startButton.setEnabled(false);
+        settingsButton.setEnabled(false);
+        stopButton.setEnabled(true);
+        progressBar.setValue(0);
+        statusLabel.setText("Статус: Рекурсивный анализ...");
+
+        recursiveBuilder.startRecursiveBuild(startForms);
+    }
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Прогресс"));
@@ -503,6 +599,13 @@ public class MainWindow extends JFrame {
     }
 
     private void stopAnalysis() {
+        if (recursiveBuilder != null && recursiveBuilder.isRunning()) {
+            recursiveBuilder.stop();
+            appendLog("Запрос на остановку рекурсивного анализа...");
+            stopButton.setEnabled(false);
+            return;
+        }
+
         if (currentTask != null && !currentTask.isDone()) {
             appendLog("Запрос на остановку анализа...");
             stopRequested = true;

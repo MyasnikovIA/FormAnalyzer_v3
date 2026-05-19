@@ -12,7 +12,7 @@
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Tue May 19 07:01:19 GMT+07:00 2026
+**Дата генерации:** Tue May 19 07:44:38 GMT+07:00 2026
 
 ---
 
@@ -198,6 +198,20 @@
                    and (hs.DATE_BEGIN <= to_date(:pdDATE_TO, 'DD.MM.YYYY') or :pdDATE_TO is null)
                 ]]>
             </component>
+
+Forms#AccessRights#d_cse_accesses.frm.txt
+Forms#HospitPlanning#hospit_planning.frm.txt
+Forms#HospitPlanning#hosp_plan_deps.frm.txt
+Forms#HospitPlanning#hosp_plan_kinds_edit.frm.txt
+Forms#HospitPlanning#hosp_plan_mkbs.frm.txt
+Forms#HospitPlanning#hosp_plan_pks.frm.txt
+Forms#HospitPlanning#hpk_mkbs_edit.frm.txt
+Forms#HospitPlanning#hpk_pk_quotes.frm.txt
+Forms#HospitPlanning#modals#graphics_add_edit.frm.txt
+Forms#HospPlan#hospplanperiod_edit.frm.txt
+Forms#Schedules#schedules_edit_hp.frm.txt
+Forms#UniversalForms#period.frm.txt
+
             <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
                 <![CDATA[
                 select hs.ID,
