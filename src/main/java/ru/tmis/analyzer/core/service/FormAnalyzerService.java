@@ -1,6 +1,7 @@
 // core/service/FormAnalyzerService.java (исправленный)
 package ru.tmis.analyzer.core.service;
 
+import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
@@ -8,6 +9,7 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import ru.tmis.analyzer.utils.CommentRemover;
 import ru.tmis.analyzer.utils.FormPathUtils;
+import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,18 +24,18 @@ import java.util.stream.Stream;
 
 public class FormAnalyzerService {
 
+    private final SettingsModel settings;
+    private final AppConfig config;
+    private final FileScannerService scannerService;
+    private final UserFormsResolver userFormsResolver;
+    private final ExtractorManager extractorManager;
+    private Set<String> formsToAnalyze;
+
     public interface FormAnalyzedCallback {
         void onFormAnalyzed(FormInfo formInfo);
     }
     private FormAnalyzedCallback formAnalyzedCallback;
     private final Map<String, ViewTableDependencies> viewDependenciesCache = new ConcurrentHashMap<>();
-
-
-    private final SettingsModel settings;
-    private final FileScannerService scannerService;
-    private final UserFormsResolver userFormsResolver;
-    private final ExtractorManager extractorManager;
-    private Set<String> formsToAnalyze;
 
     private BooleanSupplier stopCondition = () -> false;
     private ProgressCallback progressCallback;
@@ -43,12 +45,19 @@ public class FormAnalyzerService {
         void onProgress(int processed, int total, String currentForm);
     }
 
-    public FormAnalyzerService(SettingsModel settings) {
+    public FormAnalyzerService(SettingsModel settings, AppConfig config) {
         this.settings = settings;
+        this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
         this.extractorManager = new ExtractorManager(settings);
     }
+
+    // Конструктор с одним параметром (загружает config)
+    public FormAnalyzerService(SettingsModel settings) {
+        this(settings, AppConfig.load());
+    }
+
     public void setLogger(ILogger logger) {
         this.logger = logger;
     }
@@ -121,6 +130,8 @@ public class FormAnalyzerService {
         return results;
     }
 
+    // core/service/FormAnalyzerService.java - полный метод analyzeForm
+
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
@@ -142,18 +153,14 @@ public class FormAnalyzerService {
             return null;
         }
 
+        // Удаляем комментарии
         String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
 
         // Передаём в процессор очищенное содержимое
         extractorManager.process(contentWithoutComments, formInfo);
 
-        baseContent = CommentRemover.removeAllComments(baseContent);
-
-        extractorManager.process(baseContent, formInfo);
-
-        // ========== ДОБАВИТЬ ВЫЗОВ extractAutoPopupMenus ЗДЕСЬ ==========
-        extractAutoPopupMenus(baseContent, formInfo);
-        // ================================================================
+        // Извлекаем AutoPopupMenu
+        extractAutoPopupMenus(contentWithoutComments, formInfo);
 
         // Собираем все вьюхи, используемые в этой форме
         Set<String> viewNames = new LinkedHashSet<>();
@@ -171,6 +178,17 @@ public class FormAnalyzerService {
 
             for (Map.Entry<String, ViewTableDependencies> entry : viewDeps.entrySet()) {
                 log("    Вьюха " + entry.getKey() + " содержит " + entry.getValue().getOracleTables().size() + " таблиц");
+            }
+        }
+
+        // Генерация LLM промпта для формы (если включено в настройках)
+        if (formInfo != null && config != null && config.isEnableLLMExport()) {
+            try {
+                LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+                String mdFilePath = llmGen.generateForSingleForm(formInfo, settings.getOutputDir());
+                log("  LLM промпт сохранен: " + mdFilePath);
+            } catch (Exception e) {
+                error("  Ошибка сохранения LLM промпта: " + e.getMessage());
             }
         }
 

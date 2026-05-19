@@ -1200,4 +1200,139 @@ public class LLMPromptGenerator {
         System.out.println("[LLM] Генерация отдельных промптов завершена. Создано файлов: " + generatedFiles.size());
         return generatedFiles;
     }
+
+    /**
+     * Генерирует промпт для одной формы и сохраняет в MD файл
+     * @param formInfo информация о форме
+     * @param outputDir директория для сохранения
+     * @return путь к созданному файлу
+     */
+    public String generateForSingleForm(FormInfo formInfo, String outputDir) throws Exception {
+        // Создаём временный контекст для одной формы
+        LLMReportContext singleContext = new LLMReportContext();
+        List<FormInfo> singleForm = Collections.singletonList(formInfo);
+        singleContext.setAnalyzedForms(singleForm);
+        singleContext.setTotalForms(1);
+        singleContext.setAllSqlQueries(formInfo.getSqlQueries());
+        singleContext.setTotalSqlQueries(formInfo.getSqlQueries().size());
+
+        // Копируем необходимые данные из глобального контекста если есть
+        if (context != null) {
+            // Вьюхи для этой формы
+            Set<String> formViews = new LinkedHashSet<>();
+            for (String tv : formInfo.getTablesViews()) {
+                if (tv.startsWith("D_V_")) {
+                    formViews.add(tv);
+                }
+            }
+
+            Map<String, String> pgViewsDDL = new LinkedHashMap<>();
+            Map<String, String> oraViewsDDL = new LinkedHashMap<>();
+            Map<String, Set<String>> pgViewTables = new LinkedHashMap<>();
+            Map<String, Set<String>> oraViewTables = new LinkedHashMap<>();
+
+            for (String view : formViews) {
+                if (context.getPostgresViewDDL() != null && context.getPostgresViewDDL().containsKey(view)) {
+                    pgViewsDDL.put(view, context.getPostgresViewDDL().get(view));
+                    if (context.getPostgresViewTables() != null) {
+                        pgViewTables.put(view, context.getPostgresViewTables().get(view));
+                    }
+                }
+                if (context.getOracleViewDDL() != null && context.getOracleViewDDL().containsKey(view)) {
+                    oraViewsDDL.put(view, context.getOracleViewDDL().get(view));
+                    if (context.getOracleViewTables() != null) {
+                        oraViewTables.put(view, context.getOracleViewTables().get(view));
+                    }
+                }
+            }
+            singleContext.setPostgresViewDDL(pgViewsDDL);
+            singleContext.setPostgresViewTables(pgViewTables);
+            singleContext.setOracleViewDDL(oraViewsDDL);
+            singleContext.setOracleViewTables(oraViewTables);
+
+            // Таблицы для этой формы
+            Set<String> formTables = new LinkedHashSet<>();
+            for (String tv : formInfo.getTablesViews()) {
+                if (!tv.startsWith("D_V_")) {
+                    formTables.add(tv);
+                }
+            }
+            for (Set<String> tables : pgViewTables.values()) {
+                formTables.addAll(tables);
+            }
+            for (Set<String> tables : oraViewTables.values()) {
+                formTables.addAll(tables);
+            }
+
+            Map<String, String> pgTableDDL = new LinkedHashMap<>();
+            Map<String, String> oraTableDDL = new LinkedHashMap<>();
+            for (String table : formTables) {
+                if (context.getPostgresTableDDL() != null && context.getPostgresTableDDL().containsKey(table)) {
+                    pgTableDDL.put(table, context.getPostgresTableDDL().get(table));
+                }
+                if (context.getOracleTableDDL() != null && context.getOracleTableDDL().containsKey(table)) {
+                    oraTableDDL.put(table, context.getOracleTableDDL().get(table));
+                }
+            }
+            singleContext.setPostgresTableDDL(pgTableDDL);
+            singleContext.setOracleTableDDL(oraTableDDL);
+
+            // Функции для этой формы
+            Set<String> formFuncs = new LinkedHashSet<>();
+            for (SqlInfo sql : formInfo.getSqlQueries()) {
+                formFuncs.addAll(sql.getPackagesFunctions());
+            }
+
+            Map<String, String> oraFuncBodies = new LinkedHashMap<>();
+            Map<String, String> pgFuncBodies = new LinkedHashMap<>();
+            for (String func : formFuncs) {
+                if (context.getOracleFunctionBodies() != null && context.getOracleFunctionBodies().containsKey(func)) {
+                    oraFuncBodies.put(func, context.getOracleFunctionBodies().get(func));
+                }
+                String lowerFunc = func.toLowerCase();
+                if (context.getPostgresFunctionBodies() != null && context.getPostgresFunctionBodies().containsKey(lowerFunc)) {
+                    pgFuncBodies.put(lowerFunc, context.getPostgresFunctionBodies().get(lowerFunc));
+                }
+            }
+            singleContext.setOracleFunctionBodies(oraFuncBodies);
+            singleContext.setPostgresFunctionBodies(pgFuncBodies);
+        }
+
+        // Временно заменяем контекст
+        LLMReportContext originalContext = this.context;
+        this.context = singleContext;
+
+        // Генерируем промпт
+        String prompt = generateSingleFile();
+
+        // Восстанавливаем контекст
+        this.context = originalContext;
+
+        // Формируем имя файла (аналогично отчёту, но с .md)
+        String safeName = getSafeFileNameForMD(formInfo.getFormPath());
+        Path mdFilePath = Paths.get(outputDir, safeName);
+
+        // Создаём директорию если нужно
+        Path parentDir = mdFilePath.getParent();
+        if (parentDir != null && !Files.exists(parentDir)) {
+            Files.createDirectories(parentDir);
+        }
+
+        // Сохраняем файл
+        Files.writeString(mdFilePath, prompt);
+
+        return mdFilePath.toString();
+    }
+
+    /**
+     * Формирует безопасное имя файла для MD промпта (аналогично отчёту)
+     */
+    private String getSafeFileNameForMD(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        String safeName = normalized.replace("/", "#").replace("\\", "#");
+        return safeName + ".md";
+    }
 }

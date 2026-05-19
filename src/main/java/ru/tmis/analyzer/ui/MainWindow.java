@@ -578,7 +578,7 @@ public class MainWindow extends JFrame {
         appendLog("");
 
         ru.tmis.analyzer.core.service.FormAnalyzerService analyzer =
-                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings);
+                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings,config);
 
         Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
         analyzer.setFormsToAnalyze(formsSet);

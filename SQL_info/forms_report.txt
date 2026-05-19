@@ -5204,3 +5204,407 @@ SubForm:
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
 
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/modals/graphics_add_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\modals\graphics_add_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_SCHEDULE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HPK_SCHEDULE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DAT_TOOLS.DATE_RANGES_ERROR
+    D_PKG_HPK_SCHEDULE.UPG
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+            unit:SCHEDULE  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hosp_plan_kinds_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_JOURNAL_TYPES
+    D_V_HPK_PLANS
+    D_V_HOSP_PLAN_KINDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_JOURNAL_TYPES
+    D_HPK_PLANS
+    D_HOSP_PLAN_KINDS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HPK_JOURNAL_TYPES (Oracle: 3) (PostgreSQL: 3):
+          D_HPK_JOURNAL_TYPES (Oracle: 3) (PostgreSQL: 3)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+БРОКЕРЫ:
+    unit:HOSP_PLAN_KINDS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hosp_plan_deps.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_deps.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/select_bed_type_by_dep.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_DEPS;
+        HOSP_PLAN_DEP_BEDS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_DEPS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   └── "Удалить"
+│   
+└── name="pHOSP_PLAN_DEP_BEDS"
+    ├── "Обновить"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_DEPS
+    D_V_HOSP_PLAN_DEP_BEDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_DEPS
+    D_HOSP_PLAN_DEP_BEDS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_DEPS (Oracle: 1,82 тыс) (PostgreSQL: 1,34 тыс):
+          D_HOSP_PLAN_DEPS (Oracle: 1,91 тыс) (PostgreSQL: 1,90 тыс)
+
+  D_V_HOSP_PLAN_DEP_BEDS (Oracle: 577) (PostgreSQL: 300):
+          D_HOSP_PLAN_DEP_BEDS (Oracle: 582) (PostgreSQL: 580)
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:DEPS  composition:DEF_ST;
+
+БРОКЕРЫ:
+    unit:HOSP_PLAN_DEP_BEDS  action:INSERT;
+    unit:HOSP_PLAN_DEP_BEDS  action:DELETE;
+    unit:HOSP_PLAN_DEPS  action:INSERT;
+    unit:HOSP_PLAN_DEPS  action:DELETE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hosp_plan_pks.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_pks.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/hpk_pk_quotes.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HPK_PAYMENT_KINDS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pHPK_PAYMENT_KINDS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Удалить"
+    └── "Квоты"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_PAYMENT_KINDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_PAYMENT_KINDS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HPK_PAYMENT_KINDS (Oracle: 1,25 тыс) (PostgreSQL: 541):
+          D_HPK_PAYMENT_KINDS (Oracle: 1,34 тыс) (PostgreSQL: 1,34 тыс)
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:PAYMENT_KIND  composition:LIST;
+
+БРОКЕРЫ:
+    unit:HPK_PAYMENT_KINDS  action:INSERT;
+    unit:HPK_PAYMENT_KINDS  action:DELETE;
+    unit:HPK_PAYMENT_KINDS  action:UPDATE;
+
