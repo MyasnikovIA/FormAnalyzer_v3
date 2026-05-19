@@ -190,33 +190,25 @@ public class MainWindow extends JFrame {
             appendLog("  Анализ формы: " + formPath);
         });
 
-        recursiveBuilder.setOnComplete(() -> {
-            appendLog("Рекурсивное построение завершено!");
-            statusLabel.setText("Статус: Готов");
-            progressBar.setValue(100);
-            progressBar.setString("Готово");
-            startButton.setEnabled(true);
-            settingsButton.setEnabled(true);
-            stopButton.setEnabled(false);
-            formsTreePanel.refreshAllChildForms();
-        });
-
         recursiveBuilder.setOnError(message -> {
             appendLog("ОШИБКА: " + message);
             statusLabel.setText("Статус: Ошибка");
+            progressBar.setIndeterminate(false);
+            progressBar.setValue(0);
             startButton.setEnabled(true);
-            settingsButton.setEnabled(true);
             stopButton.setEnabled(false);
+            settingsButton.setEnabled(true);
         });
 
         recursiveBuilder.setOnComplete(() -> {
             appendLog("Рекурсивное построение завершено!");
             statusLabel.setText("Статус: Готов");
+            progressBar.setIndeterminate(false);
             progressBar.setValue(100);
             progressBar.setString("Готово");
             startButton.setEnabled(true);
-            settingsButton.setEnabled(true);
             stopButton.setEnabled(false);
+            settingsButton.setEnabled(true);
 
             // Обновляем дерево с сохранением состояния
             SwingUtilities.invokeLater(() -> {
@@ -281,6 +273,8 @@ public class MainWindow extends JFrame {
     }
 // MainWindow.java - добавить этот метод
 
+    // MainWindow.java - исправленный метод startRecursiveAnalysis
+
     private void startRecursiveAnalysis() {
         if (recursiveBuilder.isRunning()) {
             int confirm = JOptionPane.showConfirmDialog(this,
@@ -310,14 +304,17 @@ public class MainWindow extends JFrame {
             startForms = selectedForms;
         }
 
+        // БЛОК УПРАВЛЕНИЯ КНОПКАМИ - ВАЖНО!
         startButton.setEnabled(false);
+        stopButton.setEnabled(true);      // Активируем кнопку остановки
         settingsButton.setEnabled(false);
-        stopButton.setEnabled(true);
         progressBar.setValue(0);
+        progressBar.setIndeterminate(true);  // Показываем, что процесс идёт
         statusLabel.setText("Статус: Рекурсивный анализ...");
 
         recursiveBuilder.startRecursiveBuild(startForms);
     }
+
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Прогресс"));
@@ -617,13 +614,20 @@ public class MainWindow extends JFrame {
     }
 
     private void stopAnalysis() {
+        // Сначала проверяем рекурсивный анализатор
         if (recursiveBuilder != null && recursiveBuilder.isRunning()) {
             recursiveBuilder.stop();
             appendLog("Запрос на остановку рекурсивного анализа...");
             stopButton.setEnabled(false);
+            startButton.setEnabled(true);
+            settingsButton.setEnabled(true);
+            progressBar.setIndeterminate(false);
+            progressBar.setValue(0);
+            statusLabel.setText("Статус: Остановка...");
             return;
         }
 
+        // Обычный анализ
         if (currentTask != null && !currentTask.isDone()) {
             appendLog("Запрос на остановку анализа...");
             stopRequested = true;

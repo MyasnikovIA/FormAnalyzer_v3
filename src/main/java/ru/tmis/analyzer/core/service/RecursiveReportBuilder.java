@@ -136,11 +136,16 @@ public class RecursiveReportBuilder {
                 if (onError != null) onError.accept(e.getMessage());
             } finally {
                 isRunning.set(false);
+                // Важно: сбрасываем состояние кнопок через callback
                 if (onComplete != null) {
                     javax.swing.SwingUtilities.invokeLater(onComplete);
                 }
                 log("");
-                log("=== РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
+                if (stopRequested.get()) {
+                    log("=== РЕКУРСИВНОЕ ПОСТРОЕНИЕ ОСТАНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ ===");
+                } else {
+                    log("=== РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
+                }
                 log("Всего обработано форм: " + totalFormsProcessed);
                 log("Уровней: " + formsPerLevel.size());
                 for (Map.Entry<Integer, Integer> entry : formsPerLevel.entrySet()) {
