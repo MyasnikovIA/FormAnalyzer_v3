@@ -1,0 +1,42 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hosp_plan_kinds_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_JOURNAL_TYPES
+    D_V_HPK_PLANS
+    D_V_HOSP_PLAN_KINDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_JOURNAL_TYPES
+    D_HPK_PLANS
+    D_HOSP_PLAN_KINDS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HPK_JOURNAL_TYPES (Oracle: 3) (PostgreSQL: 3):
+          D_HPK_JOURNAL_TYPES (Oracle: 3) (PostgreSQL: 3)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+БРОКЕРЫ:
+    unit:HOSP_PLAN_KINDS;
+

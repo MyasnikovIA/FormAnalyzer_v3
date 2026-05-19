@@ -18,6 +18,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import ru.tmis.analyzer.core.report.ReportGenerator;
+
 public class RecursiveReportBuilder {
 
     private final SettingsModel settings;
@@ -86,20 +88,29 @@ public class RecursiveReportBuilder {
         System.err.println(message);
     }
 
+    /**
+     * Запуск рекурсивного построения отчётов
+     * @param startForms список форм для старта (если null - используются все корневые формы)
+     */
     public void startRecursiveBuild(List<String> startForms) {
         if (isRunning.get()) {
             log("Рекурсивное построение уже выполняется");
             return;
         }
 
+        // Определяем стартовые формы
+        List<String> finalStartForms;
         if (startForms == null || startForms.isEmpty()) {
-            startForms = formsTreePanel.getAllRootForms();
-        }
-
-        if (startForms.isEmpty()) {
-            log("Нет форм для рекурсивного анализа");
-            if (onError != null) onError.accept("Нет форм для анализа");
-            return;
+            finalStartForms = formsTreePanel.getAllRootForms();
+            if (finalStartForms.isEmpty()) {
+                log("Нет форм для рекурсивного анализа");
+                if (onError != null) onError.accept("Нет форм для анализа");
+                return;
+            }
+            log("Стартовые формы не указаны. Используем все корневые формы (" + finalStartForms.size() + " шт.)");
+        } else {
+            finalStartForms = new ArrayList<>(startForms);
+            log("Стартовые формы: " + finalStartForms.size() + " шт.");
         }
 
         stopRequested.set(false);
@@ -108,15 +119,15 @@ public class RecursiveReportBuilder {
         totalFormsProcessed = 0;
         formsPerLevel.clear();
 
-        log("=== ЗАПУСК РЕКУРСИВНОГО ПОСТРОЕНИЯ ОТЧЁТОВ ===");
-        log("Начальный уровень форм: " + startForms.size() + " шт.");
+        // Множество для отслеживания уже обработанных форм
+        final Set<String> processedForms = new HashSet<>();
 
-        // Создаем финальную копию списка для использования в lambda
-        final List<String> finalStartForms = new ArrayList<>(startForms);
+        log("=== ЗАПУСК РЕКУРСИВНОГО ПОСТРОЕНИЯ ОТЧЁТОВ ===");
+        log("Начальный уровень форм: " + finalStartForms.size() + " шт.");
 
         currentTask = executor.submit(() -> {
             try {
-                processLevel(finalStartForms, 1);
+                processLevel(finalStartForms, 1, processedForms);
             } catch (Exception e) {
                 error("Ошибка при рекурсивном построении: " + e.getMessage());
                 e.printStackTrace();
@@ -126,6 +137,7 @@ public class RecursiveReportBuilder {
                 if (onComplete != null) {
                     javax.swing.SwingUtilities.invokeLater(onComplete);
                 }
+                log("");
                 log("=== РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
                 log("Всего обработано форм: " + totalFormsProcessed);
                 log("Уровней: " + formsPerLevel.size());
@@ -140,8 +152,9 @@ public class RecursiveReportBuilder {
      * Рекурсивная обработка уровня
      * @param formsToAnalyze формы для анализа на текущем уровне
      * @param level номер уровня (1 - корневой)
+     * @param processedForms множество уже обработанных форм (для предотвращения зацикливания)
      */
-    private void processLevel(List<String> formsToAnalyze, int level) throws Exception {
+    private void processLevel(List<String> formsToAnalyze, int level, Set<String> processedForms) throws Exception {
         if (stopRequested.get()) {
             log("Построение остановлено пользователем на уровне " + level);
             return;
@@ -152,10 +165,16 @@ public class RecursiveReportBuilder {
             return;
         }
 
-        currentLevel = level;
-
-        // Убираем дубликаты
+        // Убираем дубликаты и уже обработанные формы
         Set<String> uniqueForms = new LinkedHashSet<>(formsToAnalyze);
+        uniqueForms.removeAll(processedForms);
+
+        if (uniqueForms.isEmpty()) {
+            log("Уровень " + level + ": все формы уже обработаны ранее");
+            return;
+        }
+
+        currentLevel = level;
         final List<String> formList = new ArrayList<>(uniqueForms);
 
         log("");
@@ -172,6 +191,9 @@ public class RecursiveReportBuilder {
         final List<FormInfo> analyzedForms = analyzeForms(formList);
         totalFormsProcessed += analyzedForms.size();
         formsPerLevel.put(level, analyzedForms.size());
+
+        // Добавляем проанализированные формы в множество обработанных
+        processedForms.addAll(formList);
 
         if (stopRequested.get()) {
             log("Построение остановлено после анализа уровня " + level);
@@ -193,8 +215,15 @@ public class RecursiveReportBuilder {
 
             Set<String> children = formsTreePanel.loadChildFormsFromReport(formPath);
             if (!children.isEmpty()) {
-                log("  Форма " + getShortName(formPath) + " -> дочерних: " + children.size());
-                allChildForms.addAll(children);
+                // Фильтруем уже обработанные формы
+                Set<String> newChildren = new LinkedHashSet<>(children);
+                newChildren.removeAll(processedForms);
+                if (!newChildren.isEmpty()) {
+                    log("  Форма " + getShortName(formPath) + " -> дочерних: " + newChildren.size() + " (новых: " + newChildren.size() + ")");
+                    allChildForms.addAll(newChildren);
+                } else {
+                    log("  Форма " + getShortName(formPath) + " -> дочерних: " + children.size() + " (все уже обработаны)");
+                }
             }
         }
 
@@ -202,17 +231,17 @@ public class RecursiveReportBuilder {
         if (!allChildForms.isEmpty() && !stopRequested.get()) {
             final List<String> childList = new ArrayList<>(allChildForms);
             log("");
-            log("Переход на уровень " + (level + 1) + " (найдено дочерних форм: " + childList.size() + ")");
-            processLevel(childList, level + 1);
+            log("Переход на уровень " + (level + 1) + " (найдено новых дочерних форм: " + childList.size() + ")");
+            processLevel(childList, level + 1, processedForms);
         } else {
             if (allChildForms.isEmpty()) {
-                log("Дочерние формы не найдены. Рекурсия завершена.");
+                log("Новые дочерние формы не найдены. Рекурсия завершена.");
             }
         }
     }
 
     /**
-     * Анализ списка форм
+     * Анализ списка форм с сохранением отчётов
      */
     private List<FormInfo> analyzeForms(List<String> formPaths) throws Exception {
         final List<FormInfo> results = new ArrayList<>();
@@ -227,6 +256,8 @@ public class RecursiveReportBuilder {
         final FormsTreePanel treePanel = this.formsTreePanel;
         final Consumer<String> formAnalyzedCallback = this.onFormAnalyzed;
         final AtomicBoolean stopFlag = this.stopRequested;
+        final SettingsModel settings = this.settings;
+        final AppConfig config = this.config;
 
         // Устанавливаем логгер
         analyzer.setLogger(new ILogger() {
@@ -247,8 +278,17 @@ public class RecursiveReportBuilder {
         // Устанавливаем условие остановки
         analyzer.setStopCondition(() -> stopFlag.get());
 
-        // Callback для каждой проанализированной формы
+        // Callback для каждой проанализированной формы - сохраняем отчёт
         analyzer.setFormAnalyzedCallback(formInfo -> {
+            // Сохраняем отчёт для формы
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+            } catch (IOException e) {
+                error("Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
+            }
+
             if (formAnalyzedCallback != null) {
                 javax.swing.SwingUtilities.invokeLater(() ->
                         formAnalyzedCallback.accept(formInfo.getFormPath()));

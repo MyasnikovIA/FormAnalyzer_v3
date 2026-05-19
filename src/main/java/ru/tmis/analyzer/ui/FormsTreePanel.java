@@ -663,17 +663,14 @@ public class FormsTreePanel extends JPanel {
     public void setOnAnalysisRequested(Runnable callback) {
         this.onAnalysisRequested = callback;
     }
-    /**
-     * Получить все формы на текущем уровне дерева (корневые формы)
-     */
-    public List<String> getAllRootForms() {
-        List<String> allRootForms = new ArrayList<>();
-        for (String formPath : allForms) {
-            allRootForms.add(formPath);
-        }
-        return allRootForms;
-    }
+
     public void setOnRecursiveAnalysisRequested(Runnable callback) {
         this.onRecursiveAnalysisRequested = callback;
+    }
+    /**
+     * Получить все корневые формы (без учёта иерархии)
+     */
+    public List<String> getAllRootForms() {
+        return new ArrayList<>(allForms);
     }
 }

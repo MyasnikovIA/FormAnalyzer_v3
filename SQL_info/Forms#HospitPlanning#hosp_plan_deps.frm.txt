@@ -1,0 +1,60 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hosp_plan_deps.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_deps.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/select_bed_type_by_dep.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_DEPS;
+        HOSP_PLAN_DEP_BEDS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_DEPS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   └── "Удалить"
+│   
+└── name="pHOSP_PLAN_DEP_BEDS"
+    ├── "Обновить"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_DEPS
+    D_V_HOSP_PLAN_DEP_BEDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_DEPS
+    D_HOSP_PLAN_DEP_BEDS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_DEPS (Oracle: 1,82 тыс) (PostgreSQL: 1,34 тыс):
+          D_HOSP_PLAN_DEPS (Oracle: 1,91 тыс) (PostgreSQL: 1,90 тыс)
+
+  D_V_HOSP_PLAN_DEP_BEDS (Oracle: 577) (PostgreSQL: 300):
+          D_HOSP_PLAN_DEP_BEDS (Oracle: 582) (PostgreSQL: 580)
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:DEPS  composition:DEF_ST;
+
+БРОКЕРЫ:
+    unit:HOSP_PLAN_DEP_BEDS  action:INSERT;
+    unit:HOSP_PLAN_DEP_BEDS  action:DELETE;
+    unit:HOSP_PLAN_DEPS  action:INSERT;
+    unit:HOSP_PLAN_DEPS  action:DELETE;
+
