@@ -76,7 +76,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.3 (от 18-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.4 (от 19-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -134,13 +134,11 @@ public class MainWindow extends JFrame {
         formsTreePanel.setOnFormsChanged(() -> {});
 
         // Добавляем слушатель выбора формы в дереве
-
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
-            private boolean isLoadingChildren = false;  // Флаг для предотвращения рекурсии
+            private boolean isLoadingChildren = false;
 
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                // Игнорируем события во время загрузки дочерних элементов
                 if (isLoadingChildren) return;
 
                 TreePath selectedPath = formsTreePanel.getSelectedPath();
@@ -149,15 +147,15 @@ public class MainWindow extends JFrame {
                     if (formPath != null) {
                         isLoadingChildren = true;
                         try {
-                            // Загружаем отчёт текущей формы
                             loadFormResultToPanel(formPath);
 
-                            // Загружаем дочерние формы (только один уровень)
                             Set<String> childForms = formsTreePanel.loadChildFormsFromReport(formPath);
                             if (!childForms.isEmpty()) {
                                 formsTreePanel.expandPath(selectedPath);
-                                // Обновляем дочерние узлы в дереве
                                 formsTreePanel.refreshChildForms(formPath);
+                            }
+                            if (tabbedPane.getSelectedIndex() == 2) {
+                                loadLlmPromptToPanel(formPath);
                             }
                         } finally {
                             isLoadingChildren = false;
@@ -360,9 +358,6 @@ public class MainWindow extends JFrame {
 
         return splitPane;
     }
-
-
-    // MainWindow.java - исправленный метод loadFormAndAllChildren
 
     /**
      * Рекурсивная загрузка формы и всех её дочерних элементов
