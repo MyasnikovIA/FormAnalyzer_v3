@@ -11,7 +11,7 @@
   "includeViewTables": true,
   "includeJsUnitCompositions": true,
   "includeViewDetails": true,
-  "includePopupMenus": false,
+  "includePopupMenus": true,
   "includePostgresPopupMenus": false,
   "checkDbObjects": false,
   "checkDbData": false,

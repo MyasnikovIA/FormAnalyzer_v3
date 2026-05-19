@@ -241,10 +241,14 @@ public class FormsTreePanel extends JPanel {
         addedPaths.add(formPath);
 
         String displayPath;
-        if (formPath.contains("/")) {
-            displayPath = formPath.substring(formPath.lastIndexOf("/") + 1);
+        if (formPath.startsWith("/")) {
+            displayPath = formPath.substring(1);
         } else {
             displayPath = formPath;
+        }
+        // Убеждаемся, что путь начинается с Forms/ или UserForms
+        if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
+            displayPath = "Forms/" + displayPath;
         }
 
         DefaultMutableTreeNode formNode = null;
@@ -288,10 +292,13 @@ public class FormsTreePanel extends JPanel {
 
             for (String childForm : childForms) {
                 String childDisplayPath;
-                if (childForm.contains("/")) {
-                    childDisplayPath = childForm.substring(childForm.lastIndexOf("/") + 1);
+                if (childForm.startsWith("/")) {
+                    childDisplayPath = childForm.substring(1);
                 } else {
                     childDisplayPath = childForm;
+                }
+                if (!childDisplayPath.startsWith("Forms/") && !childDisplayPath.startsWith("UserForms")) {
+                    childDisplayPath = "Forms/" + childDisplayPath;
                 }
 
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);

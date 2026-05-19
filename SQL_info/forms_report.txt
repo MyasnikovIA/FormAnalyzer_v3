@@ -1,65 +1,115 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Tue May 19 00:03:31 GMT+07:00 2026
+Дата создания: Tue May 19 07:01:02 GMT+07:00 2026
 Всего форм: 1
 ====================================================================================================
 
 ----------------------------------------------------------------------------------------------------
-ФОРМА: Forms/Schedules/schedules_edit_hp.frm
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
-СТАТУС: БАЗОВАЯ ФОРМА
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
 
 ЮЗЕРФОРМЫ:
-     (не найдено)
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+
 
 SubForm:
-     Schedules/subforms/sch_edit_hp_time_block
-     footerStyle
+     (не найдено)
 
 Список вызываемых форм в JS:
-     Schedules/schedules_copy.frm
-     Directions/Subforms/service_notify.frm
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
 
-SQL ЗАПРОСЫ (13):
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
      (содержимое скрыто)
 
 ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
-    D_V_SCHEDULESP
-    D_V_SCHEDULESP_TIMES
-    D_V_SCHEDULE
-    D_V_CLSCHS_BASE
-    D_V_DIRECTION_SERVICES_BASE
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
 
 ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
-    D_SCHEDULESP
-    D_SCHEDULESP_TIMES
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
     D_SCHEDULE
-    D_CLSCHS
-    D_DIRECTION_SERVICES
 
 ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
-  D_V_SCHEDULESP (Oracle: 46,72 тыс) (PostgreSQL: 22,43 тыс):
-          D_SCHEDULESP (Oracle: 46,88 тыс) (PostgreSQL: 46,41 тыс)
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
 
-  D_V_SCHEDULESP_TIMES (Oracle: 39,71 тыс) (PostgreSQL: 18,61 тыс):
-          D_SCHEDULESP_TIMES (Oracle: 39,91 тыс) (PostgreSQL: 39,51 тыс)
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
 
-  D_V_SCHEDULE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
           D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
 
-  D_V_CLSCHS_BASE (Oracle: 8,62 тыс) (PostgreSQL: 5,40 тыс):
-          D_CLSCHS (Oracle: 8,66 тыс) (PostgreSQL: 8,61 тыс)
-
-  D_V_DIRECTION_SERVICES_BASE (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
-          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
-
 ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
-    D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM
-    D_PKG_SCHEDULE.UPD
-    D_PKG_SCHEDULE.ADD
-    D_PKG_SCHEDULESP_TIMES.UPD_S
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
 
 
 ====================================================================================================
