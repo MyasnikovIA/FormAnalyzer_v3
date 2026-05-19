@@ -19,8 +19,8 @@ public class SettingsModel {
     private String oracleUser = "dev";
     private String oraclePassword = "def";
     private String postgresUrl = "jdbc:postgresql://192.168.241.137:5432/med2dev";
-    private String postgresUser = "postgres";
-    private String postgresPassword = "postgres";
+    private String postgresUser = "DEV";
+    private String postgresPassword = "def";
     private String misUser = "$TSTESTZON";
     private boolean checkPostgresPackages = false;
     private boolean checkPostgresPK = false;

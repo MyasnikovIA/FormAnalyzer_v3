@@ -198,6 +198,11 @@ public class MainWindow extends JFrame {
             startButton.setEnabled(true);
             stopButton.setEnabled(false);
             settingsButton.setEnabled(true);
+
+            // Обновляем дерево с сохранением состояния
+            SwingUtilities.invokeLater(() -> {
+                formsTreePanel.refreshTreeWithState();
+            });
         });
 
         recursiveBuilder.setOnComplete(() -> {
@@ -212,7 +217,25 @@ public class MainWindow extends JFrame {
 
             // Обновляем дерево с сохранением состояния
             SwingUtilities.invokeLater(() -> {
-                formsTreePanel.refreshTreePreservingState();
+                // Сохраняем состояние до обновления
+                FormsTreePanel.TreeState state = formsTreePanel.saveTreeState();
+
+                // Очищаем неактуальные узлы и обновляем дочерние формы
+                formsTreePanel.refreshAllChildFormsWithCleanup();
+
+                // Раскрываем все узлы, которые были развёрнуты
+                if (state != null && state.expandedPaths != null) {
+                    for (String pathStr : state.expandedPaths) {
+                        formsTreePanel.expandPathByDisplayString(pathStr);
+                    }
+                }
+
+                // Восстанавливаем выбранный элемент
+                if (state != null && state.selectedPath != null) {
+                    formsTreePanel.restoreSelectedPath(state.selectedPath);
+                }
+
+                appendLog("Дерево форм обновлено, состояние восстановлено");
             });
         });
 
@@ -352,9 +375,14 @@ public class MainWindow extends JFrame {
             } catch (IOException e) {
                 resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
                 appendLog("Ошибка загрузки отчёта для " + formPath + ": " + e.getMessage());
+                // Очищаем дочерние узлы при ошибке
+                formsTreePanel.clearChildNodes(formPath);
             }
         } else {
             resultArea.setText("Отчёт для формы не найден.\n\nПуть: " + reportPath + "\n\nЗапустите анализ для создания отчёта.");
+            // Очищаем дочерние узлы, так как отчёт отсутствует
+            formsTreePanel.clearChildNodes(formPath);
+            appendLog("Отчёт не найден для формы: " + formPath + ", дочерние элементы очищены");
         }
     }
 

@@ -146,8 +146,6 @@ public class FormsTreePanel extends JPanel {
         return count;
     }
 
-    // FormsTreePanel.java - исправленный метод getFullFormPathFromTreePath
-
     public String getFullFormPathFromTreePath(TreePath path) {
         if (path == null) return null;
         Object[] nodes = path.getPath();
@@ -303,8 +301,6 @@ public class FormsTreePanel extends JPanel {
         return childForms;
     }
 
-    // FormsTreePanel.java - исправленный метод addFormWithChildrenToTree (фрагмент)
-
     private void addFormWithChildrenToTree(String formPath, DefaultMutableTreeNode parentNode, Set<String> addedPaths) {
         if (addedPaths.contains(formPath)) {
             return;
@@ -368,43 +364,55 @@ public class FormsTreePanel extends JPanel {
             actualFormPath = actualFormPath.substring(6);
         }
 
-        childrenCache.remove(actualFormPath);
+        // Проверяем существование отчёта
+        String reportPath = getReportFilePath(actualFormPath);
+        File reportFile = new File(reportPath);
 
         DefaultMutableTreeNode node = formNodeMap.get(actualFormPath);
-        if (node != null) {
+        if (node == null) {
+            return;
+        }
+
+        if (!reportFile.exists()) {
+            // Отчёт не существует - очищаем дочерние узлы
             node.removeAllChildren();
+            treeModel.reload(node);
+            childrenCache.remove(actualFormPath);
+            return;
+        }
 
-            Set<String> childForms = loadChildFormsFromReport(actualFormPath);
-            childrenCache.put(actualFormPath, childForms);
+        // Отчёт существует - обновляем дочерние формы
+        node.removeAllChildren();
 
-            for (String childForm : childForms) {
-                boolean isSubForm = childForm.startsWith("(sub)_");
-                String actualChildPath = isSubForm ? childForm.substring(6) : childForm;
+        Set<String> childForms = loadChildFormsFromReport(actualFormPath);
+        childrenCache.put(actualFormPath, childForms);
 
-                String childDisplayPath;
-                if (actualChildPath.startsWith("/")) {
-                    childDisplayPath = actualChildPath.substring(1);
-                } else {
-                    childDisplayPath = actualChildPath;
-                }
-                if (!childDisplayPath.startsWith("Forms/") && !childDisplayPath.startsWith("UserForms")) {
-                    childDisplayPath = "Forms/" + childDisplayPath;
-                }
-                if (isSubForm) {
-                    childDisplayPath = "(sub)_" + childDisplayPath;
-                }
+        for (String childForm : childForms) {
+            boolean isSubForm = childForm.startsWith("(sub)_");
+            String actualChildPath = isSubForm ? childForm.substring(6) : childForm;
 
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
-                childNode.setAllowsChildren(true);
-                node.add(childNode);
-                // Сохраняем в map без маркера
-                formNodeMap.put(actualChildPath, childNode);
+            String childDisplayPath;
+            if (actualChildPath.startsWith("/")) {
+                childDisplayPath = actualChildPath.substring(1);
+            } else {
+                childDisplayPath = actualChildPath;
+            }
+            if (!childDisplayPath.startsWith("Forms/") && !childDisplayPath.startsWith("UserForms")) {
+                childDisplayPath = "Forms/" + childDisplayPath;
+            }
+            if (isSubForm) {
+                childDisplayPath = "(sub)_" + childDisplayPath;
             }
 
-            treeModel.reload(node);
-            TreePath nodePath = new TreePath(node.getPath());
-            tree.expandPath(nodePath);
+            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
+            childNode.setAllowsChildren(true);
+            node.add(childNode);
+            formNodeMap.put(actualChildPath, childNode);
         }
+
+        treeModel.reload(node);
+        TreePath nodePath = new TreePath(node.getPath());
+        tree.expandPath(nodePath);
     }
 
     public void refreshAllChildForms() {
@@ -510,7 +518,7 @@ public class FormsTreePanel extends JPanel {
         expandAllNodes();
     }
 
-    private void expandAllNodes() {
+    public void expandAllNodes() {
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);
         }
@@ -918,6 +926,236 @@ public class FormsTreePanel extends JPanel {
             restoreSelection(selectedForms);
         } else {
             refreshChildForms(formPath);
+        }
+    }
+    /**
+     * Проверяет существование отчёта для формы и очищает дочерние узлы если отчёт удалён
+     * @param formPath путь к форме
+     * @return true если отчёт существует, false если нет
+     */
+    public boolean checkAndCleanIfReportMissing(String formPath) {
+        String reportPath = getReportFilePath(formPath);
+        File reportFile = new File(reportPath);
+
+        if (!reportFile.exists()) {
+            // Отчёт не найден - очищаем дочерние узлы
+            DefaultMutableTreeNode node = formNodeMap.get(formPath);
+            if (node != null) {
+                node.removeAllChildren();
+                treeModel.reload(node);
+            }
+            // Также очищаем кэш
+            childrenCache.remove(formPath);
+            return false;
+        }
+        return true;
+    }
+
+    public void clearChildNodes(String formPath) {
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            node.removeAllChildren();
+            treeModel.reload(node);
+        }
+        childrenCache.remove(formPath);
+    }
+
+    /**
+     * Обновляет все дочерние формы, удаляя узлы для которых нет отчётов
+     * С сохранением состояния дерева
+     */
+    public void refreshAllChildFormsWithCleanup() {
+        TreeState state = saveTreeState();
+
+        Set<String> formsToRemove = new HashSet<>();
+
+        // Проверяем все формы в map
+        for (Map.Entry<String, DefaultMutableTreeNode> entry : formNodeMap.entrySet()) {
+            String formPath = entry.getKey();
+            String reportPath = getReportFilePath(formPath);
+            File reportFile = new File(reportPath);
+
+            if (!reportFile.exists()) {
+                formsToRemove.add(formPath);
+            }
+        }
+
+        // Очищаем узлы для которых нет отчётов
+        for (String formPath : formsToRemove) {
+            clearChildNodes(formPath);
+        }
+
+        // Обновляем остальные формы (только те, у которых есть отчёты)
+        for (String formPath : allForms) {
+            String reportPath = getReportFilePath(formPath);
+            File reportFile = new File(reportPath);
+            if (reportFile.exists()) {
+                refreshChildForms(formPath);
+            }
+        }
+
+        // Перестраиваем корневой узел
+        treeModel.reload(rootNode);
+
+        // Восстанавливаем состояние
+        restoreTreeState(state);
+    }
+
+    /**
+     * Сохраняет полное состояние дерева (развёрнутость узлов и выбранный элемент)
+     * @return объект состояния дерева
+     */
+    public TreeState saveTreeState() {
+        TreeState state = new TreeState();
+        state.selectedPath = saveSelectedPath();
+        state.expandedPaths = saveExpandedPaths();
+        return state;
+    }
+
+    /**
+     * Восстанавливает состояние дерева
+     * @param state сохранённое состояние
+     */
+    public void restoreTreeState(TreeState state) {
+        if (state == null) return;
+
+        // Сначала раскрываем все сохранённые пути
+        if (state.expandedPaths != null) {
+            for (String pathStr : state.expandedPaths) {
+                TreePath path = findTreePathByDisplayString(pathStr);
+                if (path != null) {
+                    tree.expandPath(path);
+                }
+            }
+        }
+
+        // Затем восстанавливаем выбранный элемент
+        if (state.selectedPath != null && !state.selectedPath.isEmpty()) {
+            restoreSelectedPath(state.selectedPath);
+        }
+    }
+
+    /**
+     * Сохраняет список развёрнутых путей в дереве
+     */
+    private Set<String> saveExpandedPaths() {
+        Set<String> expandedPaths = new LinkedHashSet<>();
+        saveExpandedPathsRecursive(rootNode, new TreePath(rootNode), expandedPaths);
+        return expandedPaths;
+    }
+
+    /**
+     * Рекурсивное сохранение развёрнутых путей
+     */
+    private void saveExpandedPathsRecursive(DefaultMutableTreeNode node, TreePath path, Set<String> expandedPaths) {
+        if (tree.isExpanded(path)) {
+            // Сохраняем путь как строку отображаемых имён
+            StringBuilder sb = new StringBuilder();
+            Object[] nodes = path.getPath();
+            for (int i = 1; i < nodes.length; i++) { // пропускаем корневой узел
+                if (sb.length() > 0) sb.append("||");
+                sb.append(nodes[i].toString());
+            }
+            if (sb.length() > 0) {
+                expandedPaths.add(sb.toString());
+            }
+        }
+
+        for (int i = 0; i < node.getChildCount(); i++) {
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+            TreePath childPath = path.pathByAddingChild(child);
+            saveExpandedPathsRecursive(child, childPath, expandedPaths);
+        }
+    }
+
+    /**
+     * Находит TreePath по строке отображаемых имён
+     */
+    private TreePath findTreePathByDisplayString(String pathStr) {
+        if (pathStr == null || pathStr.isEmpty()) return null;
+
+        String[] pathParts = pathStr.split("\\|\\|");
+        if (pathParts.length == 0) return null;
+
+        DefaultMutableTreeNode currentNode = rootNode;
+        TreePath currentPath = new TreePath(rootNode);
+
+        for (String part : pathParts) {
+            DefaultMutableTreeNode foundChild = null;
+            for (int i = 0; i < currentNode.getChildCount(); i++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) currentNode.getChildAt(i);
+                if (child.getUserObject().toString().equals(part)) {
+                    foundChild = child;
+                    break;
+                }
+            }
+            if (foundChild != null) {
+                currentNode = foundChild;
+                currentPath = currentPath.pathByAddingChild(foundChild);
+            } else {
+                return null;
+            }
+        }
+
+        return currentPath;
+    }
+
+    /**
+     * Сохраняет текущий выбранный путь в дереве
+     */
+    public String saveSelectedPath() {
+        TreePath selectedPath = tree.getSelectionPath();
+        if (selectedPath == null) return null;
+
+        StringBuilder sb = new StringBuilder();
+        Object[] nodes = selectedPath.getPath();
+        for (int i = 1; i < nodes.length; i++) {
+            if (sb.length() > 0) sb.append("||");
+            sb.append(nodes[i].toString());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Восстанавливает выбранный путь в дереве
+     */
+    public void restoreSelectedPath(String savedPath) {
+        if (savedPath == null || savedPath.isEmpty()) return;
+
+        TreePath path = findTreePathByDisplayString(savedPath);
+        if (path != null) {
+            tree.setSelectionPath(path);
+            tree.scrollPathToVisible(path);
+        }
+    }
+
+    /**
+     * Полное обновление дерева с сохранением состояния
+     */
+    public void refreshTreeWithState() {
+        TreeState state = saveTreeState();
+
+        // Перестраиваем дерево (сохраняем все формы)
+        applyFilter();
+
+        // Восстанавливаем состояние
+        restoreTreeState(state);
+    }
+
+    /**
+     * Класс для хранения состояния дерева
+     */
+    public static class TreeState {
+        public String selectedPath;
+        public Set<String> expandedPaths;
+    }
+    /**
+     * Раскрывает путь по строке отображаемых имён
+     */
+    public void expandPathByDisplayString(String pathStr) {
+        TreePath path = findTreePathByDisplayString(pathStr);
+        if (path != null) {
+            tree.expandPath(path);
         }
     }
 }
