@@ -34,8 +34,8 @@ SQL ЗАПРОСЫ (13):
 
 ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
-  D_V_SCHEDULESP (Oracle: 46,72 тыс) (PostgreSQL: 22,43 тыс):
-          D_SCHEDULESP (Oracle: 46,88 тыс) (PostgreSQL: 46,41 тыс)
+  D_V_SCHEDULESP (Oracle: 46,73 тыс) (PostgreSQL: 22,43 тыс):
+          D_SCHEDULESP (Oracle: 46,89 тыс) (PostgreSQL: 46,41 тыс)
 
   D_V_SCHEDULESP_TIMES (Oracle: 39,71 тыс) (PostgreSQL: 18,61 тыс):
           D_SCHEDULESP_TIMES (Oracle: 39,91 тыс) (PostgreSQL: 39,51 тыс)

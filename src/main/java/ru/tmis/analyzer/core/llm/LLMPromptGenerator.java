@@ -9,6 +9,7 @@ import ru.tmis.analyzer.core.model.LLMReportContext;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
+import java.io.IOException;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
@@ -1308,6 +1309,19 @@ public class LLMPromptGenerator {
         // Восстанавливаем контекст
         this.context = originalContext;
 
+        // ========== ДОБАВЛЯЕМ ИСХОДНЫЙ ТЕКСТ ФОРМЫ ==========
+        String formSourceCode = getFormSourceCode(formInfo.getFormPath());
+
+        // Создаём итоговый промпт с исходным кодом формы
+        StringBuilder finalPrompt = new StringBuilder();
+        finalPrompt.append(prompt);
+        finalPrompt.append("\n\n");
+        finalPrompt.append("---\n\n");
+        finalPrompt.append("## ИСХОДНЫЙ ТЕКСТ ФОРМЫ\n\n");
+        finalPrompt.append("Ниже представлен исходный XML код анализируемой формы:\n\n");
+        finalPrompt.append(formSourceCode);
+        finalPrompt.append("\n\n");
+
         // Формируем имя файла (аналогично отчёту, но с .md)
         String safeName = getSafeFileNameForMD(formInfo.getFormPath());
         Path mdFilePath = Paths.get(outputDir, safeName);
@@ -1319,11 +1333,10 @@ public class LLMPromptGenerator {
         }
 
         // Сохраняем файл
-        Files.writeString(mdFilePath, prompt);
+        Files.writeString(mdFilePath, finalPrompt.toString());
 
         return mdFilePath.toString();
     }
-
     /**
      * Формирует безопасное имя файла для MD промпта (аналогично отчёту)
      */
@@ -1334,5 +1347,27 @@ public class LLMPromptGenerator {
         }
         String safeName = normalized.replace("/", "#").replace("\\", "#");
         return safeName + ".md";
+    }
+
+    // core/llm/LLMPromptGenerator.java - добавить метод
+
+    /**
+     * Получает исходный текст формы
+     * @param formPath путь к форме
+     * @return исходный текст формы
+     */
+    private String getFormSourceCode(String formPath) {
+        try {
+            Path formFilePath = Paths.get(settings.getProjectPath(), formPath);
+            if (Files.exists(formFilePath)) {
+                String content = Files.readString(formFilePath);
+                // Экранируем для Markdown
+                return "```xml\n" + content + "\n```";
+            } else {
+                return "Файл формы не найден: " + formPath;
+            }
+        } catch (IOException e) {
+            return "Ошибка чтения файла формы: " + e.getMessage();
+        }
     }
 }

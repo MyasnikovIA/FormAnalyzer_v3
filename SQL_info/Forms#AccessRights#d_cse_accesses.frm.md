@@ -1,4 +1,4 @@
-# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/HospitPlanning/hosp_plan_kinds_edit.frm
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/AccessRights/d_cse_accesses.frm
 
 > **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
 
@@ -6,12 +6,12 @@
 
 Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
 
-**Анализируемая форма:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Анализируемая форма:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Tue May 19 13:18:36 GMT+07:00 2026
+**Дата генерации:** Tue May 19 13:12:38 GMT+07:00 2026
 
 ---
 
@@ -21,7 +21,7 @@
 Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
 
 **Статистика:**
-- Всего SQL запросов: 2
+- Всего SQL запросов: 9
 - Всего форм: 1
 
 ---
@@ -29,86 +29,285 @@
 ### Запрос №1
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** DS_HPK_JOURNAL_TYPES
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Имя компонента:** DSPrincipals
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
+<component cmptype="DataSet" name="DSPrincipals">
+        <![CDATA[
+            select t.ID ID,
+                   WHO_CODE principal_type,
+                   WHO_TITLE principal_type_name,
+                   WHO_ID principal_id,
+                   case
+                     when t.WHO_CODE = 'EMPLOYERS' then
+                      t.WHO_NAME || case
+                        when e.KOD_VRACHA is not null then
+                         '(' || e.KOD_VRACHA || ')'
+                      end || case
+                        when e.DEPARTMENT is not null then
+                         ', Отд.:' || e.DEPARTMENT
+                      end || case
+                        when e.SPECIALITY is not null then
+                         ', ' || e.SPECIALITY
+                      end
+                     else
+                      t.WHO_NAME
+                   end principal_name
+              from D_V_CSE_ACS_ALL t
+                   left join D_V_EMPLOYERS_BASE e on e.ID = t.WHO_ID
+             where t.UNITCODE = :UNITCODE
+               and t.UNIT_ID = :RECORD_ID
+               and t.LPU = :LPU
+        ]]>
+        <component cmptype="Variable" name="LPU" src="LPU" srctype="session" />
+        <component cmptype="Variable" name="UNITCODE" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="Variable" name="RECORD_ID" src="RecordID" srctype="var" get="gRecordID" />
+    </component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_JOURNAL_TYPES
+**Используемые таблицы/вьюхи:** D_V_CSE_ACS_ALL, D_V_EMPLOYERS_BASE
 
 ---
 
 ### Запрос №2
 
-**Тип компонента:** M2 Action
-**Имя компонента:** selectAction
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DSRights
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID" src="ID" srctype="var" get="v1" />
-	<component cmptype="ActionVar" name="HP_CODE" src="HP_CODE" srctype="ctrl" put="v2" len="20" />
-	<component cmptype="ActionVar" name="HP_NAME" src="HP_NAME" srctype="ctrl" put="v3" len="160" />
-	<component cmptype="ActionVar" name="MAX_PRIOR" src="MAX_PRIOR" srctype="ctrl" put="v4" len="5" />
-	<component cmptype="ActionVar" name="MIN_AGE" src="MIN_AGE" srctype="ctrl" put="v5" len="3" />
-	<component cmptype="ActionVar" name="MAX_AGE" src="MAX_AGE" srctype="ctrl" put="v6" len="3" />
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS" srctype="ctrl" put="v7" len="2" />
-	<component cmptype="ActionVar" name="PAYMENT_KIND" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8" len="2" />
-	<component cmptype="ActionVar" name="HAS_LIMITS" src="HAS_LIMITS" srctype="ctrl" put="v9" len="2" />
-	<component cmptype="ActionVar" name="NUMB_GROUP" src="NUMB_GROUP" srctype="ctrl" put="v10" len="2" />
-	<component cmptype="ActionVar" name="JOURNAL_TYPE" src="JOURNAL_TYPE" srctype="ctrl" put="v11" len="1" />
-	<component cmptype="ActionVar" name="IS_OPER" src="IS_OPER" srctype="ctrl" put="v12" len="1" />
-	<component cmptype="ActionVar" name="OPEN_DATE" src="OPEN_DATE" srctype="ctrl" put="v13" len="20" />
-	<component cmptype="ActionVar" name="CLOSE_DATE" src="CLOSE_DATE" srctype="ctrl" put="v14" len="20" />
-	<component cmptype="ActionVar" name="MAX_PATDATE" src="MAX_PATDATE" srctype="var" put="v15" len="10" />
-</component>
+<component cmptype="DataSet" name="DSRights">
+        select nRIGHT_ID    RIGHT_ID,
+               sRIGHT_NAME  RIGHT_NAME,
+               nHAS_RIGHT   HAS_RIGHT,
+               nFROM_PARENT FROM_PARENT,
+               nWITH_CHILDS WITH_CHILDS
+          from table(cast(D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS(:LPU, :PRINCIPAL_RIGHTSET_ID, :UNITCODE, :RECORD_ID) as D_CL_CSE_ACS_RIGHTS))
+         order by NRIGHT_CODE
+        <component cmptype="Variable" name="LPU" src="LPU" srctype="session" />
+        <component cmptype="Variable" name="UNITCODE" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="Variable" name="PRINCIPAL_RIGHTSET_ID" src="PrincipalRightsetID" srctype="var" get="gPrincipalRightsetID" />
+        <component cmptype="Variable" name="RECORD_ID" src="RecordID" srctype="var" get="gRecordID" />
+    </component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_PLANS, D_V_HOSP_PLAN_KINDS
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+
+---
+
+### Запрос №3
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DSRightsAll
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DSRightsAll">
+        select nRIGHT_ID    RIGHT_ID,
+               sRIGHT_NAME  RIGHT_NAME,
+               nHAS_RIGHT   HAS_RIGHT,
+               nFROM_PARENT FROM_PARENT,
+               nWITH_CHILDS WITH_CHILDS
+          from table(cast(D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS(:LPU, -1, :UNITCODE, :RECORD_ID) as D_CL_CSE_ACS_RIGHTS))
+        <component cmptype="Variable" name="LPU" src="LPU" srctype="session" />
+        <component cmptype="Variable" name="UNITCODE" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="Variable" name="RECORD_ID" src="RecordID" srctype="var" get="gRecordID" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+
+---
+
+### Запрос №4
+
+**Тип компонента:** M2 Action
+**Имя компонента:** AddPrincipal
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="AddPrincipal">
+        begin
+          D_PKG_CSE_ACCESSES.ADD_ACCS(pnD_INSERT_ID =&gt; :pnd_insert_id,
+                                      pnLPU         =&gt; :pnlpu,
+                                      psUNITCODE    =&gt; :psunitcode,
+                                      pnUNIT_ID     =&gt; :pnunit_id,
+                                      psWHO_CODE    =&gt; :pswho_code,
+                                      pnWHO_ID      =&gt; :pnwho_id);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="pnd_insert_id" src="NEW_ID" srctype="var" put="pNEW_ID" len="17" />
+        <component cmptype="ActionVar" name="psunitcode" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="ActionVar" name="pnunit_id" src="RecordID" srctype="var" get="gRecordID" />
+        <component cmptype="ActionVar" name="pswho_code" src="PrincipalType" srctype="var" get="gPrincipalType" />
+        <component cmptype="ActionVar" name="pnwho_id" src="PrincipalID" srctype="var" get="gPrincipalID" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.ADD_ACCS
+
+---
+
+### Запрос №5
+
+**Тип компонента:** M2 Action
+**Имя компонента:** DeletePrincipal
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="DeletePrincipal">
+        begin
+            D_PKG_CSE_ACCESSES.DEL_ACCS(pnCSE_ACCS =&gt; :pncse_accs,
+                                             pnLPU =&gt; :pnlpu);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="pncse_accs" src="PrincipalRightsetID" srctype="var" get="gPrincipalRightsetID" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.DEL_ACCS
+
+---
+
+### Запрос №6
+
+**Тип компонента:** M2 Action
+**Имя компонента:** TogglePermission
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="TogglePermission">
+        begin
+          D_PKG_CSE_ACCESSES.SET_RIGHT(pnCSE_ACCS =&gt; :pncse_accs,
+                                       pnLPU      =&gt; :pnlpu,
+                                       psUNITCODE =&gt; :psunitcode,
+                                       pnUNIT_ID  =&gt; :pnunit_id,
+                                       pnRIGHT    =&gt; :pnright,
+                                       pnIS_RIGHT =&gt; :pnis_right);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="pncse_accs" src="PrincipalRightsetID" srctype="var" get="gPrincipalRightsetID" />
+        <component cmptype="ActionVar" name="psunitcode" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="ActionVar" name="pnunit_id" src="RecordID" srctype="var" get="gRecordID" />
+        <component cmptype="ActionVar" name="pnright" src="RightID" srctype="var" get="gRightID" />
+        <component cmptype="ActionVar" name="pnis_right" src="Checked" srctype="var" get="gChecked" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.SET_RIGHT
+
+---
+
+### Запрос №7
+
+**Тип компонента:** M2 Action
+**Имя компонента:** ToggleDerive
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="ToggleDerive">
+        begin
+          D_PKG_CSE_ACCESSES.SET_WITH_CHILDS(pnCSE_ACCS    =&gt; :pncse_accs,
+                                             pnLPU         =&gt; :pnlpu,
+                                             psUNITCODE    =&gt; :psunitcode,
+                                             pnUNIT_ID     =&gt; :pnunit_id,
+                                             pnRIGHT       =&gt; :pnright,
+                                             pnWITH_CHILDS =&gt; :pnwith_childs);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="pncse_accs" src="PrincipalRightsetID" srctype="var" get="gPrincipalRightsetID" />
+        <component cmptype="ActionVar" name="psunitcode" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="ActionVar" name="pnunit_id" src="RecordID" srctype="var" get="gRecordID" />
+        <component cmptype="ActionVar" name="pnright" src="RightID" srctype="var" get="gRightID" />
+        <component cmptype="ActionVar" name="pnwith_childs" src="Checked" srctype="var" get="gChecked" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+---
+
+### Запрос №8
+
+**Тип компонента:** M2 Action
+**Имя компонента:** TogglePermissionAll
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="TogglePermissionAll">
+        begin
+          D_PKG_CSE_ACCESSES.SET_RIGHT(pnCSE_ACCS =&gt; -1,
+                                       pnLPU      =&gt; :pnlpu,
+                                       psUNITCODE =&gt; :psunitcode,
+                                       pnUNIT_ID  =&gt; :pnunit_id,
+                                       pnRIGHT    =&gt; :pnright,
+                                       pnIS_RIGHT =&gt; :pnis_right);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="psunitcode" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="ActionVar" name="pnunit_id" src="RecordID" srctype="var" get="gRecordID" />
+        <component cmptype="ActionVar" name="pnright" src="RightID" srctype="var" get="gRightID" />
+        <component cmptype="ActionVar" name="pnis_right" src="Checked" srctype="var" get="gChecked" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.SET_RIGHT
+
+---
+
+### Запрос №9
+
+**Тип компонента:** M2 Action
+**Имя компонента:** ToggleDeriveAll
+**Источник:** Forms/AccessRights/d_cse_accesses.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="ToggleDeriveAll">
+        begin
+          D_PKG_CSE_ACCESSES.SET_WITH_CHILDS(pnCSE_ACCS    =&gt; -1,
+                                             pnLPU         =&gt; :pnlpu,
+                                             psUNITCODE    =&gt; :psunitcode,
+                                             pnUNIT_ID     =&gt; :pnunit_id,
+                                             pnRIGHT       =&gt; :pnright,
+                                             pnWITH_CHILDS =&gt; :pnwith_childs);
+        end;
+        <component cmptype="ActionVar" name="pnlpu" src="LPU" srctype="session" />
+        <component cmptype="ActionVar" name="psunitcode" src="UnitCode" srctype="var" get="gUnitCode" />
+        <component cmptype="ActionVar" name="pnunit_id" src="RecordID" srctype="var" get="gRecordID" />
+        <component cmptype="ActionVar" name="pnright" src="RightID" srctype="var" get="gRightID" />
+        <component cmptype="ActionVar" name="pnwith_childs" src="Checked" srctype="var" get="gChecked" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
 
 
 ## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
@@ -138,12 +337,80 @@
 
 ## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠
 
-Пакетные функции для анализа не найдены.
+Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных пакетных функций: 5
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №2: D_PKG_CSE_ACCESSES.ADD_ACCS
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №3: D_PKG_CSE_ACCESSES.DEL_ACCS
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №4: D_PKG_CSE_ACCESSES.SET_RIGHT
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №5: D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
 
 
 ## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘
 
-Функции для анализа не найдены.
+Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных функций/процедур: 5
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: d_pkg_cse_accesses.get_all_rights
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №2: d_pkg_cse_accesses.add_accs
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №3: d_pkg_cse_accesses.del_accs
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №4: d_pkg_cse_accesses.set_right
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №5: d_pkg_cse_accesses.set_with_childs
+
+Тело функции/процедуры не найдено в PostgreSQL.
 
 
 
@@ -3113,296 +3380,6 @@ end;
 
 Исходник формы, который необходимо переработать:
 ```
-<FORM>
+
 ```
 Покажи только текст  переработанный  формы
-
-
----
-
-## ИСХОДНЫЙ ТЕКСТ ФОРМЫ
-
-Ниже представлен исходный XML код анализируемой формы:
-
-```xml
-<div cmptype="bogus" oncreate="base().onCreate();" onshow="base().onShow();" window_size="700x370">
-<div cmptype="title">Диета</div>
-<component cmptype="Script" name="userScriptBlock">
-    <![CDATA[
-	Form.onCreate = function()
-	{
-		setVar('ID', getVar('PRIMARY', 1));
-		setVar('CID', getVar('CID', 1));
-		setVar('ModalResult',0,1);
-	}
-	Form.onShow = function()
-	{
-		if(empty(getVar('ID')))
-		{
-			setVar('action', 'INSERT');
-			setWindowCaption('Виды планов госпитализации: добавление');
-			setValue('OPEN_DATE', new Date().toLocaleDateString('ru-RU'));
-		}
-		else
-		{
-			setVar('action', 'UPDATE');
-			setWindowCaption('Виды планов госпитализации: редактирование');
-			executeAction('selectAction');
-		}
-	}
-
-    Form.onOkButtonClick = function() {
-
-        var closeDat = !empty(getValue('CLOSE_DATE')) ? Date.parseDate(getValue('CLOSE_DATE'), '%d.%m.%Y').getTime() : false;
-        var openDat = !empty(getValue('OPEN_DATE')) ? Date.parseDate(getValue('OPEN_DATE'), '%d.%m.%Y').getTime() : 0;
-        var maxPatDat = !empty(getVar('MAX_PATDATE')) ? Date.parseDate(getVar('MAX_PATDATE'), '%d.%m.%Y').getTime() : 0;
-
-        if (closeDat && (closeDat < openDat)) {
-            showError('Дата окончания не может быть меньше даты начала.');
-            return;
-        }
-        if (closeDat && (closeDat < maxPatDat)){
-            alert('Закрытие плана госпитализации запрещено. Имеются записанные пациенты на дату больше даты закрытия плана.');
-            return;
-        } else {
-            closeDat && alert('План госпитализации будет закрыт ' + getValue('CLOSE_DATE'));
-        }
-
-        executeAction('InsertUpdateAction', base().aftertAction);
-    }
-
-	Form.aftertAction = function()
-	{
-		setVar('ModalResult', 1, 1);
-		if(getVar('action') == 'INSERT')
-			setVar('newid', getVar('NEW_ID'), 1);
-		closeWindow();
-	}
-    ]]>
-</component>
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID"                  src="ID"                      srctype="var"  get="v1"/>
-	<component cmptype="ActionVar" name="HP_CODE"             src="HP_CODE"                 srctype="ctrl" put="v2"  len="20"/>
-	<component cmptype="ActionVar" name="HP_NAME"             src="HP_NAME"                 srctype="ctrl" put="v3"  len="160"/>
-	<component cmptype="ActionVar" name="MAX_PRIOR"           src="MAX_PRIOR"               srctype="ctrl" put="v4"  len="5"/>
-	<component cmptype="ActionVar" name="MIN_AGE"             src="MIN_AGE"                 srctype="ctrl" put="v5"  len="3"/>
-	<component cmptype="ActionVar" name="MAX_AGE"             src="MAX_AGE"                 srctype="ctrl" put="v6"  len="3"/>
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" put="v7"  len="2"/>
-	<component cmptype="ActionVar" name="PAYMENT_KIND"        src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8"  len="2"/>
-	<component cmptype="ActionVar" name="HAS_LIMITS"          src="HAS_LIMITS"              srctype="ctrl" put="v9"  len="2"/>
-	<component cmptype="ActionVar" name="NUMB_GROUP"          src="NUMB_GROUP"              srctype="ctrl" put="v10" len="2"/>
-	<component cmptype="ActionVar" name="JOURNAL_TYPE"        src="JOURNAL_TYPE"            srctype="ctrl" put="v11" len="1"/>
-	<component cmptype="ActionVar" name="IS_OPER"             src="IS_OPER"                 srctype="ctrl" put="v12" len="1"/>
-	<component cmptype="ActionVar" name="OPEN_DATE"           src="OPEN_DATE"               srctype="ctrl" put="v13" len="20"/>
-	<component cmptype="ActionVar" name="CLOSE_DATE"          src="CLOSE_DATE"              srctype="ctrl" put="v14" len="20"/>
-	<component cmptype="ActionVar" name="MAX_PATDATE"         src="MAX_PATDATE"             srctype="var"  put="v15" len="10"/>
-</component>
-<component cmptype="Action" name="InsertUpdateAction" unit="HOSP_PLAN_KINDS">
-	<component cmptype="ActionVar" name="PND_INSERT_ID"             src="NEW_ID"                  srctype="var" put="v1" len="27"/>
-	<component cmptype="ActionVar" name="PNID"                      src="ID"                      srctype="var" get="v2"/>
-	<component cmptype="ActionVar" name="PNCID"                     src="CID"                     srctype="var" get="v3"/>
-	<component cmptype="ActionVar" name="PNLPU"                     src="LPU"                     srctype="session"/>
-	<component cmptype="ActionVar" name="psHP_CODE"                 src="HP_CODE"                 srctype="ctrl" get="v4"/>
-	<component cmptype="ActionVar" name="psHP_NAME"                 src="HP_NAME"                 srctype="ctrl" get="v5"/>
-	<component cmptype="ActionVar" name="pnMAX_PRIOR"               src="MAX_PRIOR"               srctype="ctrl" get="v6"/>
-	<component cmptype="ActionVar" name="pnMIN_AGE"                 src="MIN_AGE"                 srctype="ctrl" get="v7"/>
-	<component cmptype="ActionVar" name="pnMAX_AGE"                 src="MAX_AGE"                 srctype="ctrl" get="v8"/>
-	<component cmptype="ActionVar" name="pnHAS_MKB_CONSTRAINTS"     src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" get="v9"/>
-	<component cmptype="ActionVar" name="pnHAS_PAYMENT_CONSTRAINTS" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" get="v10"/>
-	<component cmptype="ActionVar" name="pnHAS_LIMITS"              src="HAS_LIMITS"              srctype="ctrl" get="v11"/>
-	<component cmptype="ActionVar" name="pnNUMB_GROUP"              src="NUMB_GROUP"              srctype="ctrl" get="v12"/>
-	<component cmptype="ActionVar" name="pnJOURNAL_TYPE"            src="JOURNAL_TYPE"            srctype="ctrl" get="v13"/>
-	<component cmptype="ActionVar" name="pnIS_OPER"                 src="IS_OPER"                 srctype="ctrl" get="v14"/>
-	<component cmptype="ActionVar" name="pdOPEN_DATE"               src="OPEN_DATE"               srctype="ctrl" get="v15"/>
-	<component cmptype="ActionVar" name="pdCLOSE_DATE"              src="CLOSE_DATE"              srctype="ctrl" get="v16"/>
-	<component cmptype="ActionVar" name="action"                    src="action"                  srctype="var"  get="action"/>
-</component>
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
-<table style="width:100%">
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Код: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_CODE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Наименование: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_NAME" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Предварительная запись (дней): "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_PRIOR" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Группа сквозной нумерации: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="NUMB_GROUP" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип журнала: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="JOURNAL_TYPE" width="100%">
-				<component cmptype="ComboItem" captionfield="JT_NAME" datafield="JT_CODE" dataset="DS_HPK_JOURNAL_TYPES" repeate="0"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип оперативности: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="IS_OPER" width="100%">
-				<component cmptype="ComboItem" caption="Консервативный" value="0" activ="true"/>
-				<component cmptype="ComboItem" caption="Оперативный" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr  name="userViewDataOpenBlock">
-	    <td style="padding:1pt;">
-        	<component cmptype="Label" caption="Дата начала:"/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="OPEN_DATE" width="100%" />
-        </td>
-	</tr>
-    <tr name="userViewDataCloseBlock">
-        <td style="padding:1pt;">
-            <component cmptype="Label" caption="Дата окончания: "/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="CLOSE_DATE" width="100%" />
-
-        </td>
-    </tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Возраст"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Минимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MIN_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Максимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Ограничения"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По записи: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_LIMITS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По диагнозу: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_MKB_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По виду оплаты: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_PAYMENT_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="text-align:right;padding:1pt;" colspan="2">
-			<component cmptype="Button" caption="Ок" name="OkButton" onclick="base().onOkButtonClick();"/>
-			<component cmptype="Button" caption="Отмена" onclick="closeWindow();"/>
-		</td>
-	</tr>
-</table>
-<component cmptype="DepControls" name='viewDepControls' requireds="HP_CODE;HP_NAME;NUMB_GROUP;OPEN_DATE" dependents="OkButton"/>
-</div>
-
-```
-

@@ -1,4 +1,4 @@
-# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/HospitPlanning/hosp_plan_kinds_edit.frm
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/Schedules/schedules_edit_hp.frm
 
 > **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
 
@@ -6,12 +6,12 @@
 
 Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
 
-**Анализируемая форма:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Анализируемая форма:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Tue May 19 13:18:36 GMT+07:00 2026
+**Дата генерации:** Tue May 19 13:13:06 GMT+07:00 2026
 
 ---
 
@@ -21,7 +21,7 @@
 Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
 
 **Статистика:**
-- Всего SQL запросов: 2
+- Всего SQL запросов: 13
 - Всего форм: 1
 
 ---
@@ -29,86 +29,1528 @@
 ### Запрос №1
 
 **Тип компонента:** M2 DataSet
-**Имя компонента:** DS_HPK_JOURNAL_TYPES
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Имя компонента:** DS_WEEKS
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
+<component cmptype="DataSet" name="DS_WEEKS" activateoncreate="false" compile="true">
+		<![CDATA[
+		select level week_num,
+			@if (:s_type==2) {
+               case when level=1 then 'Для нечетных дней' else 'Для четных дней' end week_num_caption
+            @} else {
+               'Неделя №'||level week_num_caption
+            @}
+          from DUAL
+		 connect by level <= (select ceil(max(DAY_NUMBER) / 7)
+	                		    from D_V_SCHEDULESP ss
+	                           where ss.PID = :sch_id)
+		]]>
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="s_type" get="s_type" src="schedule_type" srctype="ctrl" />
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_JOURNAL_TYPES
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP
 
 ---
 
 ### Запрос №2
 
-**Тип компонента:** M2 Action
-**Имя компонента:** selectAction
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAYS
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID" src="ID" srctype="var" get="v1" />
-	<component cmptype="ActionVar" name="HP_CODE" src="HP_CODE" srctype="ctrl" put="v2" len="20" />
-	<component cmptype="ActionVar" name="HP_NAME" src="HP_NAME" srctype="ctrl" put="v3" len="160" />
-	<component cmptype="ActionVar" name="MAX_PRIOR" src="MAX_PRIOR" srctype="ctrl" put="v4" len="5" />
-	<component cmptype="ActionVar" name="MIN_AGE" src="MIN_AGE" srctype="ctrl" put="v5" len="3" />
-	<component cmptype="ActionVar" name="MAX_AGE" src="MAX_AGE" srctype="ctrl" put="v6" len="3" />
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS" srctype="ctrl" put="v7" len="2" />
-	<component cmptype="ActionVar" name="PAYMENT_KIND" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8" len="2" />
-	<component cmptype="ActionVar" name="HAS_LIMITS" src="HAS_LIMITS" srctype="ctrl" put="v9" len="2" />
-	<component cmptype="ActionVar" name="NUMB_GROUP" src="NUMB_GROUP" srctype="ctrl" put="v10" len="2" />
-	<component cmptype="ActionVar" name="JOURNAL_TYPE" src="JOURNAL_TYPE" srctype="ctrl" put="v11" len="1" />
-	<component cmptype="ActionVar" name="IS_OPER" src="IS_OPER" srctype="ctrl" put="v12" len="1" />
-	<component cmptype="ActionVar" name="OPEN_DATE" src="OPEN_DATE" srctype="ctrl" put="v13" len="20" />
-	<component cmptype="ActionVar" name="CLOSE_DATE" src="CLOSE_DATE" srctype="ctrl" put="v14" len="20" />
-	<component cmptype="ActionVar" name="MAX_PATDATE" src="MAX_PATDATE" srctype="var" put="v15" len="10" />
-</component>
+<component cmptype="DataSet" name="DS_DAYS" activateoncreate="false">
+		<![CDATA[
+		select level day_num,
+		       case level
+                     when 1 then 'Пн.'
+                     when 2 then 'Вт.'
+                     when 3 then 'Ср.'
+                     when 4 then 'Чт.'
+                     when 5 then 'Пт.'
+                     when 6 then 'Сб.'
+                     when 7 then 'Вс.'
+                end day_name
+		  from DUAL
+		 connect by level <= 7
+		]]>
+	</component>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_PLANS, D_V_HOSP_PLAN_KINDS
+
+---
+
+### Запрос №3
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAYS_CHN
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DS_DAYS_CHN" activateoncreate="false">
+		<![CDATA[
+		select level day_num,1 week_num,
+        		   case level
+                  when 1 then 'Нечет.'
+                  when 2 then 'Чет.'
+               end day_name
+          from DUAL
+        connect by level <= 2
+		]]>
+	</component>
+```
+
+
+---
+
+### Запрос №4
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAYS_MONTH
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DS_DAYS_MONTH" activateoncreate="false">
+		select sp.DAY_NUMBER DAY_NUM,
+               1 WEEK_NUM,
+			   sp.ID DAY_ID
+		  from D_V_SCHEDULESP sp
+		 where sp.PID = :sch_id
+		order by sp.day_number
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="schedule_type" get="schedule_type" src="schedule_type" srctype="ctrl" />
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP
+
+---
+
+### Запрос №5
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_WEEK
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DS_WEEK" activateoncreate="false">
+            select 1 week_num
+            from dual
+	</component>
+```
+
+
+---
+
+### Запрос №6
+
+**Тип компонента:** M2 DataSet
+**Имя компонента:** DS_DAY_TIMES
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="DataSet" name="DS_DAY_TIMES" activateoncreate="false" compile="true">
+		select
+			@if ( (:schedule_type==4)||(:schedule_type==3)) {
+		       sp.day_number
+            @} else {
+               mod(sp.day_number-1, 7)+1
+            @}
+               day_num,
+            @if ((:schedule_type==4)||(:schedule_type==3)) {
+               1
+            @} else {
+               ceil(sp.day_number/7)
+            @}
+               week_num,
+		       sp.ID DAY_ID,
+               nvl(dt.TIME_TYPE, -1) TIME_TYPE,
+               nvl(dt.TIME_NAME,'Интервал Квотирования') TIME_NAME,
+               dt.ID,
+		       to_char(dt.TIME_BEGIN, 'hh24:mi') TIME_BEGIN,
+               to_char(dt.TIME_END, 'hh24:mi') TIME_END,
+               dt.STEP,
+               dt.LIMITS
+		  from D_V_SCHEDULESP_TIMES dt
+		       join D_V_SCHEDULESP sp on sp.ID = dt.PID
+		 where sp.PID = :sch_id
+	  order by sp.DAY_NUMBER, TIME_BEGIN
+		<component cmptype="Variable" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="Variable" name="schedule_type" get="schedule_type" src="schedule_type" srctype="ctrl" />
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_SCHEDULESP_TIMES, D_V_SCHEDULESP
+
+---
+
+### Запрос №7
+
+**Тип компонента:** M2 Action
+**Имя компонента:** Init
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="Init">
+		<![CDATA[
+			begin
+			  begin
+			  	select sch.ID,
+			  		   sch.NAME,
+			  		   sch.CODE,
+			  		   to_char(sch.START_DATE, 'dd.mm.yyyy'),
+			  		   sch.sch_type,
+			  		   sch.QUOTING
+			  	  into :sch_id,
+			  		   :sch_name,
+			  		   :sch_code,
+			  		   :sch_start_date,
+			  		   :sch_type,
+			  		   :QUOTING
+			  	  from D_V_SCHEDULE sch
+			  	 where sch.ID = :sch_id;
+			  exception when NO_DATA_FOUND then
+				:sch_name       := '';
+				:sch_code       := '';
+				:sch_start_date := '';
+				:sch_type	    := '';
+			  end;
+
+			  if :sch_type=3 then
+			    select count(1)
+				  into :PERIOD
+				  from D_V_schedulesp t
+				 where t.pid = :sch_id;
+              else
+                :PERIOD := null;
+              end if;
+			end;
+		]]>
+		<component cmptype="ActionVar" name="sch_id" get="sch_id" src="ScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="sch_name" put="sch_name" len="256" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_code" put="sch_code" len="60" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_start_date" put="sch_start_date" len="10" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="sch_start_date" put="sch_st_d2" len="10" src="start_date" srctype="var" />
+		<component cmptype="ActionVar" name="sch_type" put="sch_type" len="1" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" put="QUOTING" len="1" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="PERIOD" put="PERIOD" len="2" src="PERIOD" srctype="ctrl" />
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_SCHEDULE, D_V_SCHEDULESP
+
+---
+
+### Запрос №8
+
+**Тип компонента:** M2 Action
+**Имя компонента:** TimeName
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="TimeName" mode="post">
+        <![CDATA[
+            begin
+                :WEEKDAY := D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM(:pdstart_date);
+            end;
+        ]]>
+        <component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+        <component cmptype="ActionVar" name="WEEKDAY" put="WEEKDAY" src="WEEKDAY" srctype="var" />
+    </component>
+```
+
+**Используемые пакеты/функции:** D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM
+
+---
+
+### Запрос №9
+
+**Тип компонента:** M2 Action
+**Имя компонента:** AddEditSchedule
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="AddEditSchedule" mode="post">
+		<![CDATA[
+			declare sholidays  varchar2(7);
+			begin
+			  sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			  begin
+			    select sch.id
+			      into :ScheduleId
+			      from D_V_SCHEDULE sch
+			     where sch.id = :updScheduleId;
+
+				D_PKG_SCHEDULE.UPD(pnID         => :updScheduleId,
+				  				   pnLPU        => :pnlpu,
+				  				   psCODE       => :pscode,
+				  				   psNAME       => :psname,
+				  		           pdSTART_DATE => :pdstart_date,
+                                   pnSCH_TYPE   => :sch_type,
+                                   psHOLIDAYS   => sholidays,
+                                   pnQUOTING    => :QUOTING);
+
+			  exception when NO_DATA_FOUND then
+
+			  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID => :ScheduleId,
+		 		  				 pnLPU         => :pnlpu,
+				  				 pnCID         => :pncid,
+				  				 psCODE        => :pscode,
+				  			     psNAME        => :psname,
+				  				 pdSTART_DATE  => :pdstart_date,
+				  				 pnSCH_TYPE    => :sch_type,
+				  				 psHOLIDAYS    => sholidays,
+				  				 pnQUOTING     => :QUOTING,
+                                 pnSCH_KIND    => 1);
+		      end;
+            end;
+		]]>
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		
+		<component cmptype="SubAction" name="UpdWeek" groupname="weeks" type="upd">
+			<component cmptype="SubActionVar" name="week_num" get="week_num" src="weeks" srctype="ctrl" />
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+			<component cmptype="SubAction" name="AddDay" groupname="days" type="upd">
+				<![CDATA[
+					begin
+				  		begin
+				   			select sp.id
+				   			  into :day_id
+				              from D_V_SCHEDULESP sp
+				             where sp.pid = :pnsch_id
+				               and sp.day_number = (:week_num - 1) * 7 + to_number(:day_num);
+				  			exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id => :day_id,
+				                                          pnlpu => :pnlpu,
+				                                          pnpid => :pnsch_id,
+				                                   pnday_number => (:week_num - 1) * 7 + to_number(:day_num),
+				                                   pdtime_begin => null,
+				                                     pdtime_end => null);
+				  		end;
+					end;
+			 	]]>
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="week_num" get="week_num" put="week_num" src="week_num" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+				<component cmptype="SubAction" name="DelTimeType" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime" groupname="day_times" type="del">
+						begin
+						  D_PKG_SCHEDULESP_TIMES.DEL(pnID =&gt; :pnid,
+						                             pnLPU =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+
+				<component cmptype="SubAction" name="UpdTimeType" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                            pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime" groupname="day_times" type="upd">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+					   		if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type := :pntime_type;
+						    end if;
+							D_PKG_SCHEDULESP_TIMES.UPD_S(pnID        => :pnid,
+						                                pnLPU        => :pnlpu,
+						                                psTIME_BEGIN => :pstime_begin,
+						                                psTIME_END   => :pstime_end,
+						                                pnTIME_TYPE  => nTime_type,
+						                                pnGEN_ERROR  => 0,
+                                                        vAPI_VERSION => 2,
+                                                        pnSTEP       => :STEP,
+                                                        pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						 	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type:=:pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="day_times" srctype="ctrl" put="" len="17" />
+					</component>
+
+				</component>
+				<component cmptype="SubAction" name="AddTimeType" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						  	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type:=:pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+		</component>
+
+		
+		<component cmptype="SubAction" name="AddWeek" groupname="weeks" type="add">
+			<![CDATA[
+            declare
+            	nDAY_NUMBER NUMBER;
+            begin
+                select ceil(max(ss.DAY_NUMBER)/7)
+                  into nDAY_NUMBER
+                  from D_V_SCHEDULESP ss
+                 where ss.PID = :SCHEDULEID;
+
+            	if (nDAY_NUMBER is null) then
+            		:week_num := 1;
+            	else
+            		:week_num := nDAY_NUMBER + 1;
+            	end if;
+            end;
+			]]>
+			<component cmptype="SubActionVar" name="week_num" put="week_num" src="week_num" srctype="var" len="5" />
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+			<component cmptype="SubAction" name="AddDay" groupname="days" type="upd">
+				begin
+				  	begin
+				   		select sp.id
+				          into :day_id
+				          from d_v_schedulesp sp
+				         where sp.pid = :pnsch_id
+				           and sp.day_number = (:week_num - 1) * 7 + to_number(:day_num);
+				  		exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id =&gt; :day_id,
+				                                          pnlpu =&gt; :pnlpu,
+				                                          pnpid =&gt; :pnsch_id,
+				                                   pnday_number =&gt; (:week_num - 1) * 7 + to_number(:day_num),
+				                                   pdtime_begin =&gt; null,
+				                                     pdtime_end =&gt; null);
+				  	end;
+				end;
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="week_num" get="week_num" src="week_num" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+			   	<component cmptype="SubAction" name="AddTimeType" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="AddTime" groupname="day_times" type="add">
+                        <![CDATA[
+						declare nTime_type NUMBER(17);
+						begin
+						  	if :QUOTING=1 then
+								nTime_type := null;
+							else
+								nTime_type := :pntime_type;
+							end if;
+						  	D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                                 pnLPU         => :pnlpu,
+						                                 pnPID         => :pnpid,
+						                                 psTIME_BEGIN  => :pstime_begin,
+						                                 psTIME_END    => :pstime_end,
+						                                 pnTIME_TYPE   => nTime_type,
+						                                 pnGEN_ERROR   => 0,
+                                                         pnSTEP        => :STEP,
+                                                         pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+						<component cmptype="SubActionVar" name="QUOTING" src="QUOTING" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+		</component>
+
+		
+		<component cmptype="SubAction" name="DelWeek" groupname="weeks" type="del">
+			begin
+			  d_pkg_schedule.del_last_week(pnid =&gt; :ScheduleId,
+			                              pnlpu =&gt; :pnlpu,
+			                           pnnumber =&gt; :week_num);
+			end;
+			<component cmptype="SubActionVar" name="week_num" src="weeks" get="week_num" srctype="ctrl" />
+			<component cmptype="SubActionVar" name="ScheduleId" src="ScheduleId" get="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+		</component>
+
+		
+		<component cmptype="SubAction" name="CheckSchedule" mode="execlast">
+			  begin
+				D_PKG_SCHEDULE.CHECK_INTERVAL(:sch_id, :lpu_id);
+			    for schedule in (select c.ID,
+			                            c.IS_SUBST,
+			                            c.LPU,
+			                            c.EMPLOYER,
+			                            c.CABLAB,
+			                            c.DBEGIN,
+			                            c.DEND
+			                       from D_V_CLSCHS_BASE c
+			                      where c.SCHEDULE = :sch_id
+			                        and c.LPU = :lpu_id)
+			    loop
+			      if schedule.IS_SUBST in (0,2) then
+				    for subst in (select cl.ID
+			                        from D_V_CLSCHS_BASE cl
+			                       where cl.LPU = schedule.LPU
+			                         and cl.CABLAB = schedule.CABLAB
+			                         and cl.EMPLOYER = schedule.EMPLOYER
+			                         and cl.CLSCH_TYPE = 0
+			                         and cl.IS_SUBST = 1
+			                         and schedule.DEND  between cl.DBEGIN and coalesce(cl.DEND, to_date('31.12.2999', 'DD.MM.YYYY'))
+			                     )
+			        loop
+			          D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, subst.ID, 1);
+			          D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, subst.ID);
+			        end loop;
+			        D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, schedule.ID, 1);
+			        D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, schedule.ID);
+			      end if;
+			    end loop;
+			  end;
+			<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+			<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+		</component>
+	</component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_SCHEDULE
+**Используемые пакеты/функции:** D_PKG_SCHEDULE.UPD, D_PKG_SCHEDULE.ADD
+
+---
+
+### Запрос №10
+
+**Тип компонента:** M2 Action
+**Имя компонента:** AddEditSchedule_chn
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="AddEditSchedule_chn" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+				  from d_v_schedule sch
+				 where sch.id = :updScheduleId;
+
+			    D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+
+				  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_CHN" groupname="week_chn">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="AddDay_CHN" groupname="days_chn" type="upd">
+				begin
+			  		begin
+			    		select sp.id
+				          into :day_id
+				          from d_v_schedulesp sp
+				         where sp.pid = :pnsch_id
+				           and sp.day_number = :day_num;
+				   		exception when NO_DATA_FOUND then
+				   			d_pkg_schedulesp.add( pnd_insert_id =&gt; :day_id,
+				                                          pnlpu =&gt; :pnlpu,
+				                                          pnpid =&gt; :pnsch_id,
+				                                   pnday_number =&gt; :day_num,
+				                                   pdtime_begin =&gt; null,
+				                                     pdtime_end =&gt; null);
+			  		end;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="days_chn" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_CHN" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" get="nid" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_CHN" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+													  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="insert_id" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_CHN" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_CHN1" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                             pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				  begin
+					D_PKG_SCHEDULE.CHECK_INTERVAL(:sch_id, :lpu_id);
+				    for schedule in (select c.ID,
+				                            c.IS_SUBST,
+				                            c.LPU,
+				                            c.EMPLOYER,
+				                            c.CABLAB,
+				                            c.DBEGIN,
+				                            c.DEND
+				                       from D_V_CLSCHS_BASE c
+				                      where c.SCHEDULE = :sch_id
+				                        and c.LPU = :lpu_id)
+				    loop
+				      if schedule.IS_SUBST in (0,2) then
+				        for subst in (select cl.ID
+				                        from D_V_CLSCHS_BASE cl
+				                       where cl.LPU = schedule.LPU
+				                         and cl.CABLAB = schedule.CABLAB
+				                         and cl.EMPLOYER = schedule.EMPLOYER
+				                         and cl.CLSCH_TYPE = 0
+				                         and cl.IS_SUBST = 1
+				                         and schedule.DEND between cl.DBEGIN and coalesce(cl.DEND, to_date('31.12.2999', 'DD.MM.YYYY'))
+				                     )
+				        loop
+				          D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, subst.ID, 1);
+				          D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, subst.ID);
+				        end loop;
+				        D_PKG_TIMETABLE.CLEAR_TIMETABLE(:lpu_id, schedule.ID, 1);
+				        D_PKG_TIMETABLE.GEN_TIMETABLE(:lpu_id, schedule.ID);
+				      end if;
+				    end loop;
+				  end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
+```
+
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
+
+---
+
+### Запрос №11
+
+**Тип компонента:** M2 Action
+**Имя компонента:** AddEditScheduleMonth
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="AddEditScheduleMonth" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+				  from d_v_schedule sch
+				 where sch.id = :updScheduleId;
+
+			    D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+				  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_MON" groupname="week_for_mon">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="UpdDay_MON" groupname="days_for_mon" type="upd">
+				begin
+			    	select sp.id
+				      into :day_id
+				      from d_v_schedulesp sp
+				     where sp.pid = :pnsch_id
+				       and sp.day_number = :day_old;
+
+				       d_pkg_schedulesp.upd(pnid =&gt; :day_id,
+				                         pnlpu =&gt; :pnlpu,
+				                 		 pnday_number =&gt; :day_num,
+				                 		 pdtime_begin =&gt; null,
+				                    	 pdtime_end =&gt; null);
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="day_old" get="day_old" src="DAY_NUM_FOR_MON_OLD" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" src="DAY_NUM_FOR_MON" srctype="ctrl" />
+
+				<component cmptype="SubAction" name="AddTimeType_MON" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_CHN" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_CHN" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="insert_id" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_MON" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_MON" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+                                                      pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_MON" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_MON" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+						                               pnLPU         => :pnlpu,
+						                               pnPID         => :pnpid,
+						                               psTIME_BEGIN  => :pstime_begin,
+						                               psTIME_END    => :pstime_end,
+						                               pnTIME_TYPE   => :pntime_type,
+						                               pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_MON" groupname="time_types" type="del">
+
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_MON1" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                              pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="AddDay_MON" groupname="days_for_mon" type="add">
+				begin
+					if :day_num is not null then
+						d_pkg_schedulesp.add(pnd_insert_id =&gt; :day_id,
+                                                     pnlpu =&gt; :pnlpu,
+                                                     pnpid =&gt; :pnsch_id,
+                                              pnday_number =&gt; :day_num,
+                                              pdtime_begin =&gt; null,
+                                                pdtime_end =&gt; null);
+				   else
+						:day_id:=null;
+				   end if;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM_FOR_MON" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_MON" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="AddTime_CHN" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+							if :pnpid is not null then
+								D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                             pnLPU         => :pnlpu,
+                                                             pnPID         => :pnpid,
+                                                             psTIME_BEGIN  => :pstime_begin,
+                                                             psTIME_END    => :pstime_end,
+                                                             pnTIME_TYPE   => :pntime_type,
+                                                             pnGEN_ERROR   => 0,
+                                                             pnSTEP        => :STEP,
+                                                             pnLIMITS      => :LIMITS);
+							end if;
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="DelDay_MON" groupname="days_for_mon" type="del">
+				declare day_id NUMBER(17);
+				begin
+				 	select sp.id
+				      into day_id
+				      from d_v_schedulesp sp
+				     where sp.pid = :pnsch_id
+				       and sp.day_number = :day_num;
+					d_pkg_schedulesp.del(day_id,:pnlpu);
+				end;
+				<component cmptype="SubActionVar" name="day_num" get="day_num" src="days_for_mon" srctype="ctrl" len="17" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+			 </component>
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				begin
+					d_pkg_schedule.check_interval(:sch_id, :lpu_id);
+				end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
+```
+
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
+
+---
+
+### Запрос №12
+
+**Тип компонента:** M2 Action
+**Имя компонента:** AddEditScheduleSk
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="AddEditScheduleSk" mode="post">
+		declare
+   			sholidays  varchar2(7);
+  		begin
+			sholidays := :MON_HOLIDAY||:TUE_HOLIDAY||:WED_HOLIDAY||:THU_HOLIDAY||:FRI_HOLIDAY||:SAT_HOLIDAY||:SUN_HOLIDAY;
+			begin
+				select sch.id
+		          into :ScheduleId
+			  	  from d_v_schedule sch
+			 	 where sch.id = :updScheduleId;
+
+			   	D_PKG_SCHEDULE.UPD(pnID         =&gt; :updScheduleId,
+				  				   pnLPU        =&gt; :pnlpu,
+				  				   psCODE       =&gt; :pscode,
+				  				   psNAME       =&gt; :psname,
+				  		           pdSTART_DATE =&gt; :pdstart_date,
+                                   pnSCH_TYPE   =&gt; :sch_type,
+                                   psHOLIDAYS   =&gt; sholidays,
+                                   pnQUOTING    =&gt; :QUOTING);
+
+				exception when NO_DATA_FOUND then
+                  D_PKG_SCHEDULE.ADD(pnD_INSERT_ID =&gt; :ScheduleId,
+                                     pnLPU         =&gt; :pnlpu,
+                                     pnCID         =&gt; :pncid,
+                                     psCODE        =&gt; :pscode,
+                                     psNAME        =&gt; :psname,
+                                     pdSTART_DATE  =&gt; :pdstart_date,
+                                     pnSCH_TYPE    =&gt; :sch_type,
+                                     psHOLIDAYS    =&gt; sholidays,
+                                     pnQUOTING     =&gt; :QUOTING,
+                                     pnSCH_KIND    =&gt; 1);
+			end;
+		end;
+
+		<component cmptype="ActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+		<component cmptype="ActionVar" name="pscode" get="scode" src="schedule_code" srctype="ctrl" />
+		<component cmptype="ActionVar" name="psname" get="sname" src="schedule_name" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pdstart_date" get="dstart_date" src="start_date" srctype="ctrl" />
+		<component cmptype="ActionVar" name="pncid" get="ncid" src="CatalogId" srctype="var" />
+		<component cmptype="ActionVar" name="updScheduleId" get="getScheduleId" src="UpdScheduleId" srctype="var" />
+		<component cmptype="ActionVar" name="ScheduleId" put="ScheduleId" src="ScheduleId" srctype="var" len="17" />
+		<component cmptype="ActionVar" name="sch_type" get="sch_type" src="schedule_type" srctype="ctrl" />
+		<component cmptype="ActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="ctrl" />
+		<component cmptype="ActionVar" name="MON_HOLIDAY" get="MON_HOLIDAY" src="MON_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="TUE_HOLIDAY" get="TUE_HOLIDAY" src="TUE_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="WED_HOLIDAY" get="WED_HOLIDAY" src="WED_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="THU_HOLIDAY" get="THU_HOLIDAY" src="THU_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="FRI_HOLIDAY" get="FRI_HOLIDAY" src="FRI_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SAT_HOLIDAY" get="SAT_HOLIDAY" src="SAT_HOLIDAY" srctype="ctrl" />
+		<component cmptype="ActionVar" name="SUN_HOLIDAY" get="SUN_HOLIDAY" src="SUN_HOLIDAY" srctype="ctrl" />
+		
+		<component cmptype="SubAction" name="ForUpdate_SK" groupname="week_for_sk">
+			
+			<component cmptype="SubActionVar" name="ScheduleId" get="ScheduleId" src="ScheduleId" srctype="parent" />
+
+			<component cmptype="SubAction" name="DelDay_SK" groupname="days_for_sk" type="del">
+				begin
+					d_pkg_schedulesp.del(:day_id,:pnlpu);
+				end;
+				<component cmptype="SubActionVar" name="day_id" get="day_id" src="days_for_sk" srctype="ctrl" len="17" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+			 </component>
+			<component cmptype="SubAction" name="UpdDay_SK" groupname="days_for_sk" type="upd">
+				begin
+				   d_pkg_schedulesp.upd(pnid =&gt; :day_id,
+				                       pnlpu =&gt; :pnlpu,
+				                pnday_number =&gt; :day_num,
+				                pdtime_begin =&gt; null,
+				                  pdtime_end =&gt; null);
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" get="days_for_sk" src="days_for_sk" srctype="ctrl" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM" srctype="ctrlcaption" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_SK" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_SK" groupname="day_times" type="del">
+						begin
+					  		d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+					                                  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_SK" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+                        <![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                       pnLPU         => :pnlpu,
+                                                       pnPID         => :pnpid,
+                                                       psTIME_BEGIN  => :pstime_begin,
+                                                       psTIME_END    => :pstime_end,
+                                                       pnTIME_TYPE   => :pntime_type,
+                                                       pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="UpdTimeType_SK" groupname="time_types" type="upd">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="DelTime_MON" groupname="day_times" type="del">
+						begin
+						  	d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+													  pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+
+					<component cmptype="SubAction" name="UpdTime_SK" groupname="day_times" type="upd">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.UPD_S(pnID         => :pnid,
+						                               pnLPU        => :pnlpu,
+						                               psTIME_BEGIN => :pstime_begin,
+						                               psTIME_END   => :pstime_end,
+						                               pnTIME_TYPE  => :pntime_type,
+						                               pnGEN_ERROR  => 0,
+                                                       vAPI_VERSION => 2,
+                                                       pnSTEP       => :STEP,
+                                                       pnLIMITS     => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+					</component>
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+					  	  D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                       pnLPU         => :pnlpu,
+                                                       pnPID         => :pnpid,
+                                                       psTIME_BEGIN  => :pstime_begin,
+                                                       psTIME_END    => :pstime_end,
+                                                       pnTIME_TYPE   => :pntime_type,
+                                                       pnGEN_ERROR   => 0,
+                                                       pnSTEP        => :STEP,
+                                                       pnLIMITS      => :LIMITS);
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" en="17" />
+					</component>
+				</component>
+				<component cmptype="SubAction" name="DelTimeType_SK" groupname="time_types" type="del">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+					<component cmptype="SubActionVar" name="QUOTING" get="QUOTING" src="QUOTING" srctype="parent" />
+
+					<component cmptype="SubAction" name="DelTime_SK1" groupname="day_times" type="del">
+						begin
+						  d_pkg_schedulesp_times.del(pnid =&gt; :pnid,
+						                            pnlpu =&gt; :pnlpu);
+						end;
+						<component cmptype="SubActionVar" name="pnid" get="nid" src="day_times" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+					</component>
+				</component>
+			</component>
+			<component cmptype="SubAction" name="AddDay_SK" groupname="days_for_sk" type="add">
+				begin
+					if :day_num is not null then
+						d_pkg_schedulesp.add(pnd_insert_id =&gt; :day_id,
+                                                     pnlpu =&gt; :pnlpu,
+                                                     pnpid =&gt; :pnsch_id,
+                                              pnday_number =&gt; :day_num,
+                                              pdtime_begin =&gt; null,
+                                                pdtime_end =&gt; null);
+				   else
+						:day_id := null;
+				   end if;
+				end;
+
+				<component cmptype="SubActionVar" name="day_id" put="day_id" src="day_id" srctype="var" len="17" />
+				<component cmptype="SubActionVar" name="day_num" get="day_num" put="day_num" src="DAY_NUM" srctype="ctrlcaption" />
+				<component cmptype="SubActionVar" name="pnlpu" get="lpu" src="LPU" srctype="session" />
+				<component cmptype="SubActionVar" name="pnsch_id" get="sch_id" src="ScheduleId" srctype="parent" />
+
+				<component cmptype="SubAction" name="AddTimeType_SK" groupname="time_types" type="add">
+					<component cmptype="SubActionVar" name="day_id" get="day_id" src="day_id" srctype="parent" />
+					<component cmptype="SubActionVar" name="time_type" get="time_type" src="TimeTypeName" srctype="ctrl" />
+
+					<component cmptype="SubAction" name="AddTime_SK" groupname="day_times" type="add">
+						<![CDATA[
+						begin
+							if :pnpid is not null then
+								D_PKG_SCHEDULESP_TIMES.ADD_S(pnD_INSERT_ID => :pnd_insert_id,
+                                                             pnLPU         => :pnlpu,
+                                                             pnPID         => :pnpid,
+                                                             psTIME_BEGIN  => :pstime_begin,
+                                                             psTIME_END    => :pstime_end,
+                                                             pnTIME_TYPE   => :pntime_type,
+                                                             pnGEN_ERROR   => 0,
+                                                             pnSTEP        => :STEP,
+                                                             pnLIMITS      => :LIMITS);
+							end if;
+						end;
+                        ]]>
+						<component cmptype="SubActionVar" name="pnlpu" src="LPU" srctype="session" />
+						<component cmptype="SubActionVar" name="pnpid" src="day_id" srctype="parent" />
+						<component cmptype="SubActionVar" name="pstime_begin" src="TimeBegin" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pstime_end" src="TimeEnd" srctype="ctrl" />
+                        <component cmptype="SubActionVar" name="STEP" src="eStep" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="LIMITS" src="eLimits" srctype="ctrl" />
+						<component cmptype="SubActionVar" name="pntime_type" src="time_type" srctype="parent" />
+                        <component cmptype="SubActionVar" name="pnd_insert_id" src="TimeInsertId" srctype="var" put="" len="17" />
+					</component>
+				</component>
+			</component>
+
+			
+			<component cmptype="SubAction" name="CheckSchedule_CHN" mode="execlast">
+				begin
+					d_pkg_schedule.check_interval(:sch_id, :lpu_id);
+				end;
+				<component cmptype="SubActionVar" name="sch_id" get="ScheduleId" src="ScheduleId" srctype="parent" />
+				<component cmptype="SubActionVar" name="lpu_id" get="lpu" src="LPU" srctype="session" />
+			</component>
+		</component>
+	</component>
+```
+
+**Используемые пакеты/функции:** D_PKG_SCHEDULESP_TIMES.UPD_S
+
+---
+
+### Запрос №13
+
+**Тип компонента:** M2 Action
+**Имя компонента:** checkForWarning
+**Источник:** Forms/Schedules/schedules_edit_hp.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\schedules_edit_hp.frm
+
+**SQL код:**
+
+```xml
+<component cmptype="Action" name="checkForWarning">
+        <![CDATA[
+        begin
+            select case
+                       when exists(
+                               select null
+                                 from D_V_CLSCHS_BASE cb
+                                      join D_V_DIRECTION_SERVICES_BASE ds on ds.CABLAB_TO = cb.CABLAB
+                                                                         and ds.REC_DATE >= cb.DBEGIN
+                                                                         and (ds.REC_DATE <= cb.DEND or cb.DEND is null)
+                                                                         and (cb.EMPLOYER is null or cb.EMPLOYER = ds.EMPLOYER_TO)
+                                                                         and (cb.SERVICE is null or cb.SERVICE = ds.SERVICE)
+                                where cb.SCHEDULE = :SCHEDULE_ID) then 1
+                       else 0
+                       end SERVICES_COUNT
+              into :SERVICES_COUNT
+              from dual;
+        end;
+        ]]>
+        <component cmptype="ActionVar" name="SCHEDULE_ID" src="ScheduleId" srctype="var" get="sch_id" />
+        <component cmptype="ActionVar" name="SERVICES_COUNT" src="SERVICES_COUNT" srctype="var" put="pSERVICES_COUNT" len="17" />
+    </component>
+```
+
+**Используемые таблицы/вьюхи:** D_V_CLSCHS_BASE, D_V_DIRECTION_SERVICES_BASE
 
 
 ## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
@@ -138,12 +1580,68 @@
 
 ## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠
 
-Пакетные функции для анализа не найдены.
+Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных пакетных функций: 4
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №2: D_PKG_SCHEDULE.UPD
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №3: D_PKG_SCHEDULE.ADD
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №4: D_PKG_SCHEDULESP_TIMES.UPD_S
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
 
 
 ## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘
 
-Функции для анализа не найдены.
+Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных функций/процедур: 4
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: d_pkg_dat_tools.get_week_day_num
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №2: d_pkg_schedule.upd
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №3: d_pkg_schedule.add
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №4: d_pkg_schedulesp_times.upd_s
+
+Тело функции/процедуры не найдено в PostgreSQL.
 
 
 
@@ -3113,296 +4611,6 @@ end;
 
 Исходник формы, который необходимо переработать:
 ```
-<FORM>
+
 ```
 Покажи только текст  переработанный  формы
-
-
----
-
-## ИСХОДНЫЙ ТЕКСТ ФОРМЫ
-
-Ниже представлен исходный XML код анализируемой формы:
-
-```xml
-<div cmptype="bogus" oncreate="base().onCreate();" onshow="base().onShow();" window_size="700x370">
-<div cmptype="title">Диета</div>
-<component cmptype="Script" name="userScriptBlock">
-    <![CDATA[
-	Form.onCreate = function()
-	{
-		setVar('ID', getVar('PRIMARY', 1));
-		setVar('CID', getVar('CID', 1));
-		setVar('ModalResult',0,1);
-	}
-	Form.onShow = function()
-	{
-		if(empty(getVar('ID')))
-		{
-			setVar('action', 'INSERT');
-			setWindowCaption('Виды планов госпитализации: добавление');
-			setValue('OPEN_DATE', new Date().toLocaleDateString('ru-RU'));
-		}
-		else
-		{
-			setVar('action', 'UPDATE');
-			setWindowCaption('Виды планов госпитализации: редактирование');
-			executeAction('selectAction');
-		}
-	}
-
-    Form.onOkButtonClick = function() {
-
-        var closeDat = !empty(getValue('CLOSE_DATE')) ? Date.parseDate(getValue('CLOSE_DATE'), '%d.%m.%Y').getTime() : false;
-        var openDat = !empty(getValue('OPEN_DATE')) ? Date.parseDate(getValue('OPEN_DATE'), '%d.%m.%Y').getTime() : 0;
-        var maxPatDat = !empty(getVar('MAX_PATDATE')) ? Date.parseDate(getVar('MAX_PATDATE'), '%d.%m.%Y').getTime() : 0;
-
-        if (closeDat && (closeDat < openDat)) {
-            showError('Дата окончания не может быть меньше даты начала.');
-            return;
-        }
-        if (closeDat && (closeDat < maxPatDat)){
-            alert('Закрытие плана госпитализации запрещено. Имеются записанные пациенты на дату больше даты закрытия плана.');
-            return;
-        } else {
-            closeDat && alert('План госпитализации будет закрыт ' + getValue('CLOSE_DATE'));
-        }
-
-        executeAction('InsertUpdateAction', base().aftertAction);
-    }
-
-	Form.aftertAction = function()
-	{
-		setVar('ModalResult', 1, 1);
-		if(getVar('action') == 'INSERT')
-			setVar('newid', getVar('NEW_ID'), 1);
-		closeWindow();
-	}
-    ]]>
-</component>
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID"                  src="ID"                      srctype="var"  get="v1"/>
-	<component cmptype="ActionVar" name="HP_CODE"             src="HP_CODE"                 srctype="ctrl" put="v2"  len="20"/>
-	<component cmptype="ActionVar" name="HP_NAME"             src="HP_NAME"                 srctype="ctrl" put="v3"  len="160"/>
-	<component cmptype="ActionVar" name="MAX_PRIOR"           src="MAX_PRIOR"               srctype="ctrl" put="v4"  len="5"/>
-	<component cmptype="ActionVar" name="MIN_AGE"             src="MIN_AGE"                 srctype="ctrl" put="v5"  len="3"/>
-	<component cmptype="ActionVar" name="MAX_AGE"             src="MAX_AGE"                 srctype="ctrl" put="v6"  len="3"/>
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" put="v7"  len="2"/>
-	<component cmptype="ActionVar" name="PAYMENT_KIND"        src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8"  len="2"/>
-	<component cmptype="ActionVar" name="HAS_LIMITS"          src="HAS_LIMITS"              srctype="ctrl" put="v9"  len="2"/>
-	<component cmptype="ActionVar" name="NUMB_GROUP"          src="NUMB_GROUP"              srctype="ctrl" put="v10" len="2"/>
-	<component cmptype="ActionVar" name="JOURNAL_TYPE"        src="JOURNAL_TYPE"            srctype="ctrl" put="v11" len="1"/>
-	<component cmptype="ActionVar" name="IS_OPER"             src="IS_OPER"                 srctype="ctrl" put="v12" len="1"/>
-	<component cmptype="ActionVar" name="OPEN_DATE"           src="OPEN_DATE"               srctype="ctrl" put="v13" len="20"/>
-	<component cmptype="ActionVar" name="CLOSE_DATE"          src="CLOSE_DATE"              srctype="ctrl" put="v14" len="20"/>
-	<component cmptype="ActionVar" name="MAX_PATDATE"         src="MAX_PATDATE"             srctype="var"  put="v15" len="10"/>
-</component>
-<component cmptype="Action" name="InsertUpdateAction" unit="HOSP_PLAN_KINDS">
-	<component cmptype="ActionVar" name="PND_INSERT_ID"             src="NEW_ID"                  srctype="var" put="v1" len="27"/>
-	<component cmptype="ActionVar" name="PNID"                      src="ID"                      srctype="var" get="v2"/>
-	<component cmptype="ActionVar" name="PNCID"                     src="CID"                     srctype="var" get="v3"/>
-	<component cmptype="ActionVar" name="PNLPU"                     src="LPU"                     srctype="session"/>
-	<component cmptype="ActionVar" name="psHP_CODE"                 src="HP_CODE"                 srctype="ctrl" get="v4"/>
-	<component cmptype="ActionVar" name="psHP_NAME"                 src="HP_NAME"                 srctype="ctrl" get="v5"/>
-	<component cmptype="ActionVar" name="pnMAX_PRIOR"               src="MAX_PRIOR"               srctype="ctrl" get="v6"/>
-	<component cmptype="ActionVar" name="pnMIN_AGE"                 src="MIN_AGE"                 srctype="ctrl" get="v7"/>
-	<component cmptype="ActionVar" name="pnMAX_AGE"                 src="MAX_AGE"                 srctype="ctrl" get="v8"/>
-	<component cmptype="ActionVar" name="pnHAS_MKB_CONSTRAINTS"     src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" get="v9"/>
-	<component cmptype="ActionVar" name="pnHAS_PAYMENT_CONSTRAINTS" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" get="v10"/>
-	<component cmptype="ActionVar" name="pnHAS_LIMITS"              src="HAS_LIMITS"              srctype="ctrl" get="v11"/>
-	<component cmptype="ActionVar" name="pnNUMB_GROUP"              src="NUMB_GROUP"              srctype="ctrl" get="v12"/>
-	<component cmptype="ActionVar" name="pnJOURNAL_TYPE"            src="JOURNAL_TYPE"            srctype="ctrl" get="v13"/>
-	<component cmptype="ActionVar" name="pnIS_OPER"                 src="IS_OPER"                 srctype="ctrl" get="v14"/>
-	<component cmptype="ActionVar" name="pdOPEN_DATE"               src="OPEN_DATE"               srctype="ctrl" get="v15"/>
-	<component cmptype="ActionVar" name="pdCLOSE_DATE"              src="CLOSE_DATE"              srctype="ctrl" get="v16"/>
-	<component cmptype="ActionVar" name="action"                    src="action"                  srctype="var"  get="action"/>
-</component>
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
-<table style="width:100%">
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Код: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_CODE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Наименование: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_NAME" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Предварительная запись (дней): "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_PRIOR" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Группа сквозной нумерации: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="NUMB_GROUP" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип журнала: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="JOURNAL_TYPE" width="100%">
-				<component cmptype="ComboItem" captionfield="JT_NAME" datafield="JT_CODE" dataset="DS_HPK_JOURNAL_TYPES" repeate="0"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип оперативности: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="IS_OPER" width="100%">
-				<component cmptype="ComboItem" caption="Консервативный" value="0" activ="true"/>
-				<component cmptype="ComboItem" caption="Оперативный" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr  name="userViewDataOpenBlock">
-	    <td style="padding:1pt;">
-        	<component cmptype="Label" caption="Дата начала:"/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="OPEN_DATE" width="100%" />
-        </td>
-	</tr>
-    <tr name="userViewDataCloseBlock">
-        <td style="padding:1pt;">
-            <component cmptype="Label" caption="Дата окончания: "/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="CLOSE_DATE" width="100%" />
-
-        </td>
-    </tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Возраст"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Минимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MIN_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Максимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Ограничения"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По записи: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_LIMITS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По диагнозу: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_MKB_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По виду оплаты: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_PAYMENT_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="text-align:right;padding:1pt;" colspan="2">
-			<component cmptype="Button" caption="Ок" name="OkButton" onclick="base().onOkButtonClick();"/>
-			<component cmptype="Button" caption="Отмена" onclick="closeWindow();"/>
-		</td>
-	</tr>
-</table>
-<component cmptype="DepControls" name='viewDepControls' requireds="HP_CODE;HP_NAME;NUMB_GROUP;OPEN_DATE" dependents="OkButton"/>
-</div>
-
-```
-

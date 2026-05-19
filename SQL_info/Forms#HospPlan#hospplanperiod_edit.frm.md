@@ -1,4 +1,4 @@
-# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/HospitPlanning/hosp_plan_kinds_edit.frm
+# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ Forms/HospPlan/hospplanperiod_edit.frm
 
 > **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL
 
@@ -6,12 +6,12 @@
 
 Перед тобой техническая документация по форме(ам) системы T-MIS. Формы содержат SQL запросы, которые обращаются к представлениям (вьюхам) и таблицам в базах данных Oracle и PostgreSQL.
 
-**Анализируемая форма:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Анализируемая форма:** Forms/HospPlan/hospplanperiod_edit.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hospplanperiod_edit.frm
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Tue May 19 13:18:36 GMT+07:00 2026
+**Дата генерации:** Tue May 19 13:12:58 GMT+07:00 2026
 
 ---
 
@@ -21,94 +21,186 @@
 Ниже представлены все SQL запросы, извлеченные из форм. Каждый запрос включает XML-теги компонента (DataSet или Action) и содержит информацию об источнике.
 
 **Статистика:**
-- Всего SQL запросов: 2
+- Всего SQL запросов: 3
 - Всего форм: 1
 
 ---
 
 ### Запрос №1
 
-**Тип компонента:** M2 DataSet
-**Имя компонента:** DS_HPK_JOURNAL_TYPES
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Тип компонента:** D3 Action
+**Имя компонента:** InsertAction
+**Источник:** Forms/HospPlan/hospplanperiod_edit.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hospplanperiod_edit.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
+<cmpAction name="InsertAction">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        begin
+          if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdPLAN_DATE, 'DD.MM.YYYY') then
+            D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+          end if;
+          D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,
+                              pnLPU         => to_number(:pnLPU),
+                              pnPID         => to_number(:pnP_ID),
+                              pdPLAN_DATE   => to_date(:pdPLAN_DATE, 'DD.MM.YYYY'),
+                              pnMALE_COUNT  => to_number(:pnMALE_COUNT),
+                              pnOPER_COUNT  => to_number(:pnOPER_COUNT),
+                              pnGEN_COUNT   => to_number(:pnGEN_COUNT));
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdPLAN_DATE, 'DD.MM.YYYY') then
+            call D_P_EXC(1, 'Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+          end if;
+          call D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => (:pnD_INSERT_ID)::numeric,
+                                   pnLPU         => (:pnLPU)::numeric,
+                                   pnPID         => (:pnP_ID)::numeric,
+                                   pdPLAN_DATE   => to_date(:pdPLAN_DATE, 'DD.MM.YYYY'),
+                                   pnMALE_COUNT  => (:pnMALE_COUNT)::numeric,
+                                   pnOPER_COUNT  => (:pnOPER_COUNT)::numeric,
+                                   pnGEN_COUNT   => (:pnGEN_COUNT)::numeric);
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnD_INSERT_ID" src="NewID" srctype="var" put="" len="17" />
+    <cmpActionVar name="pnLPU" src="LPU" srctype="var" />
+    <cmpActionVar name="pnP_ID" src="P_ID" srctype="var" />
+    <cmpActionVar name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
+    <cmpActionVar name="psHP_NAME" src="HP_NAME" srctype="var" />
+    <cmpActionVar name="pdPLAN_DATE" src="PLAN_DATE" srctype="ctrl" />
+    <cmpActionVar name="pnMALE_COUNT" src="MALE_COUNT" srctype="ctrl" />
+    <cmpActionVar name="pnOPER_COUNT" src="OPER_COUNT" srctype="ctrl" />
+    <cmpActionVar name="pnGEN_COUNT" src="GEN_COUNT" srctype="ctrl" />
+</cmpAction>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_JOURNAL_TYPES
+**Используемые пакеты/функции:** D_PKG_HPK_PLANS.ADD
 
 ---
 
 ### Запрос №2
 
-**Тип компонента:** M2 Action
-**Имя компонента:** selectAction
-**Источник:** Forms/HospitPlanning/hosp_plan_kinds_edit.frm
-**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hosp_plan_kinds_edit.frm
+**Тип компонента:** D3 Action
+**Имя компонента:** UpdateAction
+**Источник:** Forms/HospPlan/hospplanperiod_edit.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hospplanperiod_edit.frm
 
 **SQL код:**
 
 ```xml
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID" src="ID" srctype="var" get="v1" />
-	<component cmptype="ActionVar" name="HP_CODE" src="HP_CODE" srctype="ctrl" put="v2" len="20" />
-	<component cmptype="ActionVar" name="HP_NAME" src="HP_NAME" srctype="ctrl" put="v3" len="160" />
-	<component cmptype="ActionVar" name="MAX_PRIOR" src="MAX_PRIOR" srctype="ctrl" put="v4" len="5" />
-	<component cmptype="ActionVar" name="MIN_AGE" src="MIN_AGE" srctype="ctrl" put="v5" len="3" />
-	<component cmptype="ActionVar" name="MAX_AGE" src="MAX_AGE" srctype="ctrl" put="v6" len="3" />
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS" srctype="ctrl" put="v7" len="2" />
-	<component cmptype="ActionVar" name="PAYMENT_KIND" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8" len="2" />
-	<component cmptype="ActionVar" name="HAS_LIMITS" src="HAS_LIMITS" srctype="ctrl" put="v9" len="2" />
-	<component cmptype="ActionVar" name="NUMB_GROUP" src="NUMB_GROUP" srctype="ctrl" put="v10" len="2" />
-	<component cmptype="ActionVar" name="JOURNAL_TYPE" src="JOURNAL_TYPE" srctype="ctrl" put="v11" len="1" />
-	<component cmptype="ActionVar" name="IS_OPER" src="IS_OPER" srctype="ctrl" put="v12" len="1" />
-	<component cmptype="ActionVar" name="OPEN_DATE" src="OPEN_DATE" srctype="ctrl" put="v13" len="20" />
-	<component cmptype="ActionVar" name="CLOSE_DATE" src="CLOSE_DATE" srctype="ctrl" put="v14" len="20" />
-	<component cmptype="ActionVar" name="MAX_PATDATE" src="MAX_PATDATE" srctype="var" put="v15" len="10" />
-</component>
+<cmpAction name="UpdateAction">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        begin
+          if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdPLAN_DATE, 'DD.MM.YYYY') then
+            D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+          end if;
+          D_PKG_HPK_PLANS.UPD(pnID         => to_number(:pnPLAN_ID),
+                              pnLPU        => to_number(:pnLPU),
+                              pdPLAN_DATE  => to_date(:pdPLAN_DATE, 'DD.MM.YYYY'),
+                              pnMALE_COUNT => to_number(:pnMALE_COUNT),
+                              pnOPER_COUNT => to_number(:pnOPER_COUNT),
+                              pnGEN_COUNT  => to_number(:pnGEN_COUNT));
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdPLAN_DATE, 'DD.MM.YYYY') then
+            call D_P_EXC(1, 'Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+          end if;
+          call D_PKG_HPK_PLANS.UPD(pnID         => (:pnPLAN_ID)::numeric,
+                                   pnLPU        => (:pnLPU)::numeric,
+                                   pdPLAN_DATE  => to_date(:pdPLAN_DATE, 'DD.MM.YYYY'),
+                                   pnMALE_COUNT => (:pnMALE_COUNT)::numeric,
+                                   pnOPER_COUNT => (:pnOPER_COUNT)::numeric,
+                                   pnGEN_COUNT  => (:pnGEN_COUNT)::numeric);
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnPLAN_ID" src="PLAN_ID" srctype="var" />
+    <cmpActionVar name="pnLPU" src="LPU" srctype="var" />
+    <cmpActionVar name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN" srctype="var" />
+    <cmpActionVar name="psHP_NAME" src="HP_NAME" srctype="var" />
+    <cmpActionVar name="pdPLAN_DATE" src="PLAN_DATE" srctype="ctrl" />
+    <cmpActionVar name="pnMALE_COUNT" src="MALE_COUNT" srctype="ctrl" />
+    <cmpActionVar name="pnOPER_COUNT" src="OPER_COUNT" srctype="ctrl" />
+    <cmpActionVar name="pnGEN_COUNT" src="GEN_COUNT" srctype="ctrl" />
+</cmpAction>
 ```
 
-**Используемые таблицы/вьюхи:** D_V_HPK_PLANS, D_V_HOSP_PLAN_KINDS
+**Используемые пакеты/функции:** D_PKG_HPK_PLANS.UPD
+
+---
+
+### Запрос №3
+
+**Тип компонента:** D3 Action
+**Имя компонента:** SelectAction
+**Источник:** Forms/HospPlan/hospplanperiod_edit.frm
+**Базовая форма:** C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hospplanperiod_edit.frm
+
+**SQL код:**
+
+```xml
+<cmpAction name="SelectAction">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        begin
+          select h.GEN_COUNT,
+                 h.MALE_COUNT,
+                 h.FEMALE_COUNT,
+                 h.OPER_COUNT,
+                 h.CONS_COUNT
+            into :pnGEN_COUNT,
+                 :pnMALE_COUNT,
+                 :pnFEMALE_COUNT,
+                 :pnOPER_COUNT,
+                 :pnCONS_COUNT
+            from D_V_HPK_PLANS h
+           where h.ID = to_number(:pnPLAN_ID)
+             and h.LPU = to_number(:pnLPU);
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          select h.GEN_COUNT,
+                 h.MALE_COUNT,
+                 h.FEMALE_COUNT,
+                 h.OPER_COUNT,
+                 h.CONS_COUNT
+            into :pnGEN_COUNT,
+                 :pnMALE_COUNT,
+                 :pnFEMALE_COUNT,
+                 :pnOPER_COUNT,
+                 :pnCONS_COUNT
+            from D_V_HPK_PLANS h
+           where h.ID = (:pnPLAN_ID)::numeric
+             and h.LPU = (:pnLPU)::numeric;
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnLPU" src="LPU" srctype="var" />
+    <cmpActionVar name="pnPLAN_ID" src="PLAN_ID" srctype="var" />
+    <cmpActionVar name="pnGEN_COUNT" src="GEN_COUNT" srctype="ctrl" put="" len="5" />
+    <cmpActionVar name="pnMALE_COUNT" src="MALE_COUNT" srctype="ctrl" put="" len="5" />
+    <cmpActionVar name="pnFEMALE_COUNT" src="FEMALE_COUNT" srctype="ctrl" put="" len="40" />
+    <cmpActionVar name="pnOPER_COUNT" src="OPER_COUNT" srctype="ctrl" put="" len="5" />
+    <cmpActionVar name="pnCONS_COUNT" src="CONS_COUNT" srctype="ctrl" put="" len="40" />
+</cmpAction>
+```
+
+**Используемые таблицы/вьюхи:** D_V_HPK_PLANS
 
 
 ## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘
@@ -138,12 +230,44 @@
 
 ## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠
 
-Пакетные функции для анализа не найдены.
+Ниже представлены тела функций из Oracle пакетов, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных пакетных функций: 2
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: D_PKG_HPK_PLANS.ADD
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
+
+---
+
+### Функция №2: D_PKG_HPK_PLANS.UPD
+
+Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).
 
 
 ## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘
 
-Функции для анализа не найдены.
+Ниже представлены тела функций и процедур из PostgreSQL, которые используются в SQL запросах форм.
+
+**Статистика:**
+- Всего уникальных функций/процедур: 2
+- Загружено тел функций: 0
+
+---
+
+### Функция №1: d_pkg_hpk_plans.add
+
+Тело функции/процедуры не найдено в PostgreSQL.
+
+---
+
+### Функция №2: d_pkg_hpk_plans.upd
+
+Тело функции/процедуры не найдено в PostgreSQL.
 
 
 
@@ -3113,296 +3237,6 @@ end;
 
 Исходник формы, который необходимо переработать:
 ```
-<FORM>
+
 ```
 Покажи только текст  переработанный  формы
-
-
----
-
-## ИСХОДНЫЙ ТЕКСТ ФОРМЫ
-
-Ниже представлен исходный XML код анализируемой формы:
-
-```xml
-<div cmptype="bogus" oncreate="base().onCreate();" onshow="base().onShow();" window_size="700x370">
-<div cmptype="title">Диета</div>
-<component cmptype="Script" name="userScriptBlock">
-    <![CDATA[
-	Form.onCreate = function()
-	{
-		setVar('ID', getVar('PRIMARY', 1));
-		setVar('CID', getVar('CID', 1));
-		setVar('ModalResult',0,1);
-	}
-	Form.onShow = function()
-	{
-		if(empty(getVar('ID')))
-		{
-			setVar('action', 'INSERT');
-			setWindowCaption('Виды планов госпитализации: добавление');
-			setValue('OPEN_DATE', new Date().toLocaleDateString('ru-RU'));
-		}
-		else
-		{
-			setVar('action', 'UPDATE');
-			setWindowCaption('Виды планов госпитализации: редактирование');
-			executeAction('selectAction');
-		}
-	}
-
-    Form.onOkButtonClick = function() {
-
-        var closeDat = !empty(getValue('CLOSE_DATE')) ? Date.parseDate(getValue('CLOSE_DATE'), '%d.%m.%Y').getTime() : false;
-        var openDat = !empty(getValue('OPEN_DATE')) ? Date.parseDate(getValue('OPEN_DATE'), '%d.%m.%Y').getTime() : 0;
-        var maxPatDat = !empty(getVar('MAX_PATDATE')) ? Date.parseDate(getVar('MAX_PATDATE'), '%d.%m.%Y').getTime() : 0;
-
-        if (closeDat && (closeDat < openDat)) {
-            showError('Дата окончания не может быть меньше даты начала.');
-            return;
-        }
-        if (closeDat && (closeDat < maxPatDat)){
-            alert('Закрытие плана госпитализации запрещено. Имеются записанные пациенты на дату больше даты закрытия плана.');
-            return;
-        } else {
-            closeDat && alert('План госпитализации будет закрыт ' + getValue('CLOSE_DATE'));
-        }
-
-        executeAction('InsertUpdateAction', base().aftertAction);
-    }
-
-	Form.aftertAction = function()
-	{
-		setVar('ModalResult', 1, 1);
-		if(getVar('action') == 'INSERT')
-			setVar('newid', getVar('NEW_ID'), 1);
-		closeWindow();
-	}
-    ]]>
-</component>
-<component cmptype="Action" name="selectAction">
-	begin
-		select t.HP_CODE,
-		       t.HP_NAME,
-		       t.MAX_PRIOR,
-		       t.MIN_AGE,
-		       t.MAX_AGE,
-		       t.HAS_MKB_CONSTRAINTS,
-		       t.HAS_PAYMENT_CONSTRAINTS,
-		       t.HAS_LIMITS,
-		       t.NUMB_GROUP,
-		       t.JOURNAL_TYPE,
-		       t.IS_OPER,
-	           case when t.OPEN_DATE is not null then  to_char(t.OPEN_DATE,'dd.mm.yyyy')     else ''  end as OPEN_DATE,
-	           case when t.CLOSE_DATE is not null then  to_char(t.CLOSE_DATE,'dd.mm.yyyy')   else ''  end as CLOSE_DATE,
-		       (select  to_char(max(trunc(p.plan_date)),'dd.mm.yyyy')   from d_v_hpk_plans p where p.pid=t.id) MAX_PATDATE
-		  into :HP_CODE,
-		       :HP_NAME,
-		       :MAX_PRIOR,
-		       :MIN_AGE,
-		       :MAX_AGE,
-		       :HAS_MKB_CONSTRAINTS,
-		       :PAYMENT_KIND,
-		       :HAS_LIMITS,
-		       :NUMB_GROUP,
-		       :JOURNAL_TYPE,
-		       :IS_OPER,
-		       :OPEN_DATE,
-		       :CLOSE_DATE,
-		       :MAX_PATDATE
-		  from D_V_HOSP_PLAN_KINDS t
-		 where t.ID = :ID;
-	end;
-	<component cmptype="ActionVar" name="ID"                  src="ID"                      srctype="var"  get="v1"/>
-	<component cmptype="ActionVar" name="HP_CODE"             src="HP_CODE"                 srctype="ctrl" put="v2"  len="20"/>
-	<component cmptype="ActionVar" name="HP_NAME"             src="HP_NAME"                 srctype="ctrl" put="v3"  len="160"/>
-	<component cmptype="ActionVar" name="MAX_PRIOR"           src="MAX_PRIOR"               srctype="ctrl" put="v4"  len="5"/>
-	<component cmptype="ActionVar" name="MIN_AGE"             src="MIN_AGE"                 srctype="ctrl" put="v5"  len="3"/>
-	<component cmptype="ActionVar" name="MAX_AGE"             src="MAX_AGE"                 srctype="ctrl" put="v6"  len="3"/>
-	<component cmptype="ActionVar" name="HAS_MKB_CONSTRAINTS" src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" put="v7"  len="2"/>
-	<component cmptype="ActionVar" name="PAYMENT_KIND"        src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" put="v8"  len="2"/>
-	<component cmptype="ActionVar" name="HAS_LIMITS"          src="HAS_LIMITS"              srctype="ctrl" put="v9"  len="2"/>
-	<component cmptype="ActionVar" name="NUMB_GROUP"          src="NUMB_GROUP"              srctype="ctrl" put="v10" len="2"/>
-	<component cmptype="ActionVar" name="JOURNAL_TYPE"        src="JOURNAL_TYPE"            srctype="ctrl" put="v11" len="1"/>
-	<component cmptype="ActionVar" name="IS_OPER"             src="IS_OPER"                 srctype="ctrl" put="v12" len="1"/>
-	<component cmptype="ActionVar" name="OPEN_DATE"           src="OPEN_DATE"               srctype="ctrl" put="v13" len="20"/>
-	<component cmptype="ActionVar" name="CLOSE_DATE"          src="CLOSE_DATE"              srctype="ctrl" put="v14" len="20"/>
-	<component cmptype="ActionVar" name="MAX_PATDATE"         src="MAX_PATDATE"             srctype="var"  put="v15" len="10"/>
-</component>
-<component cmptype="Action" name="InsertUpdateAction" unit="HOSP_PLAN_KINDS">
-	<component cmptype="ActionVar" name="PND_INSERT_ID"             src="NEW_ID"                  srctype="var" put="v1" len="27"/>
-	<component cmptype="ActionVar" name="PNID"                      src="ID"                      srctype="var" get="v2"/>
-	<component cmptype="ActionVar" name="PNCID"                     src="CID"                     srctype="var" get="v3"/>
-	<component cmptype="ActionVar" name="PNLPU"                     src="LPU"                     srctype="session"/>
-	<component cmptype="ActionVar" name="psHP_CODE"                 src="HP_CODE"                 srctype="ctrl" get="v4"/>
-	<component cmptype="ActionVar" name="psHP_NAME"                 src="HP_NAME"                 srctype="ctrl" get="v5"/>
-	<component cmptype="ActionVar" name="pnMAX_PRIOR"               src="MAX_PRIOR"               srctype="ctrl" get="v6"/>
-	<component cmptype="ActionVar" name="pnMIN_AGE"                 src="MIN_AGE"                 srctype="ctrl" get="v7"/>
-	<component cmptype="ActionVar" name="pnMAX_AGE"                 src="MAX_AGE"                 srctype="ctrl" get="v8"/>
-	<component cmptype="ActionVar" name="pnHAS_MKB_CONSTRAINTS"     src="HAS_MKB_CONSTRAINTS"     srctype="ctrl" get="v9"/>
-	<component cmptype="ActionVar" name="pnHAS_PAYMENT_CONSTRAINTS" src="HAS_PAYMENT_CONSTRAINTS" srctype="ctrl" get="v10"/>
-	<component cmptype="ActionVar" name="pnHAS_LIMITS"              src="HAS_LIMITS"              srctype="ctrl" get="v11"/>
-	<component cmptype="ActionVar" name="pnNUMB_GROUP"              src="NUMB_GROUP"              srctype="ctrl" get="v12"/>
-	<component cmptype="ActionVar" name="pnJOURNAL_TYPE"            src="JOURNAL_TYPE"            srctype="ctrl" get="v13"/>
-	<component cmptype="ActionVar" name="pnIS_OPER"                 src="IS_OPER"                 srctype="ctrl" get="v14"/>
-	<component cmptype="ActionVar" name="pdOPEN_DATE"               src="OPEN_DATE"               srctype="ctrl" get="v15"/>
-	<component cmptype="ActionVar" name="pdCLOSE_DATE"              src="CLOSE_DATE"              srctype="ctrl" get="v16"/>
-	<component cmptype="ActionVar" name="action"                    src="action"                  srctype="var"  get="action"/>
-</component>
-<component cmptype="DataSet" name="DS_HPK_JOURNAL_TYPES">
-    select t.jt_code,
-    	   t.jt_name
-    from d_v_hpk_journal_types t
-</component>
-<table style="width:100%">
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Код: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_CODE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Наименование: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="HP_NAME" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Предварительная запись (дней): "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_PRIOR" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Группа сквозной нумерации: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="NUMB_GROUP" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип журнала: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="JOURNAL_TYPE" width="100%">
-				<component cmptype="ComboItem" captionfield="JT_NAME" datafield="JT_CODE" dataset="DS_HPK_JOURNAL_TYPES" repeate="0"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Тип оперативности: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="IS_OPER" width="100%">
-				<component cmptype="ComboItem" caption="Консервативный" value="0" activ="true"/>
-				<component cmptype="ComboItem" caption="Оперативный" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr  name="userViewDataOpenBlock">
-	    <td style="padding:1pt;">
-        	<component cmptype="Label" caption="Дата начала:"/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="OPEN_DATE" width="100%" />
-        </td>
-	</tr>
-    <tr name="userViewDataCloseBlock">
-        <td style="padding:1pt;">
-            <component cmptype="Label" caption="Дата окончания: "/>
-        </td>
-        <td style="padding:1pt;">
-            <component cmptype="DateEdit" name="CLOSE_DATE" width="100%" />
-
-        </td>
-    </tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Возраст"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Минимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MIN_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="Максимальный: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="Edit" name="MAX_AGE" width="100%"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="padding:1pt;">
-			<hr/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<b><component cmptype="Label" caption="Ограничения"/></b>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По записи: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_LIMITS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По диагнозу: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_MKB_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:1pt;">
-			<component cmptype="Label" caption="По виду оплаты: "/>
-		</td>
-		<td style="padding:1pt;">
-			<component cmptype="ComboBox" name="HAS_PAYMENT_CONSTRAINTS" width="100%">
-				<component cmptype="ComboItem" caption="Нет" value="0"/>
-				<component cmptype="ComboItem" caption="Да" value="1"/>
-			</component>
-		</td>
-	</tr>
-	<tr>
-		<td style="text-align:right;padding:1pt;" colspan="2">
-			<component cmptype="Button" caption="Ок" name="OkButton" onclick="base().onOkButtonClick();"/>
-			<component cmptype="Button" caption="Отмена" onclick="closeWindow();"/>
-		</td>
-	</tr>
-</table>
-<component cmptype="DepControls" name='viewDepControls' requireds="HP_CODE;HP_NAME;NUMB_GROUP;OPEN_DATE" dependents="OkButton"/>
-</div>
-
-```
-
