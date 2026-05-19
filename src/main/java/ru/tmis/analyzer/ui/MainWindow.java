@@ -343,6 +343,16 @@ public class MainWindow extends JFrame {
 
         tabbedPane.addTab("LLM промпт", llmPanel);
 
+        tabbedPane.addChangeListener(e -> {
+            TreePath selectedPath = formsTreePanel.getSelectedPath();
+            if (selectedPath != null && tabbedPane.getSelectedIndex() == 2) {
+                String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
+                if (formPath != null) {
+                    loadLlmPromptToPanel(formPath);
+                }
+            }
+        });
+
         rightPanel.add(tabbedPane, BorderLayout.CENTER);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
@@ -473,8 +483,6 @@ public class MainWindow extends JFrame {
     /**
      * Загружает сохранённый отчёт для выбранной формы в панель результата
      */
-    // MainWindow.java - добавить вызов загрузки MD файла в конец метода
-
     private void loadFormResultToPanel(String formPath) {
         String reportPath = formsTreePanel.getReportFilePath(formPath);
         File reportFile = new File(reportPath);
@@ -499,7 +507,6 @@ public class MainWindow extends JFrame {
             formsTreePanel.clearChildNodes(formPath);
             appendLog("Отчёт не найден для формы: " + formPath + ", дочерние элементы очищены");
         }
-        loadLlmPromptToPanel(formPath);
     }
 
     /**
@@ -812,6 +819,7 @@ public class MainWindow extends JFrame {
         }
     }
 
+
     /**
      * Загружает MD файл промпта для выбранной формы
      * @param formPath путь к форме
@@ -819,7 +827,11 @@ public class MainWindow extends JFrame {
     private void loadLlmPromptToPanel(String formPath) {
         if (llmPromptArea == null) return;
 
-        // Формируем путь к MD файлу (аналогично TXT, но с .md)
+        // Загружаем только если вкладка LLM промпт активна
+        if (tabbedPane.getSelectedIndex() != 2) {
+            return;
+        }
+
         String mdFilePath = getLlmPromptFilePath(formPath);
         File mdFile = new File(mdFilePath);
 
@@ -847,7 +859,7 @@ public class MainWindow extends JFrame {
             }
         } else {
             llmPromptArea.setText(instructionText);
-            appendLog("MD файл не найден для формы: " + formPath + "\n" + mdFilePath);
+            appendLog("MD файл не найден для формы: " + formPath);
         }
     }
 
