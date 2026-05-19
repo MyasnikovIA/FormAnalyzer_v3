@@ -1,0 +1,40 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_federal_privs/federal_priv_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_federal_privs\federal_priv_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPU
+    D_V_AGENT_FEDERAL_PRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_AGENT_FEDERAL_PRIVS
+    D_PRIVILEGES
+    D_FLR_VERSION
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_UNITPROPS.GET_SVAL
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PRIVILEGES" composition="DEFAULT_NAME"
+

@@ -1,0 +1,46 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_federal_privs/federal_privs_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_federal_privs\federal_privs_history.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_federal_privs\federal_privs_history.d\federal_privs_history.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Agents\agent_federal_privs\federal_privs_history.d\data.dfrm
+
+
+SubForm:
+     Agents/subscript/agent_priv_common
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PRIVILEGES
+    D_V_AGENT_FEDERAL_PRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PRIVILEGES
+    D_PRIV_TYPES
+    D_DIRECTORIES_FN_DATA
+    D_AGENT_FEDERAL_PRIVS
+    D_FLR_VERSION
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.FRM_D
+    D_PKG_DOC_TOOLS.SNILS_FROM_STR
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_FRLLO.GET_FRLLO_START_DATE
+    D_PKG_AGENT_FRLLO.GET_STATUS_MNEMO
+    D_PKG_AGENT_FEDERAL_PRIVS.UPD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_REG
+

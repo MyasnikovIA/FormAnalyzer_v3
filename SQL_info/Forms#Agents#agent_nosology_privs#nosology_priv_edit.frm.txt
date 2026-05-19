@@ -1,0 +1,68 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_nosology_privs/nosology_priv_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_nosology_privs\nosology_priv_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_nosology_privs\nosology_priv_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_nosology_privs\nosology_priv_edit.frm
+
+
+SubForm:
+     Agents/subscript/agent_priv_common
+     Int/efarma/api
+     Agents/subscript/lpu
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PRIV_NOS_GROUPS
+    D_V_PRIV_NOS_GROUP_MKBS
+    D_V_LPU_BASE
+    D_V_LPUDICT_BASE
+    D_V_AGENT_NOSOLOGY_PRIVS
+    D_V_RECIPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PRIV_NOS_GROUPS
+    D_PRIV_TYPES
+    D_PRIV_NOS_GROUP_MKBS
+    D_LPU
+    D_LPUDICT
+    D_AGENT_NOSOLOGY_PRIVS
+    D_PRIVDOCKINDS
+    D_RECIPS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_PRIVILEGES
+    D_CONTINGENTS
+    D_MKB10
+    D_FINSOURCES
+    D_PRIV_DIS_GROUPS
+    D_RECIPE_PRIVTYPES
+    D_DIVISIONS
+    D_PURPOSE_PRIV
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PRIVDOCKINDS" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_NOSOLOGY_PRIVS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_ADD_AGN_PRIV_ASULON
+

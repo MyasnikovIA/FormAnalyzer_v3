@@ -1,0 +1,37 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_prev_diseases/agent_prev_diseases_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_prev_diseases\agent_prev_diseases_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_PREV_DISEASES
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_PREV_DISEASES
+    D_LPUDICT
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_PREV_DISEASES  action:INSERT;
+    unit:AGENT_PREV_DISEASES  action:UPDATE;
+

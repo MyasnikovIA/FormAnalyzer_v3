@@ -13,6 +13,7 @@
   "includeViewDetails": false,
   "includePopupMenus": false,
   "includePostgresPopupMenus": false,
+  "enableCSVExport": true,
   "checkDbObjects": false,
   "checkDbData": false,
   "checkPostgresPackages": false,

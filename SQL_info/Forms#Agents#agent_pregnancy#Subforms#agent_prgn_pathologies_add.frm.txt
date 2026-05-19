@@ -1,0 +1,35 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_pathologies_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_pathologies_add.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+БРОКЕРЫ:
+    unit:AGENT_PRGN_PATHOLOGIES  action:INSERT;
+    unit:AGENT_PRGN_PATHOLOGIES  action:UPDATE;
+

@@ -1,0 +1,39 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_oper.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_oper.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/agent_prgn_oper_add.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPUDICT_BASE
+    D_V_SERVICES_BASE
+    D_V_MKB10_BASE
+    D_V_AGENT_PRGN_OPER
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPUDICT
+    D_SERVICES
+    D_MKB10
+    D_AGENT_PRGN_OPER
+    D_DIRECTORIES_DATA_VER
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.FRM_D
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_AGENT_PRGN_OPER.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+

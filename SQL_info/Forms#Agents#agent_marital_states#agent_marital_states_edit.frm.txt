@@ -1,0 +1,33 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_marital_states/agent_marital_states_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_marital_states\agent_marital_states_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/subscript/date_functions
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MARITALSTATES
+    D_V_AGENT_MARITAL_STATES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MARITALSTATES
+    D_DIRECTORIES_DATA_VER
+    D_AGENT_MARITAL_STATES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_MARITAL_STATES;
+

@@ -1,0 +1,56 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_persdocs/agent_persdocs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_persdocs\agent_persdocs_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_persdocs\agent_persdocs_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_persdocs\agent_persdocs_edit.d\view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMoscowNIIBlohina\Agents\agent_persdocs\agent_persdocs_edit.d\view.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Agents\agent_persdocs\agent_persdocs_edit.d\agent_persdocs_edit.dfrm
+
+
+SubForm:
+     Agents/persdoc_change_mask
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PERSDOCTYPES
+    D_V_AGENT_PERSDOCS_BASE
+    D_V_COUNTRIES
+    D_V_AGENT_PERSDOCS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PERSDOCTYPES
+    D_MASKS
+    D_AGENT_PERSDOCS
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_PERSDOCS.BEFORE_CHECK
+    D_PKG_STD.FRM_D
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgnPersDocsCitizenshipCheck
+    PersDocTypeDefault
+    AgnPersDocsDefCitizenship
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="COUNTRIES" composition="GRID"
+
+БРОКЕРЫ:
+    unit:AGENT_PERSDOCS;
+

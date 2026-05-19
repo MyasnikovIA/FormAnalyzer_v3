@@ -1,0 +1,32 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_detrimental_effects/detr_effects.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_detrimental_effects\detr_effects.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_DETR_EFFECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_DETR_EFFECTS
+    D_DETRIMENTAL_EFFECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_DETR_EFFECTS.ADD
+    D_PKG_AGENT_DETR_EFFECTS.UPD
+
+БРОКЕРЫ:
+    unit:AGENT_DETR_EFFECTS  action:DELETE;
+

@@ -1,0 +1,124 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Agents\agent_polis\agent_polis_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlania =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlania\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsAlaniaSKMMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlaniaSKMMC\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsChechnya =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsChechnya\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsDemo =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsDemo\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_polis\agent_polis_edit.d\request_policy.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Agents\agent_polis\agent_polis_edit.frm
+
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsMosObl =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMosObl\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsRKB3 =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKB3\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsRkob =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Agents\agent_polis\agent_polis_edit.d\tfoms_request.dfrm
+
+     ===== UserFormsSpasenie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSpasenie\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsTver =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsTver\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsVOKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVOKOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/identperson
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (11):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_POLIS_BASE
+    D_V_INSURANCE_COMPANIES
+    D_V_AGENT_POLIS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENTS_BASE
+    D_V_AGENT_PERSDOCS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_GEOGRAFYTYPES
+    D_INSURANCE_COMPANIES
+    D_AGENTS
+    D_GEOGRAFY
+    D_AGENT_POLIS_KINDS
+    D_CONTR_AMI_DIRECTS
+    D_AGENT_PERSDOCS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_INSCOMP_SERIES.GET_SERIES
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DOC_TOOLS.SNILS_FROM_STR
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentPols_DefaultOMSKind
+    TransferENP
+    AgnPolisCloseType
+    hideFERZLButton
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="INSURANCE_COMPANIES" composition="IC_DMS"
+    unit="INSURANCE_COMPANIES" composition="IC_OMS"
+    unit="INSURANCE_COMPANIES" composition="IC"
+
+БРОКЕРЫ:
+    unit:AGENT_POLIS;
+

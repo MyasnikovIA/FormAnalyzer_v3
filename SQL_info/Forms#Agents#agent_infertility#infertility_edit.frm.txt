@@ -1,0 +1,40 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_infertility/infertility_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_infertility\infertility_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     UniversalForms/directories_data_ver.frm
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENTS_BASE
+    D_V_AGENT_INFERTINITY
+    D_V_AGENT_INFERTILITY_SPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_AGENT_INFERTINITY
+    D_AGENT_INFERTILITY_SPS
+    D_DIRECTORIES_DATA_VER
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.TREF
+    D_PKG_AGENT_INFERTINITY.UPD
+    D_PKG_AGENT_INFERTINITY.ADD
+    D_PKG_AGENT_INFERTILITY_SPS.DEL
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_AGENT_INFERTILITY_SPS.ADD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+

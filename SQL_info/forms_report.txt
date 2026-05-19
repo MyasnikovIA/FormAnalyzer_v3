@@ -4408,3 +4408,1821 @@ SubForm:
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
 
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_detrimental_effects/detrimental_effects_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_detrimental_effects\detrimental_effects_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DETRIMENTAL_EFFECTS
+    D_V_AGENT_DETR_EFFECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DETRIMENTAL_EFFECTS
+    D_AGENT_DETR_EFFECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_DETR_EFFECTS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_detrimental_effects/detr_effects.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_detrimental_effects\detr_effects.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_DETR_EFFECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_DETR_EFFECTS
+    D_DETRIMENTAL_EFFECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_DETR_EFFECTS.ADD
+    D_PKG_AGENT_DETR_EFFECTS.UPD
+
+БРОКЕРЫ:
+    unit:AGENT_DETR_EFFECTS  action:DELETE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_federal_privs/federal_privs_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_federal_privs\federal_privs_history.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_federal_privs\federal_privs_history.d\federal_privs_history.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Agents\agent_federal_privs\federal_privs_history.d\data.dfrm
+
+
+SubForm:
+     Agents/subscript/agent_priv_common
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PRIVILEGES
+    D_V_AGENT_FEDERAL_PRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PRIVILEGES
+    D_PRIV_TYPES
+    D_DIRECTORIES_FN_DATA
+    D_AGENT_FEDERAL_PRIVS
+    D_FLR_VERSION
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.FRM_D
+    D_PKG_DOC_TOOLS.SNILS_FROM_STR
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_FRLLO.GET_FRLLO_START_DATE
+    D_PKG_AGENT_FRLLO.GET_STATUS_MNEMO
+    D_PKG_AGENT_FEDERAL_PRIVS.UPD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_REG
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_federal_privs/federal_priv_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_federal_privs\federal_priv_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_federal_privs\federal_priv_edit.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPU
+    D_V_AGENT_FEDERAL_PRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_AGENT_FEDERAL_PRIVS
+    D_PRIVILEGES
+    D_FLR_VERSION
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_UNITPROPS.GET_SVAL
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PRIVILEGES" composition="DEFAULT_NAME"
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gr_rentgenogr/agent_gr_rentgenogr_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gr_rentgenogr\agent_gr_rentgenogr_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_gr_rentgenogr\agent_gr_rentgenogr_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_gr_rentgenogr\agent_gr_rentgenogr_edit.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GR_RENTGENOGR
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GR_RENTGENOGR
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="GR_RENTGENOGRAPH" composition="GR_R"
+
+БРОКЕРЫ:
+    unit:AGENT_GR_RENTGENOGR;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gr_vaccinations/agent_gr_vaccinations_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gr_vaccinations\agent_gr_vaccinations_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_gr_vaccinations\agent_gr_vaccinations_edit.d\data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GR_VACCINATIONS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GR_VACCINATIONS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="GR_VACCINATIONES" composition="GR_V"
+
+БРОКЕРЫ:
+    unit:AGENT_GR_VACCINATIONS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gynec/agent_gynec_complication.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gynec\agent_gynec_complication.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_gynec\agent_gynec_complication.d\gr_agent_gynec_complics.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_gynec/agent_gynec_complication_edit.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GYNEC_COMPLICS
+    D_V_MKB10
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_COMPLICS
+    D_COMPLICATIONES
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_COMPLICS  action:DELETE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gynec/agent_gynec_complication_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gynec\agent_gynec_complication_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_gynec\agent_gynec_complication_edit.d\tr_agent_gynec_complic_hand.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GYNEC_COMPLICS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_COMPLICS
+    D_COMPLICATIONES
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.FRM_D
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+    unit="COMPLICATIONES" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_COMPLICS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gynec/agent_gynec_contraception.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gynec\agent_gynec_contraception.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_gynec/agent_gynec_contraception_edit.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GYNEC_CONTRACEPT
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_CONTRACEPT
+    D_CONTRACEPT_TYPES
+    D_COMPLICATIONES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_CONTRACEPT  action:DELETE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gynec/agent_gynec_contraception_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gynec\agent_gynec_contraception_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GYNEC_CONTRACEPT
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_CONTRACEPT
+    D_CONTRACEPT_TYPES
+    D_COMPLICATIONES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.FRM_D
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="CONTRACEPT_TYPES" composition="DEFAULT"
+    unit="COMPLICATIONES" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_CONTRACEPT;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_inabilities/agent_inabilities_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_inabilities\agent_inabilities_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agents_popup/subforms/rep_popup_del
+
+Список вызываемых форм в JS:
+     Agents/agent_inabilities/agent_inability_insp_edit.frm
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_INABILITY_STATUSES
+    D_V_INABILITY_GROUPS
+    D_V_INABILITY_PERIOD
+    D_V_INABILITY_TERM
+    D_V_INABILITY_CAUSE
+    D_V_INABILITY_CAUSE_OTHER
+    D_V_LPU
+    D_V_AGENT_WORK_PLACES
+    D_V_AGENT_INABILITIES_UAC
+    D_V_AGENT_INABILITY_MKBS
+    D_V_AGENT_INABILITIES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_INABILITY_PERIOD
+    D_INABILITY_TERM
+    D_INABILITY_CAUSE
+    D_INABILITY_CAUSE_OTHER
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_AGENT_WORK_PLACES
+    D_AGENTS
+    D_OKVED
+    D_RAIONS
+    D_AGENT_DEPS
+    D_JOBTITLES
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_AGENT_INABILITY_MKBS
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_INABILITY_PERIOD.GET_DATE
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_AGENT_WORK_PLACES.UPD
+    D_PKG_AGENT_INABILITIES.GET_ERRORS
+    D_PKG_STD.TREF
+    D_PKG_STD.TLSTR
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_UAFUD.CHK
+
+СИСТЕМНЫЕ ОПЦИИ:
+    InabiltyStatusAndGroupCheck
+    AgentInabMKBInReestr
+    DEL
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="LPUDICT" composition="GRID_NAME"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_inabilities/agent_inability_insp_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_inabilities\agent_inability_insp_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_INABILITY_INSP
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_INABILITY_INSP
+
+БРОКЕРЫ:
+    unit:AGENT_INABILITY_INSP;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_inabilities/agent_inability_mkbs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_inabilities\agent_inability_mkbs_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_INABILITY_MKBS.GET_WARNING
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_INABILITY_MKBS  action:INSERT;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_inabilities/agent_inability_mkb_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_inabilities\agent_inability_mkb_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_inabilities/agent_inability_mkbs_edit.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_infertility/infertility_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_infertility\infertility_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     UniversalForms/directories_data_ver.frm
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENTS_BASE
+    D_V_AGENT_INFERTINITY
+    D_V_AGENT_INFERTILITY_SPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_AGENT_INFERTINITY
+    D_AGENT_INFERTILITY_SPS
+    D_DIRECTORIES_DATA_VER
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.TREF
+    D_PKG_AGENT_INFERTINITY.UPD
+    D_PKG_AGENT_INFERTINITY.ADD
+    D_PKG_AGENT_INFERTILITY_SPS.DEL
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_AGENT_INFERTILITY_SPS.ADD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_marital_states/agent_marital_states_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_marital_states\agent_marital_states_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/subscript/date_functions
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MARITALSTATES
+    D_V_AGENT_MARITAL_STATES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MARITALSTATES
+    D_DIRECTORIES_DATA_VER
+    D_AGENT_MARITAL_STATES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_MARITAL_STATES;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_names/agent_names_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_names\agent_names_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_NAMES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_NAMES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DOC_TOOLS.DECLINE_FIO
+    D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG
+
+БРОКЕРЫ:
+    unit:AGENT_NAMES;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_names/agent_names_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_names\agent_names_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_names/agent_names_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_NAMES;
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_NAMES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_NAMES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.TREF
+    D_PKG_STD.TLSTR
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_UAFUD.CHK
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentNamesInReestr
+    AGENT_NAMES
+
+БРОКЕРЫ:
+    unit:AGENT_NAMES;
+    unit:AGENT_NAMES  action:SET_IS_MAIN;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_names/agent_names_jur_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_names\agent_names_jur_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_NAMES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_NAMES
+
+БРОКЕРЫ:
+    unit:AGENT_NAMES;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_names/agent_names_jur_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_names\agent_names_jur_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_names/agent_names_jur_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_NAMES;
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_NAMES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_NAMES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_NAMES;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_nosology_privs/nosology_priv.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_nosology_privs\nosology_priv.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv.d\scripts.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_nosology_privs\nosology_priv.d\nosology_priv.dfrm
+
+
+SubForm:
+     Agents/subscript/agent_priv_common
+
+Список вызываемых форм в JS:
+     Agents/agent_nosology_privs/nosology_priv_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_NOSOLOGY_PRIVS;
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_NOSOLOGY_PRIVS
+    D_V_PRIV_NOS_GROUP_MKBS
+    D_V_PERSMEDCARD_BASE
+    D_V_RECIPS_BASE
+    D_V_EMPLOYERS_FIO
+    D_V_LPU_BASE
+    D_V_AGENTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_NOSOLOGY_PRIVS
+    D_PRIV_NOS_GROUPS
+    D_PRIV_TYPES
+    D_PRIVDOCKINDS
+    D_LPUDICT
+    D_PRIV_NOS_GROUP_MKBS
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+    D_RECIPS
+    D_LPU
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_FRLLO.GET_FRLLO_START_DATE
+    D_PKG_AGENT_FRLLO.GET_STATUS_MNEMO
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENTS.EXIST
+    D_PKG_URPRIVS.CHECK_BPPRIV
+
+СИСТЕМНЫЕ ОПЦИИ:
+    VDAutoSet7VZNPriv
+    FrlloConfirmLgot
+
+БРОКЕРЫ:
+    unit:AGENT_NOSOLOGY_PRIVS  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_nosology_privs/nosology_priv_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_nosology_privs\nosology_priv_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_nosology_privs\nosology_priv_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_nosology_privs\nosology_priv_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_nosology_privs\nosology_priv_edit.frm
+
+
+SubForm:
+     Agents/subscript/agent_priv_common
+     Int/efarma/api
+     Agents/subscript/lpu
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PRIV_NOS_GROUPS
+    D_V_PRIV_NOS_GROUP_MKBS
+    D_V_LPU_BASE
+    D_V_LPUDICT_BASE
+    D_V_AGENT_NOSOLOGY_PRIVS
+    D_V_RECIPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PRIV_NOS_GROUPS
+    D_PRIV_TYPES
+    D_PRIV_NOS_GROUP_MKBS
+    D_LPU
+    D_LPUDICT
+    D_AGENT_NOSOLOGY_PRIVS
+    D_PRIVDOCKINDS
+    D_RECIPS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_PRIVILEGES
+    D_CONTINGENTS
+    D_MKB10
+    D_FINSOURCES
+    D_PRIV_DIS_GROUPS
+    D_RECIPE_PRIVTYPES
+    D_DIVISIONS
+    D_PURPOSE_PRIV
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PRIVDOCKINDS" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_NOSOLOGY_PRIVS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_ADD_AGN_PRIV_ASULON
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_orph_categories/agent_orph_categories_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_orph_categories\agent_orph_categories_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_ORPH_CATEGORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_ORPH_CATEGORIES
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ORPHAN_CATEGORIES" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_ORPH_CATEGORIES;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_orph_places/agent_orph_places_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_orph_places\agent_orph_places_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_orph_places\agent_orph_places_edit.d\data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_ORPH_PLACES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ORPHAN_PLACES
+    D_ORPHAN_MOVE_REASONS
+    D_AGENTS
+    D_AGENT_ORPH_PLACES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ORPHAN_PLACES" composition="DEFAULT"
+    unit="AGENTS" composition="JUR_ORPHAN"
+    unit="ORPHAN_MOVE_REASONS" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_ORPH_PLACES;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_palliative/palliative.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_palliative\palliative.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_palliative/palliative_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_PALLIATIVE;
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_EMPLOYERS_FIO
+    D_V_AGENT_PALLIATIVE
+    D_V_AGENT_PALLIATIVE_DICTS
+    D_V_PALLIATIVE_NOZ_GROUPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EMPLOYERS
+    D_AGENTS
+    D_AGENT_PALLIATIVE
+    D_LPU
+    D_MKB10
+    D_PALLIATIVE_NOZ_GROUPS
+    D_AGENT_PALLIATIVE_DICTS
+    D_EXTRA_DICTS
+    D_EXTRA_DICT_VALUES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AllowEditPalliative
+
+БРОКЕРЫ:
+    unit:AGENT_PALLIATIVE  action:DELETE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_palliative/palliative_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_palliative\palliative_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_palliative\palliative_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_palliative\palliative_edit.d\script.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative_edit.frm
+
+     ===== UserFormsVOKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVOKOD\Agents\agent_palliative\palliative_edit.d\script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PALLIATIVE_NOZ_GROUPS
+    D_V_LPUDICT_BASE
+    D_V_LPU_BASE
+    D_V_MKB10
+    D_V_EMPLOYERS_FIO
+    D_V_AGENT_PALLIATIVE_DICTS
+    D_V_EXTRA_DICT_VALUES_BASE
+    D_V_EXTRA_DICTS_BASE
+    D_V_EMPLOYERS
+    D_V_MKB10_BASE
+    D_V_VIS_DIAGNOSISES_MAIN
+    D_V_AGENT_PALLIATIVE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PALLIATIVE_NOZ_GROUPS
+    D_LPUDICT
+    D_LPU
+    D_MKB10
+    D_EMPLOYERS
+    D_AGENTS
+    D_AGENT_PALLIATIVE_DICTS
+    D_EXTRA_DICTS
+    D_EXTRA_DICT_VALUES
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_AGENT_PALLIATIVE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_PALLIATIVE_DICTS.DEL
+    D_PKG_TOOLS.STR_SEPARATE_CLOB
+    D_PKG_AGENT_PALLIATIVE_DICTS.ADD
+    D_PKG_NR_NOTIFICATIONS.ADD
+
+КОНСТАНТЫ:
+    PALLIATIVE_MKB
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+    unit="LPUDICT" composition="DEFAULT_ANALYST"
+    unit="PALLIATIVE_NOZ_GROUPS" composition="DEFAULT_NAME"
+    unit="EMPLOYERS" composition="CODE_FIO"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_persdocs/agent_persdocs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_persdocs\agent_persdocs_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_persdocs\agent_persdocs_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_persdocs\agent_persdocs_edit.d\view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMoscowNIIBlohina\Agents\agent_persdocs\agent_persdocs_edit.d\view.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Agents\agent_persdocs\agent_persdocs_edit.d\agent_persdocs_edit.dfrm
+
+
+SubForm:
+     Agents/persdoc_change_mask
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PERSDOCTYPES
+    D_V_AGENT_PERSDOCS_BASE
+    D_V_COUNTRIES
+    D_V_AGENT_PERSDOCS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PERSDOCTYPES
+    D_MASKS
+    D_AGENT_PERSDOCS
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_PERSDOCS.BEFORE_CHECK
+    D_PKG_STD.FRM_D
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgnPersDocsCitizenshipCheck
+    PersDocTypeDefault
+    AgnPersDocsDefCitizenship
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="COUNTRIES" composition="GRID"
+
+БРОКЕРЫ:
+    unit:AGENT_PERSDOCS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_persdocs/agent_persdocs_edit2.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_persdocs\agent_persdocs_edit2.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agent_persdocs/agent_persdocs_edit
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_dms_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_dms_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_polis/agent_polis_edit.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_dms_import.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_dms_import.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_polis/agent_polis_dms_upload.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DMS_POLIS_UPLOAD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_AGENTS
+    D_INSURANCE_COMPANIES
+    D_AGENT_ADDRS
+    D_AGENT_WORK_PLACES
+    D_JOBTITLES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_dms_upload.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_dms_upload.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_dms_view.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_dms_view.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Agents\agent_polis\agent_polis_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlania =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlania\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsAlaniaSKMMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlaniaSKMMC\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsChechnya =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsChechnya\Agents\agent_polis\agent_polis_edit.d\tfoms_update.dfrm
+
+     ===== UserFormsDemo =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsDemo\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_polis\agent_polis_edit.d\request_policy.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Agents\agent_polis\agent_polis_edit.frm
+
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsMosObl =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMosObl\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsRKB3 =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKB3\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsRkob =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\Agents\agent_polis\agent_polis_edit.d\view.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Agents\agent_polis\agent_polis_edit.d\foms_request.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Agents\agent_polis\agent_polis_edit.d\script.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Agents\agent_polis\agent_polis_edit.d\tfoms_request.dfrm
+
+     ===== UserFormsSpasenie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSpasenie\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsTver =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsTver\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+     ===== UserFormsVOKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVOKOD\Agents\agent_polis\agent_polis_edit.d\agent_polis_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/identperson
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (11):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_POLIS_BASE
+    D_V_INSURANCE_COMPANIES
+    D_V_AGENT_POLIS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENTS_BASE
+    D_V_AGENT_PERSDOCS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_GEOGRAFYTYPES
+    D_INSURANCE_COMPANIES
+    D_AGENTS
+    D_GEOGRAFY
+    D_AGENT_POLIS_KINDS
+    D_CONTR_AMI_DIRECTS
+    D_AGENT_PERSDOCS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_INSCOMP_SERIES.GET_SERIES
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DOC_TOOLS.SNILS_FROM_STR
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentPols_DefaultOMSKind
+    TransferENP
+    AgnPolisCloseType
+    hideFERZLButton
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="INSURANCE_COMPANIES" composition="IC_DMS"
+    unit="INSURANCE_COMPANIES" composition="IC_OMS"
+    unit="INSURANCE_COMPANIES" composition="IC"
+
+БРОКЕРЫ:
+    unit:AGENT_POLIS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/agent_polis_oms_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\agent_polis_oms_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_polis/agent_polis_edit.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/checking_relevance_polis.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\checking_relevance_polis.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+СИСТЕМНЫЕ ОПЦИИ:
+    TermPeriodForDMSPolis
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/exeTatarService.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_polis\exeTatarService.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PMC_REGISTRATION_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_LPU
+    D_V_PERSMEDCARD_FIO
+    D_V_REGISTER_PURPOSES
+    D_V_AGENT_REGISTRATION_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_REGISTRATION
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_REGISTER_PURPOSES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_REGISTRATION.ADD
+    D_PKG_AGENT_REGISTRATION.UPD
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PolisIgnoreRegRT
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/agent_pregnancy_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\agent_pregnancy_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Pregnancy/subforms/check_vrt_link
+     Agents/agent_children/subForms/agent_children_grid
+
+Список вызываемых форм в JS:
+     Pregnancy/preg_card_subforms/preg_complication.frm
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_DIRECTORIES_DATA_VER
+    D_V_FERT_METHODS
+    D_V_PREGNANCY_OUTCOMES_ACTUAL
+    D_V_METHOD_ARTIF_TERM
+    D_V_PREGNANCY_OUTCOMES
+    D_V_PREGNANCY_ABORT_REASON
+    D_V_AGENT_PREGNANCY_BASE
+    D_V_AGENT_VIMIS
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+    D_DIRECTORIES_DATA_VER
+    D_FERT_METHODS
+    D_PREGNANCY_OUTCOMES
+    D_METHOD_ARTIF_TERM
+    D_PREGNANCY_ABORT_REASON
+    D_AGENT_PREGNANCY
+    D_AGENT_VIMIS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_VIMIS.GET_ACTUAL_VIMIS
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_AGENT_PREGNANCY.GET_DATE_BY_YEAR
+    D_PKG_AGENT_VIMIS.ACTUAL_VIMIS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PREGNANCY_OUTCOMES" composition="DEFAULT_ACTUAL"
+    unit="PREGNANCY_ABORT_REASON" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+БРОКЕРЫ:
+    unit:AGENT_PREGNANCY;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_birth_path.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_birth_path.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/agent_prgn_birth_path_add.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_PRGN_BIRTH_PATH
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_PRGN_BIRTH_PATH
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_PRGN_BIRTH_PATH.DEL
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_birth_path_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_birth_path_add.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+БРОКЕРЫ:
+    unit:AGENT_PRGN_BIRTH_PATH  action:INSERT;
+    unit:AGENT_PRGN_BIRTH_PATH  action:UPDATE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_oper.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_oper.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/agent_prgn_oper_add.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPUDICT_BASE
+    D_V_SERVICES_BASE
+    D_V_MKB10_BASE
+    D_V_AGENT_PRGN_OPER
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPUDICT
+    D_SERVICES
+    D_MKB10
+    D_AGENT_PRGN_OPER
+    D_DIRECTORIES_DATA_VER
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.FRM_D
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_AGENT_PRGN_OPER.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_oper_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_oper_add.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTORIES_DATA_VER
+    D_V_MKB10
+    D_V_LPUDICT_BASE
+    D_V_SERVICES_BASE
+    D_V_MKB10_BASE
+    D_V_AGENT_PRGN_OPER
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTORIES_DATA_VER
+    D_MKB10
+    D_LPUDICT
+    D_SERVICES
+    D_AGENT_PRGN_OPER
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.FRM_D
+    D_PKG_AGENT_PRGN_OPER.UPG
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="LPUDICT" composition="AGENT_NAME"
+    unit="SERVICES" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_pathologies.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_pathologies.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/agent_prgn_pathologies_add.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_PRGN_PATHOLOGIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_PRGN_PATHOLOGIES
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_PRGN_PATHOLOGIES.DEL
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/agent_prgn_pathologies_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\agent_prgn_pathologies_add.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+БРОКЕРЫ:
+    unit:AGENT_PRGN_PATHOLOGIES  action:INSERT;
+    unit:AGENT_PRGN_PATHOLOGIES  action:UPDATE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/vimis_akineo_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\vimis_akineo_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_VIMIS
+    D_V_VIMIS_STATUSES
+    D_V_AGENT_VIMIS
+    D_V_AGENT_PREGNANCY
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_VIMIS
+    D_VIMIS_STATUSES
+    D_AGENT_VIMIS
+    D_AGENT_PREGNANCY
+    D_PREGNANCY_ABORT_REASON
+    D_PREGNANCY_OUTCOMES
+    D_LPUDICT
+    D_FERT_METHODS
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_MSG.RECORD_NOT_FOUND
+
+БРОКЕРЫ:
+    unit:AGENT_VIMIS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/vimis_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\vimis_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/vimis_akineo_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_VIMIS;
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_VIMIS
+    D_V_VIMIS_STATUSES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_VIMIS
+    D_VIMIS_STATUSES
+
+БРОКЕРЫ:
+    unit:AGENT_VIMIS;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_prev_diseases/agent_prev_diseases_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_prev_diseases\agent_prev_diseases_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_PREV_DISEASES
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_PREV_DISEASES
+    D_LPUDICT
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_PREV_DISEASES  action:INSERT;
+    unit:AGENT_PREV_DISEASES  action:UPDATE;
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_prev_diseases/agent_prev_diseases_edit_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_prev_diseases\agent_prev_diseases_edit_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_prev_diseases/agent_prev_diseases_edit.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

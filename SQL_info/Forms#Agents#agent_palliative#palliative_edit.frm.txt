@@ -1,0 +1,82 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_palliative/palliative_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_palliative\palliative_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_palliative\palliative_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_palliative\palliative_edit.d\script.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_palliative\palliative_edit.frm
+
+     ===== UserFormsVOKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVOKOD\Agents\agent_palliative\palliative_edit.d\script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PALLIATIVE_NOZ_GROUPS
+    D_V_LPUDICT_BASE
+    D_V_LPU_BASE
+    D_V_MKB10
+    D_V_EMPLOYERS_FIO
+    D_V_AGENT_PALLIATIVE_DICTS
+    D_V_EXTRA_DICT_VALUES_BASE
+    D_V_EXTRA_DICTS_BASE
+    D_V_EMPLOYERS
+    D_V_MKB10_BASE
+    D_V_VIS_DIAGNOSISES_MAIN
+    D_V_AGENT_PALLIATIVE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PALLIATIVE_NOZ_GROUPS
+    D_LPUDICT
+    D_LPU
+    D_MKB10
+    D_EMPLOYERS
+    D_AGENTS
+    D_AGENT_PALLIATIVE_DICTS
+    D_EXTRA_DICTS
+    D_EXTRA_DICT_VALUES
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_AGENT_PALLIATIVE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_PALLIATIVE_DICTS.DEL
+    D_PKG_TOOLS.STR_SEPARATE_CLOB
+    D_PKG_AGENT_PALLIATIVE_DICTS.ADD
+    D_PKG_NR_NOTIFICATIONS.ADD
+
+КОНСТАНТЫ:
+    PALLIATIVE_MKB
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+    unit="LPUDICT" composition="DEFAULT_ANALYST"
+    unit="PALLIATIVE_NOZ_GROUPS" composition="DEFAULT_NAME"
+    unit="EMPLOYERS" composition="CODE_FIO"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

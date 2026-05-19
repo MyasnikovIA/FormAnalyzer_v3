@@ -1,0 +1,32 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_gynec/agent_gynec_contraception.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_gynec\agent_gynec_contraception.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_gynec/agent_gynec_contraception_edit.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_GYNEC_CONTRACEPT
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_CONTRACEPT
+    D_CONTRACEPT_TYPES
+    D_COMPLICATIONES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_CONTRACEPT  action:DELETE;
+

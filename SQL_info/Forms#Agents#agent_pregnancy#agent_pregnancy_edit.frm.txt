@@ -1,0 +1,58 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/agent_pregnancy_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\agent_pregnancy_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Pregnancy/subforms/check_vrt_link
+     Agents/agent_children/subForms/agent_children_grid
+
+Список вызываемых форм в JS:
+     Pregnancy/preg_card_subforms/preg_complication.frm
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_DIRECTORIES_DATA_VER
+    D_V_FERT_METHODS
+    D_V_PREGNANCY_OUTCOMES_ACTUAL
+    D_V_METHOD_ARTIF_TERM
+    D_V_PREGNANCY_OUTCOMES
+    D_V_PREGNANCY_ABORT_REASON
+    D_V_AGENT_PREGNANCY_BASE
+    D_V_AGENT_VIMIS
+    D_V_MKB10_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+    D_DIRECTORIES_DATA_VER
+    D_FERT_METHODS
+    D_PREGNANCY_OUTCOMES
+    D_METHOD_ARTIF_TERM
+    D_PREGNANCY_ABORT_REASON
+    D_AGENT_PREGNANCY
+    D_AGENT_VIMIS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_VIMIS.GET_ACTUAL_VIMIS
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_AGENT_PREGNANCY.GET_DATE_BY_YEAR
+    D_PKG_AGENT_VIMIS.ACTUAL_VIMIS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PREGNANCY_OUTCOMES" composition="DEFAULT_ACTUAL"
+    unit="PREGNANCY_ABORT_REASON" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:unit  composition:composition;
+
+БРОКЕРЫ:
+    unit:AGENT_PREGNANCY;
+

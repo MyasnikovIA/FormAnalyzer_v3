@@ -1,0 +1,41 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/vimis_akineo_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\vimis_akineo_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_VIMIS
+    D_V_VIMIS_STATUSES
+    D_V_AGENT_VIMIS
+    D_V_AGENT_PREGNANCY
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_VIMIS
+    D_VIMIS_STATUSES
+    D_AGENT_VIMIS
+    D_AGENT_PREGNANCY
+    D_PREGNANCY_ABORT_REASON
+    D_PREGNANCY_OUTCOMES
+    D_LPUDICT
+    D_FERT_METHODS
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_MSG.RECORD_NOT_FOUND
+
+БРОКЕРЫ:
+    unit:AGENT_VIMIS;
+

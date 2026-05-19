@@ -55,6 +55,7 @@ public class SettingsDialog extends JDialog {
     private JCheckBox includePopupMenusCheckbox;
     private JCheckBox includePostgresPopupMenusCheckbox;
     private JCheckBox checkPostgresPackagesCheckbox;
+    private JCheckBox enableCSVExportCheckbox;  // CSV Export
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -311,6 +312,15 @@ public class SettingsDialog extends JDialog {
                 "Проверять соответствие NOT NULL constraints между Oracle и PostgreSQL.\n" +
                         "Выводит ошибки, если в Oracle NOT NULL, а в PostgreSQL NULL разрешен."));
 
+        // CSV Export
+        enableCSVExportCheckbox = new JCheckBox("Выгружать CSV отчет");
+        enableCSVExportCheckbox.setSelected(config.isEnableCSVExport());
+        enableCSVExportCheckbox.addActionListener(e -> config.setEnableCSVExport(enableCSVExportCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(enableCSVExportCheckbox,
+                "Создавать CSV файл (forms_export.csv) со всеми данными о формах.\n" +
+                        "CSV файл обновляется после каждой обработанной формы.\n" +
+                        "Может быть открыт в Excel или любом текстовом редакторе."));
+
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -531,6 +541,9 @@ public class SettingsDialog extends JDialog {
         if (checkPostgresPackagesCheckbox != null) {
             checkPostgresPackagesCheckbox.setSelected(config.isCheckPostgresPackages());
         }
+        if (enableCSVExportCheckbox != null) {
+            enableCSVExportCheckbox.setSelected(config.isEnableCSVExport());
+        }
 
         // LLM settings
         if (enableLLMExportCheckbox != null) {
@@ -581,6 +594,7 @@ public class SettingsDialog extends JDialog {
         settings.setPostgresUser(postgresUserField.getText());
         settings.setPostgresPassword(new String(postgresPasswordField.getPassword()));
         settings.setMisUser(misUserField.getText());
+        config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
         settings.save();
 
         // Report settings

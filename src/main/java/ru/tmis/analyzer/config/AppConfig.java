@@ -35,6 +35,7 @@ public class AppConfig {
     private boolean includeViewDetails = false;
     private boolean includePopupMenus = true;
     private boolean includePostgresPopupMenus = false;
+    private boolean enableCSVExport = false;
 
     // Проверка БД
     private boolean checkDbObjects = false;
@@ -159,7 +160,10 @@ public class AppConfig {
     public boolean isIncludeBrokerFunctions() { return includeBrokerFunctions; }
     public void setIncludeBrokerFunctions(boolean includeBrokerFunctions) { this.includeBrokerFunctions = includeBrokerFunctions; }
 
-    // ==================== ЗАГРУЗКА И СОХРАНЕНИЕ ====================
+    public boolean isEnableCSVExport() { return enableCSVExport; }
+    public void setEnableCSVExport(boolean enableCSVExport) { this.enableCSVExport = enableCSVExport; }
+
+
 
     /**
      * Загрузить конфигурацию из файла

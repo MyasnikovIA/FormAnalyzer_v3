@@ -1,0 +1,32 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_pregnancy/Subforms/vimis_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_pregnancy\Subforms\vimis_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_pregnancy/Subforms/vimis_akineo_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_VIMIS;
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_VIMIS
+    D_V_VIMIS_STATUSES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_VIMIS
+    D_VIMIS_STATUSES
+
+БРОКЕРЫ:
+    unit:AGENT_VIMIS;
+

@@ -770,11 +770,7 @@ public class ReportGenerator {
             writer.println();
         }
     }
-
-
-
-
-    // ReportGenerator.java - исправленный метод appendFormToMainReport
+// ReportGenerator.java - исправленный метод appendFormToMainReport
 
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
         // 1. Сохраняем отдельный файл для формы (TXT)
@@ -796,11 +792,13 @@ public class ReportGenerator {
             writeFormReport(writer, formInfo);
         }
 
-        // ========== 3. ГЕНЕРАЦИЯ CSV ОТЧЕТА (добавляем строку в CSV файл) ==========
-        appendToCSVReport(formInfo);
+        // ========== 3. ГЕНЕРАЦИЯ CSV ОТЧЕТА (только если включено в настройках) ==========
+        if (config != null && config.isEnableCSVExport()) {
+            appendToCSVReport(formInfo);
+        }
 
         // ========== 4. ГЕНЕРАЦИЯ MD ПРОМПТА (если включено в настройках) ==========
-        if (config.isEnableLLMExport()) {
+        if (config != null && config.isEnableLLMExport()) {
             generateLLMPromptForForm(formInfo);
         }
     }
@@ -825,11 +823,11 @@ public class ReportGenerator {
 
             String formName = formInfo.getFormPath();
 
-            // ЮЗЕРФОРМЫ
+            // ЮЗЕРФОРМЫ - теперь не будет писать "(не найдено)"
             writeCSVBlock(writer, formName, "ЮЗЕРФОРМЫ", formInfo.getOverrides(),
                     formInfo.isFullyReplaced(), formInfo.getReplacementPath());
 
-            // SubForm
+            // SubForm - не будет писать "(не найдено)"
             writeCSVBlock(writer, formName, "SubForm", formInfo.getSubForms());
 
             // Список вызываемых форм в JS
@@ -879,9 +877,12 @@ public class ReportGenerator {
      */
     private void writeCSVBlock(PrintWriter writer, String formName, String blockName, Set<String> values) {
         if (values == null || values.isEmpty()) {
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
-        } else {
-            for (String value : values) {
+            // Не пишем "(не найдено)" - пропускаем
+            return;
+        }
+        for (String value : values) {
+            // Проверяем, не является ли значение маркером "не найдено"
+            if (value != null && !value.equals("(не найдено)") && !value.trim().isEmpty()) {
                 writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
             }
         }
@@ -894,21 +895,25 @@ public class ReportGenerator {
                                List<FormInfo.OverrideInfo> overrides, boolean fullyReplaced, String replacementPath) {
 
         if (fullyReplaced && replacementPath != null) {
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV("ПОЛНАЯ ЗАМЕНА: " + replacementPath));
+            String value = "ПОЛНАЯ ЗАМЕНА: " + replacementPath;
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
         }
 
         if (overrides == null || overrides.isEmpty()) {
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
-        } else {
-            Map<String, List<FormInfo.OverrideInfo>> overridesByRegion = new LinkedHashMap<>();
-            for (FormInfo.OverrideInfo override : overrides) {
-                overridesByRegion.computeIfAbsent(override.getRegionName(), k -> new ArrayList<>()).add(override);
-            }
+            // Не пишем "(не найдено)" - пропускаем
+            return;
+        }
 
-            for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
-                String region = entry.getKey();
-                for (FormInfo.OverrideInfo override : entry.getValue()) {
-                    String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
+        Map<String, List<FormInfo.OverrideInfo>> overridesByRegion = new LinkedHashMap<>();
+        for (FormInfo.OverrideInfo override : overrides) {
+            overridesByRegion.computeIfAbsent(override.getRegionName(), k -> new ArrayList<>()).add(override);
+        }
+
+        for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
+            String region = entry.getKey();
+            for (FormInfo.OverrideInfo override : entry.getValue()) {
+                String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
+                if (value != null && !value.trim().isEmpty()) {
                     writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
                 }
             }

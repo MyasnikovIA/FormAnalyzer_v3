@@ -1,0 +1,43 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_orph_places/agent_orph_places_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_orph_places\agent_orph_places_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agent_orph_places\agent_orph_places_edit.d\data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_ORPH_PLACES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ORPHAN_PLACES
+    D_ORPHAN_MOVE_REASONS
+    D_AGENTS
+    D_AGENT_ORPH_PLACES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ORPHAN_PLACES" composition="DEFAULT"
+    unit="AGENTS" composition="JUR_ORPHAN"
+    unit="ORPHAN_MOVE_REASONS" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_ORPH_PLACES;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
