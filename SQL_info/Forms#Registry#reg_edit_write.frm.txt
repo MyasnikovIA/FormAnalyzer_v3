@@ -1,0 +1,152 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/reg_edit_write.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Registry\reg_edit_write.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Registry\reg_edit_write.d\empty_visit_kind.dfrm
+
+
+SubForm:
+     Registry/reg_submit_checks
+     Registry/reg_write_subform
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+
+Список вызываемых форм в JS:
+     Registry/reg_finish.frm
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_SERVICES_STR
+    D_V_DIR_SERV_PAYMENTS
+    D_V_DIRECTION_SERVICES
+    D_V_CONTR_PAY_DISCOUNTS
+    D_V_CONTRACT_PAYMENTS
+    D_V_CONTRACTS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_RENDERING_JOURNAL
+    D_V_RJ_FAC_ACCOUNTS
+    D_V_FACIAL_ACCOUNTS
+    D_V_DIRECTIONS
+    D_V_CABLAB
+    D_V_OUTER_DIRECTIONS
+    D_V_PERSMEDCARD
+    D_V_SERVICES
+    D_V_OUT_DIR_SERVS
+    D_V_EMPLOYERS
+    D_V_PAYMENT_KIND
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES_STR
+    D_SERVICES
+    D_SERVTYPES
+    D_SERVPROFILES
+    D_DIR_SERV_PAYMENTS
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_CONTR_PAY_DISCOUNTS
+    D_CONTRACT_PAYMENTS
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_RENDERING_JOURNAL
+    D_RJ_FAC_ACCOUNTS
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MKB10
+    D_MESES
+    D_HOSP_HOURS
+    D_PERSMEDCARD
+    D_OUTER_DIRECTIONS
+    D_LPUDICT
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_MED_THERAPY_SCHEMES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_REASON_DIRECTION
+    D_EX_SYSTEMS
+    D_JOBTITLES
+    D_ER_PROFILES
+    D_BLOODGROUPE
+    D_RHESUS
+    D_OUT_DIR_SERVS
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CLSCHS.GET_WEEK_SCHEDULE
+    D_PKG_PRICELIST_SERVS.GET_PRICE
+    D_PKG_PRICELIST_SERVS.GET_PRICE_STR
+    D_PKG_CLSCHS.GET_INFO
+    D_PKG_DIRECTIONS.UPD
+    D_PKG_DIR_SERV_PAYMENTS.EXTENDED_DEL
+    D_PKG_OUT_DIR_SERVS.DEL
+    D_PKG_DIRECTION_SERVICES.UPD
+    D_PKG_DIRECTION_SERVICES.ADD
+    D_PKG_DIR_SERV_PAYMENTS.EXTENDED_ADD
+    D_PKG_OUT_DIR_SERVS.ADD
+    D_PKG_DIRECTION_SERVICES.DEL
+    D_PKG_BPENV.AFTERBP
+    D_PKG_OUTER_DIRECTIONS.UPD
+    D_PKG_OUTER_DIRECTIONS.ADD
+    D_PKG_CMP.DAT
+    D_PKG_DIRECTION_SERVICES.GET_PAYMENT_STATUS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    DSPCheckServPays
+    DSPCheckSocPays
+    OperScheduleType
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="JURISTIC_REG"
+    unit="MKB10" composition="DEFAULT"
+    unit="AGENTS" composition="NATURAL_REG"
+    unit="SPECIALITIES" composition="SELECT_NAME"
+    unit="VISITPURPOSES" composition="DEF"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_WEEK_SCH
+    D_DATE
+    D_NUMB
+    D_P_EXC
+

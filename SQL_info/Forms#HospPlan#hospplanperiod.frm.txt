@@ -1,0 +1,56 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/hospplanperiod.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hospplanperiod.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\HospPlan\hospplanperiod.d\usr64_remove_pat.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospPlan/hospplanperiod_edit.frm
+     HospPlan/hospplan.frm
+     HospPlan/hospplan_addpmc_edit.frm
+
+SQL ЗАПРОСЫ (13):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_LPU
+    D_V_CABLAB
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_DAT_TOOLS.DATES_IN_RANGE
+    D_PKG_HPK_PLANS.ADD
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_URPRIVS.GET_STANDART_PRIVS
+    D_PKG_HPK_PLAN_JOURNALS.REMOVE_PATIENT
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CABLAB_OUTER_DIRECTIONS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+    D_CL_DATE
+

@@ -1,0 +1,70 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reg/reg_print_talon_eq.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reg\reg_print_talon_eq.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsRKB3 =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKB3\Reg\reg_print_talon_eq.d\user_scripts.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES
+    D_V_DIRECTIONS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MKB10
+    D_MESES
+    D_HOSP_HOURS
+    D_PERSMEDCARD
+    D_OUTER_DIRECTIONS
+    D_LPUDICT
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_MED_THERAPY_SCHEMES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    DayBgnTime
+    DayEndTime
+

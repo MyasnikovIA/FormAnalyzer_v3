@@ -1,0 +1,42 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/Reception/receipt_group_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\Reception\receipt_group_call.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES
+    D_V_CONTRACTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+

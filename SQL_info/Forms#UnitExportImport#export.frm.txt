@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/UnitExportImport/export.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\UnitExportImport\export.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_EI_SCHEMES
+    D_V_EI_SCHEME_STR
+    D_V_UNITLIST
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EI_SCHEMES
+    D_EI_SCHEME_STR
+    D_UNITLIST
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EI_SCHEMES.CLEAR_TEMP_PARAM
+    D_PKG_EI_SCHEMES.SET_TEMP_ERROR
+    D_PKG_EXCH.EXP
+    D_PKG_EI_SCHEMES.GET_TEMP_ERROR_TEXT
+

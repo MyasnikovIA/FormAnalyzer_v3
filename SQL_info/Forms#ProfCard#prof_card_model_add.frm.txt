@@ -1,0 +1,142 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/prof_card_model_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ProfCard\prof_card_model_add.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ProfCard\prof_card_model_add.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ProfCard\prof_card_model_add.d\view.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\ProfCard\prof_card_model_add.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\ProfCard\prof_card_model_add.d\script.dfrm
+
+
+SubForm:
+     ProfCard/SubForms/contraindications_weapons
+     ProfCard/SubForms/catalog_validation
+     ProfCard/SubForms/check_double_read
+     ProfCard/SubForms/second_step_check
+
+Список вызываемых форм в JS:
+     Persmedcard/persmedcard_edit.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     ProfCard/profcard_edit.frm
+     ProfCard/pc_first_step_select.frm
+
+SQL ЗАПРОСЫ (21):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PROF_CARD_MODELS
+    D_V_PROF_CARD_BASE
+    D_V_PROF_CARD_SERVICES
+    D_V_VISITS
+    D_V_PC_CLOSE_REASONS
+    D_V_PROF_CARD
+    D_V_CONTR_AMI_DIRECTS
+    D_V_SINFO_SET_PARAMS
+    D_V_SIGNAL_INFO_SETS
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENTS_BASE
+    D_V_PROF_CARD_DIR_SERVS
+    D_V_DIRECTION_SERVICES
+    D_V_PROF_CARD_SERVICES_BASE
+    D_V_PROF_CARD_DIR_SERVS_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_PAYMENT_KIND
+    D_V_CONTRACTS
+    D_V_PERSMEDCARD_FIO
+    D_V_AGENT_WORK_PLACES
+    D_V_CATALOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_JOBTITLES
+    D_VISITPURPOSES
+    D_PAYMENT_KIND
+    D_SERVICES
+    D_PROF_CARD_MODELS
+    D_PROF_CARD_TYPES
+    D_PROF_CARD
+    D_PC_SERV_STATES
+    D_DEPS
+    D_CABLAB
+    D_PROF_CARD_DIR_SERVS
+    D_VISITS
+    D_PROF_CARD_SERVICES
+    D_SERVTYPES
+    D_DIRECTION_SERVICES
+    D_PC_CLOSE_REASONS
+    D_LPU
+    D_PERSMEDCARD
+    D_AGENTS
+    D_CONTRACTS
+    D_EMPLOYERS
+    D_PATIENTS_DGROUP
+    D_DECRETIV_GROUPS
+    D_PC_RESULTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_SINFO_SET_PARAMS
+    D_SIGNAL_INFO_SETS
+    D_ICONS
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_REFERENCE_KINDS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_DIR_SERV_PAYMENTS
+    D_CONTRACT_PAYMENTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_RAIONS
+    D_AGENT_DEPS
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_CATALOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_PROF_CARD.EXIST_DISP_CHILD_AGE_CAT
+    D_PKG_PROF_CARD_MODELS.CHECK_FIRST_PERIOD
+    D_PKG_STD.TREF
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_PROF_CARD.CLOSE_PROF_CARD
+    D_PKG_PROF_CARD.OPEN_PROF_CARD
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_BPENV.AFTERBP
+    D_PKG_CONTRACTS.SET_END_DATE
+    D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_CATALOGS.GET_ID_BY_NAME
+    D_PKG_DAT_TOOLS.FULL_YEARS
+
+КОНСТАНТЫ:
+    TERAP
+    CloseContract
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckCloseProfCard
+    CheckPCAge
+    PC_CheckOpenProfChild
+    PC_CLOSE_REASONS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PROF_CARD_MODELS" composition="GRID"
+    unit="CATALOGS" composition="DEFAULT"
+    unit="PERSMEDCARD" composition="PMC"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:PROF_CARD_MODELS  composition:GRID;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

@@ -1,0 +1,23 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/Statistic/movement_daily_beds_patients_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\Statistic\movement_daily_beds_patients_call.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="DEPS" composition="DEF_ST"
+    unit="BED_TYPES" composition="DEFAULT"
+    unit="PAYMENT_KIND" composition="DEFAULT"
+

@@ -1,0 +1,102 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/OuterDirections/outerdirections_view.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\OuterDirections\outerdirections_view.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\OuterDirections\outerdirections_view.d\outerdirections_view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMoscowNIIBlohina\OuterDirections\outerdirections_view.d\script.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\OuterDirections\outerdirections_view.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\OuterDirections\outerdirections_view.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\OuterDirections\outerdirections_view.d\view.dfrm
+
+
+SubForm:
+     Directions/Subforms/check_sys_opt_view_all_outer_direction
+
+Список вызываемых форм в JS:
+     Directions/add_directions_from_er.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        OUTER_DIRECTIONS;
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_OUTER_DIRECTIONS
+    D_V_DIRECTIONS
+    D_V_DIRECTION_SERVICES
+    D_V_PERSMEDCARD_FIO
+    D_V_OUTER_DIRECTIONS_BASE
+    D_V_LPUDICT
+    D_V_DIRECTIONS_BASE
+    D_V_HPK_PLAN_JOURNALS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTIONS
+    D_OUTER_DIRECTIONS
+    D_PERSMEDCARD
+    D_AGENTS
+    D_MKB10
+    D_LPUDICT
+    D_SPECIALITIES
+    D_REASON_DIRECTION
+    D_EX_SYSTEMS
+    D_SERVICES
+    D_JOBTITLES
+    D_ER_PROFILES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_CABLAB
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_HPK_PLAN_JOURNALS
+    D_MESES
+    D_HOSP_HOURS
+    D_EMPLOYERS
+    D_DEPS
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_MED_THERAPY_SCHEMES
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_HOSP_HISTORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_OUTER_DIRECTIONS.DEL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckActualLpu
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PERSMEDCARD" composition="BUTTON_EDIT_DEFAULT"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_DATE
+    D_DATE_END
+    D_NUMB
+

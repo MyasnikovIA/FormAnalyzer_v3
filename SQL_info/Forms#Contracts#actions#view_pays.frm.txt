@@ -1,0 +1,57 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/actions/view_pays.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Contracts\actions\view_pays.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Contracts/actions/edit_payment_journal.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        PAYMENT_JOURNAL;
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CONTRACTS
+    D_V_PAYMENT_JOURNAL
+    D_V_PJ_CONTRACTS_BASE
+    D_V_PJ_CON_PAYMENTS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_TAX_NOTE_PAYMENTS
+    D_V_TAX_NOTES
+    D_V_PAYMENT_JOURNAL_BASE
+    D_V_CONTRACTS_BASE
+    D_V_CONTRACT_TYPES
+    D_V_PJ_CONTRACTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_PAYMENT_JOURNAL
+    D_PJ_CONTRACTS
+    D_PJ_CON_PAYMENTS
+    D_CONTRACT_PAYMENTS
+    D_TAX_NOTE_PAYMENTS
+    D_TAX_NOTES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.FRM_D
+    D_PKG_PAYMENT_JOURNAL.GET_SUMM
+    D_PKG_PJ_CONTRACTS.ADD
+    D_PKG_PAYMENT_JOURNAL.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

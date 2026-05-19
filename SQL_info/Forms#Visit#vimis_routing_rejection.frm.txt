@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Visit/vimis_routing_rejection.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Visit\vimis_routing_rejection.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Visit/Subforms/log
+
+Список вызываемых форм в JS:
+     Visit/Subforms/vimis_routing_alert.frm
+     Forms/Visit/vimis_routing_rejection.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

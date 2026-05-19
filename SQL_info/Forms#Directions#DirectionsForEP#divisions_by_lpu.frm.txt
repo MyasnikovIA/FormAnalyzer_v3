@@ -1,0 +1,35 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/DirectionsForEP/divisions_by_lpu.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\DirectionsForEP\divisions_by_lpu.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIVISIONS_BASE
+    D_V_FED_NSI_LINK_SP
+    D_V_FED_NSI_LINKS
+    D_V_FED_NSI_VERS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIVISIONS
+    D_LPU
+    D_LPUDICT
+    D_FED_NSI_LINK_SP
+    D_FED_NSI_LINKS
+    D_FED_NSI_VERS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_UNITLIST.GET_VAL_BY_UNIT_ID
+

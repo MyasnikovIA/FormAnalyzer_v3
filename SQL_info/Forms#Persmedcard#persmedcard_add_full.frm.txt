@@ -1,0 +1,193 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Persmedcard/persmedcard_add_full.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Persmedcard\persmedcard_add_full.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_add_full.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_add_full.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_add_full.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Persmedcard\persmedcard_add_full.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Persmedcard\persmedcard_add_full.d\script.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Persmedcard\persmedcard_add_full.d\is_home.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_add_full.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_add_full.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_add_full.d\view.dfrm
+
+     ===== UserFormsNiiSerb =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsNiiSerb\Persmedcard\persmedcard_add_full.d\persmedcard_add_full.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_add_full.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_add_full.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_add_full.d\view.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Persmedcard\persmedcard_add_full.d\ADDRS_BLOCK.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\Persmedcard\persmedcard_add_full.d\persmedcard_add_full.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/zaprossnils
+     barcode_listeners/oms_all
+     Persmedcard/anonym/anonym
+     Agents/subscript/accuracyDateCheck
+     Persmedcard/subforms_view/check_reg_purpose_age
+     Agents/subscript/birthdate
+     Agents/subforms_fields/polis_oms
+     Agents/subforms_fields/polis_dms
+     Agents/subforms_fields/registration
+     Agents/subforms_fields/social_state
+     Agents/subforms_fields/orphan_category
+     Persmedcard/subforms_fields/life_categories
+     Agents/subforms_fields/contact
+     Persmedcard/subforms_fields/antro
+     Agents/subforms_fields/consitution
+     Agents/subforms_fields/persdocs
+     Agents/subforms_fields/addr
+     Agents/subforms_fields/orphan_place
+     Agents/subforms_fields/marital_state
+     Agents/subforms_fields/agent_relatives
+     Agents/subforms_fields/agent_details
+     Agents/subforms_fields/work_place
+     Agents/subforms_fields/category
+     Agents/subforms_fields/inability
+     Agents/subforms_fields/federal_priv
+     Agents/subforms_fields/decretiv_group
+     Agents/subforms_fields/gr_rentgenograph
+     Agents/subforms_fields/gr_vaccination
+     Agents/subforms_fields/names
+     Agents/subforms_fields/death
+     InformedAgreement/Patient/patient_ia_add_tab
+
+Список вызываемых форм в JS:
+     Geografy/geografy.frm
+
+SQL ЗАПРОСЫ (20):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_ANTHROP
+    D_V_PRIV_TYPES
+    D_V_FED_NATIONALITIES
+    D_V_AGENT_CONTACTS_BASE
+    D_V_AGENT_PERSDOCS
+    D_V_AGENT_ADDRS_BASE
+    D_V_AGENT_POLIS_BASE
+    D_V_PERSDOCTYPES
+    D_V_COUNTRIES
+    D_V_AGENTS
+    D_V_RELATIONSHIPS
+    D_V_AGENT_ADDRS
+    D_V_CONTINGENTS
+    D_V_SHOW_METHOD
+    D_V_FN_DOC_TYPES_FED
+    D_V_SOCIALSTATES
+    D_V_LPU
+    D_V_URPRIVS
+    D_V_CONTACT_TYPES
+    D_V_RESERVATION
+    D_V_CABLAB_BASE
+    D_V_PERSMEDCARD
+    D_V_SPECIAL_CASES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ANTHROP
+    D_MEASURES
+    D_PRIV_TYPES
+    D_FED_NATIONALITIES
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+    D_AGENT_ADDRS
+    D_AGENT_POLIS
+    D_MASKS
+    D_GEOGRAFY
+    D_AGENTS
+    D_RELATIONSHIPS
+    D_RAIONS
+    D_CONTINGENTS
+    D_SHOW_METHOD
+    D_UNITLIST
+    D_FN_DOC_TYPES_FED
+    D_SOCIALSTATES
+    D_LPU
+    D_LPUDICT
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+    D_SERVICES
+    D_EMPLOYERS
+    D_RESERVATION
+    D_CABLAB
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_SPECIAL_CASES
+    D_SPECIAL_CASES_TYPE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_EX_SYSTEM_VALUES.SET_VAL
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB_UNKNOWN
+    D_PKG_PERSMEDCARD.DEL_CARD_NUMB_UNKNOWN
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_PRIV_DIS_GROUPS.GET_GROUP_ID_FROM_MKB
+    D_PKG_PRIV_TYPES.GET_TYPE_ID_FROM_CODE
+    D_PKG_SMC_DEFVALUES.GET_DEFVALUE
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB
+    D_PKG_PERSMEDCARD.UPD_ANTHRO
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ANTHROP_VEIWLIST
+    AgnPersDocsCitizCheck
+    PMC_GEN_NUMB_UNKNOWN
+    AgentRelativeForChild
+    ShowSignByAge
+    AgentRelativeCheck
+    InabiltyStatusAndGroupCheck
+    AgentFIOadd
+    GenAnonimNumb
+    AgentAddrFieldMandatory
+    AgentAddrIsReg
+    GenEmployersNumb
+    SetSocStateAuto
+    hideFERZLButton
+    CheckPMC_SNILS
+    CheckFor_UNKNOWN
+    AgnPersDocsDefCitizenship
+    PersDocTypeDefault
+    PersDocsType_Absent
+    hideInfoMax
+    RemoteRegAllow
+    AGENT_ADDRS
+    PmcIANumbPref
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="SPECIAL_CASES" composition="SC"
+    unit="CONTINGENTS" composition="CNTG"
+    unit="MKB10" composition="DEFAULT"
+    unit="GEOGRAFY" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:PERSMEDCARD;
+    unit:PMC_REG_NUMS  action:INSERT;
+

@@ -1,0 +1,77 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/showLoadKF.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\showLoadKF.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DEPS
+    D_V_DEP_BEDS
+    D_V_DEP_BED_PROFILES
+    D_V_HOSP_HISTORY_DEPS
+    D_V_HOSP_HISTORIES
+    D_V_HH_DEP_BEDS
+    D_V_PERSMEDCARD
+    D_V_HOSP_PLAN_DEPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HEAD_DEP
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DEPS_KINDS
+    D_DEPS_TYPES
+    D_DIVISIONS
+    D_MED_CARE_PROFILES
+    D_DEP_BEDS
+    D_DEP_POSTS
+    D_DEP_BED_PROFILES
+    D_BED_TYPES
+    D_AGENT_NAMES
+    D_HOSP_HISTORY_DEPS
+    D_HOSP_HISTORIES
+    D_PAYMENT_KIND
+    D_MKB10
+    D_HOSP_RESULTS
+    D_KSGCODES
+    D_VMP
+    D_HOSP_OUTCOMES
+    D_MED_THERAPY_SCHEMES_DESC
+    D_MED_THERAPY_SCHEMES
+    D_ALV
+    D_SCALE_REHAB
+    D_AGENT_RELATIVES
+    D_PERSMEDCARD
+    D_HOSP_REASONS
+    D_HOSPITALIZATION_TYPES
+    D_TRANSPORTATION_KINDS
+    D_LPUDICT
+    D_HPK_PLAN_JOURNALS
+    D_HPKPJ_VMP_STATES
+    D_HOSP_HOURS
+    D_HH_TRANSFER_REASONS
+    D_ABILITY_STATUS
+    D_DIRECTORIES_DATA_VER
+    D_HOSP_INCOMES
+    D_DIRECTION_HOSP
+    D_HH_DEP_BEDS
+    D_BLOODGROUPE
+    D_RHESUS
+    D_CABLAB
+    D_HOSP_PLAN_DEPS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+

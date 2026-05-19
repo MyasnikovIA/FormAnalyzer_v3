@@ -130,7 +130,7 @@ public class FormAnalyzerService {
         return results;
     }
 
-    // core/service/FormAnalyzerService.java - полный метод analyzeForm
+    // FormAnalyzerService.java - исправленный метод analyzeForm
 
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
@@ -141,6 +141,21 @@ public class FormAnalyzerService {
             System.err.println("Базовая форма не найдена: " + normalizedPath);
             return null;
         }
+
+        // ========== ПРОВЕРКА: ЕСЛИ ОТЧЁТ УЖЕ СУЩЕСТВУЕТ ==========
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        String safeFileName = getSafeFileName(normalizedPath);
+        Path reportPath = Paths.get(outputDir, safeFileName);
+
+        if (Files.exists(reportPath)) {
+            log("Отчет уже существует: " + reportPath.toString());
+            log("  Форма пропущена (отчет построен ранее)");
+            return null;
+        }
+        // =======================================================
 
         FormInfo formInfo = userFormsResolver.resolveOverrides(normalizedPath);
 
@@ -195,6 +210,16 @@ public class FormAnalyzerService {
         return formInfo;
     }
 
+    /**
+     * Формирует безопасное имя файла отчёта
+     */
+    private String getSafeFileName(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
+    }
     private Set<String> getFormsToAnalyze() throws IOException {
         // Если установлен прямой список, используем его
         if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {

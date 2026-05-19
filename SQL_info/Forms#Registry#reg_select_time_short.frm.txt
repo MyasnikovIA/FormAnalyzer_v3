@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/reg_select_time_short.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Registry\reg_select_time_short.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+     Registry/reg_select_time
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

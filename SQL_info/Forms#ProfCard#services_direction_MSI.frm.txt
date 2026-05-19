@@ -1,0 +1,44 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/services_direction_MSI.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ProfCard\services_direction_MSI.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MSE_SERVICES
+    D_V_SERVICES_BASE
+    D_V_MSE_GROUP
+    D_V_MSE_MKB
+    D_V_MKB10_BASE
+    D_V_PROF_CARD_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MSE_SERVICES
+    D_SERVICES
+    D_MSE_GROUP
+    D_MSE_MKB
+    D_MKB10
+    D_DEPS
+    D_CABLAB
+    D_PROF_CARD_SERVICES
+    D_SERVTYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+

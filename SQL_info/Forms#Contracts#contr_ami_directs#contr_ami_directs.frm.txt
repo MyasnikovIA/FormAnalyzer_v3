@@ -1,0 +1,35 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contr_ami_directs/contr_ami_directs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Contracts\contr_ami_directs\contr_ami_directs.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     NosRegistrs/InfectiousRegister/subforms/universal_export
+
+Список вызываемых форм в JS:
+     Contracts/contr_ami_directs/contr_ami_directs_edit.frm
+     Contracts/contract_payments/contract_payments_control.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTR_AMI_DIRECTS;
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CONTR_AMI_DIRECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+

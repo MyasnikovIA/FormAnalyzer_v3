@@ -1,0 +1,42 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/TemplateComment/TemplateComment_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\TemplateComment\TemplateComment_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     footerStyle
+
+Список вызываемых форм в JS:
+     Labmed/LabmedResearch/select_labmed_research.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LABMED_TEMPLATE_COMM
+    D_V_LBM_TMPLT_COMM_LINK
+    D_V_LABMED_TEMPLATE_HEADING
+    D_V_LABMED_RSRCH_RES_LINK
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LABMED_TEMPLATE_COMM
+    D_LBM_TMPLT_COMM_LINK
+    D_LABMED_RESEARCH
+    D_LABMED_RSRCH_GROUPS
+    D_LABMED_RESEARCH_RES
+    D_LABMED_TEMPLATE_HEADING
+    D_LABMED_RSRCH_RES_LINK
+    D_LABMED_ALTER_MEASURE
+    D_MEASURES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_LABMED_TEMPLATE_COMM.UPD
+    D_PKG_LABMED_TEMPLATE_COMM.ADD
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="LABMED_TEMPLATE_HEADING" composition="GRID"
+

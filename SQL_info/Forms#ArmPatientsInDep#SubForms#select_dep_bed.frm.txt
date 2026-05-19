@@ -1,0 +1,83 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ArmPatientsInDep/SubForms/select_dep_bed.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ArmPatientsInDep\SubForms\select_dep_bed.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\select_dep_bed.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\select_dep_bed.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DEP_BEDS
+    D_V_DEP_BED_PROFILES_BASE
+    D_V_BED_TYPES
+    D_V_DEP_BED_EMPS
+    D_V_DEP_BEDS_ALL
+    D_V_HH_DEP_BEDS
+    D_V_HOSP_HISTORY_DEPS
+    D_V_HOSP_HISTORIES
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DEP_BEDS
+    D_DEPS
+    D_DEP_POSTS
+    D_DEP_BED_PROFILES
+    D_BED_TYPES
+    D_DEP_BED_EMPS
+    D_HH_DEP_BEDS
+    D_HOSP_HISTORY_DEPS
+    D_HOSP_HISTORIES
+    D_AGENT_NAMES
+    D_DEPS_TYPES
+    D_PAYMENT_KIND
+    D_MKB10
+    D_HOSP_RESULTS
+    D_KSGCODES
+    D_EMPLOYERS
+    D_AGENTS
+    D_VMP
+    D_HOSP_OUTCOMES
+    D_MED_THERAPY_SCHEMES_DESC
+    D_MED_THERAPY_SCHEMES
+    D_ALV
+    D_SCALE_REHAB
+    D_AGENT_RELATIVES
+    D_PERSMEDCARD
+    D_HOSP_REASONS
+    D_HOSPITALIZATION_TYPES
+    D_TRANSPORTATION_KINDS
+    D_LPUDICT
+    D_HPK_PLAN_JOURNALS
+    D_HPKPJ_VMP_STATES
+    D_HOSP_HOURS
+    D_HH_TRANSFER_REASONS
+    D_ABILITY_STATUS
+    D_DIRECTORIES_DATA_VER
+    D_HOSP_INCOMES
+    D_DIRECTION_HOSP
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DEP_BED_PROFILES.GET_ACTIVE_PROFILE
+    D_PKG_DEP_BEDS.GET_OCCUPANT
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_DAT_TOOLS.FULL_UNITS
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_HOSP_HISTORIES.GET_FACT_DAYS
+

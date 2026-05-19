@@ -1,0 +1,50 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/actions/create_check.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Contracts\actions\create_check.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Contracts/actions/edit_payment_journal.frm
+     Catalogs/catalogs.frm
+     Agents/agents_edit.frm
+     Persmedcard/patient_search.frm
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_SERVICES
+    D_V_LPU
+    D_V_PAYMENT_METHODS
+    D_V_AGENTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES_STR
+    D_SERVICES
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_PAYMENT_METHODS
+    D_DOC_TYPES
+    D_AGENTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CATALOGS.GET_FULL
+    D_PKG_BILLS.GET_NEW_NUMBER
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG_F1
+    D_PKG_BILLS.ADD
+    D_PKG_BILL_SPECS.ADD_FROM_CONTRACT
+
+СИСТЕМНЫЕ ОПЦИИ:
+    BillPref
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="AGN_GRID"
+

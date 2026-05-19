@@ -1,0 +1,262 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Lis/Dirline/dirline_order_alt.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Lis\Dirline\dirline_order_alt.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlaniaSKMMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlaniaSKMMC\Lis\Dirline\dirline_order_alt.d\data.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Lis\Dirline\dirline_order_alt.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsVolgograd =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\view.dfrm
+
+
+SubForm:
+     Lis/Utils/comments_utils
+     Lis/Utils/grid_utils
+     Lis/Barcode/subforms/barcode_utils
+     Lis/Samples/subforms/ref_char_val_by_sample
+     Lis/Dirline/subforms/dirline_research_copy_option
+     Lis/_ModularSubforms/patient_death_check
+     Lis/Patients/subforms/patient_select
+     Lis/Dirline/subforms/dirline_order/direction_comm_postponed
+     Lis/Dirline/subforms/direction_params
+     Lis/Research/subforms/research_grid_alt
+     Lis/Dirline/subforms/dirline_order/direction_refchars
+     Lis/Dirline/subforms/dirline_order/direction_results
+     Lis/Dirline/subforms/getParamsForPaymentKind
+     Directions/service_frequency
+
+Список вызываемых форм в JS:
+     Lis/Dirline/select_price.frm
+     OuterDirections/outerdirections_view_d3.frm
+     Lis/Dirline/forms/select_meth_partners.frm
+     Labmed/LabmedSamples/labmed_ref_char_edit.frm
+     Lis/Dirline/forms/schedule.frm
+     Directions/select_patient_ami_directs.frm
+     Directions/select_contract_by_pk.frm
+
+SQL ЗАПРОСЫ (23):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PAYMENT_KIND_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_LABMED_ANALYZ_RESEARCH
+    D_V_LABMED_ANALYZE
+    D_V_SERVICES_BASE
+    D_V_LABMED_DIRLINE_ORDER
+    D_V_LABMED_RESEARCH_METHODS
+    D_V_LPUDICT_BASE
+    D_V_LPU
+    D_V_PRICELISTS
+    D_V_PRICELIST_SERVS
+    D_V_LABMED_ANALYZE_BASE
+    D_V_LPU_SERVICES
+    D_V_LABMED_RESEARCH
+    D_V_LABMED_METHOD_MATERIALS
+    D_V_LABMED_RESEARCH_NEW_LIS
+    D_V_LABMED_METHOD_MAT_CONTS
+    D_V_HOSP_HISTORIES_ALL
+    D_V_HOSP_HISTORY_DEPS
+    D_V_LBM_BARCODE_SETTINGS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_CONTRACTS_BASE
+    D_V_CONTR_AMI_DIRECTS_PMC
+    D_V_LABMED_DIR_BY_SAMPLE
+    D_V_DIRECTIONS
+    D_V_DIRECTION_SERVICES
+    D_V_LABMED_DIRECTION_LINE
+    D_V_LBM_SAMPLE_DIRLINE
+    D_V_LABMED_DIRECTION_LINE_OUT
+    D_V_OUTER_DIRECTIONS_BS
+    D_V_LABMED_SAMPLES
+    D_V_AGENTS
+    D_V_EMPLOYERS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_PERSMEDCARD_BASE
+    D_V_UNITPROPS_BASE
+    D_V_UNITPROP_VALUES
+    D_V_LABMED_TEMPLATE_COMM
+    D_V_LBM_TMPLT_COMM_LINK_BASE
+    D_V_VISITPURPOSES_BASE
+    D_V_LABMED_RESEARCH_METHODS_BS
+    D_V_HOSP_HISTORIES_BASE
+    D_V_HOSP_HISTORY_DEPS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PAYMENT_KIND
+    D_DIRECTION_SERVICES
+    D_LABMED_ANALYZ_RESEARCH
+    D_LABMED_ANALYZE
+    D_SERVICES
+    D_LABMED_DIRECTION_LINE
+    D_DIRECTIONS
+    D_LABMED_RESEARCH
+    D_LABMED_RESEARCH_METHODS
+    D_LBM_DIRLINE_STATUSES
+    D_LBM_SAMPLE_DIRLINE
+    D_LABMED_SAMPLES
+    D_LABMED_BIOMATERIAL
+    D_AGENTS
+    D_LPUDICT
+    D_LPU
+    D_GEOGRAFY
+    D_PRICELIST_DMS
+    D_DIVISIONS
+    D_CONTRACTS
+    D_PRICELISTS
+    D_PRICELIST_SERV_DMS
+    D_SERVICES_STR
+    D_PRICELIST_SERVS
+    D_SERVTYPES
+    D_PRICELIST_SERVS_DEGREES
+    D_SKILL_CATEGORIES
+    D_DEGREES
+    D_SERVPROFILES
+    D_PF_CATEGORIES
+    D_LPU_SERVICES
+    D_FED_SERVICES
+    D_LBM_RESEARCH_STANDART
+    D_LABMED_RSRCH_GROUPS
+    D_LABMED_METHOD_MATERIALS
+    D_LABMED_METHOD_MAT_CONTS
+    D_LABMED_CONTAINERS
+    D_HOSP_HISTORIES
+    D_AGENT_NAMES
+    D_HOSP_HISTORY_DEPS
+    D_DEPS
+    D_DEPS_TYPES
+    D_MKB10
+    D_HOSP_RESULTS
+    D_KSGCODES
+    D_BED_TYPES
+    D_EMPLOYERS
+    D_VMP
+    D_HOSP_OUTCOMES
+    D_MED_THERAPY_SCHEMES_DESC
+    D_MED_THERAPY_SCHEMES
+    D_ALV
+    D_SCALE_REHAB
+    D_LBM_BARCODE_SETTINGS
+    D_MEASURES
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_PERSMEDCARD
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MESES
+    D_HOSP_HOURS
+    D_OUTER_DIRECTIONS
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_VISITKINDS
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_DIR_ADD_FIELD
+    D_EX_SYSTEMS
+    D_EX_SYSTEM_VALUES
+    D_EX_SYSTEM_VALUES_SP
+    D_LABMED_LOCUS
+    D_LBM_SAMPLE_STATUSES
+    D_LABMED_PATOL_CHAR
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_CONTRACT_PAYMENTS
+    D_DIR_SERV_PAYMENTS
+    D_UNITPROPS
+    D_UNITPROP_VALUES
+    D_LABMED_TEMPLATE_COMM
+    D_LBM_TMPLT_COMM_LINK
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_LABMED_SAMPLES.GET_COMP_RESEARCH
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_LBM_BARCODE_SETTINGS.GET_ACTIVE
+    D_PKG_PRICELIST_SERVS.GET_PRICE_BY_DL_ORD_PARAMS
+    D_PKG_PAYMENT_KIND.GET_ID_BY_CODE
+    D_PKG_PERSMEDCARD.GET_LATEST_ANTHROP_PARAM
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_LABMED_DIRECTION_LINE.DEL_FORCE
+    D_PKG_DIRECTION_SERVICES.DEL
+    D_PKG_DIRECTION_SERVICES.GET_PAYMENT_KIND
+
+КОНСТАНТЫ:
+    NEONAT_IS_PRIMARY
+    NEONAT_REG_DATE
+    NEONAT_REG_TIME
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchPaymentKindDefault
+    AddAnalyseToHH
+    LisHideAnalizeRsrchGroup
+    LabDirline_Order_Alt_BiomatFIX
+    LisIsPrimaryInOrder
+    LisActiveDirectionParametrs
+    LisMicrobiologyLimit
+    LisOrderCheckFieldsSemd
+    LabDirLineDoubleResearch
+    LisPrintDirInOrder
+    LisCheckScheduled
+    LabDirWeightControl
+    LabDirContractPrint
+    CreateContract
+    LisDirPaymentKindFill
+    LISVisPurpBut
+    LisLPUOutDirection
+    LabDirlineOrderDoctorCheck
+    LabDirLineCito
+    LisNetrikaReasonDir
+    LisNotificationOrder
+    LisHl7CheckResearch
+    LisHl7PartnerCode
+    DirPayAndTimeInherit
+    LisNetrNNSService
+    ;
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:VISITPURPOSES  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_NUMB
+    D_DATE
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
+

@@ -1,0 +1,112 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ControlCard/pmc_control_card.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ControlCard\pmc_control_card.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ControlCard\pmc_control_card.d\control_card_834.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\ControlCard\pmc_control_card.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\ControlCard\pmc_control_card.d\script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     ControlCard/control_card_edit.frm
+     EHR/simple_ehrdocs_form.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        Reports/ControlCard/control_card_834_call.frm;
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTROL_CARD;
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_UAC_BASE
+    D_V_LPUVERLIST_MAIN
+    D_V_VERSIONS
+    D_V_UAC_EXCEPT_BASE
+    D_V_LPU
+    D_V_EMPLOYERS_BASE
+    D_V_CONTROL_CARD
+    D_V_VIS_DIAGNOSISES
+    D_V_VISITS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_CONTROL_CARD_BASE
+    D_V_VIS_DIAGNOSISES_BASE
+    D_V_PMC_DISP_PLAN_CONTROL
+    D_V_EHRS_BASE
+    D_V_EHR_STATES_BASE
+    D_V_CONTROL_CARD_DIAGNS
+    D_V_NOS_REGISTRS
+    D_V_DIS_GROUPS
+    D_V_DIS_DIAPASONES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_UAC
+    D_LPUVERLIST_MAIN
+    D_VERSIONS
+    D_UAC_EXCEPT
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_EMPLOYERS
+    D_CONTROL_CARD
+    D_MKB10
+    D_DISP_PLAN
+    D_NR_REMOVE_REASONS
+    D_PERSMEDCARD
+    D_AGENTS
+    D_DISEASECASES
+    D_DISCASES_DISCOVER
+    D_CONTROL_CARD_GROUPS
+    D_NOS_REGISTR_TYPES
+    D_NOS_REGISTRS
+    D_PATIENTS_DGROUP
+    D_CC_DEATH_REASON
+    D_VIS_DIAGNOSISES
+    D_DISEASECHARACTERS
+    D_INJURE_KINDS
+    D_DISEASE_STAGES
+    D_CL_OBSERV_CATEGORIES
+    D_DIAGNOSIS_TYPES
+    D_DIAGNOSIS_STAGES
+    D_RISAR_STAGES
+    D_VISITS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_SPECIALITIES
+    D_CABLAB
+    D_PMC_DISP_PLAN
+    D_EHRS
+    D_EHR_STATES
+    D_CONTROL_CARD_DIAGNS
+    D_DIS_GROUPS
+    D_DIS_DIAPASONES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CONTROL_CARD_CL_OBS.GET_ACTUAL_ON_DATE
+    D_PKG_MKB10.CHECK_CODE_IN_RANGE
+    D_PKG_MKB10.CHECK_CODE_IN_RANGES
+    D_PKG_CONTROL_CARD.GET_NEXT_DATE
+    D_PKG_CONTROL_CARD.SET_NEXT_DATE
+    D_PKG_CONTROL_CARD.CONNECT_WITH_DIAGN
+
+СИСТЕМНЫЕ ОПЦИИ:
+    View_Next_Date
+    CheckEhrsIconsEnabled
+
+БРОКЕРЫ:
+    unit:CONTROL_CARD  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_STR
+

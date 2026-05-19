@@ -1,0 +1,52 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Lis/Dirline/forms/schedule.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Lis\Dirline\forms\schedule.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsKrasnodar =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodar\Lis\Dirline\forms\schedule.d\schedule.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Lis\Dirline\forms\schedule.d\schedule.dfrm
+
+     ===== UserFormsVolgograd =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\forms\schedule.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\forms\schedule.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\forms\schedule.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Reception/available_cablabs.frm
+     GenRegistry/reg_full.frm
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CABLAB
+    D_V_DIRECTION_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_DIRECTION_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CLSCHS_TOOLS.GET_REC_TIME_ONE_DAY
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_DIRECTION_SERVICES.DEL
+    D_PKG_DIR_ADD_FIELD.SET_IS_DELETED
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_F_GET_REC_TIME_ONE_DAY
+    D_CL_GET_REC_TIME_ONE_DAY
+

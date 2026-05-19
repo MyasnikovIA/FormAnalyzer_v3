@@ -1,0 +1,85 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/hp_select_schedule.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_select_schedule.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospPlanJournal/hp_add_direction.frm
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+    D_V_SCHEDULESP_BASE
+    D_V_SCHEDULESP_TIMES_BASE
+    D_V_HPK_SCHEDULE_REG
+    D_V_HOSP_PLAN_KINDS
+    D_V_AGENTS_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_LPU
+    D_V_CABLAB
+    D_V_HPK_PLAN_JOURNALS_ADD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+    D_SCHEDULESP
+    D_SCHEDULESP_TIMES
+    D_HPK_SCHEDULE_REG
+    D_HOSP_PLAN_KINDS
+    D_AGENTS
+    D_EMPLOYERS
+    D_PERSMEDCARD
+    D_DIRECTIONS
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_HOSP_HISTORY_DEPS
+    D_AGENT_CONTACTS
+    D_AGENT_ADDRS
+    D_AGENT_SOCIAL_STATES
+    D_AGENT_WORK_PLACES
+    D_AGENT_CATEGORIES
+    D_AGENT_POLIS
+    D_AGENT_PERSDOCS
+    D_HPK_PLAN_JOURNALS
+    D_HPK_PLANS
+    D_PAYMENT_KIND
+    D_HOSP_HISTORIES
+    D_SERVICES
+    D_HOSPITALIZATION_TYPES
+    D_HPKPJ_VMP_STATES
+    D_DIRECTION_KINDS
+    D_DIR_CANC_REASONS
+    D_MKB10
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DAT_TOOLS.FULL_UNITS
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_HPK_SCHEDULE_REG.UPG
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ADMISSION_HOSP_TIME
+    CABLAB_OUTER_DIRECTIONS
+    MI
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+

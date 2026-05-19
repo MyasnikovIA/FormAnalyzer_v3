@@ -1,0 +1,47 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/Labmed/labmed_analysis_mass_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\Labmed\labmed_analysis_mass_call.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Reports\Labmed\labmed_analysis_mass_call.d\script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_SERVICES_BASE
+    D_V_VISITS
+    D_V_LABMED_PATJOUR_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_VISITS_BASE
+    D_V_DIRECTION_SERVICE_CONTROL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_SERVICES
+    D_DIRECTIONS
+    D_SERVICES
+    D_VISITS
+    D_LABMED_PATJOUR
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_EXT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_STR
+    D_CL_ID
+

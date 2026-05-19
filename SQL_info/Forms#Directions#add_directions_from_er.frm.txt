@@ -1,0 +1,114 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/add_directions_from_er.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\add_directions_from_er.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Directions\add_directions_from_er.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Directions\add_directions_from_er.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Directions\add_directions_from_er.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Directions/DirectionsForEP/doctor_by_profile_and_spec.frm
+     Directions/DirectionsForEP/divisions_by_lpu.frm
+     Directions/DirectionsForEP/profiles_by_specs.frm
+     Directions/DirectionsForEP/services_by_profile_or_doctor.frm
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_EXTRA_DICTS
+    D_V_EXTRA_DICT_VALUES
+    D_V_REASON_DIRECTION
+    D_V_LPU
+    D_V_LPUDICT
+    D_V_EMPLOYERS
+    D_V_AGENTS
+    D_V_MKB10
+    D_V_VIS_DIAGNOSISES
+    D_V_EX_SYSTEMS
+    D_V_DIRECTIONS_BASE
+    D_V_URPRIVS
+    D_V_OUT_DIR_GEN_RULES
+    D_V_OUTER_DIRECTIONS
+    D_V_AGENTS_BASE
+    D_V_UNITPROP_VALUES
+    D_V_UNITPROPS
+    D_V_DIVISIONS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EXTRA_DICTS
+    D_EXTRA_DICT_VALUES
+    D_REASON_DIRECTION
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_MKB10
+    D_VIS_DIAGNOSISES
+    D_DISEASECHARACTERS
+    D_INJURE_KINDS
+    D_DISEASE_STAGES
+    D_CL_OBSERV_CATEGORIES
+    D_PATIENTS_DGROUP
+    D_DIAGNOSIS_TYPES
+    D_DIAGNOSIS_STAGES
+    D_RISAR_STAGES
+    D_EX_SYSTEMS
+    D_DIRECTIONS
+    D_URPRIVS
+    D_USERROLES
+    D_OUT_DIR_GEN_RULES
+    D_OUTER_DIRECTIONS
+    D_PERSMEDCARD
+    D_SERVICES
+    D_ER_PROFILES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_CABLAB
+    D_UNITPROP_VALUES
+    D_UNITPROPS
+    D_DIVISIONS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_OUTER_DIRECTIONS.GEN_DIR_NUMB
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_PERSMEDCARD.CREATE_REMOTE_CARD
+    D_PKG_OUTER_DIRECTIONS.ADD
+    D_PKG_OUTER_DIRECTIONS.UPD
+    D_PKG_DIR_NUMB_RESERV.DEL_BY_NUMB
+
+СИСТЕМНЫЕ ОПЦИИ:
+    GetReasonDirectionDef
+    CheckReferralService
+    DATAMART_OUTDIR
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="JOBTITLES" composition="GRID"
+    unit="MKB10" composition="DEFAULT"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_DATE
+    D_DATE_END
+    D_NUMB
+    D_PREF
+

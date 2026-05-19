@@ -1,0 +1,57 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/Dirs/select_template.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\Dirs\select_template.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospPlan/Dirs/inactive_multi_choose.frm
+     Reception/select_time_by_template.frm
+     Reception/select_date_time.frm
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_TEMPLATES
+    D_V_DIR_TEMP_SERVICES
+    D_V_SERVICES
+    D_V_LPU
+    D_V_SERVICES_STR
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_TEMPLATES
+    D_DIR_TEMP_SERVICES
+    D_SERVICES_STR
+    D_SERVICES
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_SERVTYPES
+    D_SERVPROFILES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_CLSCHS.HAVE_ACTUAL_SCH
+    D_PKG_DIRECTIONS.ADD
+    D_PKG_DIRECTIONS.COPY_FROM_TEMPLATE
+    D_PKG_DIRECTIONS.GEN_DIR_NUMB
+    D_PKG_DIRECTION_SERVICES.ADD
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_BPENV.AFTERBP
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ProvideInactiveServices
+
+БРОКЕРЫ:
+    unit:DIRECTION_SERVICES;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+

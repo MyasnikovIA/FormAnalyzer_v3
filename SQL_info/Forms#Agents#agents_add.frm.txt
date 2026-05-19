@@ -1,0 +1,107 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agents_add.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agents_add.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agents_add.frm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agents_add.d\data.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/accuracyDateCheck
+     Agents/subscript/zaprossnils
+     Agents/subscript/birthdate
+     Agents/subscript/SPFRzaprossnils
+     Agents/subforms_fields/polis_oms
+     Agents/subforms_fields/polis_dms
+     Agents/subforms_fields/social_state
+     Agents/subforms_fields/consitution
+     Agents/subforms_fields/persdocs
+     Agents/subforms_fields/marital_state
+     Agents/subforms_fields/agent_relatives
+     Agents/subforms_fields/agent_details
+     Agents/subforms_fields/work_place
+     Agents/subforms_fields/category
+     Agents/subforms_fields/inability
+     Agents/subforms_fields/federal_priv
+     Agents/subforms_fields/decretiv_group
+     Agents/subforms_fields/gr_rentgenograph
+     Agents/subforms_fields/gr_vaccination
+     Agents/subforms_fields/names
+     Agents/subforms_fields/death
+     Agents/subforms_fields/addr
+     Agents/subforms_fields/contact
+     Agents/subforms_fields/names_jur
+     footerStyle
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_ANTHROP
+    D_V_FED_NATIONALITIES
+    D_V_SOCIALSTATES
+    D_V_PERSDOCTYPES
+    D_V_FN_DOC_TYPES_FED
+    D_V_FED_NSI_LINKS
+    D_V_FED_NSI_LINK_SP
+    D_V_FED_NSI
+    D_V_FED_NSI_VERS
+    D_V_COUNTRIES
+    D_V_AGNBANKS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ANTHROP
+    D_MEASURES
+    D_FED_NATIONALITIES
+    D_SOCIALSTATES
+    D_PERSDOCTYPES
+    D_MASKS
+    D_FN_DOC_TYPES_FED
+    D_FED_NSI_LINKS
+    D_FED_NSI_LINK_SP
+    D_FED_NSI
+    D_FED_NSI_VERS
+    D_COUNTRIES
+    D_AGNBANKS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CATALOGS.GET_FULL
+    D_PKG_AGENT_CONTACTS.ADD
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ANTHROP_VEIWLIST
+    InabiltyStatusAndGroupCheck
+    CheckFor_UNKNOWN
+    SetSocStateAuto
+    AgnPersDocsDefCitizenship
+    PersDocTypeDefault
+    PersDocsType_Absent
+    hideInfoMax
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="OKVED" composition="OKV"
+    unit="OKFS" composition="DEFAULT"
+    unit="GEOGRAFY" composition="DEFAULT"
+    unit="CURRENCIES" composition="CUR"
+    unit="BANKACCTYPES" composition="BN_TYPE"
+    unit="AGNBANKS" composition="AGNB"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+
+БРОКЕРЫ:
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:AGENTS;
+

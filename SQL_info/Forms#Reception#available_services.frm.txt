@@ -1,0 +1,51 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/available_services.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reception\available_services.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Autopsist/SubForms/check_inactive_service
+     footerStyle
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_SERVTYPES
+    D_V_PAYMENT_KIND
+    D_V_CATALOGS
+    D_V_LPU_SERVICES
+    D_V_SERVICES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVTYPES
+    D_PAYMENT_KIND
+    D_CATALOGS
+    D_LPU_SERVICES
+    D_SERVICES
+    D_SERVPROFILES
+    D_FED_SERVICES
+    D_SERVICES_STR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AVAILABLE_SERVICES.GET_DATA_TO_TABLE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    LisAnReseach
+    DSPCheckServPays
+    SchNearestMaxdays
+    LPUServiceStr
+    SchPaymentKindDefault
+    PAYMENT_KIND
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

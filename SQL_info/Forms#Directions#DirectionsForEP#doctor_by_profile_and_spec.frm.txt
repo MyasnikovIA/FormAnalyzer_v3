@@ -1,0 +1,44 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/DirectionsForEP/doctor_by_profile_and_spec.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\DirectionsForEP\doctor_by_profile_and_spec.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_ER_PROFILES
+    D_V_ER_PROFILE_SERVS
+    D_V_SCH_RESOURCES_BASE
+    D_V_CABLAB_BASE
+    D_V_DEPS_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_AGENTS_BASE
+    D_V_ER_PROFILE_SPECS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ER_CODE_MESSAGE
+    D_ER_PROFILES_MESSAGE
+    D_LPU
+    D_ER_PROFILES
+    D_ER_PROFILE_SERVS
+    D_SCH_RESOURCES
+    D_CABLAB
+    D_DEPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_ER_PROFILE_SPECS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.FIO
+

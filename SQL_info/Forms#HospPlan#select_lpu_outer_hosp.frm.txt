@@ -1,0 +1,38 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/select_lpu_outer_hosp.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\select_lpu_outer_hosp.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospPlan\select_lpu_outer_hosp.d\chg_return.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPUDICT
+    D_V_LPU
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPUDICT
+    D_LPU
+    D_GEOGRAFY
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AllowSelectAllLpu
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+

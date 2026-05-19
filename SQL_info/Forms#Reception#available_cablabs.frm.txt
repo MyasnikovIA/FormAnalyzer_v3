@@ -1,0 +1,64 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/available_cablabs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reception\available_cablabs.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Reception\available_cablabs.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Reception\available_cablabs.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Reception\available_cablabs.d\view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CABLAB
+    D_V_DIVISIONS
+    D_V_CLSERVS
+    D_V_RQS_LIMITS
+    D_V_REG_QUOTA_SCHED
+    D_V_REG_QUOTES
+    D_V_CLEMPS_BASE
+    D_V_EMP_SERVICES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_LPUDICT
+    D_PAT_RESTRICTIONS
+    D_CLSERVS
+    D_EMPLOYERS
+    D_AGENTS
+    D_SPECIALITIES
+    D_RQS_LIMITS
+    D_SCHEDULE
+    D_REG_QUOTA_SCHED
+    D_REG_QUOTES
+    D_SERVICES
+    D_CLEMPS
+    D_EMP_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_PAT_RESTRICTIONS.CHECK_IT
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_STD.FRM_D
+    D_PKG_CLSCHS.HAVE_ACTUAL_SCH
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchNearestMaxdays
+    RegSearchTimeByServs
+

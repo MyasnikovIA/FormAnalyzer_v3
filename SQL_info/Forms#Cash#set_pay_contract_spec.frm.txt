@@ -1,0 +1,68 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Cash/set_pay_contract_spec.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Cash\set_pay_contract_spec.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsFNKC\Cash\set_pay_contract_spec.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Cash\set_pay_contract_spec.d\add_gen_numb.dfrm
+
+     ===== UserFormsFNKC =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsFNKC\Cash\set_pay_contract_spec.frm
+
+     ===== UserFormsKrasnodarOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\Cash\set_pay_contract_spec.d\script.dfrm
+
+
+SubForm:
+     Cash/set_pay_dep
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DOC_TYPES
+    D_V_CURRENCIES
+    D_V_PAYMENT_METHODS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_CONTRACT_PAYMENTS
+    D_V_CONTRACTS_BASE
+    D_V_PJ_CON_PAYMENTS
+    D_V_PAYMENT_JOURNAL
+    D_V_AGENTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DOC_TYPES
+    D_CURRENCIES
+    D_PAYMENT_METHODS
+    D_CONTRACT_PAYMENTS
+    D_DIRECTION_SERVICES
+    D_DIR_SERV_PAYMENTS
+    D_CONTRACTS
+    D_AGENTS
+    D_PJ_CON_PAYMENTS
+    D_PAYMENT_JOURNAL
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CONTRACT_PAYMENTS.GET_COMPL_IDS
+    D_PKG_CONTRACT_PAYMENTS.SET_PAID_COMPL
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_CASH_SECTIONS.GET_SECTION
+    D_PKG_CONTRACT_PAYMENTS.SET_PAID
+    D_PKG_CURRENCIES.GET_MAIN
+    D_PKG_PAYMENT_JOURNAL.GENERATION_CHECK_NUMBER
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CashPaymentMethod
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="NATURAL_RETURN_FIO"
+

@@ -1,0 +1,48 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/current_contracts.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ProfCard\current_contracts.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Contracts/contr_ami_directs/contr_ami_directs.frm
+     Contracts/contract_payments/contract_payments_control.frm
+     Contracts/contracts_edit.frm
+     Contracts/actions/set_pay_contract.frm
+     Contracts/actions/view_pays.frm
+     Contracts/actions/view_bills.frm
+     Contracts/actions/create_check.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTRACTS;
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CONTRACTS
+    D_V_CONTRACT_TYPES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+
+БРОКЕРЫ:
+    unit:CONTRACTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+

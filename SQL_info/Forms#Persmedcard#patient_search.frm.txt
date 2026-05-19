@@ -1,0 +1,37 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Persmedcard/patient_search.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Persmedcard\patient_search.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\patient_search.d\script.dfrm
+
+
+SubForm:
+     barcode_listeners/oms_all
+     Persmedcard/search
+
+Список вызываемых форм в JS:
+     PatientSearch/search_patient_records.frm
+     DiseaseCase/resservice.frm
+     DiseaseCase/diseasecase.frm
+     ControlCard/pmc_control_card.frm
+     PatientSearch/directions_prescribes.frm
+     PersonalAccount/patient_contracts.frm
+     Persmedcard/persmedcard_edit.frm
+     Persmedcard/persmedcard_add_full.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        PERSMEDCARD;
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+
+БРОКЕРЫ:
+    unit:PERSMEDCARD  action:DEL_FULL;
+

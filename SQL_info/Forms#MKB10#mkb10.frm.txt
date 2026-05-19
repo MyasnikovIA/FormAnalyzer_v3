@@ -1,0 +1,68 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/MKB10/mkb10.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\MKB10\mkb10.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\MKB10\mkb10.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\MKB10\mkb10.d\script.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\MKB10\mkb10.d\mkb10.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     MKB10/mkb10_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        MKB10;
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_MES_MKBS
+    D_V_KSG
+    D_V_AGENT_REGIONAL_PRIVS_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_PRIV_DIS_GROUPS
+    D_V_PRIV_DIS_DIAPASONES
+    D_V_NR_DIAGNOSIS
+    D_V_MKB10_BASE
+    D_V_MKB10_POLYTR
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+    D_MES_MKBS
+    D_KSG
+    D_AGENT_REGIONAL_PRIVS
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+    D_PRIV_DIS_GROUPS
+    D_PRIV_TYPES
+    D_PRIV_DIS_DIAPASONES
+    D_NR_DIAGNOSIS
+    D_MKB10_POLYTR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_MKB10.CHECK_CODE_IN_LIST
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_DEFAULT_RIGHTS
+
+БРОКЕРЫ:
+    unit:MKB10  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+    D_CL_ID
+    D_STRAGG
+

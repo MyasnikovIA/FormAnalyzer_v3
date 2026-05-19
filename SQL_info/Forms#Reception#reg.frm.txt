@@ -1,0 +1,55 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/reg.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reception\reg.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+     Registry/reg
+
+Список вызываемых форм в JS:
+     Registry/reg_select_time_short.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CABLAB
+    D_V_EMPLOYERS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_QUOTA_QUANTS.GET_SCHTIMETYPES
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchShowDepStr
+    SchShowCabStr
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+    D_CL_ID
+

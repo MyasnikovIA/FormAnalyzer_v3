@@ -1,0 +1,57 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/pc_patients_import.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ProfCard\pc_patients_import.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     System/say_hello.frm
+     UnitExportImport/Logs/import_error_log.frm
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PROF_CARD_TYPES
+    D_V_CATALOGS
+    D_V_CONTRACTS
+    D_V_PAYMENT_KIND
+    D_V_PROF_CARD_MODELS
+    D_V_IMP_LOG
+    D_V_IMP_LOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PROF_CARD_TYPES
+    D_REGISTER_PURPOSES
+    D_CATALOGS
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_JOBTITLES
+    D_VISITPURPOSES
+    D_SERVICES
+    D_PROF_CARD_MODELS
+    D_IMP_LOG
+    D_IMP_LOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="JURISTIC"
+    unit="PROF_CARD_MODELS" composition="GRID"
+    unit="VISITPURPOSES" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+    unit:CONTRACTS  composition:GRID_CURRENT;
+

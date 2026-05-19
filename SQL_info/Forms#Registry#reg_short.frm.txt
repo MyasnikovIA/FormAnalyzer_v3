@@ -1,0 +1,38 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/reg_short.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Registry\reg_short.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+     Registry/reg
+
+Список вызываемых форм в JS:
+     Registry/reg_select_time_full.frm
+     Registry/reg_write.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_SCHEDULE_TIME_TYPES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SCHEDULE_TIME_TYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchShowDepStr
+    SchShowCabStr
+    SchShowPatSearch
+    SchRegTypeDefault
+    DirectionRegType
+    SchTimeTypeDefault
+

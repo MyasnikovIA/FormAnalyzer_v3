@@ -1,0 +1,136 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/PatientSearch/search_patient_records.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\PatientSearch\search_patient_records.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\PatientSearch\search_patient_records.d\scripts.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\PatientSearch\search_patient_records.d\script.dfrm
+
+     ===== UserFormsRkob =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\PatientSearch\search_patient_records.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\PatientSearch\search_patient_records.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\PatientSearch\search_patient_records.d\view.dfrm
+
+     ===== UserFormsSpasenie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSpasenie\PatientSearch\search_patient_records.d\script.dfrm
+
+
+SubForm:
+     Visit/PrintVisit
+
+Список вызываемых форм в JS:
+     Registry/reg_select_time_short.frm
+     Directions/direction_cancel.frm
+     Persmedcard/persmedcard_edit.frm
+     Reg/reg_print_talon.frm
+     UniversalTemplate/UniversalTemplate.frm
+     GenRegistry/reg_select_time_full.frm
+     Registry/PmcSearch/amb_reports_list.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        Reports/AmbReps/amb_talon_choose.frm;
+        Reports/Labmed/labmed_analysis_mass_call.frm;
+
+SQL ЗАПРОСЫ (14):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPU
+    D_V_SERVTYPES
+    D_V_LPU_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_PERSMEDCARD
+    D_V_PROF_CARD_DIR_SERVS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTION_SERVICES
+    D_V_DIRECTIONS_BASE
+    D_V_CLEMPS
+    D_V_CLSERVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_SERVTYPES
+    D_EMPLOYERS
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+    D_PROF_CARD_DIR_SERVS
+    D_DIRECTION_SERVICES
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_SERVICES
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_CLEMPS
+    D_SPECIALITIES
+    D_JOBTITLES
+    D_CLSERVS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_QUOTA_QUANTS.CHECK_QUOTA_FT
+    D_PKG_SES.GETCONTEXT
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_DIRECTION_SERVICES.GET_LAST_PROC_DS
+    D_PKG_VISITS.GET_TEMPLATE_INFO
+    D_PKG_DIRECTION_SERVICES.UPD
+    D_PKG_BPENV.AFTERBP
+    D_PKG_DIRECTION_SERVICES.DEL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SearchPatientRecordsTime
+    DIRECTION_SERVICES
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="EMPLOYERS" composition="SELECT_ID"
+    unit="SERVICES" composition="DEFAULT"
+    unit="MKB10" composition="DEFAULT"
+

@@ -1,0 +1,37 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contract_finansource_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Contracts\contract_finansource_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_FINANSOURCES
+    D_V_CONTRACTS_BASE
+    D_V_CONTRACT_FINANSOURCE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FINANSOURCES
+    D_CONTRACTS
+    D_AGENTS
+    D_CONTRACT_FINANSOURCE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DAT_TOOLS.DATE_RANGES_ERROR
+    D_PKG_NUM_TOOLS.TO_STR
+
+БРОКЕРЫ:
+    unit:CONTRACT_FINANSOURCE;
+

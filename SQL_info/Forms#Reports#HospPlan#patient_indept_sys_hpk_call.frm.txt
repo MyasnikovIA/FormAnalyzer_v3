@@ -1,0 +1,43 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/HospPlan/patient_indept_sys_hpk_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\HospPlan\patient_indept_sys_hpk_call.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reports\HospPlan\patient_indept_sys_hpk_call.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsSaratov =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reports\HospPlan\patient_indept_sys_hpk_call.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIVISIONS
+    D_V_DEPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIVISIONS
+    D_LPUDICT
+    D_PAT_RESTRICTIONS
+    D_HEAD_DEP
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DEPS_KINDS
+    D_DEPS_TYPES
+    D_MED_CARE_PROFILES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+

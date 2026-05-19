@@ -1,0 +1,33 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Lis/Citology/forms/labmed_sample_scomment_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Lis\Citology\forms\labmed_sample_scomment_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LABMED_SAMPLES_BASE
+    D_V_LBM_SAMPLE_COMMENTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LABMED_SAMPLES
+    D_LABMED_BIOMATERIAL
+    D_CABLAB
+    D_LBM_SAMPLE_COMMENTS
+    D_LABMED_TEMPLATE_HEADING
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_LBM_SAMPLE_COMMENTS.UPG
+    D_PKG_LBM_SAMPLE_COMMENTS.DEL
+

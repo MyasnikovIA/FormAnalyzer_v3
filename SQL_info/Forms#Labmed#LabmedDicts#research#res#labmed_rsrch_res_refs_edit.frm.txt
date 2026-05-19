@@ -1,0 +1,37 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Labmed/LabmedDicts/research/res/labmed_rsrch_res_refs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Labmed\LabmedDicts\research\res\labmed_rsrch_res_refs_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LABMED_RSRCH_RES_REFS
+    D_V_LABMED_RESEARCH_RES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LABMED_RSRCH_RES_REFS
+    D_LABMED_RESEARCH_RES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_LABMED_RSRCH_RES_REFS.UPD
+    D_PKG_STD.FRM_D
+    D_PKG_NUM_TOOLS.NUM_RANGES_ERROR
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MEASURES" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:LABMED_RSRCH_RES_REFS;
+

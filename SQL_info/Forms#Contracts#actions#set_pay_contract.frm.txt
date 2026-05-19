@@ -1,0 +1,51 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/actions/set_pay_contract.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Contracts\actions\set_pay_contract.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (11):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DOC_TYPES
+    D_V_CURRENCIES
+    D_V_PAYMENT_METHODS
+    D_V_CASH_SECTIONS
+    D_V_CASH_DEPS
+    D_V_CONTRACTS_BASE
+    D_V_AGENTS_BASE
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_PJ_CON_PAYMENTS
+    D_V_PAYMENT_JOURNAL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DOC_TYPES
+    D_CURRENCIES
+    D_PAYMENT_METHODS
+    D_CASH_SECTIONS
+    D_CASH_DEPS
+    D_CONTRACTS
+    D_AGENTS
+    D_CONTRACT_PAYMENTS
+    D_PJ_CON_PAYMENTS
+    D_PAYMENT_JOURNAL
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CONTRACTS.SET_PAID_WITH_SEL_METH
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_CURRENCIES.GET_MAIN
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="AGN_NAME"
+

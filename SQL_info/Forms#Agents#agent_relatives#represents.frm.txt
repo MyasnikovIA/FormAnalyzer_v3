@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_relatives/represents.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_relatives\represents.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_relatives/agent_relatives_add.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_RELATIVES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+
+БРОКЕРЫ:
+    unit:AGENT_RELATIVES  action:DELETE;
+

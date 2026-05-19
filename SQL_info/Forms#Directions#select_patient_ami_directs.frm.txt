@@ -1,0 +1,49 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_patient_ami_directs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\select_patient_ami_directs.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agent_polis/checking_relevance_polis
+     Contracts/subforms/checking_relevance_contract
+
+Список вызываемых форм в JS:
+     Directions/select_patient_ami_direct_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTR_AMI_DIRECTS;
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_POLIS_DMS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENT_RELATIVES
+    D_V_PERSMEDCARD_BASE
+    D_V_PERSMEDCARD_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+    D_EMPLOYERS
+    D_PERSMEDCARD
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+

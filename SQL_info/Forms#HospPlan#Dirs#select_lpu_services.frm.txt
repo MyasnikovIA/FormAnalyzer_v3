@@ -1,0 +1,95 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/Dirs/select_lpu_services.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\Dirs\select_lpu_services.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     HospPlan/SubForms/check_services
+     Contracts/subforms/checking_relevance_contract
+
+Список вызываемых форм в JS:
+     HospPlan/Dirs/inactive_multi_choose.frm
+     Directions/services_for_nearest_rec_time.frm
+     Directions/select_sub_services.frm
+     Directions/select_contract_by_pk.frm
+     Labmed/addict_set_params.frm
+     Directions/select_patient_ami_directs.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        LPU_SERVICES;
+
+SQL ЗАПРОСЫ (11):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPU_SERVICES
+    D_V_SERVICES
+    D_V_SERVICES_PAYS
+    D_V_CATALOGS
+    D_V_SERVICES_BASE
+    D_V_PAYMENT_KIND
+    D_V_SERVTYPES
+    D_V_DIRECTION_SERVICES
+    D_V_LABMED_ANALYZE
+    D_V_LABMED_ANALYZE_PARAMS
+    D_V_CONTRACTS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_FED_NSI_LINKS
+    D_V_FED_NSI_LINK_SP
+    D_V_SERVICES_STR
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU_SERVICES
+    D_SERVICES
+    D_SERVTYPES
+    D_SERVPROFILES
+    D_FED_SERVICES
+    D_SERVICES_STR
+    D_SERVICES_PAYS
+    D_CATALOGS
+    D_PAYMENT_KIND
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_LABMED_ANALYZE
+    D_LABMED_ANALYZE_PARAMS
+    D_LABMED_RESEARCH
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_FED_NSI_LINKS
+    D_FED_NSI_LINK_SP
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_BROKER.APARAMS
+    D_PKG_DIRECTIONS.GEN_DIR_NUMB
+    D_PKG_DIRECTIONS.ADD
+    D_PKG_STR_TOOLS.ARRSTR_GET
+    D_PKG_DIRECTION_SERVICES.ADD
+    D_PKG_DIR_SERV_PAYMENTS.EXTENDED_ADD
+    D_PKG_BPENV.AFTERBP
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckSelectContr
+    CAMI_RTK
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="FN_ANAT_LOCALIZATION" composition="DEFAULT"
+

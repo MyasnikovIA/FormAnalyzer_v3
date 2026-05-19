@@ -309,8 +309,16 @@ public class MainWindow extends JFrame {
         JPanel resultButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton clearResultBtn = new JButton("Очистить результат");
         clearResultBtn.addActionListener(e -> resultArea.setText(""));
+
+        JButton deleteReportBtn = new JButton("Удалить отчёт");
+        deleteReportBtn.setBackground(new Color(244, 67, 54));
+        deleteReportBtn.setForeground(Color.WHITE);
+        deleteReportBtn.addActionListener(e -> deleteReportForCurrentForm());
+
         JButton saveResultBtn = new JButton("Сохранить результат в файл");
         saveResultBtn.addActionListener(e -> saveResultToFile());
+
+        resultButtons.add(deleteReportBtn);  // Добавить перед сохранением
         resultButtons.add(saveResultBtn);
         resultButtons.add(clearResultBtn);
         resultPanel.add(resultButtons, BorderLayout.NORTH);
@@ -859,22 +867,6 @@ public class MainWindow extends JFrame {
     }
 
     /**
-     * Формирует путь к MD файлу промпта
-     */
-    private String getLlmPromptFilePath(String formPath) {
-        String actualPath = formPath;
-        if (actualPath.startsWith("/")) {
-            actualPath = actualPath.substring(1);
-        }
-        String safeName = actualPath.replace("/", "#").replace("\\", "#");
-        String outputDir = settings.getOutputDir();
-        if (outputDir == null || outputDir.isEmpty()) {
-            outputDir = "SQL_info";
-        }
-        return outputDir + File.separator + safeName + ".md";
-    }
-
-    /**
      * Сохраняет текущий LLM промпт в файл
      */
     private void saveLlmPromptToFile() {
@@ -963,5 +955,110 @@ public class MainWindow extends JFrame {
             }
         });
     }
+    /**
+     * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
+     */
+    private void deleteReportForCurrentForm() {
+        TreePath selectedPath = formsTreePanel.getSelectedPath();
+        if (selectedPath == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Не выбрана форма для удаления отчёта",
+                    "Нет выбранной формы",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
+        if (formPath == null) {
+            return;
+        }
+
+        // Формируем пути к файлам
+        String txtPath = formsTreePanel.getReportFilePath(formPath);
+        String mdPath = getLlmPromptFilePath(formPath);
+
+        File txtFile = new File(txtPath);
+        File mdFile = new File(mdPath);
+
+        // Подтверждение удаления
+        StringBuilder message = new StringBuilder();
+        message.append("Удалить отчёты для формы:\n");
+        message.append(formPath).append("\n\n");
+
+        if (txtFile.exists()) {
+            message.append("✓ ").append(txtFile.getName()).append("\n");
+        }
+        if (mdFile.exists()) {
+            message.append("✓ ").append(mdFile.getName()).append("\n");
+        }
+        if (!txtFile.exists() && !mdFile.exists()) {
+            message.append("(файлы отчётов не найдены)");
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                message.toString(),
+                "Подтверждение удаления",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Удаляем файлы
+        boolean deleted = false;
+        if (txtFile.exists()) {
+            if (txtFile.delete()) {
+                appendLog("Удалён файл отчёта: " + txtPath);
+                deleted = true;
+            } else {
+                appendLog("Ошибка удаления: " + txtPath);
+            }
+        }
+
+        if (mdFile.exists()) {
+            if (mdFile.delete()) {
+                appendLog("Удалён MD файл: " + mdPath);
+                deleted = true;
+            } else {
+                appendLog("Ошибка удаления: " + mdPath);
+            }
+        }
+
+        if (deleted) {
+            // Очищаем панель результата
+            resultArea.setText("");
+            // Очищаем дочерние узлы в дереве
+            formsTreePanel.clearChildNodes(formPath);
+            // Если вкладка LLM активна, показываем инструкцию
+            if (tabbedPane.getSelectedIndex() == 2) {
+                loadLlmPromptToPanel(formPath);
+            }
+
+            JOptionPane.showMessageDialog(this,
+                    "Файлы отчётов удалены",
+                    "Удаление завершено",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Не удалось удалить файлы",
+                    "Ошибка",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    /**
+     * Формирует путь к MD файлу промпта
+     */
+    private String getLlmPromptFilePath(String formPath) {
+        String actualPath = formPath;
+        if (actualPath.startsWith("/")) {
+            actualPath = actualPath.substring(1);
+        }
+        String safeName = actualPath.replace("/", "#").replace("\\", "#");
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        return outputDir + File.separator + safeName + ".md";
+    }
 }

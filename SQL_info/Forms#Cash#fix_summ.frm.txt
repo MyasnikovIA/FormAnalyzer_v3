@@ -1,0 +1,50 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Cash/fix_summ.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Cash\fix_summ.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Reception/select_price.frm
+     Cash/contr_pay_discounts_edit.frm
+     Cash/bonus_pay_edit.frm
+     Cash/SelectDate.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTR_PAY_DISCOUNTS;
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CONTR_PAY_DISCOUNTS
+    D_V_CONTRACT_PAYMENTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTR_PAY_DISCOUNTS
+    D_CONTRACT_PAYMENTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_NUM_TOOLS.TO_STR
+    D_PKG_DISCOUNT_CARDS.GET_DSC_LIST
+    D_PKG_CONTRACT_PAYMENTS.RESET_DISCOUNT
+    D_PKG_CONTR_PAY_DISCOUNTS.DEL
+    D_PKG_PRICELIST_SERVS.GET_PRICE
+    D_PKG_CONTRACT_PAYMENTS.SET_DIR_SUMM
+    D_PKG_TAXIS.CALC_BASE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    NoNDSTaxGr
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="TAXGR" composition="LIST"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+

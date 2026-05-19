@@ -1,0 +1,50 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/select_price.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reception\select_price.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PRICELISTS
+    D_V_PRICELIST_SERVS
+    D_V_PRICELIST_SERVS_DEGREES
+    D_V_EMPLOYER_DEGREES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_PAYMENT_KIND
+    D_PRICELIST_DMS
+    D_DIVISIONS
+    D_CONTRACTS
+    D_PRICELISTS
+    D_PRICELIST_SERV_DMS
+    D_SERVICES_STR
+    D_PRICELIST_SERVS
+    D_SERVICES
+    D_SERVTYPES
+    D_PRICELIST_SERVS_DEGREES
+    D_SKILL_CATEGORIES
+    D_DEGREES
+    D_SERVPROFILES
+    D_PF_CATEGORIES
+    D_LPU_SERVICES
+    D_EMPLOYER_DEGREES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.STR_IN_STR
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PriceShowRegPeriod
+

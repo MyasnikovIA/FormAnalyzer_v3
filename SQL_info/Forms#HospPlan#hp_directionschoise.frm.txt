@@ -1,0 +1,59 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/hp_directionschoise.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\hp_directionschoise.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospPlan\hp_directionschoise.d\change_lpu_to_mo.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\HospPlan\hp_directionschoise.d\dataset.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospPlan/hp_directions_edit.frm
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTIONS
+    D_V_HPK_PLAN_JOURNALS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MKB10
+    D_MESES
+    D_HOSP_HOURS
+    D_DIRECTIONS
+    D_PERSMEDCARD
+    D_AGENTS
+    D_OUTER_DIRECTIONS
+    D_LPUDICT
+    D_EMPLOYERS
+    D_DEPS
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_MED_THERAPY_SCHEMES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_HOSP_HISTORIES
+

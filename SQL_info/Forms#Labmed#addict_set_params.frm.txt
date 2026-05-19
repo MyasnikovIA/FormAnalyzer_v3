@@ -1,0 +1,65 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Labmed/addict_set_params.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Labmed\addict_set_params.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Labmed\addict_set_params.d\WIDTH.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIR_SERV_LM_PAR_VALUES
+    D_V_DIRECTION_SERVICES
+    D_V_LABMED_ANALYZE
+    D_V_LABMED_ANALYZE_PARAMS
+    D_V_LABMED_PARAMS
+    D_V_LABMED_RESEARCH
+    D_V_LABMED_ANALYZ_RESEARCH
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIR_SERV_LM_PAR_VALUES
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_LABMED_ANALYZE
+    D_LABMED_ANALYZE_PARAMS
+    D_LABMED_RESEARCH
+    D_LABMED_PARAMS
+    D_LPU_SERVICES
+    D_LABMED_BIOMATERIAL
+    D_LBM_RESEARCH_STANDART
+    D_LABMED_RSRCH_GROUPS
+    D_LABMED_ANALYZ_RESEARCH
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_LABMED_PARAMS.GET_PARAM_VALUE
+    D_PKG_STD.FRM_DT
+    D_PKG_DIR_SERV_LM_PAR_VALUES.ADD
+    D_PKG_DIR_SERV_LM_PAR_VALUES.UPD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+

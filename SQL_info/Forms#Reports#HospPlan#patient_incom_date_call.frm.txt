@@ -1,0 +1,38 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/HospPlan/patient_incom_date_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\HospPlan\patient_incom_date_call.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reports\HospPlan\patient_incom_date_call.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Reports\HospPlan\patient_incom_date_call.frm
+
+     ===== UserFormsSaratov =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reports\HospPlan\patient_incom_date_call.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIVISIONS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIVISIONS
+    D_LPUDICT
+    D_PAT_RESTRICTIONS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_EMP_RIGHTS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+

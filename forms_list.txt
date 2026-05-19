@@ -1,1 +1,1 @@
-Forms/HospitPlanning/hospit_planning.frm
+Forms/ControlCard/pmc_control_card.frm

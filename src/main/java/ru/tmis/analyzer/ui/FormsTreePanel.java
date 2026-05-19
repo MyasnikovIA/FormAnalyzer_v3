@@ -491,22 +491,53 @@ public class FormsTreePanel extends JPanel {
         });
     }
 
-   private void applyFilter() {
+    private void applyFilter() {
         String filter = searchField.getText().trim().toLowerCase();
         rootNode.removeAllChildren();
         formNodeMap.clear();
-        Set<String> addedPaths = new HashSet<>();
 
         if (filter.isEmpty()) {
+            Set<String> addedPaths = new HashSet<>();
             for (String formPath : allForms) {
                 addFormWithChildrenToTree(formPath, rootNode, addedPaths);
             }
         } else {
-            filteredForms.clear();
+            // Есть фильтр - строим плоский список (только корневой уровень)
+            // Сортируем найденные формы по алфавиту
+            List<String> matchedForms = new ArrayList<>();
             for (String formPath : allForms) {
                 if (formPath.toLowerCase().contains(filter)) {
-                    filteredForms.add(formPath);
-                    addFormWithChildrenToTree(formPath, rootNode, addedPaths);
+                    matchedForms.add(formPath);
+                }
+            }
+            matchedForms.sort(String::compareToIgnoreCase);
+
+            // Добавляем каждую найденную форму как прямой дочерний узел корня
+            for (String formPath : matchedForms) {
+                // Определяем отображаемое имя (полный путь)
+                String displayPath = formPath;
+                if (displayPath.startsWith("/")) {
+                    displayPath = displayPath.substring(1);
+                }
+                if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
+                    displayPath = "Forms/" + displayPath;
+                }
+
+                // Проверяем, нет ли уже такого узла
+                boolean exists = false;
+                for (int i = 0; i < rootNode.getChildCount(); i++) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) rootNode.getChildAt(i);
+                    if (child.getUserObject().toString().equals(displayPath)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(displayPath);
+                    formNode.setAllowsChildren(false); // В режиме фильтра дочерних нет
+                    rootNode.add(formNode);
+                    formNodeMap.put(formPath, formNode);
                 }
             }
         }

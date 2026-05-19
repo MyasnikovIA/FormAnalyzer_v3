@@ -1,0 +1,118 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agents_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agents_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agents_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Agents\agents_edit.d\view.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\Agents\agents_edit.d\view.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Agents\agents_edit.d\agents_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/base
+     Agents/subscript/accuracyDateCheck
+     Agents/subscript/zaprossnils
+     Agents/subscript/birthdate
+     Agents/subscript/SPFRzaprossnils
+     Agents/subforms_view/polis_oms
+     Agents/subforms_view/polis_dms
+     Persmedcard/subforms_view/registration
+     Agents/subforms_view/social_state
+     Agents/subforms_view/orphan_category
+     Agents/subforms_view/consitution
+     Agents/subforms_view/pregnancy
+     Agents/subforms_view/persdocs
+     Agents/subforms_view/marital_state
+     Agents/subforms_view/agent_relatives_docs
+     Agents/subforms_view/agent_details
+     Agents/subforms_view/work_place
+     Agents/subforms_view/inability
+     Agents/agent_regional_privs/regional_priv
+     Agents/subforms_view/federal_priv
+     Agents/agent_nosology_privs/nosology_priv
+     Agents/subforms_view/decretiv_group
+     Agents/subforms_view/gr_vaccination
+     Agents/subforms_view/gr_rentgenograph
+     Agents/subforms_view/names
+     Agents/subforms_fields/death
+     Agents/subforms_view/addr
+     Agents/subforms_view/orphan_place
+     Agents/subforms_view/contact
+     Agents/subforms_view/names_jur
+     Agents/subforms_fields/allergic_anamnes
+     Agents/subforms_fields/trf_anamnesis
+     Agents/subforms_fields/bad_habits
+     Agents/subforms_fields/inherited_diseases
+     Agents/subforms_fields/infertility
+     Agents/subforms_fields/PmcVaccinations
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_FED_NATIONALITIES
+    D_V_BJ_BULLETIN_CONTENTS_BASE
+    D_V_EX_SYSTEM_VALUES
+    D_V_LPUDICT_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_AGENTS
+    D_V_URPRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FED_NATIONALITIES
+    D_BJ_BULLETIN_CONTENTS
+    D_EX_SYSTEM_VALUES
+    D_LPUDICT
+    D_EMPLOYERS
+    D_GEOGRAFY
+    D_AGENTS
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG
+    D_PKG_STD.FRM_D
+    D_PKG_STD.SFRM_T
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.GET_VAL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentInfChangeLN
+    Lpu_UpdFromPassport
+    Empl_UpdFromRMR
+    AgentDeathDateCheck
+    ShowSignByAge
+    VisibleStatusLgot
+    IntegrationEnabled
+    CheckFor_UNKNOWN
+    hideInfoMax
+    PassportMO
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="OKVED" composition="OKV"
+    unit="OKFS" composition="DEFAULT"
+    unit="GEOGRAFY" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENTS  action:GEN_CODE;
+    unit:AGENTS;
+

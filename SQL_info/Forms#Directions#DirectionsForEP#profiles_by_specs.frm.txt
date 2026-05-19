@@ -1,0 +1,32 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/DirectionsForEP/profiles_by_specs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\DirectionsForEP\profiles_by_specs.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_ER_PROFILES
+    D_V_ER_PROFILE_SPECS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ER_CODE_MESSAGE
+    D_ER_PROFILES_MESSAGE
+    D_LPU
+    D_ER_PROFILES
+    D_ER_PROFILE_SPECS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_FED_NSI_LINKS.GET_CURRENT_VAL
+

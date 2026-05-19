@@ -1,0 +1,47 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/SubForms/visits_before_hosp.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospPlan\SubForms\visits_before_hosp.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_AGENTS_BASE
+    D_V_CABLAB_BASE
+    D_V_VISITS_BASE
+    D_V_DS_SERV_STATUSES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_DIRECTIONS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CABLAB
+    D_VISITS
+    D_DS_SERV_STATUSES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_DIRECTION_SERVICES.GET_PAYMENT_KIND
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_VISITS.UPD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+

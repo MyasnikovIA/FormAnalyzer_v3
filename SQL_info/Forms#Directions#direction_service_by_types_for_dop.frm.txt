@@ -1,0 +1,68 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/direction_service_by_types_for_dop.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\direction_service_by_types_for_dop.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAstr\Directions\direction_service_by_types_for_dop.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAstr =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAstr\Directions\direction_service_by_types_for_dop.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Directions/select_sub_services.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     UniversalTemplate/UniversalTemplate.frm
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PAYMENT_KIND
+    D_V_SERVICES
+    D_V_SERVICES_PAYS
+    D_V_DIR_SERV_PAYMENTS
+    D_V_SERVICES_STR
+    D_V_DIRECTION_SERVICES
+    D_V_VISITS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PAYMENT_KIND
+    D_SERVICES_STR
+    D_SERVICES
+    D_SERVICES_PAYS
+    D_DIR_SERV_PAYMENTS
+    D_SERVTYPES
+    D_SERVPROFILES
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_VISITS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_SERVICES.IS_IN_LPU
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_DIRECTION_SERVICES.GET_PAYMENT_KIND
+    D_PKG_DIRECTION_SERVICES.CREATE_NEW_DIRECTION
+    D_PKG_BPENV.AFTERBP
+    D_PKG_VISITS.GET_TEMPLATE_INFO
+    D_PKG_DIRECTION_SERVICES.ADD
+
+БРОКЕРЫ:
+    unit:DIRECTION_SERVICES;
+

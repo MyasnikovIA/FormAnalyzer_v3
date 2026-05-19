@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ArmPatientsInDep/SubForms/select_mkb_exact.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\ArmPatientsInDep\SubForms\select_mkb_exact.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\ArmPatientsInDep\SubForms\select_mkb_exact.d\select_mkb_exact.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
