@@ -40,7 +40,8 @@ public class MainWindow extends JFrame {
     private ExecutorService executorService;
     private RecursiveReportBuilder recursiveBuilder;
 
-
+    private JTextArea llmPromptArea;  // Текстовая область для LLM промпта
+    private JTabbedPane tabbedPane;   // Переместить в поле класса
 
     private PrintStream originalOut;
     private PrintStream originalErr;
@@ -274,7 +275,7 @@ public class MainWindow extends JFrame {
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder("Результаты"));
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
 
         // Tab 1: Лог процесса
         JPanel logPanel = new JPanel(new BorderLayout());
@@ -297,7 +298,7 @@ public class MainWindow extends JFrame {
 
         tabbedPane.addTab("Лог процесса", logPanel);
 
-        // Tab 2: Результат
+        // Tab 2: Результат (отчёт)
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultArea = new JTextArea();
         resultArea.setEditable(false);
@@ -317,6 +318,30 @@ public class MainWindow extends JFrame {
         resultPanel.add(resultButtons, BorderLayout.NORTH);
 
         tabbedPane.addTab("Результат", resultPanel);
+
+        // Tab 3: LLM промпт (НОВАЯ ВКЛАДКА)
+        JPanel llmPanel = new JPanel(new BorderLayout());
+        llmPromptArea = new JTextArea();
+        llmPromptArea.setEditable(false);
+        llmPromptArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        llmPromptArea.setBackground(new Color(245, 245, 245));
+        llmPromptArea.setForeground(Color.BLACK);
+        JScrollPane llmScroll = new JScrollPane(llmPromptArea);
+        llmPanel.add(llmScroll, BorderLayout.CENTER);
+
+        JPanel llmButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton clearLlmBtn = new JButton("Очистить");
+        clearLlmBtn.addActionListener(e -> llmPromptArea.setText(""));
+        JButton saveLlmBtn = new JButton("Сохранить MD файл");
+        saveLlmBtn.addActionListener(e -> saveLlmPromptToFile());
+        JButton regenerateLlmBtn = new JButton("Перегенерировать промпт");
+        regenerateLlmBtn.addActionListener(e -> regenerateLlmPrompt());
+        llmButtons.add(saveLlmBtn);
+        llmButtons.add(regenerateLlmBtn);
+        llmButtons.add(clearLlmBtn);
+        llmPanel.add(llmButtons, BorderLayout.NORTH);
+
+        tabbedPane.addTab("LLM промпт", llmPanel);
 
         rightPanel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -448,6 +473,8 @@ public class MainWindow extends JFrame {
     /**
      * Загружает сохранённый отчёт для выбранной формы в панель результата
      */
+    // MainWindow.java - добавить вызов загрузки MD файла в конец метода
+
     private void loadFormResultToPanel(String formPath) {
         String reportPath = formsTreePanel.getReportFilePath(formPath);
         File reportFile = new File(reportPath);
@@ -460,21 +487,19 @@ public class MainWindow extends JFrame {
                 resultArea.setCaretPosition(0);
                 appendLog("Загружен отчёт для формы: " + formPath);
 
-                // ОБНОВЛЯЕМ ДОЧЕРНИЕ ФОРМЫ ПОСЛЕ ЗАГРУЗКИ ОТЧЁТА
                 formsTreePanel.refreshChildForms(formPath);
 
             } catch (IOException e) {
                 resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
                 appendLog("Ошибка загрузки отчёта для " + formPath + ": " + e.getMessage());
-                // Очищаем дочерние узлы при ошибке
                 formsTreePanel.clearChildNodes(formPath);
             }
         } else {
             resultArea.setText("Отчёт для формы не найден.\n\nПуть: " + reportPath + "\n\nЗапустите анализ для создания отчёта.");
-            // Очищаем дочерние узлы, так как отчёт отсутствует
             formsTreePanel.clearChildNodes(formPath);
             appendLog("Отчёт не найден для формы: " + formPath + ", дочерние элементы очищены");
         }
+        loadLlmPromptToPanel(formPath);
     }
 
     /**
@@ -787,5 +812,149 @@ public class MainWindow extends JFrame {
         }
     }
 
+    /**
+     * Загружает MD файл промпта для выбранной формы
+     * @param formPath путь к форме
+     */
+    private void loadLlmPromptToPanel(String formPath) {
+        if (llmPromptArea == null) return;
+
+        // Формируем путь к MD файлу (аналогично TXT, но с .md)
+        String mdFilePath = getLlmPromptFilePath(formPath);
+        File mdFile = new File(mdFilePath);
+
+        String instructionText =
+                "=== ИНСТРУКЦИЯ ===\n\n" +
+                        "Для генерации LLM промпта необходимо:\n" +
+                        "1. Убедиться, что в настройках включена опция 'Включить экспорт LLM промпта после анализа'\n" +
+                        "2. Запустить анализ формы (кнопка 'Запуск анализа' или 'Рекурсивный анализ')\n" +
+                        "3. После завершения анализа MD файл будет создан автоматически\n\n" +
+                        "Файл промпта будет сохранён с тем же именем, что и отчёт, но с расширением .md\n" +
+                        "Пример: Forms#HospitPlanning#hospit_planning.frm.md\n\n" +
+                        "=== ОЖИДАНИЕ ФАЙЛА ===\n" +
+                        "Файл не найден: " + mdFilePath;
+
+        if (mdFile.exists()) {
+            try {
+                String content = new String(Files.readAllBytes(mdFile.toPath()),
+                        java.nio.charset.StandardCharsets.UTF_8);
+                llmPromptArea.setText(content);
+                llmPromptArea.setCaretPosition(0);
+                appendLog("Загружен LLM промпт для формы: " + formPath);
+            } catch (IOException e) {
+                llmPromptArea.setText("Ошибка загрузки MD файла: " + e.getMessage() + "\n\n" + instructionText);
+                appendLog("Ошибка загрузки MD файла для " + formPath + ": " + e.getMessage());
+            }
+        } else {
+            llmPromptArea.setText(instructionText);
+            appendLog("MD файл не найден для формы: " + formPath + "\n" + mdFilePath);
+        }
+    }
+
+    /**
+     * Формирует путь к MD файлу промпта
+     */
+    private String getLlmPromptFilePath(String formPath) {
+        String actualPath = formPath;
+        if (actualPath.startsWith("/")) {
+            actualPath = actualPath.substring(1);
+        }
+        String safeName = actualPath.replace("/", "#").replace("\\", "#");
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        return outputDir + File.separator + safeName + ".md";
+    }
+
+    /**
+     * Сохраняет текущий LLM промпт в файл
+     */
+    private void saveLlmPromptToFile() {
+        String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String filename = "llm_prompt_export_" + timestamp + ".md";
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.print(llmPromptArea.getText());
+            appendLog("LLM промпт сохранен: " + filename);
+            JOptionPane.showMessageDialog(this,
+                    "LLM промпт сохранен в файл: " + filename,
+                    "Сохранение",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            appendLog("Ошибка сохранения LLM промпта: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                    "Ошибка сохранения: " + e.getMessage(),
+                    "Ошибка",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Перегенерировать LLM промпт для текущей формы
+     */
+    private void regenerateLlmPrompt() {
+        TreePath selectedPath = formsTreePanel.getSelectedPath();
+        if (selectedPath == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Не выбрана форма для генерации промпта",
+                    "Нет выбранной формы",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
+        if (formPath == null) {
+            return;
+        }
+
+        appendLog("Запрос на перегенерацию LLM промпта для формы: " + formPath);
+
+        // Запускаем анализ только для этой формы
+        Set<String> formsSet = new LinkedHashSet<>();
+        formsSet.add(formPath);
+
+        // Используем существующий механизм анализа
+        startAnalysisForForms(formsSet);
+    }
+
+    /**
+     * Запускает анализ для указанных форм
+     */
+    private void startAnalysisForForms(Set<String> formsSet) {
+        if (isRunning.get()) {
+            appendLog("Анализ уже выполняется");
+            return;
+        }
+
+        stopRequested = false;
+        isRunning.set(true);
+        startButton.setEnabled(false);
+        stopButton.setEnabled(true);
+        settingsButton.setEnabled(false);
+        progressBar.setValue(0);
+        progressBar.setIndeterminate(true);
+        statusLabel.setText("Статус: Генерация LLM промпта...");
+
+        currentTask = executorService.submit(() -> {
+            try {
+                runAnalysis(new ArrayList<>(formsSet));
+            } catch (Exception e) {
+                SwingUtilities.invokeLater(() -> {
+                    appendLog("ОШИБКА: " + e.getMessage());
+                    e.printStackTrace();
+                });
+            } finally {
+                isRunning.set(false);
+                SwingUtilities.invokeLater(() -> {
+                    startButton.setEnabled(true);
+                    stopButton.setEnabled(false);
+                    settingsButton.setEnabled(true);
+                    statusLabel.setText("Статус: Готов");
+                    progressBar.setIndeterminate(false);
+                });
+            }
+        });
+    }
 
 }

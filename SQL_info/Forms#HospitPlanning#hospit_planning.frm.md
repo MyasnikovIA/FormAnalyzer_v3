@@ -12,7 +12,7 @@
 
 **Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, чтобы понять бизнес-логику системы и взаимосвязи между объектами.
 
-**Дата генерации:** Tue May 19 13:12:12 GMT+07:00 2026
+**Дата генерации:** Tue May 19 13:29:43 GMT+07:00 2026
 
 ---
 
@@ -3788,6 +3788,992 @@ end;
 
 Исходник формы, который необходимо переработать:
 ```
-
+<FORM>
 ```
 Покажи только текст  переработанный  формы
+
+
+---
+
+## ИСХОДНЫЙ ТЕКСТ ФОРМЫ
+
+Ниже представлен исходный XML код анализируемой формы:
+
+```xml
+<div cmptype="form" oncreate="base().onCreate();" onshow="base().onShow();" window_size="100%x100%">
+    <!--
+        ========================================================================
+        НАЗВАНИЕ ФОРМЫ: HospitPlanning/hospit_planning.frm
+        ОПИСАНИЕ: Форма планирования госпитализации. Управление видами планов,
+                  планами госпитализации на даты и графиками.
+
+        ВХОДНЫЕ ПАРАМЕТРЫ:
+        - LPU : number - Идентификатор ЛПУ (из сессии)
+
+        ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+        - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+
+        ПРИМЕР ВЫЗОВА:
+        openWindow({
+            name: 'HospitPlanning/hospit_planning',
+            vars: {
+                LPU: getVar('LPU')
+            }
+        }, true, 1200, 800)
+            .addListener('onafterclose', function() {
+                if (getVar('ModalResult') == 1) {
+                    refreshDataSet('dsHospPlanKinds');
+                }
+            });
+        ========================================================================
+    -->
+    <component cmptype="ProtectedBlock" alert="true" modcode="HospitalIncome">
+        <component cmptype="Script">
+            <![CDATA[
+            Form.onCreate = function() {
+                executeAction('acGetDefParams', null, null, null, 0, 0);
+            };
+
+            Form.onShow = function() {
+                // код выполняется при показе формы
+            };
+
+            Form.getMonth = function(pnDIR) {
+                setVar('SEARCH_DIRECTION', pnDIR);
+                executeAction('acGetNewMonth', function() {
+                    refreshDataSet('dsHpkPlans');
+                });
+            };
+
+            Form.onHospPlanKindsPopup = function() {
+                var vnHasMkbConstraints = getControlProperty('HOSP_PLAN_KINDS', 'data')['HAS_MKB_CONSTRAINTS'];
+
+                if (!empty(vnHasMkbConstraints) && +vnHasMkbConstraints === 1) {
+                    PopUpItem_SetHide(getControlByName('pHOSP_PLAN_KINDS'), 'pMKBS', false);
+                } else {
+                    PopUpItem_SetHide(getControlByName('pHOSP_PLAN_KINDS'), 'pMKBS', true);
+                }
+            };
+
+            Form.onHpkPlansPopup = function() {
+                var vsPlanDayEng = getControlProperty('HPK_PLANS', 'data')['PLAN_DAY_ENG'];
+                var vnHpkPlans = getValue('HPK_PLANS');
+
+                if (empty(vnHpkPlans)) {
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pEDIT', true);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pDEL', true);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pAPPLY', true);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pCOPY', false);
+                } else {
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pEDIT', false);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pDEL', false);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pAPPLY', false);
+                    PopUpItem_SetHide(getControlByName('pHPK_PLANS'), 'pCOPY', false);
+
+                    var vsCaption = '';
+                    switch (vsPlanDayEng) {
+                        case 'MONDAY':
+                            vsCaption = 'На все понедельники';
+                            break;
+                        case 'TUESDAY':
+                            vsCaption = 'На все вторники';
+                            break;
+                        case 'WEDNESDAY':
+                            vsCaption = 'На все среды';
+                            break;
+                        case 'THURSDAY':
+                            vsCaption = 'На все четверги';
+                            break;
+                        case 'FRIDAY':
+                            vsCaption = 'На все пятницы';
+                            break;
+                        case 'SATURDAY':
+                            vsCaption = 'На все субботы';
+                            break;
+                        case 'SUNDAY':
+                            vsCaption = 'На все воскресения';
+                            break;
+                        default:
+                            vsCaption = 'На все дни недели';
+                    }
+
+                    ['pALLD', 'pCOPYALLD'].forEach(function(psItemName) {
+                        PopUpItem_SetCaption(getControlByName('pHPK_PLANS'), psItemName, vsCaption);
+                    });
+                }
+            };
+
+            Form.addHospPlanKind = function() {
+                setVar('CID', getVar('MAIN_CID'));
+                setVar('PRIMARY', null);
+                openWindow('HospitPlanning/hosp_plan_kinds_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setControlProperty('HOSP_PLAN_KINDS', 'locate', getVar('newid'));
+                            refreshDataSet('DS_HOSP_PLAN_KINDS');
+                        }
+                    });
+            };
+
+            Form.editHospPlanKind = function() {
+                setVar('CID', getVar('MAIN_CID'));
+                setVar('PRIMARY', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospitPlanning/hosp_plan_kinds_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setControlProperty('HOSP_PLAN_KINDS', 'locate', getVar('PRIMARY'));
+                            refreshDataSet('DS_HOSP_PLAN_KINDS');
+                        }
+                    });
+            };
+
+            Form.delHospPlanKind = function() {
+                if (confirm('Вы действительно хотите удалить запись?')) {
+                    executeAction('acDelHospPlanKind', function() {
+                        refreshDataSet('DS_HOSP_PLAN_KINDS');
+                    });
+                }
+            };
+
+            Form.showDepsHospPlanKind = function() {
+                setVar('HPK_ID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospitPlanning/hosp_plan_deps', true)
+                    .addListener('onafterclose', function() {
+                        setControlProperty('HOSP_PLAN_KINDS', 'locate', getVar('HPK_ID'));
+                        refreshDataSet('DS_HOSP_PLAN_KINDS');
+                    });
+            };
+
+            Form.showPksHospPlanKind = function() {
+                setVar('HPK_ID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospitPlanning/hosp_plan_pks', true)
+                    .addListener('onafterclose', function() {
+                        setControlProperty('HOSP_PLAN_KINDS', 'locate', getVar('HPK_ID'));
+                        refreshDataSet('DS_HOSP_PLAN_KINDS');
+                    });
+            };
+
+            Form.showMkbsHospPlanKind = function() {
+                setVar('HPK_ID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospitPlanning/hosp_plan_mkbs', true)
+                    .addListener('onafterclose', function() {
+                        setControlProperty('HOSP_PLAN_KINDS', 'locate', getVar('HPK_ID'));
+                        refreshDataSet('DS_HOSP_PLAN_KINDS');
+                    });
+            };
+
+            Form.showRights = function() {
+                setVar('UnitCode', 'HOSP_PLAN_KINDS');
+                setVar('RecordID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('AccessRights/d_cse_accesses', true);
+            };
+
+            Form.delHpkPlans = function() {
+                if (confirm('Вы действительно хотите удалить запись?')) {
+                    executeAction('acDelHpkPlan', function() {
+                        refreshDataSet('DS_HPK_PLANS');
+                    });
+                }
+            };
+
+            Form.addHpkPlans = function() {
+                setVar('IDD', null);
+                setVar('DDATE', null);
+                setVar('PPID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospPlan/hospplanperiod_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setControlProperty('HPK_PLANS', 'locate', getVar('newid'));
+                            refreshDataSet('DS_HPK_PLANS');
+                        }
+                    });
+            };
+
+            Form.editHpkPlans = function() {
+                setVar('IDD', getValue('HPK_PLANS'));
+                setVar('DDATE', getControlProperty('HPK_PLANS', 'data')['PLAN_DATE']);
+                setVar('PPID', getValue('HOSP_PLAN_KINDS'));
+                openWindow('HospPlan/hospplanperiod_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setControlProperty('HPK_PLANS', 'locate', getVar('IDD'));
+                            refreshDataSet('DS_HPK_PLANS');
+                        }
+                    });
+            };
+
+            Form.toAllWeekDay = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setVar('PLAN_DAY_ENG', getControlProperty('HPK_PLANS', 'data')['PLAN_DAY_ENG']);
+                            executeAction('acSetPlanForDay', function() {
+                                refreshDataSet('DS_HPK_PLANS');
+                            });
+                        }
+                    });
+            };
+
+            Form.toAllPeriod = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            setVar('PLAN_DAY_ENG', null);
+                            executeAction('acSetPlanForDay', function() {
+                                refreshDataSet('DS_HPK_PLANS');
+                            });
+                        }
+                    });
+            };
+
+            Form.weekToAllPeriod = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            executeAction('acSetPlanForWeek', function() {
+                                refreshDataSet('DS_HPK_PLANS');
+                            });
+                        }
+                    });
+            };
+
+            Form.copyToAllWeekDay = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true).addListener('onafterclose', function() {
+                    if (+getVar('ModalResult') === 1) {
+                        setVar('PLAN_DAY_ENG', getControlProperty('HPK_PLANS', 'data')['PLAN_DAY_ENG']);
+                        executeAction('acCopyPlanForDay', function() {
+                            refreshDataSet('DS_HPK_PLANS');
+                        });
+                    }
+                });
+            };
+
+            Form.copyToAllPeriod = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true).addListener('onafterclose', function() {
+                    if (+getVar('ModalResult') === 1) {
+                        setVar('PLAN_DAY_ENG', null);
+                        executeAction('acCopyPlanForDay', function() {
+                            refreshDataSet('DS_HPK_PLANS');
+                        });
+                    }
+                });
+            };
+
+            Form.copyWeekToAllPeriod = function() {
+                setVar('in_value_from', getVar('SYS_DATE'));
+                openWindow('UniversalForms/period', true).addListener('onafterclose', function() {
+                    if (+getVar('ModalResult') === 1) {
+                        executeAction('acCopyPlanForWeek', function() {
+                            refreshDataSet('DS_HPK_PLANS');
+                        });
+                    }
+                });
+            };
+
+            Form.refreshTabs = function(poGrid) {
+                if (!empty(poGrid)) {
+                    setVar('CLOSE_DATE_PLAN', poGrid.data.CLOSE_DATE);
+                    setVar('HP_NAME', poGrid.data.HP_NAME);
+                }
+                refreshDataSet('DS_HPK_PLANS');
+                refreshDataSet('dsHPKSchedule');
+            };
+
+            Form.onRowScheduleClone = function(poClone, poData) {
+                $$(poClone);
+                    setValue('checkIsActive', poData.IS_ACTIVE);
+                    setValue('checkIsPrior', poData.IS_PRIORITY);
+                _$$();
+            };
+
+            Form.onScheduleGridPopup = function() {
+                var vnSchAdd = +getVar('SCH_ADD');
+                var vnSchUpd = +getVar('SCH_UPD');
+                var vnSchDel = +getVar('SCH_DEL');
+                var voPopup = getControlByName('popupSchedule');
+                var voGridData = getControlProperty('gridSchedule', 'data');
+                var vbIsEmptyGrid = empty(voGridData['ID']);
+
+                if (vnSchAdd === 0) {
+                    PopUpMenu_HideItem(voPopup, 'pAddSchedule');
+                } else {
+                    PopUpMenu_ShowItem(voPopup, 'pAddSchedule');
+                }
+
+                if (vnSchUpd === 0 || vbIsEmptyGrid) {
+                    PopUpMenu_HideItem(voPopup, 'pEditSchedule');
+                } else {
+                    PopUpMenu_ShowItem(voPopup, 'pEditSchedule');
+                }
+
+                if (vnSchDel === 0 || vbIsEmptyGrid) {
+                    PopUpMenu_HideItem(voPopup, 'pDelSchedule');
+                } else {
+                    PopUpMenu_ShowItem(voPopup, 'pDelSchedule');
+                }
+            };
+
+            Form.executeSchedule = function(psAction) {
+                var voGridScheduleData = getControlProperty('gridSchedule', 'data');
+
+                if (psAction === 'del') {
+                    executeAction('acDelSchedule', function() {
+                        refreshDataSet('dsHPKSchedule');
+                    });
+                    return;
+                }
+
+                if (empty(voGridScheduleData['HOSP_PLAN_KINDS'])) {
+                    voGridScheduleData['HOSP_PLAN_KINDS'] = getControlProperty('HOSP_PLAN_KINDS', 'data')['ID'];
+                }
+
+                openD3Form('HospitPlanning/modals/graphics_add_edit', true, {
+                    width: 500,
+                    height: 300,
+                    vars: {
+                        mode: psAction,
+                        formData: voGridScheduleData
+                    },
+                    onclose: function(poMod) {
+                        if (poMod && +poMod.ModalResult === 1) {
+                            refreshDataSet('dsHPKSchedule');
+                        }
+                    }
+                });
+            };
+
+            Form.openHpSchedule = function() {
+                var voGridData = getControlProperty('gridSchedule', 'data');
+                openWindow({
+                    name: 'Schedules/schedules_edit_hp',
+                    vars: {
+                        ReadOnly: 1,
+                        ScheduleId: voGridData['SCHEDULE']
+                    }
+                }, true, 1115, 530);
+            };
+            ]]>
+        </component>
+
+        <component cmptype="Action" name="acSetPlanForDay">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: установка плана на день
+                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
+                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+                  end if;
+                  D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY(pnLPU        => to_number(:pnLPU),          -- ЛПУ пользователя
+                                                   pnPLAN       => to_number(:pnHPK_PLANS),    -- ID плана-образца
+                                                   psDAY        => :psPLAN_DAY_ENG,            -- День недели (англ.)
+                                                   pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'), -- Дата начала периода
+                                                   pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));   -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: установка плана на день
+                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
+                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
+                  end if;
+                  call D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY(pnLPU        => (:pnLPU)::numeric,          -- ЛПУ пользователя
+                                                        pnPLAN       => (:pnHPK_PLANS)::numeric,    -- ID плана-образца
+                                                        psDAY        => (:psPLAN_DAY_ENG)::text,    -- День недели (англ.)
+                                                        pdSTART_DATE => (:pdDATE_FROM)::date,       -- Дата начала периода
+                                                        pdEND_DATE   => (:pdDATE_TO)::date);        -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU"             src="LPU"               srctype="session"/>
+            <component cmptype="ActionVar" name="pnHPK_PLANS"       src="HPK_PLANS"         srctype="ctrl"/>
+            <component cmptype="ActionVar" name="psPLAN_DAY_ENG"    src="PLAN_DAY_ENG"      srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_FROM"       src="return_from_value" srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_TO"         src="return_to_value"   srctype="var"/>
+            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN"   srctype="var"/>
+            <component cmptype="ActionVar" name="psHP_NAME"         src="HP_NAME"           srctype="var"/>
+        </component>
+
+        <component cmptype="Action" name="acSetPlanForWeek">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: установка плана на неделю
+                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
+                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+                  end if;
+                  D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK(pnLPU        => to_number(:pnLPU),          -- ЛПУ пользователя
+                                                    pnHOSP_PLAN  => to_number(:pnHPK_PLANS),    -- ID плана-образца
+                                                    pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'), -- Дата начала периода
+                                                    pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));   -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: установка плана на неделю
+                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
+                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
+                  end if;
+                  call D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK(pnLPU        => (:pnLPU)::numeric,          -- ЛПУ пользователя
+                                                         pnHOSP_PLAN  => (:pnHPK_PLANS)::numeric,    -- ID плана-образца
+                                                         pdSTART_DATE => (:pdDATE_FROM)::date,       -- Дата начала периода
+                                                         pdEND_DATE   => (:pdDATE_TO)::date);        -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU"             src="LPU"               srctype="session"/>
+            <component cmptype="ActionVar" name="pnHPK_PLANS"       src="HPK_PLANS"         srctype="ctrl"/>
+            <component cmptype="ActionVar" name="pdDATE_FROM"       src="return_from_value" srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_TO"         src="return_to_value"   srctype="var"/>
+            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN"   srctype="var"/>
+            <component cmptype="ActionVar" name="psHP_NAME"         src="HP_NAME"           srctype="var"/>
+        </component>
+
+        <component cmptype="Action" name="acDelHpkPlan">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_PLANS" action="DELETE"/>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: удаление плана госпитализации
+                  call D_PKG_HPK_PLANS.DEL(pnID  => (:pnID)::numeric,   -- Идентификатор записи
+                                           pnLPU => (:pnLPU)::numeric);  -- ЛПУ пользователя
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session"/>
+            <component cmptype="ActionVar" name="pnID"  src="HPK_PLANS" srctype="ctrl"/>
+        </component>
+
+        <component cmptype="Action" name="acDelHospPlanKind">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HOSP_PLAN_KINDS" action="DELETE"/>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: удаление вида плана госпитализации
+                  call D_PKG_HOSP_PLAN_KINDS.DEL(pnID  => (:pnID)::numeric,   -- Идентификатор записи
+                                                 pnLPU => (:pnLPU)::numeric);  -- ЛПУ пользователя
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session"/>
+            <component cmptype="ActionVar" name="pnID"  src="HOSP_PLAN_KINDS" srctype="ctrl"/>
+        </component>
+
+        <component cmptype="Action" name="acGetNewMonth">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                declare
+                  ndNEW_DATE DATE;
+                begin
+                  -- ORACLE: расчет нового месяца для навигации
+                  ndNEW_DATE := ADD_MONTHS(to_date(:pdPLAN_DATE_FROM_S, 'dd.mm.yyyy'), :pnSEARCH_DIRECTION);
+                  :pdPLAN_DATE_FROM := '01.' || to_char(ndNEW_DATE, 'mm.yyyy');
+                  :pdPLAN_DATE_TO := to_char(LAST_DAY(ndNEW_DATE), 'DD.MM.YYYY');
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                declare
+                  ndNEW_DATE date;
+                begin
+                  -- POSTGRESQL: расчет нового месяца для навигации
+                  ndNEW_DATE := (:pdPLAN_DATE_FROM_S)::date + ((:pnSEARCH_DIRECTION)::integer || ' months')::interval;
+                  :pdPLAN_DATE_FROM := '01.' || to_char(ndNEW_DATE, 'MM.YYYY');
+                  :pdPLAN_DATE_TO := to_char(date_trunc('month', ndNEW_DATE) + interval '1 month - 1 day', 'DD.MM.YYYY');
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pdPLAN_DATE_FROM_S" src="PLAN_DATE_FROM" srctype="ctrl"/>
+            <component cmptype="ActionVar" name="pnSEARCH_DIRECTION" src="SEARCH_DIRECTION" srctype="var"/>
+            <component cmptype="ActionVar" name="pdPLAN_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" put="" len="15"/>
+            <component cmptype="ActionVar" name="pdPLAN_DATE_TO"   src="PLAN_DATE_TO"   srctype="ctrl" put="" len="15"/>
+        </component>
+
+        <component cmptype="Action" name="acGetDefParams">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: получение параметров по умолчанию
+                  :pdSYS_DATE := to_char(sysdate, 'DD.MM.YYYY');
+                  :pdFILTER_DATE_FROM := '01.' || to_char(sysdate, 'MM.YYYY');
+                  :pdFILTER_DATE_TO := to_char(last_day(sysdate), 'DD.MM.YYYY');
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
+                    into :pnSHOW_CSE
+                    from dual;
+
+                  D_PKG_CATALOGS.FIND_ROOT_CATALOG(1, :pnLPU, 'HOSP_PLAN_KINDS', :pnCID);
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_INSERT', null, 0)
+                    into :pnSCH_ADD
+                    from dual;
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_UPDATE', null, 0)
+                    into :pnSCH_UPD
+                    from dual;
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_DELETE', null, 0)
+                    into :pnSCH_DEL
+                    from dual;
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                declare
+                  nCID numeric;  -- Локальная переменная для INOUT параметра
+                begin
+                  -- POSTGRESQL: получение параметров по умолчанию
+                  :pdSYS_DATE := to_char(current_date, 'DD.MM.YYYY');
+                  :pdFILTER_DATE_FROM := '01.' || to_char(current_date, 'MM.YYYY');
+                  :pdFILTER_DATE_TO := to_char(date_trunc('month', current_date) + interval '1 month - 1 day', 'DD.MM.YYYY');
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
+                    into :pnSHOW_CSE;
+
+                  nCID := :pnCID;
+
+                  call D_PKG_CATALOGS.FIND_ROOT_CATALOG(pnRAISE    => 1,                       -- Отображать сообщение при ошибке
+                                                        pnLPU      => (:pnLPU)::numeric,       -- ЛПУ пользователя
+                                                        psUNITCODE => 'HOSP_PLAN_KINDS',       -- Код раздела
+                                                        pnCATALOG  => nCID);                   -- INOUT: ID каталога
+
+                  :pnCID := nCID;
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_INSERT', null, 0)
+                    into :pnSCH_ADD;
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_UPDATE', null, 0)
+                    into :pnSCH_UPD;
+
+                  select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_DELETE', null, 0)
+                    into :pnSCH_DEL;
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU"              src="LPU"            srctype="session"/>
+            <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" put="" len="15"/>
+            <component cmptype="ActionVar" name="pdFILTER_DATE_TO"   src="PLAN_DATE_TO"   srctype="ctrl" put="" len="15"/>
+            <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="deSchDateFrom"  srctype="ctrl" put="" len="15"/>
+            <component cmptype="ActionVar" name="pdFILTER_DATE_TO"   src="deSchDateTo"    srctype="ctrl" put="" len="15"/>
+            <component cmptype="ActionVar" name="pnSHOW_CSE"         src="SHOW_CSE"       srctype="var"  put="" len="10"/>
+            <component cmptype="ActionVar" name="pnCID"              src="MAIN_CID"       srctype="var"  put="" len="17"/>
+            <component cmptype="ActionVar" name="pdSYS_DATE"         src="SYS_DATE"       srctype="var"  put="" len="15"/>
+            <component cmptype="ActionVar" name="pnSCH_ADD"          src="SCH_ADD"        srctype="var"  put="" len="1"/>
+            <component cmptype="ActionVar" name="pnSCH_UPD"          src="SCH_UPD"        srctype="var"  put="" len="1"/>
+            <component cmptype="ActionVar" name="pnSCH_DEL"          src="SCH_DEL"        srctype="var"  put="" len="1"/>
+        </component>
+
+        <component cmptype="Action" name="acCopyPlanForDay">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: копирование плана на день
+                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
+                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+                  end if;
+                  D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY(pnLPU        => to_number(:pnLPU),          -- ЛПУ пользователя
+                                                    pnPLAN       => to_number(:pnHPK_PLANS),    -- ID плана-источника
+                                                    psDAY        => :psPLAN_DAY_ENG,            -- День недели (англ.)
+                                                    pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'), -- Дата начала периода
+                                                    pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));   -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: копирование плана на день
+                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
+                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
+                  end if;
+                  call D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY(pnLPU        => (:pnLPU)::numeric,          -- ЛПУ пользователя
+                                                         pnPLAN       => (:pnHPK_PLANS)::numeric,    -- ID плана-источника
+                                                         psDAY        => (:psPLAN_DAY_ENG)::text,    -- День недели (англ.)
+                                                         pdSTART_DATE => (:pdDATE_FROM)::date,       -- Дата начала периода
+                                                         pdEND_DATE   => (:pdDATE_TO)::date);        -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU"             src="LPU"               srctype="session"/>
+            <component cmptype="ActionVar" name="pnHPK_PLANS"       src="HPK_PLANS"         srctype="ctrl"/>
+            <component cmptype="ActionVar" name="psPLAN_DAY_ENG"    src="PLAN_DAY_ENG"      srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_FROM"       src="return_from_value" srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_TO"         src="return_to_value"   srctype="var"/>
+            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN"   srctype="var"/>
+            <component cmptype="ActionVar" name="psHP_NAME"         src="HP_NAME"           srctype="var"/>
+        </component>
+
+        <component cmptype="Action" name="acCopyPlanForWeek">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: копирование плана на неделю
+                  if to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY') < to_date(:pdDATE_TO, 'DD.MM.YYYY') then
+                    D_P_EXC('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || to_date(:pdCLOSE_DATE_PLAN, 'DD.MM.YYYY'));
+                  end if;
+                  D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK(pnLPU        => to_number(:pnLPU),          -- ЛПУ пользователя
+                                                     pnHOSP_PLAN  => to_number(:pnHPK_PLANS),    -- ID плана-источника
+                                                     pdSTART_DATE => to_date(:pdDATE_FROM, 'DD.MM.YYYY'), -- Дата начала периода
+                                                     pdEND_DATE   => to_date(:pdDATE_TO, 'DD.MM.YYYY'));   -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: копирование плана на неделю
+                  if (:pdCLOSE_DATE_PLAN)::date < (:pdDATE_TO)::date then
+                    PERFORM D_P_EXC(1, ('Дата плана не может быть больше даты окончания действия вида плана госпитализации. Для "' || :psHP_NAME || '" установлена дата окончания действия ' || (:pdCLOSE_DATE_PLAN)::text));
+                  end if;
+                  call D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK(pnLPU        => (:pnLPU)::numeric,          -- ЛПУ пользователя
+                                                          pnHOSP_PLAN  => (:pnHPK_PLANS)::numeric,    -- ID плана-источника
+                                                          pdSTART_DATE => (:pdDATE_FROM)::date,       -- Дата начала периода
+                                                          pdEND_DATE   => (:pdDATE_TO)::date);        -- Дата окончания периода
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnLPU"             src="LPU"               srctype="session"/>
+            <component cmptype="ActionVar" name="pnHPK_PLANS"       src="HPK_PLANS"         srctype="ctrl"/>
+            <component cmptype="ActionVar" name="pdDATE_FROM"       src="return_from_value" srctype="var"/>
+            <component cmptype="ActionVar" name="pdDATE_TO"         src="return_to_value"   srctype="var"/>
+            <component cmptype="ActionVar" name="pdCLOSE_DATE_PLAN" src="CLOSE_DATE_PLAN"   srctype="var"/>
+            <component cmptype="ActionVar" name="psHP_NAME"         src="HP_NAME"           srctype="var"/>
+        </component>
+
+        <component cmptype="Action" name="acDelSchedule">
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                begin
+                  -- ORACLE: удаление графика
+                  D_PKG_HPK_SCHEDULE.DEL(:pnID, :pnLPU);
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                begin
+                  -- POSTGRESQL: удаление графика
+                  call D_PKG_HPK_SCHEDULE.DEL(pnID  => (:pnID)::numeric,   -- Идентификатор записи
+                                              pnLPU => (:pnLPU)::numeric);  -- ЛПУ пользователя
+                end;
+                ]]>
+            </component>
+            <component cmptype="ActionVar" name="pnID"  src="gridSchedule" srctype="ctrl"/>
+            <component cmptype="ActionVar" name="pnLPU" src="LPU"          srctype="session"/>
+        </component>
+
+        <component cmptype="DataSet" name="DS_HOSP_PLAN_KINDS" mode="Range">
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                -- ORACLE: выборка видов планов госпитализации
+                -- pnLPU - идентификатор ЛПУ из сессии
+                -- pnCABLAB - идентификатор кабинета из сессии
+                -- pnSHOW_CSE - флаг показа всех записей (1 - показывать все)
+                select hpk.ID,                                   -- Уникальный идентификатор
+                       hpk.HP_CODE,                              -- Код вида плана
+                       hpk.HP_NAME,                              -- Наименование вида плана
+                       hpk.MAX_PRIOR,                            -- Максимальный приоритет
+                       hpk.DEPS,                                 -- Отделения (склейка)
+                       hpk.MIN_AGE,                              -- Минимальный возраст
+                       hpk.MAX_AGE,                              -- Максимальный возраст
+                       hpk.HAS_MKB_CONSTRAINTS,                  -- Признак ограничения по диагнозу (0/1)
+                       hpk.SHAS_MKB_CONSTRAINTS,                 -- Признак ограничения по диагнозу (Да/Нет)
+                       hpk.SHAS_LIMITS,                          -- Признак ограничения по записи (Да/Нет)
+                       hpk.SHAS_PAYMENT_CONSTRAINTS,             -- Признак ограничения по видам оплаты (Да/Нет)
+                       hpk.NUMB_GROUP,                           -- Группа сквозной нумерации
+                       hpk.JOURNAL_TYPE_MNEMO,                   -- Тип журнала (расшифровка)
+                       hpk.OPER_MNEMO,                           -- Тип оперативности (расшифровка)
+                       to_char(hpk.OPEN_DATE, 'DD.MM.YYYY') as OPEN_DATE,   -- Дата начала действия
+                       to_char(hpk.CLOSE_DATE, 'DD.MM.YYYY') as CLOSE_DATE  -- Дата окончания действия
+                  from D_V_HOSP_PLAN_KINDS hpk
+                 where hpk.LPU = to_number(:pnLPU)
+                   and (D_PKG_CSE_ACCESSES.CHECK_RIGHT(pnLPU      => to_number(:pnLPU),
+                                                       psUNITCODE => 'HOSP_PLAN_KINDS',
+                                                       pnUNIT_ID  => hpk.ID,
+                                                       psRIGHT    => 11,
+                                                       pnCABLAB   => to_number(:pnCABLAB),
+                                                       pnSERVICE  => null) = 1
+                    or to_number(:pnSHOW_CSE) = 1)
+                ]]>
+            </component>
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                -- POSTGRESQL: выборка видов планов госпитализации
+                -- pnLPU - идентификатор ЛПУ из сессии
+                -- pnCABLAB - идентификатор кабинета из сессии
+                -- pnSHOW_CSE - флаг показа всех записей (1 - показывать все)
+                select hpk.ID,                                   -- Уникальный идентификатор
+                       hpk.HP_CODE,                              -- Код вида плана
+                       hpk.HP_NAME,                              -- Наименование вида плана
+                       hpk.MAX_PRIOR,                            -- Максимальный приоритет
+                       hpk.DEPS,                                 -- Отделения (склейка)
+                       hpk.MIN_AGE,                              -- Минимальный возраст
+                       hpk.MAX_AGE,                              -- Максимальный возраст
+                       hpk.HAS_MKB_CONSTRAINTS,                  -- Признак ограничения по диагнозу (0/1)
+                       hpk.SHAS_MKB_CONSTRAINTS,                 -- Признак ограничения по диагнозу (Да/Нет)
+                       hpk.SHAS_LIMITS,                          -- Признак ограничения по записи (Да/Нет)
+                       hpk.SHAS_PAYMENT_CONSTRAINTS,             -- Признак ограничения по видам оплаты (Да/Нет)
+                       hpk.NUMB_GROUP,                           -- Группа сквозной нумерации
+                       hpk.JOURNAL_TYPE_MNEMO,                   -- Тип журнала (расшифровка)
+                       hpk.OPER_MNEMO,                           -- Тип оперативности (расшифровка)
+                       to_char(hpk.OPEN_DATE, 'DD.MM.YYYY') as OPEN_DATE,   -- Дата начала действия
+                       to_char(hpk.CLOSE_DATE, 'DD.MM.YYYY') as CLOSE_DATE  -- Дата окончания действия
+                  from D_V_HOSP_PLAN_KINDS hpk
+                 where hpk.LPU = (:pnLPU)::numeric
+                   and (D_PKG_CSE_ACCESSES.CHECK_RIGHT(pnLPU      => (:pnLPU)::numeric,
+                                                       psUNITCODE => 'HOSP_PLAN_KINDS',
+                                                       pnUNIT_ID  => hpk.ID,
+                                                       psRIGHT    => 11,
+                                                       pnCABLAB   => (:pnCABLAB)::numeric,
+                                                       pnSERVICE  => null) = 1
+                    or (:pnSHOW_CSE)::numeric = 1)
+                ]]>
+            </component>
+            <component cmptype="Variable" name="pnLPU"      src="LPU"      srctype="session"/>
+            <component cmptype="Variable" name="pnCABLAB"   src="CABLAB"   srctype="session"/>
+            <component cmptype="Variable" name="pnSHOW_CSE" src="SHOW_CSE" srctype="var"/>
+            <component cmptype="Variable" name="r1c"        src="r1c"      srctype="var"    default="10"/>
+            <component cmptype="Variable" name="r1s"        src="r1s"      srctype="var"    default="1"/>
+        </component>
+
+        <component cmptype="DataSet" name="DS_HPK_PLANS" activateoncreate="false" mode="Range">
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                -- ORACLE: выборка планов госпитализации для выбранного вида
+                -- pnHOSP_PLAN_KINDS - идентификатор вида плана госпитализации (PID)
+                -- pdPLAN_DATE_FROM - начало периода фильтрации
+                -- pdPLAN_DATE_TO - окончание периода фильтрации
+                select hp.ID,                                   -- Уникальный идентификатор
+                       trunc(hp.PLAN_DATE) as PLAN_DATE,        -- Дата плана (без времени)
+                       hp.PLAN_DAY_RUS,                         -- День недели (русский)
+                       trim(hp.PLAN_DAY_ENG) as PLAN_DAY_ENG,   -- День недели (английский)
+                       to_char(hp.PLAN_DATE, 'D') as PLAN_DAY_NUMBER, -- Номер дня недели (1-7)
+                       hp.MALE_COUNT_S,                         -- Мужских мест (с информацией по записи)
+                       hp.FEMALE_COUNT_S,                       -- Женских мест (с информацией по записи)
+                       hp.OPER_COUNT_S,                         -- Оперативных мест (с информацией по записи)
+                       hp.CON_COUNT_S,                          -- Консервативных мест (с информацией по записи)
+                       hp.GEN_COUNT_S                           -- Всего мест (с информацией по записи)
+                  from D_V_HPK_PLANS hp
+                 where hp.PID = to_number(:pnHOSP_PLAN_KINDS)
+                   and (hp.PLAN_DATE >= to_date(:pdPLAN_DATE_FROM, 'DD.MM.YYYY') or :pdPLAN_DATE_FROM is null)
+                   and (hp.PLAN_DATE <= to_date(:pdPLAN_DATE_TO, 'DD.MM.YYYY') or :pdPLAN_DATE_TO is null)
+                ]]>
+            </component>
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                -- POSTGRESQL: выборка планов госпитализации для выбранного вида
+                -- pnHOSP_PLAN_KINDS - идентификатор вида плана госпитализации (PID)
+                -- pdPLAN_DATE_FROM - начало периода фильтрации
+                -- pdPLAN_DATE_TO - окончание периода фильтрации
+                select hp.ID,                                   -- Уникальный идентификатор
+                       date_trunc('day', hp.PLAN_DATE) as PLAN_DATE,        -- Дата плана (без времени)
+                       hp.PLAN_DAY_RUS,                         -- День недели (русский)
+                       trim(hp.PLAN_DAY_ENG) as PLAN_DAY_ENG,   -- День недели (английский)
+                       to_char(hp.PLAN_DATE, 'D') as PLAN_DAY_NUMBER, -- Номер дня недели (1-7)
+                       hp.MALE_COUNT_S,                         -- Мужских мест (с информацией по записи)
+                       hp.FEMALE_COUNT_S,                       -- Женских мест (с информацией по записи)
+                       hp.OPER_COUNT_S,                         -- Оперативных мест (с информацией по записи)
+                       hp.CON_COUNT_S,                          -- Консервативных мест (с информацией по записи)
+                       hp.GEN_COUNT_S                           -- Всего мест (с информацией по записи)
+                  from D_V_HPK_PLANS hp
+                 where hp.PID = (:pnHOSP_PLAN_KINDS)::numeric
+                   and (hp.PLAN_DATE >= (:pdPLAN_DATE_FROM)::date or :pdPLAN_DATE_FROM is null)
+                   and (hp.PLAN_DATE <= (:pdPLAN_DATE_TO)::date or :pdPLAN_DATE_TO is null)
+                ]]>
+            </component>
+            <component cmptype="Variable" name="pnHOSP_PLAN_KINDS" src="HOSP_PLAN_KINDS" srctype="ctrl"/>
+            <component cmptype="Variable" name="pdPLAN_DATE_FROM"  src="PLAN_DATE_FROM"  srctype="ctrl"/>
+            <component cmptype="Variable" name="pdPLAN_DATE_TO"    src="PLAN_DATE_TO"    srctype="ctrl"/>
+            <component cmptype="Variable" name="r1c"               src="r1c"             srctype="var" default="10"/>
+            <component cmptype="Variable" name="r1s"               src="r1s"             srctype="var" default="1"/>
+        </component>
+
+        <component cmptype="DataSet" name="dsHPKSchedule" activateoncreate="false" mode="Range">
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
+                <![CDATA[
+                -- ORACLE: выборка графиков для вида плана госпитализации
+                -- pnHOSP_PLAN_KINDS - идентификатор вида плана госпитализации
+                -- pdDATE_FROM - начало периода фильтрации
+                -- pdDATE_TO - окончание периода фильтрации
+                select hs.ID,                               -- Уникальный идентификатор
+                       hs.DATE_BEGIN,                       -- Дата начала действия графика
+                       hs.DATE_END,                         -- Дата окончания действия графика
+                       sc.CODE,                             -- Код графика
+                       sc.NAME,                             -- Наименование графика
+                       hs.IS_ACTIVE,                        -- Признак действующего графика (0/1)
+                       hs.IS_PRIORITY,                      -- Признак приоритетного графика (0/1)
+                       hs.OVER_LIMITS,                      -- Признак превышения лимитов (0/1)
+                       hs.HOSP_PLAN_KINDS,                  -- ID вида плана госпитализации
+                       hs.SCHEDULE                          -- ID графика
+                  from D_V_HPK_SCHEDULE_BASE hs
+                  join D_V_SCHEDULE_BASE sc on hs.SCHEDULE = sc.ID
+                 where hs.HOSP_PLAN_KINDS = to_number(:pnHOSP_PLAN_KINDS)
+                   and (hs.DATE_BEGIN >= to_date(:pdDATE_FROM, 'DD.MM.YYYY') or :pdDATE_FROM is null)
+                   and (hs.DATE_BEGIN <= to_date(:pdDATE_TO, 'DD.MM.YYYY') or :pdDATE_TO is null)
+                ]]>
+            </component>
+            <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                -- POSTGRESQL: выборка графиков для вида плана госпитализации
+                -- pnHOSP_PLAN_KINDS - идентификатор вида плана госпитализации
+                -- pdDATE_FROM - начало периода фильтрации
+                -- pdDATE_TO - окончание периода фильтрации
+                select hs.ID,                               -- Уникальный идентификатор
+                       hs.DATE_BEGIN,                       -- Дата начала действия графика
+                       hs.DATE_END,                         -- Дата окончания действия графика
+                       sc.CODE,                             -- Код графика
+                       sc.NAME,                             -- Наименование графика
+                       hs.IS_ACTIVE,                        -- Признак действующего графика (0/1)
+                       hs.IS_PRIORITY,                      -- Признак приоритетного графика (0/1)
+                       hs.OVER_LIMITS,                      -- Признак превышения лимитов (0/1)
+                       hs.HOSP_PLAN_KINDS,                  -- ID вида плана госпитализации
+                       hs.SCHEDULE                          -- ID графика
+                  from D_V_HPK_SCHEDULE_BASE hs
+                  join D_V_SCHEDULE_BASE sc on hs.SCHEDULE = sc.ID
+                 where hs.HOSP_PLAN_KINDS = (:pnHOSP_PLAN_KINDS)::numeric
+                   and (hs.DATE_BEGIN >= (:pdDATE_FROM)::date or :pdDATE_FROM is null)
+                   and (hs.DATE_BEGIN <= (:pdDATE_TO)::date or :pdDATE_TO is null)
+                ]]>
+            </component>
+            <component cmptype="Variable" name="pnHOSP_PLAN_KINDS" src="HOSP_PLAN_KINDS" srctype="ctrl"/>
+            <component cmptype="Variable" name="pdDATE_FROM"       src="deSchDateFrom"   srctype="ctrl"/>
+            <component cmptype="Variable" name="pdDATE_TO"         src="deSchDateTo"     srctype="ctrl"/>
+            <component cmptype="Variable" name="r1c"               src="r1c"             srctype="var" default="10"/>
+            <component cmptype="Variable" name="r1s"               src="r1s"             srctype="var" default="1"/>
+        </component>
+
+        <div style="height: 50%">
+            <component cmptype="Popup" name="pHOSP_PLAN_KINDS" popupobject="HOSP_PLAN_KINDS" onpopup="base().onHospPlanKindsPopup();">
+                <component cmptype="PopupItem" caption="Обновить" onclick="refreshDataSet('DS_HOSP_PLAN_KINDS');" cssimg="refresh"/>
+                <component cmptype="PopupItem" caption="-"/>
+                <component cmptype="PopupItem" caption="Добавить" name="pADD" unitbp="HOSP_PLAN_KINDS_INSERT" onclick="base().addHospPlanKind();" cssimg="insert"/>
+                <component cmptype="PopupItem" caption="Редактировать" name="pEDIT" unitbp="HOSP_PLAN_KINDS_UPDATE" onclick="base().editHospPlanKind();" cssimg="edit"/>
+                <component cmptype="PopupItem" caption="Удалить" name="pDEL" unitbp="HOSP_PLAN_KINDS_DELETE" onclick="base().delHospPlanKind();" cssimg="delete"/>
+                <component cmptype="PopupItem" caption="-"/>
+                <component cmptype="PopupItem" caption="Отделения" name="pDEPS" onclick="base().showDepsHospPlanKind();"/>
+                <component cmptype="PopupItem" caption="Диагнозы" name="pMKBS" onclick="base().showMkbsHospPlanKind();"/>
+                <component cmptype="PopupItem" caption="Виды оплаты" name="pPKS" onclick="base().showPksHospPlanKind();"/>
+                <component cmptype="PopupItem" caption="Права записи" name="pRIGHTS" onclick="base().showRights();"/>
+            </component>
+            <component cmptype="AutoPopupMenu" unit="HOSP_PLAN_KINDS" all="true" join_menu="pHOSP_PLAN_KINDS" popupobject="HOSP_PLAN_KINDS"/>
+            <component cmptype="Grid" name="HOSP_PLAN_KINDS" dataset="DS_HOSP_PLAN_KINDS" field="ID" onchange="Form.refreshTabs(this);" grid_caption="Виды планов госпитализации">
+                <component cmptype="Column" caption="Код" field="HP_CODE" filter="HP_CODE"/>
+                <component cmptype="Column" caption="Наименование" field="HP_NAME" filter="HP_NAME"/>
+                <component cmptype="Column" caption="Предв. запись" field="MAX_PRIOR"/>
+                <component cmptype="Column" caption="Отделения" field="DEPS" filter="DEPS"/>
+                <component cmptype="Column" caption="Мин. возраст" field="MIN_AGE"/>
+                <component cmptype="Column" caption="Макс. возраст" field="MAX_AGE"/>
+                <component cmptype="Column" caption="Ограничения по диагнозу" field="SHAS_MKB_CONSTRAINTS" filter="SHAS_MKB_CONSTRAINTS" filterkind="combo" fcontent="Да|Да;Нет|Нет"/>
+                <component cmptype="Column" caption="Ограничения по записи" field="SHAS_LIMITS" filter="SHAS_LIMITS" filterkind="combo" fcontent="Да|Да;Нет|Нет"/>
+                <component cmptype="Column" caption="Ограничения по видам оплаты" field="SHAS_PAYMENT_CONSTRAINTS" filter="SHAS_PAYMENT_CONSTRAINTS" filterkind="combo" fcontent="Да|Да;Нет|Нет"/>
+                <component cmptype="Column" caption="Группа сквозной нумерации" field="NUMB_GROUP"/>
+                <component cmptype="Column" caption="Тип журнала" field="JOURNAL_TYPE_MNEMO" filter="JOURNAL_TYPE_MNEMO" filterkind="combo" fcontent="Обычный|Обычный;Очередь стационара|Очередь стационара;Очередь поликлиники|Очередь поликлиники"/>
+                <component cmptype="Column" caption="Тип оперативности" field="OPER_MNEMO" filter="OPER_MNEMO" filterkind="combo" fcontent="Оперативный|Оперативный;Консервативный|Консервативный"/>
+                <component cmptype="Column" caption="Дата начала" field="OPEN_DATE" filter="OPEN_DATE" filterkind="date"/>
+                <component cmptype="Column" caption="Дата окончания" field="CLOSE_DATE" filter="CLOSE_DATE" filterkind="date"/>
+                <component cmptype="GridFooter" separate="false">
+                    <component count="10" cmptype="Range" varstart="r1s" varcount="r1c" valuecount="10" valuestart="1"/>
+                </component>
+            </component>
+        </div>
+
+        <component cmptype="PageControl" name="PageControl1" mode="gorizontal">
+            <component cmptype="TabSheet" caption="Планы госпитализации" name="tsHospPlans">
+                <div>
+                    <component cmptype="Label" caption="Период: "/>
+                    <component cmptype="DateEdit" name="PLAN_DATE_FROM" typeMask="date"/>
+                    <component cmptype="Label" caption=" - "/>
+                    <component cmptype="DateEdit" name="PLAN_DATE_TO" typeMask="date"/>
+                    <component cmptype="Button" caption="&lt;&lt;&lt;" onclick="base().getMonth(-1);"/>
+                    <component cmptype="Button" caption="Отобрать" onclick="refreshDataSet('DS_HPK_PLANS');"/>
+                    <component cmptype="Button" caption="&gt;&gt;&gt;" onclick="base().getMonth(1);"/>
+                </div>
+                <div style="height: 50%">
+                    <component cmptype="Popup" name="pHPK_PLANS" popupobject="HPK_PLANS" onpopup="base().onHpkPlansPopup()">
+                        <component cmptype="PopupItem" caption="Обновить" onclick="refreshDataSet('DS_HPK_PLANS');" cssimg="refresh"/>
+                        <component cmptype="PopupItem" caption="-"/>
+                        <component cmptype="PopupItem" name="pADD" caption="Добавить" unitbp="HPK_PLANS_INSERT" onclick="base().addHpkPlans();" cssimg="insert"/>
+                        <component cmptype="PopupItem" name="pEDIT" caption="Редактировать" unitbp="HPK_PLANS_UPDATE" onclick="base().editHpkPlans();" cssimg="edit"/>
+                        <component cmptype="PopupItem" name="pDEL" caption="Удалить" unitbp="HPK_PLANS_DELETE" onclick="base().delHpkPlans();" cssimg="delete"/>
+                        <component cmptype="PopupItem" caption="-"/>
+                        <component cmptype="PopupItem" name="pAPPLY" caption="Назначить" cssimg="record">
+                            <component cmptype="PopupItem" name="pALLD" caption="Ко всем дням недели" onclick="base().toAllWeekDay();" cssimg="report"/>
+                            <component cmptype="PopupItem" name="pPERIOD" caption="День к периоду" onclick="base().toAllPeriod();" cssimg="report"/>
+                            <component cmptype="PopupItem" name="pWPERIOD" caption="Неделю в период" onclick="base().weekToAllPeriod();" cssimg="report"/>
+                        </component>
+                        <component cmptype="PopupItem" name="pCOPY" caption="Копировать" cssimg="copy">
+                            <component cmptype="PopupItem" name="pCOPYALLD" caption="Ко всем дням недели" onclick="base().copyToAllWeekDay();" cssimg="report"/>
+                            <component cmptype="PopupItem" name="pCOPYPERIOD" caption="День к периоду" onclick="base().copyToAllPeriod();" cssimg="report"/>
+                            <component cmptype="PopupItem" name="pCOPYWPERIOD" caption="Неделю в период" onclick="base().copyWeekToAllPeriod();" cssimg="report"/>
+                        </component>
+                    </component>
+                    <component cmptype="AutoPopupMenu" unit="HPK_PLANS" all="true" join_menu="pHPK_PLANS" popupobject="HPK_PLANS"/>
+                    <component cmptype="Grid" dataset="DS_HPK_PLANS" name="HPK_PLANS" field="ID" grid_caption="Планы госпитализации">
+                        <component cmptype="Column" caption="Дата плана" field="PLAN_DATE" sort="PLAN_DATE" sortorder="1" filter="PLAN_DATE" filterkind="date"/>
+                        <component cmptype="Column" caption="День недели" field="PLAN_DAY_RUS" sort="PLAN_DAY_NUMBER"/>
+                        <component cmptype="Column" caption="Мужских мест" field="MALE_COUNT_S"/>
+                        <component cmptype="Column" caption="Женских мест" field="FEMALE_COUNT_S"/>
+                        <component cmptype="Column" caption="Оперативных" field="OPER_COUNT_S"/>
+                        <component cmptype="Column" caption="Консервативных" field="CON_COUNT_S"/>
+                        <component cmptype="Column" caption="Всего" field="GEN_COUNT_S"/>
+                        <component cmptype="GridFooter" separate="false">
+                            <component count="10" cmptype="Range" varstart="r1s" varcount="r1c" valuecount="10" valuestart="1"/>
+                        </component>
+                    </component>
+                </div>
+            </component>
+            <component cmptype="TabSheet" caption="Графики" name="tsSchedule">
+                <div>
+                    <component cmptype="Label" caption="Период: "/>
+                    <component cmptype="DateEdit" name="deSchDateFrom" typeMask="date"/>
+                    <component cmptype="Label" caption=" - "/>
+                    <component cmptype="DateEdit" name="deSchDateTo" typeMask="date"/>
+                    <component cmptype="Button" caption="Отобрать" onclick="refreshDataSet('dsHPKSchedule');"/>
+                </div>
+                <div>
+                    <component cmptype="Grid"
+                               dataset="dsHPKSchedule"
+                               name="gridSchedule"
+                               field="ID"
+                               grid_caption="Графики"
+                               onclone="Form.onRowScheduleClone(this, _dataArray);">
+                        <component cmptype="Column" caption="Дата начала"      field="DATE_BEGIN"  filter="DATE_BEGIN"  filterkind="date" sort="DATE_BEGIN"/>
+                        <component cmptype="Column" caption="Дата окончания"   field="DATE_END"    filter="DATE_END"    filterkind="date" sort="DATE_END"/>
+                        <component cmptype="Column" caption="Код графика"      field="CODE"        filter="CODE"        filterkind="text"/>
+                        <component cmptype="Column" caption="Название графика" field="NAME"        filter="NAME"        filterkind="text"/>
+                        <component cmptype="Column" caption="Действующий"      field="IS_ACTIVE"   filter="IS_ACTIVE"   filterkind="combo" fcontent="1|Да;0|Нет">
+                            <component cmptype="CheckBox" name="checkIsActive" valuechecked="1" valueunchecked="0" enabled="false"/>
+                        </component>
+                        <component cmptype="Column" caption="Приоритетный"     field="IS_PRIORITY" filter="IS_PRIORITY" filterkind="combo" fcontent="1|Да;0|Нет">
+                            <component cmptype="CheckBox" name="checkIsPrior" valuechecked="1" valueunchecked="0" enabled="false"/>
+                        </component>
+                        <component cmptype="GridFooter" separate="false">
+                            <component count="10" cmptype="Range" varstart="r1s" varcount="r1c" valuecount="10" valuestart="1"/>
+                        </component>
+                    </component>
+                    <component cmptype="Popup" name="popupSchedule" popupobject="gridSchedule" onpopup="base().onScheduleGridPopup();">
+                        <component cmptype="PopupItem" caption="Обновить" onclick="refreshDataSet('dsHPKSchedule');" cssimg="refresh"/>
+                        <component cmptype="PopupItem" caption="-"/>
+                        <component cmptype="PopupItem" caption="Просмотреть график" name="pWatchSch"     onclick="base().openHpSchedule();"        cssimg="graph"/>
+                        <component cmptype="PopupItem" caption="Добавить"           name="pAddSchedule"  onclick="base().executeSchedule('add');"  cssimg="insert"/>
+                        <component cmptype="PopupItem" caption="Редактировать"      name="pEditSchedule" onclick="base().executeSchedule('edit');" cssimg="edit"/>
+                        <component cmptype="PopupItem" caption="Удалить"            name="pDelSchedule"  onclick="base().executeSchedule('del');"  cssimg="delete"/>
+                    </component>
+                </div>
+            </component>
+        </component>
+    </component>
+    <component cmptype="MaskInspector" name="miForDate" controls="deSchDateFrom;deSchDateTo;PLAN_DATE_FROM;PLAN_DATE_TO"/>
+</div>
+```
+
