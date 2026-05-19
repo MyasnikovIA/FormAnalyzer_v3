@@ -26,50 +26,21 @@ public class ExtractorManager {
     }
 
     private void registerDefaultProcessors() {
-        // 1. SubForm (priority 10)
-        processors.add(new SubFormProcessor());
-
-        // 2. Brokers (priority 20)
-        processors.add(new BrokerProcessor());
-
-        // 3. PackageFromAction (priority 22)
-        processors.add(new PackageFromActionProcessor());
-
-        // 4. JsForms (priority 25)
-        processors.add(new JsFormProcessor());
-
-        // 5. Constants (priority 35)
-        processors.add(new ConstantProcessor());
-
-        // 6. SystemOptions (priority 36)
-        processors.add(new SystemOptionProcessor());
-
-        // 7. UnitCompositions (priority 50)
-        processors.add(new UnitCompositionProcessor());
-
-        // 8. UniversalCompositions (priority 55)
-        processors.add(new UniversalCompositionProcessor());
-
-        // 9. SystemCompositions (priority 60)
-        processors.add(new SystemCompositionProcessor());
-
-        // 10. D3ApiShowForm (priority 65)
-        processors.add(new D3ApiShowFormProcessor());
-
-        // 11. Reports (priority 70)
-        processors.add(new ReportProcessor());
-
-        // 12. AutoPopupMenu (priority 80)
-        processors.add(new AutoPopupMenuProcessor());
-
-        // 12.5. PopupMenu (priority 85) - для Oracle
-        processors.add(new PopupMenuProcessor(settings));
-
-        // 12.6. PopupMenuPg (priority 86) - для PostgreSQL
-        processors.add(new PopupMenuProcessorPg(settings));
-
-        // 13. UnknownObjects (priority 200)
-        processors.add(new UnknownObjectProcessor());
+        processors.add(new SubFormProcessor());           // SubForm
+        processors.add(new BrokerProcessor());            // Брокеры
+        processors.add(new PackageFromActionProcessor()); // Пакеты из Action
+        processors.add(new JsFormProcessor());            // JS формы
+        processors.add(new ConstantProcessor());          // Константы
+        processors.add(new SystemOptionProcessor());      // Системные опции
+        processors.add(new UnitCompositionProcessor());   // Unit композиции
+        processors.add(new UniversalCompositionProcessor()); // UniversalComposition
+        processors.add(new SystemCompositionProcessor()); // System/composition
+        processors.add(new D3ApiShowFormProcessor());     // D3Api.showForm
+        processors.add(new ReportProcessor());            // Отчёты
+        processors.add(new AutoPopupMenuProcessor());     // AutoPopupMenu
+        processors.add(new PopupMenuProcessor(settings)); // Контекстное меню Oracle
+        processors.add(new PopupMenuProcessorPg(settings)); // Контекстное меню PostgreSQL
+        processors.add(new UnknownObjectProcessor());     // Неизвестные объекты
 
         processors.sort((a, b) -> Integer.compare(a.getPriority(), b.getPriority()));
     }

@@ -142,6 +142,11 @@ public class FormAnalyzerService {
             return null;
         }
 
+        String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
+
+        // Передаём в процессор очищенное содержимое
+        extractorManager.process(contentWithoutComments, formInfo);
+
         baseContent = CommentRemover.removeAllComments(baseContent);
 
         extractorManager.process(baseContent, formInfo);

@@ -1158,4 +1158,87 @@ public class FormsTreePanel extends JPanel {
             tree.expandPath(path);
         }
     }
+
+
+
+    // FormsTreePanel.java - добавить методы
+
+    /**
+     * Раскрывает указанный путь в дереве
+     * @param path путь для раскрытия
+     */
+    public void expandPath(TreePath path) {
+        if (path != null) {
+            tree.expandPath(path);
+        }
+    }
+
+    /**
+     * Находит узел дерева по пути формы
+     * @param formPath путь к форме (без маркера)
+     * @return узел дерева или null
+     */
+    public DefaultMutableTreeNode findNodeByFormPath(String formPath) {
+        return formNodeMap.get(formPath);
+    }
+
+    /**
+     * Получает TreePath для узла
+     * @param node узел дерева
+     * @return TreePath или null
+     */
+    public TreePath getTreePathForNode(DefaultMutableTreeNode node) {
+        if (node == null) return null;
+        return new TreePath(node.getPath());
+    }
+
+    /**
+     * Рекурсивно загружает все дочерние формы для указанного пути
+     * @param formPath путь к форме
+     * @param expandAfterLoad раскрывать ли узлы после загрузки
+     */
+    public void loadAllChildrenRecursively(String formPath, boolean expandAfterLoad) {
+        // Загружаем дочерние формы из отчёта
+        Set<String> childForms = loadChildFormsFromReport(formPath);
+
+        if (childForms.isEmpty()) return;
+
+        // Обновляем дочерние узлы в дереве
+        refreshChildForms(formPath);
+
+        // Находим узел текущей формы
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node == null) return;
+
+        if (expandAfterLoad) {
+            TreePath path = new TreePath(node.getPath());
+            tree.expandPath(path);
+        }
+
+        // Рекурсивно загружаем дочерние формы
+        for (String childForm : childForms) {
+            String actualChildPath = childForm.startsWith("(sub)_") ? childForm.substring(6) : childForm;
+            loadAllChildrenRecursively(actualChildPath, expandAfterLoad);
+        }
+    }
+
+    /**
+     * Загружает все дочерние формы для выбранного пути и раскрывает дерево
+     * @param formPath путь к форме
+     */
+    public void loadFullTree(String formPath) {
+        // Сначала обновляем текущий узел
+        refreshChildForms(formPath);
+
+        // Затем рекурсивно загружаем всех детей
+        loadAllChildrenRecursively(formPath, true);
+
+        // Находим и раскрываем узел
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            TreePath path = new TreePath(node.getPath());
+            tree.expandPath(path);
+            tree.setSelectionPath(path);
+        }
+    }
 }

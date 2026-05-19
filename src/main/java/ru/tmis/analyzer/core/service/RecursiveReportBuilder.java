@@ -1,10 +1,10 @@
-// core/service/RecursiveReportBuilder.java
 package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
 import java.io.IOException;
@@ -18,7 +18,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-import ru.tmis.analyzer.core.report.ReportGenerator;
 
 public class RecursiveReportBuilder {
 
@@ -250,8 +249,20 @@ public class RecursiveReportBuilder {
     /**
      * Анализ списка форм с сохранением отчётов
      */
+    /**
+     * Анализ списка форм с сохранением отчётов
+     * @param formPaths список путей к формам для анализа
+     * @return список проанализированных FormInfo
+     */
     private List<FormInfo> analyzeForms(List<String> formPaths) throws Exception {
         final List<FormInfo> results = new ArrayList<>();
+
+        if (formPaths == null || formPaths.isEmpty()) {
+            log("  Нет форм для анализа");
+            return results;
+        }
+
+        log("  Анализ " + formPaths.size() + " форм...");
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings);
 
@@ -285,6 +296,14 @@ public class RecursiveReportBuilder {
         // Устанавливаем условие остановки
         analyzer.setStopCondition(() -> stopFlag.get());
 
+        // Устанавливаем callback для прогресса
+        analyzer.setProgressCallback((processed, total, currentForm) -> {
+            if (formAnalyzedCallback != null) {
+                javax.swing.SwingUtilities.invokeLater(() ->
+                        formAnalyzedCallback.accept(currentForm));
+            }
+        });
+
         // Callback для каждой проанализированной формы - сохраняем отчёт
         analyzer.setFormAnalyzedCallback(formInfo -> {
             // Сохраняем отчёт для формы
@@ -292,8 +311,9 @@ public class RecursiveReportBuilder {
                 ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
+                RecursiveReportBuilder.this.log("    Отчёт сохранён: " + formInfo.getFormPath());
             } catch (IOException e) {
-                error("Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
+                error("    Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
             }
 
             if (formAnalyzedCallback != null) {
@@ -309,6 +329,8 @@ public class RecursiveReportBuilder {
         final List<FormInfo> analyzed = analyzer.analyzeAllForms();
         results.addAll(analyzed);
         analyzer.clearFormsToAnalyze();
+
+        log("  Проанализировано форм: " + results.size());
 
         return results;
     }

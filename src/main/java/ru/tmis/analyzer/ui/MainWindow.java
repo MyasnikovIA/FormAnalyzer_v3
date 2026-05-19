@@ -12,6 +12,7 @@ import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -122,6 +123,7 @@ public class MainWindow extends JFrame {
         formsTreePanel.setOnFormsChanged(() -> {});
 
         // Добавляем слушатель выбора формы в дереве
+
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -129,7 +131,8 @@ public class MainWindow extends JFrame {
                 if (selectedPath != null) {
                     String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
                     if (formPath != null) {
-                        loadFormResultToPanel(formPath);
+                        // Рекурсивно загружаем все дочерние формы
+                        loadFormAndAllChildren(formPath, selectedPath);
                     } else {
                         resultArea.setText("");
                     }
@@ -294,9 +297,44 @@ public class MainWindow extends JFrame {
 
         return splitPane;
     }
-// MainWindow.java - добавить этот метод
 
-    // MainWindow.java - исправленный метод startRecursiveAnalysis
+
+    // MainWindow.java - добавить метод
+
+    /**
+     * Рекурсивная загрузка формы и всех её дочерних элементов
+     * @param formPath путь к форме
+     * @param treePath путь в дереве (для раскрытия узлов)
+     */
+    private void loadFormAndAllChildren(String formPath, TreePath treePath) {
+        // Загружаем отчёт текущей формы
+        loadFormResultToPanel(formPath);
+
+        // Получаем дочерние формы
+        Set<String> childForms = formsTreePanel.loadChildFormsFromReport(formPath);
+
+        if (!childForms.isEmpty()) {
+            // Раскрываем текущий узел
+            formsTreePanel.expandPath(treePath);
+
+            // Рекурсивно загружаем каждую дочернюю форму
+            for (String childForm : childForms) {
+                // Убираем маркер SubForm если есть
+                String actualChildPath = childForm;
+                if (actualChildPath.startsWith("(sub)_")) {
+                    actualChildPath = actualChildPath.substring(6);
+                }
+
+                // Находим узел дочерней формы в дереве
+                DefaultMutableTreeNode childNode = formsTreePanel.findNodeByFormPath(actualChildPath);
+                if (childNode != null) {
+                    TreePath childPath = formsTreePanel.getTreePathForNode(childNode);
+                    // Рекурсивно загружаем дочернюю форму
+                    loadFormAndAllChildren(actualChildPath, childPath);
+                }
+            }
+        }
+    }
 
     private void startRecursiveAnalysis() {
         if (recursiveBuilder.isRunning()) {
