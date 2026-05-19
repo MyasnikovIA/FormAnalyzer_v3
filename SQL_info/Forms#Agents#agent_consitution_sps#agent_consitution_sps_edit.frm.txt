@@ -1,0 +1,47 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_consitution_sps/agent_consitution_sps_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_consitution_sps\agent_consitution_sps_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/subforms_fields/consitution_functions
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LATERALITY_BASE
+    D_V_RES_INTERPRETATION
+    D_V_AGENT_CONSITUTION_SPS
+    D_V_AGENT_CONSITUTION_SPS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LATERALITY
+    D_RES_INTERPRETATION
+    D_AGENT_CONSITUTION_SPS
+    D_ANTHROP
+    D_MEASURES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_NUM_TOOLS.TO_STR
+    D_PKG_STD.TREF
+    D_PKG_ANTHROP.GET_BY_SHORTCODE
+    D_PKG_ANTHROP.WEIGHT
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_CONSITUTION_SPS.MOD
+    D_PKG_AGENT_CONSITUTION_SPS.ADD
+    D_PKG_AGENT_CONSITUTION_SPS.UPD
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ANTHROP" composition="DEFAULT"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_AGENT_CONSITUTION_SPS
+

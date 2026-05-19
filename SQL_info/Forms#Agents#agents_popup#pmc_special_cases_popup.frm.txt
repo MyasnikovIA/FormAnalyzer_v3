@@ -1,0 +1,43 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_popup/pmc_special_cases_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agents_popup\pmc_special_cases_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agents_popup/subforms/rep_popup_del
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PMC_SPECIAL_CASES
+    D_V_PERSMEDCARD_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PMC_SPECIAL_CASES
+    D_SPECIAL_CASES
+    D_SPECIAL_CASES_TYPE
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STD.TREF
+    D_PKG_STD.TLSTR
+    D_PKG_STR_TOOLS.SE
+    D_PKG_STD.TSTR
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_UAFUD.CHK
+    D_PKG_STR_TOOLS.GET_CONC_LIST
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PMCSpecCaseInReestr
+    DEL
+

@@ -86,6 +86,13 @@ public class FormAnalyzerService {
 
     public List<FormInfo> analyzeAllForms() throws IOException {
         Set<String> formsToAnalyzeList = getFormsToAnalyze();
+
+        // Если список пуст (null) - возвращаем null, чтобы вызвать предупреждение
+        if (formsToAnalyzeList == null) {
+            System.out.println("Список форм пуст, требуется подтверждение пользователя");
+            return null;
+        }
+
         List<FormInfo> results = new ArrayList<>();
 
         System.out.println("Найдено форм для анализа: " + formsToAnalyzeList.size());
@@ -129,8 +136,6 @@ public class FormAnalyzerService {
 
         return results;
     }
-
-    // FormAnalyzerService.java - исправленный метод analyzeForm
 
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
@@ -210,16 +215,6 @@ public class FormAnalyzerService {
         return formInfo;
     }
 
-    /**
-     * Формирует безопасное имя файла отчёта
-     */
-    private String getSafeFileName(String formPath) {
-        String normalized = formPath;
-        if (normalized.startsWith("/")) {
-            normalized = normalized.substring(1);
-        }
-        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
-    }
     private Set<String> getFormsToAnalyze() throws IOException {
         // Если установлен прямой список, используем его
         if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {
@@ -246,9 +241,9 @@ public class FormAnalyzerService {
             }
         }
 
-        // Если список пуст - сканируем все формы
-        System.out.println("Список форм пуст, сканируем проект...");
-        return scanAllForms();
+        // Если список пуст - возвращаем null, чтобы вызвать предупреждение
+        System.out.println("Список форм пуст");
+        return null;
     }
 
     private Set<String> scanAllForms() throws IOException {
@@ -448,5 +443,55 @@ public class FormAnalyzerService {
      */
     public void clearFormsToAnalyze() {
         this.formsToAnalyze = null;
+    }
+
+    /**
+     * Сканирует весь проект и анализирует все найденные формы
+     */
+    /**
+     * Сканирует весь проект и анализирует только новые (необработанные) формы
+     */
+    public List<FormInfo> scanAllFormsAndAnalyze() throws IOException {
+        Set<String> allForms = scanAllForms();
+        Set<String> formsToProcess = new LinkedHashSet<>();
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+
+        // Фильтруем формы - оставляем только те, у которых нет отчёта
+        for (String formPath : allForms) {
+            String normalized = FormPathUtils.normalizeFormPath(formPath);
+            String safeFileName = getSafeFileName(normalized);
+            Path reportPath = Paths.get(outputDir, safeFileName);
+
+            if (!Files.exists(reportPath)) {
+                formsToProcess.add(formPath);
+            } else {
+                log("  Отчет уже существует: " + formPath);
+            }
+        }
+
+        log("Всего найдено форм: " + allForms.size());
+        log("Новых форм для анализа: " + formsToProcess.size());
+
+        if (formsToProcess.isEmpty()) {
+            log("Нет новых форм для анализа");
+            return new ArrayList<>();
+        }
+
+        setFormsToAnalyze(formsToProcess);
+        return analyzeAllForms();
+    }
+
+    /**
+     * Формирует безопасное имя файла отчёта
+     */
+    private String getSafeFileName(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
     }
 }

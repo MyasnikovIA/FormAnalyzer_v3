@@ -1,0 +1,36 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dirs_enh_services.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Add_Dirs\add_dirs_enh_services.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CATALOGS
+    D_V_SERVICES
+    D_V_LPU_SERVICES
+    D_V_CATALOGS_SYS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CATALOGS
+    D_SERVICES_STR
+    D_SERVICES
+    D_LPU_SERVICES
+    D_SERVTYPES
+    D_SERVPROFILES
+    D_FED_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+

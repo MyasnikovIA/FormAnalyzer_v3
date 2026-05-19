@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_children/subForms/agent_children_grid.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_children\subForms\agent_children_grid.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_children/agent_children_edit.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_CHILDREN
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_CHILDREN
+    D_AGENTS
+    D_MKB10
+    D_DIRECTORIES_DATA_VER
+    D_FORM_VPR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+БРОКЕРЫ:
+    unit:AGENT_CHILDREN  action:DELETE;
+

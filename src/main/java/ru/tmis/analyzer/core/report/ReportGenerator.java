@@ -5,6 +5,7 @@ import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.*;
+import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
@@ -105,29 +106,7 @@ public class ReportGenerator {
         System.out.println("Отчет для формы сохранен: " + formReportPath);
     }
 
-    /**
-     * Сохраняет отдельный отчет для формы и добавляет в общий отчет
-     */
-    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        // 1. Сохраняем отдельный файл для формы
-        saveFormReportToFile(formInfo);
 
-        // 2. Добавляем в общий отчет
-        Path outputPath = Paths.get(outputDir);
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
-
-        Path reportPath = outputPath.resolve("forms_report.txt");
-
-        if (!Files.exists(reportPath)) {
-            createMainReportHeader();
-        }
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
-            writeFormReport(writer, formInfo);
-        }
-    }
 
     public void generateMainReport() throws IOException {
         Path outputPath = Paths.get(outputDir);
@@ -791,4 +770,190 @@ public class ReportGenerator {
             writer.println();
         }
     }
+
+
+
+
+    // ReportGenerator.java - исправленный метод appendFormToMainReport
+
+    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
+        // 1. Сохраняем отдельный файл для формы (TXT)
+        saveFormReportToFile(formInfo);
+
+        // 2. Добавляем в общий отчет
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        Path reportPath = outputPath.resolve("forms_report.txt");
+
+        if (!Files.exists(reportPath)) {
+            createMainReportHeader();
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
+            writeFormReport(writer, formInfo);
+        }
+
+        // ========== 3. ГЕНЕРАЦИЯ CSV ОТЧЕТА (добавляем строку в CSV файл) ==========
+        appendToCSVReport(formInfo);
+
+        // ========== 4. ГЕНЕРАЦИЯ MD ПРОМПТА (если включено в настройках) ==========
+        if (config.isEnableLLMExport()) {
+            generateLLMPromptForForm(formInfo);
+        }
+    }
+
+    /**
+     * Добавляет запись в CSV отчет (дозапись в конец файла)
+     */
+    private void appendToCSVReport(FormInfo formInfo) throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        Path csvPath = outputPath.resolve("forms_export.csv");
+        boolean fileExists = Files.exists(csvPath);
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
+            // Если файл только создаётся, добавляем заголовок
+            if (!fileExists) {
+                writer.println("ФОРМА;БЛОК;ЗНАЧЕНИЕ");
+            }
+
+            String formName = formInfo.getFormPath();
+
+            // ЮЗЕРФОРМЫ
+            writeCSVBlock(writer, formName, "ЮЗЕРФОРМЫ", formInfo.getOverrides(),
+                    formInfo.isFullyReplaced(), formInfo.getReplacementPath());
+
+            // SubForm
+            writeCSVBlock(writer, formName, "SubForm", formInfo.getSubForms());
+
+            // Список вызываемых форм в JS
+            writeCSVBlock(writer, formName, "Список вызываемых форм в JS", formInfo.getJsForms());
+
+            // ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ
+            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ", formInfo.getTablesViews());
+
+            // ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ
+            Set<String> viewTables = getViewTables(formInfo);
+            writeCSVBlock(writer, formName, "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)", viewTables);
+
+            // ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ
+            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ", formInfo.getPackagesFunctions());
+
+            // СИСТЕМНЫЕ ОПЦИИ
+            writeCSVBlock(writer, formName, "СИСТЕМНЫЕ ОПЦИИ", formInfo.getSystemOptions());
+
+            // КОНСТАНТЫ
+            writeCSVBlock(writer, formName, "КОНСТАНТЫ", formInfo.getConstants());
+
+            // ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ
+            writeCSVBlock(writer, formName, "ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ", formInfo.getUserProcedures());
+
+            // КОДЫ ПОДКЛЮЧАЕМОГО AUTOPOPUP МЕНЮ
+            writeCSVBlock(writer, formName, "Коды подключаемого AutoPopUp меню на форме", formInfo.getAutoPopupMenus());
+
+            // БРОКЕРЫ
+            writeCSVBlock(writer, formName, "БРОКЕРЫ", formInfo.getBrokers());
+
+            // КОМПОЗИЦИИ
+            writeCSVBlock(writer, formName, "КОМПОЗИЦИИ UnitEdit на форме", formInfo.getUnitCompositions());
+
+            // JS UNIT COMPOSITIONS
+            writeCSVBlock(writer, formName, "JS Unit Compositions", formInfo.getJsUnitCompositions());
+
+            // РАЗОБРАТЬ АНАЛИТИКОМ
+            writeCSVBlock(writer, formName, "РАЗОБРАТЬ АНАЛИТИКОМ", formInfo.getUnknownObjects());
+
+            // ОТЧЕТЫ
+            writeCSVBlock(writer, formName, "ОТЧЕТЫ", formInfo.getReports());
+        }
+    }
+
+    /**
+     * Записывает блок в CSV (для простых коллекций)
+     */
+    private void writeCSVBlock(PrintWriter writer, String formName, String blockName, Set<String> values) {
+        if (values == null || values.isEmpty()) {
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
+        } else {
+            for (String value : values) {
+                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+            }
+        }
+    }
+
+    /**
+     * Записывает блок UserForms в CSV
+     */
+    private void writeCSVBlock(PrintWriter writer, String formName, String blockName,
+                               List<FormInfo.OverrideInfo> overrides, boolean fullyReplaced, String replacementPath) {
+
+        if (fullyReplaced && replacementPath != null) {
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV("ПОЛНАЯ ЗАМЕНА: " + replacementPath));
+        }
+
+        if (overrides == null || overrides.isEmpty()) {
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
+        } else {
+            Map<String, List<FormInfo.OverrideInfo>> overridesByRegion = new LinkedHashMap<>();
+            for (FormInfo.OverrideInfo override : overrides) {
+                overridesByRegion.computeIfAbsent(override.getRegionName(), k -> new ArrayList<>()).add(override);
+            }
+
+            for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
+                String region = entry.getKey();
+                for (FormInfo.OverrideInfo override : entry.getValue()) {
+                    String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
+                    writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+                }
+            }
+        }
+    }
+
+    /**
+     * Получает все таблицы из вьюх
+     */
+    private Set<String> getViewTables(FormInfo formInfo) {
+        Set<String> viewTables = new LinkedHashSet<>();
+        if (formInfo.getViewDependencies() != null) {
+            for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
+                viewTables.addAll(entry.getValue().getOracleTables());
+            }
+        }
+        return viewTables;
+    }
+
+    /**
+     * Генерирует MD промпт для формы
+     */
+    private void generateLLMPromptForForm(FormInfo formInfo) {
+        try {
+            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            String mdFilePath = llmGen.generateForSingleForm(formInfo, outputDir);
+            System.out.println("  LLM промпт сохранен: " + mdFilePath);
+        } catch (Exception e) {
+            System.err.println("  Ошибка сохранения LLM промпта: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Экранирование CSV
+     */
+    private String escapeCSV(String value) {
+        if (value == null) return "";
+        String escaped = value.replace(";", ",");
+        if (escaped.contains("\"")) {
+            escaped = escaped.replace("\"", "\"\"");
+        }
+        if (escaped.contains(",") || escaped.contains("\n") || escaped.contains("\r")) {
+            escaped = "\"" + escaped + "\"";
+        }
+        return escaped;
+    }
+
 }

@@ -1,0 +1,73 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_application/agent_application_reg.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_application\agent_application_reg.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_application\agent_application_reg.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_application\agent_application_reg.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_application\agent_application_reg.d\view.dfrm
+
+     ===== UserFormsVolgograd =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Agents\agent_application\agent_application_reg.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Agents\agent_application\agent_application_reg.d\view.dfrm
+
+
+SubForm:
+     Agents/check_filter_periods
+
+Список вызываемых форм в JS:
+     Agents/agent_application/subform/application_accept.frm
+     Persmedcard/persmedcard_edit.frm
+     Log/log_record.frm
+     UnitPopupItems/joined_docs.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_APPLICATION_REG;
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_RELATIVES_BASE
+    D_V_AGENTS_BASE
+    D_V_AGENT_CONTACTS_BASE
+    D_V_EMPLOYERS_FIO
+    D_V_JOINEDDOCS
+    D_V_AGENT_APPLICATION_REG
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENTS
+    D_V_APPLICATION_STATUSES_REG
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_RELATIVES
+    D_AGENTS
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_EMPLOYERS
+    D_JOINEDDOCS
+    D_AGENT_APPLICATION_REG
+    D_LPUDICT
+    D_REGISTER_PURPOSES
+    D_REGISTRATION_TYPES
+    D_DIVISIONS
+    D_DIRECTORIES_DATA_VER
+    D_APPLICATION_KINDS
+    D_SITES
+    D_PERSMEDCARD
+    D_GEOGRAFY
+    D_APPLICATION_STATUSES_REG
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_APPLICATION_REG.SET_STATUS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    hideFERZLButton
+
+БРОКЕРЫ:
+    action:D_PKG_AGENT_APPLICATION_REG.SET_STATUS;
+

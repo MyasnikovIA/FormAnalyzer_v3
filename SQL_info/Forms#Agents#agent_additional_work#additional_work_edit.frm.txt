@@ -1,0 +1,47 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_additional_work/additional_work_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_additional_work\additional_work_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_additional_work\additional_work_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Agents\agent_additional_work\additional_work_edit.frm
+
+     ===== UserFormsKhabarovsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_additional_work\additional_work_edit.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTORIES
+    D_V_AGENT_ADDITIONAL_WORK
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTORIES
+    D_AGENT_ADDITIONAL_WORK
+    D_AGENTS
+    D_WORK_CAT_KIND
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SportPlace
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="WORK_CAT_KIND" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_ADDITIONAL_WORK;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CODE
+    D_NAME
+

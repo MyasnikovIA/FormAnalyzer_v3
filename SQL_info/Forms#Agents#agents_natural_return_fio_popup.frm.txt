@@ -1,0 +1,39 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_natural_return_fio_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agents_natural_return_fio_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agents_edit.frm
+     Agents/agents_add.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENTS;
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CATALOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CATALOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.ARRSTR_GET
+    D_PKG_DOCUMENT.DEL_SUBUNITS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentJuristicList
+
+БРОКЕРЫ:
+    unit:AGENTS  action:DELETE;
+

@@ -1,0 +1,44 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_addrs/agent_addrs_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_addrs\agent_addrs_history.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENT_ADDRS;
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_ADDRS
+    D_V_AGENT_ADDRS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_ADDRS
+    D_GEOGRAFY
+    D_RAIONS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.TREF
+    D_PKG_STD.TLSTR
+    D_PKG_UAFUD.CHK
+    D_PKG_MSG.RECORD_NOT_FOUND
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentAddrInReestr
+
+БРОКЕРЫ:
+    unit:AGENT_ADDRS  action:DELETE;
+    unit:AGENT_ADDRS  action:SET_IS_MAIN;
+

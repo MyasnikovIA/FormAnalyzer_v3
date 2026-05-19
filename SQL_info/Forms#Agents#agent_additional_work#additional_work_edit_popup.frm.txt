@@ -1,0 +1,21 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_additional_work/additional_work_edit_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_additional_work\additional_work_edit_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_additional_work/additional_work_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENTS;
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

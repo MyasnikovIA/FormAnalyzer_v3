@@ -1,0 +1,38 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_accs/agent_accs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_accs\agent_accs_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENTS
+    D_V_AGNBANKS
+    D_V_AGENT_ACCS_FULL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_GEOGRAFY
+    D_AGENTS
+    D_AGNBANKS
+    D_AGENT_ACCS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="CURRENCIES" composition="CUR"
+    unit="BANKACCTYPES" composition="BN_TYPE"
+    unit="AGNBANKS" composition="AGNB"
+
+БРОКЕРЫ:
+    unit:AGENT_ACCS  action:GEN_NEXT_STRCODE;
+    unit:AGENT_ACCS;
+

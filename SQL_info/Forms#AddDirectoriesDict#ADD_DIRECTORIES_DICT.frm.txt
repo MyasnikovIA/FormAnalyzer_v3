@@ -1,0 +1,42 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AddDirectoriesDict\ADD_DIRECTORIES_DICT.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_ADD_DIR_ROWS
+    D_V_ADD_DIRECTORIES
+    D_V_ADD_DIR_COLUMNS
+    D_V_ADD_DATATYPES
+    D_V_ADD_DIR_VALUES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_ADD_DIR_COLUMNS
+    D_ADD_DATATYPES
+    D_ADD_DIR_VALUES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_ADD_DIR_VALUES.GET_ID
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_ROW
+    D_COLUMN_ID
+    D_P_EXC
+

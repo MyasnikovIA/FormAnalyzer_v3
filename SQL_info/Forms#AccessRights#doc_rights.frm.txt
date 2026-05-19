@@ -1,0 +1,76 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/doc_rights.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\doc_rights.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_7VZN_APPL_TYPES
+    D_V_CSE_ACCESSES_RIGHTS
+    D_V_CSE_RIGHTS
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS_BASE
+    D_V_7VZN_APPLICATION_STATUS
+    D_V_CABLAB
+    D_V_SPECIALITIES
+    D_V_EMPLOYERS
+    D_V_ROLES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_7VZN_APPL_TYPES
+    D_EMPLOYERS
+    D_AGENTS
+    D_SPECIALITIES
+    D_CABLAB
+    D_ROLES
+    D_SERVICES
+    D_CSE_ACCESSES
+    D_CSE_RIGHTS
+    D_CSE_ACS_ALL_RIGHTS
+    D_CSE_ACS_EMPS
+    D_CSE_ACS_EMP_RIGHTS
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_SPEC_RIGHTS
+    D_CSE_ACS_CABLABS
+    D_CSE_ACS_CL_RIGHTS
+    D_CSE_ACS_ROLES
+    D_CSE_ACS_ROLE_RIGHTS
+    D_CSE_ACS_SERVS
+    D_CSE_ACS_SERV_RIGHTS
+    D_7VZN_APPLICATION_STATUS
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

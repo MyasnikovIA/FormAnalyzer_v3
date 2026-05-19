@@ -1,0 +1,50 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_juristic_composition.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agents_juristic_composition.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agents_add.frm
+     Persmedcard/persmedcard_add_by_agent.frm
+     Agents/agents_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENTS;
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENTS_JURISTIC
+    D_V_INSURANCE_COMPANIES
+    D_V_CATALOGS_SYS
+    D_V_PERSMEDCARD
+    D_V_AGENTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_GEOGRAFYTYPES
+    D_INSURANCE_COMPANIES
+    D_AGENTS
+    D_GEOGRAFY
+    D_CATALOGS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+
+БРОКЕРЫ:
+    unit:AGENTS  action:DEL_FULL;
+    unit:AGENTS  action:MOVE_OUT;
+

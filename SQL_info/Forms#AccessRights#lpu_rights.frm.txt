@@ -1,0 +1,79 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/lpu_rights.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\lpu_rights.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/d_cse_accesses.frm
+     AccessRights/principal_search.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        LPU;
+        CSE_ACCESSES;
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LPU
+    D_V_CABLAB
+    D_V_SPECIALITIES
+    D_V_EMPLOYERS
+    D_V_ROLES
+    D_V_CSE_RIGHTS
+    D_V_CSE_ACS_ALL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_SPECIALITIES
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_ROLES
+    D_CSE_RIGHTS
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CSE_ACS_EMPS
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+БРОКЕРЫ:
+    unit:CSE_ACCESSES  action:ADD_SPECIALITY_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_ROLE_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_CABLAB_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_EMP_RIGHT;
+    unit:CSE_ACCESSES  action:DEL_ACCS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+

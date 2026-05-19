@@ -1,0 +1,63 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_application/subform/application_reject_reason.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_application\subform\application_reject_reason.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_application\subform\application_reject_reason.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Agents\agent_application\subform\application_reject_reason.d\script.dfrm
+
+     ===== UserFormsMagadan =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMagadan\Agents\agent_application\subform\application_reject_reason.d\data.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Agents\agent_application\subform\application_reject_reason.d\data.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Agents\agent_application\subform\application_reject_reason.d\data.dfrm
+
+     ===== UserFormsVolgograd =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Agents\agent_application\subform\application_reject_reason.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Agents\agent_application\subform\application_reject_reason.d\script.dfrm
+
+
+SubForm:
+     Agents/agent_application/subform/fed_reg
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTORIES_DATA_VER
+    D_V_DIRECTORIES
+    D_V_AGENT_APPLICATION_REG
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTORIES_DATA_VER
+    D_DIRECTORIES
+    D_AGENT_APPLICATION_REG
+    D_AGENTS
+    D_LPUDICT
+    D_REGISTER_PURPOSES
+    D_REGISTRATION_TYPES
+    D_DIVISIONS
+    D_APPLICATION_KINDS
+    D_SITES
+    D_AGENT_RELATIVES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_FED_NSI_LINKS.GET_CURRENT_VAL
+    D_PKG_AGENT_APPLICATION_REG.AGREEMENT
+    D_PKG_AGENT_APPLICATION_REG.SET_STATUS
+    D_PKG_AGENT_APPLICATION_REG.UPD
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CODE
+    D_NAME
+

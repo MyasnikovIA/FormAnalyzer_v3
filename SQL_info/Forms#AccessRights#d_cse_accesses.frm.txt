@@ -1,0 +1,49 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/d_cse_accesses.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\AccessRights\d_cse_accesses.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CSE_ACCESSES;
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CSE_ACS_SPECS
+    D_SPECIALITIES
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+

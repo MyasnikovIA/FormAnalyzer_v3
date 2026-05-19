@@ -1,0 +1,22 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/hintAutoFill.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\#examples\hintAutoFill.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     LpuDict/lpudict_short_list_d3.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ONKO_DOCTYPES" composition="DEFAULT"
+    unit="LPUDICT" composition="SHORT_GRID_LPU_NAME"
+
