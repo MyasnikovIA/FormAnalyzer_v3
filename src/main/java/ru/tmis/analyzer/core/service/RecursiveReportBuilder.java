@@ -43,7 +43,7 @@ public class RecursiveReportBuilder {
 
     public RecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
-        this.config = config;
+        this.config = config;  // должно быть сохранено
         this.formsTreePanel = formsTreePanel;
         this.executor = Executors.newSingleThreadExecutor();
     }
@@ -90,6 +90,7 @@ public class RecursiveReportBuilder {
      * Запуск рекурсивного построения отчётов
      * @param startForms список форм для старта (если null - используются все корневые формы)
      */
+    // RecursiveReportBuilder.java - проверьте метод startRecursiveBuild
     public void startRecursiveBuild(List<String> startForms) {
         if (isRunning.get()) {
             log("Рекурсивное построение уже выполняется");
@@ -110,7 +111,6 @@ public class RecursiveReportBuilder {
             finalStartForms = new ArrayList<>(startForms);
             log("Стартовые формы: " + finalStartForms.size() + " шт.");
         }
-
         stopRequested.set(false);
         isRunning.set(true);
         currentLevel = 0;
@@ -301,11 +301,12 @@ public class RecursiveReportBuilder {
             }
         });
 
-        // Callback для каждой проанализированной формы - используем ТОТ ЖЕ ReportGenerator
+        // RecursiveReportBuilder.java - метод analyzeForms (фрагмент)
+
         analyzer.setFormAnalyzedCallback(formInfo -> {
             try {
-                // Используем ТЕ ЖЕ настройки что и в обычном анализе
-                ReportGenerator reportGen = new ReportGenerator(outputDir, config);
+                // Используем config из конструктора
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
             } catch (IOException e) {

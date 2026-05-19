@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------------------
-ФОРМА: Forms/UniversalForms/period.frm
+ФОРМА: Forms/Schedules/subforms/sch_edit_hp_time_block.frm
 ----------------------------------------------------------------------------------------------------
-Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\UniversalForms\period.frm
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\subforms\sch_edit_hp_time_block.frm
 СТАТУС: БАЗОВАЯ ФОРМА
 
 ЮЗЕРФОРМЫ:

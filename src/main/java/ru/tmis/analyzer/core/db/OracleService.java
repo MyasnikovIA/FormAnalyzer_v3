@@ -70,6 +70,13 @@ public class OracleService {
 
     private String fetchViewDDL(String viewName) {
         String sql = "SELECT TEXT FROM ALL_VIEWS WHERE VIEW_NAME = ?";
+
+        System.out.println("[OracleService] ========== SQL ЗАПРОС ==========");
+        System.out.println("[OracleService] Цель: Получение DDL вьюхи");
+        System.out.println("[OracleService] Параметры: viewName = " + viewName);
+        System.out.println("[OracleService] SQL: " + sql.replace("?", "'" + viewName.toUpperCase() + "'"));
+        System.out.println("[OracleService] ==================================");
+
         try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, viewName.toUpperCase());

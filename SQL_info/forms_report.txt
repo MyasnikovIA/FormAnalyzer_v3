@@ -1,6 +1,6 @@
 ====================================================================================================
 === ОТЧЕТ ПО ФОРМАМ T-MIS ===
-Дата создания: Tue May 19 10:35:20 GMT+07:00 2026
+Дата создания: Tue May 19 12:03:02 GMT+07:00 2026
 ====================================================================================================
 
 ----------------------------------------------------------------------------------------------------
@@ -110,255 +110,112 @@ SQL ЗАПРОСЫ (12):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_P_EXC
 
-ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
 
-  D_PKG_CSE_ACCESSES.CHECK_RIGHT:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_cse_accesses.check_right(numeric, varchar, numeric, varchar, numeric, numeric, numeric)
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
 
-  D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_plans.set_plan_for_day(numeric, numeric, varchar, timestamp, timestamp)
 
-  D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK:
-    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
-    Сигнатура: d_pkg_hpk_plans.set_plan_for_week(numeric, numeric, timestamp, timestamp)
-    ПРЕДУПРЕЖДЕНИЯ:
-      warning extra:00000:46:FOR with integer loop variable:auto variable "nind" shadows a previously defined variable
+SubForm:
+     (не найдено)
 
-  D_PKG_HPK_PLANS.DEL:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_plans.del(numeric, numeric)
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
 
-  D_PKG_HOSP_PLAN_KINDS.DEL:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hosp_plan_kinds.del(numeric, numeric)
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
 
-  D_PKG_URPRIVS.CHECK_BPPRIV:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_urprivs.check_bppriv(numeric, varchar, numeric, numeric)
 
-  D_PKG_CATALOGS.FIND_ROOT_CATALOG:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_catalogs.find_root_catalog(numeric, numeric, varchar, numeric)
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
 
-  D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_plans.copy_plan_for_day(numeric, numeric, varchar, timestamp, timestamp)
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
 
-  D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK:
-    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
-    Сигнатура: d_pkg_hpk_plans.copy_plan_for_week(numeric, numeric, timestamp, timestamp)
-    ПРЕДУПРЕЖДЕНИЯ:
-      warning extra:00000:45:FOR with integer loop variable:auto variable "nind" shadows a previously defined variable
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
 
-  D_PKG_HPK_SCHEDULE.DEL:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_schedule.del(numeric, numeric)
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
 
-  D_HOSP_PLAN_KINDS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
 
-  D_HPK_PLANS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
 
-  D_HPK_SCHEDULE:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
 
-  D_SCHEDULE:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
 
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
 
-  D_HOSP_PLAN_KINDS:
-    Колонка: HP_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_name SET NOT NULL;
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
 
-    Колонка: NUMB_GROUP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN numb_group SET NOT NULL;
-
-    Колонка: IS_OPER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN is_oper SET NOT NULL;
-
-    Колонка: HAS_PAYMENT_CONSTRAINTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_payment_constraints SET NOT NULL;
-
-    Колонка: HAS_LIMITS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_limits SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: HAS_MKB_CONSTRAINTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_mkb_constraints SET NOT NULL;
-
-    Колонка: HP_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_code SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN id SET NOT NULL;
-
-    Колонка: JOURNAL_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN journal_type SET NOT NULL;
-
-    Колонка: OPEN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN open_date SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN cid SET NOT NULL;
-
-    Колонка: HP_BLOCK
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_block SET NOT NULL;
-
-  D_HPK_PLANS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PLAN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN plan_date SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN cid SET NOT NULL;
-
-  D_HPK_SCHEDULE:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: DATE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_begin SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN id SET NOT NULL;
-
-    Колонка: SCHEDULE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN schedule SET NOT NULL;
-
-    Колонка: HOSP_PLAN_KINDS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN hosp_plan_kinds SET NOT NULL;
-
-    Колонка: DATE_CREATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_create SET NOT NULL;
-
-  D_SCHEDULE:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN code SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN id SET NOT NULL;
-
-    Колонка: QUOTING
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN quoting SET NOT NULL;
-
-    Колонка: NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN name SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN cid SET NOT NULL;
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/modals/graphics_add_edit.frm
@@ -398,61 +255,6 @@ JS Unit Compositions (только из вызовов openWindow/openD3Form):
 
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_P_EXC
-
-ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
-
-  D_PKG_DAT_TOOLS.DATE_RANGES_ERROR:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_dat_tools.date_ranges_error(timestamp, timestamp, timestamp, timestamp, numeric)
-
-  D_PKG_HPK_SCHEDULE.UPG:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_schedule.upg(numeric, numeric, numeric, numeric, numeric, numeric, timestamp, timestamp, numeric, timestamp, numeric)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_SCHEDULE:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_SCHEDULE:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: DATE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_begin SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN id SET NOT NULL;
-
-    Колонка: SCHEDULE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN schedule SET NOT NULL;
-
-    Колонка: HOSP_PLAN_KINDS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN hosp_plan_kinds SET NOT NULL;
-
-    Колонка: DATE_CREATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_create SET NOT NULL;
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hosp_plan_kinds_edit.frm
@@ -495,145 +297,6 @@ SQL ЗАПРОСЫ (2):
 
 БРОКЕРЫ:
     unit:HOSP_PLAN_KINDS;
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_JOURNAL_TYPES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: JT_CODE
-
-  D_HPK_PLANS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_HOSP_PLAN_KINDS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_JOURNAL_TYPES:
-    Колонка: JT_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_journal_types ALTER COLUMN jt_name SET NOT NULL;
-
-    Колонка: JT_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_journal_types ALTER COLUMN jt_code SET NOT NULL;
-
-  D_HPK_PLANS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PLAN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN plan_date SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN cid SET NOT NULL;
-
-  D_HOSP_PLAN_KINDS:
-    Колонка: HP_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_name SET NOT NULL;
-
-    Колонка: NUMB_GROUP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN numb_group SET NOT NULL;
-
-    Колонка: IS_OPER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN is_oper SET NOT NULL;
-
-    Колонка: HAS_PAYMENT_CONSTRAINTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_payment_constraints SET NOT NULL;
-
-    Колонка: HAS_LIMITS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_limits SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: HAS_MKB_CONSTRAINTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_mkb_constraints SET NOT NULL;
-
-    Колонка: HP_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_code SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN id SET NOT NULL;
-
-    Колонка: JOURNAL_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN journal_type SET NOT NULL;
-
-    Колонка: OPEN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN open_date SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN cid SET NOT NULL;
-
-    Колонка: HP_BLOCK
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_block SET NOT NULL;
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hosp_plan_deps.frm
@@ -695,68 +358,6 @@ JS Unit Compositions (только из вызовов openWindow/openD3Form):
     unit:HOSP_PLAN_DEPS  action:INSERT;
     unit:HOSP_PLAN_DEPS  action:DELETE;
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HOSP_PLAN_DEPS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_HOSP_PLAN_DEP_BEDS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HOSP_PLAN_DEPS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_deps ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: HP_KIND
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_deps ALTER COLUMN hp_kind SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_deps ALTER COLUMN id SET NOT NULL;
-
-    Колонка: DEP
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_deps ALTER COLUMN dep SET NOT NULL;
-
-  D_HOSP_PLAN_DEP_BEDS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_dep_beds ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_dep_beds ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_dep_beds ALTER COLUMN id SET NOT NULL;
-
-    Колонка: BED_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hosp_plan_dep_beds ALTER COLUMN bed_type SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hosp_plan_pks.frm
 ----------------------------------------------------------------------------------------------------
@@ -806,51 +407,6 @@ JS Unit Compositions (только из вызовов openWindow/openD3Form):
     unit:HPK_PAYMENT_KINDS  action:DELETE;
     unit:HPK_PAYMENT_KINDS  action:UPDATE;
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_PAYMENT_KINDS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_PAYMENT_KINDS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PAYMENT_KIND
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN payment_kind SET NOT NULL;
-
-    Колонка: HAS_QUOTES
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN has_quotes SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_payment_kinds ALTER COLUMN cid SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hosp_plan_mkbs.frm
 ----------------------------------------------------------------------------------------------------
@@ -895,39 +451,6 @@ SQL ЗАПРОСЫ (1):
 БРОКЕРЫ:
     unit:HPK_MKBS  action:INSERT;
     unit:HPK_MKBS  action:DELETE;
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_MKBS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_MKBS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN cid SET NOT NULL;
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/AccessRights/d_cse_accesses.frm
@@ -1003,506 +526,6 @@ SQL ЗАПРОСЫ (9):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_CL_CSE_ACS_RIGHTS
 
-ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
-
-  D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS:
-    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
-    Сигнатура: d_pkg_cse_accesses.get_all_rights(numeric, numeric, varchar, numeric)
-    ОШИБКИ:
-      error:42883:9:statement block:function d_cl_cse_acs_rights() does not exist
-
-  D_PKG_CSE_ACCESSES.ADD_ACCS:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_cse_accesses.add_accs(numeric, numeric, varchar, numeric, varchar, numeric)
-
-  D_PKG_CSE_ACCESSES.DEL_ACCS:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_cse_accesses.del_accs(numeric, numeric)
-
-  D_PKG_CSE_ACCESSES.SET_RIGHT:
-    Статус: СУЩЕСТВУЕТ (ОШИБКИ)
-    Сигнатура: d_pkg_cse_accesses.set_right(numeric, numeric, varchar, numeric, numeric, numeric)
-    ОШИБКИ:
-      error:42601:25:CALL:procedure parameter "pnd_insert_id" is an output parameter but corresponding argument is not writable
-
-  D_PKG_CSE_ACCESSES.SET_WITH_CHILDS:
-    Статус: СУЩЕСТВУЕТ (ПРЕДУПРЕЖДЕНИЯ)
-    Сигнатура: d_pkg_cse_accesses.set_with_childs(numeric, numeric, varchar, numeric, numeric, numeric)
-    ПРЕДУПРЕЖДЕНИЯ:
-      warning:42804:15:SQL statement:target type is different type than source type
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_CSE_ACCESSES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CSE_ACS_CABLABS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CABLAB:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CSE_ACS_EMPS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_EMPLOYERS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_AGENTS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CSE_ACS_SPECS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_SPECIALITIES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CSE_ACS_ROLES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_ROLES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CSE_ACS_SERVS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_SERVICES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_CSE_ACCESSES:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_accesses ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: UNIT_ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_accesses ALTER COLUMN unit_id SET NOT NULL;
-
-    Колонка: ALL_RIGHTS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_accesses ALTER COLUMN all_rights SET NOT NULL;
-
-    Колонка: UNITCODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_accesses ALTER COLUMN unitcode SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_accesses ALTER COLUMN id SET NOT NULL;
-
-  D_CSE_ACS_CABLABS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_cablabs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_cablabs ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_cablabs ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CABLAB
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_cablabs ALTER COLUMN cablab SET NOT NULL;
-
-  D_CABLAB:
-    Колонка: IS_COMM
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN is_comm SET NOT NULL;
-
-    Колонка: DEPARTMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN department SET NOT NULL;
-
-    Колонка: CL_BEGIN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_begin_date SET NOT NULL;
-
-    Колонка: DIVISION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN division SET NOT NULL;
-
-    Колонка: CL_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_code SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CL_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cl_name SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cablab ALTER COLUMN cid SET NOT NULL;
-
-  D_CSE_ACS_EMPS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_emps ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: EMPLOYER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_emps ALTER COLUMN employer SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_emps ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_emps ALTER COLUMN id SET NOT NULL;
-
-  D_EMPLOYERS:
-    Колонка: REGDATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN regdate SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: AGENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN agent SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN id SET NOT NULL;
-
-    Колонка: IS_DISMISSED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN is_dismissed SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_employers ALTER COLUMN cid SET NOT NULL;
-
-  D_AGENTS:
-    Колонка: IS_EMPLOYER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_employer SET NOT NULL;
-
-    Колонка: IS_ANONYM
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_anonym SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN cid SET NOT NULL;
-
-    Колонка: AGN_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_code SET NOT NULL;
-
-    Колонка: ACCORDING_RELATIVES
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN according_relatives SET NOT NULL;
-
-    Колонка: IS_HOME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN is_home SET NOT NULL;
-
-    Колонка: AGN_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_type SET NOT NULL;
-
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN version SET NOT NULL;
-
-    Колонка: AGN_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_agents ALTER COLUMN agn_name SET NOT NULL;
-
-  D_CSE_ACS_SPECS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_specs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_specs ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_specs ALTER COLUMN id SET NOT NULL;
-
-    Колонка: SPECIALITY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_specs ALTER COLUMN speciality SET NOT NULL;
-
-  D_SPECIALITIES:
-    Колонка: CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN code SET NOT NULL;
-
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN version SET NOT NULL;
-
-    Колонка: DATE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN date_begin SET NOT NULL;
-
-    Колонка: TITLE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN title SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_specialities ALTER COLUMN cid SET NOT NULL;
-
-  D_CSE_ACS_ROLES:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_roles ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: ROLE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_roles ALTER COLUMN role SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_roles ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_roles ALTER COLUMN id SET NOT NULL;
-
-  D_ROLES:
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_roles ALTER COLUMN id SET NOT NULL;
-
-    Колонка: NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_roles ALTER COLUMN name SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_roles ALTER COLUMN cid SET NOT NULL;
-
-  D_CSE_ACS_SERVS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_servs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_servs ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: SERVICE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_servs ALTER COLUMN service SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_cse_acs_servs ALTER COLUMN id SET NOT NULL;
-
-  D_SERVICES:
-    Колонка: SE_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN se_type SET NOT NULL;
-
-    Колонка: SE_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN se_code SET NOT NULL;
-
-    Колонка: TAXGR
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN taxgr SET NOT NULL;
-
-    Колонка: SE_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN se_name SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN cid SET NOT NULL;
-
-    Колонка: IS_COMBINED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN is_combined SET NOT NULL;
-
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN version SET NOT NULL;
-
-    Колонка: OPEN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_services ALTER COLUMN open_date SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospPlan/hospplanperiod_edit.frm
 ----------------------------------------------------------------------------------------------------
@@ -1539,55 +562,6 @@ SQL ЗАПРОСЫ (3):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_P_EXC
 
-ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
-
-  D_PKG_HPK_PLANS.ADD:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_plans.add(numeric, numeric, numeric, timestamp, numeric, numeric, numeric)
-
-  D_PKG_HPK_PLANS.UPD:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_hpk_plans.upd(numeric, numeric, timestamp, numeric, numeric, numeric)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_PLANS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_PLANS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PLAN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN plan_date SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN cid SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/UniversalForms/period.frm
 ----------------------------------------------------------------------------------------------------
@@ -1605,12 +579,6 @@ SubForm:
 
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/Schedules/schedules_edit_hp.frm
@@ -1669,317 +637,6 @@ SQL ЗАПРОСЫ (13):
     D_PKG_SCHEDULE.ADD
     D_PKG_SCHEDULESP_TIMES.UPD_S
 
-ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
-
-  D_PKG_DAT_TOOLS.GET_WEEK_DAY_NUM:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_dat_tools.get_week_day_num(timestamp)
-
-  D_PKG_SCHEDULE.UPD:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_schedule.upd(numeric, numeric, varchar, varchar, timestamp, numeric, varchar, numeric, numeric, numeric)
-
-  D_PKG_SCHEDULE.ADD:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_schedule.add(numeric, numeric, numeric, varchar, varchar, timestamp, numeric, varchar, numeric, numeric)
-
-  D_PKG_SCHEDULESP_TIMES.UPD_S:
-    Статус: СУЩЕСТВУЕТ (OK)
-    Сигнатура: d_pkg_schedulesp_times.upd_s(numeric, numeric, varchar, varchar, numeric, numeric, numeric, numeric, numeric)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_SCHEDULESP:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_SCHEDULESP_TIMES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_SCHEDULE:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_CLSCHS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_DIRECTION_SERVICES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_SCHEDULESP:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: DAY_NUMBER
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp ALTER COLUMN day_number SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp ALTER COLUMN cid SET NOT NULL;
-
-  D_SCHEDULESP_TIMES:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: TIME_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN time_begin SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN id SET NOT NULL;
-
-    Колонка: TIME_END
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN time_end SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedulesp_times ALTER COLUMN cid SET NOT NULL;
-
-  D_SCHEDULE:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN code SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN id SET NOT NULL;
-
-    Колонка: QUOTING
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN quoting SET NOT NULL;
-
-    Колонка: NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN name SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_schedule ALTER COLUMN cid SET NOT NULL;
-
-  D_CLSCHS:
-    Колонка: CLSCH_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN clsch_type SET NOT NULL;
-
-    Колонка: DBEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN dbegin SET NOT NULL;
-
-    Колонка: CABLAB
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN cablab SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PURPOSE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN purpose SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN id SET NOT NULL;
-
-    Колонка: SCHEDULE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN schedule SET NOT NULL;
-
-    Колонка: IS_SUBST
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN is_subst SET NOT NULL;
-
-    Колонка: SCHEDULE_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN schedule_type SET NOT NULL;
-
-    Колонка: SCH_RESOURCE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN sch_resource SET NOT NULL;
-
-    Колонка: USE_DIRECTION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN use_direction SET NOT NULL;
-
-    Колонка: USE_CITO
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN use_cito SET NOT NULL;
-
-    Колонка: USE_WORK_CALENDAR
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_clschs ALTER COLUMN use_work_calendar SET NOT NULL;
-
-  D_DIRECTION_SERVICES:
-    Колонка: IS_NECESSARY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN is_necessary SET NOT NULL;
-
-    Колонка: SERVICE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN service SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN id SET NOT NULL;
-
-    Колонка: REG_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN reg_type SET NOT NULL;
-
-    Колонка: SER_COUNT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN ser_count SET NOT NULL;
-
-    Колонка: IMPORTANT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN important SET NOT NULL;
-
-    Колонка: IS_COMBINED_PAYMENT
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN is_combined_payment SET NOT NULL;
-
-    Колонка: ATTENDANCE_STATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN attendance_state SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: IS_CONFIRMED
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN is_confirmed SET NOT NULL;
-
-    Колонка: UK_HASH
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN uk_hash SET NOT NULL;
-
-    Колонка: SERV_STATUS
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN serv_status SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: IS_PRIMARY
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_direction_services ALTER COLUMN is_primary SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/select_bed_type_by_dep.frm
 ----------------------------------------------------------------------------------------------------
@@ -2013,80 +670,6 @@ SQL ЗАПРОСЫ (1):
 
   D_V_BEDS_FUND (Oracle: 1,18 тыс) (PostgreSQL: 609):
           D_BEDS_FUND (Oracle: 1,18 тыс) (PostgreSQL: 1,18 тыс)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_BED_TYPES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-  D_BEDS_FUND:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_BED_TYPES:
-    Колонка: BT_CODE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_bed_types ALTER COLUMN bt_code SET NOT NULL;
-
-    Колонка: VERSION
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_bed_types ALTER COLUMN version SET NOT NULL;
-
-    Колонка: BT_NAME
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_bed_types ALTER COLUMN bt_name SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_bed_types ALTER COLUMN id SET NOT NULL;
-
-    Колонка: IS_ACTIVE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_bed_types ALTER COLUMN is_active SET NOT NULL;
-
-  D_BEDS_FUND:
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_beds_fund ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_beds_fund ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: BEGIN_DATE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_beds_fund ALTER COLUMN begin_date SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_beds_fund ALTER COLUMN id SET NOT NULL;
-
-    Колонка: BED_TYPE
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_beds_fund ALTER COLUMN bed_type SET NOT NULL;
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hpk_pk_quotes.frm
@@ -2132,45 +715,6 @@ SQL ЗАПРОСЫ (1):
 БРОКЕРЫ:
     unit:HPK_PK_QUOTES  action:DELETE;
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_PK_QUOTES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_PK_QUOTES:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: DATE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN date_begin SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN cid SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hpk_mkbs_edit.frm
 ----------------------------------------------------------------------------------------------------
@@ -2206,39 +750,6 @@ SQL ЗАПРОСЫ (1):
 БРОКЕРЫ:
     unit:HPK_MKBS;
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-
-  D_HPK_MKBS:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-
-  D_HPK_MKBS:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN lpu SET NOT NULL;
-
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN pid SET NOT NULL;
-
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN id SET NOT NULL;
-
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_mkbs ALTER COLUMN cid SET NOT NULL;
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/AccessRights/principal_search.frm
 ----------------------------------------------------------------------------------------------------
@@ -2260,12 +771,6 @@ SubForm:
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/Schedules/schedules_copy.frm
 ----------------------------------------------------------------------------------------------------
@@ -2284,12 +789,6 @@ SubForm:
 SQL ЗАПРОСЫ (1):
      (содержимое скрыто)
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/Directions/Subforms/service_notify.frm
 ----------------------------------------------------------------------------------------------------
@@ -2307,12 +806,6 @@ SubForm:
 
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
-
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
 
 ----------------------------------------------------------------------------------------------------
 ФОРМА: Forms/HospitPlanning/hpk_pk_quotes_edit.frm
@@ -2349,42 +842,435 @@ SQL ЗАПРОСЫ (1):
 БРОКЕРЫ:
     unit:HPK_PK_QUOTES;
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
 
-  D_HPK_PK_QUOTES:
-    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
-    Oracle PK поля: ID
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
 
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
 
-  D_HPK_PK_QUOTES:
-    Колонка: LPU
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN lpu SET NOT NULL;
+SubForm:
+     (не найдено)
 
-    Колонка: DATE_BEGIN
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN date_begin SET NOT NULL;
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
 
-    Колонка: PID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN pid SET NOT NULL;
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
 
-    Колонка: ID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN id SET NOT NULL;
 
-    Колонка: CID
-      Oracle: NOT NULL
-      PostgreSQL: NULL разрешен
-      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
-      Рекомендация: ALTER TABLE d_hpk_pk_quotes ALTER COLUMN cid SET NOT NULL;
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/modals/graphics_add_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\modals\graphics_add_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HPK_SCHEDULE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HPK_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HPK_SCHEDULE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DAT_TOOLS.DATE_RANGES_ERROR
+    D_PKG_HPK_SCHEDULE.UPG
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+            unit:SCHEDULE  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospitPlanning/hospit_planning.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\HospitPlanning\hospit_planning.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HospitPlanning/modals/graphics_add_edit.frm
+     HospitPlanning/hosp_plan_kinds_edit.frm
+     HospitPlanning/hosp_plan_deps.frm
+     HospitPlanning/hosp_plan_pks.frm
+     HospitPlanning/hosp_plan_mkbs.frm
+     AccessRights/d_cse_accesses.frm
+     HospPlan/hospplanperiod_edit.frm
+     UniversalForms/period.frm
+     Schedules/schedules_edit_hp.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        HOSP_PLAN_KINDS;
+        HPK_PLANS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pHOSP_PLAN_KINDS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Отделения"
+│   ├── "Диагнозы"
+│   ├── "Виды оплаты"
+│   └── "Права записи"
+│   
+├── name="pHPK_PLANS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Назначить"
+│   │   ├── "Ко всем дням недели"
+│   │   ├── "День к периоду"
+│   │   └── "Неделю в период"
+│   └── "Копировать"
+│       ├── "Ко всем дням недели"
+│       ├── "День к периоду"
+│       └── "Неделю в период"
+│   
+└── name="popupSchedule"
+    ├── "Обновить"
+    ├── "Просмотреть график"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (12):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS
+    D_V_HPK_SCHEDULE_BASE
+    D_V_SCHEDULE_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOSP_PLAN_KINDS
+    D_HPK_PLANS
+    D_HPK_SCHEDULE
+    D_SCHEDULE
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_HOSP_PLAN_KINDS (Oracle: 868) (PostgreSQL: 368):
+          D_HOSP_PLAN_KINDS (Oracle: 891) (PostgreSQL: 884)
+
+  D_V_HPK_PLANS (Oracle: 30,05 тыс) (PostgreSQL: 26,83 тыс):
+          D_HPK_PLANS (Oracle: 30,09 тыс) (PostgreSQL: 30,02 тыс)
+
+  D_V_HPK_SCHEDULE_BASE (Oracle: 40) (PostgreSQL: 27):
+          D_HPK_SCHEDULE (Oracle: 44) (PostgreSQL: 34)
+
+  D_V_SCHEDULE_BASE (Oracle: 6,31 тыс) (PostgreSQL: 2,92 тыс):
+          D_SCHEDULE (Oracle: 6,33 тыс) (PostgreSQL: 6,26 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+    D_PKG_HPK_PLANS.DEL
+    D_PKG_HOSP_PLAN_KINDS.DEL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+    D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+    D_PKG_HPK_SCHEDULE.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Schedules/subforms/sch_edit_hp_time_block.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\subforms\sch_edit_hp_time_block.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/footerStyle.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\footerStyle.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Schedules/subforms/sch_edit_hp_time_block.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Schedules\subforms\sch_edit_hp_time_block.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/footerStyle.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\footerStyle.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
 

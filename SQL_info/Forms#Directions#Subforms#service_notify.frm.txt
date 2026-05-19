@@ -16,9 +16,3 @@ SubForm:
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
 
-ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-
-ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
-     (нет таблиц для проверки)
-

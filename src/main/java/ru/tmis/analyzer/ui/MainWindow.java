@@ -2,6 +2,7 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.log.ILogger;
+import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
@@ -134,14 +135,32 @@ public class MainWindow extends JFrame {
         // Добавляем слушатель выбора формы в дереве
 
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
+            private boolean isLoadingChildren = false;  // Флаг для предотвращения рекурсии
+
             @Override
             public void valueChanged(TreeSelectionEvent e) {
+                // Игнорируем события во время загрузки дочерних элементов
+                if (isLoadingChildren) return;
+
                 TreePath selectedPath = formsTreePanel.getSelectedPath();
                 if (selectedPath != null) {
                     String formPath = formsTreePanel.getFormPathFromTreePath(selectedPath);
                     if (formPath != null) {
-                        // Рекурсивно загружаем все дочерние формы
-                        loadFormAndAllChildren(formPath, selectedPath);
+                        isLoadingChildren = true;
+                        try {
+                            // Загружаем отчёт текущей формы
+                            loadFormResultToPanel(formPath);
+
+                            // Загружаем дочерние формы (только один уровень)
+                            Set<String> childForms = formsTreePanel.loadChildFormsFromReport(formPath);
+                            if (!childForms.isEmpty()) {
+                                formsTreePanel.expandPath(selectedPath);
+                                // Обновляем дочерние узлы в дереве
+                                formsTreePanel.refreshChildForms(formPath);
+                            }
+                        } finally {
+                            isLoadingChildren = false;
+                        }
                     } else {
                         resultArea.setText("");
                     }
@@ -308,7 +327,7 @@ public class MainWindow extends JFrame {
     }
 
 
-    // MainWindow.java - добавить метод
+    // MainWindow.java - исправленный метод loadFormAndAllChildren
 
     /**
      * Рекурсивная загрузка формы и всех её дочерних элементов
@@ -343,6 +362,31 @@ public class MainWindow extends JFrame {
                 }
             }
         }
+
+        // Восстанавливаем выбор на исходной форме (после загрузки всех дочерних)
+        // Используем final переменную для лямбды
+        final String originalFormPath = formPath;
+        SwingUtilities.invokeLater(() -> {
+            TreePath currentPath = formsTreePanel.getSelectedPath();
+            if (currentPath != null) {
+                String currentFormPath = formsTreePanel.getFormPathFromTreePath(currentPath);
+                if (currentFormPath == null || !currentFormPath.equals(originalFormPath)) {
+                    // Возвращаем выбор на исходную форму
+                    DefaultMutableTreeNode node = formsTreePanel.findNodeByFormPath(originalFormPath);
+                    if (node != null) {
+                        TreePath originalPath = formsTreePanel.getTreePathForNode(node);
+                        formsTreePanel.setSelectedPath(originalPath);
+                    }
+                }
+            } else {
+                // Если нет выбранного пути, выбираем исходную форму
+                DefaultMutableTreeNode node = formsTreePanel.findNodeByFormPath(originalFormPath);
+                if (node != null) {
+                    TreePath originalPath = formsTreePanel.getTreePathForNode(node);
+                    formsTreePanel.setSelectedPath(originalPath);
+                }
+            }
+        });
     }
 
     private void startRecursiveAnalysis() {
@@ -459,19 +503,16 @@ public class MainWindow extends JFrame {
         // Получаем выбранные формы из дерева
         List<String> selectedForms = formsTreePanel.getSelectedForms();
 
-        // Нормализуем пути - убираем возможные дублирования и формируем корректные пути
+        // Нормализуем пути
         Set<String> normalizedForms = new LinkedHashSet<>();
         for (String form : selectedForms) {
             String normalized = form;
-            // Если путь содержит родительский путь, извлекаем только дочернюю часть
             if (normalized.contains("/Forms/") && normalized.lastIndexOf("/Forms/") > 0) {
                 normalized = normalized.substring(normalized.lastIndexOf("/Forms/") + 1);
             }
-            // Убираем ведущий слеш
             if (normalized.startsWith("/")) {
                 normalized = normalized.substring(1);
             }
-            // Убеждаемся, что путь начинается с Forms/ или UserForms
             if (!normalized.startsWith("Forms/") && !normalized.startsWith("UserForms")) {
                 normalized = "Forms/" + normalized;
             }
@@ -498,9 +539,103 @@ public class MainWindow extends JFrame {
         stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
+        progressBar.setIndeterminate(true);
         statusLabel.setText("Статус: Анализ запущен");
+
+        // Запускаем анализ в отдельном потоке
+        currentTask = executorService.submit(() -> {
+            try {
+                runAnalysis(new ArrayList<>(normalizedForms));
+            } catch (Exception e) {
+                SwingUtilities.invokeLater(() -> {
+                    appendLog("ОШИБКА: " + e.getMessage());
+                    e.printStackTrace();
+                });
+            } finally {
+                isRunning.set(false);
+                SwingUtilities.invokeLater(() -> {
+                    startButton.setEnabled(true);
+                    stopButton.setEnabled(false);
+                    settingsButton.setEnabled(true);
+                    statusLabel.setText("Статус: Готов");
+                    progressBar.setIndeterminate(false);
+                    if (!stopRequested) {
+                        progressBar.setString("Анализ завершен");
+                    } else {
+                        progressBar.setString("Анализ остановлен");
+                    }
+                });
+            }
+        });
     }
 
+    // MainWindow.java - метод runAnalysis
+
+    private void runAnalysis(List<String> formsToAnalyze) throws Exception {
+        appendLog("=".repeat(80));
+        appendLog("=== ЗАПУСК АНАЛИЗА ФОРМ ===");
+        appendLog("=".repeat(80));
+        appendLog("Путь к проекту: " + settings.getProjectPath());
+        appendLog("Всего форм для анализа: " + formsToAnalyze.size());
+        appendLog("");
+
+        ru.tmis.analyzer.core.service.FormAnalyzerService analyzer =
+                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings);
+
+        Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
+        analyzer.setFormsToAnalyze(formsSet);
+
+        analyzer.setLogger(new ILogger() {
+            @Override
+            public void log(String message) { appendLog(message); }
+            @Override
+            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            @Override
+            public void debug(String message) { appendLog("[DEBUG] " + message); }
+        });
+
+        analyzer.setStopCondition(() -> stopRequested);
+        analyzer.setProgressCallback((processed, total, currentForm) -> {
+            SwingUtilities.invokeLater(() -> {
+                int percent = total > 0 ? (processed * 100 / total) : 0;
+                progressBar.setValue(percent);
+                progressBar.setString(String.format("%d из %d (%d%%)", processed, total, percent));
+                statusLabel.setText("Статус: " + currentForm);
+            });
+        });
+
+        analyzer.setFormAnalyzedCallback(formInfo -> {
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+
+                SwingUtilities.invokeLater(() -> {
+                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                });
+            } catch (IOException e) {
+                appendLog("Ошибка сохранения отчёта: " + e.getMessage());
+            }
+        });
+
+        List<?> results = analyzer.analyzeAllForms();
+        analyzer.clearFormsToAnalyze();
+
+        if (stopRequested) {
+            appendLog("Анализ остановлен пользователем");
+            return;
+        }
+
+        appendLog("");
+        appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
+        appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
+        appendLog("Обработано форм: " + results.size());
+        appendLog("Отчеты сохранены в: " + settings.getOutputDir());
+
+        SwingUtilities.invokeLater(() -> {
+            formsTreePanel.refreshAllChildForms();
+        });
+    }
     private void stopAnalysis() {
         // Сначала проверяем рекурсивный анализатор
         if (recursiveBuilder != null && recursiveBuilder.isRunning()) {

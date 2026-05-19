@@ -25,13 +25,22 @@ public class PostgresReportsService {
                 "FROM d_reports_links drl JOIN d_reports rep ON drl.pid = rep.id " +
                 "WHERE drl.unitcode = ?";
 
+        // ЛОГ: SQL запрос
+        System.out.println("[PostgresReportsService] ========== SQL ЗАПРОС (POSTGRESQL) ==========");
+        System.out.println("[PostgresReportsService] Цель: Получение отчётов по unit'у");
+        System.out.println("[PostgresReportsService] Параметры: unitCode = " + unitCode);
+        System.out.println("[PostgresReportsService] SQL: " + sql.replace("?", "'" + unitCode + "'"));
+        System.out.println("[PostgresReportsService] =============================================");
+
+
         try (Connection conn = getPostgresConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, unitCode);
             pstmt.setQueryTimeout(30);
             ResultSet rs = pstmt.executeQuery();
-
+            int count = 0;
             while (rs.next()) {
+                count++;
                 DbReportInfo report = new DbReportInfo();
                 report.setPrivName(rs.getString("priv_name"));
                 report.setUnitCode(unitCode);
@@ -48,6 +57,8 @@ public class PostgresReportsService {
                 }
                 result.add(report);
             }
+            System.out.println("[PostgresReportsService] Результат: найдено " + count + " записей");
+
         } catch (SQLException e) {
             System.err.println("PostgreSQL ошибка при получении отчетов по unit=" + unitCode + ": " + e.getMessage());
         }

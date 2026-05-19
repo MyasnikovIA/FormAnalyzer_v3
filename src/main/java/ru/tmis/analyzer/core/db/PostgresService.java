@@ -78,12 +78,17 @@ public class PostgresService {
     private String fetchViewDDL(String viewName) {
         try (Connection conn = getConnection()) {
             String getOidSql = "SELECT oid FROM pg_class WHERE relname = ? AND relkind = 'v'";
+            System.out.println("[PostgresService] ========== SQL ЗАПРОС ==========");
+            System.out.println("[PostgresService] Цель: Получение DDL вьюхи из PostgreSQL");
+            System.out.println("[PostgresService] Параметры: viewName = " + viewName);
+
             try (PreparedStatement oidStmt = conn.prepareStatement(getOidSql)) {
                 oidStmt.setString(1, viewName.toLowerCase());
                 ResultSet oidRs = oidStmt.executeQuery();
                 if (oidRs.next()) {
                     int oid = oidRs.getInt("oid");
                     String sql = "SELECT pg_get_viewdef(?, true) as viewdef";
+                    System.out.println("[PostgresService] SQL (OID): " + getOidSql.replace("?", "'" + viewName.toLowerCase() + "'"));
                     try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                         pstmt.setInt(1, oid);
                         ResultSet rs = pstmt.executeQuery();
@@ -96,6 +101,7 @@ public class PostgresService {
                     }
                 }
             }
+            System.out.println("[PostgresService] Результат: вьюха не найдена");
         } catch (SQLException e) {
             System.err.println("Ошибка получения DDL вьюхи " + viewName + ": " + e.getMessage());
         }

@@ -415,9 +415,6 @@ public class FormsTreePanel extends JPanel {
         tree.expandPath(nodePath);
     }
 
-    public void refreshAllChildForms() {
-        refreshAllChildFormsPreservingState();
-    }
 
     private void createContextMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
@@ -896,18 +893,6 @@ public class FormsTreePanel extends JPanel {
     }
 
     /**
-     * Обновить все дочерние формы с сохранением состояния
-     */
-    public void refreshAllChildFormsPreservingState() {
-        Map<String, Boolean> expandedState = saveExpandedState();
-        Set<String> selectedForms = new HashSet<>(getSelectedForms());
-
-        refreshAllChildForms();
-
-        restoreExpandedState(expandedState);
-        restoreSelection(selectedForms);
-    }
-    /**
      * Обновить дочерние формы для конкретной формы с сохранением состояния дерева
      */
     public void refreshChildFormsPreservingState(String formPath) {
@@ -1240,5 +1225,36 @@ public class FormsTreePanel extends JPanel {
             tree.expandPath(path);
             tree.setSelectionPath(path);
         }
+    }
+    /**
+     * Устанавливает выбранный путь в дереве
+     * @param path путь для выбора
+     */
+    public void setSelectedPath(TreePath path) {
+        if (path != null) {
+            tree.setSelectionPath(path);
+            tree.scrollPathToVisible(path);
+        }
+    }
+    /**
+     * Обновить все дочерние формы (без сохранения состояния)
+     */
+    public void refreshAllChildForms() {
+        for (String formPath : allForms) {
+            refreshChildForms(formPath);
+        }
+    }
+
+    /**
+     * Обновить все дочерние формы с сохранением состояния
+     */
+    public void refreshAllChildFormsPreservingState() {
+        Map<String, Boolean> expandedState = saveExpandedState();
+        Set<String> selectedForms = new HashSet<>(getSelectedForms());
+
+        refreshAllChildForms();
+
+        restoreExpandedState(expandedState);
+        restoreSelection(selectedForms);
     }
 }

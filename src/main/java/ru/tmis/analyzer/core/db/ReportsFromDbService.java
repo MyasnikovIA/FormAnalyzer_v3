@@ -60,6 +60,13 @@ public class ReportsFromDbService {
                         "  FROM D_REPORTS_LINKS drl\n" +
                         "  JOIN D_REPORTS rep ON drl.PID = rep.ID\n" +
                         " WHERE drl.UNITCODE = ?\n";  // Добавляем сортировку
+        // ЛОГ: SQL запрос
+        System.out.println("[ReportsFromDbService] ========== SQL ЗАПРОС (ORACLE) ==========");
+        System.out.println("[ReportsFromDbService] Цель: Получение отчётов по unit'у");
+        System.out.println("[ReportsFromDbService] Параметры: unitCode = " + unitCode);
+        System.out.println("[ReportsFromDbService] SQL: " + sql.replace("?", "'" + unitCode + "'"));
+        System.out.println("[ReportsFromDbService] ========================================");
+
 
         Properties props = new Properties();
         props.setProperty("user", settings.getOracleUser());
