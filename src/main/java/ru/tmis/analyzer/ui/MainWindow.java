@@ -133,7 +133,8 @@ public class MainWindow extends JFrame {
         formsTreePanel = new FormsTreePanel();
         formsTreePanel.setOnFormsChanged(() -> {});
 
-        // Добавляем слушатель выбора формы в дереве
+        // MainWindow.java - исправленный TreeSelectionListener
+
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
             private boolean isLoadingChildren = false;
 
@@ -147,16 +148,17 @@ public class MainWindow extends JFrame {
                     if (formPath != null) {
                         isLoadingChildren = true;
                         try {
+                            // Загружаем отчёт текущей формы
                             loadFormResultToPanel(formPath);
 
-                            Set<String> childForms = formsTreePanel.loadChildFormsFromReport(formPath);
-                            if (!childForms.isEmpty()) {
-                                formsTreePanel.expandPath(selectedPath);
-                                formsTreePanel.refreshChildForms(formPath);
-                            }
+                            // Рекурсивно загружаем и разворачиваем ВСЕ дочерние уровни
+                            formsTreePanel.expandAllChildrenRecursive(formPath, selectedPath);
+
+                            // Если вкладка LLM промпт активна, загружаем MD файл
                             if (tabbedPane.getSelectedIndex() == 2) {
                                 loadLlmPromptToPanel(formPath);
                             }
+
                         } finally {
                             isLoadingChildren = false;
                         }

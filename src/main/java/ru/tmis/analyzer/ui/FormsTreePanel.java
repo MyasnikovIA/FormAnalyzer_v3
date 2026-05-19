@@ -453,6 +453,21 @@ public class FormsTreePanel extends JPanel {
         JMenuItem deselectAllMenuItem = new JMenuItem("Снять выделение");
         deselectAllMenuItem.addActionListener(e -> tree.clearSelection());
 
+        JMenuItem expandAllMenuItem = new JMenuItem("Развернуть всё дерево");
+        expandAllMenuItem.addActionListener(e -> {
+            TreePath selectedPath = tree.getSelectionPath();
+            if (selectedPath != null) {
+                String formPath = getFormPathFromTreePath(selectedPath);
+                if (formPath != null) {
+                    // Запускаем рекурсивное разворачивание в отдельном потоке
+                    SwingUtilities.invokeLater(() -> {
+                        expandAllChildrenRecursive(formPath, selectedPath);
+                    });
+                }
+            }
+        });
+
+
         popupMenu.add(addMenuItem);
         popupMenu.add(removeMenuItem);
         popupMenu.addSeparator();
@@ -461,6 +476,8 @@ public class FormsTreePanel extends JPanel {
         popupMenu.addSeparator();
         popupMenu.add(selectAllMenuItem);
         popupMenu.add(deselectAllMenuItem);
+        popupMenu.addSeparator();
+        popupMenu.add(expandAllMenuItem);
 
 
         tree.addMouseListener(new MouseAdapter() {
@@ -1287,5 +1304,74 @@ public class FormsTreePanel extends JPanel {
 
         restoreExpandedState(expandedState);
         restoreSelection(selectedForms);
+    }
+
+    /**
+     * Рекурсивно разворачивает все дочерние узлы для указанного пути
+     * @param parentPath путь к родительскому узлу
+     */
+    public void expandAllChildren(TreePath parentPath) {
+        if (parentPath == null) return;
+
+        Object lastComponent = parentPath.getLastPathComponent();
+        if (lastComponent instanceof DefaultMutableTreeNode) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) lastComponent;
+
+            // Разворачиваем текущий узел
+            tree.expandPath(parentPath);
+
+            // Рекурсивно разворачиваем всех детей
+            for (int i = 0; i < node.getChildCount(); i++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+                TreePath childPath = parentPath.pathByAddingChild(child);
+                expandAllChildren(childPath);
+            }
+        }
+    }
+
+    /**
+     * Рекурсивно разворачивает все дочерние узлы для формы по пути
+     * @param formPath путь к форме
+     */
+    public void expandAllChildrenForForm(String formPath) {
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            TreePath path = new TreePath(node.getPath());
+            expandAllChildren(path);
+        }
+    }
+    /**
+     * Рекурсивно загружает и разворачивает все дочерние формы для указанного пути
+     * @param formPath путь к форме
+     * @param treePath путь в дереве
+     */
+    public void expandAllChildrenRecursive(String formPath, TreePath treePath) {
+        // Загружаем дочерние формы из отчёта
+        Set<String> childForms = loadChildFormsFromReport(formPath);
+
+        if (childForms.isEmpty()) return;
+
+        // Обновляем дочерние узлы в дереве
+        refreshChildForms(formPath);
+
+        // Раскрываем текущий узел
+        if (treePath != null) {
+            tree.expandPath(treePath);
+        }
+
+        // Рекурсивно обрабатываем каждую дочернюю форму
+        for (String childForm : childForms) {
+            String actualChildPath = childForm;
+            if (actualChildPath.startsWith("(sub)_")) {
+                actualChildPath = actualChildPath.substring(6);
+            }
+
+            DefaultMutableTreeNode childNode = formNodeMap.get(actualChildPath);
+            if (childNode != null) {
+                TreePath childPath = new TreePath(childNode.getPath());
+                // Рекурсивный вызов для дочерней формы
+                expandAllChildrenRecursive(actualChildPath, childPath);
+            }
+        }
     }
 }
