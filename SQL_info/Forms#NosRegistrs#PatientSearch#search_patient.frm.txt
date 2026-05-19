@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/NosRegistrs/PatientSearch/search_patient.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\NosRegistrs\PatientSearch\search_patient.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     NosRegistrs/PatientSearch/SubForms/search_patient
+
+Список вызываемых форм в JS:
+     PatientSearch/search_patient_records.frm
+     DiseaseCase/resservice.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

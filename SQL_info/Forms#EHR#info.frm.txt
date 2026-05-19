@@ -1,0 +1,41 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/EHR/info.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\EHR\info.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Lis/Styles/styles
+     EHR/sign_subform_d3
+     EHR/subforms/info_subform
+     EHR/iemk_subform
+     EHR/subforms/sign_subform_d3_view
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="MSGS_POPUP"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_EHR_STATES_SIGNS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EHR_STATES_SIGNS
+    D_SIGN_ROLES
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_EHR_STATES_SIGNS (Oracle: 38,51 тыс) (PostgreSQL: 37,73 тыс):
+          D_EHR_STATES_SIGNS (Oracle: 38,51 тыс) (PostgreSQL: 38,12 тыс)
+          D_SIGN_ROLES (Oracle: 32) (PostgreSQL: 32)
+

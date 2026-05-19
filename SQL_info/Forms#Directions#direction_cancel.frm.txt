@@ -1,0 +1,51 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/direction_cancel.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Directions\direction_cancel.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Directions\direction_cancel.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Directions\direction_cancel.frm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Directions\direction_cancel.d\data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_SERVICES
+    D_SERVICES
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_DIRECTION_SERVICES_BASE (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+  D_V_SERVICES_BASE (Oracle: 51,01 тыс) (PostgreSQL: 50,83 тыс):
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DIRECTION_SERVICES.SET_STATUS
+    D_PKG_EX_SYSTEMS.GET_STOPPED
+    D_PKG_EX_SYSTEMS.GET_ID_BY_CODE
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="DS_CANCEL_REASONS" composition="CLINIC"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+

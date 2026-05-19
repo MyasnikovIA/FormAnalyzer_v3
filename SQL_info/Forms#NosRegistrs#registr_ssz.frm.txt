@@ -1,0 +1,315 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/NosRegistrs/registr_ssz.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\NosRegistrs\registr_ssz.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     NosRegistrs/SubForms/Tabs/SSZ/patient_info_tab
+     NosRegistrs/SubForms/Tabs/SSZ/common_info_tab
+     NosRegistrs/SubForms/Tabs/SSZ/blockades_tab
+     NosRegistrs/SubForms/Tabs/SSZ/tachycardia_tab
+     NosRegistrs/SubForms/Tabs/SSZ/deleting_tab
+     NosRegistrs/SubForms/Tabs/SSZ/endocardit_tab
+     NosRegistrs/SubForms/Tabs/SSZ/pericardit_tab
+     NosRegistrs/SubForms/Tabs/SSZ/rheumatic_tab
+     NosRegistrs/SubForms/Tabs/SSZ/analysis
+     NosRegistrs/SubForms/Tabs/SSZ/lag_tab
+     NosRegistrs/SubForms/Tabs/SSZ/visits
+     NosRegistrs/SubForms/Tabs/reports_tab
+
+Список вызываемых форм в JS:
+     Persmedcard/persmedcard_edit.frm
+     DiseaseCase/diseasecase.frm
+     NosRegistrs/PatientSearch/search_patient.frm
+     NosRegistrs/select_reg_emp.frm
+     Agents/agents_edit.frm
+
+SQL ЗАПРОСЫ (16):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10
+    D_V_NR_PATIENTS
+    D_V_NR_REQUEST
+    D_V_EMPLOYERS_FIO
+    D_V_SSZ_DATA
+    D_V_SSZ_OUT
+    D_V_R_SSZ_OUT
+    D_V_AGENTS
+    D_V_VISITS
+    D_V_EMPLOYERS
+    D_V_R_SSZ_REAS_PEREC
+    D_V_R_SSZ_DATA
+    D_V_LPU
+    D_V_AGENT_ADDRS
+    D_V_AGENT_REGISTRATION
+    D_V_AGENT_PERSDOCS
+    D_V_AGENT_SOCIAL_STATES
+    D_V_AGENT_POLIS
+    D_V_AGENT_INABILITY_MKBS
+    D_V_AGENT_INABILITIES
+    D_V_AGENT_CATEGORIES
+    D_V_AGENT_CONSITUTIONS
+    D_V_AGENT_CONSITUTION_SPS
+    D_V_PERSMEDCARD_FIO
+    D_V_NR_REMOVE_REASONS
+    D_V_NOS_REGISTRS
+    D_V_REPORTS
+    D_V_REPORT_PARAMS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+    D_NR_PATIENTS
+    D_AGENTS
+    D_NOS_REGISTRS
+    D_LPUDICT
+    D_NR_REMOVE_REASONS
+    D_NR_REQUEST
+    D_NR_REQUEST_STATUS
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SSZ_DATA
+    D_HOSP_HISTORIES
+    D_CARDIO_FREQUENCY
+    D_CARDIO_NYHA
+    D_SSZ_OUT
+    D_R_SSZ_OUT
+    D_GEOGRAFY
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_VISITS
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_R_SSZ_REAS_PEREC
+    D_R_SSZ_DATA
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_AGENT_REGISTRATION
+    D_REGISTER_PURPOSES
+    D_SITES
+    D_DIVISIONS
+    D_REGISTRATION_TYPES
+    D_REG_CATEGORIES
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_SOCIALCATEGORIES
+    D_AGENT_POLIS
+    D_INSURANCE_COMPANIES
+    D_AGENT_POLIS_KINDS
+    D_AGENT_INABILITY_MKBS
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_AGENT_CATEGORIES
+    D_CATEGORIES
+    D_AGENT_CONSITUTION_SPS
+    D_ANTHROP
+    D_AGENT_CONSITUTIONS
+    D_CONSTITUTIONS
+    D_RES_INTERPRETATION
+    D_MEASURES
+    D_LATERALITY
+    D_PERSMEDCARD
+    D_REPORTS
+    D_REPORT_PARAMS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс):
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+
+  D_V_NR_PATIENTS (Oracle: 8,56 тыс) (PostgreSQL: 8,54 тыс):
+          D_NR_PATIENTS (Oracle: 8,56 тыс) (PostgreSQL: 8,54 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_NOS_REGISTRS (Oracle: 90) (PostgreSQL: 90)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_NR_REQUEST (Oracle: 7,79 тыс) (PostgreSQL: 7,78 тыс):
+          D_NR_REQUEST (Oracle: 7,79 тыс) (PostgreSQL: 7,78 тыс)
+          D_NOS_REGISTRS (Oracle: 90) (PostgreSQL: 90)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_NR_REQUEST_STATUS (Oracle: 6) (PostgreSQL: 6)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_JOBTITLES (Oracle: 8,19 тыс) (PostgreSQL: 8,19 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+
+  D_V_EMPLOYERS_FIO (Oracle: 12,90 тыс) (PostgreSQL: 6,13 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_SSZ_DATA (Oracle: 169) (PostgreSQL: 169):
+          D_SSZ_DATA (Oracle: 169) (PostgreSQL: 169)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_CARDIO_FREQUENCY (Oracle: 5) (PostgreSQL: 5)
+          D_CARDIO_NYHA (Oracle: 4) (PostgreSQL: 4)
+
+  D_V_SSZ_OUT (Oracle: 74) (PostgreSQL: 74):
+          D_SSZ_OUT (Oracle: 74) (PostgreSQL: 74)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_R_SSZ_OUT (Oracle: 72) (PostgreSQL: 72):
+          D_R_SSZ_OUT (Oracle: 72) (PostgreSQL: 72)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,56 млн):
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_VISITS (Oracle: 233,40 тыс) (PostgreSQL: 220,49 тыс):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_VISITS (Oracle: 233,49 тыс) (PostgreSQL: 232,76 тыс)
+
+  D_V_EMPLOYERS (Oracle: 12,90 тыс) (PostgreSQL: 6,13 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_JOBTITLES (Oracle: 8,19 тыс) (PostgreSQL: 8,19 тыс)
+          D_SPECIALITIES (Oracle: 698) (PostgreSQL: 698)
+          D_SPECIALITIES_ED (Oracle: 174) (PostgreSQL: 173)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DEPS_KINDS (Oracle: 56) (PostgreSQL: 56)
+          D_USERS (Oracle: 5,63 тыс) (PostgreSQL: 5,61 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_AGENT_ESIA (Oracle: 49) (PostgreSQL: 49)
+          D_EMP_SKILL (Oracle: 637) (PostgreSQL: 635)
+          D_SKILL_CATEGORIES (Oracle: 12) (PostgreSQL: 12)
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_R_SSZ_REAS_PEREC (Oracle: 143) (PostgreSQL: 143):
+          D_R_SSZ_REAS_PEREC (Oracle: 143) (PostgreSQL: 143)
+
+  D_V_R_SSZ_DATA (Oracle: 563) (PostgreSQL: 562):
+          D_R_SSZ_DATA (Oracle: 563) (PostgreSQL: 562)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_CARDIO_FREQUENCY (Oracle: 5) (PostgreSQL: 5)
+          D_CARDIO_NYHA (Oracle: 4) (PostgreSQL: 4)
+
+  D_V_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+
+  D_V_AGENT_ADDRS (Oracle: 587,98 тыс) (PostgreSQL: ошибка):
+          D_AGENT_ADDRS (Oracle: 587,98 тыс) (PostgreSQL: 587,91 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+          D_RAIONS (Oracle: 147) (PostgreSQL: 146)
+
+  D_V_AGENT_REGISTRATION (Oracle: 850,64 тыс) (PostgreSQL: 850,57 тыс):
+          D_AGENT_REGISTRATION (Oracle: 850,64 тыс) (PostgreSQL: 850,60 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_REGISTER_PURPOSES (Oracle: 68) (PostgreSQL: 67)
+          D_SITES (Oracle: 1,28 тыс) (PostgreSQL: 1,28 тыс)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_REGISTRATION_TYPES (Oracle: 4) (PostgreSQL: 4)
+          D_REG_CATEGORIES (Oracle: 28) (PostgreSQL: 28)
+
+  D_V_AGENT_PERSDOCS (Oracle: 291,90 тыс) (PostgreSQL: ошибка):
+          D_AGENT_PERSDOCS (Oracle: 291,90 тыс) (PostgreSQL: 291,68 тыс)
+          D_PERSDOCTYPES (Oracle: 51) (PostgreSQL: 51)
+          D_COUNTRIES (Oracle: 264) (PostgreSQL: 264)
+          D_NORESIDENT_STATUS (Oracle: 8) (PostgreSQL: 8)
+
+  D_V_AGENT_SOCIAL_STATES (Oracle: 182,83 тыс) (PostgreSQL: ошибка):
+          D_AGENT_SOCIAL_STATES (Oracle: 182,83 тыс) (PostgreSQL: 182,60 тыс)
+          D_SOCIALSTATES (Oracle: 117) (PostgreSQL: 117)
+          D_SOCIALCATEGORIES (Oracle: 3) (PostgreSQL: 3)
+
+  D_V_AGENT_POLIS (Oracle: 798,34 тыс) (PostgreSQL: 798,06 тыс):
+          D_AGENT_POLIS (Oracle: 798,34 тыс) (PostgreSQL: 798,28 тыс)
+          D_INSURANCE_COMPANIES (Oracle: 944) (PostgreSQL: 944)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_AGENT_POLIS_KINDS (Oracle: 3) (PostgreSQL: 3)
+
+  D_V_AGENT_INABILITY_MKBS (Oracle: 414) (PostgreSQL: 413):
+          D_AGENT_INABILITY_MKBS (Oracle: 414) (PostgreSQL: 413)
+
+  D_V_AGENT_INABILITIES (Oracle: 3,69 тыс) (PostgreSQL: 3,69 тыс):
+          D_AGENT_INABILITIES (Oracle: 3,69 тыс) (PostgreSQL: 3,69 тыс)
+          D_INABILITY_TYPES (Oracle: 6) (PostgreSQL: 6)
+          D_INABILITY_STATUSES (Oracle: 4) (PostgreSQL: 4)
+          D_INABILITY_GROUPS (Oracle: 4) (PostgreSQL: 4)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_AGENT_CATEGORIES (Oracle: 1,32 тыс) (PostgreSQL: 1,29 тыс):
+          D_AGENT_CATEGORIES (Oracle: 1,32 тыс) (PostgreSQL: 1,30 тыс)
+          D_CATEGORIES (Oracle: 107) (PostgreSQL: 107)
+
+  D_V_AGENT_CONSITUTIONS (Oracle: 12,26 тыс) (PostgreSQL: 12,11 тыс):
+          D_AGENT_CONSITUTION_SPS (Oracle: 36,89 тыс) (PostgreSQL: 36,67 тыс)
+          D_ANTHROP (Oracle: 132) (PostgreSQL: 132)
+          D_AGENT_CONSITUTIONS (Oracle: 12,26 тыс) (PostgreSQL: 12,16 тыс)
+          D_CONSTITUTIONS (Oracle: 9) (PostgreSQL: 9)
+
+  D_V_AGENT_CONSITUTION_SPS (Oracle: 36,89 тыс) (PostgreSQL: 36,59 тыс):
+          D_RES_INTERPRETATION (Oracle: 40) (PostgreSQL: 40)
+          D_AGENT_CONSITUTION_SPS (Oracle: 36,89 тыс) (PostgreSQL: 36,67 тыс)
+          D_ANTHROP (Oracle: 132) (PostgreSQL: 132)
+          D_MEASURES (Oracle: 2,68 тыс) (PostgreSQL: 2,68 тыс)
+          D_LATERALITY (Oracle: 4) (PostgreSQL: 4)
+
+  D_V_PERSMEDCARD_FIO (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+
+  D_V_NR_REMOVE_REASONS (Oracle: 151) (PostgreSQL: 115):
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_NOS_REGISTRS (Oracle: 58) (PostgreSQL: 49):
+          D_NOS_REGISTRS (Oracle: 90) (PostgreSQL: 90)
+
+  D_V_REPORTS (Oracle: 8,93 тыс) (PostgreSQL: 5,91 тыс):
+          D_REPORTS (Oracle: 8,94 тыс) (PostgreSQL: 8,94 тыс)
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+
+  D_V_REPORT_PARAMS (Oracle: 38,31 тыс) (PostgreSQL: 26,02 тыс):
+          D_REPORT_PARAMS (Oracle: 38,46 тыс) (PostgreSQL: 38,45 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_MKB10.CHECK_CODE_IN_RANGE
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_R_SSZ_REAS_PEREC.ADD
+    D_PKG_R_SSZ_REAS_PEREC.UPD
+    D_PKG_R_SSZ_REAS_PEREC.DEL
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_CONTACTS.GET_ACTUAL
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_CONSITUTIONS.GET_ACTUAL_ON_DATE
+    D_PKG_NR_REQUEST.GEN_NUMB
+    D_PKG_NR_REQUEST.SET_STATUS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="LPUDICT" composition="GRID_NAME"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+    D_STRAGG
+

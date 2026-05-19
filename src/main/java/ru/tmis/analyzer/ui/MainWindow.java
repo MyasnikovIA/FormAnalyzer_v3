@@ -569,8 +569,6 @@ public class MainWindow extends JFrame {
         });
     }
 
-    // MainWindow.java - метод runAnalysis
-
     private void runAnalysis(List<String> formsToAnalyze) throws Exception {
         appendLog("=".repeat(80));
         appendLog("=== ЗАПУСК АНАЛИЗА ФОРМ ===");
@@ -606,7 +604,8 @@ public class MainWindow extends JFrame {
 
         analyzer.setFormAnalyzedCallback(formInfo -> {
             try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                ru.tmis.analyzer.core.report.ReportGenerator reportGen =
+                        new ru.tmis.analyzer.core.report.ReportGenerator(settings.getOutputDir(), config);
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
 

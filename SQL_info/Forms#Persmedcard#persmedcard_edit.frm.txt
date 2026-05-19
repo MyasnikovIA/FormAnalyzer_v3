@@ -1,0 +1,438 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Persmedcard/persmedcard_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Persmedcard\persmedcard_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAltay =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAltay\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Persmedcard\persmedcard_edit.d\view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_edit.d\foms_request.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKhabarovsk\Persmedcard\persmedcard_edit.d\view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMoscowNIIBlohina\Persmedcard\persmedcard_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsMoscowNIIBlohina\Persmedcard\persmedcard_edit.d\view.dfrm
+
+     ===== UserFormsNiiSerb =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsNiiSerb\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+     ===== UserFormsPrimorie =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_edit.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsPrimorie\Persmedcard\persmedcard_edit.d\view.dfrm
+
+     ===== UserFormsRKOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Persmedcard\persmedcard_edit.d\remove_from_registry.dfrm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Persmedcard\persmedcard_edit.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Persmedcard\persmedcard_edit.d\view.dfrm
+
+     ===== UserFormsSamRMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSamRMC\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Persmedcard\persmedcard_edit.d\persmedcard_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/base
+     Agents/subscript/zaprossnils
+     Agents/subscript/enrichRequestCall
+     Persmedcard/anonym/anonym
+     Agents/subscript/accuracyDateCheck
+     Int/MedicBk/api
+     Persmedcard/subforms_fields/is_emp
+     Agents/subforms_view/polis_oms
+     Agents/subforms_view/polis_dms
+     Persmedcard/subforms_view/registration
+     Persmedcard/subforms_view/application
+     Agents/subforms_view/social_state
+     Persmedcard/subforms_view/special_case
+     Agents/subforms_view/orphan_category
+     Agents/subforms_view/agent_ability
+     Agents/subforms_view/contingent
+     Persmedcard/subforms_view/life_categories
+     Persmedcard/subforms_view/mobility_group
+     Persmedcard/subforms_view/const_care
+     Agents/subforms_view/contact
+     Persmedcard/subforms_fields/antro
+     Agents/subforms_view/consitution
+     Agents/subforms_view/pregnancy
+     Vimis/agentMonitoringVimis/agentMonitoringVimis
+     Agents/subforms_view/persdocs
+     Agents/subforms_view/addr
+     Agents/subforms_view/orphan_place
+     Agents/subforms_view/marital_state
+     Agents/subforms_view/agent_relatives_docs
+     Agents/subforms_view/agent_details
+     Agents/subforms_view/work_place
+     Agents/subforms_view/agent_lgot_tabs
+     Persmedcard/subforms_view/CAMI
+     Agents/subforms_view/decretiv_group
+     Agents/subforms_view/gr_vaccination
+     Agents/subforms_view/gr_rentgenograph
+     Agents/subforms_view/flu
+     Agents/subforms_view/names
+     Agents/subforms_fields/death
+     InformedAgreement/Patient/patient_ia_tab
+     Agents/subforms_fields/allergic_anamnes
+     Agents/subforms_fields/trf_anamnesis
+     Agents/subforms_fields/monitoring_indication_of_diagnoses
+     Agents/subforms_fields/PmcVaccinations
+     Markers/pmc_markers
+     Agents/subforms_fields/bad_habits
+     Agents/subforms_fields/inherited_diseases
+     Agents/subforms_fields/infertility
+     Agents/agent_gynec/agent_gynec_contraception
+     Agents/subforms_fields/medical_reports
+     /Forms/MentalHistory/mental_history.frm
+
+Список вызываемых форм в JS:
+     Persmedcard/pmc_regional_privs/pmc_regional_privs_edit.frm
+     NosRegistrs/registr_ssz.frm
+     Agents/agent_relatives/agent_relatives_add.frm
+     Agents/subforms_fields/data_from_edit.frm
+
+SQL ЗАПРОСЫ (24):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_FED_NATIONALITIES
+    D_V_EX_SYSTEMS
+    D_V_EX_SYSTEM_VALUES
+    D_V_PERSMEDCARD
+    D_V_INSURANCE_COMPANIES_BASE
+    D_V_GEOGRAFY_BASE
+    D_V_AGENT_PERSDOCS
+    D_V_PERSDOCTYPES
+    D_V_COUNTRIES
+    D_V_PERSMEDCARD_EXTERNAL_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_COUNTRIES_BASE
+    D_V_AGENT_ADDRS
+    D_V_GEOGRAFY
+    D_V_AGENT_CONTACTS_BASE
+    D_V_NR_PATIENTS
+    D_V_NR_REMOVE_REASONS
+    D_V_NOS_REGISTRS
+    D_V_R_SSZ_OUT
+    D_V_AGENTS_BASE
+    D_V_BJ_BULLETIN_CONTENTS_BASE
+    D_V_ZNO_DATA
+    D_V_ZNO_DATA_REGISTR_OUT
+    D_V_PMC_BLOODGROUPE_CHRON_BASE
+    D_V_AGENT_POLIS_BASE
+    D_V_AGENT_GYNEC
+    D_V_AGENT_PSY_ANAMNESIS
+    D_V_LPU_BASE
+    D_V_URPRIVS
+    D_V_AGENT_ORPH_CATEGORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FED_NATIONALITIES
+    D_EX_SYSTEMS
+    D_EX_SYSTEM_VALUES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_INSURANCE_COMPANIES
+    D_GEOGRAFY
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+    D_MASKS
+    D_PERSMEDCARD_EXTERNAL
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_GEOGRAFYTYPES
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_NR_PATIENTS
+    D_NOS_REGISTRS
+    D_LPUDICT
+    D_MKB10
+    D_NR_REMOVE_REASONS
+    D_R_SSZ_OUT
+    D_BJ_BULLETIN_CONTENTS
+    D_ZNO_DATA
+    D_ONKO_AFFECTED_SIDE
+    D_ONKO_MULTI_PRIM
+    D_ONKO_CIRCUMSTANCES
+    D_ONKO_MORPH_TYPES
+    D_ONKO_TNM_T
+    D_ONKO_TNM_N
+    D_ONKO_TNM_M
+    D_ONKO_STAGES
+    D_JOBTITLES
+    D_ONKO_REGISTR_KINDS
+    D_ZNO_DATA_CL_GROUPS
+    D_ONKO_DIFFERENTIATION
+    D_ONKO_CLINICAL_GROUPS
+    D_ONKO_MORPH_TYPES_ICDO3
+    D_ONKO_TOPIC_TYPES_ICDO3
+    D_ONKO_TUMOR_STATUSES
+    D_ONKO_FORM_CRIZ
+    D_ONKO_MIELPHASES
+    D_R_ONKO_GIST_GROUPS
+    D_ICCC_3
+    D_R_ONKO_VISIT_CAUSE
+    D_SOURCE_MED_INF
+    D_CHAR_PROCESS_DIS
+    D_ONKO_CLASSIFICATION
+    D_ONKO_ANAT_LOCAL
+    D_R_ONKO_TNM_EXTRA
+    D_ONKO_LATERALITY
+    D_ONKO_LAB_RESEARCH
+    D_ZNO_DATA_REGISTR_OUT
+    D_PMC_BLOODGROUPE_CHRON
+    D_AGENT_POLIS
+    D_AGENT_GYNEC
+    D_DIRECTORIES_DATA_VER
+    D_AGENT_PSY_ANAMNESIS
+    D_LPU
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+    D_AGENT_ORPH_CATEGORIES
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_FED_NATIONALITIES (Oracle: 187) (PostgreSQL: 187):
+          D_FED_NATIONALITIES (Oracle: 187) (PostgreSQL: 187)
+
+  D_V_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512):
+          D_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512)
+
+  D_V_EX_SYSTEM_VALUES (Oracle: 492,37 тыс) (PostgreSQL: 488,44 тыс):
+          D_EX_SYSTEM_VALUES (Oracle: 492,37 тыс) (PostgreSQL: 488,44 тыс)
+
+  D_V_PERSMEDCARD (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_BLOODGROUPE (Oracle: 10) (PostgreSQL: 10)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_RHESUS (Oracle: 5) (PostgreSQL: 5)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+
+  D_V_INSURANCE_COMPANIES_BASE (Oracle: 944) (PostgreSQL: 919):
+          D_INSURANCE_COMPANIES (Oracle: 944) (PostgreSQL: 944)
+
+  D_V_GEOGRAFY_BASE (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн):
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+
+  D_V_AGENT_PERSDOCS (Oracle: 291,90 тыс) (PostgreSQL: ошибка):
+          D_AGENT_PERSDOCS (Oracle: 291,90 тыс) (PostgreSQL: 291,68 тыс)
+          D_PERSDOCTYPES (Oracle: 51) (PostgreSQL: 51)
+          D_COUNTRIES (Oracle: 264) (PostgreSQL: 264)
+          D_NORESIDENT_STATUS (Oracle: 8) (PostgreSQL: 8)
+
+  D_V_PERSDOCTYPES (Oracle: 51) (PostgreSQL: 36):
+          D_PERSDOCTYPES (Oracle: 51) (PostgreSQL: 51)
+          D_MASKS (Oracle: 121) (PostgreSQL: 121)
+
+  D_V_COUNTRIES (Oracle: 264) (PostgreSQL: 259):
+          D_COUNTRIES (Oracle: 264) (PostgreSQL: 264)
+
+  D_V_PERSMEDCARD_EXTERNAL_BASE (Oracle: 142) (PostgreSQL: 141):
+          D_PERSMEDCARD_EXTERNAL (Oracle: 142) (PostgreSQL: 141)
+
+  D_V_PERSMEDCARD_BASE (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+
+  D_V_COUNTRIES_BASE (Oracle: 264) (PostgreSQL: 259):
+          D_COUNTRIES (Oracle: 264) (PostgreSQL: 264)
+
+  D_V_AGENT_ADDRS (Oracle: 587,98 тыс) (PostgreSQL: ошибка):
+          D_AGENT_ADDRS (Oracle: 587,98 тыс) (PostgreSQL: 587,91 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+          D_RAIONS (Oracle: 147) (PostgreSQL: 146)
+
+  D_V_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн):
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+          D_GEOGRAFYTYPES (Oracle: 714) (PostgreSQL: 714)
+
+  D_V_AGENT_CONTACTS_BASE (Oracle: 64,60 тыс) (PostgreSQL: ошибка):
+          D_AGENT_CONTACTS (Oracle: 64,60 тыс) (PostgreSQL: 64,55 тыс)
+          D_CONTACT_TYPES (Oracle: 105) (PostgreSQL: 105)
+
+  D_V_NR_PATIENTS (Oracle: 8,56 тыс) (PostgreSQL: 8,54 тыс):
+          D_NR_PATIENTS (Oracle: 8,56 тыс) (PostgreSQL: 8,54 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_NOS_REGISTRS (Oracle: 90) (PostgreSQL: 90)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_NR_REMOVE_REASONS (Oracle: 151) (PostgreSQL: 115):
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_NOS_REGISTRS (Oracle: 58) (PostgreSQL: 49):
+          D_NOS_REGISTRS (Oracle: 90) (PostgreSQL: 90)
+
+  D_V_R_SSZ_OUT (Oracle: 72) (PostgreSQL: 72):
+          D_R_SSZ_OUT (Oracle: 72) (PostgreSQL: 72)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_AGENTS_BASE (Oracle: 1,58 млн) (PostgreSQL: 1,56 млн):
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_BJ_BULLETIN_CONTENTS_BASE (Oracle: 11,68 тыс) (PostgreSQL: 11,62 тыс):
+          D_BJ_BULLETIN_CONTENTS (Oracle: 11,68 тыс) (PostgreSQL: 11,62 тыс)
+
+  D_V_ZNO_DATA (Oracle: 1,18 тыс) (PostgreSQL: 1,17 тыс):
+          D_ZNO_DATA (Oracle: 1,18 тыс) (PostgreSQL: 1,17 тыс)
+          D_ONKO_AFFECTED_SIDE (Oracle: 80) (PostgreSQL: 80)
+          D_ONKO_MULTI_PRIM (Oracle: 80) (PostgreSQL: 80)
+          D_ONKO_CIRCUMSTANCES (Oracle: 114) (PostgreSQL: 114)
+          D_ONKO_MORPH_TYPES (Oracle: 21,92 тыс) (PostgreSQL: 21,92 тыс)
+          D_ONKO_TNM_T (Oracle: 380) (PostgreSQL: 380)
+          D_ONKO_TNM_N (Oracle: 224) (PostgreSQL: 224)
+          D_ONKO_TNM_M (Oracle: 81) (PostgreSQL: 81)
+          D_ONKO_STAGES (Oracle: 313) (PostgreSQL: 313)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_JOBTITLES (Oracle: 8,19 тыс) (PostgreSQL: 8,19 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_ONKO_REGISTR_KINDS (Oracle: 64) (PostgreSQL: 64)
+          D_ZNO_DATA_CL_GROUPS (Oracle: 1,57 тыс) (PostgreSQL: 1,56 тыс)
+          D_ONKO_DIFFERENTIATION (Oracle: 85) (PostgreSQL: 85)
+          D_ONKO_CLINICAL_GROUPS (Oracle: 81) (PostgreSQL: 81)
+          D_ONKO_MORPH_TYPES_ICDO3 (Oracle: 3,46 тыс) (PostgreSQL: 3,46 тыс)
+          D_ONKO_TOPIC_TYPES_ICDO3 (Oracle: 1,41 тыс) (PostgreSQL: 1,41 тыс)
+          D_ONKO_TUMOR_STATUSES (Oracle: 176) (PostgreSQL: 176)
+          D_ONKO_FORM_CRIZ (Oracle: 5) (PostgreSQL: 5)
+          D_ONKO_MIELPHASES (Oracle: 3) (PostgreSQL: 3)
+          D_R_ONKO_GIST_GROUPS (Oracle: 425) (PostgreSQL: 425)
+          D_ICCC_3 (Oracle: 172,69 тыс) (PostgreSQL: 172,69 тыс)
+          D_R_ONKO_VISIT_CAUSE (Oracle: 232) (PostgreSQL: 232)
+          D_SOURCE_MED_INF (Oracle: 7) (PostgreSQL: 7)
+          D_CHAR_PROCESS_DIS (Oracle: 1,57 тыс) (PostgreSQL: 1,57 тыс)
+          D_ONKO_CLASSIFICATION (Oracle: 3) (PostgreSQL: 3)
+          D_ONKO_ANAT_LOCAL (Oracle: 1,24 тыс) (PostgreSQL: 1,24 тыс)
+          D_R_ONKO_TNM_EXTRA (Oracle: 5) (PostgreSQL: 5)
+          D_ONKO_LATERALITY (Oracle: 3) (PostgreSQL: 3)
+          D_ONKO_LAB_RESEARCH (Oracle: 2,90 тыс) (PostgreSQL: 2,90 тыс)
+
+  D_V_ZNO_DATA_REGISTR_OUT (Oracle: 219) (PostgreSQL: 219):
+          D_ZNO_DATA_REGISTR_OUT (Oracle: 219) (PostgreSQL: 219)
+          D_NR_REMOVE_REASONS (Oracle: 361) (PostgreSQL: 361)
+
+  D_V_PMC_BLOODGROUPE_CHRON_BASE (Oracle: 2,27 тыс) (PostgreSQL: 2,14 тыс):
+          D_PMC_BLOODGROUPE_CHRON (Oracle: 2,28 тыс) (PostgreSQL: 2,27 тыс)
+
+  D_V_AGENT_POLIS_BASE (Oracle: 798,34 тыс) (PostgreSQL: 798,06 тыс):
+          D_AGENT_POLIS (Oracle: 798,34 тыс) (PostgreSQL: 798,28 тыс)
+
+  D_V_AGENT_GYNEC (Oracle: 1,73 тыс) (PostgreSQL: 1,71 тыс):
+          D_AGENT_GYNEC (Oracle: 1,73 тыс) (PostgreSQL: 1,71 тыс)
+          D_DIRECTORIES_DATA_VER (Oracle: 48,97 тыс) (PostgreSQL: 48,97 тыс)
+
+  D_V_AGENT_PSY_ANAMNESIS (Oracle: 996) (PostgreSQL: 971):
+          D_AGENT_PSY_ANAMNESIS (Oracle: 996) (PostgreSQL: 976)
+
+  D_V_LPU_BASE (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+
+  D_V_URPRIVS (Oracle: 44,92 млн) (PostgreSQL: 295,81 тыс):
+          D_URPRIVS (Oracle: 59,65 млн) (PostgreSQL: 59,42 млн)
+          D_USERS (Oracle: 5,63 тыс) (PostgreSQL: 5,61 тыс)
+          D_USERROLES (Oracle: 1,23 млн) (PostgreSQL: 1,23 млн)
+
+  D_V_AGENT_ORPH_CATEGORIES (Oracle: 436) (PostgreSQL: 431):
+          D_AGENT_ORPH_CATEGORIES (Oracle: 436) (PostgreSQL: 431)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_STD.FRM_D
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.SET_VAL
+    D_PKG_NR_REQUEST.ADD
+    D_PKG_R_SSZ_OUT.ADD
+    D_PKG_NR_REQUEST.UPD
+    D_PKG_R_SSZ_OUT.UPD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB_UNKNOWN
+    D_PKG_PERSMEDCARD.DEL_CARD_NUMB_UNKNOWN
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_PERSMEDCARD.CHECK_ALL
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+    D_PKG_AGENT_PSY_ANAMNESIS.GET_LAST
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_URPRIVS.CHECK_EMP_BPPRIV
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_VIEW_EMPLOYERS_ACTION.ADD
+    D_PKG_AGENT_POLIS.ADD
+    D_PKG_USERS.GET_ID
+    D_PKG_PMC_CARD_LOCATIONS.ADD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB
+    D_PKG_PERSMEDCARD.UPD_FULL
+    D_PKG_STD.FRM_DT
+    D_PKG_PERSMEDCARD.SGCC_MESSAGE
+    D_PKG_PERSMEDCARD.UPD_ANTHRO
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgnPersDocsCitizCheck
+    PMC_GEN_NUMB_UNKNOWN
+    PMC_UPD_UNKNOWN
+    SszAutoCloseNoticeDeath
+    AgentInfChangeLN
+    AgentFIOadd
+    TransferENP
+    AgentDeathDateCheck
+    ShowSignByAge
+    GenAnonimNumb
+    AgentAddrIsReg
+    GenEmployersNumb
+    hideFERZLButton
+    MaxAllowAge
+    WEBIOMED_hide
+    MedicBK_hide
+    VisibleStatusLgot
+    IntegrationEnabled
+    CheckFor_UNKNOWN
+    CheckPMC_SNILS
+    FrlloManualSend
+    SpecLpuType
+    hideInfoMax
+    LogEmployersAction
+    PmcGetPolicOMC
+    mgfoms/erzl
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="GEOGRAFY" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:PMC_REGIONAL_PRIVS  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+    D_P_EXC
+    D_INSERT_ID
+

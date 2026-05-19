@@ -1,0 +1,42 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Pregnancy/link_with_diseasecase.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Pregnancy\link_with_diseasecase.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Pregnancy/preg_diseasecase_select.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_PREGNANCY
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_PREGNANCY
+    D_PREGNANCY_ABORT_REASON
+    D_PREGNANCY_OUTCOMES
+    D_LPUDICT
+    D_FERT_METHODS
+    D_MKB10
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_AGENT_PREGNANCY (Oracle: 5,67 тыс) (PostgreSQL: 5,60 тыс):
+          D_AGENT_PREGNANCY (Oracle: 5,67 тыс) (PostgreSQL: 5,60 тыс)
+          D_PREGNANCY_ABORT_REASON (Oracle: 171) (PostgreSQL: 171)
+          D_PREGNANCY_OUTCOMES (Oracle: 2,28 тыс) (PostgreSQL: 2,28 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_FERT_METHODS (Oracle: 49) (PostgreSQL: 49)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DISEASECASES.SET_PREGNANCY
+

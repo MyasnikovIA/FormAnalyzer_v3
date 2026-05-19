@@ -1,0 +1,77 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/Labmed/labmed_analysis_mass_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\Labmed\labmed_analysis_mass_call.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\Reports\Labmed\labmed_analysis_mass_call.d\script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_SERVICES_BASE
+    D_V_VISITS
+    D_V_LABMED_PATJOUR_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_VISITS_BASE
+    D_V_DIRECTION_SERVICE_CONTROL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_SERVICES
+    D_DIRECTIONS
+    D_SERVICES
+    D_VISITS
+    D_LABMED_PATJOUR
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_DIRECTION_SERVICES_BASE (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+  D_V_DIRECTIONS_BASE (Oracle: 373,66 тыс) (PostgreSQL: 340,75 тыс):
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+
+  D_V_SERVICES_BASE (Oracle: 51,01 тыс) (PostgreSQL: 50,83 тыс):
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+
+  D_V_VISITS (Oracle: 233,40 тыс) (PostgreSQL: 220,49 тыс):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_VISITS (Oracle: 233,49 тыс) (PostgreSQL: 232,76 тыс)
+
+  D_V_LABMED_PATJOUR_BASE (Oracle: 308,89 тыс) (PostgreSQL: 301,78 тыс):
+          D_LABMED_PATJOUR (Oracle: 308,89 тыс) (PostgreSQL: 308,12 тыс)
+
+  D_V_PERSMEDCARD_BASE (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+
+  D_V_VISITS_BASE (Oracle: 233,40 тыс) (PostgreSQL: 220,49 тыс):
+          D_VISITS (Oracle: 233,49 тыс) (PostgreSQL: 232,76 тыс)
+
+  D_V_DIRECTION_SERVICE_CONTROL (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_EXT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_STR
+    D_CL_ID
+

@@ -1,0 +1,558 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Lis/Dirline/dirline_order_alt.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Lis\Dirline\dirline_order_alt.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlaniaSKMMC =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlaniaSKMMC\Lis\Dirline\dirline_order_alt.d\data.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Lis\Dirline\dirline_order_alt.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKaliningrad\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsRostov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsSaratov =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Lis\Dirline\dirline_order_alt.d\script.dfrm
+
+     ===== UserFormsVolgograd =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\data.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVolgograd\Lis\Dirline\dirline_order_alt.d\view.dfrm
+
+
+SubForm:
+     Lis/Utils/comments_utils
+     Lis/Utils/grid_utils
+     Lis/Barcode/subforms/barcode_utils
+     Lis/Samples/subforms/ref_char_val_by_sample
+     Lis/Dirline/subforms/dirline_research_copy_option
+     Lis/_ModularSubforms/patient_death_check
+     Lis/Patients/subforms/patient_select
+     Lis/Dirline/subforms/dirline_order/direction_comm_postponed
+     Lis/Dirline/subforms/direction_params
+     Lis/Research/subforms/research_grid_alt
+     Lis/Dirline/subforms/dirline_order/direction_refchars
+     Lis/Dirline/subforms/dirline_order/direction_results
+     Lis/Dirline/subforms/getParamsForPaymentKind
+     Directions/service_frequency
+
+Список вызываемых форм в JS:
+     Lis/Dirline/select_price.frm
+     OuterDirections/outerdirections_view_d3.frm
+     Lis/Dirline/forms/select_meth_partners.frm
+     Labmed/LabmedSamples/labmed_ref_char_edit.frm
+     Lis/Dirline/forms/schedule.frm
+     Directions/select_patient_ami_directs.frm
+     Directions/select_contract_by_pk.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="PopupDirline"
+    └── "Сбросить"
+
+SQL ЗАПРОСЫ (23):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_PAYMENT_KIND_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_LABMED_ANALYZ_RESEARCH
+    D_V_LABMED_ANALYZE
+    D_V_SERVICES_BASE
+    D_V_LABMED_DIRLINE_ORDER
+    D_V_LABMED_RESEARCH_METHODS
+    D_V_LPUDICT_BASE
+    D_V_LPU
+    D_V_PRICELISTS
+    D_V_PRICELIST_SERVS
+    D_V_LABMED_ANALYZE_BASE
+    D_V_LPU_SERVICES
+    D_V_LABMED_RESEARCH
+    D_V_LABMED_METHOD_MATERIALS
+    D_V_LABMED_RESEARCH_NEW_LIS
+    D_V_LABMED_METHOD_MAT_CONTS
+    D_V_HOSP_HISTORIES_ALL
+    D_V_HOSP_HISTORY_DEPS
+    D_V_LBM_BARCODE_SETTINGS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_CONTRACTS_BASE
+    D_V_CONTR_AMI_DIRECTS_PMC
+    D_V_LABMED_DIR_BY_SAMPLE
+    D_V_DIRECTIONS
+    D_V_DIRECTION_SERVICES
+    D_V_LABMED_DIRECTION_LINE
+    D_V_LBM_SAMPLE_DIRLINE
+    D_V_LABMED_DIRECTION_LINE_OUT
+    D_V_OUTER_DIRECTIONS_BS
+    D_V_LABMED_SAMPLES
+    D_V_AGENTS
+    D_V_EMPLOYERS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_PERSMEDCARD_BASE
+    D_V_UNITPROPS_BASE
+    D_V_UNITPROP_VALUES
+    D_V_LABMED_TEMPLATE_COMM
+    D_V_LBM_TMPLT_COMM_LINK_BASE
+    D_V_VISITPURPOSES_BASE
+    D_V_LABMED_RESEARCH_METHODS_BS
+    D_V_HOSP_HISTORIES_BASE
+    D_V_HOSP_HISTORY_DEPS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PAYMENT_KIND
+    D_DIRECTION_SERVICES
+    D_LABMED_ANALYZ_RESEARCH
+    D_LABMED_ANALYZE
+    D_SERVICES
+    D_LABMED_DIRECTION_LINE
+    D_DIRECTIONS
+    D_LABMED_RESEARCH
+    D_LABMED_RESEARCH_METHODS
+    D_LBM_DIRLINE_STATUSES
+    D_LBM_SAMPLE_DIRLINE
+    D_LABMED_SAMPLES
+    D_LABMED_BIOMATERIAL
+    D_AGENTS
+    D_LPUDICT
+    D_LPU
+    D_GEOGRAFY
+    D_PRICELIST_DMS
+    D_DIVISIONS
+    D_CONTRACTS
+    D_PRICELISTS
+    D_PRICELIST_SERV_DMS
+    D_SERVICES_STR
+    D_PRICELIST_SERVS
+    D_SERVTYPES
+    D_PRICELIST_SERVS_DEGREES
+    D_SKILL_CATEGORIES
+    D_DEGREES
+    D_SERVPROFILES
+    D_PF_CATEGORIES
+    D_LPU_SERVICES
+    D_FED_SERVICES
+    D_LBM_RESEARCH_STANDART
+    D_LABMED_RSRCH_GROUPS
+    D_LABMED_METHOD_MATERIALS
+    D_LABMED_METHOD_MAT_CONTS
+    D_LABMED_CONTAINERS
+    D_HOSP_HISTORIES
+    D_AGENT_NAMES
+    D_HOSP_HISTORY_DEPS
+    D_DEPS
+    D_DEPS_TYPES
+    D_MKB10
+    D_HOSP_RESULTS
+    D_KSGCODES
+    D_BED_TYPES
+    D_EMPLOYERS
+    D_VMP
+    D_HOSP_OUTCOMES
+    D_MED_THERAPY_SCHEMES_DESC
+    D_MED_THERAPY_SCHEMES
+    D_ALV
+    D_SCALE_REHAB
+    D_LBM_BARCODE_SETTINGS
+    D_MEASURES
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_PERSMEDCARD
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MESES
+    D_HOSP_HOURS
+    D_OUTER_DIRECTIONS
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_VISITKINDS
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_DIR_ADD_FIELD
+    D_EX_SYSTEMS
+    D_EX_SYSTEM_VALUES
+    D_EX_SYSTEM_VALUES_SP
+    D_LABMED_LOCUS
+    D_LBM_SAMPLE_STATUSES
+    D_LABMED_PATOL_CHAR
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_CONTRACT_PAYMENTS
+    D_DIR_SERV_PAYMENTS
+    D_UNITPROPS
+    D_UNITPROP_VALUES
+    D_LABMED_TEMPLATE_COMM
+    D_LBM_TMPLT_COMM_LINK
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_PAYMENT_KIND_BASE (Oracle: 165) (PostgreSQL: 100):
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+
+  D_V_DIRECTION_SERVICES_BASE (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+  D_V_LABMED_ANALYZ_RESEARCH (Oracle: 4,45 тыс) (PostgreSQL: 1,82 тыс):
+          D_LABMED_ANALYZ_RESEARCH (Oracle: 4,45 тыс) (PostgreSQL: 4,43 тыс)
+
+  D_V_LABMED_ANALYZE (Oracle: 2,93 тыс) (PostgreSQL: 1,29 тыс):
+          D_LABMED_ANALYZE (Oracle: 2,93 тыс) (PostgreSQL: 2,91 тыс)
+
+  D_V_SERVICES_BASE (Oracle: 51,01 тыс) (PostgreSQL: 50,83 тыс):
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+
+  D_V_LABMED_DIRLINE_ORDER (Oracle: 311,73 тыс) (PostgreSQL: 303,16 тыс):
+          D_LABMED_DIRECTION_LINE (Oracle: 333,60 тыс) (PostgreSQL: 332,78 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 5,98 тыс)
+          D_LABMED_RESEARCH_METHODS (Oracle: 4,69 тыс) (PostgreSQL: 4,66 тыс)
+          D_LBM_DIRLINE_STATUSES (Oracle: 10) (PostgreSQL: 10)
+          D_LBM_SAMPLE_DIRLINE (Oracle: 338,84 тыс) (PostgreSQL: 338,02 тыс)
+          D_LABMED_SAMPLES (Oracle: 289,28 тыс) (PostgreSQL: 288,56 тыс)
+          D_LABMED_BIOMATERIAL (Oracle: 167) (PostgreSQL: 164)
+
+  D_V_LABMED_RESEARCH_METHODS (Oracle: 4,32 тыс) (PostgreSQL: 1,87 тыс):
+          D_LABMED_RESEARCH_METHODS (Oracle: 4,69 тыс) (PostgreSQL: 4,66 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_LPUDICT_BASE (Oracle: 15,31 тыс) (PostgreSQL: 14,52 тыс):
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс):
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+
+  D_V_PRICELISTS (Oracle: 408) (PostgreSQL: 328):
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+          D_PRICELIST_DMS (Oracle: 176) (PostgreSQL: 176)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_CONTRACTS (Oracle: 12,20 тыс) (PostgreSQL: 12,13 тыс)
+          D_PRICELISTS (Oracle: 412) (PostgreSQL: 412)
+
+  D_V_PRICELIST_SERVS (Oracle: 6,57 тыс) (PostgreSQL: 5,94 тыс):
+          D_PRICELIST_SERV_DMS (Oracle: 2,41 тыс) (PostgreSQL: 2,41 тыс)
+          D_SERVICES_STR (Oracle: 3,66 тыс) (PostgreSQL: 3,64 тыс)
+          D_PRICELIST_SERVS (Oracle: 6,58 тыс) (PostgreSQL: 6,58 тыс)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_SERVTYPES (Oracle: 13) (PostgreSQL: 13)
+          D_PRICELIST_SERVS_DEGREES (Oracle: 145) (PostgreSQL: 145)
+          D_SKILL_CATEGORIES (Oracle: 12) (PostgreSQL: 12)
+          D_DEGREES (Oracle: 4) (PostgreSQL: 4)
+          D_SERVPROFILES (Oracle: 145) (PostgreSQL: 145)
+          D_PF_CATEGORIES (Oracle: 65) (PostgreSQL: 65)
+          D_LPU_SERVICES (Oracle: 49,16 тыс) (PostgreSQL: 49,09 тыс)
+
+  D_V_LABMED_ANALYZE_BASE (Oracle: 2,93 тыс) (PostgreSQL: 1,29 тыс):
+          D_LABMED_ANALYZE (Oracle: 2,93 тыс) (PostgreSQL: 2,91 тыс)
+
+  D_V_LPU_SERVICES (Oracle: 49,08 тыс) (PostgreSQL: 21,13 тыс):
+          D_LPU_SERVICES (Oracle: 49,16 тыс) (PostgreSQL: 49,09 тыс)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_SERVTYPES (Oracle: 13) (PostgreSQL: 13)
+          D_SERVPROFILES (Oracle: 145) (PostgreSQL: 145)
+          D_FED_SERVICES (Oracle: 11,61 тыс) (PostgreSQL: 11,60 тыс)
+
+  D_V_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 2,01 тыс):
+          D_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 5,98 тыс)
+          D_LPU_SERVICES (Oracle: 49,16 тыс) (PostgreSQL: 49,09 тыс)
+          D_LABMED_BIOMATERIAL (Oracle: 167) (PostgreSQL: 164)
+          D_LBM_RESEARCH_STANDART (Oracle: 11) (PostgreSQL: 11)
+          D_LABMED_RSRCH_GROUPS (Oracle: ошибка) (PostgreSQL: 590)
+
+  D_V_LABMED_METHOD_MATERIALS (Oracle: 5,20 тыс) (PostgreSQL: 2,29 тыс):
+          D_LABMED_METHOD_MATERIALS (Oracle: 5,89 тыс) (PostgreSQL: 5,86 тыс)
+          D_LABMED_BIOMATERIAL (Oracle: 167) (PostgreSQL: 164)
+          D_LABMED_METHOD_MAT_CONTS (Oracle: 5,96 тыс) (PostgreSQL: 5,92 тыс)
+          D_LABMED_CONTAINERS (Oracle: 645) (PostgreSQL: 643)
+
+  D_V_LABMED_RESEARCH_NEW_LIS (Oracle: 3,53 тыс) (PostgreSQL: 1,45 тыс):
+          D_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 5,98 тыс)
+          D_LPU_SERVICES (Oracle: 49,16 тыс) (PostgreSQL: 49,09 тыс)
+          D_LABMED_BIOMATERIAL (Oracle: 167) (PostgreSQL: 164)
+          D_LBM_RESEARCH_STANDART (Oracle: 11) (PostgreSQL: 11)
+          D_LABMED_RSRCH_GROUPS (Oracle: ошибка) (PostgreSQL: 590)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_LABMED_RESEARCH_METHODS (Oracle: 4,69 тыс) (PostgreSQL: 4,66 тыс)
+          D_LABMED_METHOD_MATERIALS (Oracle: 5,89 тыс) (PostgreSQL: 5,86 тыс)
+
+  D_V_LABMED_METHOD_MAT_CONTS (Oracle: 5,60 тыс) (PostgreSQL: 2,66 тыс):
+          D_LABMED_METHOD_MAT_CONTS (Oracle: 5,96 тыс) (PostgreSQL: 5,92 тыс)
+          D_LABMED_CONTAINERS (Oracle: 645) (PostgreSQL: 643)
+
+  D_V_HOSP_HISTORIES_ALL (Oracle: 122,22 тыс) (PostgreSQL: 119,51 тыс):
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+
+  D_V_HOSP_HISTORY_DEPS (Oracle: 127,91 тыс) (PostgreSQL: 124,29 тыс):
+          D_AGENT_NAMES (Oracle: 1,45 млн) (PostgreSQL: 1,45 млн)
+          D_HOSP_HISTORY_DEPS (Oracle: 127,92 тыс) (PostgreSQL: 127,79 тыс)
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DEPS_TYPES (Oracle: 83) (PostgreSQL: 83)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_HOSP_RESULTS (Oracle: 54) (PostgreSQL: 53)
+          D_KSGCODES (Oracle: 25,18 тыс) (PostgreSQL: 25,18 тыс)
+          D_BED_TYPES (Oracle: 745) (PostgreSQL: 745)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_VMP (Oracle: 26,91 тыс) (PostgreSQL: 26,91 тыс)
+          D_HOSP_OUTCOMES (Oracle: 29) (PostgreSQL: 29)
+          D_MED_THERAPY_SCHEMES_DESC (Oracle: 22,85 тыс) (PostgreSQL: 22,85 тыс)
+          D_MED_THERAPY_SCHEMES (Oracle: 11,40 тыс) (PostgreSQL: 11,40 тыс)
+          D_ALV (Oracle: 12) (PostgreSQL: 12)
+          D_SCALE_REHAB (Oracle: 73) (PostgreSQL: 73)
+
+  D_V_LBM_BARCODE_SETTINGS (Oracle: 265) (PostgreSQL: 156):
+          D_LBM_BARCODE_SETTINGS (Oracle: 267) (PostgreSQL: 267)
+          D_DIVISIONS (Oracle: 2,04 тыс) (PostgreSQL: 2,03 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_MEASURES (Oracle: 2,68 тыс) (PostgreSQL: 2,68 тыс)
+
+  D_V_CONTR_AMI_DIRECTS (Oracle: 3,93 тыс) (PostgreSQL: 3,86 тыс):
+          D_AGENT_POLIS (Oracle: 798,34 тыс) (PostgreSQL: 798,28 тыс)
+          D_CONTR_AMI_DIRECTS (Oracle: 3,93 тыс) (PostgreSQL: 3,93 тыс)
+
+  D_V_CONTRACTS_BASE (Oracle: 12,19 тыс) (PostgreSQL: 10,77 тыс):
+          D_CONTRACTS (Oracle: 12,20 тыс) (PostgreSQL: 12,13 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_CONTR_AMI_DIRECTS_PMC (Oracle: 3,93 тыс) (PostgreSQL: 3,86 тыс):
+          D_CONTR_AMI_DIRECTS (Oracle: 3,93 тыс) (PostgreSQL: 3,93 тыс)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_LABMED_DIR_BY_SAMPLE (Oracle: 309,97 тыс) (PostgreSQL: 301,40 тыс):
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_LABMED_DIRECTION_LINE (Oracle: 333,60 тыс) (PostgreSQL: 332,78 тыс)
+          D_LBM_SAMPLE_DIRLINE (Oracle: 338,84 тыс) (PostgreSQL: 338,02 тыс)
+          D_LABMED_SAMPLES (Oracle: 289,28 тыс) (PostgreSQL: 288,56 тыс)
+
+  D_V_DIRECTIONS (Oracle: 373,66 тыс) (PostgreSQL: 340,75 тыс):
+          D_VISITPLACES (Oracle: 25) (PostgreSQL: 25)
+          D_VISITS (Oracle: 233,49 тыс) (PostgreSQL: 232,76 тыс)
+          D_DIR_REG_TYPES (Oracle: 7) (PostgreSQL: 7)
+          D_SPECIALITIES (Oracle: 698) (PostgreSQL: 698)
+          D_HPK_PLAN_JOURNALS (Oracle: 19,76 тыс) (PostgreSQL: 19,66 тыс)
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+          D_MESES (Oracle: 105) (PostgreSQL: 105)
+          D_HOSP_HOURS (Oracle: 14) (PostgreSQL: 14)
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_OUTER_DIRECTIONS (Oracle: 36,15 тыс) (PostgreSQL: 36,04 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_HOSPITALIZATIONKINDS (Oracle: 22) (PostgreSQL: 22)
+          D_INJURE_KINDS (Oracle: 12) (PostgreSQL: 12)
+          D_DIRECTION_KINDS (Oracle: 110) (PostgreSQL: 110)
+          D_BED_TYPES (Oracle: 745) (PostgreSQL: 745)
+          D_HOSP_REASONS (Oracle: 32) (PostgreSQL: 32)
+          D_DIR_CANC_REASONS (Oracle: 18) (PostgreSQL: 18)
+          D_DEPDICT (Oracle: 57) (PostgreSQL: 57)
+          D_HOSPITALIZATION_TYPES (Oracle: 20) (PostgreSQL: 20)
+          D_HOSP_DIRECT_TYPES (Oracle: 5) (PostgreSQL: 5)
+          D_TRANSPORTATION_KINDS (Oracle: 13) (PostgreSQL: 13)
+          D_MED_THERAPY_SCHEMES (Oracle: 11,40 тыс) (PostgreSQL: 11,40 тыс)
+          D_DIRECTION_FORMS (Oracle: 4) (PostgreSQL: 4)
+          D_TYPE_MED_HELP (Oracle: 12) (PostgreSQL: 12)
+          D_DIRECTION_CONDITIONS (Oracle: 4) (PostgreSQL: 4)
+
+  D_V_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_SERVICES_STR (Oracle: 3,66 тыс) (PostgreSQL: 3,64 тыс)
+          D_VISITKINDS (Oracle: 58) (PostgreSQL: 57)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_SERVICES (Oracle: 51,01 тыс) (PostgreSQL: 50,97 тыс)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+          D_VISITPURPOSES (Oracle: 179) (PostgreSQL: 179)
+          D_REFERENCE_KINDS (Oracle: 14) (PostgreSQL: 14)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_REG_TYPES (Oracle: 9) (PostgreSQL: 9)
+          D_DS_SERV_STATUSES (Oracle: 5) (PostgreSQL: 5)
+          D_SCHEDULE_TIME_TYPES (Oracle: 385) (PostgreSQL: 386)
+          D_PAYMENT_KIND (Oracle: 195) (PostgreSQL: 195)
+
+  D_V_LABMED_DIRECTION_LINE (Oracle: 333,60 тыс) (PostgreSQL: 322,57 тыс):
+          D_LABMED_DIRECTION_LINE (Oracle: 333,60 тыс) (PostgreSQL: 332,78 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 5,98 тыс)
+          D_LABMED_RESEARCH_METHODS (Oracle: 4,69 тыс) (PostgreSQL: 4,66 тыс)
+          D_LBM_DIRLINE_STATUSES (Oracle: 10) (PostgreSQL: 10)
+
+  D_V_LBM_SAMPLE_DIRLINE (Oracle: 338,84 тыс) (PostgreSQL: 327,47 тыс):
+          D_LBM_SAMPLE_DIRLINE (Oracle: 338,84 тыс) (PostgreSQL: 338,02 тыс)
+          D_LABMED_SAMPLES (Oracle: 289,28 тыс) (PostgreSQL: 288,56 тыс)
+
+  D_V_LABMED_DIRECTION_LINE_OUT (Oracle: 305,85 тыс) (PostgreSQL: 296,22 тыс):
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+          D_LABMED_DIRECTION_LINE (Oracle: 333,60 тыс) (PostgreSQL: 332,78 тыс)
+          D_LABMED_RESEARCH (Oracle: 6,01 тыс) (PostgreSQL: 5,98 тыс)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+          D_DIR_ADD_FIELD (Oracle: 94,88 тыс) (PostgreSQL: 94,22 тыс)
+          D_OUTER_DIRECTIONS (Oracle: 36,15 тыс) (PostgreSQL: 36,04 тыс)
+          D_EX_SYSTEMS (Oracle: 512) (PostgreSQL: 512)
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_EX_SYSTEM_VALUES (Oracle: 492,37 тыс) (PostgreSQL: 488,44 тыс)
+          D_EX_SYSTEM_VALUES_SP (Oracle: 235,98 тыс) (PostgreSQL: 234,72 тыс)
+
+  D_V_OUTER_DIRECTIONS_BS (Oracle: 36,15 тыс) (PostgreSQL: 28,73 тыс):
+          D_OUTER_DIRECTIONS (Oracle: 36,15 тыс) (PostgreSQL: 36,04 тыс)
+
+  D_V_LABMED_SAMPLES (Oracle: 289,28 тыс) (PostgreSQL: 273,80 тыс):
+          D_LABMED_SAMPLES (Oracle: 289,28 тыс) (PostgreSQL: 288,56 тыс)
+          D_LABMED_BIOMATERIAL (Oracle: 167) (PostgreSQL: 164)
+          D_LABMED_LOCUS (Oracle: 36) (PostgreSQL: 34)
+          D_LABMED_CONTAINERS (Oracle: 645) (PostgreSQL: 643)
+          D_CABLAB (Oracle: 5,34 тыс) (PostgreSQL: 5,31 тыс)
+          D_LBM_SAMPLE_STATUSES (Oracle: 9) (PostgreSQL: 9)
+          D_LABMED_PATOL_CHAR (Oracle: 50) (PostgreSQL: 50)
+
+  D_V_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,56 млн):
+          D_GEOGRAFY (Oracle: 1,86 млн) (PostgreSQL: 1,86 млн)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+
+  D_V_EMPLOYERS (Oracle: 12,90 тыс) (PostgreSQL: 6,13 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_JOBTITLES (Oracle: 8,19 тыс) (PostgreSQL: 8,19 тыс)
+          D_SPECIALITIES (Oracle: 698) (PostgreSQL: 698)
+          D_SPECIALITIES_ED (Oracle: 174) (PostgreSQL: 173)
+          D_DEPS (Oracle: 3,33 тыс) (PostgreSQL: 3,32 тыс)
+          D_DEPS_KINDS (Oracle: 56) (PostgreSQL: 56)
+          D_USERS (Oracle: 5,63 тыс) (PostgreSQL: 5,61 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_AGENT_ESIA (Oracle: 49) (PostgreSQL: 49)
+          D_EMP_SKILL (Oracle: 637) (PostgreSQL: 635)
+          D_SKILL_CATEGORIES (Oracle: 12) (PostgreSQL: 12)
+          D_LPU (Oracle: 3,17 тыс) (PostgreSQL: 3,16 тыс)
+          D_LPUDICT (Oracle: 15,31 тыс) (PostgreSQL: 15,31 тыс)
+
+  D_V_CONTRACT_PAYMENTS_BASE (Oracle: 19,54 тыс) (PostgreSQL: 17,87 тыс):
+          D_CONTRACT_PAYMENTS (Oracle: 19,55 тыс) (PostgreSQL: 19,44 тыс)
+
+  D_V_DIR_SERV_PAYMENTS (Oracle: 768,19 тыс) (PostgreSQL: 730,18 тыс):
+          D_DIR_SERV_PAYMENTS (Oracle: 768,33 тыс) (PostgreSQL: 766,43 тыс)
+
+  D_V_PERSMEDCARD_BASE (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+
+  D_V_UNITPROPS_BASE (Oracle: 1,64 тыс) (PostgreSQL: 1,56 тыс):
+          D_UNITPROPS (Oracle: 1,64 тыс) (PostgreSQL: 1,64 тыс)
+
+  D_V_UNITPROP_VALUES (Oracle: 1,14 млн) (PostgreSQL: 1,14 млн):
+          D_UNITPROP_VALUES (Oracle: 1,14 млн) (PostgreSQL: 1,14 млн)
+
+  D_V_LABMED_TEMPLATE_COMM (Oracle: 155) (PostgreSQL: 117):
+          D_LABMED_TEMPLATE_COMM (Oracle: 155) (PostgreSQL: 155)
+
+  D_V_LBM_TMPLT_COMM_LINK_BASE (Oracle: 353) (PostgreSQL: 309):
+          D_LBM_TMPLT_COMM_LINK (Oracle: 353) (PostgreSQL: 353)
+
+  D_V_VISITPURPOSES_BASE (Oracle: 177) (PostgreSQL: 167):
+          D_VISITPURPOSES (Oracle: 179) (PostgreSQL: 179)
+
+  D_V_LABMED_RESEARCH_METHODS_BS (Oracle: 4,69 тыс) (PostgreSQL: 1,96 тыс):
+          D_LABMED_RESEARCH_METHODS (Oracle: 4,69 тыс) (PostgreSQL: 4,66 тыс)
+
+  D_V_HOSP_HISTORIES_BASE (Oracle: 121,92 тыс) (PostgreSQL: 119,26 тыс):
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+
+  D_V_HOSP_HISTORY_DEPS_BASE (Oracle: 127,91 тыс) (PostgreSQL: 124,29 тыс):
+          D_HOSP_HISTORY_DEPS (Oracle: 127,92 тыс) (PostgreSQL: 127,79 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_LABMED_SAMPLES.GET_COMP_RESEARCH
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_LBM_BARCODE_SETTINGS.GET_ACTIVE
+    D_PKG_PRICELIST_SERVS.GET_PRICE_BY_DL_ORD_PARAMS
+    D_PKG_PAYMENT_KIND.GET_ID_BY_CODE
+    D_PKG_PERSMEDCARD.GET_LATEST_ANTHROP_PARAM
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_LABMED_DIRECTION_LINE.DEL_FORCE
+    D_PKG_DIRECTION_SERVICES.DEL
+    D_PKG_DIRECTION_SERVICES.GET_PAYMENT_KIND
+
+КОНСТАНТЫ:
+    NEONAT_IS_PRIMARY
+    NEONAT_REG_DATE
+    NEONAT_REG_TIME
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchPaymentKindDefault
+    AddAnalyseToHH
+    LisHideAnalizeRsrchGroup
+    LabDirline_Order_Alt_BiomatFIX
+    LisIsPrimaryInOrder
+    LisActiveDirectionParametrs
+    LisMicrobiologyLimit
+    LisOrderCheckFieldsSemd
+    LabDirLineDoubleResearch
+    LisPrintDirInOrder
+    LisCheckScheduled
+    LabDirWeightControl
+    LabDirContractPrint
+    CreateContract
+    LisDirPaymentKindFill
+    LISVisPurpBut
+    LisLPUOutDirection
+    LabDirlineOrderDoctorCheck
+    LabDirLineCito
+    LisNetrikaReasonDir
+    LisNotificationOrder
+    LisHl7CheckResearch
+    LisHl7PartnerCode
+    DirPayAndTimeInherit
+    LisNetrNNSService
+    ;
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:VISITPURPOSES  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_NUMB
+    D_DATE
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
+

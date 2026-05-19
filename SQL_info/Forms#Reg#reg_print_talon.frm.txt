@@ -1,0 +1,41 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reg/reg_print_talon.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reg\reg_print_talon.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reg\reg_print_talon.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsSaratov =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSaratov\Reg\reg_print_talon.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTION_SERVICES
+    D_DIRECTIONS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_DIRECTION_SERVICES_BASE (Oracle: 1,10 млн) (PostgreSQL: 1,06 млн):
+          D_DIRECTION_SERVICES (Oracle: 1,10 млн) (PostgreSQL: 1,10 млн)
+
+  D_V_DIRECTIONS_BASE (Oracle: 373,66 тыс) (PostgreSQL: 340,75 тыс):
+          D_DIRECTIONS (Oracle: 373,70 тыс) (PostgreSQL: 372,03 тыс)
+
+СИСТЕМНЫЕ ОПЦИИ:
+    DayBgnTime
+    DayEndTime
+

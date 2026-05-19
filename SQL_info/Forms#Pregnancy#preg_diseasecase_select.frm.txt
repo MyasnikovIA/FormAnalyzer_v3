@@ -1,0 +1,54 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Pregnancy/preg_diseasecase_select.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Pregnancy\preg_diseasecase_select.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="P_HOSP_DISEASECASES"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_MKB10_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_DISEASECASES_BASE
+    D_V_HOSP_HISTORIES_FULL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MKB10
+    D_EMPLOYERS
+    D_AGENTS
+    D_PERSMEDCARD
+    D_DISEASECASES
+    D_HOSP_HISTORIES
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_MKB10_BASE (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс):
+          D_MKB10 (Oracle: 35,71 тыс) (PostgreSQL: 35,71 тыс)
+
+  D_V_PERSMEDCARD_BASE (Oracle: 607,17 тыс) (PostgreSQL: 585,56 тыс):
+          D_EMPLOYERS (Oracle: 12,91 тыс) (PostgreSQL: 12,90 тыс)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_PERSMEDCARD (Oracle: 607,18 тыс) (PostgreSQL: 606,78 тыс)
+
+  D_V_DISEASECASES_BASE (Oracle: 289,63 тыс) (PostgreSQL: 275,56 тыс):
+          D_DISEASECASES (Oracle: 289,72 тыс) (PostgreSQL: 289,20 тыс)
+
+  D_V_HOSP_HISTORIES_FULL (Oracle: 123,39 тыс) (PostgreSQL: 120,56 тыс):
+          D_HOSP_HISTORIES (Oracle: 123,40 тыс) (PostgreSQL: 123,32 тыс)
+

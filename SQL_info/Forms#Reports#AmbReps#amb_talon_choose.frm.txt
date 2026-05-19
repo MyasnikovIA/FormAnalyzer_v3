@@ -1,0 +1,52 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/AmbReps/amb_talon_choose.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Reports\AmbReps\amb_talon_choose.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVita\Reports\AmbReps\amb_talon_choose.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlania =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsAlania\Reports\AmbReps\amb_talon_choose.d\view.dfrm
+
+     ===== UserFormsBarsMED =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsBarsMED\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Tomsk\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsHosp =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsHosp\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsKrasnodarOD =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsKrasnodarOD\Reports\AmbReps\amb_talon_choose.d\view.dfrm
+
+     ===== UserFormsRKB3 =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKB3\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsRKOD =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRKOD\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsRkob =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRkob\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsRostov =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsRostov\Reports\AmbReps\amb_talon_choose.frm
+
+     ===== UserFormsSakhalin =====
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Reports\AmbReps\amb_talon_choose.d\script.dfrm
+        ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsSakhalin\Reports\AmbReps\amb_talon_choose.d\view.dfrm
+
+     ===== UserFormsVita =====
+        ПОЛНАЯ ЗАМЕНА: C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsVita\Reports\AmbReps\amb_talon_choose.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+

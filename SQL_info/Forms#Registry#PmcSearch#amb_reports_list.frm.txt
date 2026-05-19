@@ -1,0 +1,41 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/PmcSearch/amb_reports_list.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Registry\PmcSearch\amb_reports_list.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_EXTRA_DICT_VALUES
+    D_V_EXTRA_DICTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EXTRA_DICT_VALUES
+    D_EXTRA_DICTS
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_EXTRA_DICT_VALUES (Oracle: 51,68 тыс) (PostgreSQL: 41,84 тыс):
+          D_EXTRA_DICT_VALUES (Oracle: 52,07 тыс) (PostgreSQL: 52,05 тыс)
+          D_EXTRA_DICTS (Oracle: 3,98 тыс) (PostgreSQL: 3,97 тыс)
+
+  D_V_EXTRA_DICTS (Oracle: 3,93 тыс) (PostgreSQL: 3,41 тыс):
+          D_EXTRA_DICTS (Oracle: 3,98 тыс) (PostgreSQL: 3,97 тыс)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PmcAmbReportsDefault
+

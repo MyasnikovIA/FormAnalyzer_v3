@@ -1,0 +1,58 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_relatives/agent_relatives_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: C:\AppServ\www\5_mis_MEDDEV-151210\Forms\Agents\agent_relatives\agent_relatives_add.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agent_relatives/search_patient
+     Agents/agent_relatives/trusted
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_AGENT_RELATIVES
+    D_V_RELATIONSHIPS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+
+ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):
+
+  D_V_AGENT_RELATIVES (Oracle: 7,54 тыс) (PostgreSQL: 7,50 тыс):
+          D_FN_RELATIVES_OTHER (Oracle: 8) (PostgreSQL: 8)
+          D_FED_NSI_VERS (Oracle: 14,13 тыс) (PostgreSQL: 14,12 тыс)
+          D_FED_NSI (Oracle: 4,69 тыс) (PostgreSQL: 4,69 тыс)
+          D_LPUVERLIST_MAIN (Oracle: 1,05 тыс) (PostgreSQL: 1,05 тыс)
+          D_AGENT_RELATIVES (Oracle: 7,54 тыс) (PostgreSQL: 7,51 тыс)
+          D_RELATIONSHIPS (Oracle: 33) (PostgreSQL: 33)
+          D_AGENTS (Oracle: 1,58 млн) (PostgreSQL: 1,58 млн)
+          D_REPRESENT_LSTATUSES (Oracle: 21) (PostgreSQL: 21)
+
+  D_V_RELATIONSHIPS (Oracle: 28) (PostgreSQL: 15):
+          D_RELATIONSHIPS (Oracle: 33) (PostgreSQL: 33)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_RELATIVES_DOCS.CHECK_ACTUAL
+    D_PKG_AGENT_RELATIVES_DOCS.CLOSE_ACTUAL
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:AGENTS  composition:JURISTIC_RETURN_NAME;
+
+БРОКЕРЫ:
+    unit:AGENT_RELATIVES;
+
