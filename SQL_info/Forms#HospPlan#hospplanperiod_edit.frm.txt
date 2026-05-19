@@ -34,3 +34,52 @@ SQL ЗАПРОСЫ (3):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_P_EXC
 
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_HPK_PLANS.ADD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plans.add(numeric, numeric, numeric, timestamp, numeric, numeric, numeric)
+
+  D_PKG_HPK_PLANS.UPD:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_plans.upd(numeric, numeric, timestamp, numeric, numeric, numeric)
+
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_HPK_PLANS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+
+  D_HPK_PLANS:
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: PLAN_DATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN plan_date SET NOT NULL;
+
+    Колонка: PID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN pid SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN id SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN cid SET NOT NULL;
+

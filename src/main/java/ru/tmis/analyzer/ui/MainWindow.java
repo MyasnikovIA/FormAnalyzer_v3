@@ -1,14 +1,7 @@
-// ui/MainWindow.java
 package ru.tmis.analyzer.ui;
-import javax.swing.Timer;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
-import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
-import ru.tmis.analyzer.core.model.LLMReportContext;
 import ru.tmis.analyzer.core.log.ILogger;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.service.FormAnalyzerService;
-import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
@@ -18,7 +11,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.List;
@@ -47,6 +39,14 @@ public class MainWindow extends JFrame {
     private ExecutorService executorService;
     private RecursiveReportBuilder recursiveBuilder;
 
+
+
+    private PrintStream originalOut;
+    private PrintStream originalErr;
+    private PipedInputStream pipeIn;
+    private Thread logReader;
+
+
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
@@ -59,6 +59,15 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+                saveState();
+            }
+        });
+        redirectSystemOutToLog();
+       // Добавляем слушатель для восстановления при закрытии
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                restoreSystemOut();
                 saveState();
             }
         });
@@ -490,193 +499,6 @@ public class MainWindow extends JFrame {
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
         statusLabel.setText("Статус: Анализ запущен");
-
-        PrintStream originalOut = System.out;
-        PrintStream originalErr = System.err;
-
-        try {
-            PipedInputStream pipeIn = new PipedInputStream();
-            PipedOutputStream pipeOut = new PipedOutputStream(pipeIn);
-            PrintStream customOut = new PrintStream(pipeOut, true);
-            System.setOut(customOut);
-            System.setErr(customOut);
-
-            Thread logReader = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(pipeIn))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        final String finalLine = line;
-                        SwingUtilities.invokeLater(() -> appendLog(finalLine));
-                    }
-                } catch (IOException e) {
-                    if (!Thread.currentThread().isInterrupted()) {
-                        SwingUtilities.invokeLater(() -> appendLog("Ошибка чтения лога: " + e.getMessage()));
-                    }
-                }
-            });
-            logReader.start();
-
-            currentTask = executorService.submit(() -> {
-                try {
-                    runAnalysis(new ArrayList<>(normalizedForms));
-                } catch (Exception e) {
-                    SwingUtilities.invokeLater(() -> appendLog("ОШИБКА: " + e.getMessage()));
-                    e.printStackTrace();
-                } finally {
-                    System.setOut(originalOut);
-                    System.setErr(originalErr);
-                    logReader.interrupt();
-                    isRunning.set(false);
-                    SwingUtilities.invokeLater(() -> {
-                        startButton.setEnabled(true);
-                        stopButton.setEnabled(false);
-                        settingsButton.setEnabled(true);
-                        statusLabel.setText("Статус: Готов");
-                        if (!stopRequested) {
-                            progressBar.setString("Анализ завершен");
-                        } else {
-                            progressBar.setString("Анализ остановлен");
-                        }
-                    });
-                }
-            });
-        } catch (IOException e) {
-            appendLog("Не удалось перенаправить вывод: " + e.getMessage());
-            System.setOut(originalOut);
-            System.setErr(originalErr);
-            isRunning.set(false);
-            startButton.setEnabled(true);
-            stopButton.setEnabled(false);
-            settingsButton.setEnabled(true);
-        }
-    }
-
-    /**
-     * Сохраняет выбранные формы во временный файл для анализа
-     */
-    private void saveSelectedFormsToFile(List<String> selectedForms) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            for (String form : selectedForms) {
-                sb.append(form).append("\n");
-            }
-            Files.writeString(Paths.get("forms_list_selected.txt"), sb.toString(),
-                    java.nio.charset.StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            appendLog("Ошибка сохранения списка выбранных форм: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Запускает анализ с указанным списком форм
-     */
-    private void runAnalysis(List<String> formsToAnalyze) throws Exception {
-        appendLog("=".repeat(80));
-        appendLog("=== ЗАПУСК АНАЛИЗА ФОРМ ===");
-        appendLog("=".repeat(80));
-        appendLog("Путь к проекту: " + settings.getProjectPath());
-        appendLog("Всего форм для анализа: " + formsToAnalyze.size());
-        appendLog("");
-
-        FormAnalyzerService analyzer = new FormAnalyzerService(settings);
-
-        // Устанавливаем прямой список форм для анализа
-        Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
-        analyzer.setFormsToAnalyze(formsSet);
-
-        analyzer.setLogger(new ILogger() {
-            @Override
-            public void log(String message) { appendLog(message); }
-            @Override
-            public void error(String message) { appendLog("ОШИБКА: " + message); }
-            @Override
-            public void debug(String message) { appendLog("[DEBUG] " + message); }
-        });
-
-        analyzer.setStopCondition(() -> stopRequested);
-        analyzer.setProgressCallback((processed, total, currentForm) -> {
-            SwingUtilities.invokeLater(() -> {
-                int percent = total > 0 ? (processed * 100 / total) : 0;
-                progressBar.setValue(percent);
-                progressBar.setString(String.format("%d из %d (%.1f%%)", processed, total, (double) percent));
-                statusLabel.setText("Статус: " + currentForm);
-            });
-        });
-
-        analyzer.setFormAnalyzedCallback(formInfo -> {
-            try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();
-                reportGen.appendFormToMainReport(formInfo);
-
-                SwingUtilities.invokeLater(() -> {
-                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
-                });
-
-            } catch (IOException e) {
-                appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
-            }
-        });
-
-        List<FormInfo> results = analyzer.analyzeAllForms();
-        analyzer.clearFormsToAnalyze();
-        if (stopRequested) {
-            appendLog("Анализ остановлен пользователем");
-            if (!results.isEmpty()) {
-                appendLog("Сохранено частичных результатов: " + results.size() + " форм");
-            }
-            return;
-        }
-
-        appendLog("");
-        appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
-
-        ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-        reportGen.addAllForms(results);
-        reportGen.generateMainReport();
-        reportGen.generateSummaryReport();
-        reportGen.createMainReportHeader();
-
-        appendLog("");
-        appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
-        appendLog("Обработано форм: " + results.size());
-        appendLog("Отчеты сохранены в: " + settings.getOutputDir());
-
-        // Обновляем все дочерние формы после завершения анализа
-        SwingUtilities.invokeLater(() -> {
-            formsTreePanel.refreshAllChildForms();
-        });
-
-        if (config.isEnableLLMExport()) {
-            appendLog("=== ГЕНЕРАЦИЯ LLM ПРОМПТА ===");
-            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
-            llmGen.setStopCondition(() -> stopRequested);
-            LLMReportContext ctx = llmGen.prepareContext(results);
-            if (config.getLlmExportMode().equals("single_file")) {
-                String prompt = llmGen.generateSingleFile();
-                Path llmPath = Paths.get(settings.getOutputDir(), "llm_prompt_all_forms.md");
-                Files.writeString(llmPath, prompt);
-                appendLog("LLM промпт сохранен: " + llmPath);
-            } else {
-                List<String> files = llmGen.generateForEachForm();
-                appendLog("Создано промптов для форм: " + files.size());
-            }
-        }
-
-        // Удаляем временный файл
-        Files.deleteIfExists(Paths.get("forms_list_temp.txt"));
-
-        SwingUtilities.invokeLater(() -> {
-            int result = JOptionPane.showConfirmDialog(this,
-                    "Анализ завершен! Открыть папку с отчетами?",
-                    "Завершено", JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                openOutputDirectory();
-            }
-        });
-        SwingUtilities.invokeLater(() -> {
-            formsTreePanel.refreshTreePreservingState();
-        });
     }
 
     private void stopAnalysis() {
@@ -703,98 +525,6 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private void runAnalysis() throws Exception {
-        appendLog("=".repeat(80));
-        appendLog("=== ЗАПУСК АНАЛИЗА ФОРМ ===");
-        appendLog("=".repeat(80));
-        appendLog("Путь к проекту: " + settings.getProjectPath());
-        appendLog("");
-
-        FormAnalyzerService analyzer = new FormAnalyzerService(settings);
-
-        analyzer.setLogger(new ILogger() {
-            @Override
-            public void log(String message) { appendLog(message); }
-            @Override
-            public void error(String message) { appendLog("ОШИБКА: " + message); }
-            @Override
-            public void debug(String message) { appendLog("[DEBUG] " + message); }
-        });
-
-        analyzer.setStopCondition(() -> stopRequested);
-        analyzer.setProgressCallback((processed, total, currentForm) -> {
-            SwingUtilities.invokeLater(() -> {
-                int percent = total > 0 ? (processed * 100 / total) : 0;
-                progressBar.setValue(percent);
-                progressBar.setString(String.format("%d из %d (%.1f%%)", processed, total, (double) percent));
-                statusLabel.setText("Статус: " + currentForm);
-            });
-        });
-        analyzer.setFormAnalyzedCallback(formInfo -> {
-            try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();
-                reportGen.appendFormToMainReport(formInfo);
-
-                // Обновляем дочерние формы для проанализированной формы
-                SwingUtilities.invokeLater(() -> {
-                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
-                });
-
-            } catch (IOException e) {
-                appendLog("Ошибка сохранения промежуточного отчёта: " + e.getMessage());
-            }
-        });
-        List<FormInfo> results = analyzer.analyzeAllForms();
-
-        if (stopRequested) {
-            appendLog("Анализ остановлен пользователем");
-            if (!results.isEmpty()) {
-                appendLog("Сохранено частичных результатов: " + results.size() + " форм");
-            }
-            return;
-        }
-
-        appendLog("");
-        appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
-
-        ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-        reportGen.addAllForms(results);
-        reportGen.generateMainReport();
-        reportGen.generateSummaryReport();
-        reportGen.createMainReportHeader();
-
-        appendLog("");
-        appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
-        appendLog("Обработано форм: " + results.size());
-        appendLog("Отчеты сохранены в: " + settings.getOutputDir());
-
-        if (config.isEnableLLMExport()) {
-            appendLog("=== ГЕНЕРАЦИЯ LLM ПРОМПТА ===");
-            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
-            llmGen.setStopCondition(() -> stopRequested);
-            LLMReportContext ctx = llmGen.prepareContext(results);
-            if (config.getLlmExportMode().equals("single_file")) {
-                String prompt = llmGen.generateSingleFile();
-                Path llmPath = Paths.get(settings.getOutputDir(), "llm_prompt_all_forms.md");
-                Files.writeString(llmPath, prompt);
-                appendLog("LLM промпт сохранен: " + llmPath);
-            } else {
-                List<String> files = llmGen.generateForEachForm();
-                appendLog("Создано промптов для форм: " + files.size());
-            }
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            int result = JOptionPane.showConfirmDialog(this,
-                    "Анализ завершен! Открыть папку с отчетами?",
-                    "Завершено", JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                openOutputDirectory();
-            }
-        });
-    }
-
     private void openSettings() {
         SettingsDialog dialog = new SettingsDialog(this, settings, config);
         dialog.setVisible(true);
@@ -811,10 +541,6 @@ public class MainWindow extends JFrame {
         } catch (IOException e) {
             appendLog("Ошибка открытия директории: " + e.getMessage());
         }
-    }
-
-    private void saveFormsList() {
-        // Данные уже сохраняются в FormsTreePanel при изменениях
     }
 
     private void appendLog(String message) {
@@ -873,4 +599,59 @@ public class MainWindow extends JFrame {
         config.save();
         settings.save();
     }
+
+    /**
+     * Перенаправляет System.out и System.err в лог-панель
+     */
+    private void redirectSystemOutToLog() {
+        try {
+            // Сохраняем оригинальные потоки
+            originalOut = System.out;
+            originalErr = System.err;
+
+            // Создаем Piped потоки
+            pipeIn = new PipedInputStream();
+            PipedOutputStream pipeOut = new PipedOutputStream(pipeIn);
+            PrintStream customOut = new PrintStream(pipeOut, true);
+
+            // Перенаправляем вывод
+            System.setOut(customOut);
+            System.setErr(customOut);
+
+            // Запускаем поток чтения
+            logReader = new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(pipeIn))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        final String finalLine = line;
+                        SwingUtilities.invokeLater(() -> appendLog(finalLine));
+                    }
+                } catch (IOException e) {
+                    if (!Thread.currentThread().isInterrupted()) {
+                        SwingUtilities.invokeLater(() -> appendLog("Ошибка чтения лога: " + e.getMessage()));
+                    }
+                }
+            });
+            logReader.start();
+
+        } catch (IOException e) {
+            appendLog("Не удалось перенаправить вывод: " + e.getMessage());
+        }
+    }
+    /**
+     * Восстанавливает оригинальные потоки вывода
+     */
+    private void restoreSystemOut() {
+        if (originalOut != null) {
+            System.setOut(originalOut);
+        }
+        if (originalErr != null) {
+            System.setErr(originalErr);
+        }
+        if (logReader != null && logReader.isAlive()) {
+            logReader.interrupt();
+        }
+    }
+
+
 }

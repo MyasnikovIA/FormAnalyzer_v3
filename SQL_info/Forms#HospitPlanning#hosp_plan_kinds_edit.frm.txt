@@ -40,3 +40,142 @@ SQL ЗАПРОСЫ (2):
 БРОКЕРЫ:
     unit:HOSP_PLAN_KINDS;
 
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_HPK_JOURNAL_TYPES:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: JT_CODE
+
+  D_HPK_PLANS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+  D_HOSP_PLAN_KINDS:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+
+  D_HPK_JOURNAL_TYPES:
+    Колонка: JT_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_journal_types ALTER COLUMN jt_name SET NOT NULL;
+
+    Колонка: JT_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_journal_types ALTER COLUMN jt_code SET NOT NULL;
+
+  D_HPK_PLANS:
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: PLAN_DATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN plan_date SET NOT NULL;
+
+    Колонка: PID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN pid SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN id SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_plans ALTER COLUMN cid SET NOT NULL;
+
+  D_HOSP_PLAN_KINDS:
+    Колонка: HP_NAME
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_name SET NOT NULL;
+
+    Колонка: NUMB_GROUP
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN numb_group SET NOT NULL;
+
+    Колонка: IS_OPER
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN is_oper SET NOT NULL;
+
+    Колонка: HAS_PAYMENT_CONSTRAINTS
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_payment_constraints SET NOT NULL;
+
+    Колонка: HAS_LIMITS
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_limits SET NOT NULL;
+
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: HAS_MKB_CONSTRAINTS
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN has_mkb_constraints SET NOT NULL;
+
+    Колонка: HP_CODE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_code SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN id SET NOT NULL;
+
+    Колонка: JOURNAL_TYPE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN journal_type SET NOT NULL;
+
+    Колонка: OPEN_DATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN open_date SET NOT NULL;
+
+    Колонка: CID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN cid SET NOT NULL;
+
+    Колонка: HP_BLOCK
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hosp_plan_kinds ALTER COLUMN hp_block SET NOT NULL;
+

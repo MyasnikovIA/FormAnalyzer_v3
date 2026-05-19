@@ -8,9 +8,6 @@ import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -246,9 +243,8 @@ public class RecursiveReportBuilder {
         }
     }
 
-    /**
-     * Анализ списка форм с сохранением отчётов
-     */
+    // RecursiveReportBuilder.java - исправленный метод analyzeForms
+
     /**
      * Анализ списка форм с сохранением отчётов
      * @param formPaths список путей к формам для анализа
@@ -276,6 +272,7 @@ public class RecursiveReportBuilder {
         final AtomicBoolean stopFlag = this.stopRequested;
         final SettingsModel settings = this.settings;
         final AppConfig config = this.config;
+        final String outputDir = settings.getOutputDir();
 
         // Устанавливаем логгер
         analyzer.setLogger(new ILogger() {
@@ -304,14 +301,13 @@ public class RecursiveReportBuilder {
             }
         });
 
-        // Callback для каждой проанализированной формы - сохраняем отчёт
+        // Callback для каждой проанализированной формы - используем ТОТ ЖЕ ReportGenerator
         analyzer.setFormAnalyzedCallback(formInfo -> {
-            // Сохраняем отчёт для формы
             try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                // Используем ТЕ ЖЕ настройки что и в обычном анализе
+                ReportGenerator reportGen = new ReportGenerator(outputDir, config);
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
-                RecursiveReportBuilder.this.log("    Отчёт сохранён: " + formInfo.getFormPath());
             } catch (IOException e) {
                 error("    Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
             }
@@ -325,7 +321,7 @@ public class RecursiveReportBuilder {
                     treePanel.refreshChildForms(formInfo.getFormPath()));
         });
 
-        // Запускаем анализ
+        // Запускаем анализ (ТОТ ЖЕ МЕТОД, что и в обычном анализе)
         final List<FormInfo> analyzed = analyzer.analyzeAllForms();
         results.addAll(analyzed);
         analyzer.clearFormsToAnalyze();
@@ -352,25 +348,10 @@ public class RecursiveReportBuilder {
         return isRunning.get();
     }
 
-    public int getCurrentLevel() {
-        return currentLevel;
-    }
-
-    public int getTotalFormsProcessed() {
-        return totalFormsProcessed;
-    }
-
-    public Map<Integer, Integer> getFormsPerLevel() {
-        return new LinkedHashMap<>(formsPerLevel);
-    }
-
     private String getShortName(String formPath) {
         if (formPath.contains("/")) {
             return formPath.substring(formPath.lastIndexOf("/") + 1);
         }
         return formPath;
-    }
-    public void setOnTreeRefreshRequested(Runnable callback) {
-        this.onTreeRefreshRequested = callback;
     }
 }

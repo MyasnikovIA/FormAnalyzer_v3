@@ -37,3 +37,58 @@ JS Unit Compositions (только из вызовов openWindow/openD3Form):
 РАЗОБРАТЬ АНАЛИТИКОМ:
     D_P_EXC
 
+ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:
+
+  D_PKG_DAT_TOOLS.DATE_RANGES_ERROR:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_dat_tools.date_ranges_error(timestamp, timestamp, timestamp, timestamp, numeric)
+
+  D_PKG_HPK_SCHEDULE.UPG:
+    Статус: СУЩЕСТВУЕТ (OK)
+    Сигнатура: d_pkg_hpk_schedule.upg(numeric, numeric, numeric, numeric, numeric, numeric, timestamp, timestamp, numeric, timestamp, numeric)
+
+ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):
+
+  D_HPK_SCHEDULE:
+    Статус: ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL
+    Oracle PK поля: ID
+
+ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):
+
+  D_HPK_SCHEDULE:
+    Колонка: LPU
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN lpu SET NOT NULL;
+
+    Колонка: DATE_BEGIN
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_begin SET NOT NULL;
+
+    Колонка: ID
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN id SET NOT NULL;
+
+    Колонка: SCHEDULE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN schedule SET NOT NULL;
+
+    Колонка: HOSP_PLAN_KINDS
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN hosp_plan_kinds SET NOT NULL;
+
+    Колонка: DATE_CREATE
+      Oracle: NOT NULL
+      PostgreSQL: NULL разрешен
+      ОШИБКА: В Oracle NOT NULL, в PostgreSQL NULL разрешен
+      Рекомендация: ALTER TABLE d_hpk_schedule ALTER COLUMN date_create SET NOT NULL;
+
