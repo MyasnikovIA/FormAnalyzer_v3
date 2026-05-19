@@ -315,9 +315,7 @@ public class FormsTreePanel extends JPanel {
     }
 
     public void refreshAllChildForms() {
-        for (String formPath : allForms) {
-            refreshChildForms(formPath);
-        }
+        refreshAllChildFormsPreservingState();
     }
 
     private void createContextMenu() {
@@ -672,5 +670,157 @@ public class FormsTreePanel extends JPanel {
      */
     public List<String> getAllRootForms() {
         return new ArrayList<>(allForms);
+    }
+
+
+    /**
+     * Сохраняет текущее состояние развёрнутости всех узлов дерева
+     * @return карта: полный путь к форме -> был ли узел развёрнут
+     */
+    public Map<String, Boolean> saveExpandedState() {
+        Map<String, Boolean> expandedState = new LinkedHashMap<>();
+        saveExpandedStateRecursive(rootNode, new TreePath(rootNode), expandedState);
+        return expandedState;
+    }
+
+    /**
+     * Рекурсивное сохранение состояния развёрнутости
+     */
+    private void saveExpandedStateRecursive(DefaultMutableTreeNode node, TreePath path, Map<String, Boolean> state) {
+        // Сохраняем состояние текущего узла (если это не корневой узел)
+        if (node != rootNode && node.getUserObject() != null) {
+            String formPath = getFormPathFromNode(node);
+            if (formPath != null) {
+                boolean isExpanded = tree.isExpanded(path);
+                state.put(formPath, isExpanded);
+            }
+        }
+
+        // Рекурсивно обрабатываем детей
+        for (int i = 0; i < node.getChildCount(); i++) {
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+            TreePath childPath = path.pathByAddingChild(child);
+            saveExpandedStateRecursive(child, childPath, state);
+        }
+    }
+
+    /**
+     * Восстанавливает состояние развёрнутости узлов дерева
+     * @param expandedState карта с сохранённым состоянием
+     */
+    public void restoreExpandedState(Map<String, Boolean> expandedState) {
+        if (expandedState == null || expandedState.isEmpty()) {
+            return;
+        }
+
+        // Сначала разворачиваем все узлы, которые были развёрнуты
+        for (Map.Entry<String, Boolean> entry : expandedState.entrySet()) {
+            if (entry.getValue()) {
+                String formPath = entry.getKey();
+                DefaultMutableTreeNode node = formNodeMap.get(formPath);
+                if (node != null) {
+                    TreePath path = new TreePath(node.getPath());
+                    tree.expandPath(path);
+                }
+            }
+        }
+
+        // Обновляем отображение
+        tree.revalidate();
+        tree.repaint();
+    }
+
+    /**
+     * Получить путь формы из узла дерева
+     */
+    private String getFormPathFromNode(DefaultMutableTreeNode node) {
+        if (node == null || node.getUserObject() == null) return null;
+
+        String displayPath = node.getUserObject().toString();
+
+        // Ищем соответствие в formNodeMap
+        for (Map.Entry<String, DefaultMutableTreeNode> entry : formNodeMap.entrySet()) {
+            if (entry.getValue() == node) {
+                return entry.getKey();
+            }
+        }
+
+        // Если не нашли, пробуем восстановить из displayPath
+        if (displayPath.startsWith("Forms/") || displayPath.startsWith("UserForms")) {
+            return displayPath;
+        }
+
+        return null;
+    }
+
+    /**
+     * Полный рефреш дерева с сохранением состояния
+     */
+    public void refreshTreePreservingState() {
+        // Сохраняем текущее состояние
+        Map<String, Boolean> expandedState = saveExpandedState();
+        Set<String> selectedForms = new HashSet<>(getSelectedForms());
+
+        // Перестраиваем дерево
+        applyFilter();
+
+        // Восстанавливаем выделение
+        restoreSelection(selectedForms);
+
+        // Восстанавливаем развёрнутость
+        restoreExpandedState(expandedState);
+    }
+
+    /**
+     * Восстанавливает выделенные формы
+     */
+    private void restoreSelection(Set<String> selectedForms) {
+        if (selectedForms.isEmpty()) return;
+
+        List<TreePath> pathsToSelect = new ArrayList<>();
+        for (String formPath : selectedForms) {
+            DefaultMutableTreeNode node = formNodeMap.get(formPath);
+            if (node != null) {
+                pathsToSelect.add(new TreePath(node.getPath()));
+            }
+        }
+
+        if (!pathsToSelect.isEmpty()) {
+            tree.setSelectionPaths(pathsToSelect.toArray(new TreePath[0]));
+        }
+    }
+
+    /**
+     * Обновить все дочерние формы с сохранением состояния
+     */
+    public void refreshAllChildFormsPreservingState() {
+        Map<String, Boolean> expandedState = saveExpandedState();
+        Set<String> selectedForms = new HashSet<>(getSelectedForms());
+
+        refreshAllChildForms();
+
+        restoreExpandedState(expandedState);
+        restoreSelection(selectedForms);
+    }
+    /**
+     * Обновить дочерние формы для конкретной формы с сохранением состояния дерева
+     */
+    public void refreshChildFormsPreservingState(String formPath) {
+        // Сохраняем состояние только для поддерева этой формы
+        Map<String, Boolean> expandedState = new LinkedHashMap<>();
+        DefaultMutableTreeNode node = formNodeMap.get(formPath);
+        if (node != null) {
+            saveExpandedStateRecursive(node, new TreePath(node.getPath()), expandedState);
+            Set<String> selectedForms = new HashSet<>(getSelectedForms());
+
+            // Обновляем
+            refreshChildForms(formPath);
+
+            // Восстанавливаем
+            restoreExpandedState(expandedState);
+            restoreSelection(selectedForms);
+        } else {
+            refreshChildForms(formPath);
+        }
     }
 }

@@ -32,6 +32,8 @@ public class RecursiveReportBuilder {
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
+    private Runnable onTreeRefreshRequested;
+
     private Consumer<String> onLevelStart;
     private Consumer<Integer> onLevelComplete;
     private Consumer<String> onFormAnalyzed;
@@ -340,5 +342,8 @@ public class RecursiveReportBuilder {
             return formPath.substring(formPath.lastIndexOf("/") + 1);
         }
         return formPath;
+    }
+    public void setOnTreeRefreshRequested(Runnable callback) {
+        this.onTreeRefreshRequested = callback;
     }
 }

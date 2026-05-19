@@ -209,6 +209,21 @@ public class MainWindow extends JFrame {
             stopButton.setEnabled(false);
         });
 
+        recursiveBuilder.setOnComplete(() -> {
+            appendLog("Рекурсивное построение завершено!");
+            statusLabel.setText("Статус: Готов");
+            progressBar.setValue(100);
+            progressBar.setString("Готово");
+            startButton.setEnabled(true);
+            settingsButton.setEnabled(true);
+            stopButton.setEnabled(false);
+
+            // Обновляем дерево с сохранением состояния
+            SwingUtilities.invokeLater(() -> {
+                formsTreePanel.refreshTreePreservingState();
+            });
+        });
+
         // Right panel with tabs
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder("Результаты"));
@@ -595,6 +610,9 @@ public class MainWindow extends JFrame {
             if (result == JOptionPane.YES_OPTION) {
                 openOutputDirectory();
             }
+        });
+        SwingUtilities.invokeLater(() -> {
+            formsTreePanel.refreshTreePreservingState();
         });
     }
 
