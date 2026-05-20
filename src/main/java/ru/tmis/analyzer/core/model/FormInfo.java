@@ -33,6 +33,7 @@ public class FormInfo {
     private List<PopupMenuInfo> popupMenus;
     private List<PopupMenuInfo> popupMenusPg;
     private Set<String> tablesFromViews;  // Таблицы, используемые через вьюхи
+    private ConversionStatistics conversionStatistics;
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -131,6 +132,14 @@ public class FormInfo {
 
     public void setPopupMenusPg(List<PopupMenuInfo> popupMenusPg) {
         this.popupMenusPg = popupMenusPg;
+    }
+
+    public ConversionStatistics getConversionStatistics() {
+        return conversionStatistics;
+    }
+
+    public void setConversionStatistics(ConversionStatistics conversionStatistics) {
+        this.conversionStatistics = conversionStatistics;
     }
 
     /**

@@ -112,7 +112,6 @@ public class ReportGenerator {
             Files.createDirectories(outputPath);
         }
 
-        // 1. Сохраняем общий отчет
         Path reportPath = outputPath.resolve("forms_report.txt");
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(reportPath))) {
             writeHeader(writer);
@@ -122,10 +121,12 @@ public class ReportGenerator {
             }
 
             writeFooter(writer);
+
+            // Добавляем общую статистику конвертации
+            writeConversionSummary(writer);
         }
         System.out.println("Общий отчет сохранен: " + reportPath);
 
-        // 2. Сохраняем отдельные файлы для каждой формы
         for (FormInfo form : forms) {
             saveFormReportToFile(form);
         }
@@ -323,8 +324,6 @@ public class ReportGenerator {
                     settings.getPostgresUser(),
                     settings.getPostgresPassword()
             );
-            // Можно установить логгер
-            // checker.setLogCallback(...);
 
             Map<String, PostgresPackageChecker.FunctionInfo> results = checker.checkFunctions(form.getPackagesFunctions());
 
@@ -418,6 +417,37 @@ public class ReportGenerator {
                 writer.println("     (нет таблиц для проверки)");
                 writer.println();
             }
+        }
+        // ========== СТАТИСТИКА КОНВЕРТАЦИИ ==========
+        ConversionStatistics stats = form.getConversionStatistics();
+        if (stats != null && stats.getTotalQueries() > 0) {
+            writer.println("СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:");
+            writer.println("    Всего SQL запросов: " + stats.getTotalQueries());
+            writer.println("    Конвертировано (с Router): " + stats.getConvertedQueries());
+            writer.println("    Процент конвертации: " + String.format("%.1f%%", stats.getConversionPercent()));
+
+            if (stats.isFullyConverted()) {
+                writer.println("    СТАТУС: ✓ ФОРМА ПОЛНОСТЬЮ КОНВЕРТИРОВАНА ДЛЯ POSTGRESQL");
+            } else if (stats.isNotConverted()) {
+                writer.println("    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА");
+            } else {
+                writer.println("    СТАТУС: ⚠ ФОРМА КОНВЕРТИРОВАНА ЧАСТИЧНО");
+            }
+            writer.println();
+
+            // Детали по каждому запросу
+            writer.println("ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:");
+            for (Map.Entry<String, ConversionStatistics.QueryConversionInfo> entry :
+                    stats.getQueryDetails().entrySet()) {
+                ConversionStatistics.QueryConversionInfo info = entry.getValue();
+                writer.println("    " + info.getComponentType() + ": " + info.getComponentName());
+                writer.println("        Статус: " + info.getStatus());
+                if (info.hasRouter()) {
+                    writer.println("        Oracle SQL: " + (info.hasOracleSql() ? "✓ есть" : "✗ отсутствует"));
+                    writer.println("        PostgreSQL SQL: " + (info.hasPostgresSql() ? "✓ есть" : "✗ отсутствует"));
+                }
+            }
+            writer.println();
         }
     }
 
@@ -1217,4 +1247,52 @@ public class ReportGenerator {
         return report;
     }
 
+    /**
+     * Выводит общую статистику конвертации по всем формам
+     */
+    private void writeConversionSummary(PrintWriter writer) {
+        if (forms.isEmpty()) return;
+
+        // Собираем статистику из всех форм
+        int totalForms = 0;
+        int convertedForms = 0;
+        int notConvertedForms = 0;
+        int totalQueries = 0;
+        int convertedQueries = 0;
+
+        for (FormInfo form : forms) {
+            ConversionStatistics stats = form.getConversionStatistics();
+            if (stats != null && stats.getTotalQueries() > 0) {
+                totalForms++;
+                totalQueries += stats.getTotalQueries();
+                convertedQueries += stats.getConvertedQueries();
+
+                if (stats.isFullyConverted()) {
+                    convertedForms++;
+                } else if (stats.isNotConverted()) {
+                    notConvertedForms++;
+                }
+            }
+        }
+
+        if (totalForms == 0) return;
+
+        writer.println();
+        writer.println("=".repeat(100));
+        writer.println("=== ОБЩАЯ СТАТИСТИКА КОНВЕРТАЦИИ ===");
+        writer.println("=".repeat(100));
+        writer.println();
+        writer.println("Формы с SQL запросами: " + totalForms);
+        writer.println("  Полностью конвертировано: " + convertedForms +
+                " (" + String.format("%.1f", (convertedForms * 100.0) / totalForms) + "%)");
+        writer.println("  Частично конвертировано: " + (totalForms - convertedForms - notConvertedForms));
+        writer.println("  Не конвертировано: " + notConvertedForms +
+                " (" + String.format("%.1f", (notConvertedForms * 100.0) / totalForms) + "%)");
+        writer.println();
+        writer.println("SQL запросы:");
+        writer.println("  Всего: " + totalQueries);
+        writer.println("  Конвертировано: " + convertedQueries +
+                " (" + String.format("%.1f", (convertedQueries * 100.0) / totalQueries) + "%)");
+        writer.println();
+    }
 }

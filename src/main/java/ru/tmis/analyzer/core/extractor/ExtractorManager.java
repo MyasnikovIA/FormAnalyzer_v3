@@ -5,8 +5,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
+import ru.tmis.analyzer.core.model.ConversionStatistics;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
@@ -18,6 +20,8 @@ public class ExtractorManager {
     private final List<IXmlProcessor> processors = new ArrayList<>();
     private final SqlExtractor sqlExtractor;
     private final SettingsModel settings;
+    private final ConversionAnalyzer conversionAnalyzer = new ConversionAnalyzer();
+
 
     public ExtractorManager(SettingsModel settings) {
         this.settings = settings;
@@ -57,6 +61,11 @@ public class ExtractorManager {
 
         Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
 
+        // Анализ конвертации SQL запросов
+        ConversionStatistics stats = conversionAnalyzer.analyzeForm(formInfo, xmlContent);
+        formInfo.setConversionStatistics(stats);
+
+
         List<SqlInfo> sqlList = sqlExtractor.extract(doc, formInfo);
         formInfo.setSqlQueries(sqlList);
 
@@ -86,5 +95,8 @@ public class ExtractorManager {
 
     public SqlExtractor getSqlExtractor() {
         return sqlExtractor;
+    }
+    public ConversionAnalyzer getConversionAnalyzer() {
+        return conversionAnalyzer;
     }
 }
