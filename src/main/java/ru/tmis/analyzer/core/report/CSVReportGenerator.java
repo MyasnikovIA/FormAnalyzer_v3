@@ -1,6 +1,8 @@
 package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.db.ReportsFromDbService;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 
 import java.io.*;
@@ -11,11 +13,12 @@ public class CSVReportGenerator {
 
     private final String outputDir;
     private final SettingsModel settings;  // Добавить
-
+    private transient ReportsFromDbService reportsService;
 
     public CSVReportGenerator(String outputDir) {
         this.outputDir = outputDir;
         this.settings = SettingsModel.getInstance();
+        this.reportsService = new ReportsFromDbService(settings);
     }
 
     /**
@@ -130,7 +133,8 @@ public class CSVReportGenerator {
             writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
         } else {
             for (String value : values) {
-                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+                String formattedValue = formatReportWithDbInfo(value);
+                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(formattedValue));
             }
         }
     }
@@ -224,5 +228,43 @@ public class CSVReportGenerator {
         }
 
         return relativePath;
+    }
+
+    /**
+     * Форматирует отчёт с информацией из БД
+     */
+    private String formatReportWithDbInfo(String report) {
+        if (report.contains("/") || report.endsWith(".frm")) {
+            return report;
+        }
+
+        DbReportInfo dbReport = reportsService.getReportByCode(report);
+        if (dbReport != null) {
+            String typeName = getRepTypeName(dbReport.getRepType());
+            StringBuilder sb = new StringBuilder();
+            sb.append(report).append(" (").append(typeName).append(")");
+
+            if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
+                String formPath = dbReport.getRepFilename();
+                if (!formPath.endsWith(".frm")) formPath = formPath + ".frm";
+                if (!formPath.startsWith("Reports/")) formPath = "Reports/" + formPath;
+                sb.append(" ").append(formPath);
+            }
+            return sb.toString();
+        }
+
+        return report;
+    }
+
+    private String getRepTypeName(int repType) {
+        switch (repType) {
+            case 0: return "Crystal Reports";
+            case 1: return "WEB-форма";
+            case 2: return "Crystal Reports(PDF)";
+            case 3: return "Бланк";
+            case 5: return "WEB-конструктор";
+            case 6: return "Составной";
+            default: return "Неизвестный тип (" + repType + ")";
+        }
     }
 }

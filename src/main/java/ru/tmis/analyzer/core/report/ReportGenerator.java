@@ -6,10 +6,7 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.*;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.PopupMenuInfo;
-import ru.tmis.analyzer.core.model.SqlInfo;
-import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.core.model.*;
 
 import ru.tmis.analyzer.core.db.PostgresPackageChecker;
 
@@ -32,8 +29,7 @@ public class ReportGenerator {
 
     private OracleService oracleService;
     private PostgresService postgresService;
-
-    // В конструкторе инициализируем сервисы (если ещё нет)
+    private transient ReportsFromDbService reportsService;
 
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -42,7 +38,9 @@ public class ReportGenerator {
         this.settings = SettingsModel.getInstance();
         this.oracleService = new OracleService(settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword());
         this.postgresService = new PostgresService(settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(), settings.getMisUser());
+        this.reportsService = new ReportsFromDbService(settings);
     }
+
 
     // Метод для получения количества записей в Oracle (с кэшированием)
     private long getOracleCount(String objectName) {
@@ -187,7 +185,9 @@ public class ReportGenerator {
         if (!form.getReports().isEmpty()) {
             writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
             for (String report : form.getReports()) {
-                writer.println("        " + report + ";");
+                // Форматируем отчёт с информацией из БД (если нужно)
+                String formattedReport = formatReportWithDbInfo(report);
+                writer.println("        " + formattedReport + ";");
             }
             writer.println();
         }
@@ -1183,6 +1183,38 @@ public class ReportGenerator {
 
         System.out.println("[CSV] Итого таблиц: " + tables.size());
         return tables;
+    }
+    /**
+     * Форматирует отчёт с информацией из БД, если это код
+     */
+    private String formatReportWithDbInfo(String report) {
+        // Если это путь к файлу (содержит / или .frm) - возвращаем как есть
+        if (report.contains("/") || report.endsWith(".frm")) {
+            return report;
+        }
+
+        // Проверяем кэш в ReportsFromDbService
+        DbReportInfo dbReport = reportsService.getReportByCode(report);
+        if (dbReport != null) {
+            String typeName = dbReport.getRepTypeName();
+            StringBuilder sb = new StringBuilder();
+            sb.append(report).append(" (").append(typeName).append(")");
+
+            // Если REP_TYPE = 1 (WEB-форма) и есть REP_FILENAME
+            if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
+                String formPath = dbReport.getRepFilename();
+                if (!formPath.endsWith(".frm")) {
+                    formPath = formPath + ".frm";
+                }
+                if (!formPath.startsWith("Reports/")) {
+                    formPath = "Reports/" + formPath;
+                }
+                sb.append(" ").append(formPath);
+            }
+            return sb.toString();
+        }
+
+        return report;
     }
 
 }

@@ -5,7 +5,10 @@ package ru.tmis.analyzer.core.extractor.processors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.db.ReportsFromDbService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
@@ -16,37 +19,43 @@ import java.util.regex.Pattern;
 
 /**
  * Извлечение отчетов из форм
- * Отчеты извлекаются из:
- * 1. SQL запросов (внутри DataSet/Action компонентов)
- * 2. JS вызовов внутри Action компонентов
- * 3. CDATA секций (JS код)
- * 4. Прямых вызовов printReportByCode в любом тексте
  */
 public class ReportProcessor implements IXmlProcessor {
 
-    // Паттерн для printReportByCode('CODE')
     private static final Pattern PRINT_REPORT_PATTERN = Pattern.compile(
             "printReportByCode\\s*\\(\\s*['\"]([^'\"]+)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    // Паттерн для printReportByCode("CODE")
     private static final Pattern PRINT_REPORT_PATTERN_DOUBLE = Pattern.compile(
             "printReportByCode\\s*\\(\\s*\"([^\"]+)\"",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    // Паттерн для Reports/путь/к/отчёту.frm
     private static final Pattern REPORTS_PATH_PATTERN = Pattern.compile(
             "['\"]Reports/([^'\"]+\\.frm)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
-    // Паттерн для CDATA секций
     private static final Pattern CDATA_PATTERN = Pattern.compile(
             "<!\\[CDATA\\[(.*?)\\]\\]>",
             Pattern.DOTALL
     );
+
+    private final SettingsModel settings;
+    private final ReportsFromDbService reportsService;
+
+    // Конструктор по умолчанию
+    public ReportProcessor() {
+        this.settings = SettingsModel.getInstance();
+        this.reportsService = new ReportsFromDbService(settings);
+    }
+
+    // Конструктор с параметром
+    public ReportProcessor(SettingsModel settings) {
+        this.settings = settings;
+        this.reportsService = new ReportsFromDbService(settings);
+    }
 
     @Override
     public String getName() {
@@ -62,7 +71,7 @@ public class ReportProcessor implements IXmlProcessor {
     public void process(Document doc, FormInfo formInfo) {
         Set<String> reports = new LinkedHashSet<>();
 
-        // 1. Ищем отчеты в SQL запросах (уже сохранены в formInfo)
+        // 1. Ищем отчеты в SQL запросах
         for (SqlInfo sql : formInfo.getSqlQueries()) {
             String sqlContent = sql.getSqlContent();
             if (sqlContent != null) {
@@ -70,10 +79,9 @@ public class ReportProcessor implements IXmlProcessor {
             }
         }
 
-        // 2. Ищем отчеты в Action компонентах (которые не являются SQL)
+        // 2. Ищем отчеты в Action компонентах
         Elements actions = doc.select("component[cmptype=Action], cmpAction");
         for (Element action : actions) {
-            // Пропускаем Action, которые содержат SQL (уже обработаны выше)
             if (hasSqlContent(action)) {
                 continue;
             }
@@ -83,7 +91,7 @@ public class ReportProcessor implements IXmlProcessor {
             }
         }
 
-        // 3. Ищем отчеты в CDATA секциях (JS код)
+        // 3. Ищем отчеты в CDATA секциях
         String html = doc.html();
         Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
         while (cdataMatcher.find()) {
@@ -93,27 +101,57 @@ public class ReportProcessor implements IXmlProcessor {
             }
         }
 
-        // 4. Ищем отчеты во всем HTML (на случай, если вызовы вне CDATA)
+        // 4. Ищем отчеты во всем HTML
         reports.addAll(extractFromText(html));
 
-        // 5. Добавляем найденные отчеты
+        // 5. Форматируем отчеты с информацией из БД
         for (String report : reports) {
-            formInfo.addReport(report);
-        }
-
-        if (!reports.isEmpty()) {
-            System.out.println("[ReportProcessor] Найдено отчетов: " + reports.size() + " " + reports);
+            String formattedReport = formatReportWithDbInfo(report);
+            formInfo.addReport(formattedReport);
         }
     }
 
     /**
-     * Проверка, содержит ли компонент SQL запрос
+     * Форматирует отчёт с информацией из БД, если это код
      */
+    private String formatReportWithDbInfo(String report) {
+        // Если это путь к файлу (содержит / или .frm) - возвращаем как есть
+        if (report.contains("/") || report.endsWith(".frm")) {
+            return report;
+        }
+
+        // Пытаемся получить информацию из БД
+        try {
+            DbReportInfo dbReport = reportsService.getReportByCode(report);
+            if (dbReport != null) {
+                String typeName = dbReport.getRepTypeName();
+                StringBuilder sb = new StringBuilder();
+                sb.append(report).append(" (").append(typeName).append(")");
+
+                // Если REP_TYPE = 1 (WEB-форма) и есть REP_FILENAME
+                if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
+                    String formPath = dbReport.getRepFilename();
+                    if (!formPath.endsWith(".frm")) {
+                        formPath = formPath + ".frm";
+                    }
+                    if (!formPath.startsWith("Reports/")) {
+                        formPath = "Reports/" + formPath;
+                    }
+                    sb.append(" ").append(formPath);
+                }
+                return sb.toString();
+            }
+        } catch (Exception e) {
+            System.err.println("[ReportProcessor] Ошибка получения информации об отчёте " + report + ": " + e.getMessage());
+        }
+
+        return report;
+    }
+
     private boolean hasSqlContent(Element element) {
         String html = element.html();
         if (html == null) return false;
 
-        // Проверяем наличие CDATA с SQL
         Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
         while (cdataMatcher.find()) {
             String content = cdataMatcher.group(1);
@@ -122,14 +160,10 @@ public class ReportProcessor implements IXmlProcessor {
             }
         }
 
-        // Проверяем прямой текст (без CDATA)
         String text = element.ownText();
         return isSqlContent(text);
     }
 
-    /**
-     * Проверка, является ли содержимое SQL запросом
-     */
     private boolean isSqlContent(String content) {
         if (content == null) return false;
         String lower = content.toLowerCase().trim();
@@ -139,9 +173,6 @@ public class ReportProcessor implements IXmlProcessor {
                 lower.contains("into") || lower.contains("from");
     }
 
-    /**
-     * Извлечение отчетов из текста
-     */
     private Set<String> extractFromText(String text) {
         Set<String> result = new LinkedHashSet<>();
 
@@ -149,33 +180,27 @@ public class ReportProcessor implements IXmlProcessor {
             return result;
         }
 
-        // printReportByCode('REPORT_CODE')
         Matcher printMatcher = PRINT_REPORT_PATTERN.matcher(text);
         while (printMatcher.find()) {
             String reportCode = cleanValue(printMatcher.group(1));
             if (isValidReportCode(reportCode)) {
                 result.add(reportCode);
-                System.out.println("[ReportProcessor] Найден отчет (одинарные кавычки): " + reportCode);
             }
         }
 
-        // printReportByCode("REPORT_CODE")
         Matcher printMatcherDouble = PRINT_REPORT_PATTERN_DOUBLE.matcher(text);
         while (printMatcherDouble.find()) {
             String reportCode = cleanValue(printMatcherDouble.group(1));
             if (isValidReportCode(reportCode)) {
                 result.add(reportCode);
-                System.out.println("[ReportProcessor] Найден отчет (двойные кавычки): " + reportCode);
             }
         }
 
-        // Reports/some_report.frm
         Matcher pathMatcher = REPORTS_PATH_PATTERN.matcher(text);
         while (pathMatcher.find()) {
             String reportPath = pathMatcher.group(1);
             if (reportPath != null && !reportPath.isEmpty()) {
                 result.add("/Reports/" + reportPath);
-                System.out.println("[ReportProcessor] Найден отчет по пути: /Reports/" + reportPath);
             }
         }
 
@@ -192,7 +217,6 @@ public class ReportProcessor implements IXmlProcessor {
 
     private boolean isValidReportCode(String code) {
         if (code == null || code.isEmpty()) return false;
-        // Пропускаем переменные и выражения
         if (code.contains("+") || code.contains("getVar") ||
                 code.contains("getValue") || code.contains("this.") ||
                 code.contains("function") || code.contains("return") ||

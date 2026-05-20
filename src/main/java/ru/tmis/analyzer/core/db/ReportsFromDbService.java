@@ -9,6 +9,7 @@ import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Сервис для получения отчетов из БД по unit'у из AutoPopupMenu
@@ -343,5 +344,63 @@ public class ReportsFromDbService {
 
             return result;
         });
+    }
+
+    /**
+     * Кэш для отчётов по коду
+     */
+    private static final Map<String, DbReportInfo> reportByCodeCache = new ConcurrentHashMap<>();
+
+    /**
+     * Получить отчет по коду (rep_code)
+     * @param repCode код отчета
+     * @return информация об отчёте или null
+     */
+    public DbReportInfo getReportByCode(String repCode) {
+        if (repCode == null || repCode.trim().isEmpty()) {
+            return null;
+        }
+
+        String key = repCode.toUpperCase();
+        return reportByCodeCache.computeIfAbsent(key, k -> {
+            String sql =
+                    "SELECT ID, LPU, REP_CODE, REP_NAME, REP_TYPE, REP_FILENAME, IS_SHARE " +
+                            "FROM D_REPORTS WHERE REP_CODE = ? AND IS_SHARE = 1";
+
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+            props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+            props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, repCode);
+                pstmt.setQueryTimeout(30);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    DbReportInfo report = new DbReportInfo();
+                    report.setRepID(rs.getInt("ID"));
+                    report.setRepCode(rs.getString("REP_CODE"));
+                    report.setRepName(rs.getString("REP_NAME"));
+                    report.setRepType(rs.getInt("REP_TYPE"));
+                    report.setRepFilename(rs.getString("REP_FILENAME"));
+                    report.setUnitCode(rs.getString("LPU"));
+                    return report;
+                }
+            } catch (SQLException e) {
+                System.err.println("[ReportsFromDbService] Ошибка получения отчета по коду " + repCode + ": " + e.getMessage());
+            }
+            return null;
+        });
+    }
+
+    /**
+     * Очистить кэш отчётов по коду
+     */
+    public static void clearReportByCodeCache() {
+        reportByCodeCache.clear();
     }
 }
