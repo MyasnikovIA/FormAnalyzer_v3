@@ -1,56 +1,100 @@
 ФОРМА;БЛОК;ЗНАЧЕНИЕ
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/data.dfrm
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/script.dfrm
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/view.dfrm
-Forms/HospDirAccounting/hospdiraccounting.frm;Юзерформы;UserFormsMoscowNIIBlohina/HospDirAccounting/hospdiraccounting.d/data.dfrm
-Forms/HospDirAccounting/hospdiraccounting.frm;subForm;Visit/PrintVisit
-Forms/HospDirAccounting/hospdiraccounting.frm;subForm;HospDirAccounting/search_patient
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;HospPlan/hp_view_joined_docs.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;Persmedcard/persmedcard_edit.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;DiseaseCase/diseasecase.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;PatientSearch/directions_prescribes.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;HospPlan/hospplan.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;формы JS;HospPlan/hp_directions_edit.frm
-Forms/HospDirAccounting/hospdiraccounting.frm;"Отчеты, вызываемые на форме";(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_LPUDICT
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_DIRECTIONS_BASE
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_LPU
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_EMPLOYERS
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_HOSP_HISTORIES_BASE
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_HPK_SCHEDULE_REG
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_HPK_PLAN_JOURNALS_BASE
-Forms/HospDirAccounting/hospdiraccounting.frm;Вьюхи;D_V_HOSP_PLAN_KINDS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_LPUDICT
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_DIRECTIONS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_LPU
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_GEOGRAFY
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_EMPLOYERS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_JOBTITLES
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_SPECIALITIES
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_SPECIALITIES_ED
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_DEPS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_DEPS_KINDS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_USERS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_AGENTS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_AGENT_ESIA
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_EMP_SKILL
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_SKILL_CATEGORIES
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_DIRECTION_SERVICES
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_HOSP_HISTORIES
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_HPK_SCHEDULE_REG
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_HPK_PLAN_JOURNALS
-Forms/HospDirAccounting/hospdiraccounting.frm;Таблицы;D_HOSP_PLAN_KINDS
-Forms/HospDirAccounting/hospdiraccounting.frm;Пакеты и функции;D_PKG_HPK_SCHEDULE_REG.DEL
-Forms/HospDirAccounting/hospdiraccounting.frm;Пакеты и функции;D_PKG_HPK_PLAN_JOURNALS.DEL
-Forms/HospDirAccounting/hospdiraccounting.frm;Пакеты и функции;D_PKG_DIRECTIONS.DEL
-Forms/HospDirAccounting/hospdiraccounting.frm;Пакеты и функции;D_PKG_OUTER_DIRECTIONS.DEL
-Forms/HospDirAccounting/hospdiraccounting.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
-Forms/HospDirAccounting/hospdiraccounting.frm;СО;(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Универсальные композиции;(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Пользовательские процедуры;(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Константы;(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Брокеры;(не найдено)
-Forms/HospDirAccounting/hospdiraccounting.frm;Неопределенные;(не найдено)
+Forms/NR/cancer_risk_registr.frm;Юзерформы;UserFormsVOKOD/NR/cancer_risk_registr.d/cancer_risk_registr.dfrm
+Forms/NR/cancer_risk_registr.frm;Юзерформы;UserFormsVOKOD/NR/cancer_risk_registr.d/script.dfrm
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/utils
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/DataSetCompleters
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/patient_data
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_data
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_relatives
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_disp
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_control
+Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_out
+Forms/NR/cancer_risk_registr.frm;subForm;NosRegistrs/SubForms/nr_attached_docs_grid
+Forms/NR/cancer_risk_registr.frm;формы JS;NosRegistrs/PatientSearch/search_patient.frm
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_REQUEST
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_PATIENTS
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NOS_REGISTRS
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_EMPLOYERS
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_LPU
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_REMOVE_REASONS
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_ONKO_AUTOPSY
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENT_CONTACTS_V2
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENT_RELATIVES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REQUEST
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_NOS_REGISTRS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENTS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REQUEST_STATUS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPUDICT
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_EMPLOYERS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_JOBTITLES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_MKB10
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_PATIENTS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REMOVE_REASONS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_SPECIALITIES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_SPECIALITIES_ED
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_DEPS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_DEPS_KINDS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_USERS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_ESIA
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_EMP_SKILL
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPU
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_GEOGRAFY
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_ONKO_AUTOPSY
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_PERSMEDCARD
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_BLOODGROUPE
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_DIVISIONS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_RHESUS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_CABLAB
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_CONTACTS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_CONTACT_TYPES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_FN_RELATIVES_OTHER
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_FED_NSI_VERS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_FED_NSI
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPUVERLIST_MAIN
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_RELATIVES
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_RELATIONSHIPS
+Forms/NR/cancer_risk_registr.frm;Таблицы;D_REPRESENT_LSTATUSES
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.GET_ACTUAL_PHONE
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_STD.FRM_DT
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_DIAGNS.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_DIAGNS.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DISP.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DISP.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.DEL
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_AGENT_RELATIVES.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.ADD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.UPD
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.SET_STATUS
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.GEN_REG_NUMB
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.DEL
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.DEL
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.DEL
+Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.DEL
+Forms/NR/cancer_risk_registr.frm;СО;(не найдено)
+Forms/NR/cancer_risk_registr.frm;Универсальные композиции;unit:LPUDICT composition:GRID_NAME
+Forms/NR/cancer_risk_registr.frm;Пользовательские процедуры;(не найдено)
+Forms/NR/cancer_risk_registr.frm;Константы;(не найдено)
+Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_DATA_REASONS.DEL
+Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_CONTR_RES.DEL
+Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_CONTROL.DEL
+Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_RELATIVES.DEL
+Forms/NR/cancer_risk_registr.frm;Неопределенные;D_P_EXC
+Forms/NR/cancer_risk_registr.frm;Неопределенные;D_STRAGG
+Forms/NR/cancer_risk_registr.frm;Неопределенные;D_INSERT_ID

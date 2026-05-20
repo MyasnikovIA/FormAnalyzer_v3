@@ -48,7 +48,7 @@ public class CSVReportGenerator {
                 writeBlock(writer, formName, "формы JS", form.getJsForms());
 
                 // 4. Отчеты, вызываемые на форме
-                writeBlock(writer, formName, "Отчеты, вызываемые на форме", form.getReports());
+                //writeBlock(writer, formName, "Отчеты, вызываемые на форме", form.getReports());
 
                 // 5. Вьюхи (D_V_*)
                 Set<String> views = new LinkedHashSet<>();
@@ -74,8 +74,28 @@ public class CSVReportGenerator {
                 // 8. СО (системные опции)
                 writeBlock(writer, formName, "СО", form.getSystemOptions());
 
-                // 9. Универсальные композиции
-                writeBlock(writer, formName, "Универсальные композиции", form.getJsUnitCompositions());
+                // 9. Универсальные композиции (объединяем оба блока)
+                Set<String> allCompositions = new LinkedHashSet<>();
+                if (form.getUnitCompositions() != null) {
+                    for (String comp : form.getUnitCompositions()) {
+                        // Преобразуем формат unit="XXX" composition="YYY" в unit:XXX composition:YYY;
+                        String normalized = comp.replace("=\"", ":").replace("\"", "").replace(" composition:", " composition:").replace(",", "");;
+                        normalized = normalized.replaceAll(",","");
+                        normalized = normalized.replaceAll("\"","");
+                        allCompositions.add(normalized);
+                    }
+                }
+                if (form.getJsUnitCompositions() != null) {
+                    for (String comp : form.getJsUnitCompositions()) {
+                        // Преобразуем формат unit="XXX" composition="YYY" в unit:XXX composition:YYY;
+                        String normalized = comp.replace("=\"", ":").replace("\"", "").replace(" composition:", " composition:").replace(",", "");
+                        normalized = normalized.replaceAll(",","");
+                        normalized = normalized.replaceAll(";","");
+                        normalized = normalized.replaceAll("\"","");
+                        allCompositions.add(normalized);
+                    }
+                }
+                writeBlock(writer, formName, "Универсальные композиции", allCompositions);
 
                 // 10. Пользовательские процедуры
                 writeBlock(writer, formName, "Пользовательские процедуры", form.getUserProcedures());
@@ -84,7 +104,14 @@ public class CSVReportGenerator {
                 writeBlock(writer, formName, "Константы", form.getConstants());
 
                 // 12. Брокеры
-                writeBlock(writer, formName, "Брокеры", form.getBrokers());
+                Set<String> allBrokers = new LinkedHashSet<>();
+                if (form.getBrokers() != null) {
+                    for (String comp : form.getBrokers()) {
+                        String normalized = comp.replaceAll(";","").replaceAll(",","").replaceAll("\"","");
+                        allBrokers.add(normalized);
+                    }
+                }
+                writeBlock(writer, formName, "Брокеры", allBrokers);
 
                 // 13. Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
                 writeBlock(writer, formName, "Неопределенные", form.getUnknownObjects());
