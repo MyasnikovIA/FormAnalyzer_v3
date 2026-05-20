@@ -792,16 +792,31 @@ public class ReportGenerator {
             writeFormReport(writer, formInfo);
         }
 
-        // ========== 3. ГЕНЕРАЦИЯ CSV ОТЧЕТА (только если включено в настройках) ==========
+        // 3. Генерация CSV отчета (только если включено)
         if (config != null && config.isEnableCSVExport()) {
             appendToCSVReport(formInfo);
         }
 
-        // ========== 4. ГЕНЕРАЦИЯ MD ПРОМПТА (если включено в настройках) ==========
+        // ========== 4. ГЕНЕРАЦИЯ JSON ОТЧЕТА ==========
+        if (config != null && config.isEnableJSONExport()) {
+            appendToJSONReport(formInfo);
+        }
+
+        // 5. Генерация MD промпта
         if (config != null && config.isEnableLLMExport()) {
             generateLLMPromptForForm(formInfo);
         }
     }
+
+    /**
+     * Добавляет данные формы в JSON отчет
+     */
+    private void appendToJSONReport(FormInfo formInfo) throws IOException {
+        JSONReportGenerator jsonGen = new JSONReportGenerator(outputDir, config);
+        jsonGen.appendFormToJSON(formInfo);
+        System.out.println("  JSON отчет обновлен");
+    }
+
 
     /**
      * Добавляет запись в CSV отчет (дозапись в конец файла)

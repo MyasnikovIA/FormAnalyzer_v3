@@ -45,6 +45,9 @@ public class AppConfig {
     private boolean checkPostgresPK = false;
     private boolean checkNotNullConstraints = false;
 
+    // JSON Export
+    private boolean enableJSONExport = false;
+
     // LLM Export
     private boolean enableLLMExport = false;
     private String llmExportMode = "single_file";
@@ -162,7 +165,8 @@ public class AppConfig {
 
     public boolean isEnableCSVExport() { return enableCSVExport; }
     public void setEnableCSVExport(boolean enableCSVExport) { this.enableCSVExport = enableCSVExport; }
-
+    public boolean isEnableJSONExport() { return enableJSONExport; }
+    public void setEnableJSONExport(boolean enableJSONExport) { this.enableJSONExport = enableJSONExport; }
 
 
     /**

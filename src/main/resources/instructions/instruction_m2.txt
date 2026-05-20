@@ -2943,14 +2943,12 @@ begin
            end
     into nRES_ACCESS
     from D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS((:pnLPU)::numeric,
-                                           (
-                                            select t.ID
+                                           (select t.ID
                                               from D_V_CSE_ACS_ALL t
                                              where t.WHO_ID    = (:pnEMPLOYER)::numeric
                                                and t.WHO_CODE  = 'EMPLOYERS'
                                                and t.UNITCODE  = :psUNITCODE
-                                               and t.UNIT_ID   = (:pnUNIT_ID)::numeric
-                                            ),
+                                               and t.UNIT_ID   = (:pnUNIT_ID)::numeric),
                                            'HOSP_PLAN_KINDS',
                                            (:pnUNIT_ID)::numeric) as t(RIGHT_ID, NRIGHT_CODE, RIGHT_NAME)
    where instr(';' || :psCHECK_CODE || ';', ';' || t.NRIGHT_CODE || ';') > 0;
@@ -2959,6 +2957,44 @@ begin
   :pnRES_ACCESS := nRES_ACCESS;
 end;
 ```
+
+
+### 78  В SQL запросах "exception" и "when" пишутся на одной строке
+Не правильный пример:
+```
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            begin
+              select hpk.ID
+                into :pnD_INSERT_ID
+                from D_V_HPK_PLANS hpk
+               where hpk.LPU = :pnLPU
+            exception
+              when no_data_found then
+                D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Идентификатор новой записи
+                                    pnGEN_COUNT   => null);            -- Общее кол-во мест
+            end;
+            ]]>
+        </component>
+```
+Правильный пример:
+```
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            begin
+              select hpk.ID
+                into :pnD_INSERT_ID
+                from D_V_HPK_PLANS hpk
+               where hpk.LPU = :pnLPU
+            exception when no_data_found then
+              D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Идентификатор новой записи
+                                  pnGEN_COUNT   => null);            -- Общее кол-во мест
+            end;
+            ]]>
+        </component>
+```
+
+
 
 Исходник формы, который необходимо переработать:
 ```

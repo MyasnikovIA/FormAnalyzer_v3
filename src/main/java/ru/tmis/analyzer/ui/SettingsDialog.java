@@ -56,6 +56,7 @@ public class SettingsDialog extends JDialog {
     private JCheckBox includePostgresPopupMenusCheckbox;
     private JCheckBox checkPostgresPackagesCheckbox;
     private JCheckBox enableCSVExportCheckbox;  // CSV Export
+    private JCheckBox enableJSONExportCheckbox;
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -321,6 +322,15 @@ public class SettingsDialog extends JDialog {
                         "CSV файл обновляется после каждой обработанной формы.\n" +
                         "Может быть открыт в Excel или любом текстовом редакторе."));
 
+
+        enableJSONExportCheckbox = new JCheckBox("Выгружать JSON отчет");
+        enableJSONExportCheckbox.setSelected(config.isEnableJSONExport());
+        enableJSONExportCheckbox.addActionListener(e -> config.setEnableJSONExport(enableJSONExportCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(enableJSONExportCheckbox,
+                "Создавать JSON файл (forms_export.json) со всеми данными о формах.\n" +
+                        "JSON файл обновляется после каждой обработанной формы."));
+
+
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -545,6 +555,10 @@ public class SettingsDialog extends JDialog {
             enableCSVExportCheckbox.setSelected(config.isEnableCSVExport());
         }
 
+        if (enableJSONExportCheckbox != null) {
+            enableJSONExportCheckbox.setSelected(config.isEnableJSONExport());
+        }
+
         // LLM settings
         if (enableLLMExportCheckbox != null) {
             enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
@@ -595,6 +609,7 @@ public class SettingsDialog extends JDialog {
         settings.setPostgresPassword(new String(postgresPasswordField.getPassword()));
         settings.setMisUser(misUserField.getText());
         config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
+        config.setEnableJSONExport(enableJSONExportCheckbox.isSelected());
         settings.save();
 
         // Report settings

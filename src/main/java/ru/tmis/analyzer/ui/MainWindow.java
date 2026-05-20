@@ -136,8 +136,6 @@ public class MainWindow extends JFrame {
         formsTreePanel = new FormsTreePanel();
         formsTreePanel.setOnFormsChanged(() -> {});
 
-        // MainWindow.java - исправленный TreeSelectionListener
-
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
             private boolean isLoadingChildren = false;
 
@@ -154,8 +152,11 @@ public class MainWindow extends JFrame {
                             // Загружаем отчёт текущей формы
                             loadFormResultToPanel(formPath);
 
-                            // Рекурсивно загружаем и разворачиваем ВСЕ дочерние уровни
-                            formsTreePanel.expandAllChildrenRecursive(formPath, selectedPath);
+                            // ТОЛЬКО ОДИН УРОВЕНЬ: загружаем прямых детей и раскрываем узел
+                            formsTreePanel.refreshChildForms(formPath);
+                            if (selectedPath != null) {
+                                formsTreePanel.expandPath(selectedPath);
+                            }
 
                             // Если вкладка LLM промпт активна, загружаем MD файл
                             if (tabbedPane.getSelectedIndex() == 2) {
@@ -317,7 +318,6 @@ public class MainWindow extends JFrame {
 
         JButton deleteReportBtn = new JButton("Удалить отчёт");
         deleteReportBtn.setBackground(new Color(244, 67, 54));
-        deleteReportBtn.setForeground(Color.WHITE);
         deleteReportBtn.addActionListener(e -> deleteReportForCurrentForm());
 
         JButton saveResultBtn = new JButton("Сохранить результат в файл");
@@ -370,66 +370,6 @@ public class MainWindow extends JFrame {
         splitPane.setDividerLocation(400);
 
         return splitPane;
-    }
-
-    /**
-     * Рекурсивная загрузка формы и всех её дочерних элементов
-     * @param formPath путь к форме
-     * @param treePath путь в дереве (для раскрытия узлов)
-     */
-    private void loadFormAndAllChildren(String formPath, TreePath treePath) {
-        // Загружаем отчёт текущей формы
-        loadFormResultToPanel(formPath);
-
-        // Получаем дочерние формы
-        Set<String> childForms = formsTreePanel.loadChildFormsFromReport(formPath);
-
-        if (!childForms.isEmpty()) {
-            // Раскрываем текущий узел
-            formsTreePanel.expandPath(treePath);
-
-            // Рекурсивно загружаем каждую дочернюю форму
-            for (String childForm : childForms) {
-                // Убираем маркер SubForm если есть
-                String actualChildPath = childForm;
-                if (actualChildPath.startsWith("(sub)_")) {
-                    actualChildPath = actualChildPath.substring(6);
-                }
-
-                // Находим узел дочерней формы в дереве
-                DefaultMutableTreeNode childNode = formsTreePanel.findNodeByFormPath(actualChildPath);
-                if (childNode != null) {
-                    TreePath childPath = formsTreePanel.getTreePathForNode(childNode);
-                    // Рекурсивно загружаем дочернюю форму
-                    loadFormAndAllChildren(actualChildPath, childPath);
-                }
-            }
-        }
-
-        // Восстанавливаем выбор на исходной форме (после загрузки всех дочерних)
-        // Используем final переменную для лямбды
-        final String originalFormPath = formPath;
-        SwingUtilities.invokeLater(() -> {
-            TreePath currentPath = formsTreePanel.getSelectedPath();
-            if (currentPath != null) {
-                String currentFormPath = formsTreePanel.getFormPathFromTreePath(currentPath);
-                if (currentFormPath == null || !currentFormPath.equals(originalFormPath)) {
-                    // Возвращаем выбор на исходную форму
-                    DefaultMutableTreeNode node = formsTreePanel.findNodeByFormPath(originalFormPath);
-                    if (node != null) {
-                        TreePath originalPath = formsTreePanel.getTreePathForNode(node);
-                        formsTreePanel.setSelectedPath(originalPath);
-                    }
-                }
-            } else {
-                // Если нет выбранного пути, выбираем исходную форму
-                DefaultMutableTreeNode node = formsTreePanel.findNodeByFormPath(originalFormPath);
-                if (node != null) {
-                    TreePath originalPath = formsTreePanel.getTreePathForNode(node);
-                    formsTreePanel.setSelectedPath(originalPath);
-                }
-            }
-        });
     }
 
     private void startRecursiveAnalysis() {
