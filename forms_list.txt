@@ -1,3 +1,1 @@
-Forms/HospitPlanning/modals/graphics_add_edit.frm
-Forms/HospitPlanning/hospit_planning.frm
-Forms/Agents/agents_edit.frm
+Forms/HospDirAccounting/hospdiraccounting.frm

@@ -1,5 +1,6 @@
 package ru.tmis.analyzer.core.report;
 
+import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.model.FormInfo;
 
 import java.io.*;
@@ -9,9 +10,12 @@ import java.util.*;
 public class CSVReportGenerator {
 
     private final String outputDir;
+    private final SettingsModel settings;  // Добавить
+
 
     public CSVReportGenerator(String outputDir) {
         this.outputDir = outputDir;
+        this.settings = SettingsModel.getInstance();
     }
 
     /**
@@ -106,18 +110,19 @@ public class CSVReportGenerator {
 
 
     /**
-     * Записывает блок UserForms (особый случай, так как там сложная структура)
+     * Записывает блок UserForms в CSV
      */
     private void writeBlock(PrintWriter writer, String formName, String blockName,
                             List<FormInfo.OverrideInfo> overrides, boolean fullyReplaced, String replacementPath) {
 
         if (fullyReplaced && replacementPath != null) {
-            // writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV("ПОЛНАЯ ЗАМЕНА: " + replacementPath));
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV( replacementPath));
+            String relativePath = getRelativePath(replacementPath);
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(relativePath));
         }
 
         if (overrides == null || overrides.isEmpty()) {
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
+            // Не пишем "(не найдено)" - пропускаем
+            return;
         } else {
             Map<String, List<FormInfo.OverrideInfo>> overridesByRegion = new LinkedHashMap<>();
             for (FormInfo.OverrideInfo override : overrides) {
@@ -127,8 +132,9 @@ public class CSVReportGenerator {
             for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
                 String region = entry.getKey();
                 for (FormInfo.OverrideInfo override : entry.getValue()) {
-                    // String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
-                    String value = override.getType().getDescription() + " - " + override.getOverridePath();
+                    String relativePath = getRelativePath(override.getOverridePath());
+                    // Формат: UserFormsRegion\путь\к\файлу.dfrm
+                    String value = getRelativePathWithinRegion(relativePath, region);
                     writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
                 }
             }
@@ -150,5 +156,46 @@ public class CSVReportGenerator {
             escaped = "\"" + escaped + "\"";
         }
         return escaped;
+    }
+    /**
+     * Получить относительный путь от корня проекта
+     */
+    private String getRelativePath(String absolutePath) {
+        if (absolutePath == null || absolutePath.isEmpty()) return "";
+
+        String projectPath = settings.getProjectPath();
+        if (projectPath == null || projectPath.isEmpty()) {
+            return absolutePath;
+        }
+
+        String normalizedProject = projectPath.replace("\\", "/");
+        String normalizedPath = absolutePath.replace("\\", "/");
+
+        if (normalizedPath.startsWith(normalizedProject)) {
+            String relative = normalizedPath.substring(normalizedProject.length());
+            if (relative.startsWith("/")) {
+                relative = relative.substring(1);
+            }
+            return relative;
+        }
+
+        return absolutePath;
+    }
+    /**
+     * Получить путь относительно региона UserForms
+     */
+    private String getRelativePathWithinRegion(String relativePath, String region) {
+        if (relativePath == null || region == null) return "";
+
+        String normalizedPath = relativePath.replace("\\", "/");
+        String normalizedRegion = region.replace("\\", "/");
+
+        int regionIndex = normalizedPath.indexOf(normalizedRegion);
+        if (regionIndex >= 0) {
+            String result = normalizedPath.substring(regionIndex);
+            return result;
+        }
+
+        return relativePath;
     }
 }

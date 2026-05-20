@@ -1,0 +1,54 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/HospPlan/stationary_act.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/HospPlan/stationary_act.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Reports/HospPlan/stationary_act.d
+            └── data.dfrm
+
+
+SubForm:
+     RepTemplates/rep_template
+     RepTemplates/rep_template_footer
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_HOSP_HISTORIES
+    D_V_HPK_PLAN_JOURNALS
+    D_V_SERVICES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_RELATIVES
+    D_AGENTS
+    D_HOSP_HISTORIES
+    D_PERSMEDCARD
+    D_HOSP_REASONS
+    D_HOSPITALIZATION_TYPES
+    D_TRANSPORTATION_KINDS
+    D_LPUDICT
+    D_MKB10
+    D_HOSP_RESULTS
+    D_DEPS
+    D_HPK_PLAN_JOURNALS
+    D_HPKPJ_VMP_STATES
+    D_HOSP_OUTCOMES
+    D_HOSP_HOURS
+    D_HH_TRANSFER_REASONS
+    D_ABILITY_STATUS
+    D_DIRECTORIES_DATA_VER
+    D_HOSP_INCOMES
+    D_DIRECTION_HOSP
+    D_SERVICES_STR
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+

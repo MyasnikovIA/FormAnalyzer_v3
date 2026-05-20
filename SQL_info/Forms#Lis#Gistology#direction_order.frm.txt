@@ -1,0 +1,122 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Lis/Gistology/direction_order.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Lis/Gistology/direction_order.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     footerStyle
+     Lis/Utils/comments_utils
+     Lis/Barcode/subforms/barcode_utils
+     Lis/Patients/subforms/patient_select
+     Lis/Dirline/subforms/direction_params
+
+Список вызываемых форм в JS:
+     Lis/Dirline/dirline_order_alt.frm
+     OuterDirections/outerdirections_view_d3.frm
+     Lis/Gistology/forms/sample_edit_glass_comment.frm
+     Lis/Gistology/forms/sample_edit_comment.frm
+     TemplateComment/TemplateComment.frm
+     Lis/Gistology/forms/multi_copy.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     ArmPatientsInDep/SubForms/select_mkb_exact.frm
+
+SQL ЗАПРОСЫ (15):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_LABMED_RESEARCH_METHODS
+    D_V_LABMED_RESEARCH_BASE
+    D_V_LABMED_RSRCH_GROUPS
+    D_V_LABMED_METHOD_MATERIALS_BS
+    D_V_LABMED_METHOD_MAT_CONTS
+    D_V_LABMED_ANALYZ_RESEARCH
+    D_V_LABMED_ANALYZE_BASE
+    D_V_LABMED_LOCUS
+    D_V_LABMED_PATOL_CHAR
+    D_V_LABMED_MO_ENUM
+    D_V_LABMED_CONTAINRES_HIST
+    D_V_PAYMENT_KIND
+    D_V_HOSP_HISTORIES_ALL
+    D_V_HOSP_HISTORY_DEPS_BASE
+    D_V_LPU
+    D_V_AGENTS_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_DEPS_BASE
+    D_V_LBM_BARCODE_SETTINGS
+    D_V_LPU_BASE
+    D_V_DISEASECASES_BASE
+    D_V_VISITS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_HPK_PLAN_JOURNALS_BASE
+    D_V_HOSP_HISTORIES_BASE
+    D_V_CONTRACTS_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_FACIAL_ACCOUNTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LABMED_RESEARCH_METHODS
+    D_AGENTS
+    D_LABMED_RESEARCH
+    D_LABMED_RSRCH_GROUPS
+    D_LABMED_METHOD_MATERIALS
+    D_LABMED_METHOD_MAT_CONTS
+    D_LABMED_CONTAINERS
+    D_LABMED_ANALYZ_RESEARCH
+    D_LABMED_ANALYZE
+    D_LABMED_LOCUS
+    D_LABMED_PATOL_CHAR
+    D_LABMED_MO_ENUM
+    D_LABMED_BIOMATERIAL
+    D_LPU_SERVICES
+    D_PAYMENT_KIND
+    D_HOSP_HISTORIES
+    D_HOSP_HISTORY_DEPS
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_EMPLOYERS
+    D_DEPS
+    D_LBM_BARCODE_SETTINGS
+    D_DIVISIONS
+    D_MEASURES
+    D_DISEASECASES
+    D_VISITS
+    D_DIRECTION_SERVICES
+    D_HPK_PLAN_JOURNALS
+    D_CONTRACTS
+    D_PERSMEDCARD
+    D_FACIAL_ACCOUNTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_LBM_BARCODE_SETTINGS.GET_ACTIVE
+    D_PKG_STD.TREF
+    D_PKG_DIRECTIONS.ADD
+    D_PKG_BLOB_BUFFER.GET
+    D_PKG_LABMED_DIR_ATT.ADD
+    D_PKG_LABMED_GISTOLOGY.GET_PATIENT_MKB
+    D_PKG_LABMED_GISTOLOGY.GET_LAST_HIST_CONCLUSION
+    D_PKG_LABMED_CONTAINERS.GET_GIST_LEVEL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    LisHistAddGlass
+    SchPaymentKindDefault
+    AddAnalyseToHH
+    LisHistResearchGoal
+    LisHideDeliveredToLab
+    LisHistDirStatus
+    CreateContract
+    LisHistMainDiagnozMKBRequired
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:MKB10  composition:DEFAULT;
+
+БРОКЕРЫ:
+    action:D_PKG_LABMED_CONTAINERS.GET_GIST_LEVEL;
+

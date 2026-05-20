@@ -12,7 +12,7 @@
 6) Все атрибуты cmpActionVar и cmpDataSetVar должны быить выстроены в одну линию по вертикали. закрывающийся тэг "/>" должен быть без пробелов между последним атрибутом
 7) SQL запросы  должны иметь следующий вид :
    ```sql
-	<component cmptype="Action" name="AC_get_gw">
+	<component cmptype="Action" name="initAction">
         <![CDATA[
         select jwg.ID,
                jwg.CODE,

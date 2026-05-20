@@ -1,0 +1,109 @@
+Вот переработанная **только для SQL-блоков DataSet и Action** версия инструкции.
+Все правила по переименованию переменных, JS-функций, атрибутов `name` и структуре компонентов **удалены**, остались только правила, влияющие на содержимое CDATA внутри `ActionRouter` / `DataSetRouter`.
+
+---
+
+## Инструкция по модификации SQL-блоков в DataSet и Action (M2)
+
+### 1. SQL запросы в DataSet / Action
+- Все переменные в SQL запросах пишутся в верхнем регистре, кроме первых двух букв, которые обозначают тип:
+  `pnLPU`, `psCODE`, `pnID`, `pdDATE`
+- Все цифровые переменные обёрнуты в `to_number(:pnLPU)`
+- Все переменные, содержащие `_ID` или `ID`, являются числами → обёрнуты в `to_number`
+- Если в атрибутах `put=""` есть `put`, то в SQL добавляется блок `INTO`:
+
+**Пример:**
+```sql
+select jwg.id,
+       jwg.code
+  into :pnID_TAB,
+       :psCODE
+  from CORE.V_JOB_WORKERS_GROUP jwg
+ where jwg.id = to_number(:pnID)
+```
+
+### 2. Регистр и синтаксис SQL
+- Имена таблиц – **верхний регистр**: `CORE.V_JOB_WORKERS_GROUP`
+- Имена полей – **верхний регистр**: `jwg.ID, jwg.CODE`
+- Псевдонимы таблиц – **маленькие буквы**, осмысленные:
+  `D_V_VISITS vis`, `D_V_DIRECTION_SERVICES ds`
+- SQL-функции – **верхний регистр**: `COALESCE`, `SELECT`, `FROM`, `WHERE`, `AND`, `ORDER BY`, `DENSE_RANK`
+- `to_number` – **нижний регистр**
+- `ROWNUM` – **нижний регистр**
+- Конструкции DDL – **нижний регистр** (coalesce, select, from, where, and, order by, dense_rank)
+
+### 3. Форматирование SQL (внутри CDATA)
+- `select` начинается сразу после `<![CDATA[` (без отступа)
+- Ключевые слова `select`, `from`, `where`, `and`, `order by` – на одной вертикали
+- Отступ внутри CDATA для SQL/PLSQL – **2 пробела**
+- `begin` и `end` – без отступа внутри CDATA, код внутри – 2 пробела
+
+**Пример:**
+```sql
+<![CDATA[
+select hmkb.ID,
+       hmkb.MKB
+  from D_V_HPK_MKBS hmkb
+ where hmkb.LPU = to_number(:pnLPU)
+]]>
+```
+
+### 4. CASE WHEN
+- `case when`, `else`, `end` – каждый на новой строке
+- `else` – под `case` + 2 пробела
+
+**Пример:**
+```sql
+select case when (ds.REC_DATE = trunc(ds.REC_DATE) and ds.REC_DATE is not null) then v.VISIT_DATE
+              else ds.REC_DATE
+            end
+```
+
+### 5. PostgreSQL-специфичное
+- Входящие переменные конвертируются через `::`
+- Вызов процедур – через `CALL`
+- Функции – через `SELECT ... INTO`
+
+**Пример:**
+```sql
+where hmkb.LPU = (:pnLPU)::numeric
+  and hmkb.PID = (:pnHPK_ID)::numeric
+```
+
+### 6. Именованные параметры и комментарии
+- Все вызовы процедур/функций – через именованные параметры
+- У каждого параметра – комментарий `--`
+
+**Пример:**
+```sql
+call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnID,   -- ID новой записи
+                        pnLPU         => :pnLPU); -- ЛПУ
+```
+
+### 7. Исключения (exception when)
+- `exception when` – на одной строке
+
+**Пример:**
+```sql
+exception when no_data_found then
+```
+
+### 8. Комментарий к полю в SELECT
+- У каждого поля – комментарий `--` с описанием
+
+**Пример:**
+```sql
+select hmkb.ID,          -- ID диагноза
+       hmkb.MKB          -- Код МКБ
+```
+
+### 9. Что не меняется
+- **Не изменяются** имена переменных в `getVar`/`setVar`/`getValue`/`setValue`
+- **Не изменяются** атрибуты `src` в `ActionVar` / `Variable`
+- **Не изменяются** имена компонентов (`name` у Action/DataSet)
+- **Не изменяется** структура компонентов (остаётся M2: `component cmptype="..."`)
+- **Не удаляются** `debugger`, не переформатируется JS-код
+
+---
+
+Если нужен **только переработанный текст исходной формы** согласно этим SQL-правилам (без изменений JS и атрибутов `name`/`src`), пришли исходник формы, и я его обработаю.

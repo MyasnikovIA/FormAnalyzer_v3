@@ -1,0 +1,128 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/PatientSearch/directions_prescribes.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/PatientSearch/directions_prescribes.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Visit/PrintVisit
+     Directions/DirectionsForEP/DirectionsForEP
+
+Список вызываемых форм в JS:
+     Reg/reg_print_talon.frm
+     Registry/reg_prescr.frm
+     Directions/direction_cancel.frm
+     Persmedcard/persmedcard_edit.frm
+     UniversalTemplate/UniversalTemplate.frm
+     GenRegistry/reg_full.frm
+     HomeCalls/home_call_pass.frm
+     HomeCalls/in_results_jour_note.frm
+     UniversalTemplate/TemplateDirServ.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        DIRECTION_SERVICES;
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIR_SERV_PAYMENTS
+    D_V_DIRECTION_SERVICES
+    D_V_DIRECTIONS
+    D_V_HOME_CALL_JOUR
+    D_V_SERVICES_BASE
+    D_V_PERSMEDCARD
+    D_V_VISIT_TEMPLATES
+    D_V_VIS_TEMP_SERVICES
+    D_V_VIS_TEMP_TABS
+    D_V_VISIT_TAB_FIELDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIR_SERV_PAYMENTS
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_VISITPLACES
+    D_VISITS
+    D_DIR_REG_TYPES
+    D_SPECIALITIES
+    D_HPK_PLAN_JOURNALS
+    D_MKB10
+    D_MESES
+    D_HOSP_HOURS
+    D_PERSMEDCARD
+    D_OUTER_DIRECTIONS
+    D_LPUDICT
+    D_HOSPITALIZATIONKINDS
+    D_INJURE_KINDS
+    D_DIRECTION_KINDS
+    D_BED_TYPES
+    D_HOSP_REASONS
+    D_DIR_CANC_REASONS
+    D_DEPDICT
+    D_HOSPITALIZATION_TYPES
+    D_HOSP_DIRECT_TYPES
+    D_TRANSPORTATION_KINDS
+    D_MED_THERAPY_SCHEMES
+    D_DIRECTION_FORMS
+    D_TYPE_MED_HELP
+    D_DIRECTION_CONDITIONS
+    D_HOME_CALL_JOUR
+    D_SITES
+    D_HOME_CALL_INITS
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VIS_DIAGNOSISES
+    D_HOME_CALL_BULLETINES
+    D_BLOODGROUPE
+    D_RHESUS
+    D_VISIT_TEMPLATES
+    D_VIS_TEMP_SERVICES
+    D_VIS_TEMP_TABS
+    D_VISIT_TAB_FIELDS
+    D_ADD_DATATYPES
+    D_EDIT_METHODS
+    D_ADD_DIR_COLUMNS
+    D_ADD_DIRECTORIES
+    D_COMPOSITION
+    D_SHOW_METHOD
+    D_EXTRA_DICTS
+    D_VISIT_CONTAINERS
+    D_MASKS
+    D_MASKTYPES
+    D_CSS_STYLES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DIRECTION_SERVICES.SET_STATUS
+    D_PKG_VISITS.GET_TEMPLATE_INFO
+    D_PKG_DIRECTION_SERVICES.GET_LAST_PROC_DS
+    D_PKG_DIRECTION_SERVICES.UPD
+    D_PKG_BPENV.AFTERBP
+    D_PKG_DIRECTION_SERVICES.DEL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    DSInputCancelReasons
+    DIRECTION_SERVICES
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="EMPLOYERS" composition="SELECT_ID"
+    unit="SERVICES" composition="DEFAULT"
+

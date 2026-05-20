@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ru.tmis.analyzer.config.AppConfig;
+import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
@@ -18,11 +19,13 @@ public class JSONReportGenerator {
 
     private final String outputDir;
     private final AppConfig config;
+    private final SettingsModel settings;
     private final Gson gson;
 
     public JSONReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
         this.config = config;
+        this.settings = SettingsModel.getInstance();
         this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
@@ -78,10 +81,11 @@ public class JSONReportGenerator {
 
         // Основная информация
         formJson.addProperty("formPath", formInfo.getFormPath());
-        formJson.addProperty("baseFormPath", formInfo.getBaseFormPath());
+        // Исправлено: относительный путь
+        formJson.addProperty("baseFormPath", getRelativePath(formInfo.getBaseFormPath()));
         formJson.addProperty("fullyReplaced", formInfo.isFullyReplaced());
         if (formInfo.getReplacementPath() != null) {
-            formJson.addProperty("replacementPath", formInfo.getReplacementPath());
+            formJson.addProperty("replacementPath", getRelativePath(formInfo.getReplacementPath()));
         }
 
         // Overrides (UserForms)
@@ -89,7 +93,8 @@ public class JSONReportGenerator {
         for (FormInfo.OverrideInfo override : formInfo.getOverrides()) {
             JsonObject overrideJson = new JsonObject();
             overrideJson.addProperty("regionName", override.getRegionName());
-            overrideJson.addProperty("overridePath", override.getOverridePath());
+            // Исправлено: относительный путь
+            overrideJson.addProperty("overridePath", getRelativePath(override.getOverridePath()));
             overrideJson.addProperty("type", override.getType().getDescription());
             overrideJson.addProperty("typeCode", override.getType().name());
             overridesArray.add(overrideJson);
@@ -244,5 +249,29 @@ public class JSONReportGenerator {
         }
 
         return itemJson;
+    }
+    /**
+     * Получить относительный путь от корня проекта
+     */
+    private String getRelativePath(String absolutePath) {
+        if (absolutePath == null || absolutePath.isEmpty()) return "";
+
+        String projectPath = settings.getProjectPath();
+        if (projectPath == null || projectPath.isEmpty()) {
+            return absolutePath;
+        }
+
+        String normalizedProject = projectPath.replace("\\", "/");
+        String normalizedPath = absolutePath.replace("\\", "/");
+
+        if (normalizedPath.startsWith(normalizedProject)) {
+            String relative = normalizedPath.substring(normalizedProject.length());
+            if (relative.startsWith("/")) {
+                relative = relative.substring(1);
+            }
+            return relative;
+        }
+
+        return absolutePath;
     }
 }

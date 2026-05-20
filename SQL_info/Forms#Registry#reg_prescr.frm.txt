@@ -1,0 +1,53 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/reg_prescr.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Registry/reg_prescr.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+     Registry/reg
+
+Список вызываемых форм в JS:
+     Registry/reg_select_time_full.frm
+     Registry/reg_edit_write.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_SCHEDULE_TIME_TYPES
+    D_V_DIRECTION_SERVICES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SCHEDULE_TIME_TYPES
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_CABLAB
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_PAYMENT_KIND
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SchShowDepStr
+    SchShowCabStr
+    SchShowPatSearch
+    SchRegTypeDefault
+    DirectionRegType
+    SchTimeTypeDefault
+

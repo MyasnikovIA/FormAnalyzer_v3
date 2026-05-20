@@ -1,0 +1,53 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/direction_cancel_reason.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/direction_cancel_reason.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Directions/direction_cancel_reason.d
+            └── hh_cancel.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:
+    D_V_DIR_CANC_REASONS
+    D_V_HPK_PLAN_JOURNALS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_VISITS_BASE
+    D_V_VISIT_FIELDS_BASE
+    D_V_VISIT_TAB_FIELDS_BASE
+    D_V_EXTRA_DICT_VALUES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIR_CANC_REASONS
+    D_HPK_PLAN_JOURNALS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_VISITS
+    D_VISIT_FIELDS
+    D_VISIT_TAB_FIELDS
+    D_EXTRA_DICT_VALUES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.FRM_D
+    D_PKG_STD.FRM_T
+    D_PKG_DIRECTIONS.SET_CANCELED
+
+КОНСТАНТЫ:
+    CodeServiceReasonOtkaz
+
+СИСТЕМНЫЕ ОПЦИИ:
+    HospRefuseService
+

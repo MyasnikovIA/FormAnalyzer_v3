@@ -1,0 +1,366 @@
+Вот инструкция **только для переработки JavaScript-кода** в M2 форме, с **запретом на переименование переменных и контролов**.
+
+---
+
+## Инструкция по переработке JavaScript-кода в M2 форме
+
+### Общие ограничения
+
+**ЗАПРЕЩЕНО переименовывать:**
+- Переменные в `setVar()`, `getVar()`, `setValue()`, `getValue()`
+- Переменные в `setCaption()`, `getCaption()`
+- Имена контролов (например, `ctrlName`, `deDate`, `gridMain`)
+- Любые строковые литералы, используемые для обращения к переменным и контролам
+
+**РАЗРЕШЕНО изменять:**
+- Форматирование (отступы, пробелы, переносы строк)
+- Стиль объявления функций (camelCase)
+- Операторы сравнения (`==` → `===`)
+- Приведение типов (`+getVar()`)
+- Удаление `debugger`
+- Добавление `;` в конце функций
+
+---
+
+### 1. Имена JS-функций (camelCase, с маленькой буквы)
+
+**Правильно:**
+```javascript
+Form.onCreate = function() { ... };
+Form.afterSelect = function() { ... };
+```
+
+**Неправильно:**
+```javascript
+Form.OnCreate = function() { ... };
+Form.AfterSelect = function() { ... };
+```
+
+---
+
+### 2. Имена инициализированных переменных (camelCase, без подчеркиваний)
+
+**Правильно:**
+```javascript
+let minWorkers = +getValue('ctrlMinWorkers');
+var maxCount = getValue('ctrlMaxCount');
+```
+
+**Неправильно:**
+```javascript
+let min_workers = +getValue('ctrlMinWorkers');
+var max_count = getValue('ctrlMaxCount');
+```
+
+---
+
+### 3. Условие `if`
+
+**Правильно:**
+```javascript
+if (getVar('action') === 'INSERT') {
+    // код
+}
+```
+
+**Неправильно:**
+```javascript
+if(getVar('action')=='INSERT'){
+    // код
+}
+```
+
+---
+
+### 4. Шаблон JS-функции
+
+```javascript
+Form.afterSelect = function() {
+    setVar('ID', null);
+    // остальной код
+};
+```
+
+---
+
+### 5. Кавычки (всегда одинарные)
+
+**Правильно:**
+```javascript
+setVar('CODE', 'текст \' "XXX" ');
+getValue('ctrlName');
+```
+
+**Неправильно:**
+```javascript
+setVar("CODE", "текст");
+getValue("ctrlName");
+```
+
+---
+
+### 6. Вызов функций (замена `base()` на `Form.`)
+
+**Правильно:**
+```javascript
+executeAction('acSelect', Form.afterSelect);
+Form.onCreate();
+```
+
+**Неправильно:**
+```javascript
+executeAction('acSelect', base().afterSelect);
+base().onCreate();
+```
+
+**Исключение:** В атрибутах компонента `<div cmptype="form" oncreate="base().onCreate();">` – **не заменять**.
+
+---
+
+### 7. Сравнение с числом (приведение через `+`)
+
+**Правильно:**
+```javascript
+if (+getVar('ModalResult') === 1) {
+    refreshDataSet('dsHpkMkbs');
+}
+```
+
+**Неправильно:**
+```javascript
+if (getVar('ModalResult') == 1) {
+    refreshDataSet('dsHpkMkbs');
+}
+```
+
+---
+
+### 8. Пробелы после `,`, `:`, `;`
+
+**Правильно:**
+```javascript
+function(a, b, c) { var x = 1; var y = 2; }
+```
+
+**Неправильно:**
+```javascript
+function(a,b,c){var x=1;var y=2;}
+```
+
+---
+
+### 9. Пробел перед `{` в функции
+
+**Правильно:**
+```javascript
+function() {
+    // код
+}
+```
+
+**Неправильно:**
+```javascript
+function(){
+    // код
+}
+```
+
+---
+
+### 10. Атрибуты функций – по вертикали
+
+```javascript
+Form.validate = function(a, b, c) {
+    // код
+};
+```
+
+---
+
+### 11. Удалить `debugger`
+
+Все строки, содержащие `debugger;`, удаляются полностью.
+
+---
+
+### 12. Точка с запятой после каждой JS-функции
+
+**Правильно:**
+```javascript
+Form.onCreate = function() {
+    // код
+};
+```
+
+**Неправильно:**
+```javascript
+Form.onCreate = function() {
+    // код
+}
+```
+
+---
+
+### 13. Отступы внутри компонента Script
+
+- `CDATA[` – на одном уровне с `<component cmptype="Script">`
+- Первая строка JS – без дополнительного отступа относительно `CDATA[`
+- Внутри JS – отступ **4 пробела**
+
+**Правильно:**
+```xml
+<component cmptype="Script">
+    <![CDATA[
+    Form.onCreate = function() {
+        setVar('HPK_ID', getVar('HPK_ID', 1));
+    };
+    ]]>
+</component>
+```
+
+**Неправильно:**
+```xml
+<component cmptype="Script">
+    <![CDATA[
+                Form.onCreate = function() {
+                    setVar('HPK_ID', getVar('HPK_ID', 1));
+                };
+    ]]>
+</component>
+```
+
+---
+
+### 14. Запрещённые действия (контрольный список)
+
+- [ ] **НЕ** переименовывать переменные в `setVar/getVar/setValue/getValue/setCaption/getCaption`
+- [ ] **НЕ** переименовывать контролы (`ctrl...`, `de...`, `grid...`, `btn...`)
+- [ ] **НЕ** менять строковые литералы, переданные в эти функции
+- [ ] **НЕ** менять имена переменных, используемых в `openWindow({ vars: {...} })`
+- [ ] **НЕ** менять атрибут `name` у визуальных компонентов (Grid, Edit, Button и т.д.)
+
+---
+
+### 15. Пример полного JS-блока (с соблюдением всех правил)
+
+```xml
+<component cmptype="Script">
+    <![CDATA[
+    Form.onCreate = function() {
+        setVar('HPK_ID', getVar('HPK_ID', 1));
+        setValue('ctrlDateFrom', new Date());
+    };
+
+    Form.onShow = function() {
+        if (+getVar('ModalResult') === 1) {
+            refreshDataSet('dsHpkMkbs');
+        }
+    };
+
+    Form.addRecord = function() {
+        if (empty(getValue('ctrlCode'))) {
+            message('ERROR', 'Не заполнен код');
+            return;
+        }
+        executeAction('acInsert', Form.afterInsert);
+    };
+
+    Form.afterInsert = function() {
+        setVar('PRIMARY', getVar('NEW_ID'));
+        refreshDataSet('dsMain');
+    };
+    ]]>
+</component>
+```
+
+Имена инициализированных переменных JS должны писаться в кэмэлкейсе без подчеркивания пример:
+    не правильно:let min_workers = +getValue('ctrlMinWorkers');
+	правильно : let minWorkers = +getValue('ctrlMinWorkers');
+    не правильно: var min_workers = +getValue('ctrlMinWorkers');
+	правильно : var minWorkers = +getValue('ctrlMinWorkers');
+
+
+16) Удалить все debbuger из JS
+17) оставь комментарии без изменения
+18) имена JS функций должны быть в кэмэлкейсе  с маленькой буквы пример
+    не правильно :   Form.OnCreate
+	правильно :      Form.onCreate
+
+
+
+
+#### 68.4 Сравнение правильного и неправильного форматирования
+
+| Элемент | Правильно | Неправильно |
+|---------|-----------|--------------|
+| **Отступ перед `<![CDATA[`** | 4 пробела | 4 пробела |
+| **Отступ первой строки JS** | 0 пробелов (относительно CDATA) | 8-16 пробелов |
+| **Отступ вложенных блоков JS** | 4 пробела | 8-20 пробелов |
+| **Отступ перед `]]>`** | 0 пробелов | 8-16 пробелов |
+
+#### 68.5 Визуальное представление
+
+**Правильная структура отступов:**
+```
+[4 пробела]<component cmptype="Script">
+[4 пробела]    <![CDATA[
+[4 пробела]    Form.onCreate = function() {
+[4 пробела]        // код с отступом 4 пробела
+[4 пробела]    };
+[4 пробела]    ]]>
+[4 пробела]</component>
+```
+
+**Неправильная структура отступов:**
+```
+[4 пробела]<component cmptype="Script">
+[4 пробела]    <![CDATA[
+[8 пробелов]        Form.onCreate = function() {
+[12 пробелов]            // слишком большой отступ
+[8 пробелов]        };
+[8 пробелов]    ]]>
+[4 пробела]</component>
+```
+
+
+#### 68.8 Автоматическое применение правила
+
+При переработке формы необходимо:
+1. Удалить все лишние пробелы в начале каждой строки JavaScript кода
+2. Оставить только стандартные отступы внутри JS кода (4 пробела)
+3. Убедиться, что первая строка JS кода начинается сразу после перевода строки после `<![CDATA[`
+4. Закрывающий `]]>` должен быть на отдельной строке без пробелов в начале
+
+## Правило №69: Отступы внутри блоков $$() и _$$()
+
+### Правило №69: Форматирование кода между $$() и _$$()
+
+Весь код, расположенный между вызовами `$$(clone);` и `_$$();`, должен иметь отступ **на 4 пробела больше**, чем окружающий код.
+
+#### Пример:
+
+**Неправильно:**
+```javascript
+$$(clone);
+setValue('checkIsActive', data.IS_ACTIVE);
+setValue('checkIsPrior', data.IS_PRIORITY);
+_$$();
+```
+
+**Правильно:**
+```javascript
+$$(clone);
+    setValue('checkIsActive', data.IS_ACTIVE);
+    setValue('checkIsPrior', data.IS_PRIORITY);
+_$$();
+```
+
+#### Общее правило:
+- `$$(clone);` - без дополнительного отступа
+- Внутренний код - отступ **+4 пробела** относительно внешнего блока
+- `_$$();` - без дополнительного отступа (на одном уровне с `$$(clone);`)
+
+
+---
+
+Если нужна переработка конкретного JS-кода формы – пришли, обработаю по этой инструкции.

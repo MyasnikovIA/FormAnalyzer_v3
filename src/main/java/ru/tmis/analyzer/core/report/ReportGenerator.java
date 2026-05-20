@@ -146,18 +146,19 @@ public class ReportGenerator {
         writer.println("-".repeat(100));
         writer.println("ФОРМА: " + form.getFormPath());
         writer.println("-".repeat(100));
-        writer.println("Базовая форма: " + form.getBaseFormPath());
 
+        // Исправлено: относительный путь для базовой формы
+        writer.println("Базовая форма: " + getRelativePath(form.getBaseFormPath()));
         if (form.isFullyReplaced()) {
             writer.println("СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА");
-            writer.println("Файл замены: " + form.getReplacementPath());
+            // Исправлено: относительный путь для файла замены
+            writer.println("Файл замены: " + getRelativePath(form.getReplacementPath()));
         } else if (!form.getOverrides().isEmpty()) {
             writer.println("СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА");
         } else {
             writer.println("СТАТУС: БАЗОВАЯ ФОРМА");
         }
         writer.println();
-
         writeUserFormsSection(writer, form);
 
         // SubForm
@@ -538,7 +539,7 @@ public class ReportGenerator {
             return;
         }
 
-        writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
+        writer.println("Вьюхи");
         for (String table : allTables) {
             writer.println("    " + table);
         }
@@ -603,22 +604,22 @@ public class ReportGenerator {
             Map<String, Set<String>> dotDCatalogs = new LinkedHashMap<>();
 
             for (FormInfo.OverrideInfo override : overrides) {
-                String path = override.getOverridePath();
-                String fileName = path.substring(path.lastIndexOf("/") + 1);
+                String relativePath = getRelativePath(override.getOverridePath());
+                String fileName = relativePath.substring(relativePath.lastIndexOf("/") + 1);
 
                 switch (override.getType()) {
                     case FULL_OVERRIDE:
-                        fullReplacements.add(path);
+                        fullReplacements.add(relativePath);
                         break;
                     case PARTIAL_OVERRIDE:
-                        partialDfrm.add(path);
+                        partialDfrm.add(relativePath);
                         break;
                     case DOT_D_OVERRIDE:
-                        if (path.contains(".d/")) {
-                            String catalogPath = path.substring(0, path.indexOf(".d/") + 2);
+                        if (relativePath.contains(".d/")) {
+                            String catalogPath = relativePath.substring(0, relativePath.indexOf(".d/") + 2);
                             dotDCatalogs.computeIfAbsent(catalogPath, k -> new LinkedHashSet<>()).add(fileName);
                         } else {
-                            partialDfrm.add(path);
+                            partialDfrm.add(relativePath);
                         }
                         break;
                 }
@@ -770,8 +771,6 @@ public class ReportGenerator {
             writer.println();
         }
     }
-// ReportGenerator.java - исправленный метод appendFormToMainReport
-
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
         // 1. Сохраняем отдельный файл для формы (TXT)
         saveFormReportToFile(formInfo);
@@ -839,27 +838,34 @@ public class ReportGenerator {
             String formName = formInfo.getFormPath();
 
             // ЮЗЕРФОРМЫ - теперь не будет писать "(не найдено)"
-            writeCSVBlock(writer, formName, "ЮЗЕРФОРМЫ", formInfo.getOverrides(),
+            writeCSVBlock(writer, formName, "Юзерформы", formInfo.getOverrides(),
                     formInfo.isFullyReplaced(), formInfo.getReplacementPath());
 
             // SubForm - не будет писать "(не найдено)"
             writeCSVBlock(writer, formName, "SubForm", formInfo.getSubForms());
 
             // Список вызываемых форм в JS
-            writeCSVBlock(writer, formName, "Список вызываемых форм в JS", formInfo.getJsForms());
+            writeCSVBlock(writer, formName, "формы JS", formInfo.getJsForms());
+
+
+            // "Отчеты, вызываемые на форме"
 
             // ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ
-            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление)", formInfo.getTablesViews());
+            writeCSVBlock(writer, formName, "ВЬЮХИ", formInfo.getTablesViews());
 
             // ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ
             Set<String> viewTables = getViewTables(formInfo);
+            System.out.println("[CSV DEBUG] Форма: " + formName + ", таблиц из вьюх: " + viewTables.size());
+            for (String table : viewTables) {
+                System.out.println("[CSV DEBUG]   - " + table);
+            }
             writeCSVBlock(writer, formName, "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)", viewTables);
 
             // ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ
-            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ", formInfo.getPackagesFunctions());
+            writeCSVBlock(writer, formName, "Пакеты и функции", formInfo.getPackagesFunctions());
 
             // СИСТЕМНЫЕ ОПЦИИ
-            writeCSVBlock(writer, formName, "СИСТЕМНЫЕ ОПЦИИ", formInfo.getSystemOptions());
+            writeCSVBlock(writer, formName, "СО", formInfo.getSystemOptions());
 
             // КОНСТАНТЫ
             writeCSVBlock(writer, formName, "КОНСТАНТЫ", formInfo.getConstants());
@@ -989,11 +995,18 @@ public class ReportGenerator {
      */
     private Set<String> getViewTables(FormInfo formInfo) {
         Set<String> viewTables = new LinkedHashSet<>();
-        if (formInfo.getViewDependencies() != null) {
-            for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
-                viewTables.addAll(entry.getValue().getOracleTables());
+
+        // Важно: проверяем через formInfo.getViewDependencies()
+        Map<String, ViewTableDependencies> deps = formInfo.getViewDependencies();
+        if (deps != null && !deps.isEmpty()) {
+            for (Map.Entry<String, ViewTableDependencies> entry : deps.entrySet()) {
+                ViewTableDependencies dep = entry.getValue();
+                if (dep != null && dep.getOracleTables() != null) {
+                    viewTables.addAll(dep.getOracleTables());
+                }
             }
         }
+
         return viewTables;
     }
 
