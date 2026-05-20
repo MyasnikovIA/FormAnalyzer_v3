@@ -1,2 +1,1 @@
 Forms/HospDirAccounting/hospdiraccounting.frm
-Forms/Reports/report_structure_edit.frm

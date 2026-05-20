@@ -1,0 +1,80 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospDirAccounting/hospdiraccounting.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HospDirAccounting/hospdiraccounting.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlaniaSKMMC =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        КАТАЛОГ: UserFormsMoscowNIIBlohina/HospDirAccounting/hospdiraccounting.d
+            └── data.dfrm
+
+
+SubForm:
+     Visit/PrintVisit
+     HospDirAccounting/search_patient
+
+Список вызываемых форм в JS:
+     HospPlan/hp_view_joined_docs.frm
+     Persmedcard/persmedcard_edit.frm
+     DiseaseCase/diseasecase.frm
+     PatientSearch/directions_prescribes.frm
+     HospPlan/hospplan.frm
+     HospPlan/hp_directions_edit.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        DIRECTIONS;
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_LPUDICT
+    D_V_DIRECTIONS_BASE
+    D_V_LPU
+    D_V_EMPLOYERS
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_HOSP_HISTORIES_BASE
+    D_V_HPK_SCHEDULE_REG
+    D_V_HPK_PLAN_JOURNALS_BASE
+    D_V_HOSP_PLAN_KINDS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPUDICT
+    D_DIRECTIONS
+    D_LPU
+    D_GEOGRAFY
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_DIRECTION_SERVICES
+    D_HOSP_HISTORIES
+    D_HPK_SCHEDULE_REG
+    D_HPK_PLAN_JOURNALS
+    D_HOSP_PLAN_KINDS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_HPK_SCHEDULE_REG.DEL
+    D_PKG_HPK_PLAN_JOURNALS.DEL
+    D_PKG_DIRECTIONS.DEL
+    D_PKG_OUTER_DIRECTIONS.DEL
+    D_PKG_EMPLOYERS.GET_ID
+

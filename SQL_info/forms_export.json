@@ -1,0 +1,877 @@
+{
+  "forms": [
+    {
+      "formPath": "Forms/HospDirAccounting/hospdiraccounting.frm",
+      "baseFormPath": "Forms/HospDirAccounting/hospdiraccounting.frm",
+      "fullyReplaced": true,
+      "replacementPath": "UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm",
+      "Юзерформы": [
+        {
+          "regionName": "UserFormsAlaniaSKMMC",
+          "overridePath": "UserFormsAlaniaSKMMC/HospDirAccounting/hospdiraccounting.frm",
+          "type": ".frm - полная замена",
+          "typeCode": "FULL_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/script.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/HospDirAccounting/hospdiraccounting.d/view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsMoscowNIIBlohina",
+          "overridePath": "UserFormsMoscowNIIBlohina/HospDirAccounting/hospdiraccounting.d/data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        }
+      ],
+      "subForm": [
+        "Visit/PrintVisit",
+        "HospDirAccounting/search_patient"
+      ],
+      "формы JS": [
+        "HospPlan/hp_view_joined_docs.frm",
+        "Persmedcard/persmedcard_edit.frm",
+        "DiseaseCase/diseasecase.frm",
+        "PatientSearch/directions_prescribes.frm",
+        "HospPlan/hospplan.frm",
+        "HospPlan/hp_directions_edit.frm"
+      ],
+      "Вьюхи": [
+        "D_V_LPUDICT",
+        "D_V_DIRECTIONS_BASE",
+        "D_V_LPU",
+        "D_V_EMPLOYERS",
+        "D_V_DIRECTION_SERVICES_BASE",
+        "D_V_HOSP_HISTORIES_BASE",
+        "D_V_HPK_SCHEDULE_REG",
+        "D_V_HPK_PLAN_JOURNALS_BASE",
+        "D_V_HOSP_PLAN_KINDS"
+      ],
+      "Пакеты и функции": [
+        "D_PKG_HPK_SCHEDULE_REG.DEL",
+        "D_PKG_HPK_PLAN_JOURNALS.DEL",
+        "D_PKG_DIRECTIONS.DEL",
+        "D_PKG_OUTER_DIRECTIONS.DEL",
+        "D_PKG_EMPLOYERS.GET_ID"
+      ],
+      "viewDependencies": {
+        "D_V_LPUDICT": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_LPUDICT"
+          ],
+          "postgresTables": [
+            "D_LPUDICT",
+            "D_LPUKINDS",
+            "D_AGENTS"
+          ]
+        },
+        "D_V_DIRECTIONS_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_DIRECTIONS"
+          ],
+          "postgresTables": [
+            "D_DIRECTIONS"
+          ]
+        },
+        "D_V_LPU": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_LPU",
+            "D_LPUDICT",
+            "D_GEOGRAFY"
+          ],
+          "postgresTables": [
+            "D_LPU",
+            "D_LPUDICT",
+            "D_GEOGRAFY"
+          ]
+        },
+        "D_V_EMPLOYERS": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_EMPLOYERS",
+            "D_JOBTITLES",
+            "D_SPECIALITIES",
+            "D_SPECIALITIES_ED",
+            "D_DEPS",
+            "D_DEPS_KINDS",
+            "D_USERS",
+            "D_AGENTS",
+            "D_AGENT_ESIA",
+            "D_EMP_SKILL",
+            "D_SKILL_CATEGORIES",
+            "D_LPU",
+            "D_LPUDICT"
+          ],
+          "postgresTables": [
+            "D_EMPLOYERS",
+            "D_JOBTITLES",
+            "D_SPECIALITIES",
+            "D_SPECIALITIES_ED",
+            "D_DEPS",
+            "D_DEPS_KINDS",
+            "D_USERS",
+            "D_AGENTS",
+            "D_AGENT_ESIA",
+            "D_SKILL_CATEGORIES",
+            "D_LPU",
+            "D_LPUDICT"
+          ]
+        },
+        "D_V_DIRECTION_SERVICES_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_DIRECTION_SERVICES"
+          ],
+          "postgresTables": [
+            "D_DIRECTION_SERVICES"
+          ]
+        },
+        "D_V_HOSP_HISTORIES_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_HOSP_HISTORIES"
+          ],
+          "postgresTables": [
+            "D_HOSP_HISTORIES"
+          ]
+        },
+        "D_V_HPK_SCHEDULE_REG": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_HPK_SCHEDULE_REG"
+          ],
+          "postgresTables": [
+            "D_HPK_SCHEDULE_REG"
+          ]
+        },
+        "D_V_HPK_PLAN_JOURNALS_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_HPK_PLAN_JOURNALS"
+          ],
+          "postgresTables": [
+            "D_HPK_PLAN_JOURNALS"
+          ]
+        },
+        "D_V_HOSP_PLAN_KINDS": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_HOSP_PLAN_KINDS"
+          ],
+          "postgresTables": [
+            "D_HOSP_PLAN_KINDS",
+            "D_HPK_JOURNAL_TYPES"
+          ]
+        }
+      },
+      "popupMenus": [
+        {
+          "name": "P_GRID_MAIN",
+          "items": [
+            {
+              "caption": "Обновить",
+              "name": "pREFRESH",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "История исследований",
+              "name": "pSHOW_HIST",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Назначения",
+              "name": "pSHOW_PRESC",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Записать",
+              "name": "pADD_HOSP_PLAN",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотр прикрепленных документов",
+              "name": "pADD_HOSP_PLAN",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Направление 057/у",
+              "name": "pOutDirServ",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Направление на госпитализацию",
+              "name": "pHospResult",
+              "fromAutoPopup": true,
+              "autoPopupName": "DIRECTIONS",
+              "isDbReport": false
+            },
+            {
+              "caption": "Печать посещения",
+              "name": "pVisitReport",
+              "fromAutoPopup": true,
+              "autoPopupName": "DIRECTIONS",
+              "isDbReport": false
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5\"             \"Талон амбулаторного пациента A5 (Алания)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 \")   Form\u003d\"Reports/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"patient_new_cancer_polyclinic\" \"Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)\" (\"Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)\")   Form\u003d\"Reports/HospPlan/patient_new_cancer_polyclinic.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_alan\"        \"Талон амбулаторного пациента A5 (Алания)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Алания\")   Form\u003d\"Reports/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"CHECKS\"                        \"CHECKS\" (\"Reports/Reception/check\")   Form\u003d\"Reports/Reception/check.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"HOSPITALISATION_DIR\"           \"HOSPITALISATION_DIR\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"Составной\"       - REP_CODE\u003d\"NapravlenieAlania\"             \"Документы на госпитализацию\" (\"Документы на госпитализацию\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"057У\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"на госпитализацию\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"057/у-04 Направление на госпитализацию\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"HOSPITALISATION_DIR\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"analis_\"             \"\" (\"Анализы\")   Form\u003d\"Reports/Visit_1/alaniyaAnalysis.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"analis_mochi_\"       \"\" (\"Исследование мочи\")   Form\u003d\"Reports/Visit_1/alaniyaUrineTest.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"mammograf\"           \"\" (\"Заключение исследования\")   Form\u003d\"Reports/Visit_1/alaniyaMammograf.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │                                      └── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"EKG\"                 \"\" (\"ЭКГ\")   Form\u003d\"Reports/Visit_1/alaniyaEkg.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A5_Krasnodar\"        \"ТАП A5 Краснодар\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Krasnodar\")   Form\u003d\"Reports/AmbReps/amb_talon_A5_new.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"INSP_CONS_1\"                   \"заключение врача с шапкой\" (\"Заключение врача (с диагностикой) 1 \")   Form\u003d\"Reports/Visit/INSP_CONS_DoctorResult_ONKO_MED.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE_MASS\"      \"Массовая печать направлений\" (\"Массовая печать направление на анализ со штрих-кодом\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE_LIST.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE1\"          \"Направление2\" (\"Направление на анализ со штрих-кодом1\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE1.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"soglasie_na_med_vmesh_DZ_dp\"   \"Информационное согласие 10102020\" (\"(Томск)ИС на медицинское вмешательство (ДЗ ТО) пакет документов\")   Form\u003d\"Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServForReg\"              \"Направление на консультацию\" (\"Направление на обследование, консультацию\")   Form\u003d\"Reports/Visit/OutDirServForReg.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4_Alania\"           \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА_Alania\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A5\"                  \"ТАП\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5\")   Form\u003d\"Reports/AmbReps/amb_talon_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"task_2_2_report\"               \"0000000000000000000000000000000000000000000000000\" (\"Task 2.2 - отчет \")   Form\u003d\"Reports/task_2_2_report.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4_old_28082025\"     \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"sakh_amb_talon_old\"            \"Талон амбулаторного пациента (Общий)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)\")   Form\u003d\"Reports/AmbReps/sakh_amb_talon_new_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4\"                  \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"MED_VISIT_OFT_EXTR\"            \"Мед карта (неотложка)\" (\"Мед карта (неотл)\")   Form\u003d\"Reports/Visit/VISIT_OFT_EXTR_MedCard.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"sakh_amb_talon\"                \"Талон амбулаторного пациента (Общий)\" (\"025-1/у  ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"112/y_10\"                      \"DIRECTIONS\" (\"112/у История развития ребенка стр. 10\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4(old)2\"            \"Талон амбулаторного пациента A5\" (\"amb_talon_A4(old)2\")   Form\u003d\"Reports/AmbReps/amb_talon_A4(old).frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"INSP_CONS_1_SF\"                \"заключение врача с шапкой\" (\"Заключение врача (с диагностикой)  1 \")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"Crystal Reports\" - REP_CODE\u003d\"HOSP_HISTORY_KATAR\"            \"ntcn\" (\"Мед. карта (HOSP_HISTORY_KATAR)\")   Form\u003d\"1.rpt.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_for_disp_new\"        \"ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)\" (\"ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)\")   Form\u003d\"Reports/AmbReps/amb_talon_for_disp.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"vnytr_napr_0049_old\"           \"vnytr_napr_0049\" (\"Внутреннее направление\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"emergency_notification_dtp\"    \"58 - ДТП - 2/У\" (\"Извещение о раненом в ДТП\")   Form\u003d\"Reports/EmergencyRep/emergency_notification_dtp.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"MAP_ANEST_530n\"                \"КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ\" (\"КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ\")   Form\u003d\"Reports/ArmPatientsInDep/map_anest_530n.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")  ",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"task_2_2_report\"               \"0000000000000000000000000000000000000000000000000\" (\"Task 2.2 - отчет \")   Form\u003d\"Reports/task_2_2_report.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE_21\"        \"Направления на услуги \" (\"Направление на анализ со штрих-кодом как на приморье\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServPaid\"                \"057/у-04 Платные Направление\" (\"057/у-04 Платные Направление\")   Form\u003d\"Reports/Visit/OutDirServPaid.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServNew__1\"              \"057/у-04 NEW Направление на консультацию, диагностическое исследование\" (\"057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ\")   Form\u003d\"Reports/Visit/OutDirServNew.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_274\"         \"ТАП Тверь\" (\"ТАП Тверь 274\")   Form\u003d\"Reports/AmbReps/Order274/amb_talon_0251_A5.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServNew\"                 \"057/у-04 NEW Направление на консультацию, диагностическое исследование\" (\"057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ\")   Form\u003d\"Reports/Visit/OutDirServNew.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    └── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4\"                  \"Талон амбулаторного пациента A4\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4(приказ 274)\")   Form\u003d\"Reports/AmbReps/Order274/amb_talon_A4.frm\"",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            }
+          ]
+        }
+      ],
+      "popupMenusPg": [
+        {
+          "name": "P_GRID_MAIN",
+          "items": [
+            {
+              "caption": "Обновить",
+              "name": "pREFRESH",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL_DIRECTION",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "История исследований",
+              "name": "pSHOW_HIST",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Назначения",
+              "name": "pSHOW_PRESC",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Записать",
+              "name": "pADD_HOSP_PLAN",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотр прикрепленных документов",
+              "name": "pADD_HOSP_PLAN",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Направление 057/у",
+              "name": "pOutDirServ",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Направление на госпитализацию",
+              "name": "pHospResult",
+              "fromAutoPopup": true,
+              "autoPopupName": "DIRECTIONS",
+              "isDbReport": false
+            },
+            {
+              "caption": "Печать посещения",
+              "name": "pVisitReport",
+              "fromAutoPopup": true,
+              "autoPopupName": "DIRECTIONS",
+              "isDbReport": false
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5\"             \"Талон амбулаторного пациента A5 (Алания)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 \")   Form\u003d\"Reports/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"patient_new_cancer_polyclinic\" \"Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)\" (\"Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)\")   Form\u003d\"Reports/HospPlan/patient_new_cancer_polyclinic.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_alan\"        \"Талон амбулаторного пациента A5 (Алания)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Алания\")   Form\u003d\"Reports/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"CHECKS\"                        \"CHECKS\" (\"Reports/Reception/check\")   Form\u003d\"Reports/Reception/check.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"HOSPITALISATION_DIR\"           \"HOSPITALISATION_DIR\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"Составной\"       - REP_CODE\u003d\"NapravlenieAlania\"             \"Документы на госпитализацию\" (\"Документы на госпитализацию\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"на госпитализацию\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"HOSPITALISATION_DIR\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"057У\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"HOSPITALISATION_DIR\" \"057/у-04 Направление на госпитализацию\" (\"057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию\")   Form\u003d\"Reports/Visit_1/HOSPITALISATION_DIR.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"analis_\"             \"\" (\"Анализы\")   Form\u003d\"Reports/Visit_1/alaniyaAnalysis.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"analis_mochi_\"       \"\" (\"Исследование мочи\")   Form\u003d\"Reports/Visit_1/alaniyaUrineTest.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   ├── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"mammograf\"           \"\" (\"Заключение исследования\")   Form\u003d\"Reports/Visit_1/alaniyaMammograf.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    │   └── - REP_TYPE\u003d\"WEB-форма\" - REP_CODE\u003d\"EKG\"                 \"\" (\"ЭКГ\")   Form\u003d\"Reports/Visit_1/alaniyaEkg.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A5_Krasnodar\"        \"ТАП A5 Краснодар\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Krasnodar\")   Form\u003d\"Reports/AmbReps/amb_talon_A5_new.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"INSP_CONS_1\"                   \"заключение врача с шапкой\" (\"Заключение врача (с диагностикой) 1 \")   Form\u003d\"Reports/Visit/INSP_CONS_DoctorResult_ONKO_MED.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE_MASS\"      \"Массовая печать направлений\" (\"Массовая печать направление на анализ со штрих-кодом\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE_LIST.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE1\"          \"Направление2\" (\"Направление на анализ со штрих-кодом1\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE1.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"soglasie_na_med_vmesh_DZ_dp\"   \"Информационное согласие 10102020\" (\"(Томск)ИС на медицинское вмешательство (ДЗ ТО) пакет документов\")   Form\u003d\"Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServForReg\"              \"Направление на консультацию\" (\"Направление на обследование, консультацию\")   Form\u003d\"Reports/Visit/OutDirServForReg.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4_Alania\"           \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА_Alania\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A5\"                  \"ТАП\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5\")   Form\u003d\"Reports/AmbReps/amb_talon_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"task_2_2_report\"               \"0000000000000000000000000000000000000000000000000\" (\"Task 2.2 - отчет \")   Form\u003d\"Reports/task_2_2_report.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4_old_28082025\"     \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"sakh_amb_talon_old\"            \"Талон амбулаторного пациента (Общий)\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)\")   Form\u003d\"Reports/AmbReps/sakh_amb_talon_new_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4\"                  \"Талон амбулаторного пациента A5\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1\")   Form\u003d\"Reports/AmbReps/amb_talon_A4.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"MED_VISIT_OFT_EXTR\"            \"Мед карта (неотложка)\" (\"Мед карта (неотл)\")   Form\u003d\"Reports/Visit/VISIT_OFT_EXTR_MedCard.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"sakh_amb_talon\"                \"Талон амбулаторного пациента (Общий)\" (\"025-1/у  ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"112/y_10\"                      \"DIRECTIONS\" (\"112/у История развития ребенка стр. 10\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4(old)2\"            \"Талон амбулаторного пациента A5\" (\"amb_talon_A4(old)2\")   Form\u003d\"Reports/AmbReps/amb_talon_A4(old).frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"INSP_CONS_1_SF\"                \"заключение врача с шапкой\" (\"Заключение врача (с диагностикой)  1 \")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"Crystal Reports\" - REP_CODE\u003d\"HOSP_HISTORY_KATAR\"            \"ntcn\" (\"Мед. карта (HOSP_HISTORY_KATAR)\")   Form\u003d\"1.rpt.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_for_disp_new\"        \"ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)\" (\"ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)\")   Form\u003d\"Reports/AmbReps/amb_talon_for_disp.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"vnytr_napr_0049_old\"           \"vnytr_napr_0049\" (\"Внутреннее направление\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"emergency_notification_dtp\"    \"58 - ДТП - 2/У\" (\"Извещение о раненом в ДТП\")   Form\u003d\"Reports/EmergencyRep/emergency_notification_dtp.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"MAP_ANEST_530n\"                \"КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ\" (\"КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ\")   Form\u003d\"Reports/ArmPatientsInDep/map_anest_530n.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-конструктор\" - REP_CODE\u003d\"TEST77\"                        \"Тестовый отчет TEST77\" (\"TEST77\")   (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_tver\"        \"ТАП Тверь\" (\"ТАП Тверь\")   Form\u003d\"Reports/AmbReps/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"task_2_2_report\"               \"0000000000000000000000000000000000000000000000000\" (\"Task 2.2 - отчет \")   Form\u003d\"Reports/task_2_2_report.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"lis_directions_sample\"         \"MEDDEV-13137\" (\"Направление на лабораторные исследования\")   Form\u003d\"Reports/Lis/lis_directions_sample/lis_directions_sample.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"NAPR_ANALIZ_BARCODE_21\"        \"Направления на услуги \" (\"Направление на анализ со штрих-кодом как на приморье\")   Form\u003d\"Reports/DirectionServices/NAPR_ANALIZ_BARCODE.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServPaid\"                \"057/у-04 Платные Направление\" (\"057/у-04 Платные Направление\")   Form\u003d\"Reports/Visit/OutDirServPaid.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServNew__1\"              \"057/у-04 NEW Направление на консультацию, диагностическое исследование\" (\"057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ\")   Form\u003d\"Reports/Visit/OutDirServNew.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_0251_A5_274\"         \"ТАП Тверь\" (\"ТАП Тверь 274\")   Form\u003d\"Reports/AmbReps/Order274/amb_talon_0251_A5.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    ├── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"OutDirServNew\"                 \"057/у-04 NEW Направление на консультацию, диагностическое исследование\" (\"057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ\")   Form\u003d\"Reports/Visit/OutDirServNew.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            },
+            {
+              "caption": "    └── (AutoPopup \"DIRECTIONS\") - REP_TYPE\u003d\"WEB-форма\"       - REP_CODE\u003d\"amb_talon_A4\"                  \"Талон амбулаторного пациента A4\" (\"025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4(приказ 274)\")   Form\u003d\"Reports/AmbReps/Order274/amb_talon_A4.frm\" (PostgreSQL)",
+              "fromAutoPopup": false,
+              "isDbReport": true
+            }
+          ]
+        }
+      ],
+      "totalSqlQueries": 4
+    }
+  ],
+  "totalForms": 1,
+  "exportDate": "Wed May 20 18:32:06 GMT+07:00 2026"
+}

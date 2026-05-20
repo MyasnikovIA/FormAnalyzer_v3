@@ -32,6 +32,7 @@ public class FormInfo {
     private Map<String, ViewTableDependencies> viewDependencies;
     private List<PopupMenuInfo> popupMenus;
     private List<PopupMenuInfo> popupMenusPg;
+    private Set<String> tablesFromViews;  // Таблицы, используемые через вьюхи
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -53,6 +54,7 @@ public class FormInfo {
         this.openFormCompositions = new LinkedHashSet<>();
         this.d3ApiShowFormCompositions = new LinkedHashSet<>();
         this.openD3FormCompositions = new LinkedHashSet<>();
+        this.tablesFromViews = new LinkedHashSet<>();
     }
 
     // Getters and Setters
@@ -212,5 +214,27 @@ public class FormInfo {
         if (composition != null && !composition.isEmpty()) {
             this.openD3FormCompositions.add(composition);
         }
+    }
+
+    public Set<String> getTablesFromViews() {
+        return tablesFromViews;
+    }
+
+    public void setTablesFromViews(Set<String> tablesFromViews) {
+        this.tablesFromViews = tablesFromViews;
+    }
+
+    public void addTableFromView(String table) {
+        if (this.tablesFromViews == null) {
+            this.tablesFromViews = new LinkedHashSet<>();
+        }
+        this.tablesFromViews.add(table);
+    }
+
+    public void addAllTablesFromViews(Set<String> tables) {
+        if (this.tablesFromViews == null) {
+            this.tablesFromViews = new LinkedHashSet<>();
+        }
+        this.tablesFromViews.addAll(tables);
     }
 }

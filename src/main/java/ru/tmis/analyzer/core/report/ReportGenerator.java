@@ -220,7 +220,7 @@ public class ReportGenerator {
 
         // Используемые таблицы и вьюхи
         if (config.isIncludeTablesViews() && !form.getTablesViews().isEmpty()) {
-            writer.println("ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ:");
+            writer.println("ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:");
             for (String tv : form.getTablesViews()) {
                 writer.println("    " + tv);
             }
@@ -539,7 +539,11 @@ public class ReportGenerator {
             return;
         }
 
-        writer.println("Вьюхи");
+        // ========== СОХРАНЯЕМ ТАБЛИЦЫ В FormInfo ==========
+        formInfo.setTablesFromViews(allTables);
+        System.out.println("[DEBUG] Сохранено таблиц в FormInfo: " + allTables.size());
+
+        writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
         for (String table : allTables) {
             writer.println("    " + table);
         }
@@ -817,9 +821,6 @@ public class ReportGenerator {
     }
 
 
-    /**
-     * Добавляет запись в CSV отчет (дозапись в конец файла)
-     */
     private void appendToCSVReport(FormInfo formInfo) throws IOException {
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
@@ -830,7 +831,6 @@ public class ReportGenerator {
         boolean fileExists = Files.exists(csvPath);
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
-            // Если файл только создаётся, добавляем заголовок
             if (!fileExists) {
                 writer.println("ФОРМА;БЛОК;ЗНАЧЕНИЕ");
             }
@@ -859,12 +859,12 @@ public class ReportGenerator {
             }
             writeCSVBlock(writer, formName, "Вьюхи", views);
 
-            // 6. Таблицы (D_* не начинающиеся с D_V_)
-            Set<String> tables = new LinkedHashSet<>();
-            for (String tv : formInfo.getTablesViews()) {
-                if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
-                    tables.add(tv);
-                }
+            // 6. Таблицы - берём из FormInfo (уже сохранены при генерации TXT)
+            Set<String> tables = formInfo.getTablesFromViews();
+            if (tables == null || tables.isEmpty()) {
+                System.out.println("[CSV] Таблицы не найдены в FormInfo для формы: " + formName);
+            } else {
+                System.out.println("[CSV] Найдено таблиц в FormInfo: " + tables.size());
             }
             writeCSVBlock(writer, formName, "Таблицы", tables);
 
@@ -875,7 +875,6 @@ public class ReportGenerator {
             writeCSVBlock(writer, formName, "СО", formInfo.getSystemOptions());
 
             // 9. Универсальные композиции
-            // Объединяем unitCompositions и jsUnitCompositions
             Set<String> allCompositions = new LinkedHashSet<>();
             if (formInfo.getUnitCompositions() != null) {
                 allCompositions.addAll(formInfo.getUnitCompositions());
@@ -885,7 +884,7 @@ public class ReportGenerator {
             }
             writeCSVBlock(writer, formName, "Универсальные композиции", allCompositions);
 
-            // 10. Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
+            // 10. Неопределенные
             writeCSVBlock(writer, formName, "Неопределенные", formInfo.getUnknownObjects());
         }
     }
@@ -894,14 +893,15 @@ public class ReportGenerator {
      * Записывает блок в CSV (для простых коллекций)
      */
     private void writeCSVBlock(PrintWriter writer, String formName, String blockName, Set<String> values) {
+        System.out.println("[CSV] writeCSVBlock: block=" + blockName + ", values.size=" + (values == null ? "null" : values.size()));
+
         if (values == null || values.isEmpty()) {
-            // Не пишем "(не найдено)" - пропускаем
             return;
         }
         for (String value : values) {
-            // Проверяем, не является ли значение маркером "не найдено"
-            if (value != null && !value.equals("(не найдено)") && !value.trim().isEmpty()) {
+            if (value != null && !value.trim().isEmpty() && !value.equals("(не найдено)")) {
                 writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+                System.out.println("[CSV] Записано: " + formName + ";" + blockName + ";" + value);
             }
         }
     }
@@ -930,7 +930,6 @@ public class ReportGenerator {
             String region = entry.getKey();
             for (FormInfo.OverrideInfo override : entry.getValue()) {
                 String relativePath = getRelativePath(override.getOverridePath());
-                // Формат: UserFormsRegion\путь\к\файлу.dfrm
                 String value =  getRelativePathWithinRegion(override.getOverridePath(), region);
                 writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
             }
@@ -1033,6 +1032,157 @@ public class ReportGenerator {
             escaped = "\"" + escaped + "\"";
         }
         return escaped;
+    }
+    /**
+     * Получает таблицы из вьюх, читая из уже сохранённого TXT отчёта
+     * Это гарантирует соответствие данных между TXT и CSV
+     */
+    private Set<String> getTablesFromTxtReport(FormInfo formInfo) {
+        Set<String> tables = new LinkedHashSet<>();
+
+        // Формируем путь к TXT отчёту
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path reportPath = Paths.get(outputDir, fileName);
+
+        if (!Files.exists(reportPath)) {
+            System.out.println("[CSV] TXT отчёт не найден: " + reportPath);
+            return tables;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportPath),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            // Ищем блок "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):"
+            String marker = "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):";
+            int startIndex = content.indexOf(marker);
+
+            if (startIndex != -1) {
+                // Находим конец блока (следующий заголовок или конец файла)
+                int endIndex = content.indexOf("\n\n", startIndex + marker.length());
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(startIndex + marker.length(), endIndex);
+
+                // Извлекаем все D_* таблицы
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\s+(D_[A-Z0-9_]+)");
+                java.util.regex.Matcher matcher = pattern.matcher(section);
+
+                while (matcher.find()) {
+                    String table = matcher.group(1);
+                    if (!table.isEmpty() && !table.startsWith("D_V_")) {
+                        tables.add(table);
+                    }
+                }
+
+                System.out.println("[CSV] Из TXT отчёта извлечено таблиц: " + tables.size());
+            } else {
+                System.out.println("[CSV] Блок таблиц не найден в TXT отчёте");
+            }
+
+        } catch (IOException e) {
+            System.err.println("[CSV] Ошибка чтения TXT отчёта: " + e.getMessage());
+        }
+
+        return tables;
+    }
+
+
+
+
+    /**
+     * Универсальный метод для извлечения данных из TXT отчёта по заголовку блока
+     * @param formInfo информация о форме
+     * @param blockTitle заголовок блока (например, "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ")
+     * @param pattern регулярное выражение для извлечения значений
+     * @return множество извлечённых значений
+     */
+    private Set<String> extractFromTxtReport(FormInfo formInfo, String blockTitle, String pattern) {
+        Set<String> result = new LinkedHashSet<>();
+
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path reportPath = Paths.get(outputDir, fileName);
+
+        if (!Files.exists(reportPath)) {
+            return result;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportPath),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            int startIndex = content.indexOf(blockTitle);
+            if (startIndex != -1) {
+                int endIndex = content.indexOf("\n\n", startIndex + blockTitle.length());
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(startIndex + blockTitle.length(), endIndex);
+
+                java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern);
+                java.util.regex.Matcher m = p.matcher(section);
+
+                while (m.find()) {
+                    String value = m.group(1);
+                    if (value != null && !value.isEmpty()) {
+                        result.add(value);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка чтения TXT отчёта: " + e.getMessage());
+        }
+
+        return result;
+    }
+    /**
+     * Извлекает ТОЛЬКО таблицы из блока "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ"
+     * Исключает пакеты D_PKG_*
+     */
+    private Set<String> extractTablesFromTxtReport(FormInfo formInfo) {
+        Set<String> tables = new LinkedHashSet<>();
+
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path reportPath = Paths.get(outputDir, fileName);
+
+        if (!Files.exists(reportPath)) {
+            return tables;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportPath),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            String blockTitle = "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):";
+            int startIndex = content.indexOf(blockTitle);
+
+            if (startIndex != -1) {
+                int endIndex = content.indexOf("\n\n", startIndex + blockTitle.length());
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(startIndex + blockTitle.length(), endIndex);
+
+                // Разбиваем по строкам
+                for (String line : section.split("\\r?\\n")) {
+                    String trimmed = line.trim();
+                    // Только D_* но не D_PKG_* и не пустые
+                    if (trimmed.startsWith("D_") && !trimmed.startsWith("D_PKG_") && !trimmed.isEmpty()) {
+                        tables.add(trimmed);
+                        System.out.println("[CSV] Таблица: " + trimmed);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка чтения TXT отчёта: " + e.getMessage());
+        }
+
+        System.out.println("[CSV] Итого таблиц: " + tables.size());
+        return tables;
     }
 
 }

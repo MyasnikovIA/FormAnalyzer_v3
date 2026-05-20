@@ -60,7 +60,7 @@ public class CSVReportGenerator {
                 writeBlock(writer, formName, "Вьюхи", views);
 
                 // 6. Таблицы (D_* не начинающиеся с D_V_)
-                Set<String> tables = new LinkedHashSet<>();
+                Set<String> tables = form.getTablesFromViews();
                 for (String tv : form.getTablesViews()) {
                     if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
                         tables.add(tv);
