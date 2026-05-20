@@ -837,59 +837,56 @@ public class ReportGenerator {
 
             String formName = formInfo.getFormPath();
 
-            // ЮЗЕРФОРМЫ - теперь не будет писать "(не найдено)"
+            // 1. Юзерформы
             writeCSVBlock(writer, formName, "Юзерформы", formInfo.getOverrides(),
                     formInfo.isFullyReplaced(), formInfo.getReplacementPath());
 
-            // SubForm - не будет писать "(не найдено)"
-            writeCSVBlock(writer, formName, "SubForm", formInfo.getSubForms());
+            // 2. subForm
+            writeCSVBlock(writer, formName, "subForm", formInfo.getSubForms());
 
-            // Список вызываемых форм в JS
+            // 3. формы JS
             writeCSVBlock(writer, formName, "формы JS", formInfo.getJsForms());
 
+            // 4. Отчеты, вызываемые на форме
+            writeCSVBlock(writer, formName, "Отчеты, вызываемые на форме", formInfo.getReports());
 
-            // "Отчеты, вызываемые на форме"
-
-            // ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ
-            writeCSVBlock(writer, formName, "ВЬЮХИ", formInfo.getTablesViews());
-
-            // ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ
-            Set<String> viewTables = getViewTables(formInfo);
-            System.out.println("[CSV DEBUG] Форма: " + formName + ", таблиц из вьюх: " + viewTables.size());
-            for (String table : viewTables) {
-                System.out.println("[CSV DEBUG]   - " + table);
+            // 5. Вьюхи (D_V_*)
+            Set<String> views = new LinkedHashSet<>();
+            for (String tv : formInfo.getTablesViews()) {
+                if (tv.startsWith("D_V_")) {
+                    views.add(tv);
+                }
             }
-            writeCSVBlock(writer, formName, "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)", viewTables);
+            writeCSVBlock(writer, formName, "Вьюхи", views);
 
-            // ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ
+            // 6. Таблицы (D_* не начинающиеся с D_V_)
+            Set<String> tables = new LinkedHashSet<>();
+            for (String tv : formInfo.getTablesViews()) {
+                if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
+                    tables.add(tv);
+                }
+            }
+            writeCSVBlock(writer, formName, "Таблицы", tables);
+
+            // 7. Пакеты и функции
             writeCSVBlock(writer, formName, "Пакеты и функции", formInfo.getPackagesFunctions());
 
-            // СИСТЕМНЫЕ ОПЦИИ
+            // 8. СО (системные опции)
             writeCSVBlock(writer, formName, "СО", formInfo.getSystemOptions());
 
-            // КОНСТАНТЫ
-            writeCSVBlock(writer, formName, "КОНСТАНТЫ", formInfo.getConstants());
+            // 9. Универсальные композиции
+            // Объединяем unitCompositions и jsUnitCompositions
+            Set<String> allCompositions = new LinkedHashSet<>();
+            if (formInfo.getUnitCompositions() != null) {
+                allCompositions.addAll(formInfo.getUnitCompositions());
+            }
+            if (formInfo.getJsUnitCompositions() != null) {
+                allCompositions.addAll(formInfo.getJsUnitCompositions());
+            }
+            writeCSVBlock(writer, formName, "Универсальные композиции", allCompositions);
 
-            // ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ
-            writeCSVBlock(writer, formName, "ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ", formInfo.getUserProcedures());
-
-            // КОДЫ ПОДКЛЮЧАЕМОГО AUTOPOPUP МЕНЮ
-            writeCSVBlock(writer, formName, "Коды подключаемого AutoPopUp меню на форме", formInfo.getAutoPopupMenus());
-
-            // БРОКЕРЫ
-            writeCSVBlock(writer, formName, "БРОКЕРЫ", formInfo.getBrokers());
-
-            // КОМПОЗИЦИИ
-            writeCSVBlock(writer, formName, "КОМПОЗИЦИИ UnitEdit на форме", formInfo.getUnitCompositions());
-
-            // JS UNIT COMPOSITIONS
-            writeCSVBlock(writer, formName, "JS Unit Compositions", formInfo.getJsUnitCompositions());
-
-            // РАЗОБРАТЬ АНАЛИТИКОМ
-            writeCSVBlock(writer, formName, "РАЗОБРАТЬ АНАЛИТИКОМ", formInfo.getUnknownObjects());
-
-            // ОТЧЕТЫ
-            writeCSVBlock(writer, formName, "ОТЧЕТЫ", formInfo.getReports());
+            // 10. Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
+            writeCSVBlock(writer, formName, "Неопределенные", formInfo.getUnknownObjects());
         }
     }
 
