@@ -1,4 +1,5 @@
 // core/extractor/processors/ReportProcessor.java
+
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
@@ -15,22 +16,33 @@ import java.util.regex.Pattern;
 
 /**
  * Извлечение отчетов из форм
- * Отчеты извлекаются ТОЛЬКО из:
+ * Отчеты извлекаются из:
  * 1. SQL запросов (внутри DataSet/Action компонентов)
  * 2. JS вызовов внутри Action компонентов
+ * 3. CDATA секций (JS код)
+ * 4. Прямых вызовов printReportByCode в любом тексте
  */
 public class ReportProcessor implements IXmlProcessor {
 
+    // Паттерн для printReportByCode('CODE')
     private static final Pattern PRINT_REPORT_PATTERN = Pattern.compile(
             "printReportByCode\\s*\\(\\s*['\"]([^'\"]+)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
+    // Паттерн для printReportByCode("CODE")
+    private static final Pattern PRINT_REPORT_PATTERN_DOUBLE = Pattern.compile(
+            "printReportByCode\\s*\\(\\s*\"([^\"]+)\"",
+            Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+    );
+
+    // Паттерн для Reports/путь/к/отчёту.frm
     private static final Pattern REPORTS_PATH_PATTERN = Pattern.compile(
             "['\"]Reports/([^'\"]+\\.frm)['\"]",
             Pattern.DOTALL | Pattern.CASE_INSENSITIVE
     );
 
+    // Паттерн для CDATA секций
     private static final Pattern CDATA_PATTERN = Pattern.compile(
             "<!\\[CDATA\\[(.*?)\\]\\]>",
             Pattern.DOTALL
@@ -50,7 +62,7 @@ public class ReportProcessor implements IXmlProcessor {
     public void process(Document doc, FormInfo formInfo) {
         Set<String> reports = new LinkedHashSet<>();
 
-        // 1. Ищем отчеты ТОЛЬКО в SQL запросах
+        // 1. Ищем отчеты в SQL запросах (уже сохранены в formInfo)
         for (SqlInfo sql : formInfo.getSqlQueries()) {
             String sqlContent = sql.getSqlContent();
             if (sqlContent != null) {
@@ -65,16 +77,32 @@ public class ReportProcessor implements IXmlProcessor {
             if (hasSqlContent(action)) {
                 continue;
             }
-
             String actionHtml = action.html();
             if (actionHtml != null) {
                 reports.addAll(extractFromText(actionHtml));
             }
         }
 
-        // 3. Добавляем найденные отчеты
+        // 3. Ищем отчеты в CDATA секциях (JS код)
+        String html = doc.html();
+        Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
+        while (cdataMatcher.find()) {
+            String jsContent = cdataMatcher.group(1);
+            if (jsContent != null) {
+                reports.addAll(extractFromText(jsContent));
+            }
+        }
+
+        // 4. Ищем отчеты во всем HTML (на случай, если вызовы вне CDATA)
+        reports.addAll(extractFromText(html));
+
+        // 5. Добавляем найденные отчеты
         for (String report : reports) {
             formInfo.addReport(report);
+        }
+
+        if (!reports.isEmpty()) {
+            System.out.println("[ReportProcessor] Найдено отчетов: " + reports.size() + " " + reports);
         }
     }
 
@@ -127,6 +155,17 @@ public class ReportProcessor implements IXmlProcessor {
             String reportCode = cleanValue(printMatcher.group(1));
             if (isValidReportCode(reportCode)) {
                 result.add(reportCode);
+                System.out.println("[ReportProcessor] Найден отчет (одинарные кавычки): " + reportCode);
+            }
+        }
+
+        // printReportByCode("REPORT_CODE")
+        Matcher printMatcherDouble = PRINT_REPORT_PATTERN_DOUBLE.matcher(text);
+        while (printMatcherDouble.find()) {
+            String reportCode = cleanValue(printMatcherDouble.group(1));
+            if (isValidReportCode(reportCode)) {
+                result.add(reportCode);
+                System.out.println("[ReportProcessor] Найден отчет (двойные кавычки): " + reportCode);
             }
         }
 
@@ -136,6 +175,7 @@ public class ReportProcessor implements IXmlProcessor {
             String reportPath = pathMatcher.group(1);
             if (reportPath != null && !reportPath.isEmpty()) {
                 result.add("/Reports/" + reportPath);
+                System.out.println("[ReportProcessor] Найден отчет по пути: /Reports/" + reportPath);
             }
         }
 
@@ -155,7 +195,8 @@ public class ReportProcessor implements IXmlProcessor {
         // Пропускаем переменные и выражения
         if (code.contains("+") || code.contains("getVar") ||
                 code.contains("getValue") || code.contains("this.") ||
-                code.contains("function") || code.contains("return")) {
+                code.contains("function") || code.contains("return") ||
+                code.contains("undefined") || code.contains("null")) {
             return false;
         }
         return true;

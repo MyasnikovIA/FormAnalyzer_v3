@@ -48,7 +48,7 @@ public class CSVReportGenerator {
                 writeBlock(writer, formName, "формы JS", form.getJsForms());
 
                 // 4. Отчеты, вызываемые на форме
-                //writeBlock(writer, formName, "Отчеты, вызываемые на форме", form.getReports());
+                writeBlock(writer, formName, "Отчеты, вызываемые на форме", form.getReports());
 
                 // 5. Вьюхи (D_V_*)
                 Set<String> views = new LinkedHashSet<>();

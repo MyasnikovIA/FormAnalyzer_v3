@@ -1,160 +1,206 @@
+// core/cache/DatabaseCacheManager.java
+
 package ru.tmis.analyzer.core.cache;
 
+import ru.tmis.analyzer.core.db.DatabaseObjectChecker;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * Централизованное управление кэшами для БД объектов
  */
 public class DatabaseCacheManager {
 
-    // Кэш DDL вьюх
+    // ==================== СУЩЕСТВУЮЩИЕ КЭШИ ====================
     private static final Map<String, String> oracleViewDDLCache = new ConcurrentHashMap<>();
     private static final Map<String, String> postgresViewDDLCache = new ConcurrentHashMap<>();
-
-    // Кэш DDL таблиц
     private static final Map<String, String> oracleTableDDLCache = new ConcurrentHashMap<>();
     private static final Map<String, String> postgresTableDDLCache = new ConcurrentHashMap<>();
-
-    // Кэш тел функций
     private static final Map<String, String> oracleFunctionBodyCache = new ConcurrentHashMap<>();
     private static final Map<String, String> postgresFunctionBodyCache = new ConcurrentHashMap<>();
-
-    // Кэш зависимостей вьюх (таблицы внутри вьюхи)
     private static final Map<String, ViewTableDependencies> viewDependenciesCache = new ConcurrentHashMap<>();
-
-    // Кэш количества записей
     private static final Map<String, Long> oracleCountCache = new ConcurrentHashMap<>();
     private static final Map<String, Long> postgresCountCache = new ConcurrentHashMap<>();
 
-    // Статистика кэша
-    private static int oracleViewHits = 0;
-    private static int oracleViewMisses = 0;
-    private static int postgresViewHits = 0;
-    private static int postgresViewMisses = 0;
-    private static int viewDepsHits = 0;
-    private static int viewDepsMisses = 0;
+    // ==================== НОВЫЕ КЭШИ ====================
 
-    // Геттеры с проверкой кэша
-    public static String getOracleViewDDL(String viewName, java.util.function.Supplier<String> loader) {
+    // Брокеры (Oracle)
+    private static final Map<String, String> brokerExecProcCache = new ConcurrentHashMap<>();
+
+    // Отчёты (Oracle)
+    private static final Map<String, List<DbReportInfo>> oracleReportsCache = new ConcurrentHashMap<>();
+    private static final Map<String, List<DbReportInfo>> oracleCompositeReportsCache = new ConcurrentHashMap<>();
+
+    // Отчёты (PostgreSQL)
+    private static final Map<String, List<DbReportInfo>> postgresReportsCache = new ConcurrentHashMap<>();
+    private static final Map<String, List<DbReportInfo>> postgresCompositeReportsCache = new ConcurrentHashMap<>();
+
+    // OID вьюх (PostgreSQL)
+    private static final Map<String, Integer> postgresViewOidCache = new ConcurrentHashMap<>();
+
+    // Проверка первичных ключей
+    private static final Map<String, DatabaseObjectChecker.PrimaryKeyInfo> pkCache = new ConcurrentHashMap<>();
+
+    // Проверка NOT NULL constraints
+    private static final Map<String, List<DatabaseObjectChecker.NotNullConstraintInfo>> notNullCache = new ConcurrentHashMap<>();
+
+    // Проверка функций PostgreSQL (результаты plpgsql_check)
+    private static final Map<String, Object> postgresFunctionCheckCache = new ConcurrentHashMap<>();
+
+    // ==================== ГЕТТЕРЫ С КЭШИРОВАНИЕМ ====================
+
+    // Существующие методы (оставляем без изменений)
+    public static String getOracleViewDDL(String viewName, Supplier<String> loader) {
         String key = viewName.toUpperCase();
-        if (oracleViewDDLCache.containsKey(key)) {
-            oracleViewHits++;
-            return oracleViewDDLCache.get(key);
-        }
-        oracleViewMisses++;
-        String ddl = loader.get();
-        if (ddl != null) {
-            oracleViewDDLCache.put(key, ddl);
-        }
-        return ddl;
+        return oracleViewDDLCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static String getPostgresViewDDL(String viewName, java.util.function.Supplier<String> loader) {
+    public static String getPostgresViewDDL(String viewName, Supplier<String> loader) {
         String key = viewName.toLowerCase();
-        if (postgresViewDDLCache.containsKey(key)) {
-            postgresViewHits++;
-            return postgresViewDDLCache.get(key);
-        }
-        postgresViewMisses++;
-        String ddl = loader.get();
-        if (ddl != null) {
-            postgresViewDDLCache.put(key, ddl);
-        }
-        return ddl;
+        return postgresViewDDLCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static String getOracleTableDDL(String tableName, java.util.function.Supplier<String> loader) {
+    public static String getOracleTableDDL(String tableName, Supplier<String> loader) {
         String key = tableName.toUpperCase();
-        if (oracleTableDDLCache.containsKey(key)) {
-            return oracleTableDDLCache.get(key);
-        }
-        String ddl = loader.get();
-        if (ddl != null) {
-            oracleTableDDLCache.put(key, ddl);
-        }
-        return ddl;
+        return oracleTableDDLCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static String getPostgresTableDDL(String tableName, java.util.function.Supplier<String> loader) {
+    public static String getPostgresTableDDL(String tableName, Supplier<String> loader) {
         String key = tableName.toLowerCase();
-        if (postgresTableDDLCache.containsKey(key)) {
-            return postgresTableDDLCache.get(key);
-        }
-        String ddl = loader.get();
-        if (ddl != null) {
-            postgresTableDDLCache.put(key, ddl);
-        }
-        return ddl;
+        return postgresTableDDLCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static String getOracleFunctionBody(String functionKey, java.util.function.Supplier<String> loader) {
+    public static String getOracleFunctionBody(String functionKey, Supplier<String> loader) {
         String key = functionKey.toUpperCase();
-        if (oracleFunctionBodyCache.containsKey(key)) {
-            return oracleFunctionBodyCache.get(key);
-        }
-        String body = loader.get();
-        if (body != null) {
-            oracleFunctionBodyCache.put(key, body);
-        }
-        return body;
+        return oracleFunctionBodyCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static String getPostgresFunctionBody(String functionKey, java.util.function.Supplier<String> loader) {
+    public static String getPostgresFunctionBody(String functionKey, Supplier<String> loader) {
         String key = functionKey.toLowerCase();
-        if (postgresFunctionBodyCache.containsKey(key)) {
-            return postgresFunctionBodyCache.get(key);
-        }
-        String body = loader.get();
-        if (body != null) {
-            postgresFunctionBodyCache.put(key, body);
-        }
-        return body;
+        return postgresFunctionBodyCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static ViewTableDependencies getViewDependencies(String viewName, java.util.function.Supplier<ViewTableDependencies> loader) {
+    public static ViewTableDependencies getViewDependencies(String viewName, Supplier<ViewTableDependencies> loader) {
         String key = viewName.toUpperCase();
-        if (viewDependenciesCache.containsKey(key)) {
-            viewDepsHits++;
-            return viewDependenciesCache.get(key);
-        }
-        viewDepsMisses++;
-        ViewTableDependencies deps = loader.get();
-        if (deps != null) {
-            viewDependenciesCache.put(key, deps);
-        }
-        return deps;
+        return viewDependenciesCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static Long getOracleCount(String objectName, java.util.function.Supplier<Long> loader) {
+    public static Long getOracleCount(String objectName, Supplier<Long> loader) {
         String key = objectName.toUpperCase();
         return oracleCountCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    public static Long getPostgresCount(String objectName, java.util.function.Supplier<Long> loader) {
+    public static Long getPostgresCount(String objectName, Supplier<Long> loader) {
         String key = objectName.toLowerCase();
         return postgresCountCache.computeIfAbsent(key, k -> loader.get());
     }
 
-    // Статистика
-    public static void printStats() {
-        System.out.println("=== СТАТИСТИКА КЭША ===");
-        System.out.println("Oracle View DDL: hits=" + oracleViewHits + ", misses=" + oracleViewMisses +
-                ", size=" + oracleViewDDLCache.size());
-        System.out.println("PostgreSQL View DDL: hits=" + postgresViewHits + ", misses=" + postgresViewMisses +
-                ", size=" + postgresViewDDLCache.size());
-        System.out.println("View Dependencies: hits=" + viewDepsHits + ", misses=" + viewDepsMisses +
-                ", size=" + viewDependenciesCache.size());
-        System.out.println("Oracle Table DDL: size=" + oracleTableDDLCache.size());
-        System.out.println("PostgreSQL Table DDL: size=" + postgresTableDDLCache.size());
-        System.out.println("Oracle Function Body: size=" + oracleFunctionBodyCache.size());
-        System.out.println("PostgreSQL Function Body: size=" + postgresFunctionBodyCache.size());
-        System.out.println("Oracle Count: size=" + oracleCountCache.size());
-        System.out.println("PostgreSQL Count: size=" + postgresCountCache.size());
+    // ==================== НОВЫЕ МЕТОДЫ ====================
+
+    /**
+     * 1. Кэш для брокеров (поиск execProc в Oracle)
+     */
+    public static String getBrokerExecProc(String unit, String action, Supplier<String> loader) {
+        String key = (unit + "_" + action).toUpperCase();
+        return brokerExecProcCache.computeIfAbsent(key, k -> loader.get());
     }
 
+    /**
+     * 2. Кэш для отчётов Oracle по unit
+     */
+    public static List<DbReportInfo> getOracleReports(String unitCode, Supplier<List<DbReportInfo>> loader) {
+        String key = unitCode.toUpperCase();
+        return oracleReportsCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 3. Кэш для составных отчётов Oracle
+     */
+    public static List<DbReportInfo> getOracleCompositeReports(int parentId, Supplier<List<DbReportInfo>> loader) {
+        String key = "COMPOSITE_ORACLE_" + parentId;
+        return oracleCompositeReportsCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 4. Кэш для отчётов PostgreSQL по unit
+     */
+    public static List<DbReportInfo> getPostgresReports(String unitCode, Supplier<List<DbReportInfo>> loader) {
+        String key = unitCode.toUpperCase();
+        return postgresReportsCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 5. Кэш для составных отчётов PostgreSQL
+     */
+    public static List<DbReportInfo> getPostgresCompositeReports(int parentId, Supplier<List<DbReportInfo>> loader) {
+        String key = "COMPOSITE_POSTGRES_" + parentId;
+        return postgresCompositeReportsCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 6. Кэш для OID вьюх PostgreSQL
+     */
+    public static int getPostgresViewOid(String viewName, Supplier<Integer> loader) {
+        String key = viewName.toLowerCase();
+        return postgresViewOidCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 7. Кэш для проверки первичных ключей
+     */
+    public static DatabaseObjectChecker.PrimaryKeyInfo getPrimaryKeyInfo(String tableName, Supplier<DatabaseObjectChecker.PrimaryKeyInfo> loader) {
+        String key = tableName.toUpperCase();
+        return pkCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 8. Кэш для проверки NOT NULL constraints
+     */
+    public static List<DatabaseObjectChecker.NotNullConstraintInfo> getNotNullConstraints(String tableName, Supplier<List<DatabaseObjectChecker.NotNullConstraintInfo>> loader) {
+        String key = tableName.toUpperCase();
+        return notNullCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    /**
+     * 9. Кэш для проверки функций PostgreSQL
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getPostgresFunctionCheck(String functionName, Supplier<T> loader) {
+        String key = functionName.toLowerCase();
+        return (T) postgresFunctionCheckCache.computeIfAbsent(key, k -> loader.get());
+    }
+
+    // ==================== СТАТИСТИКА ====================
+
+    public static void printStats() {
+        System.out.println("=== СТАТИСТИКА КЭША ===");
+        System.out.println("Oracle View DDL: " + oracleViewDDLCache.size());
+        System.out.println("PostgreSQL View DDL: " + postgresViewDDLCache.size());
+        System.out.println("Oracle Table DDL: " + oracleTableDDLCache.size());
+        System.out.println("PostgreSQL Table DDL: " + postgresTableDDLCache.size());
+        System.out.println("Oracle Function Body: " + oracleFunctionBodyCache.size());
+        System.out.println("PostgreSQL Function Body: " + postgresFunctionBodyCache.size());
+        System.out.println("View Dependencies: " + viewDependenciesCache.size());
+        System.out.println("Oracle Count: " + oracleCountCache.size());
+        System.out.println("PostgreSQL Count: " + postgresCountCache.size());
+        System.out.println("Broker ExecProc: " + brokerExecProcCache.size());
+        System.out.println("Oracle Reports: " + oracleReportsCache.size());
+        System.out.println("PostgreSQL Reports: " + postgresReportsCache.size());
+        System.out.println("Primary Key: " + pkCache.size());
+        System.out.println("NOT NULL: " + notNullCache.size());
+        System.out.println("PostgreSQL View OID: " + postgresViewOidCache.size());
+        System.out.println("PostgreSQL Function Check: " + postgresFunctionCheckCache.size());
+    }
+
+    // ==================== ОЧИСТКА ====================
+
     public static void clearAll() {
+        // Существующие
         oracleViewDDLCache.clear();
         postgresViewDDLCache.clear();
         oracleTableDDLCache.clear();
@@ -164,12 +210,18 @@ public class DatabaseCacheManager {
         viewDependenciesCache.clear();
         oracleCountCache.clear();
         postgresCountCache.clear();
-        oracleViewHits = 0;
-        oracleViewMisses = 0;
-        postgresViewHits = 0;
-        postgresViewMisses = 0;
-        viewDepsHits = 0;
-        viewDepsMisses = 0;
+
+        // Новые
+        brokerExecProcCache.clear();
+        oracleReportsCache.clear();
+        oracleCompositeReportsCache.clear();
+        postgresReportsCache.clear();
+        postgresCompositeReportsCache.clear();
+        postgresViewOidCache.clear();
+        pkCache.clear();
+        notNullCache.clear();
+        postgresFunctionCheckCache.clear();
+
         System.out.println("[КЭШ] Все кэши очищены");
     }
 }

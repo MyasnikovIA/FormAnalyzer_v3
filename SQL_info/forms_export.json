@@ -1,289 +1,664 @@
 {
   "forms": [
     {
-      "formPath": "Forms/NR/cancer_risk_registr.frm",
-      "baseFormPath": "Forms/NR/cancer_risk_registr.frm",
-      "fullyReplaced": false,
+      "formPath": "Forms/ArmPatientsInDep/hosp_history_archive.frm",
+      "baseFormPath": "Forms/ArmPatientsInDep/hosp_history_archive.frm",
+      "fullyReplaced": true,
+      "replacementPath": "UserFormsSaratov/ArmPatientsInDep/hosp_history_archive.frm",
       "Юзерформы": [
         {
-          "regionName": "UserFormsVOKOD",
-          "overridePath": "UserFormsVOKOD/NR/cancer_risk_registr.d/cancer_risk_registr.dfrm",
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/data.dfrm",
           "type": ".d/*.dfrm - переопределение из каталога .d",
           "typeCode": "DOT_D_OVERRIDE"
         },
         {
-          "regionName": "UserFormsVOKOD",
-          "overridePath": "UserFormsVOKOD/NR/cancer_risk_registr.d/script.dfrm",
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/script.dfrm",
           "type": ".d/*.dfrm - переопределение из каталога .d",
           "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Tomsk",
+          "overridePath": "UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Tomsk",
+          "overridePath": "UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/script.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Tomsk",
+          "overridePath": "UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsKaliningrad",
+          "overridePath": "UserFormsKaliningrad/ArmPatientsInDep/hosp_history_archive.d/popup.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsKrasnodarOD",
+          "overridePath": "UserFormsKrasnodarOD/ArmPatientsInDep/hosp_history_archive.d/popup_item_report.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsMoscowNIIBlohina",
+          "overridePath": "UserFormsMoscowNIIBlohina/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsNiiSerb",
+          "overridePath": "UserFormsNiiSerb/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsPrimorie",
+          "overridePath": "UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsPrimorie",
+          "overridePath": "UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/scripts.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsPrimorie",
+          "overridePath": "UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsRKB3",
+          "overridePath": "UserFormsRKB3/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsRKOD",
+          "overridePath": "UserFormsRKOD/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsRkob",
+          "overridePath": "UserFormsRkob/ArmPatientsInDep/hosp_history_archive.d/Reports.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsRostov",
+          "overridePath": "UserFormsRostov/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive_popup.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSakhalin",
+          "overridePath": "UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSakhalin",
+          "overridePath": "UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/scripts.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSakhalin",
+          "overridePath": "UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSamRMC",
+          "overridePath": "UserFormsSamRMC/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSaratov",
+          "overridePath": "UserFormsSaratov/ArmPatientsInDep/hosp_history_archive.frm",
+          "type": ".frm - полная замена",
+          "typeCode": "FULL_OVERRIDE"
         }
       ],
       "subForm": [
-        "NR/subforms/utils",
-        "NR/subforms/DataSetCompleters",
-        "NR/subforms/patient_data",
-        "NR/subforms/zno_risk/zno_risk_data",
-        "NR/subforms/zno_risk/zno_risk_relatives",
-        "NR/subforms/zno_risk/zno_risk_disp",
-        "NR/subforms/zno_risk/zno_risk_control",
-        "NR/subforms/zno_risk/zno_risk_out",
-        "NosRegistrs/SubForms/nr_attached_docs_grid"
+        "KSG/subforms/get_calc_main_ksg_action",
+        "ArmPatientsInDep/SubForms/hh_deps",
+        "ArmPatientsInDep/SubForms/mp_prescribes"
       ],
       "формы JS": [
-        "NosRegistrs/PatientSearch/search_patient.frm"
+        "System/messagedlg.frm",
+        "ArmPatientsInDep/hosp_history_archive_filter.frm",
+        "ArmPatientsInDep/hosp_history_new.frm",
+        "Persmedcard/persmedcard_edit.frm",
+        "DiseaseCase/diseasecase.frm",
+        "PersonalAccount/patient_contracts.frm",
+        "HospPlan/patient_analyze.frm",
+        "HospPlan/setPrivilege.frm",
+        "ArmStatistic/hosp_stat_card_edit.frm",
+        "ArmPatientsInDep/hosp_history_rep_services.frm",
+        "ArmPatientsInDep/SubForms/hosp_history_ehrs.frm"
+      ],
+      "Отчеты, вызываемые на форме": [
+        "Reports/ArmPatientsInDep/530n_patient_prescribes_exec_call.frm",
+        "Reports/ArmPatientsInDep/temperature_list_004u_call.frm",
+        "066_1_y_02",
+        "list_prib",
+        "list_ubyt",
+        "med_card_stac_pat"
       ],
       "Вьюхи": [
-        "D_V_NR_REQUEST",
-        "D_V_NR_PATIENTS",
-        "D_V_NOS_REGISTRS",
-        "D_V_EMPLOYERS",
-        "D_V_LPU",
-        "D_V_NR_REMOVE_REASONS",
-        "D_V_ONKO_AUTOPSY",
-        "D_V_PERSMEDCARD",
-        "D_V_AGENT_CONTACTS_V2",
+        "D_V_HOSP_STAT_CARDS_BASE",
+        "D_V_HOSP_STAT_CARDS_DEPS_BASE",
+        "D_V_HOSP_REESTR_SPECS",
+        "D_V_DIRECTION_SERVICES_BASE",
+        "D_V_SERVICES_BASE",
+        "D_V_HHD_KSG",
+        "D_V_MED_THERAPY_SCHEMES_DESC",
+        "D_V_Q_FRACTION",
+        "D_V_HOSP_HISTORY_DEPS_BASE",
+        "D_V_DEPS_BASE",
+        "D_V_HOSP_OUTCOMES",
+        "D_V_SCALE_REHAB",
+        "D_V_ALV",
+        "D_V_MED_THERAPY_SCHEMES",
         "D_V_AGENTS_BASE",
-        "D_V_AGENT_RELATIVES"
+        "D_V_USERROLES",
+        "D_V_USERPROCS",
+        "D_V_HOSP_STAT_CARDS",
+        "D_V_HOSP_HISTORIES_BASE",
+        "D_V_HOME_CALL_JOUR",
+        "D_V_LPU",
+        "D_V_NR_NOTIFICATIONS",
+        "D_V_HOSP_HISTORIES",
+        "D_V_HOSP_REESTRS"
       ],
       "Пакеты и функции": [
-        "D_PKG_VERSIONS.GET_VERSION_BY_LPU",
-        "D_PKG_STR_TOOLS.FIO",
-        "D_PKG_NR_REQUEST.GET_ACTUAL_PHONE",
-        "D_PKG_STD.FRM_DT",
-        "D_PKG_NR_REQUEST.ADD",
-        "D_PKG_NR_REQUEST.UPD",
-        "D_PKG_R_ZNO_RISK_DATA.ADD",
-        "D_PKG_R_ZNO_RISK_DATA.UPD",
-        "D_PKG_R_ZNO_RISK_DATA_REASONS.ADD",
-        "D_PKG_R_ZNO_RISK_DATA_REASONS.UPD",
-        "D_PKG_R_ZNO_RISK_DATA_DIAGNS.UPD",
-        "D_PKG_R_ZNO_RISK_DATA_DIAGNS.ADD",
-        "D_PKG_R_ZNO_RISK_DISP.ADD",
-        "D_PKG_R_ZNO_RISK_DISP.UPD",
-        "D_PKG_R_ZNO_RISK_CONTROL.ADD",
-        "D_PKG_R_ZNO_RISK_CONTROL.UPD",
-        "D_PKG_R_ZNO_RISK_CONTR_RES.ADD",
-        "D_PKG_R_ZNO_RISK_CONTR_RES.UPD",
-        "D_PKG_R_ZNO_RISK_OUT.ADD",
-        "D_PKG_R_ZNO_RISK_OUT.UPD",
-        "D_PKG_R_ZNO_RISK_OUT.DEL",
-        "D_PKG_AGENT_RELATIVES.ADD",
-        "D_PKG_R_ZNO_RISK_RELATIVES.ADD",
-        "D_PKG_R_ZNO_RISK_RELATIVES.UPD",
-        "D_PKG_NR_REQUEST.SET_STATUS",
-        "D_PKG_NR_REQUEST.GEN_REG_NUMB",
-        "D_PKG_R_ZNO_RISK_DATA_REASONS.DEL",
-        "D_PKG_R_ZNO_RISK_CONTR_RES.DEL",
-        "D_PKG_R_ZNO_RISK_CONTROL.DEL",
-        "D_PKG_R_ZNO_RISK_RELATIVES.DEL"
+        "D_PKG_DAT_TOOLS.AGE_TO_STR",
+        "D_PKG_HOSP_HISTORIES.GET_FACT_DAYS",
+        "D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE",
+        "D_PKG_HOSP_HISTORIES.GET_ARCHIVE",
+        "D_PKG_EMPLOYERS.GET_ID",
+        "D_PKG_HOME_CALL_JOUR.SET_STATE",
+        "D_PKG_HOME_CALL_JOUR.SET_HH_ID",
+        "D_PKG_EDF_TOOLS.CHECK_BEFORE_EDIT_MED_EVENT",
+        "D_PKG_URPRIVS.CHECK_BPPRIV",
+        "D_PKG_HOSP_HISTORIES.CANCEL_CLOSE",
+        "D_PKG_NR_NOTIFICATIONS.DEL",
+        "D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL_CLOSE",
+        "D_PKG_EHRS.CHECK_ACTION",
+        "D_PKG_HOSP_STAT_CARDS.DEL",
+        "D_PKG_HOSP_STAT_CARDS.RECREATE",
+        "D_PKG_HOSP_STAT_CARDS.CREATE_STAT_CARD_FROM_HISTORY"
       ],
-      "Брокеры": [
-        "action:D_PKG_R_ZNO_RISK_DATA_REASONS.DEL;",
-        "action:D_PKG_R_ZNO_RISK_CONTR_RES.DEL;",
-        "action:D_PKG_R_ZNO_RISK_CONTROL.DEL;",
-        "action:D_PKG_R_ZNO_RISK_RELATIVES.DEL;"
+      "СО": [
+        "CheckDepBed_HospHistory",
+        "RolesEditClosedHH",
+        "ToggleSecurityEDF",
+        "CheckRegEmd",
+        "HOSP_HISTORIES",
+        "пациент не выписан из стационара"
+      ],
+      "Пользовательские процедуры": [
+        "CalcmainKSG"
       ],
       "Неопределенные": [
-        "D_P_EXC",
+        "D_STRAGG_COMMA",
         "D_STRAGG",
-        "D_INSERT_ID"
+        "D_CL_HOSP_HISTORIES_ARCHIVE",
+        "D_P_EXC"
       ],
       "viewDependencies": {
-        "D_V_NR_REQUEST": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_NR_REQUEST",
-            "D_NOS_REGISTRS",
-            "D_AGENTS",
-            "D_NR_REQUEST_STATUS",
-            "D_LPUDICT",
-            "D_EMPLOYERS",
-            "D_JOBTITLES",
-            "D_MKB10"
-          ],
-          "postgresTables": [
-            "D_NR_REQUEST",
-            "D_NOS_REGISTRS",
-            "D_AGENTS",
-            "D_NR_REQUEST_STATUS",
-            "D_LPUDICT",
-            "D_EMPLOYERS",
-            "D_JOBTITLES",
-            "D_MKB10"
-          ]
+        "D_V_HOSP_STAT_CARDS_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_NR_PATIENTS": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_NR_PATIENTS",
-            "D_AGENTS",
-            "D_NOS_REGISTRS",
-            "D_LPUDICT",
-            "D_MKB10",
-            "D_NR_REMOVE_REASONS"
-          ],
-          "postgresTables": [
-            "D_NR_PATIENTS",
-            "D_AGENTS",
-            "D_NOS_REGISTRS",
-            "D_LPUDICT",
-            "D_MKB10",
-            "D_NR_REMOVE_REASONS"
-          ]
+        "D_V_HOSP_STAT_CARDS_DEPS_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_NOS_REGISTRS": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_NOS_REGISTRS"
-          ],
-          "postgresTables": [
-            "D_NOS_REGISTRS",
-            "D_NOS_REGISTR_TYPES"
-          ]
+        "D_V_HOSP_REESTR_SPECS": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_EMPLOYERS": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_EMPLOYERS",
-            "D_JOBTITLES",
-            "D_SPECIALITIES",
-            "D_SPECIALITIES_ED",
-            "D_DEPS",
-            "D_DEPS_KINDS",
-            "D_USERS",
-            "D_AGENTS",
-            "D_AGENT_ESIA",
-            "D_EMP_SKILL",
-            "D_SKILL_CATEGORIES",
-            "D_LPU",
-            "D_LPUDICT"
-          ],
-          "postgresTables": [
-            "D_EMPLOYERS",
-            "D_JOBTITLES",
-            "D_SPECIALITIES",
-            "D_SPECIALITIES_ED",
-            "D_DEPS",
-            "D_DEPS_KINDS",
-            "D_USERS",
-            "D_AGENTS",
-            "D_AGENT_ESIA",
-            "D_SKILL_CATEGORIES",
-            "D_LPU",
-            "D_LPUDICT"
-          ]
+        "D_V_DIRECTION_SERVICES_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_LPU": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_LPU",
-            "D_LPUDICT",
-            "D_GEOGRAFY"
-          ],
-          "postgresTables": [
-            "D_LPU",
-            "D_LPUDICT",
-            "D_GEOGRAFY"
-          ]
+        "D_V_SERVICES_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_NR_REMOVE_REASONS": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_NR_REMOVE_REASONS"
-          ],
-          "postgresTables": [
-            "D_NR_REMOVE_REASONS",
-            "D_NOS_REGISTR_TYPES"
-          ]
+        "D_V_HHD_KSG": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_ONKO_AUTOPSY": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_ONKO_AUTOPSY"
-          ],
-          "postgresTables": [
-            "D_ONKO_AUTOPSY"
-          ]
+        "D_V_MED_THERAPY_SCHEMES_DESC": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_PERSMEDCARD": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_PERSMEDCARD",
-            "D_AGENTS",
-            "D_BLOODGROUPE",
-            "D_DIVISIONS",
-            "D_RHESUS",
-            "D_EMPLOYERS",
-            "D_CABLAB"
-          ],
-          "postgresTables": [
-            "D_PERSMEDCARD",
-            "D_AGENTS",
-            "D_BLOODGROUPE",
-            "D_DIVISIONS",
-            "D_RHESUS",
-            "D_EMPLOYERS",
-            "D_CABLAB"
-          ]
+        "D_V_Q_FRACTION": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_AGENT_CONTACTS_V2": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_AGENT_CONTACTS",
-            "D_CONTACT_TYPES"
-          ],
-          "postgresTables": [
-            "D_AGENT_CONTACTS",
-            "D_CONTACT_TYPES"
-          ]
+        "D_V_HOSP_HISTORY_DEPS_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_DEPS_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOSP_OUTCOMES": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_SCALE_REHAB": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_ALV": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_MED_THERAPY_SCHEMES": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
         "D_V_AGENTS_BASE": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_AGENTS"
-          ],
-          "postgresTables": [
-            "D_AGENTS"
-          ]
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         },
-        "D_V_AGENT_RELATIVES": {
-          "existsInOracle": true,
-          "existsInPostgres": true,
-          "oracleTables": [
-            "D_FN_RELATIVES_OTHER",
-            "D_FED_NSI_VERS",
-            "D_FED_NSI",
-            "D_LPUVERLIST_MAIN",
-            "D_AGENT_RELATIVES",
-            "D_RELATIONSHIPS",
-            "D_AGENTS",
-            "D_REPRESENT_LSTATUSES"
-          ],
-          "postgresTables": [
-            "D_FN_RELATIVES_OTHER",
-            "D_FED_NSI_VERS",
-            "D_FED_NSI",
-            "D_LPUVERLIST_MAIN",
-            "D_AGENT_RELATIVES",
-            "D_RELATIONSHIPS",
-            "D_AGENTS",
-            "D_REPRESENT_LSTATUSES"
-          ]
+        "D_V_USERROLES": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_USERPROCS": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOSP_STAT_CARDS": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOSP_HISTORIES_BASE": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOME_CALL_JOUR": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_LPU": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_NR_NOTIFICATIONS": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOSP_HISTORIES": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
+        },
+        "D_V_HOSP_REESTRS": {
+          "existsInOracle": false,
+          "existsInPostgres": false,
+          "oracleError": "Вьюха не найдена в Oracle",
+          "postgresError": "Вьюха не найдена в PostgreSQL"
         }
       },
-      "totalSqlQueries": 8
+      "popupMenus": [
+        {
+          "name": "pHOSP_HISTORY_ARCH",
+          "items": [
+            {
+              "caption": "Обновить",
+              "name": "pREF",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Открыть историю болезни",
+              "name": "pOPEN_IB",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотр истории болезни",
+              "name": "pVIEW_IB",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Лицевой счет",
+              "name": "pFA",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Анализы",
+              "name": "pANALYSES",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "ВМП",
+              "name": "pVMP",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Переформировать стат. карты",
+              "name": "pREDO_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Определить расчетную КСГ",
+              "name": "piCALC_MAIN_KSG",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать стат. карту",
+              "name": "pEDIT_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить стат. карту",
+              "name": "pDEL_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отменить выписку из стационара",
+              "name": "pCANC_AWAY",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отчеты",
+              "name": "piHSC_PRINT",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями",
+                  "name": "PrintOnko",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Статистическая карта выбывшего из псих./нарк. стационара",
+                  "name": "PRINT_STAT",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Форма № 2 - Адресный листок прибытия",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Форма № 7 - Адресный листок убытия",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Лист назначений и их выполнение",
+                  "name": "PRINT_PRESCRIBES",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            },
+            {
+              "caption": "Медицинские документы",
+              "name": "pEHR",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "name": "pAutoRepForAdd",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Мед. карта стац. больного в формате А4",
+              "name": "pMED_CARD",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Температурный лист (форма №004/у)",
+              "name": "pOPER_PLAN",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Универсальные датасеты для вывода диагнозов в отчет",
+              "name": "pUniversalDatasetsReport",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            }
+          ]
+        }
+      ],
+      "popupMenusPg": [
+        {
+          "name": "pHOSP_HISTORY_ARCH",
+          "items": [
+            {
+              "caption": "Обновить",
+              "name": "pREF",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Открыть историю болезни",
+              "name": "pOPEN_IB",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотр истории болезни",
+              "name": "pVIEW_IB",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Лицевой счет",
+              "name": "pFA",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Анализы",
+              "name": "pANALYSES",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "ВМП",
+              "name": "pVMP",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Переформировать стат. карты",
+              "name": "pREDO_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Определить расчетную КСГ",
+              "name": "piCALC_MAIN_KSG",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать стат. карту",
+              "name": "pEDIT_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить стат. карту",
+              "name": "pDEL_STAT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отменить выписку из стационара",
+              "name": "pCANC_AWAY",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отчеты",
+              "name": "piHSC_PRINT",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями",
+                  "name": "PrintOnko",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Статистическая карта выбывшего из псих./нарк. стационара",
+                  "name": "PRINT_STAT",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Форма № 2 - Адресный листок прибытия",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Форма № 7 - Адресный листок убытия",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Лист назначений и их выполнение",
+                  "name": "PRINT_PRESCRIBES",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            },
+            {
+              "caption": "Медицинские документы",
+              "name": "pEHR",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "name": "pAutoRepForAdd",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Мед. карта стац. больного в формате А4",
+              "name": "pMED_CARD",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Температурный лист (форма №004/у)",
+              "name": "pOPER_PLAN",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            },
+            {
+              "caption": "Универсальные датасеты для вывода диагнозов в отчет",
+              "name": "pUniversalDatasetsReport",
+              "fromAutoPopup": true,
+              "autoPopupName": "pAP_ALL",
+              "isDbReport": false
+            }
+          ]
+        }
+      ],
+      "totalSqlQueries": 12
     }
   ],
   "totalForms": 1,
-  "exportDate": "Wed May 20 19:33:00 GMT+07:00 2026"
+  "exportDate": "Wed May 20 20:40:11 GMT+07:00 2026"
 }

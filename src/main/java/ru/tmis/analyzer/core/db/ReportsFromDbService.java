@@ -2,6 +2,7 @@
 package ru.tmis.analyzer.core.db;
 
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 
@@ -20,13 +21,20 @@ public class ReportsFromDbService {
     // Статический метод для преобразования типа отчета
     private static String getRepTypeNameStatic(int repType) {
         switch (repType) {
-            case 0: return "Crystal Reports";
-            case 1: return "WEB-форма";
-            case 2: return "Crystal Reports(PDF)";
-            case 3: return "Бланк";
-            case 5: return "WEB-конструктор";
-            case 6: return "Составной";
-            default: return "Неизвестный тип (" + repType + ")";
+            case 0:
+                return "Crystal Reports";
+            case 1:
+                return "WEB-форма";
+            case 2:
+                return "Crystal Reports(PDF)";
+            case 3:
+                return "Бланк";
+            case 5:
+                return "WEB-конструктор";
+            case 6:
+                return "Составной";
+            default:
+                return "Неизвестный тип (" + repType + ")";
         }
     }
 
@@ -36,91 +44,94 @@ public class ReportsFromDbService {
 
     /**
      * Получить список отчетов по unit'у
+     *
      * @param unitCode код unit'а (например, 'HOSP_HISTORIES')
      * @return список отчетов
      */
     public List<DbReportInfo> getReportsByUnit(String unitCode) {
-        // --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
-        List<DbReportInfo> result = new ArrayList<>();
+        return DatabaseCacheManager.getOracleReports(unitCode, () -> {
+            List<DbReportInfo> result = new ArrayList<>();
+            // --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
 
-        if (unitCode == null || unitCode.trim().isEmpty()) {
-            return result;
-        }
-
-        // Исправленный SQL запрос для Oracle
-        String sql =
-                "SELECT rep.ID,\n" +
-                        "       drl.PRIV_NAME,\n" +
-                        "       rep.REP_TYPE,\n" +
-                        "       rep.REP_DATA,\n" +
-                        "       rep.REP_FILENAME,\n" +
-                        "       rep.REP_NAME,\n" +
-                        "       rep.REP_CODE,\n" +
-                        "       rep.LPU\n" +  // Добавляем LPU
-                        "  FROM D_REPORTS_LINKS drl\n" +
-                        "  JOIN D_REPORTS rep ON drl.PID = rep.ID\n" +
-                        " WHERE drl.UNITCODE = ?\n";  // Добавляем сортировку
-        // ЛОГ: SQL запрос
-        System.out.println("[ReportsFromDbService] ========== SQL ЗАПРОС (ORACLE) ==========");
-        System.out.println("[ReportsFromDbService] Цель: Получение отчётов по unit'у");
-        System.out.println("[ReportsFromDbService] Параметры: unitCode = " + unitCode);
-        System.out.println("[ReportsFromDbService] SQL: " + sql.replace("?", "'" + unitCode + "'"));
-        System.out.println("[ReportsFromDbService] ========================================");
-
-
-        Properties props = new Properties();
-        props.setProperty("user", settings.getOracleUser());
-        props.setProperty("password", settings.getOraclePassword());
-        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
-        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
-        props.setProperty("oracle.jdbc.defaultNChar", "true");
-
-        try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, unitCode);
-            pstmt.setQueryTimeout(30);
-            ResultSet rs = pstmt.executeQuery();
-
-            System.out.println("[ReportsFromDbService] Загрузка отчётов для unit=" + unitCode);
-
-            while (rs.next()) {
-                DbReportInfo report = new DbReportInfo();
-                report.setPrivName(rs.getString("PRIV_NAME"));
-                report.setUnitCode(unitCode);
-                report.setRepType(rs.getInt("REP_TYPE"));
-                report.setRepData(rs.getBytes("REP_DATA"));
-                report.setRepFilename(rs.getString("REP_FILENAME"));
-                report.setRepName(rs.getString("REP_NAME") );
-                report.setRepCode(rs.getString("REP_CODE"));
-                report.setRepID(rs.getInt("ID"));
-
-                // Устанавливаем LPU (если нужно для контекста)
-                String lpu = rs.getString("LPU");
-                if (lpu != null) {
-                    report.setUnitCode(lpu); // или другое поле
-                }
-
-                // Если отчет составной, загружаем его структуру
-                if (report.isComposite()) {
-                    List<DbReportInfo> children = getCompositeReports(report.getRepID());
-                    for (DbReportInfo child : children) {
-                        report.addChild(child);
-                    }
-                }
-
-                result.add(report);
-                System.out.println("  [ReportsFromDbService] Найден отчёт: " + report.getRepCode() + " - " + report.getRepName());
+            if (unitCode == null || unitCode.trim().isEmpty()) {
+                return result;
             }
 
-            System.out.println("[ReportsFromDbService] Всего найдено отчётов: " + result.size());
+            // Исправленный SQL запрос для Oracle
+            String sql =
+                    "SELECT rep.ID,\n" +
+                            "       drl.PRIV_NAME,\n" +
+                            "       rep.REP_TYPE,\n" +
+                            "       rep.REP_DATA,\n" +
+                            "       rep.REP_FILENAME,\n" +
+                            "       rep.REP_NAME,\n" +
+                            "       rep.REP_CODE,\n" +
+                            "       rep.LPU\n" +  // Добавляем LPU
+                            "  FROM D_REPORTS_LINKS drl\n" +
+                            "  JOIN D_REPORTS rep ON drl.PID = rep.ID\n" +
+                            " WHERE drl.UNITCODE = ?\n";  // Добавляем сортировку
+            // ЛОГ: SQL запрос
+            System.out.println("[ReportsFromDbService] ========== SQL ЗАПРОС (ORACLE) ==========");
+            System.out.println("[ReportsFromDbService] Цель: Получение отчётов по unit'у");
+            System.out.println("[ReportsFromDbService] Параметры: unitCode = " + unitCode);
+            System.out.println("[ReportsFromDbService] SQL: " + sql.replace("?", "'" + unitCode + "'"));
+            System.out.println("[ReportsFromDbService] ========================================");
 
-        } catch (SQLException e) {
-            System.err.println("[ReportsFromDbService] Ошибка получения отчетов по unit=" + unitCode + ": " + e.getMessage());
-            e.printStackTrace();
-        }
 
-        return result;
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+            props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+            props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+            props.setProperty("oracle.jdbc.defaultNChar", "true");
+
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, unitCode);
+                pstmt.setQueryTimeout(30);
+                ResultSet rs = pstmt.executeQuery();
+
+                System.out.println("[ReportsFromDbService] Загрузка отчётов для unit=" + unitCode);
+
+                while (rs.next()) {
+                    DbReportInfo report = new DbReportInfo();
+                    report.setPrivName(rs.getString("PRIV_NAME"));
+                    report.setUnitCode(unitCode);
+                    report.setRepType(rs.getInt("REP_TYPE"));
+                    report.setRepData(rs.getBytes("REP_DATA"));
+                    report.setRepFilename(rs.getString("REP_FILENAME"));
+                    report.setRepName(rs.getString("REP_NAME"));
+                    report.setRepCode(rs.getString("REP_CODE"));
+                    report.setRepID(rs.getInt("ID"));
+
+                    // Устанавливаем LPU (если нужно для контекста)
+                    String lpu = rs.getString("LPU");
+                    if (lpu != null) {
+                        report.setUnitCode(lpu); // или другое поле
+                    }
+
+                    // Если отчет составной, загружаем его структуру
+                    if (report.isComposite()) {
+                        List<DbReportInfo> children = getCompositeReports(report.getRepID());
+                        for (DbReportInfo child : children) {
+                            report.addChild(child);
+                        }
+                    }
+
+                    result.add(report);
+                    System.out.println("  [ReportsFromDbService] Найден отчёт: " + report.getRepCode() + " - " + report.getRepName());
+                }
+
+                System.out.println("[ReportsFromDbService] Всего найдено отчётов: " + result.size());
+
+            } catch (SQLException e) {
+                System.err.println("[ReportsFromDbService] Ошибка получения отчетов по unit=" + unitCode + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            return result;
+        });
     }
 
     /**
@@ -269,65 +280,68 @@ public class ReportsFromDbService {
 
     /**
      * Загрузить составные части отчета (для REP_TYPE = 6) с рекурсивным обходом
+     *
      * @param parentReportId ID родительского отчета
      * @return список вложенных отчетов
      */
     public List<DbReportInfo> getCompositeReports(int parentReportId) {
-        List<DbReportInfo> result = new ArrayList<>();
+        return DatabaseCacheManager.getOracleCompositeReports(parentReportId, () -> {
+            List<DbReportInfo> result = new ArrayList<>();
 
-        String sql =
-                "SELECT rep.ID, " +
-                        "       rep.REP_CODE, " +
-                        "       rep.REP_NAME, " +
-                        "       rep.REP_TYPE, " +
-                        "       rep.REP_FILENAME, " +
-                        "       rep.LPU, " +
-                        "       drl.PRIV_NAME " +
-                        "FROM D_REPORTS_STRUCTURE t " +
-                        "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
-                        "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
-                        "WHERE t.PID = ? " +
-                        "ORDER BY t.SORT";
+            String sql =
+                    "SELECT rep.ID, " +
+                            "       rep.REP_CODE, " +
+                            "       rep.REP_NAME, " +
+                            "       rep.REP_TYPE, " +
+                            "       rep.REP_FILENAME, " +
+                            "       rep.LPU, " +
+                            "       drl.PRIV_NAME " +
+                            "FROM D_REPORTS_STRUCTURE t " +
+                            "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
+                            "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
+                            "WHERE t.PID = ? " +
+                            "ORDER BY t.SORT";
 
-        Properties props = new Properties();
-        props.setProperty("user", settings.getOracleUser());
-        props.setProperty("password", settings.getOraclePassword());
-        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
-        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
-        props.setProperty("oracle.jdbc.defaultNChar", "true");
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+            props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+            props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+            props.setProperty("oracle.jdbc.defaultNChar", "true");
 
-        try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, parentReportId);
-            pstmt.setQueryTimeout(30);
-            ResultSet rs = pstmt.executeQuery();
+                pstmt.setInt(1, parentReportId);
+                pstmt.setQueryTimeout(30);
+                ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                DbReportInfo report = new DbReportInfo();
-                report.setRepID(rs.getInt("ID"));
-                report.setRepCode(rs.getString("REP_CODE"));
-                report.setRepName(rs.getString("REP_NAME"));
-                report.setRepType(rs.getInt("REP_TYPE"));
-                report.setRepFilename(rs.getString("REP_FILENAME"));
-                report.setPrivName(rs.getString("PRIV_NAME"));
-                report.setUnitCode(rs.getString("LPU") != null ? String.valueOf(rs.getInt("LPU")) : null);
+                while (rs.next()) {
+                    DbReportInfo report = new DbReportInfo();
+                    report.setRepID(rs.getInt("ID"));
+                    report.setRepCode(rs.getString("REP_CODE"));
+                    report.setRepName(rs.getString("REP_NAME"));
+                    report.setRepType(rs.getInt("REP_TYPE"));
+                    report.setRepFilename(rs.getString("REP_FILENAME"));
+                    report.setPrivName(rs.getString("PRIV_NAME"));
+                    report.setUnitCode(rs.getString("LPU") != null ? String.valueOf(rs.getInt("LPU")) : null);
 
-                // Рекурсивно загружаем дочерние отчеты, если текущий тоже составной
-                if (report.isComposite()) {
-                    List<DbReportInfo> children = getCompositeReports(report.getRepID());
-                    for (DbReportInfo child : children) {
-                        report.addChild(child);
+                    // Рекурсивно загружаем дочерние отчеты, если текущий тоже составной
+                    if (report.isComposite()) {
+                        List<DbReportInfo> children = getCompositeReports(report.getRepID());
+                        for (DbReportInfo child : children) {
+                            report.addChild(child);
+                        }
                     }
+
+                    result.add(report);
                 }
 
-                result.add(report);
+            } catch (SQLException e) {
+                System.err.println("Ошибка получения составных отчетов для ID=" + parentReportId + ": " + e.getMessage());
             }
 
-        } catch (SQLException e) {
-            System.err.println("Ошибка получения составных отчетов для ID=" + parentReportId + ": " + e.getMessage());
-        }
-
-        return result;
+            return result;
+        });
     }
 }

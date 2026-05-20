@@ -2,6 +2,7 @@ package ru.tmis.analyzer.core.llm;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.model.BrokerInfo;
@@ -399,27 +400,28 @@ public class LLMPromptGenerator {
         return null;
     }
 
-    private String findExecProc(String unit, String action) {
-        String sql = "SELECT execproc FROM D_UNITBPS WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
-        Properties props = new Properties();
-        props.setProperty("user", settings.getOracleUser());
-        props.setProperty("password", settings.getOraclePassword());
-        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
-        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
 
-        try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, "%" + unit.toUpperCase() + "%");
-            pstmt.setString(2, "%" + action.toUpperCase() + "%");
-            pstmt.setQueryTimeout(30);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("execproc");
+    private String findExecProc(String unit, String action) {
+        return DatabaseCacheManager.getBrokerExecProc(unit, action, () -> {
+            String sql = "SELECT execproc FROM D_UNITBPS WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, "%" + unit.toUpperCase() + "%");
+                pstmt.setString(2, "%" + action.toUpperCase() + "%");
+                pstmt.setQueryTimeout(30);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("execproc");
+                }
+            } catch (SQLException e) {
+                System.err.println("[Broker] Ошибка: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            System.err.println("[Broker] Ошибка поиска execproc для " + unit + "/" + action + ": " + e.getMessage());
-        }
-        return null;
+            return null;
+        });
     }
 
     private Set<String> extractTablesFromDDL(String ddl) {

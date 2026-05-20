@@ -1,5 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,31 +79,33 @@ public class PostgresService {
 
     private String fetchViewDDL(String viewName) {
         try (Connection conn = getConnection()) {
-            String getOidSql = "SELECT oid FROM pg_class WHERE relname = ? AND relkind = 'v'";
-            System.out.println("[PostgresService] ========== SQL ЗАПРОС ==========");
-            System.out.println("[PostgresService] Цель: Получение DDL вьюхи из PostgreSQL");
-            System.out.println("[PostgresService] Параметры: viewName = " + viewName);
+            int oid = DatabaseCacheManager.getPostgresViewOid(viewName, () -> {
+                String getOidSql = "SELECT oid FROM pg_class WHERE relname = ? AND relkind = 'v'";
+                try (PreparedStatement oidStmt = conn.prepareStatement(getOidSql)) {
+                    oidStmt.setString(1, viewName.toLowerCase());
+                    ResultSet oidRs = oidStmt.executeQuery();
+                    if (oidRs.next()) {
+                        return oidRs.getInt("oid");
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Ошибка получения OID: " + e.getMessage());
+                }
+                return -1;
+            });
 
-            try (PreparedStatement oidStmt = conn.prepareStatement(getOidSql)) {
-                oidStmt.setString(1, viewName.toLowerCase());
-                ResultSet oidRs = oidStmt.executeQuery();
-                if (oidRs.next()) {
-                    int oid = oidRs.getInt("oid");
-                    String sql = "SELECT pg_get_viewdef(?, true) as viewdef";
-                    System.out.println("[PostgresService] SQL (OID): " + getOidSql.replace("?", "'" + viewName.toLowerCase() + "'"));
-                    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                        pstmt.setInt(1, oid);
-                        ResultSet rs = pstmt.executeQuery();
-                        if (rs.next()) {
-                            String viewdef = rs.getString("viewdef");
-                            if (viewdef != null) {
-                                return "-- PostgreSQL View: " + viewName + "\n" + viewdef;
-                            }
+            if (oid > 0) {
+                String sql = "SELECT pg_get_viewdef(?, true) as viewdef";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setInt(1, oid);
+                    ResultSet rs = pstmt.executeQuery();
+                    if (rs.next()) {
+                        String viewdef = rs.getString("viewdef");
+                        if (viewdef != null) {
+                            return "-- PostgreSQL View: " + viewName + "\n" + viewdef;
                         }
                     }
                 }
             }
-            System.out.println("[PostgresService] Результат: вьюха не найдена");
         } catch (SQLException e) {
             System.err.println("Ошибка получения DDL вьюхи " + viewName + ": " + e.getMessage());
         }

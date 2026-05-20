@@ -1,100 +1,93 @@
 ФОРМА;БЛОК;ЗНАЧЕНИЕ
-Forms/NR/cancer_risk_registr.frm;Юзерформы;UserFormsVOKOD/NR/cancer_risk_registr.d/cancer_risk_registr.dfrm
-Forms/NR/cancer_risk_registr.frm;Юзерформы;UserFormsVOKOD/NR/cancer_risk_registr.d/script.dfrm
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/utils
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/DataSetCompleters
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/patient_data
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_data
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_relatives
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_disp
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_control
-Forms/NR/cancer_risk_registr.frm;subForm;NR/subforms/zno_risk/zno_risk_out
-Forms/NR/cancer_risk_registr.frm;subForm;NosRegistrs/SubForms/nr_attached_docs_grid
-Forms/NR/cancer_risk_registr.frm;формы JS;NosRegistrs/PatientSearch/search_patient.frm
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_REQUEST
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_PATIENTS
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NOS_REGISTRS
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_EMPLOYERS
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_LPU
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_NR_REMOVE_REASONS
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_ONKO_AUTOPSY
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_PERSMEDCARD
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENT_CONTACTS_V2
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENTS_BASE
-Forms/NR/cancer_risk_registr.frm;Вьюхи;D_V_AGENT_RELATIVES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REQUEST
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_NOS_REGISTRS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENTS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REQUEST_STATUS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPUDICT
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_EMPLOYERS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_JOBTITLES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_MKB10
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_PATIENTS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_NR_REMOVE_REASONS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_SPECIALITIES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_SPECIALITIES_ED
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_DEPS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_DEPS_KINDS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_USERS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_ESIA
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_EMP_SKILL
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_SKILL_CATEGORIES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPU
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_GEOGRAFY
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_ONKO_AUTOPSY
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_PERSMEDCARD
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_BLOODGROUPE
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_DIVISIONS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_RHESUS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_CABLAB
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_CONTACTS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_CONTACT_TYPES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_FN_RELATIVES_OTHER
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_FED_NSI_VERS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_FED_NSI
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_LPUVERLIST_MAIN
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_AGENT_RELATIVES
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_RELATIONSHIPS
-Forms/NR/cancer_risk_registr.frm;Таблицы;D_REPRESENT_LSTATUSES
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.GET_ACTUAL_PHONE
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_STD.FRM_DT
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_DIAGNS.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_DIAGNS.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DISP.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DISP.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_OUT.DEL
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_AGENT_RELATIVES.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.ADD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.UPD
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.SET_STATUS
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_NR_REQUEST.GEN_REG_NUMB
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_DATA_REASONS.DEL
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTR_RES.DEL
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_CONTROL.DEL
-Forms/NR/cancer_risk_registr.frm;Пакеты и функции;D_PKG_R_ZNO_RISK_RELATIVES.DEL
-Forms/NR/cancer_risk_registr.frm;СО;(не найдено)
-Forms/NR/cancer_risk_registr.frm;Универсальные композиции;unit:LPUDICT composition:GRID_NAME
-Forms/NR/cancer_risk_registr.frm;Пользовательские процедуры;(не найдено)
-Forms/NR/cancer_risk_registr.frm;Константы;(не найдено)
-Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_DATA_REASONS.DEL
-Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_CONTR_RES.DEL
-Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_CONTROL.DEL
-Forms/NR/cancer_risk_registr.frm;Брокеры;action:D_PKG_R_ZNO_RISK_RELATIVES.DEL
-Forms/NR/cancer_risk_registr.frm;Неопределенные;D_P_EXC
-Forms/NR/cancer_risk_registr.frm;Неопределенные;D_STRAGG
-Forms/NR/cancer_risk_registr.frm;Неопределенные;D_INSERT_ID
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSaratov/ArmPatientsInDep/hosp_history_archive.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/data.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/script.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Novosib/ArmPatientsInDep/hosp_history_archive.d/view.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/data.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/script.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsEgis3Tomsk/ArmPatientsInDep/hosp_history_archive.d/view.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsKaliningrad/ArmPatientsInDep/hosp_history_archive.d/popup.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsKrasnodarOD/ArmPatientsInDep/hosp_history_archive.d/popup_item_report.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsMoscowNIIBlohina/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsNiiSerb/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/data.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/scripts.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsPrimorie/ArmPatientsInDep/hosp_history_archive.d/view.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsRKB3/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsRKOD/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsRkob/ArmPatientsInDep/hosp_history_archive.d/Reports.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsRostov/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive_popup.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/data.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/scripts.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSakhalin/ArmPatientsInDep/hosp_history_archive.d/view.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSamRMC/ArmPatientsInDep/hosp_history_archive.d/hosp_history_archive.dfrm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Юзерформы;UserFormsSaratov/ArmPatientsInDep/hosp_history_archive.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;subForm;KSG/subforms/get_calc_main_ksg_action
+Forms/ArmPatientsInDep/hosp_history_archive.frm;subForm;ArmPatientsInDep/SubForms/hh_deps
+Forms/ArmPatientsInDep/hosp_history_archive.frm;subForm;ArmPatientsInDep/SubForms/mp_prescribes
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;System/messagedlg.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;ArmPatientsInDep/hosp_history_archive_filter.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;ArmPatientsInDep/hosp_history_new.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;DiseaseCase/diseasecase.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;PersonalAccount/patient_contracts.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;HospPlan/patient_analyze.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;HospPlan/setPrivilege.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;ArmStatistic/hosp_stat_card_edit.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;ArmPatientsInDep/hosp_history_rep_services.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;формы JS;ArmPatientsInDep/SubForms/hosp_history_ehrs.frm
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_STAT_CARDS_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_STAT_CARDS_DEPS_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_REESTR_SPECS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HHD_KSG
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_MED_THERAPY_SCHEMES_DESC
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_Q_FRACTION
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_HISTORY_DEPS_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_DEPS_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_OUTCOMES
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_SCALE_REHAB
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_ALV
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_MED_THERAPY_SCHEMES
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_USERROLES
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_USERPROCS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_STAT_CARDS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_HISTORIES_BASE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_LPU
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_NR_NOTIFICATIONS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_HISTORIES
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Вьюхи;D_V_HOSP_REESTRS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Таблицы;(не найдено)
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_DAT_TOOLS.AGE_TO_STR
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_HISTORIES.GET_FACT_DAYS
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_HISTORIES.GET_ARCHIVE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_STATE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_HH_ID
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_EDF_TOOLS.CHECK_BEFORE_EDIT_MED_EVENT
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_URPRIVS.CHECK_BPPRIV
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_HISTORIES.CANCEL_CLOSE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_NR_NOTIFICATIONS.DEL
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_WLH_REQUESTS.UPD_BY_HH_CANCEL_CLOSE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_EHRS.CHECK_ACTION
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_STAT_CARDS.DEL
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_STAT_CARDS.RECREATE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пакеты и функции;D_PKG_HOSP_STAT_CARDS.CREATE_STAT_CARD_FROM_HISTORY
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;CheckDepBed_HospHistory
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;RolesEditClosedHH
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;ToggleSecurityEDF
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;CheckRegEmd
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;HOSP_HISTORIES
+Forms/ArmPatientsInDep/hosp_history_archive.frm;СО;пациент не выписан из стационара
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Универсальные композиции;(не найдено)
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Пользовательские процедуры;CalcmainKSG
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Константы;(не найдено)
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Брокеры;(не найдено)
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Неопределенные;D_STRAGG_COMMA
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Неопределенные;D_STRAGG
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Неопределенные;D_CL_HOSP_HISTORIES_ARCHIVE
+Forms/ArmPatientsInDep/hosp_history_archive.frm;Неопределенные;D_P_EXC

@@ -1,5 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+
 import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
@@ -95,17 +97,14 @@ public class PostgresPackageChecker {
         return t.replaceAll("^[a-z_][a-z0-9_]*\\s+", "");
     }
 
-    public FunctionInfo checkFunction(String functionName) {
-        String key = functionName.toLowerCase();
-        if (cache.containsKey(key)) {
-            log("  [КЭШ] " + functionName);
-            return cache.get(key);
-        }
 
-        FunctionInfo info = doCheckFunction(functionName);
-        cache.put(key, info);
-        return info;
+
+    public FunctionInfo checkFunction(String functionName) {
+        return DatabaseCacheManager.getPostgresFunctionCheck(functionName, () -> {
+            return doCheckFunction(functionName);
+        });
     }
+
 
     private FunctionInfo doCheckFunction(String functionName) {
         String cleanName = functionName.toLowerCase();
