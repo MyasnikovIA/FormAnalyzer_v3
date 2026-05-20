@@ -3,6 +3,7 @@ package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
 
@@ -607,6 +608,7 @@ public class SettingsDialog extends JDialog {
         }
     }
 
+
     private void saveSettings() {
         settings.setProjectPath(projectPathField.getText());
         settings.setOutputDir(outputDirField.getText());
@@ -617,9 +619,16 @@ public class SettingsDialog extends JDialog {
         settings.setPostgresUser(postgresUserField.getText());
         settings.setPostgresPassword(new String(postgresPasswordField.getPassword()));
         settings.setMisUser(misUserField.getText());
-        config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
-        config.setEnableJSONExport(enableJSONExportCheckbox.isSelected());
+
         settings.save();
+
+        // Сбросить статус подключения к БД и перепроверить
+        DatabaseCacheManager.resetConnectionStatus();
+        DatabaseCacheManager.initDbConfig(
+                settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
+                settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
+                settings.getMisUser()
+        );
 
         // Report settings
         if (includeSqlContentCheckbox != null) {

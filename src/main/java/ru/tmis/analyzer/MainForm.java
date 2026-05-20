@@ -11,29 +11,48 @@ import java.io.File;
 
 public class MainForm {
 
+
     public static void main(String[] args) {
-        // Настройки для Windows (Oracle Instant Client)
+        // Настройки для Windows
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("win")) {
             configureWindowsOracle();
         }
 
-        // Запуск UI в EDT потоке
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 SettingsModel settings = SettingsModel.load();
                 AppConfig config = AppConfig.load();
 
-                // Инициализируем конфигурацию БД в кэше
+                // Инициализируем конфигурацию БД
                 DatabaseCacheManager.initDbConfig(
                         settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
                         settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
                         settings.getMisUser()
                 );
 
-                // Проверяем доступность БД при старте
+                // Проверяем доступность БД
                 DatabaseCacheManager.checkConnections();
+
+                // Показываем предупреждение, если БД недоступна
+                if (!DatabaseCacheManager.isOracleAvailable()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Oracle база данных недоступна!\n" +
+                                    "Некоторые функции анализа будут ограничены.\n" +
+                                    "Проверьте настройки подключения.",
+                            "Предупреждение",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+                if (!DatabaseCacheManager.isPostgresAvailable()) {
+                    JOptionPane.showMessageDialog(null,
+                            "PostgreSQL база данных недоступна!\n" +
+                                    "Некоторые функции анализа будут ограничены.\n" +
+                                    "Проверьте настройки подключения.",
+                            "Предупреждение",
+                            JOptionPane.WARNING_MESSAGE);
+                }
 
                 MainWindow window = new MainWindow(settings, config);
                 window.setVisible(true);
