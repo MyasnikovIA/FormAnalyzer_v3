@@ -748,22 +748,25 @@ public class FormsTreePanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
     private void selectAllNodes() {
         List<TreePath> allPaths = new ArrayList<>();
-        collectAllLeafPaths(rootNode, new TreePath(rootNode), allPaths);
+        // Собираем ВСЕ узлы (включая родительские и корневые)
+        collectAllPaths(rootNode, new TreePath(rootNode), allPaths);
         tree.setSelectionPaths(allPaths.toArray(new TreePath[0]));
     }
 
-    private void collectAllLeafPaths(DefaultMutableTreeNode node, TreePath parentPath, List<TreePath> paths) {
-        if (node.isLeaf()) {
-            paths.add(parentPath);
-        } else {
-            for (int i = 0; i < node.getChildCount(); i++) {
-                DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
-                TreePath childPath = parentPath.pathByAddingChild(child);
-                collectAllLeafPaths(child, childPath, paths);
-            }
+    /**
+     * Рекурсивно собирает ВСЕ пути в дереве (включая родительские узлы)
+     */
+    private void collectAllPaths(DefaultMutableTreeNode node, TreePath parentPath, List<TreePath> paths) {
+        // Добавляем текущий узел (даже если это не лист)
+        paths.add(parentPath);
+
+        // Рекурсивно обходим всех детей
+        for (int i = 0; i < node.getChildCount(); i++) {
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+            TreePath childPath = parentPath.pathByAddingChild(child);
+            collectAllPaths(child, childPath, paths);
         }
     }
 

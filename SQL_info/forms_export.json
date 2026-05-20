@@ -1,0 +1,392 @@
+{
+  "forms": [
+    {
+      "formPath": "Forms/HospitPlanning/hospit_planning.frm",
+      "baseFormPath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\Forms\\HospitPlanning\\hospit_planning.frm",
+      "fullyReplaced": false,
+      "overrides": [
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsEgis3Novosib\\HospitPlanning\\hospit_planning.d\\hospit_planning.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        }
+      ],
+      "jsForms": [
+        "HospitPlanning/modals/graphics_add_edit.frm",
+        "HospitPlanning/hosp_plan_kinds_edit.frm",
+        "HospitPlanning/hosp_plan_deps.frm",
+        "HospitPlanning/hosp_plan_pks.frm",
+        "HospitPlanning/hosp_plan_mkbs.frm",
+        "AccessRights/d_cse_accesses.frm",
+        "HospPlan/hospplanperiod_edit.frm",
+        "UniversalForms/period.frm",
+        "Schedules/schedules_edit_hp.frm"
+      ],
+      "tablesViews": [
+        "D_V_HOSP_PLAN_KINDS",
+        "D_V_HPK_PLANS",
+        "D_V_HPK_SCHEDULE_BASE",
+        "D_V_SCHEDULE_BASE"
+      ],
+      "packagesFunctions": [
+        "D_PKG_CSE_ACCESSES.CHECK_RIGHT",
+        "D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY",
+        "D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK",
+        "D_PKG_HPK_PLANS.DEL",
+        "D_PKG_HOSP_PLAN_KINDS.DEL",
+        "D_PKG_URPRIVS.CHECK_BPPRIV",
+        "D_PKG_CATALOGS.FIND_ROOT_CATALOG",
+        "D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY",
+        "D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK",
+        "D_PKG_HPK_SCHEDULE.DEL"
+      ],
+      "autoPopupMenus": [
+        "HOSP_PLAN_KINDS",
+        "HPK_PLANS"
+      ],
+      "unknownObjects": [
+        "D_P_EXC"
+      ],
+      "popupMenus": [
+        {
+          "name": "pHOSP_PLAN_KINDS",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отделения",
+              "name": "pDEPS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Диагнозы",
+              "name": "pMKBS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Виды оплаты",
+              "name": "pPKS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Права записи",
+              "name": "pRIGHTS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            }
+          ]
+        },
+        {
+          "name": "pHPK_PLANS",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Назначить",
+              "name": "pAPPLY",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Ко всем дням недели",
+                  "name": "pALLD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "День к периоду",
+                  "name": "pPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Неделю в период",
+                  "name": "pWPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            },
+            {
+              "caption": "Копировать",
+              "name": "pCOPY",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Ко всем дням недели",
+                  "name": "pCOPYALLD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "День к периоду",
+                  "name": "pCOPYPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Неделю в период",
+                  "name": "pCOPYWPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "popupSchedule",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотреть график",
+              "name": "pWatchSch",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pAddSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEditSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDelSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            }
+          ]
+        }
+      ],
+      "popupMenusPg": [
+        {
+          "name": "pHOSP_PLAN_KINDS",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Отделения",
+              "name": "pDEPS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Диагнозы",
+              "name": "pMKBS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Виды оплаты",
+              "name": "pPKS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Права записи",
+              "name": "pRIGHTS",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            }
+          ]
+        },
+        {
+          "name": "pHPK_PLANS",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pADD",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEDIT",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDEL",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Назначить",
+              "name": "pAPPLY",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Ко всем дням недели",
+                  "name": "pALLD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "День к периоду",
+                  "name": "pPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Неделю в период",
+                  "name": "pWPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            },
+            {
+              "caption": "Копировать",
+              "name": "pCOPY",
+              "fromAutoPopup": false,
+              "isDbReport": false,
+              "children": [
+                {
+                  "caption": "Ко всем дням недели",
+                  "name": "pCOPYALLD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "День к периоду",
+                  "name": "pCOPYPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                },
+                {
+                  "caption": "Неделю в период",
+                  "name": "pCOPYWPERIOD",
+                  "fromAutoPopup": false,
+                  "isDbReport": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "popupSchedule",
+          "items": [
+            {
+              "caption": "Обновить",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Просмотреть график",
+              "name": "pWatchSch",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Добавить",
+              "name": "pAddSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Редактировать",
+              "name": "pEditSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            },
+            {
+              "caption": "Удалить",
+              "name": "pDelSchedule",
+              "fromAutoPopup": false,
+              "isDbReport": false
+            }
+          ]
+        }
+      ],
+      "totalSqlQueries": 12
+    }
+  ],
+  "totalForms": 1,
+  "exportDate": "Wed May 20 12:45:36 GMT+07:00 2026"
+}

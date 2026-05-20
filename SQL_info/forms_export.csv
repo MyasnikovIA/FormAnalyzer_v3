@@ -1,0 +1,37 @@
+ФОРМА;БЛОК;ЗНАЧЕНИЕ
+Forms/HospitPlanning/hospit_planning.frm;ЮЗЕРФОРМЫ;UserFormsEgis3Novosib: .d/*.dfrm - переопределение из каталога .d - C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
+Forms/HospitPlanning/hospit_planning.frm;SubForm;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/modals/graphics_add_edit.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_kinds_edit.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_deps.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_pks.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_mkbs.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;AccessRights/d_cse_accesses.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospPlan/hospplanperiod_edit.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;UniversalForms/period.frm
+Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;Schedules/schedules_edit_hp.frm
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HOSP_PLAN_KINDS
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HPK_PLANS
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HPK_SCHEDULE_BASE
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_SCHEDULE_BASE
+Forms/HospitPlanning/hospit_planning.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_CSE_ACCESSES.CHECK_RIGHT
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.DEL
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HOSP_PLAN_KINDS.DEL
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_URPRIVS.CHECK_BPPRIV
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_CATALOGS.FIND_ROOT_CATALOG
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
+Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_SCHEDULE.DEL
+Forms/HospitPlanning/hospit_planning.frm;СИСТЕМНЫЕ ОПЦИИ;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;КОНСТАНТЫ;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;Коды подключаемого AutoPopUp меню на форме;HOSP_PLAN_KINDS
+Forms/HospitPlanning/hospit_planning.frm;Коды подключаемого AutoPopUp меню на форме;HPK_PLANS
+Forms/HospitPlanning/hospit_planning.frm;БРОКЕРЫ;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;КОМПОЗИЦИИ UnitEdit на форме;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;JS Unit Compositions;(не найдено)
+Forms/HospitPlanning/hospit_planning.frm;РАЗОБРАТЬ АНАЛИТИКОМ;D_P_EXC
+Forms/HospitPlanning/hospit_planning.frm;ОТЧЕТЫ;(не найдено)
