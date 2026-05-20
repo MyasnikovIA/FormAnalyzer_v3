@@ -3,6 +3,7 @@ package ru.tmis.analyzer.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -56,6 +57,13 @@ public class SettingsModel {
         try (Writer writer = new FileWriter(SETTINGS_FILE)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(this, writer);
+
+            // Обновляем конфигурацию в DatabaseCacheManager
+            DatabaseCacheManager.initDbConfig(
+                    getOracleUrl(), getOracleUser(), getOraclePassword(),
+                    getPostgresUrl(), getPostgresUser(), getPostgresPassword(),
+                    getMisUser()
+            );
         } catch (IOException e) {
             System.err.println("Ошибка сохранения настроек: " + e.getMessage());
         }

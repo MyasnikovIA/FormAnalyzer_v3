@@ -3,6 +3,7 @@ package ru.tmis.analyzer;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.ui.MainWindow;
 
 import javax.swing.*;
@@ -23,6 +24,16 @@ public class MainForm {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 SettingsModel settings = SettingsModel.load();
                 AppConfig config = AppConfig.load();
+
+                // Инициализируем конфигурацию БД в кэше
+                DatabaseCacheManager.initDbConfig(
+                        settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
+                        settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
+                        settings.getMisUser()
+                );
+
+                // Проверяем доступность БД при старте
+                DatabaseCacheManager.checkConnections();
 
                 MainWindow window = new MainWindow(settings, config);
                 window.setVisible(true);

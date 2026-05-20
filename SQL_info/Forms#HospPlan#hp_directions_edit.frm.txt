@@ -1,0 +1,250 @@
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HospPlan/hp_directions_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HospPlan/hp_directions_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/HospPlan/hp_directions_edit.d
+            └── ButtonPrint.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/HospPlan/hp_directions_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        КАТАЛОГ: UserFormsKrasnodarOD/HospPlan/hp_directions_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsRKB3 =====
+        КАТАЛОГ: UserFormsRKB3/HospPlan/hp_directions_edit.d
+            └── hp_directions_edit.dfrm
+
+     ===== UserFormsRostov =====
+        КАТАЛОГ: UserFormsRostov/HospPlan/hp_directions_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     HospPlanJournal/DirectionHospDirectTypes
+
+Список вызываемых форм в JS:
+     NoticeDirect/doctor_notices_call.frm
+     HospPlan/hp_bed_days_loads.frm
+     Vmp/subforms/vmp_patient_list.frm
+     HospPlan/hp_select_schedule.frm
+     System/messagedlg.frm
+     HospPlan/select_vmp.frm
+     OuterDirections/outerdirections_view.frm
+     HospPlan/select_mes_by_mkb.frm
+     ArmPatientsInDep/SubForms/select_mkb_exact.frm
+     Persmedcard/persmedcard_edit.frm
+     EHR/simple_ehrdocs_form.frm
+     HospPlan/hospplanperiod.frm
+     HospPlan/hospplan.frm
+     HospPlan/select_lpu_outer_hosp.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        OutDirServNew;
+
+SQL ЗАПРОСЫ (33):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOSP_REASONS
+    D_V_HOSPITALIZATIONKINDS
+    D_V_DIRECTORIES
+    D_V_DIRECTORIES_FN_DATA
+    D_V_BED_TYPES
+    D_V_BEDS_FUND
+    D_V_DIRECTION_KINDS
+    D_V_DIRECTION_FORMS
+    D_V_TYPE_MED_HELP
+    D_V_DIRECTION_CONDITIONS
+    D_V_LPU
+    D_V_LPUDICT_BASE
+    D_V_LPU_BASE
+    D_V_DIRECTIONS
+    D_V_PERSMEDCARD
+    D_V_DIRECTIONS_BASE
+    D_V_HOSP_HISTORIES_BASE
+    D_V_HPK_PLAN_JOURNALS_BASE
+    D_V_OUTER_DIRECTIONS
+    D_V_HPK_PLAN_JOURNALS
+    D_V_OUTER_DIRECTIONS_BASE
+    D_V_VMP_LINKS
+    D_V_VMP_TALONS
+    D_V_HOSP_HISTORIES
+    D_V_DIR_THERAPY_SCHEMES
+    D_V_VMP
+    D_V_PERSMEDCARD_BASE
+    D_V_MKB10_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_HPK_SCHEDULE_REG
+    D_V_HOSP_PLAN_KINDS
+    D_V_HPK_PLANS_BASE
+    D_V_HOSPITALIZATION_TYPES
+    D_V_EMPLOYERS
+    D_V_MKB10
+    D_V_LPUDICT
+    D_V_AGENTS
+    D_V_AGENT_ORPH_CATEGORIES
+    D_V_AGENTS_BASE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DIRECTIONS.ADD
+    D_PKG_DIR_THERAPY_SCHEMES.UPG_ALL
+    D_PKG_PERSMEDCARD.CREATE_REMOTE_CARD
+    D_PKG_OUTER_DIRECTIONS.ADD
+    D_PKG_DIRECTIONS.GEN_DIR_NUMB
+    D_PKG_STD.FRM_D
+    D_PKG_DIR_NUMB_RESERV.DEL_BY_NUMB
+    D_PKG_DIRECTIONS.DEL
+    D_PKG_OUTER_DIRECTIONS.DEL
+    D_PKG_DIRECTIONS.UPD
+    D_PKG_OUTER_DIRECTIONS.UPD
+    D_PKG_VMP_LINKS.UPD
+    D_PKG_ROLES.CHECK_EMP_ROLES
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_AGENT_POLIS.CHECKS_TEMPORARY_CERT_OMS
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_STD.FRM_DT
+    D_PKG_HPK_SCHEDULE_REG.DEL
+    D_PKG_HPK_PLAN_JOURNALS.DEL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AllowSelectAllLpu
+    TIME_UNIQUE_DIRHOSP
+    UNIQUE_DIRHOSP
+    RolesEditDirectionDate
+    ADDDIRKINDHOSP
+    HHLPUDICT
+    AddDirBedProfile
+    AddDirHospDep
+    AddDirHospDiagnosis
+    AddDirHospPlanDate
+    AddDirHosptalizationKind
+    BedFundViewForDirection
+    DaysDirRealisedView
+    VmpFromWaitingList
+    AddDirectionHospReason
+    AddDirectionHospType
+    AddDirectionHospComment
+    TherapySchemesField
+    HospDirParametrs
+    ADMISSION_HOSP
+    HH_HOSP_KIND_DEFAULT
+    HH_DIR_KIND_DEFAULT
+    HH_HOSP_REASON_DEFAULT
+    HH_HOSP_TYPE_DEFAULT
+    VmpUniqueNumb
+    VmpMaskField
+    CheckPeriodTemporaryCertOMS
+    CheckDirHospPlanDate
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PERSMEDCARD" composition="BUTTON_EDIT_DEFAULT"
+    unit="MKB10" composition="DEFAULT"
+    unit="MED_THERAPY_SCHEMES" composition="SCHEMES_HOSP"
+    unit="INJURE_KINDS" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:MKB10  composition:MKB10_INJURY;
+    unit:EMPLOYERS  composition:EMP_MEDIC2;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CODE
+    D_P_EXC
+    D_ID
+    D_LPU
+    D_C_ID
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 34
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCardNumb
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkPreviousDirection
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: freeDirNumbReserve
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetDirNumb
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getOptionsData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CheckRightsREC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getMKB
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_DEFAULT_LPU
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getOuterDirectionData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkBeforeRegForHosp
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefParams
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkHospDirections
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCurrentLPU
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCurrentLPUName
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getVmpUniqueNumb
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CheckForDuplicateVMP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MKB_callback
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setOuterLpu
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getOnlyOneBed
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CheckHomeLess
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetAgentId
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpgradeActionBeforeCheck
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: deleteHospJournal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOSP_REASONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOMELESS_REASON
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_BEDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DIR_KIND
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsDirectionForms
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsTypeMedHelp
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsDirectionCondition
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+

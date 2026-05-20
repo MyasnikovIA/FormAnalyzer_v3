@@ -10,6 +10,9 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 public class SettingsDialog extends JDialog {
@@ -206,6 +209,12 @@ public class SettingsDialog extends JDialog {
         JLabel hintLabel = new JLabel("(контекст PostgreSQL)");
         hintLabel.setForeground(Color.GRAY);
         panel.add(hintLabel, gbc);
+
+
+        JPanel testButtonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton testAllButton = new JButton("Проверить все подключения");
+        testAllButton.addActionListener(e -> testConnections());
+        testButtonsPanel.add(testAllButton);
 
         return panel;
     }
@@ -806,4 +815,52 @@ public class SettingsDialog extends JDialog {
         return "## ИНСТРУКЦИЯ ДЛЯ АНАЛИЗА (M2)\n\n" +
                 "Пожалуйста, проанализируй предоставленную информацию...";
     }
+
+    private void testConnections() {
+        boolean oracleOk = testOracleConnection();
+        boolean postgresOk = testPostgresConnection();
+
+        if (oracleOk && postgresOk) {
+            JOptionPane.showMessageDialog(this,
+                    "Подключения к Oracle и PostgreSQL успешны!",
+                    "Проверка БД", JOptionPane.INFORMATION_MESSAGE);
+        } else if (!oracleOk && !postgresOk) {
+            JOptionPane.showMessageDialog(this,
+                    "Ошибка подключения к обеим базам данных!",
+                    "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } else if (!oracleOk) {
+            JOptionPane.showMessageDialog(this,
+                    "Ошибка подключения к Oracle!\nPostgreSQL работает.",
+                    "Ошибка", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Ошибка подключения к PostgreSQL!\nOracle работает.",
+                    "Ошибка", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private boolean testOracleConnection() {
+        String url = oracleUrlField.getText();
+        String user = oracleUserField.getText();
+        String password = new String(oraclePasswordField.getPassword());
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            return conn.isValid(5);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    private boolean testPostgresConnection() {
+        String url = postgresUrlField.getText();
+        String user = postgresUserField.getText();
+        String password = new String(postgresPasswordField.getPassword());
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            return conn.isValid(5);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
 }
