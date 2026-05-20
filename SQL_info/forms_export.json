@@ -1,392 +1,203 @@
 {
   "forms": [
     {
-      "formPath": "Forms/HospitPlanning/hospit_planning.frm",
-      "baseFormPath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\Forms\\HospitPlanning\\hospit_planning.frm",
+      "formPath": "Forms/Agents/agents_edit.frm",
+      "baseFormPath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\Forms\\Agents\\agents_edit.frm",
       "fullyReplaced": false,
-      "overrides": [
+      "Юзерформы": [
         {
           "regionName": "UserFormsEgis3Novosib",
-          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsEgis3Novosib\\HospitPlanning\\hospit_planning.d\\hospit_planning.dfrm",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsEgis3Novosib\\Agents\\agents_edit.d\\data.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsEgis3Novosib\\Agents\\agents_edit.d\\script.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsEgis3Novosib",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsEgis3Novosib\\Agents\\agents_edit.d\\view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSamRMC",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsSamRMC\\Agents\\agents_edit.d\\view.dfrm",
+          "type": ".d/*.dfrm - переопределение из каталога .d",
+          "typeCode": "DOT_D_OVERRIDE"
+        },
+        {
+          "regionName": "UserFormsSaratov",
+          "overridePath": "C:\\AppServ\\www\\5_mis_MEDDEV-151210\\UserFormsSaratov\\Agents\\agents_edit.d\\agents_edit.dfrm",
           "type": ".d/*.dfrm - переопределение из каталога .d",
           "typeCode": "DOT_D_OVERRIDE"
         }
       ],
-      "jsForms": [
-        "HospitPlanning/modals/graphics_add_edit.frm",
-        "HospitPlanning/hosp_plan_kinds_edit.frm",
-        "HospitPlanning/hosp_plan_deps.frm",
-        "HospitPlanning/hosp_plan_pks.frm",
-        "HospitPlanning/hosp_plan_mkbs.frm",
-        "AccessRights/d_cse_accesses.frm",
-        "HospPlan/hospplanperiod_edit.frm",
-        "UniversalForms/period.frm",
-        "Schedules/schedules_edit_hp.frm"
+      "subForm": [
+        "Agents/subscript/get_full_years",
+        "Agents/subscript/to_upper_case",
+        "Agents/subscript/snils",
+        "Agents/subscript/base",
+        "Agents/subscript/accuracyDateCheck",
+        "Agents/subscript/zaprossnils",
+        "Agents/subscript/birthdate",
+        "Agents/subscript/SPFRzaprossnils",
+        "Agents/subforms_view/polis_oms",
+        "Agents/subforms_view/polis_dms",
+        "Persmedcard/subforms_view/registration",
+        "Agents/subforms_view/social_state",
+        "Agents/subforms_view/orphan_category",
+        "Agents/subforms_view/consitution",
+        "Agents/subforms_view/pregnancy",
+        "Agents/subforms_view/persdocs",
+        "Agents/subforms_view/marital_state",
+        "Agents/subforms_view/agent_relatives_docs",
+        "Agents/subforms_view/agent_details",
+        "Agents/subforms_view/work_place",
+        "Agents/subforms_view/inability",
+        "Agents/agent_regional_privs/regional_priv",
+        "Agents/subforms_view/federal_priv",
+        "Agents/agent_nosology_privs/nosology_priv",
+        "Agents/subforms_view/decretiv_group",
+        "Agents/subforms_view/gr_vaccination",
+        "Agents/subforms_view/gr_rentgenograph",
+        "Agents/subforms_view/names",
+        "Agents/subforms_fields/death",
+        "Agents/subforms_view/addr",
+        "Agents/subforms_view/orphan_place",
+        "Agents/subforms_view/contact",
+        "Agents/subforms_view/names_jur",
+        "Agents/subforms_fields/allergic_anamnes",
+        "Agents/subforms_fields/trf_anamnesis",
+        "Agents/subforms_fields/bad_habits",
+        "Agents/subforms_fields/inherited_diseases",
+        "Agents/subforms_fields/infertility",
+        "Agents/subforms_fields/PmcVaccinations"
       ],
-      "tablesViews": [
-        "D_V_HOSP_PLAN_KINDS",
-        "D_V_HPK_PLANS",
-        "D_V_HPK_SCHEDULE_BASE",
-        "D_V_SCHEDULE_BASE"
+      "Вьюхи": [
+        "D_V_FED_NATIONALITIES",
+        "D_V_BJ_BULLETIN_CONTENTS_BASE",
+        "D_V_EX_SYSTEM_VALUES",
+        "D_V_LPUDICT_BASE",
+        "D_V_EMPLOYERS_BASE",
+        "D_V_AGENTS",
+        "D_V_URPRIVS"
       ],
-      "packagesFunctions": [
-        "D_PKG_CSE_ACCESSES.CHECK_RIGHT",
-        "D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY",
-        "D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK",
-        "D_PKG_HPK_PLANS.DEL",
-        "D_PKG_HOSP_PLAN_KINDS.DEL",
-        "D_PKG_URPRIVS.CHECK_BPPRIV",
-        "D_PKG_CATALOGS.FIND_ROOT_CATALOG",
-        "D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY",
-        "D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK",
-        "D_PKG_HPK_SCHEDULE.DEL"
+      "Пакеты и функции": [
+        "D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG",
+        "D_PKG_STD.FRM_D",
+        "D_PKG_STD.SFRM_T",
+        "D_PKG_VERSIONS.GET_VERSION_BY_LPU",
+        "D_PKG_DAT_TOOLS.FULL_YEARS",
+        "D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE",
+        "D_PKG_EX_SYSTEM_VALUES.GET_VAL",
+        "D_PKG_URPRIVS.CHECK_BPPRIV"
       ],
-      "autoPopupMenus": [
-        "HOSP_PLAN_KINDS",
-        "HPK_PLANS"
+      "СО": [
+        "AgentInfChangeLN",
+        "Lpu_UpdFromPassport",
+        "Empl_UpdFromRMR",
+        "AgentDeathDateCheck",
+        "ShowSignByAge",
+        "VisibleStatusLgot",
+        "IntegrationEnabled",
+        "CheckFor_UNKNOWN",
+        "hideInfoMax",
+        "PassportMO"
       ],
-      "unknownObjects": [
-        "D_P_EXC"
+      "Брокеры": [
+        "unit:AGENTS  action:GEN_CODE;",
+        "unit:AGENTS;"
       ],
-      "popupMenus": [
-        {
-          "name": "pHOSP_PLAN_KINDS",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pADD",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEDIT",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDEL",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Отделения",
-              "name": "pDEPS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Диагнозы",
-              "name": "pMKBS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Виды оплаты",
-              "name": "pPKS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Права записи",
-              "name": "pRIGHTS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            }
+      "viewDependencies": {
+        "D_V_FED_NATIONALITIES": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_FED_NATIONALITIES"
+          ],
+          "postgresTables": [
+            "D_FED_NATIONALITIES"
           ]
         },
-        {
-          "name": "pHPK_PLANS",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pADD",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEDIT",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDEL",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Назначить",
-              "name": "pAPPLY",
-              "fromAutoPopup": false,
-              "isDbReport": false,
-              "children": [
-                {
-                  "caption": "Ко всем дням недели",
-                  "name": "pALLD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "День к периоду",
-                  "name": "pPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "Неделю в период",
-                  "name": "pWPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                }
-              ]
-            },
-            {
-              "caption": "Копировать",
-              "name": "pCOPY",
-              "fromAutoPopup": false,
-              "isDbReport": false,
-              "children": [
-                {
-                  "caption": "Ко всем дням недели",
-                  "name": "pCOPYALLD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "День к периоду",
-                  "name": "pCOPYPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "Неделю в период",
-                  "name": "pCOPYWPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                }
-              ]
-            }
+        "D_V_BJ_BULLETIN_CONTENTS_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_BJ_BULLETIN_CONTENTS"
+          ],
+          "postgresTables": [
+            "D_BJ_BULLETIN_CONTENTS"
           ]
         },
-        {
-          "name": "popupSchedule",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Просмотреть график",
-              "name": "pWatchSch",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pAddSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEditSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDelSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            }
+        "D_V_EX_SYSTEM_VALUES": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_EX_SYSTEM_VALUES"
+          ],
+          "postgresTables": [
+            "D_EX_SYSTEM_VALUES"
+          ]
+        },
+        "D_V_LPUDICT_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_LPUDICT"
+          ],
+          "postgresTables": [
+            "D_LPUDICT"
+          ]
+        },
+        "D_V_EMPLOYERS_BASE": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_EMPLOYERS"
+          ],
+          "postgresTables": [
+            "D_EMPLOYERS"
+          ]
+        },
+        "D_V_AGENTS": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_GEOGRAFY",
+            "D_AGENTS"
+          ],
+          "postgresTables": [
+            "D_GEOGRAFY",
+            "D_AGENTS",
+            "D_OKVED",
+            "D_EDUCATION_TYPES",
+            "D_DOC_TYPES",
+            "D_OKFS",
+            "D_FED_NATIONALITIES"
+          ]
+        },
+        "D_V_URPRIVS": {
+          "existsInOracle": true,
+          "existsInPostgres": true,
+          "oracleTables": [
+            "D_URPRIVS",
+            "D_USERS",
+            "D_USERROLES"
+          ],
+          "postgresTables": [
+            "D_URPRIVS",
+            "D_USERROLES",
+            "D_USERS"
           ]
         }
-      ],
-      "popupMenusPg": [
-        {
-          "name": "pHOSP_PLAN_KINDS",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pADD",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEDIT",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDEL",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Отделения",
-              "name": "pDEPS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Диагнозы",
-              "name": "pMKBS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Виды оплаты",
-              "name": "pPKS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Права записи",
-              "name": "pRIGHTS",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            }
-          ]
-        },
-        {
-          "name": "pHPK_PLANS",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pADD",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEDIT",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDEL",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Назначить",
-              "name": "pAPPLY",
-              "fromAutoPopup": false,
-              "isDbReport": false,
-              "children": [
-                {
-                  "caption": "Ко всем дням недели",
-                  "name": "pALLD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "День к периоду",
-                  "name": "pPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "Неделю в период",
-                  "name": "pWPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                }
-              ]
-            },
-            {
-              "caption": "Копировать",
-              "name": "pCOPY",
-              "fromAutoPopup": false,
-              "isDbReport": false,
-              "children": [
-                {
-                  "caption": "Ко всем дням недели",
-                  "name": "pCOPYALLD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "День к периоду",
-                  "name": "pCOPYPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                },
-                {
-                  "caption": "Неделю в период",
-                  "name": "pCOPYWPERIOD",
-                  "fromAutoPopup": false,
-                  "isDbReport": false
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "popupSchedule",
-          "items": [
-            {
-              "caption": "Обновить",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Просмотреть график",
-              "name": "pWatchSch",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Добавить",
-              "name": "pAddSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Редактировать",
-              "name": "pEditSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            },
-            {
-              "caption": "Удалить",
-              "name": "pDelSchedule",
-              "fromAutoPopup": false,
-              "isDbReport": false
-            }
-          ]
-        }
-      ],
-      "totalSqlQueries": 12
+      },
+      "totalSqlQueries": 8
     }
   ],
   "totalForms": 1,
-  "exportDate": "Wed May 20 12:45:36 GMT+07:00 2026"
+  "exportDate": "Wed May 20 14:53:28 GMT+07:00 2026"
 }

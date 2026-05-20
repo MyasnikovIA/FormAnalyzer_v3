@@ -1,37 +1,85 @@
 ФОРМА;БЛОК;ЗНАЧЕНИЕ
-Forms/HospitPlanning/hospit_planning.frm;ЮЗЕРФОРМЫ;UserFormsEgis3Novosib: .d/*.dfrm - переопределение из каталога .d - C:\AppServ\www\5_mis_MEDDEV-151210\UserFormsEgis3Novosib\HospitPlanning\hospit_planning.d\hospit_planning.dfrm
-Forms/HospitPlanning/hospit_planning.frm;SubForm;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/modals/graphics_add_edit.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_kinds_edit.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_deps.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_pks.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospitPlanning/hosp_plan_mkbs.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;AccessRights/d_cse_accesses.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;HospPlan/hospplanperiod_edit.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;UniversalForms/period.frm
-Forms/HospitPlanning/hospit_planning.frm;Список вызываемых форм в JS;Schedules/schedules_edit_hp.frm
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HOSP_PLAN_KINDS
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HPK_PLANS
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_HPK_SCHEDULE_BASE
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ;D_V_SCHEDULE_BASE
-Forms/HospitPlanning/hospit_planning.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_CSE_ACCESSES.CHECK_RIGHT
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.SET_PLAN_FOR_DAY
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.SET_PLAN_FOR_WEEK
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.DEL
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HOSP_PLAN_KINDS.DEL
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_URPRIVS.CHECK_BPPRIV
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_CATALOGS.FIND_ROOT_CATALOG
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.COPY_PLAN_FOR_DAY
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_PLANS.COPY_PLAN_FOR_WEEK
-Forms/HospitPlanning/hospit_planning.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_HPK_SCHEDULE.DEL
-Forms/HospitPlanning/hospit_planning.frm;СИСТЕМНЫЕ ОПЦИИ;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;КОНСТАНТЫ;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;Коды подключаемого AutoPopUp меню на форме;HOSP_PLAN_KINDS
-Forms/HospitPlanning/hospit_planning.frm;Коды подключаемого AutoPopUp меню на форме;HPK_PLANS
-Forms/HospitPlanning/hospit_planning.frm;БРОКЕРЫ;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;КОМПОЗИЦИИ UnitEdit на форме;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;JS Unit Compositions;(не найдено)
-Forms/HospitPlanning/hospit_planning.frm;РАЗОБРАТЬ АНАЛИТИКОМ;D_P_EXC
-Forms/HospitPlanning/hospit_planning.frm;ОТЧЕТЫ;(не найдено)
+Forms/Agents/agents_edit.frm;ЮЗЕРФОРМЫ;UserFormsEgis3Novosib/Agents/agents_edit.d/data.dfrm
+Forms/Agents/agents_edit.frm;ЮЗЕРФОРМЫ;UserFormsEgis3Novosib/Agents/agents_edit.d/script.dfrm
+Forms/Agents/agents_edit.frm;ЮЗЕРФОРМЫ;UserFormsEgis3Novosib/Agents/agents_edit.d/view.dfrm
+Forms/Agents/agents_edit.frm;ЮЗЕРФОРМЫ;UserFormsSamRMC/Agents/agents_edit.d/view.dfrm
+Forms/Agents/agents_edit.frm;ЮЗЕРФОРМЫ;UserFormsSaratov/Agents/agents_edit.d/agents_edit.dfrm
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/get_full_years
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/to_upper_case
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/snils
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/base
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/accuracyDateCheck
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/zaprossnils
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/birthdate
+Forms/Agents/agents_edit.frm;SubForm;Agents/subscript/SPFRzaprossnils
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/polis_oms
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/polis_dms
+Forms/Agents/agents_edit.frm;SubForm;Persmedcard/subforms_view/registration
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/social_state
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/orphan_category
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/consitution
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/pregnancy
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/persdocs
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/marital_state
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/agent_relatives_docs
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/agent_details
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/work_place
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/inability
+Forms/Agents/agents_edit.frm;SubForm;Agents/agent_regional_privs/regional_priv
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/federal_priv
+Forms/Agents/agents_edit.frm;SubForm;Agents/agent_nosology_privs/nosology_priv
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/decretiv_group
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/gr_vaccination
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/gr_rentgenograph
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/names
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/death
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/addr
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/orphan_place
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/contact
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_view/names_jur
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/allergic_anamnes
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/trf_anamnesis
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/bad_habits
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/inherited_diseases
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/infertility
+Forms/Agents/agents_edit.frm;SubForm;Agents/subforms_fields/PmcVaccinations
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_FED_NATIONALITIES
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_BJ_BULLETIN_CONTENTS_BASE
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_EX_SYSTEM_VALUES
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_LPUDICT_BASE
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_EMPLOYERS_BASE
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_AGENTS
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление);D_V_URPRIVS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_FED_NATIONALITIES
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_BJ_BULLETIN_CONTENTS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_EX_SYSTEM_VALUES
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_LPUDICT
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_EMPLOYERS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_GEOGRAFY
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_AGENTS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_URPRIVS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_USERS
+Forms/Agents/agents_edit.frm;"ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)";D_USERROLES
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_STD.FRM_D
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_STD.SFRM_T
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_EX_SYSTEM_VALUES.GET_VAL
+Forms/Agents/agents_edit.frm;ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ;D_PKG_URPRIVS.CHECK_BPPRIV
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;AgentInfChangeLN
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;Lpu_UpdFromPassport
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;Empl_UpdFromRMR
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;AgentDeathDateCheck
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;ShowSignByAge
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;VisibleStatusLgot
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;IntegrationEnabled
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;CheckFor_UNKNOWN
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;hideInfoMax
+Forms/Agents/agents_edit.frm;СИСТЕМНЫЕ ОПЦИИ;PassportMO
+Forms/Agents/agents_edit.frm;БРОКЕРЫ;"unit:AGENTS  action:GEN_CODE,"
+Forms/Agents/agents_edit.frm;БРОКЕРЫ;"unit:AGENTS,"
+Forms/Agents/agents_edit.frm;КОМПОЗИЦИИ UnitEdit на форме;unit=""OKVED"" composition=""OKV""
+Forms/Agents/agents_edit.frm;КОМПОЗИЦИИ UnitEdit на форме;unit=""OKFS"" composition=""DEFAULT""
+Forms/Agents/agents_edit.frm;КОМПОЗИЦИИ UnitEdit на форме;unit=""GEOGRAFY"" composition=""DEFAULT""

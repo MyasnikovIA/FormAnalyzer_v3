@@ -94,48 +94,57 @@ public class JSONReportGenerator {
             overrideJson.addProperty("typeCode", override.getType().name());
             overridesArray.add(overrideJson);
         }
-        formJson.add("overrides", overridesArray);
+        formJson.add("Юзерформы", overridesArray);
 
-        // SubForm
-        addSetToJson(formJson, "subForms", formInfo.getSubForms());
+        // subForm
+        addSetToJson(formJson, "subForm", formInfo.getSubForms());
 
-        // JS Forms
-        addSetToJson(formJson, "jsForms", formInfo.getJsForms());
+        // формы JS
+        addSetToJson(formJson, "формы JS", formInfo.getJsForms());
 
-        // Tables and Views
-        addSetToJson(formJson, "tablesViews", formInfo.getTablesViews());
+        // Отчеты, вызываемые на форме
+        addSetToJson(formJson, "Отчеты, вызываемые на форме", formInfo.getReports());
 
-        // Packages and Functions
-        addSetToJson(formJson, "packagesFunctions", formInfo.getPackagesFunctions());
+        // Вьюхи (D_V_*)
+        Set<String> views = new LinkedHashSet<>();
+        for (String tv : formInfo.getTablesViews()) {
+            if (tv.startsWith("D_V_")) {
+                views.add(tv);
+            }
+        }
+        addSetToJson(formJson, "Вьюхи", views);
 
-        // System Options
-        addSetToJson(formJson, "systemOptions", formInfo.getSystemOptions());
+        // Таблицы (D_* не начинающиеся с D_V_)
+        Set<String> tables = new LinkedHashSet<>();
+        for (String tv : formInfo.getTablesViews()) {
+            if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
+                tables.add(tv);
+            }
+        }
+        addSetToJson(formJson, "Таблицы", tables);
 
-        // Constants
-        addSetToJson(formJson, "constants", formInfo.getConstants());
+        // Пакеты и функции
+        addSetToJson(formJson, "Пакеты и функции", formInfo.getPackagesFunctions());
 
-        // User Procedures
-        addSetToJson(formJson, "userProcedures", formInfo.getUserProcedures());
+        // СО (системные опции)
+        addSetToJson(formJson, "СО", formInfo.getSystemOptions());
 
-        // AutoPopup Menus
-        addSetToJson(formJson, "autoPopupMenus", formInfo.getAutoPopupMenus());
+        // Универсальные композиции
+        addSetToJson(formJson, "Универсальные композиции", formInfo.getJsUnitCompositions());
 
-        // Brokers
-        addSetToJson(formJson, "brokers", formInfo.getBrokers());
+        // Пользовательские процедуры
+        addSetToJson(formJson, "Пользовательские процедуры", formInfo.getUserProcedures());
 
-        // Unit Compositions
-        addSetToJson(formJson, "unitCompositions", formInfo.getUnitCompositions());
+        // Константы
+        addSetToJson(formJson, "Константы", formInfo.getConstants());
 
-        // JS Unit Compositions
-        addSetToJson(formJson, "jsUnitCompositions", formInfo.getJsUnitCompositions());
+        // Брокеры
+        addSetToJson(formJson, "Брокеры", formInfo.getBrokers());
 
-        // Unknown Objects
-        addSetToJson(formJson, "unknownObjects", formInfo.getUnknownObjects());
+        // Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
+        addSetToJson(formJson, "Неопределенные", formInfo.getUnknownObjects());
 
-        // Reports
-        addSetToJson(formJson, "reports", formInfo.getReports());
-
-        // View Dependencies
+        // View Dependencies (оставляем как есть для детальной информации)
         if (formInfo.getViewDependencies() != null && !formInfo.getViewDependencies().isEmpty()) {
             JsonObject viewDepsJson = new JsonObject();
             for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
@@ -155,7 +164,7 @@ public class JSONReportGenerator {
             formJson.add("viewDependencies", viewDepsJson);
         }
 
-        // Popup Menus
+        // Popup Menus (оставляем как есть)
         if (formInfo.getPopupMenus() != null && !formInfo.getPopupMenus().isEmpty()) {
             JsonArray popupMenusArray = new JsonArray();
             for (PopupMenuInfo menu : formInfo.getPopupMenus()) {

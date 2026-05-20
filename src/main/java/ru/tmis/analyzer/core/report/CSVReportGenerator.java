@@ -1,9 +1,6 @@
-// core/report/CSVReportGenerator.java
 package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.PopupMenuInfo;
-import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
 import java.io.*;
 import java.nio.file.*;
@@ -37,51 +34,56 @@ public class CSVReportGenerator {
             for (FormInfo form : forms) {
                 String formName = form.getFormPath();
 
-                // 1. ЮЗЕРФОРМЫ
-                writeBlock(writer, formName, "ЮЗЕРФОРМЫ", form.getOverrides(), form.isFullyReplaced(), form.getReplacementPath());
+                // 1. Юзерформы
+                writeBlock(writer, formName, "Юзерформы", form.getOverrides(), form.isFullyReplaced(), form.getReplacementPath());
 
                 // 2. SubForm
-                writeBlock(writer, formName, "SubForm", form.getSubForms());
+                writeBlock(writer, formName, "subForm", form.getSubForms());
 
-                // 3. Список вызываемых форм в JS
-                writeBlock(writer, formName, "Список вызываемых форм в JS", form.getJsForms());
+                // 3. формы JS
+                writeBlock(writer, formName, "формы JS", form.getJsForms());
 
-                // 4. ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ
-                writeBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ", form.getTablesViews());
+                // 4. Отчеты, вызываемые на форме
+                writeBlock(writer, formName, "Отчеты, вызываемые на форме", form.getReports());
 
-                // 5. ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)
-                Set<String> viewTables = getViewTables(form);
-                writeBlock(writer, formName, "ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы)", viewTables);
+                // 5. Вьюхи (D_V_*)
+                Set<String> views = new LinkedHashSet<>();
+                for (String tv : form.getTablesViews()) {
+                    if (tv.startsWith("D_V_")) {
+                        views.add(tv);
+                    }
+                }
+                writeBlock(writer, formName, "Вьюхи", views);
 
-                // 6. ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ
-                writeBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ", form.getPackagesFunctions());
+                // 6. Таблицы (D_* не начинающиеся с D_V_)
+                Set<String> tables = new LinkedHashSet<>();
+                for (String tv : form.getTablesViews()) {
+                    if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
+                        tables.add(tv);
+                    }
+                }
+                writeBlock(writer, formName, "Таблицы", tables);
 
-                // 7. СИСТЕМНЫЕ ОПЦИИ
-                writeBlock(writer, formName, "СИСТЕМНЫЕ ОПЦИИ", form.getSystemOptions());
+                // 7. Пакеты и функции
+                writeBlock(writer, formName, "Пакеты и функции", form.getPackagesFunctions());
 
-                // 8. КОНСТАНТЫ
-                writeBlock(writer, formName, "КОНСТАНТЫ", form.getConstants());
+                // 8. СО (системные опции)
+                writeBlock(writer, formName, "СО", form.getSystemOptions());
 
-                // 9. ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ
-                writeBlock(writer, formName, "ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ", form.getUserProcedures());
+                // 9. Универсальные композиции
+                writeBlock(writer, formName, "Универсальные композиции", form.getJsUnitCompositions());
 
-                // 10. КОДЫ ПОДКЛЮЧАЕМОГО AUTOPOPUP МЕНЮ
-                writeBlock(writer, formName, "Коды подключаемого AutoPopUp меню на форме", form.getAutoPopupMenus());
+                // 10. Пользовательские процедуры
+                writeBlock(writer, formName, "Пользовательские процедуры", form.getUserProcedures());
 
-                // 11. БРОКЕРЫ
-                writeBlock(writer, formName, "БРОКЕРЫ", form.getBrokers());
+                // 11. Константы
+                writeBlock(writer, formName, "Константы", form.getConstants());
 
-                // 12. КОМПОЗИЦИИ
-                writeBlock(writer, formName, "КОМПОЗИЦИИ UnitEdit на форме", form.getUnitCompositions());
+                // 12. Брокеры
+                writeBlock(writer, formName, "Брокеры", form.getBrokers());
 
-                // 13. JS UNIT COMPOSITIONS
-                writeBlock(writer, formName, "JS Unit Compositions", form.getJsUnitCompositions());
-
-                // 14. РАЗОБРАТЬ АНАЛИТИКОМ
-                writeBlock(writer, formName, "РАЗОБРАТЬ АНАЛИТИКОМ", form.getUnknownObjects());
-
-                // 15. ОТЧЕТЫ
-                writeBlock(writer, formName, "ОТЧЕТЫ", form.getReports());
+                // 13. Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
+                writeBlock(writer, formName, "Неопределенные", form.getUnknownObjects());
             }
         }
 
@@ -110,7 +112,8 @@ public class CSVReportGenerator {
                             List<FormInfo.OverrideInfo> overrides, boolean fullyReplaced, String replacementPath) {
 
         if (fullyReplaced && replacementPath != null) {
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV("ПОЛНАЯ ЗАМЕНА: " + replacementPath));
+            // writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV("ПОЛНАЯ ЗАМЕНА: " + replacementPath));
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV( replacementPath));
         }
 
         if (overrides == null || overrides.isEmpty()) {
@@ -124,25 +127,13 @@ public class CSVReportGenerator {
             for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
                 String region = entry.getKey();
                 for (FormInfo.OverrideInfo override : entry.getValue()) {
-                    String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
+                    // String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
+                    String value = override.getType().getDescription() + " - " + override.getOverridePath();
                     writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
                 }
             }
         }
     }
-    /**
-     * Получает все таблицы из вьюх
-     */
-    private Set<String> getViewTables(FormInfo formInfo) {
-        Set<String> viewTables = new LinkedHashSet<>();
-        if (formInfo.getViewDependencies() != null) {
-            for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
-                viewTables.addAll(entry.getValue().getOracleTables());
-            }
-        }
-        return viewTables;
-    }
-
     /**
      * Экранирование CSV (замена кавычек и точек с запятой)
      */

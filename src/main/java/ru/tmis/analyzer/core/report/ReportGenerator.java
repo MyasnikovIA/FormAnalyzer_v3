@@ -849,7 +849,7 @@ public class ReportGenerator {
             writeCSVBlock(writer, formName, "Список вызываемых форм в JS", formInfo.getJsForms());
 
             // ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ
-            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ТАБЛИЦЫ И ВЬЮХИ", formInfo.getTablesViews());
+            writeCSVBlock(writer, formName, "ИСПОЛЬЗУЕМЫЕ ВЬЮХИ (представление)", formInfo.getTablesViews());
 
             // ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ
             Set<String> viewTables = getViewTables(formInfo);
@@ -910,12 +910,11 @@ public class ReportGenerator {
                                List<FormInfo.OverrideInfo> overrides, boolean fullyReplaced, String replacementPath) {
 
         if (fullyReplaced && replacementPath != null) {
-            String value = "ПОЛНАЯ ЗАМЕНА: " + replacementPath;
-            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+            String relativePath = getRelativePath(replacementPath);
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(relativePath));
         }
 
         if (overrides == null || overrides.isEmpty()) {
-            // Не пишем "(не найдено)" - пропускаем
             return;
         }
 
@@ -927,13 +926,63 @@ public class ReportGenerator {
         for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : overridesByRegion.entrySet()) {
             String region = entry.getKey();
             for (FormInfo.OverrideInfo override : entry.getValue()) {
-                String value = region + ": " + override.getType().getDescription() + " - " + override.getOverridePath();
-                if (value != null && !value.trim().isEmpty()) {
-                    writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
-                }
+                String relativePath = getRelativePath(override.getOverridePath());
+                // Формат: UserFormsRegion\путь\к\файлу.dfrm
+                String value =  getRelativePathWithinRegion(override.getOverridePath(), region);
+                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
             }
         }
     }
+
+    /**
+     * Получить относительный путь от корня проекта
+     */
+    private String getRelativePath(String absolutePath) {
+        if (absolutePath == null) return "";
+
+        String projectPath = settings.getProjectPath();
+        if (projectPath == null || projectPath.isEmpty()) {
+            return absolutePath;
+        }
+
+        String normalizedProject = projectPath.replace("\\", "/");
+        String normalizedPath = absolutePath.replace("\\", "/");
+
+        if (normalizedPath.startsWith(normalizedProject)) {
+            String relative = normalizedPath.substring(normalizedProject.length());
+            if (relative.startsWith("/")) {
+                relative = relative.substring(1);
+            }
+            return relative;
+        }
+
+        return absolutePath;
+    }
+
+    /**
+     * Получить путь относительно региона UserForms
+     */
+    private String getRelativePathWithinRegion(String absolutePath, String region) {
+        if (absolutePath == null || region == null) return "";
+
+        String normalizedPath = absolutePath.replace("\\", "/");
+        String normalizedRegion = region.replace("\\", "/");
+
+        int regionIndex = normalizedPath.indexOf(normalizedRegion);
+        if (regionIndex >= 0) {
+            String relative = normalizedPath.substring(regionIndex);
+            return relative;
+        }
+
+        // Если не нашли регион, пробуем извлечь имя файла
+        int lastSlash = normalizedPath.lastIndexOf("/");
+        if (lastSlash >= 0) {
+            return normalizedPath.substring(lastSlash + 1);
+        }
+
+        return absolutePath;
+    }
+
 
     /**
      * Получает все таблицы из вьюх
