@@ -1,7 +1,7 @@
 {
   "windowWidth": 1936,
   "windowHeight": 1056,
-  "windowX": 1912,
+  "windowX": -8,
   "windowY": -8,
   "windowExtendedState": 6,
   "splitDividerLocation": 400,
@@ -11,7 +11,7 @@
   "includeViewTables": true,
   "includeJsUnitCompositions": true,
   "includeViewDetails": false,
-  "includePopupMenus": false,
+  "includePopupMenus": true,
   "includePostgresPopupMenus": false,
   "enableCSVExport": true,
   "checkDbObjects": false,
@@ -31,5 +31,6 @@
   "includeOracleTables": true,
   "includeOracleFunctions": true,
   "includePostgresFunctions": true,
-  "includeBrokerFunctions": true
+  "includeBrokerFunctions": true,
+  "skipDbOnError": true
 }

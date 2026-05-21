@@ -63,6 +63,9 @@ public class AppConfig {
     private boolean includePostgresFunctions = true;
     private boolean includeBrokerFunctions = true;
 
+    private boolean skipDbOnError = true;
+
+
     // ==================== GETTERS AND SETTERS ====================
 
     // Настройки окна
@@ -168,6 +171,8 @@ public class AppConfig {
     public boolean isEnableJSONExport() { return enableJSONExport; }
     public void setEnableJSONExport(boolean enableJSONExport) { this.enableJSONExport = enableJSONExport; }
 
+    public boolean isSkipDbOnError() { return skipDbOnError; }
+    public void setSkipDbOnError(boolean skip) { this.skipDbOnError = skip; }
 
     /**
      * Загрузить конфигурацию из файла

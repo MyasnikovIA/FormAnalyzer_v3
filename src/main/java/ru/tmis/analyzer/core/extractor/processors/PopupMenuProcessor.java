@@ -41,6 +41,7 @@ public class PopupMenuProcessor implements IXmlProcessor {
 
     @Override
     public void process(Document doc, FormInfo formInfo) {
+
         menuMap.clear();
         autoPopups.clear();
 

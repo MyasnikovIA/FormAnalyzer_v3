@@ -17,6 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReportsFromDbService {
 
     private final SettingsModel settings;
+    // Добавить поле для кэширования статуса подключения
+    private static Boolean oracleAvailable = null;
+    private static long lastCheckTime = 0;
+    private static final long CHECK_INTERVAL = 600000; // проверять раз в минуту
 
 
     // Статический метод для преобразования типа отчета
@@ -52,6 +56,11 @@ public class ReportsFromDbService {
     public List<DbReportInfo> getReportsByUnit(String unitCode) {
         return DatabaseCacheManager.getOracleReports(unitCode, () -> {
             List<DbReportInfo> result = new ArrayList<>();
+            if (!isOracleAvailable()) {
+                System.out.println("[ReportsFromDbService] Oracle недоступна, пропускаем запрос для unit=" + unitCode);
+                return result;
+            }
+
             // --Тип (по виду продукта): 0 - Crystal Reports; 1 - WEB-форма; 2 - Crystal Reports(PDF); 3 - Бланк; 5 - WEB-конструктор; 6 - Составной\n" +
 
             if (unitCode == null || unitCode.trim().isEmpty()) {
@@ -360,6 +369,14 @@ public class ReportsFromDbService {
         if (repCode == null || repCode.trim().isEmpty()) {
             return null;
         }
+        if (!isOracleAvailable()) {
+            System.out.println("[ReportsFromDbService] Oracle недоступна, пропускаем запрос для repCode=" + repCode);
+            DbReportInfo errorReport = new DbReportInfo();
+            errorReport.setRepCode(repCode);
+            errorReport.setRepName("Oracle недоступна");
+            errorReport.setRepType(-1);
+            return errorReport;
+        }
 
         String key = repCode.toUpperCase();
         return reportByCodeCache.computeIfAbsent(key, k -> {
@@ -403,4 +420,32 @@ public class ReportsFromDbService {
     public static void clearReportByCodeCache() {
         reportByCodeCache.clear();
     }
+
+    private boolean isOracleAvailable() {
+        long now = System.currentTimeMillis();
+        if (oracleAvailable != null && (now - lastCheckTime) < CHECK_INTERVAL) {
+            return oracleAvailable;
+        }
+
+        try {
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+            props.setProperty("oracle.net.CONNECT_TIMEOUT", "5000");
+            props.setProperty("oracle.jdbc.ReadTimeout", "5000");
+
+            DriverManager.setLoginTimeout(5);
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT 1 FROM DUAL")) {
+                oracleAvailable = rs.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("[ReportsFromDbService] Oracle недоступна: " + e.getMessage());
+            oracleAvailable = false;
+        }
+        lastCheckTime = now;
+        return oracleAvailable;
+    }
+
 }
