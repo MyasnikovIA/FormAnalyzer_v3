@@ -6,7 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.db.PostgresReportsService;
-import ru.tmis.analyzer.core.db.ReportsFromDbService;
 import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -24,6 +23,11 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
     private final PostgresReportsService postgresReportsService;
     private final Map<String, PopupMenuInfo> menuMap = new LinkedHashMap<>();
     private final List<AutoPopupInfo> autoPopups = new ArrayList<>();
+
+    // Множество для сбора форм отчётов из AutoPopupMenu (для добавления в reports)
+    private final Set<String> reportFormsFromAutoPopup = new LinkedHashSet<>();
+    // Множество для сбора путей форм для добавления в jsForms
+    private final Set<String> jsFormsFromAutoPopup = new LinkedHashSet<>();
 
     public PopupMenuProcessorPg(SettingsModel settings) {
         this.settings = settings;
@@ -44,6 +48,8 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
     public void process(Document doc, FormInfo formInfo) {
         menuMap.clear();
         autoPopups.clear();
+        reportFormsFromAutoPopup.clear();
+        jsFormsFromAutoPopup.clear();
 
         // 1. Поиск D3 PopupMenu (cmpPopupMenu)
         Elements d3Popups = doc.select("cmpPopupMenu");
@@ -127,6 +133,9 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
                     List<DbReportInfo> dbReports = postgresReportsService.getReportsByUnit(autoPopup.unit);
 
                     if (!dbReports.isEmpty()) {
+                        // Извлекаем формы отчётов для добавления в reports и jsForms
+                        extractReportFormsFromDbReports(dbReports);
+
                         // Используем форматирование с правильной иерархией
                         List<String> formattedReports = PostgresReportsService.formatReportsForDisplay(
                                 dbReports, autoPopup.autoPopupName, "", true);
@@ -152,6 +161,78 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
         }
 
         formInfo.setPopupMenusPg(result);
+
+        // 7. Добавляем собранные формы отчётов в reports (блок "Отчеты вызываемые на форме")
+        for (String reportForm : reportFormsFromAutoPopup) {
+            formInfo.addReport(reportForm);
+            System.out.println("  [PopupMenuProcessorPg] Добавлен отчёт в блок 'Отчеты вызываемые на форме': " + reportForm);
+        }
+
+        // 8. Добавляем собранные пути форм в jsForms (блок "Список вызываемых форм в JS:")
+        for (String jsFormPath : jsFormsFromAutoPopup) {
+            String normalizedPath = normalizeJsFormPath(jsFormPath);
+            if (normalizedPath != null && !normalizedPath.isEmpty()) {
+                formInfo.addJsForm(normalizedPath);
+                System.out.println("  [PopupMenuProcessorPg] Добавлена форма в блок 'Список вызываемых форм в JS': " + normalizedPath);
+            }
+        }
+    }
+
+    /**
+     * Извлекает формы отчётов из списка DbReportInfo для добавления в reports и jsForms
+     */
+    private void extractReportFormsFromDbReports(List<DbReportInfo> reports) {
+        if (reports == null || reports.isEmpty()) return;
+
+        for (DbReportInfo report : reports) {
+            // Если это WEB-форма (REP_TYPE = 1) и есть REP_FILENAME
+            if (report.getRepType() == 1 && report.getRepFilename() != null && !report.getRepFilename().isEmpty()) {
+                String formPath = report.getRepFilename();
+                if (!formPath.endsWith(".frm")) {
+                    formPath = formPath + ".frm";
+                }
+                if (!formPath.startsWith("Reports/")) {
+                    formPath = "Reports/" + formPath;
+                }
+
+                // Форматируем строку отчёта для блока "Отчеты вызываемые на форме"
+                String formattedReport = String.format("%s (WEB-форма) %s",
+                        report.getRepCode() != null ? report.getRepCode() : "?",
+                        formPath);
+                reportFormsFromAutoPopup.add(formattedReport);
+
+                // Добавляем путь формы в jsForms
+                jsFormsFromAutoPopup.add(formPath);
+
+                System.out.println("  [PopupMenuProcessorPg] Найдена форма отчёта в AutoPopup: " + formattedReport);
+            }
+
+            // Рекурсивно обрабатываем дочерние отчёты (для составных отчётов)
+            if (report.hasChildren()) {
+                extractReportFormsFromDbReports(report.getChildren());
+            }
+        }
+    }
+
+    /**
+     * Нормализация пути формы для jsForms
+     */
+    private String normalizeJsFormPath(String formPath) {
+        if (formPath == null || formPath.trim().isEmpty()) return null;
+
+        String normalized = formPath.trim();
+
+        // Убираем ведущий слеш
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+
+        // Добавляем .frm если нет расширения
+        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+            normalized = normalized + ".frm";
+        }
+
+        return normalized;
     }
 
     /**

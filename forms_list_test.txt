@@ -51,3 +51,166 @@ Forms/NR/cancer_risk_registr.frm
 
 #UniversalEditForm
 Forms/NoticeDirect/notice_dir_prompts_edit.frm
+
+
+
+
+
+
+
+
+Список вызываемых форм в JS:
+     HospPlan/hp_view_joined_docs.frm
+     Persmedcard/persmedcard_edit.frm
+     DiseaseCase/diseasecase.frm
+     PatientSearch/directions_prescribes.frm
+     HospPlan/hospplan.frm
+     HospPlan/hp_directions_edit.frm
+     Reports/Visit_1/HOSPITALISATION_DIR.frm
+     Reports/Visit/OutDirServNew.frm
+     Reports/amb_talon_0251_A5.frm
+     Reports/HospPlan/patient_new_cancer_polyclinic.frm
+     Reports/AmbReps/amb_talon_0251_A5.frm
+     Reports/Reception/check.frm
+     Reports/Visit_1/alaniyaAnalysis.frm
+     Reports/Visit_1/alaniyaUrineTest.frm
+     Reports/Visit_1/alaniyaMammograf.frm
+     Reports/Visit_1/alaniyaEkg.frm
+     Reports/AmbReps/amb_talon_A5_new.frm
+     Reports/Visit/INSP_CONS_DoctorResult_ONKO_MED.frm
+     Reports/DirectionServices/NAPR_ANALIZ_BARCODE_LIST.frm
+     Reports/DirectionServices/NAPR_ANALIZ_BARCODE1.frm
+     Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm
+     Reports/Visit/OutDirServForReg.frm
+     Reports/AmbReps/amb_talon_A4.frm
+     Reports/AmbReps/amb_talon_A5.frm
+     Reports/task_2_2_report.frm
+     Reports/AmbReps/sakh_amb_talon_new_A5.frm
+     Reports/Visit/VISIT_OFT_EXTR_MedCard.frm
+     Reports/AmbReps/amb_talon_A4(old).frm
+     Reports/AmbReps/amb_talon_for_disp.frm
+     Reports/EmergencyRep/emergency_notification_dtp.frm
+     Reports/Lis/lis_directions_sample/lis_directions_sample.frm
+     Reports/ArmPatientsInDep/map_anest_530n.frm
+     Reports/DirectionServices/NAPR_ANALIZ_BARCODE.frm
+     Reports/Visit/OutDirServPaid.frm
+     Reports/AmbReps/Order274/amb_talon_0251_A5.frm
+     Reports/AmbReps/Order274/amb_talon_A4.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        HOSPITALISATION_DIR (WEB-форма) Reports/Visit_1/HOSPITALISATION_DIR.frm;
+        OutDirServNew (WEB-форма) Reports/Visit/OutDirServNew.frm;
+        amb_talon_0251_A5 (WEB-форма) Reports/amb_talon_0251_A5.frm;
+        patient_new_cancer_polyclinic (WEB-форма) Reports/HospPlan/patient_new_cancer_polyclinic.frm;
+        amb_talon_0251_A5_tver (WEB-форма) Reports/AmbReps/amb_talon_0251_A5.frm;
+        amb_talon_0251_A5_alan (WEB-форма) Reports/amb_talon_0251_A5.frm;
+        CHECKS (WEB-форма) Reports/Reception/check.frm;
+        HOSPITALISATION_DIR (WEB-форма) Reports/Visit_1/HOSPITALISATION_DIR.frm;
+        analis_ (WEB-форма) Reports/Visit_1/alaniyaAnalysis.frm;
+        analis_mochi_ (WEB-форма) Reports/Visit_1/alaniyaUrineTest.frm;
+        mammograf (WEB-форма) Reports/Visit_1/alaniyaMammograf.frm;
+        EKG (WEB-форма) Reports/Visit_1/alaniyaEkg.frm;
+        amb_talon_A5_Krasnodar (WEB-форма) Reports/AmbReps/amb_talon_A5_new.frm;
+        amb_talon_0251_A5_tver (WEB-форма) Reports/AmbReps/amb_talon_0251_A5.frm;
+        INSP_CONS_1 (WEB-форма) Reports/Visit/INSP_CONS_DoctorResult_ONKO_MED.frm;
+        NAPR_ANALIZ_BARCODE_MASS (WEB-форма) Reports/DirectionServices/NAPR_ANALIZ_BARCODE_LIST.frm;
+        amb_talon_0251_A5_tver (WEB-форма) Reports/AmbReps/amb_talon_0251_A5.frm;
+        NAPR_ANALIZ_BARCODE1 (WEB-форма) Reports/DirectionServices/NAPR_ANALIZ_BARCODE1.frm;
+        soglasie_na_med_vmesh_DZ_dp (WEB-форма) Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm;
+        OutDirServForReg (WEB-форма) Reports/Visit/OutDirServForReg.frm;
+        amb_talon_A4_Alania (WEB-форма) Reports/AmbReps/amb_talon_A4.frm;
+        amb_talon_A5 (WEB-форма) Reports/AmbReps/amb_talon_A5.frm;
+        task_2_2_report (WEB-форма) Reports/task_2_2_report.frm;
+        amb_talon_A4_old_28082025 (WEB-форма) Reports/AmbReps/amb_talon_A4.frm;
+        sakh_amb_talon_old (WEB-форма) Reports/AmbReps/sakh_amb_talon_new_A5.frm;
+        amb_talon_A4 (WEB-форма) Reports/AmbReps/amb_talon_A4.frm;
+        MED_VISIT_OFT_EXTR (WEB-форма) Reports/Visit/VISIT_OFT_EXTR_MedCard.frm;
+        amb_talon_A4(old)2 (WEB-форма) Reports/AmbReps/amb_talon_A4(old).frm;
+        amb_talon_for_disp_new (WEB-форма) Reports/AmbReps/amb_talon_for_disp.frm;
+        emergency_notification_dtp (WEB-форма) Reports/EmergencyRep/emergency_notification_dtp.frm;
+        lis_directions_sample (WEB-форма) Reports/Lis/lis_directions_sample/lis_directions_sample.frm;
+        MAP_ANEST_530n (WEB-форма) Reports/ArmPatientsInDep/map_anest_530n.frm;
+        amb_talon_0251_A5_tver (WEB-форма) Reports/AmbReps/amb_talon_0251_A5.frm;
+        task_2_2_report (WEB-форма) Reports/task_2_2_report.frm;
+        lis_directions_sample (WEB-форма) Reports/Lis/lis_directions_sample/lis_directions_sample.frm;
+        NAPR_ANALIZ_BARCODE_21 (WEB-форма) Reports/DirectionServices/NAPR_ANALIZ_BARCODE.frm;
+        OutDirServPaid (WEB-форма) Reports/Visit/OutDirServPaid.frm;
+        OutDirServNew__1 (WEB-форма) Reports/Visit/OutDirServNew.frm;
+        amb_talon_0251_A5_274 (WEB-форма) Reports/AmbReps/Order274/amb_talon_0251_A5.frm;
+        OutDirServNew (WEB-форма) Reports/Visit/OutDirServNew.frm;
+        amb_talon_A4 (WEB-форма) Reports/AmbReps/Order274/amb_talon_A4.frm;
+
+Коды подключаемого AutoPopUp меню на форме:
+        DIRECTIONS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="P_GRID_MAIN"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Редактировать"
+    ├── "Удалить"
+    ├── "История исследований"
+    ├── "Назначения"
+    ├── "Записать"
+    ├── "Просмотр прикрепленных документов"
+    ├── "Направление 057/у"
+    ├── (AutoPopup "DIRECTIONS") "Направление на госпитализацию"
+    ├── (AutoPopup "DIRECTIONS") "Печать посещения"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5"             "Талон амбулаторного пациента A5 (Алания)" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 ")   Form="Reports/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="patient_new_cancer_polyclinic" "Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)" ("Контрольный лист учета МП пациентам, страдающим злокачественными новообразованиями (печать на основе амб. талона)")   Form="Reports/HospPlan/patient_new_cancer_polyclinic.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_tver"        "ТАП Тверь" ("ТАП Тверь")   Form="Reports/AmbReps/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_alan"        "Талон амбулаторного пациента A5 (Алания)" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Алания")   Form="Reports/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="TEST77"                        "Тестовый отчет TEST77" ("TEST77")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="CHECKS"                        "CHECKS" ("Reports/Reception/check")   Form="Reports/Reception/check.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="HOSPITALISATION_DIR"           "HOSPITALISATION_DIR" ("057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию")   Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="Составной"       - REP_CODE="NapravlenieAlania"             "Документы на госпитализацию" ("Документы на госпитализацию")
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR" "057У" ("057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию")   Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR" "HOSPITALISATION_DIR" ("057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию")   Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR" "на госпитализацию" ("057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию")   Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="HOSPITALISATION_DIR" "057/у-04 Направление на госпитализацию" ("057/у-04 Направление на госпитализацию, восстановительное лечение, консультацию")   Form="Reports/Visit_1/HOSPITALISATION_DIR.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="analis_"             "" ("Анализы")   Form="Reports/Visit_1/alaniyaAnalysis.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="analis_mochi_"       "" ("Исследование мочи")   Form="Reports/Visit_1/alaniyaUrineTest.frm"
+    │                                      ├── - REP_TYPE="WEB-форма" - REP_CODE="mammograf"           "" ("Заключение исследования")   Form="Reports/Visit_1/alaniyaMammograf.frm"
+    │                                      └── - REP_TYPE="WEB-форма" - REP_CODE="EKG"                 "" ("ЭКГ")   Form="Reports/Visit_1/alaniyaEkg.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5_Krasnodar"        "ТАП A5 Краснодар" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5 Krasnodar")   Form="Reports/AmbReps/amb_talon_A5_new.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_tver"        "ТАП Тверь" ("ТАП Тверь")   Form="Reports/AmbReps/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="INSP_CONS_1"                   "заключение врача с шапкой" ("Заключение врача (с диагностикой) 1 ")   Form="Reports/Visit/INSP_CONS_DoctorResult_ONKO_MED.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="NAPR_ANALIZ_BARCODE_MASS"      "Массовая печать направлений" ("Массовая печать направление на анализ со штрих-кодом")   Form="Reports/DirectionServices/NAPR_ANALIZ_BARCODE_LIST.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="TEST77"                        "Тестовый отчет TEST77" ("TEST77")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_tver"        "ТАП Тверь" ("ТАП Тверь")   Form="Reports/AmbReps/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="NAPR_ANALIZ_BARCODE1"          "Направление2" ("Направление на анализ со штрих-кодом1")   Form="Reports/DirectionServices/NAPR_ANALIZ_BARCODE1.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="soglasie_na_med_vmesh_DZ_dp"   "Информационное согласие 10102020" ("(Томск)ИС на медицинское вмешательство (ДЗ ТО) пакет документов")   Form="Reports/PatientAgreement/soglasie_na_med_vmesh_DZ.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServForReg"              "Направление на консультацию" ("Направление на обследование, консультацию")   Form="Reports/Visit/OutDirServForReg.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_Alania"           "Талон амбулаторного пациента A5" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА_Alania")   Form="Reports/AmbReps/amb_talon_A4.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A5"                  "ТАП" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5")   Form="Reports/AmbReps/amb_talon_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="task_2_2_report"               "0000000000000000000000000000000000000000000000000" ("Task 2.2 - отчет ")   Form="Reports/task_2_2_report.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_old_28082025"     "Талон амбулаторного пациента A5" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1")   Form="Reports/AmbReps/amb_talon_A4.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="sakh_amb_talon_old"            "Талон амбулаторного пациента (Общий)" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)")   Form="Reports/AmbReps/sakh_amb_talon_new_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4"                  "Талон амбулаторного пациента A5" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A5_1")   Form="Reports/AmbReps/amb_talon_A4.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="MED_VISIT_OFT_EXTR"            "Мед карта (неотложка)" ("Мед карта (неотл)")   Form="Reports/Visit/VISIT_OFT_EXTR_MedCard.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="sakh_amb_talon"                "Талон амбулаторного пациента (Общий)" ("025-1/у  ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА (Общий)")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="112/y_10"                      "DIRECTIONS" ("112/у История развития ребенка стр. 10")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4(old)2"            "Талон амбулаторного пациента A5" ("amb_talon_A4(old)2")   Form="Reports/AmbReps/amb_talon_A4(old).frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="INSP_CONS_1_SF"                "заключение врача с шапкой" ("Заключение врача (с диагностикой)  1 ")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="Crystal Reports" - REP_CODE="HOSP_HISTORY_KATAR"            "ntcn" ("Мед. карта (HOSP_HISTORY_KATAR)")   Form="1.rpt.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_for_disp_new"        "ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)" ("ТАПы по диспансеризации (новые) (отчет работает на ЮФ НСО)")   Form="Reports/AmbReps/amb_talon_for_disp.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="vnytr_napr_0049_old"           "vnytr_napr_0049" ("Внутреннее направление")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="emergency_notification_dtp"    "58 - ДТП - 2/У" ("Извещение о раненом в ДТП")   Form="Reports/EmergencyRep/emergency_notification_dtp.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="lis_directions_sample"         "MEDDEV-13137" ("Направление на лабораторные исследования")   Form="Reports/Lis/lis_directions_sample/lis_directions_sample.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="lis_directions_sample"         "MEDDEV-13137" ("Направление на лабораторные исследования")   Form="Reports/Lis/lis_directions_sample/lis_directions_sample.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="MAP_ANEST_530n"                "КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ" ("КАРТА ПРОВЕДЕНИЯ АНЕСТЕЗИОЛОГИЧЕСКОГО ПОСОБИЯ")   Form="Reports/ArmPatientsInDep/map_anest_530n.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-конструктор" - REP_CODE="TEST77"                        "Тестовый отчет TEST77" ("TEST77")
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_tver"        "ТАП Тверь" ("ТАП Тверь")   Form="Reports/AmbReps/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="task_2_2_report"               "0000000000000000000000000000000000000000000000000" ("Task 2.2 - отчет ")   Form="Reports/task_2_2_report.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="lis_directions_sample"         "MEDDEV-13137" ("Направление на лабораторные исследования")   Form="Reports/Lis/lis_directions_sample/lis_directions_sample.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="NAPR_ANALIZ_BARCODE_21"        "Направления на услуги " ("Направление на анализ со штрих-кодом как на приморье")   Form="Reports/DirectionServices/NAPR_ANALIZ_BARCODE.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServPaid"                "057/у-04 Платные Направление" ("057/у-04 Платные Направление")   Form="Reports/Visit/OutDirServPaid.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServNew__1"              "057/у-04 NEW Направление на консультацию, диагностическое исследование" ("057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ")   Form="Reports/Visit/OutDirServNew.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_0251_A5_274"         "ТАП Тверь" ("ТАП Тверь 274")   Form="Reports/AmbReps/Order274/amb_talon_0251_A5.frm"
+    ├── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="OutDirServNew"                 "057/у-04 NEW Направление на консультацию, диагностическое исследование" ("057/у-04 Направление на восстановительное лечение, консультацию НОВЫЙ")   Form="Reports/Visit/OutDirServNew.frm"
+    └── (AutoPopup "DIRECTIONS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4"                  "Талон амбулаторного пациента A4" ("025-1/у ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4(приказ 274)")   Form="Reports/AmbReps/Order274/amb_talon_A4.frm"
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
