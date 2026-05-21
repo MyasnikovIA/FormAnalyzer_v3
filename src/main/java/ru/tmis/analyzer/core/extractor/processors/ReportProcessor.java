@@ -45,13 +45,11 @@ public class ReportProcessor implements IXmlProcessor {
     private final SettingsModel settings;
     private final ReportsFromDbService reportsService;
 
-    // Конструктор по умолчанию
     public ReportProcessor() {
         this.settings = SettingsModel.getInstance();
         this.reportsService = new ReportsFromDbService(settings);
     }
 
-    // Конструктор с параметром
     public ReportProcessor(SettingsModel settings) {
         this.settings = settings;
         this.reportsService = new ReportsFromDbService(settings);
@@ -70,12 +68,14 @@ public class ReportProcessor implements IXmlProcessor {
     @Override
     public void process(Document doc, FormInfo formInfo) {
         Set<String> reports = new LinkedHashSet<>();
+        Set<String> reportForms = new LinkedHashSet<>(); // НОВОЕ: для форм отчётов
 
         // 1. Ищем отчеты в SQL запросах
         for (SqlInfo sql : formInfo.getSqlQueries()) {
             String sqlContent = sql.getSqlContent();
             if (sqlContent != null) {
                 reports.addAll(extractFromText(sqlContent));
+                reportForms.addAll(extractReportFormsFromText(sqlContent)); // НОВОЕ
             }
         }
 
@@ -88,6 +88,7 @@ public class ReportProcessor implements IXmlProcessor {
             String actionHtml = action.html();
             if (actionHtml != null) {
                 reports.addAll(extractFromText(actionHtml));
+                reportForms.addAll(extractReportFormsFromText(actionHtml)); // НОВОЕ
             }
         }
 
@@ -98,29 +99,118 @@ public class ReportProcessor implements IXmlProcessor {
             String jsContent = cdataMatcher.group(1);
             if (jsContent != null) {
                 reports.addAll(extractFromText(jsContent));
+                reportForms.addAll(extractReportFormsFromText(jsContent)); // НОВОЕ
             }
         }
 
         // 4. Ищем отчеты во всем HTML
         reports.addAll(extractFromText(html));
+        reportForms.addAll(extractReportFormsFromText(html)); // НОВОЕ
 
         // 5. Форматируем отчеты с информацией из БД
         for (String report : reports) {
             String formattedReport = formatReportWithDbInfo(report);
             formInfo.addReport(formattedReport);
         }
+
+        // 6. ДОБАВЛЯЕМ ФОРМЫ ОТЧЁТОВ В JS_FORMS
+        for (String reportForm : reportForms) {
+            String normalizedPath = normalizeReportFormPath(reportForm);
+            if (normalizedPath != null && !normalizedPath.isEmpty()) {
+                formInfo.addJsForm(normalizedPath);
+                System.out.println("  [ReportProcessor] Добавлена форма отчёта в JS формы: " + normalizedPath);
+            }
+        }
+    }
+
+    /**
+     * Извлекает формы отчётов из текста (Reports/xxx.frm)
+     */
+    private Set<String> extractReportFormsFromText(String text) {
+        Set<String> result = new LinkedHashSet<>();
+
+        if (text == null || text.isEmpty()) {
+            return result;
+        }
+
+        // Паттерн для поиска Reports/xxx.frm
+        Matcher pathMatcher = REPORTS_PATH_PATTERN.matcher(text);
+        while (pathMatcher.find()) {
+            String reportPath = pathMatcher.group(1);
+            if (reportPath != null && !reportPath.isEmpty()) {
+                result.add("Reports/" + reportPath);
+            }
+        }
+
+        // Также ищем через printReportByCode с последующим получением формы из БД
+        Matcher printMatcher = PRINT_REPORT_PATTERN.matcher(text);
+        while (printMatcher.find()) {
+            String reportCode = cleanValue(printMatcher.group(1));
+            if (isValidReportCode(reportCode)) {
+                DbReportInfo dbReport = reportsService.getReportByCode(reportCode);
+                if (dbReport != null && dbReport.getRepType() == 1 && dbReport.getRepFilename() != null) {
+                    String formPath = dbReport.getRepFilename();
+                    if (!formPath.endsWith(".frm")) {
+                        formPath = formPath + ".frm";
+                    }
+                    if (!formPath.startsWith("Reports/")) {
+                        formPath = "Reports/" + formPath;
+                    }
+                    result.add(formPath);
+                }
+            }
+        }
+
+        Matcher printMatcherDouble = PRINT_REPORT_PATTERN_DOUBLE.matcher(text);
+        while (printMatcherDouble.find()) {
+            String reportCode = cleanValue(printMatcherDouble.group(1));
+            if (isValidReportCode(reportCode)) {
+                DbReportInfo dbReport = reportsService.getReportByCode(reportCode);
+                if (dbReport != null && dbReport.getRepType() == 1 && dbReport.getRepFilename() != null) {
+                    String formPath = dbReport.getRepFilename();
+                    if (!formPath.endsWith(".frm")) {
+                        formPath = formPath + ".frm";
+                    }
+                    if (!formPath.startsWith("Reports/")) {
+                        formPath = "Reports/" + formPath;
+                    }
+                    result.add(formPath);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Нормализация пути формы отчёта
+     */
+    private String normalizeReportFormPath(String formPath) {
+        if (formPath == null || formPath.trim().isEmpty()) return null;
+
+        String normalized = formPath.trim();
+
+        // Убираем ведущий слеш
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+
+        // Добавляем .frm если нет расширения
+        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+            normalized = normalized + ".frm";
+        }
+
+        return normalized;
     }
 
     /**
      * Форматирует отчёт с информацией из БД, если это код
      */
     private String formatReportWithDbInfo(String report) {
-        // Если это путь к файлу (содержит / или .frm) - возвращаем как есть
         if (report.contains("/") || report.endsWith(".frm")) {
             return report;
         }
 
-        // Пытаемся получить информацию из БД
         try {
             DbReportInfo dbReport = reportsService.getReportByCode(report);
             if (dbReport != null) {
@@ -128,7 +218,6 @@ public class ReportProcessor implements IXmlProcessor {
                 StringBuilder sb = new StringBuilder();
                 sb.append(report).append(" (").append(typeName).append(")");
 
-                // Если REP_TYPE = 1 (WEB-форма) и есть REP_FILENAME
                 if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
                     String formPath = dbReport.getRepFilename();
                     if (!formPath.endsWith(".frm")) {

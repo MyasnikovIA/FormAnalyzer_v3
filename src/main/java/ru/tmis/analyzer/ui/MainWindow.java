@@ -79,7 +79,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.7 (от 20-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.8 (от 21-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -1033,6 +1033,9 @@ public class MainWindow extends JFrame {
     /**
      * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
      */
+    /**
+     * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
+     */
     private void deleteReportForCurrentForm() {
         TreePath selectedPath = formsTreePanel.getSelectedPath();
         if (selectedPath == null) {
@@ -1048,9 +1051,18 @@ public class MainWindow extends JFrame {
             return;
         }
 
-        // Формируем пути к файлам
-        String txtPath = formsTreePanel.getReportFilePath(formPath);
-        String mdPath = getLlmPromptFilePath(formPath);
+        // Получаем базовую директорию отчётов
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+
+        // Формируем безопасное имя файла
+        String safeFileName = getSafeFileNameForDelete(formPath);
+
+        // Формируем пути к файлам внутри подкаталога Forms
+        String txtPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".txt";
+        String mdPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".md";
 
         File txtFile = new File(txtPath);
         File mdFile = new File(mdPath);
@@ -1122,18 +1134,35 @@ public class MainWindow extends JFrame {
         }
     }
     /**
-     * Формирует путь к MD файлу промпта
+     * Формирует безопасное имя файла для удаления (без расширения)
+     */
+    private String getSafeFileNameForDelete(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        // Убираем маркер SubForm если есть
+        if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
+        return normalized.replace("/", "#").replace("\\", "#");
+    }
+    /**
+     * Формирует путь к MD файлу промпта (в подкаталоге Forms)
      */
     private String getLlmPromptFilePath(String formPath) {
         String actualPath = formPath;
         if (actualPath.startsWith("/")) {
             actualPath = actualPath.substring(1);
         }
+        if (actualPath.startsWith("(sub)_")) {
+            actualPath = actualPath.substring(6);
+        }
         String safeName = actualPath.replace("/", "#").replace("\\", "#");
         String outputDir = settings.getOutputDir();
         if (outputDir == null || outputDir.isEmpty()) {
             outputDir = "SQL_info";
         }
-        return outputDir + File.separator + safeName + ".md";
+        return outputDir + File.separator + "Forms" + File.separator + safeName + ".md";
     }
 }

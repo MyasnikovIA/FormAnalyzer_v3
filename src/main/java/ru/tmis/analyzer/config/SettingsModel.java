@@ -32,31 +32,11 @@ public class SettingsModel {
 
     private SettingsModel() {}
 
-    public static SettingsModel getInstance() {
-        if (instance == null) {
-            instance = load();
-        }
-        return instance;
-    }
-
-    public static SettingsModel load() {
-        Path configPath = Paths.get(SETTINGS_FILE);
-        if (Files.exists(configPath)) {
-            try (Reader reader = new FileReader(configPath.toFile())) {
-                Gson gson = new Gson();
-                instance = gson.fromJson(reader, SettingsModel.class);
-                return instance;
-            } catch (IOException e) {
-                System.err.println("Ошибка загрузки настроек: " + e.getMessage());
-            }
-        }
-        return new SettingsModel();
-    }
-
     public void save() {
         try (Writer writer = new FileWriter(SETTINGS_FILE)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(this, writer);
+            System.out.println("Настройки сохранены в файл: " + SETTINGS_FILE);
 
             // Обновляем конфигурацию в DatabaseCacheManager
             DatabaseCacheManager.initDbConfig(
@@ -96,12 +76,51 @@ public class SettingsModel {
 
     public String getMisUser() { return misUser; }
     public void setMisUser(String misUser) { this.misUser = misUser; }
+
     public boolean isCheckPostgresPackages() { return checkPostgresPackages; }
     public void setCheckPostgresPackages(boolean checkPostgresPackages) { this.checkPostgresPackages = checkPostgresPackages; }
-    // Геттеры/сеттеры
+
     public boolean isCheckPostgresPK() { return checkPostgresPK; }
     public void setCheckPostgresPK(boolean checkPostgresPK) { this.checkPostgresPK = checkPostgresPK; }
+
     public boolean isCheckNotNullConstraints() { return checkNotNullConstraints; }
     public void setCheckNotNullConstraints(boolean checkNotNullConstraints) { this.checkNotNullConstraints = checkNotNullConstraints; }
 
+
+    // Добавить этот метод
+    public static SettingsModel createDefault() {
+        return new SettingsModel();
+    }
+
+    public static SettingsModel getInstance() {
+        if (instance == null) {
+            instance = load();
+            // Если load() вернул null (что не должно происходить), создаём новый
+            if (instance == null) {
+                instance = createDefault();
+                instance.save(); // Сохраняем настройки по умолчанию
+            }
+        }
+        return instance;
+    }
+
+    public static SettingsModel load() {
+        Path configPath = Paths.get(SETTINGS_FILE);
+        if (Files.exists(configPath)) {
+            try (Reader reader = new FileReader(configPath.toFile())) {
+                Gson gson = new Gson();
+                SettingsModel model = gson.fromJson(reader, SettingsModel.class);
+                if (model != null) {
+                    System.out.println("Настройки загружены из файла: " + SETTINGS_FILE);
+                    return model;
+                }
+            } catch (IOException e) {
+                System.err.println("Ошибка загрузки настроек: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Файл настроек не найден, будут использованы настройки по умолчанию");
+        }
+        // Всегда возвращаем новый экземпляр, а не null
+        return createDefault();
+    }
 }

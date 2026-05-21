@@ -6,7 +6,7 @@
 
 
 
-СИСТЕМНЫЕ ОПЦИИ:
+#СИСТЕМНЫЕ ОПЦИИ:
 /Forms/ARMMainDoc/main_doc.frm
 /Forms/HospPlan/hp_directions_edit.frm
 /Forms/ARMMainDoc/arm_director.frm
@@ -18,7 +18,7 @@
 /Forms/DBTest.frm
 
 
-константы
+#константы
 Forms/Lis/Reports/Statistic/journal_pcr_covid_call.frm
 Forms/Agents/agent_palliative/palliative_edit.frm
 
@@ -26,28 +26,28 @@ Forms/Agents/agent_palliative/palliative_edit.frm
 /Forms/NR/subforms/patient_data.frm
 
 
-D_V_USERPROCS
+#D_V_USERPROCS
 /Forms/ArmPatientsInDep/SubForms/hh_deps_edit.frm
 
-SubForm
+#SubForm
 /Forms/components.frm
 
 
-брокеры
+#брокеры
 Forms/HospitPlanning/hpk_pk_quotes_edit.frm
 Forms/HospitPlanning/hpk_pk_quotes.frm
 Forms/Registry/SetLocGroups/settings_lg.frm
 Forms/ArmAidsCenter/AidsCenterDataForm/Subforms/EpidCard/Subforms/main_insert_action.frm
 
-printReportByCode
+#printReportByCode
 Forms/ArmPatientsInDep/hosp_history_archive.frm
 Forms/Registry/reg_finish.frm
 
-пакет в Action
+#пакет в Action
 Forms/NR/cancer_risk_registr.frm
 
 
-DiseaseCase/diseasecase.frm
+#DiseaseCase/diseasecase.frm
 
-UniversalEditForm
+#UniversalEditForm
 Forms/NoticeDirect/notice_dir_prompts_edit.frm

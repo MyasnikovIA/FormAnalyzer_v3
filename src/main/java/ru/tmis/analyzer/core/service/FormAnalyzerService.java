@@ -148,12 +148,7 @@ public class FormAnalyzerService {
         }
 
         // ========== ПРОВЕРКА: ЕСЛИ ОТЧЁТ УЖЕ СУЩЕСТВУЕТ ==========
-        String outputDir = settings.getOutputDir();
-        if (outputDir == null || outputDir.isEmpty()) {
-            outputDir = "SQL_info";
-        }
-        String safeFileName = getSafeFileName(normalizedPath);
-        Path reportPath = Paths.get(outputDir, safeFileName);
+        Path reportPath = getReportPath(normalizedPath);
 
         if (Files.exists(reportPath)) {
             log("Отчет уже существует: " + reportPath.toString());
@@ -487,11 +482,26 @@ public class FormAnalyzerService {
     /**
      * Формирует безопасное имя файла отчёта
      */
+    /**
+     * Формирует безопасное имя файла отчёта
+     */
     private String getSafeFileName(String formPath) {
         String normalized = formPath;
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
         return normalized.replace("/", "#").replace("\\", "#") + ".txt";
+    }
+
+    /**
+     * Получает полный путь к файлу отчёта с учётом подкаталога Forms
+     */
+    private Path getReportPath(String formPath) {
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        String safeFileName = getSafeFileName(formPath);
+        return Paths.get(outputDir, "Forms", safeFileName);
     }
 }

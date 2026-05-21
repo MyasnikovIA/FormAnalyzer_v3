@@ -69,77 +69,80 @@ public class ReportGenerator {
         this.forms.addAll(forms);
     }
 
+
     /**
-     * Генерирует безопасное имя файла из пути формы
+     * Формирует безопасное имя файла из пути формы
      * Заменяет все разделители пути на '#'
      * Пример: Forms/ArmPatientsInDep/SubForms/hh_mp_prescribes.frm -> Forms#ArmPatientsInDep#SubForms#hh_mp_prescribes.frm.txt
      */
     private String getSafeFileName(String formPath) {
         String normalized = formPath;
-        // Убираем ведущий слеш если есть
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        // Заменяем все разделители на '#'
+        // Убираем маркер SubForm если есть
+        if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
         String safeName = normalized.replace("/", "#").replace("\\", "#");
         return safeName + ".txt";
     }
+    /**
+     * Получает полный путь к файлу отчёта с учётом подкаталога Forms
+     * @param formPath путь к форме
+     * @return полный путь к файлу отчёта
+     */
+    private Path getFormReportPath(String formPath) throws IOException {
+        Path outputPath = Paths.get(outputDir);
 
+        // Создаём подкаталог Forms внутри outputDir
+        Path formsSubDir = outputPath.resolve("Forms");
+        if (!Files.exists(formsSubDir)) {
+            Files.createDirectories(formsSubDir);
+        }
+
+        String fileName = getSafeFileName(formPath);
+        return formsSubDir.resolve(fileName);
+    }
     /**
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
-    public void saveFormReportToFile(FormInfo formInfo) throws IOException {
-        Path outputPath = Paths.get(outputDir);
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
+    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
+        // 1. Сохраняем отдельный файл для формы (TXT) в подкаталог Forms (ТОЛЬКО ЗДЕСЬ)
+        saveFormReportToFile(formInfo);
 
-        String fileName = getSafeFileName(formInfo.getFormPath());
-        Path formReportPath = outputPath.resolve(fileName);
-
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(formReportPath))) {
-            writeFormReport(writer, formInfo);
-        }
-
-        System.out.println("Отчет для формы сохранен: " + formReportPath);
-    }
-
-
-
-    public void generateMainReport() throws IOException {
+        // 2. Добавляем в общий отчет (только в forms_report.txt, без создания дубликата)
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
         }
 
         Path reportPath = outputPath.resolve("forms_report.txt");
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(reportPath))) {
-            writeHeader(writer);
 
-            for (FormInfo form : forms) {
-                writeFormReport(writer, form);
-            }
-
-            writeFooter(writer);
-
-            // Добавляем общую статистику конвертации
-            writeConversionSummary(writer);
+        if (!Files.exists(reportPath)) {
+            createMainReportHeader();
         }
-        System.out.println("Общий отчет сохранен: " + reportPath);
 
-        for (FormInfo form : forms) {
-            saveFormReportToFile(form);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
+            writeFormReport(writer, formInfo);
+        }
+
+        // 3. Генерация CSV отчета
+        if (config != null && config.isEnableCSVExport()) {
+            appendToCSVReport(formInfo);
+        }
+
+        // 4. Генерация JSON отчета
+        if (config != null && config.isEnableJSONExport()) {
+            appendToJSONReport(formInfo);
+        }
+
+        // 5. Генерация MD промпта
+        if (config != null && config.isEnableLLMExport()) {
+            generateLLMPromptForForm(formInfo);
         }
     }
 
-    private void writeHeader(PrintWriter writer) {
-        writer.println("=".repeat(100));
-        writer.println("=== ОТЧЕТ ПО ФОРМАМ T-MIS ===");
-        writer.println("Дата создания: " + new Date());
-        writer.println("Всего форм: " + forms.size());
-        writer.println("=".repeat(100));
-        writer.println();
-    }
 
     private void writeFormReport(PrintWriter writer, FormInfo form) {
         writer.println("-".repeat(100));
@@ -805,41 +808,6 @@ public class ReportGenerator {
             writer.println();
         }
     }
-    public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        // 1. Сохраняем отдельный файл для формы (TXT)
-        saveFormReportToFile(formInfo);
-
-        // 2. Добавляем в общий отчет
-        Path outputPath = Paths.get(outputDir);
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
-
-        Path reportPath = outputPath.resolve("forms_report.txt");
-
-        if (!Files.exists(reportPath)) {
-            createMainReportHeader();
-        }
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
-            writeFormReport(writer, formInfo);
-        }
-
-        // 3. Генерация CSV отчета (только если включено)
-        if (config != null && config.isEnableCSVExport()) {
-            appendToCSVReport(formInfo);
-        }
-
-        // ========== 4. ГЕНЕРАЦИЯ JSON ОТЧЕТА ==========
-        if (config != null && config.isEnableJSONExport()) {
-            appendToJSONReport(formInfo);
-        }
-
-        // 5. Генерация MD промпта
-        if (config != null && config.isEnableLLMExport()) {
-            generateLLMPromptForForm(formInfo);
-        }
-    }
 
     /**
      * Добавляет данные формы в JSON отчет
@@ -1295,4 +1263,30 @@ public class ReportGenerator {
                 " (" + String.format("%.1f", (convertedQueries * 100.0) / totalQueries) + "%)");
         writer.println();
     }
+
+    /**
+     * Сохраняет отчет для отдельной формы в отдельный файл в подкаталоге Forms
+     */
+    public void saveFormReportToFile(FormInfo formInfo) throws IOException {
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        // Создаём подкаталог Forms внутри outputDir
+        Path formsSubDir = outputPath.resolve("Forms");
+        if (!Files.exists(formsSubDir)) {
+            Files.createDirectories(formsSubDir);
+        }
+
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path formReportPath = formsSubDir.resolve(fileName);
+
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(formReportPath))) {
+            writeFormReport(writer, formInfo);
+        }
+
+        System.out.println("Отчет для формы сохранен: " + formReportPath);
+    }
+
 }

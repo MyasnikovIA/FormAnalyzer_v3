@@ -11,7 +11,6 @@ import java.io.File;
 
 public class MainForm {
 
-
     public static void main(String[] args) {
         // Настройки для Windows
         String os = System.getProperty("os.name").toLowerCase();
@@ -22,13 +21,19 @@ public class MainForm {
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                SettingsModel settings = SettingsModel.load();
+
+                // Загружаем настройки
+                SettingsModel settings = SettingsModel.getInstance();
                 AppConfig config = AppConfig.load();
 
                 // Инициализируем конфигурацию БД
                 DatabaseCacheManager.initDbConfig(
-                        settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
-                        settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
+                        settings.getOracleUrl(),
+                        settings.getOracleUser(),
+                        settings.getOraclePassword(),
+                        settings.getPostgresUrl(),
+                        settings.getPostgresUser(),
+                        settings.getPostgresPassword(),
                         settings.getMisUser()
                 );
 

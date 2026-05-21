@@ -1210,6 +1210,12 @@ public class LLMPromptGenerator {
      * @param outputDir директория для сохранения
      * @return путь к созданному файлу
      */
+    /**
+     * Генерирует промпт для одной формы и сохраняет в MD файл
+     * @param formInfo информация о форме
+     * @param outputDir директория для сохранения
+     * @return путь к созданному файлу
+     */
     public String generateForSingleForm(FormInfo formInfo, String outputDir) throws Exception {
         // Создаём временный контекст для одной формы
         LLMReportContext singleContext = new LLMReportContext();
@@ -1311,7 +1317,7 @@ public class LLMPromptGenerator {
         // Восстанавливаем контекст
         this.context = originalContext;
 
-        // ========== ДОБАВЛЯЕМ ИСХОДНЫЙ ТЕКСТ ФОРМЫ ==========
+        // Добавляем исходный текст формы
         String formSourceCode = getFormSourceCode(formInfo.getFormPath());
 
         // Создаём итоговый промпт с исходным кодом формы
@@ -1326,19 +1332,20 @@ public class LLMPromptGenerator {
 
         // Формируем имя файла (аналогично отчёту, но с .md)
         String safeName = getSafeFileNameForMD(formInfo.getFormPath());
-        Path mdFilePath = Paths.get(outputDir, safeName);
 
-        // Создаём директорию если нужно
-        Path parentDir = mdFilePath.getParent();
-        if (parentDir != null && !Files.exists(parentDir)) {
-            Files.createDirectories(parentDir);
+        // Сохраняем в подкаталог Forms
+        Path formsSubDir = Paths.get(outputDir, "Forms");
+        if (!Files.exists(formsSubDir)) {
+            Files.createDirectories(formsSubDir);
         }
+        Path mdFilePath = formsSubDir.resolve(safeName);
 
         // Сохраняем файл
         Files.writeString(mdFilePath, finalPrompt.toString());
 
         return mdFilePath.toString();
     }
+
     /**
      * Формирует безопасное имя файла для MD промпта (аналогично отчёту)
      */
@@ -1347,11 +1354,13 @@ public class LLMPromptGenerator {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
+        // Убираем маркер SubForm если есть
+        if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
         String safeName = normalized.replace("/", "#").replace("\\", "#");
         return safeName + ".md";
     }
-
-    // core/llm/LLMPromptGenerator.java - добавить метод
 
     /**
      * Получает исходный текст формы

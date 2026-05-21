@@ -198,7 +198,9 @@ public class FormsTreePanel extends JPanel {
             normalized = normalized.substring(1);
         }
         String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
-        return outputDir + File.separator + safeName;
+
+        // Возвращаем путь внутри подкаталога Forms
+        return outputDir + File.separator + "Forms" + File.separator + safeName;
     }
 
     public Set<String> loadChildFormsFromReport(String formPath) {
