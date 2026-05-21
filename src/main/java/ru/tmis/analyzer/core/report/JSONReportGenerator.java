@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
@@ -15,6 +16,8 @@ import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JSONReportGenerator {
 
@@ -22,6 +25,32 @@ public class JSONReportGenerator {
     private final AppConfig config;
     private final SettingsModel settings;
     private final Gson gson;
+
+    // Паттерны для разбора строки отчёта
+    private static final Pattern AUTO_POPUP_PATTERN = Pattern.compile(
+            "\\(AutoPopup \"([^\"]+)\"\\)",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern REP_TYPE_PATTERN = Pattern.compile(
+            "REP_TYPE=\"([^\"]+)\"",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern REP_CODE_PATTERN = Pattern.compile(
+            "REP_CODE=\"([^\"]+)\"",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern PRIV_NAME_PATTERN = Pattern.compile(
+            "\"([^\"]+)\"\\s*\\([\"']([^\"']+)[\"']\\)",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern FORM_PATH_PATTERN = Pattern.compile(
+            "Form=\"([^\"]+)\"",
+            Pattern.CASE_INSENSITIVE
+    );
 
     public JSONReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -45,7 +74,6 @@ public class JSONReportGenerator {
 
         JsonArray formsArray = new JsonArray();
 
-        // Если файл существует, читаем существующий массив
         if (Files.exists(jsonPath)) {
             String content = Files.readString(jsonPath);
             if (!content.isEmpty()) {
@@ -60,16 +88,13 @@ public class JSONReportGenerator {
             }
         }
 
-        // Добавляем новую форму
         formsArray.add(convertFormToJson(formInfo));
 
-        // Создаём корневой объект
         JsonObject root = new JsonObject();
         root.add("forms", formsArray);
         root.addProperty("totalForms", formsArray.size());
         root.addProperty("exportDate", new Date().toString());
 
-        // Сохраняем файл
         Files.writeString(jsonPath, gson.toJson(root));
     }
 
@@ -105,13 +130,13 @@ public class JSONReportGenerator {
         // формы JS
         addSetToJson(formJson, "формы JS", formInfo.getJsForms());
 
-        // Отчеты, вызываемые на форме (существующие)
+        // Отчеты, вызываемые на форме
         addSetToJson(formJson, "Отчеты, вызываемые на форме", formInfo.getReports());
 
-        // ========== НОВОЕ: Отчеты из AutoPopup с отдельными атрибутами ==========
+        // Отчеты из AutoPopup с отдельными атрибутами
         addReportsFromAutoPopupToJson(formJson, formInfo.getReportsFromAutoPopup());
 
-        // Вьюхи (D_V_*)
+        // Вьюхи
         Set<String> views = new LinkedHashSet<>();
         for (String tv : formInfo.getTablesViews()) {
             if (tv.startsWith("D_V_")) {
@@ -120,7 +145,7 @@ public class JSONReportGenerator {
         }
         addSetToJson(formJson, "Вьюхи", views);
 
-        // Таблицы (D_* не начинающиеся с D_V_)
+        // Таблицы
         Set<String> tables = new LinkedHashSet<>();
         for (String tv : formInfo.getTablesViews()) {
             if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
@@ -132,7 +157,7 @@ public class JSONReportGenerator {
         // Пакеты и функции
         addSetToJson(formJson, "Пакеты и функции", formInfo.getPackagesFunctions());
 
-        // СО (системные опции)
+        // СО
         addSetToJson(formJson, "СО", formInfo.getSystemOptions());
 
         // Универсальные композиции
@@ -170,11 +195,11 @@ public class JSONReportGenerator {
             formJson.add("viewDependencies", viewDepsJson);
         }
 
-        // Popup Menus
+        // Popup Menus - НОВАЯ ИЕРАРХИЧЕСКАЯ СТРУКТУРА
         if (formInfo.getPopupMenus() != null && !formInfo.getPopupMenus().isEmpty()) {
             JsonArray popupMenusArray = new JsonArray();
             for (PopupMenuInfo menu : formInfo.getPopupMenus()) {
-                popupMenusArray.add(convertPopupMenuToJson(menu));
+                popupMenusArray.add(convertPopupMenuToHierarchicalJson(menu, false));
             }
             formJson.add("popupMenus", popupMenusArray);
         }
@@ -183,7 +208,7 @@ public class JSONReportGenerator {
         if (formInfo.getPopupMenusPg() != null && !formInfo.getPopupMenusPg().isEmpty()) {
             JsonArray popupMenusPgArray = new JsonArray();
             for (PopupMenuInfo menu : formInfo.getPopupMenusPg()) {
-                popupMenusPgArray.add(convertPopupMenuToJson(menu));
+                popupMenusPgArray.add(convertPopupMenuToHierarchicalJson(menu, true));
             }
             formJson.add("popupMenusPg", popupMenusPgArray);
         }
@@ -195,7 +220,139 @@ public class JSONReportGenerator {
     }
 
     /**
-     * НОВОЕ: Добавляет информацию об отчётах из AutoPopup в JSON с отдельными атрибутами
+     * НОВЫЙ МЕТОД: Конвертирует PopupMenuInfo в иерархический JSON
+     */
+    private JsonObject convertPopupMenuToHierarchicalJson(PopupMenuInfo menu, boolean isPostgres) {
+        JsonObject menuJson = new JsonObject();
+        menuJson.addProperty("name", menu.getName());
+        if (isPostgres) {
+            menuJson.addProperty("source", "PostgreSQL");
+        } else {
+            menuJson.addProperty("source", "Oracle");
+        }
+
+        JsonArray itemsArray = new JsonArray();
+        for (PopupMenuInfo.MenuItem item : menu.getRootItems()) {
+            itemsArray.add(convertMenuItemToHierarchicalJson(item));
+        }
+        menuJson.add("items", itemsArray);
+
+        return menuJson;
+    }
+
+    /**
+     * НОВЫЙ МЕТОД: Конвертирует MenuItem в иерархический JSON
+     */
+    private JsonObject convertMenuItemToHierarchicalJson(PopupMenuInfo.MenuItem item) {
+        JsonObject itemJson = new JsonObject();
+
+        if (item.isDbReport() && item.getCaption() != null) {
+            // Это отчёт из БД - парсим строку caption
+            parseDbReportCaption(item.getCaption(), itemJson, item.isFromAutoPopup(), item.getAutoPopupName());
+        } else {
+            // Обычный пункт меню
+            if (item.getCaption() != null && !item.getCaption().isEmpty()) {
+                itemJson.addProperty("caption", item.getCaption());
+            } else if (item.getName() != null && !item.getName().isEmpty()) {
+                itemJson.addProperty("name", item.getName());
+            }
+
+            if (item.isFromAutoPopup() && item.getAutoPopupName() != null) {
+                itemJson.addProperty("autoPopupName", item.getAutoPopupName());
+            }
+        }
+
+        // Рекурсивно обрабатываем дочерние элементы
+        if (item.hasChildren()) {
+            JsonArray childrenArray = new JsonArray();
+            for (PopupMenuInfo.MenuItem child : item.getChildren()) {
+                childrenArray.add(convertMenuItemToHierarchicalJson(child));
+            }
+            itemJson.add("children", childrenArray);
+        }
+
+        return itemJson;
+    }
+
+    /**
+     * Парсит строку caption отчёта из БД и создаёт структурированный JSON объект
+     */
+    private void parseDbReportCaption(String caption, JsonObject itemJson, boolean fromAutoPopup, String autoPopupName) {
+        if (caption == null || caption.isEmpty()) return;
+
+        // Извлекаем AutoPopup имя
+        String autoPopup = null;
+        Matcher autoMatcher = AUTO_POPUP_PATTERN.matcher(caption);
+        if (autoMatcher.find()) {
+            autoPopup = autoMatcher.group(1);
+        }
+
+        // Извлекаем REP_TYPE
+        String repType = null;
+        Matcher typeMatcher = REP_TYPE_PATTERN.matcher(caption);
+        if (typeMatcher.find()) {
+            repType = typeMatcher.group(1);
+        }
+
+        // Извлекаем REP_CODE
+        String repCode = null;
+        Matcher codeMatcher = REP_CODE_PATTERN.matcher(caption);
+        if (codeMatcher.find()) {
+            repCode = codeMatcher.group(1);
+        }
+
+        // Извлекаем PRIV_NAME и REP_NAME
+        String privName = null;
+        String repName = null;
+        Matcher nameMatcher = PRIV_NAME_PATTERN.matcher(caption);
+        if (nameMatcher.find()) {
+            privName = nameMatcher.group(1);
+            repName = nameMatcher.group(2);
+        }
+
+        // Извлекаем Form путь
+        String formPath = null;
+        Matcher formMatcher = FORM_PATH_PATTERN.matcher(caption);
+        if (formMatcher.find()) {
+            formPath = formMatcher.group(1);
+        }
+
+        // Создаём структурированный объект
+        if (autoPopup != null) {
+            // Если это пункт из AutoPopup, создаём объект с autoPopupName
+            JsonObject reportJson = new JsonObject();
+            reportJson.addProperty("autoPopupName", autoPopup);
+
+            JsonObject reportData = new JsonObject();
+            if (repType != null) reportData.addProperty("REP_TYPE", repType);
+            if (repCode != null) reportData.addProperty("REP_CODE", repCode);
+            if (privName != null) reportData.addProperty("PRIV_NAME", privName);
+            if (repName != null) reportData.addProperty("REP_NAME", repName);
+            if (formPath != null) reportData.addProperty("REP_FILENAME", formPath);
+
+            reportJson.add("report", reportData);
+
+            // Добавляем все поля в itemJson
+            itemJson.addProperty("autoPopupName", autoPopup);
+            itemJson.add("report", reportData);
+        } else {
+            // Обычный отчёт
+            if (repType != null) itemJson.addProperty("REP_TYPE", repType);
+            if (repCode != null) itemJson.addProperty("REP_CODE", repCode);
+            if (privName != null) itemJson.addProperty("PRIV_NAME", privName);
+            if (repName != null) itemJson.addProperty("REP_NAME", repName);
+            if (formPath != null) itemJson.addProperty("REP_FILENAME", formPath);
+        }
+
+        // Добавляем информацию об источнике
+        if (fromAutoPopup && autoPopup != null) {
+            itemJson.addProperty("fromAutoPopup", true);
+        }
+        itemJson.addProperty("isDbReport", true);
+    }
+
+    /**
+     * Добавляет информацию об отчётах из AutoPopup в JSON
      */
     private void addReportsFromAutoPopupToJson(JsonObject formJson, List<FormInfo.ReportFromAutoPopupInfo> reports) {
         if (reports == null || reports.isEmpty()) {
@@ -230,51 +387,6 @@ public class JSONReportGenerator {
             }
             json.add(key, array);
         }
-    }
-
-    /**
-     * Конвертирует PopupMenuInfo в JSON
-     */
-    private JsonObject convertPopupMenuToJson(PopupMenuInfo menu) {
-        JsonObject menuJson = new JsonObject();
-        menuJson.addProperty("name", menu.getName());
-
-        JsonArray itemsArray = new JsonArray();
-        for (PopupMenuInfo.MenuItem item : menu.getRootItems()) {
-            itemsArray.add(convertMenuItemToJson(item));
-        }
-        menuJson.add("items", itemsArray);
-
-        return menuJson;
-    }
-
-    /**
-     * Конвертирует MenuItem в JSON
-     */
-    private JsonObject convertMenuItemToJson(PopupMenuInfo.MenuItem item) {
-        JsonObject itemJson = new JsonObject();
-
-        if (item.getCaption() != null) {
-            itemJson.addProperty("caption", item.getCaption());
-        }
-        if (item.getName() != null) {
-            itemJson.addProperty("name", item.getName());
-        }
-        itemJson.addProperty("fromAutoPopup", item.isFromAutoPopup());
-        if (item.getAutoPopupName() != null) {
-            itemJson.addProperty("autoPopupName", item.getAutoPopupName());
-        }
-        itemJson.addProperty("isDbReport", item.isDbReport());
-
-        if (item.hasChildren()) {
-            JsonArray childrenArray = new JsonArray();
-            for (PopupMenuInfo.MenuItem child : item.getChildren()) {
-                childrenArray.add(convertMenuItemToJson(child));
-            }
-            itemJson.add("children", childrenArray);
-        }
-
-        return itemJson;
     }
 
     /**
