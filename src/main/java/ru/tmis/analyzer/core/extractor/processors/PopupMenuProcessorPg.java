@@ -61,7 +61,7 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
             menuMap.put(name, menu);
         }
 
-        // 1.1. Поиск D3 PopupMenu (cmpPopup) - ДОБАВЛЕНО
+        // 1.1. Поиск D3 PopupMenu (cmpPopup)
         Elements d3CmpPopups = doc.select("cmpPopup");
         for (Element popup : d3CmpPopups) {
             String name = popup.attr("name");
@@ -91,7 +91,6 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            // Исправлено: fallback на unit, если name отсутствует
             info.autoPopupName = (name != null && !name.isEmpty()) ? name :
                     (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
@@ -109,7 +108,6 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
             AutoPopupInfo info = new AutoPopupInfo();
             info.targetMenuName = joinMenu;
-            // Исправлено: fallback на unit, если name отсутствует
             info.autoPopupName = (name != null && !name.isEmpty()) ? name :
                     (unit != null && !unit.isEmpty()) ? unit : "";
             info.unit = unit;
@@ -134,7 +132,7 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
                     if (!dbReports.isEmpty()) {
                         // Извлекаем все отчёты для добавления в reports и jsForms
-                        extractAllReportsFromDbReports(dbReports);
+                        extractAllReportsFromDbReports(dbReports, formInfo);
 
                         // Используем форматирование с правильной иерархией для контекстного меню
                         List<String> formattedReports = PostgresReportsService.formatReportsForDisplay(
@@ -142,7 +140,6 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
 
                         for (String formattedReport : formattedReports) {
                             PopupMenuInfo.MenuItem dbItem = new PopupMenuInfo.MenuItem();
-                            // Добавляем пометку PostgreSQL, но сохраняем полную строку с символами дерева
                             dbItem.setCaption(formattedReport + " (PostgreSQL)");
                             dbItem.setDbReport(true);
                             targetMenu.addItem(dbItem);
@@ -182,7 +179,7 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
      * Извлекает ВСЕ отчёты из списка DbReportInfo для добавления в reports и jsForms
      * Формат: REP_CODE (REP_TYPE) REP_FILENAME (если есть)
      */
-    private void extractAllReportsFromDbReports(List<DbReportInfo> reports) {
+    private void extractAllReportsFromDbReports(List<DbReportInfo> reports, FormInfo formInfo) {
         if (reports == null || reports.isEmpty()) return;
 
         for (DbReportInfo report : reports) {
@@ -190,12 +187,13 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
             if (repCode == null || repCode.trim().isEmpty()) {
                 // Если нет REP_CODE, пропускаем
                 if (report.hasChildren()) {
-                    extractAllReportsFromDbReports(report.getChildren());
+                    extractAllReportsFromDbReports(report.getChildren(), formInfo);
                 }
                 continue;
             }
 
             String repTypeName = report.getRepTypeName();
+            int repType = report.getRepType();
             String repFilename = report.getRepFilename();
 
             // Форматируем строку отчёта для блока "Отчеты вызываемые на форме"
@@ -222,11 +220,20 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
                 jsFormsFromAutoPopup.add(formPath);
             }
 
+            // Добавляем в reportsFromAutoPopup для JSON экспорта
+            formInfo.addReportFromAutoPopup(new FormInfo.ReportFromAutoPopupInfo(
+                    repCode,
+                    String.valueOf(repType),
+                    repTypeName,
+                    repFilename != null ? repFilename : "",
+                    formPath != null ? formPath : ""
+            ));
+
             System.out.println("  [PopupMenuProcessorPg] Найден отчёт в AutoPopup: " + formattedReport);
 
             // Рекурсивно обрабатываем дочерние отчёты (для составных отчётов)
             if (report.hasChildren()) {
-                extractAllReportsFromDbReports(report.getChildren());
+                extractAllReportsFromDbReports(report.getChildren(), formInfo);
             }
         }
     }
@@ -262,7 +269,6 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
             String tagName = child.tagName().toLowerCase();
             boolean isPopupItem = false;
 
-            // ИСПРАВЛЕНО: добавлено cmpPopupItem с игнорированием регистра
             if (tagName.equalsIgnoreCase("cmpPopupItem") ||
                     (tagName.equals("component") && "PopupItem".equalsIgnoreCase(child.attr("cmptype")))) {
                 isPopupItem = true;
@@ -288,7 +294,7 @@ public class PopupMenuProcessorPg implements IXmlProcessor {
                 items.add(item);
             } else if (tagName.equals("cmppopupmenu") ||
                     (tagName.equals("component") && "Popup".equalsIgnoreCase(child.attr("cmptype"))) ||
-                    tagName.equals("cmppopup")) {  // ДОБАВЛЕНО: поддержка вложенных cmpPopup
+                    tagName.equals("cmppopup")) {
                 parseMenuItems(child, items);
             } else {
                 parseMenuItems(child, items);

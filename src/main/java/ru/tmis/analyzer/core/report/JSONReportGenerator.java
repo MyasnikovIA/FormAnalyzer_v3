@@ -1,4 +1,5 @@
 // core/report/JSONReportGenerator.java
+
 package ru.tmis.analyzer.core.report;
 
 import com.google.gson.Gson;
@@ -54,7 +55,6 @@ public class JSONReportGenerator {
                         formsArray = root.getAsJsonArray("forms");
                     }
                 } catch (Exception e) {
-                    // Если файл поврежден, создаем новый массив
                     formsArray = new JsonArray();
                 }
             }
@@ -63,7 +63,7 @@ public class JSONReportGenerator {
         // Добавляем новую форму
         formsArray.add(convertFormToJson(formInfo));
 
-        // Создаем корневой объект
+        // Создаём корневой объект
         JsonObject root = new JsonObject();
         root.add("forms", formsArray);
         root.addProperty("totalForms", formsArray.size());
@@ -81,7 +81,6 @@ public class JSONReportGenerator {
 
         // Основная информация
         formJson.addProperty("formPath", formInfo.getFormPath());
-        // Исправлено: относительный путь
         formJson.addProperty("baseFormPath", getRelativePath(formInfo.getBaseFormPath()));
         formJson.addProperty("fullyReplaced", formInfo.isFullyReplaced());
         if (formInfo.getReplacementPath() != null) {
@@ -93,7 +92,6 @@ public class JSONReportGenerator {
         for (FormInfo.OverrideInfo override : formInfo.getOverrides()) {
             JsonObject overrideJson = new JsonObject();
             overrideJson.addProperty("regionName", override.getRegionName());
-            // Исправлено: относительный путь
             overrideJson.addProperty("overridePath", getRelativePath(override.getOverridePath()));
             overrideJson.addProperty("type", override.getType().getDescription());
             overrideJson.addProperty("typeCode", override.getType().name());
@@ -107,8 +105,11 @@ public class JSONReportGenerator {
         // формы JS
         addSetToJson(formJson, "формы JS", formInfo.getJsForms());
 
-        // Отчеты, вызываемые на форме
+        // Отчеты, вызываемые на форме (существующие)
         addSetToJson(formJson, "Отчеты, вызываемые на форме", formInfo.getReports());
+
+        // ========== НОВОЕ: Отчеты из AutoPopup с отдельными атрибутами ==========
+        addReportsFromAutoPopupToJson(formJson, formInfo.getReportsFromAutoPopup());
 
         // Вьюхи (D_V_*)
         Set<String> views = new LinkedHashSet<>();
@@ -146,10 +147,10 @@ public class JSONReportGenerator {
         // Брокеры
         addSetToJson(formJson, "Брокеры", formInfo.getBrokers());
 
-        // Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
+        // Неопределенные
         addSetToJson(formJson, "Неопределенные", formInfo.getUnknownObjects());
 
-        // View Dependencies (оставляем как есть для детальной информации)
+        // View Dependencies
         if (formInfo.getViewDependencies() != null && !formInfo.getViewDependencies().isEmpty()) {
             JsonObject viewDepsJson = new JsonObject();
             for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
@@ -169,7 +170,7 @@ public class JSONReportGenerator {
             formJson.add("viewDependencies", viewDepsJson);
         }
 
-        // Popup Menus (оставляем как есть)
+        // Popup Menus
         if (formInfo.getPopupMenus() != null && !formInfo.getPopupMenus().isEmpty()) {
             JsonArray popupMenusArray = new JsonArray();
             for (PopupMenuInfo menu : formInfo.getPopupMenus()) {
@@ -191,6 +192,31 @@ public class JSONReportGenerator {
         formJson.addProperty("totalSqlQueries", formInfo.getSqlQueries().size());
 
         return formJson;
+    }
+
+    /**
+     * НОВОЕ: Добавляет информацию об отчётах из AutoPopup в JSON с отдельными атрибутами
+     */
+    private void addReportsFromAutoPopupToJson(JsonObject formJson, List<FormInfo.ReportFromAutoPopupInfo> reports) {
+        if (reports == null || reports.isEmpty()) {
+            return;
+        }
+
+        JsonArray reportsArray = new JsonArray();
+        for (FormInfo.ReportFromAutoPopupInfo report : reports) {
+            JsonObject reportJson = new JsonObject();
+            reportJson.addProperty("repCode", report.getRepCode());
+            reportJson.addProperty("repType", report.getRepType());
+            reportJson.addProperty("repTypeName", report.getRepTypeName());
+            if (report.getRepFilename() != null && !report.getRepFilename().isEmpty()) {
+                reportJson.addProperty("repFilename", report.getRepFilename());
+            }
+            if (report.getFormPath() != null && !report.getFormPath().isEmpty()) {
+                reportJson.addProperty("formPath", report.getFormPath());
+            }
+            reportsArray.add(reportJson);
+        }
+        formJson.add("отчетыИзAutoPopup", reportsArray);
     }
 
     /**
@@ -250,6 +276,7 @@ public class JSONReportGenerator {
 
         return itemJson;
     }
+
     /**
      * Получить относительный путь от корня проекта
      */

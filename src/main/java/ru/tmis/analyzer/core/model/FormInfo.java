@@ -1,6 +1,5 @@
 // core/model/FormInfo.java
 package ru.tmis.analyzer.core.model;
-
 import java.util.*;
 
 /**
@@ -34,6 +33,8 @@ public class FormInfo {
     private List<PopupMenuInfo> popupMenusPg;
     private Set<String> tablesFromViews;  // Таблицы, используемые через вьюхи
     private ConversionStatistics conversionStatistics;
+    private List<ReportFromAutoPopupInfo> reportsFromAutoPopup = new ArrayList<>();
+
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -141,6 +142,21 @@ public class FormInfo {
     public void setConversionStatistics(ConversionStatistics conversionStatistics) {
         this.conversionStatistics = conversionStatistics;
     }
+    // Геттер и сеттер
+    public List<ReportFromAutoPopupInfo> getReportsFromAutoPopup() {
+        return reportsFromAutoPopup;
+    }
+
+    public void setReportsFromAutoPopup(List<ReportFromAutoPopupInfo> reports) {
+        this.reportsFromAutoPopup = reports;
+    }
+
+    public void addReportFromAutoPopup(ReportFromAutoPopupInfo report) {
+        if (this.reportsFromAutoPopup == null) {
+            this.reportsFromAutoPopup = new ArrayList<>();
+        }
+        this.reportsFromAutoPopup.add(report);
+    }
 
     /**
      * Информация о переопределении формы
@@ -245,5 +261,32 @@ public class FormInfo {
             this.tablesFromViews = new LinkedHashSet<>();
         }
         this.tablesFromViews.addAll(tables);
+    }
+
+
+    /**
+     * Информация об отчёте из AutoPopup для JSON экспорта
+     */
+    public static class ReportFromAutoPopupInfo {
+        private final String repCode;
+        private final String repType;
+        private final String repTypeName;
+        private final String repFilename;
+        private final String formPath;
+
+        public ReportFromAutoPopupInfo(String repCode, String repType, String repTypeName,
+                                       String repFilename, String formPath) {
+            this.repCode = repCode;
+            this.repType = repType;
+            this.repTypeName = repTypeName;
+            this.repFilename = repFilename;
+            this.formPath = formPath;
+        }
+
+        public String getRepCode() { return repCode; }
+        public String getRepType() { return repType; }
+        public String getRepTypeName() { return repTypeName; }
+        public String getRepFilename() { return repFilename; }
+        public String getFormPath() { return formPath; }
     }
 }

@@ -87,27 +87,21 @@ public class FormsTreePanel extends JPanel {
         treeScroll.setBorder(BorderFactory.createTitledBorder("Список форм"));
         add(treeScroll, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+       // JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-
-        addButton = new JButton("➕ Добавить формы");
-        addButton.addActionListener(e -> showAddFormsDialog());
-
-        removeButton = new JButton("🗑 Удалить выбранные");
-        removeButton.addActionListener(e -> removeSelectedForms());
-
-        selectAllButton = new JButton("✓ Выбрать всё");
-        selectAllButton.addActionListener(e -> selectAllNodes());
-
-        deselectAllButton = new JButton("✗ Снять выделение");
-        deselectAllButton.addActionListener(e -> tree.clearSelection());
-
-        buttonPanel.add(addButton);
-        buttonPanel.add(removeButton);
-        buttonPanel.add(selectAllButton);
-        buttonPanel.add(deselectAllButton);
-
-        add(buttonPanel, BorderLayout.SOUTH);
+       // addButton = new JButton("➕ Добавить формы");
+       // addButton.addActionListener(e -> showAddFormsDialog());
+       // removeButton = new JButton("🗑 Удалить выбранные");
+       // removeButton.addActionListener(e -> removeSelectedForms());
+        //selectAllButton = new JButton("✓ Выбрать всё");
+        //selectAllButton.addActionListener(e -> selectAllNodes());
+        //deselectAllButton = new JButton("✗ Снять выделение");
+        //deselectAllButton.addActionListener(e -> tree.clearSelection());
+       //buttonPanel.add(addButton);
+       //buttonPanel.add(removeButton);
+       //buttonPanel.add(selectAllButton);
+       //buttonPanel.add(deselectAllButton);
+       // add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public void addTreeSelectionListener(TreeSelectionListener listener) {
