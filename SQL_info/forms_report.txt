@@ -36296,3 +36296,5712 @@ SubForm:
 SQL ЗАПРОСЫ (0):
      (содержимое скрыто)
 
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/HomeCalls/home_call_edit.d
+            └── home_call_edit.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/HomeCalls/home_call_edit.d
+            └── form.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/HomeCalls/home_call_edit.d
+            └── dopinfo.dfrm
+
+     ===== UserFormsVolgograd =====
+        КАТАЛОГ: UserFormsVolgograd/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+
+Список вызываемых форм в JS:
+     HomeCalls/home_call_question.frm
+     Reception/select_price.frm
+     HomeCalls/home_call_pass.frm
+     services/select_by_in_lpu.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     Reg/select_discounts.frm
+     HomeCalls/home_call_set_state.frm
+
+SQL ЗАПРОСЫ (28):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_INITS
+    D_V_HOME_CALL_CAUSES
+    D_V_HOME_CALL_TYPES
+    D_V_DIR_REG_TYPES
+    D_V_PERSMEDCARD
+    D_V_LPU
+    D_V_QUOTA_GROUPS
+    D_V_DISEASECASES_OPEN
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_PAYMENT_KIND_BASE
+    D_V_SERVICES_PAYS_BASE
+    D_V_SOCIALSTATE_PAYS
+    D_V_HOME_CALL_BULLETINES
+    D_V_SERVICES
+    D_V_AGENTS_BASE
+    D_V_NR_NEWBORN_CARD
+    D_V_AGENT_ADDRS
+    D_V_AGENT_ADDRS_BASE
+    D_V_AGENT_WORK_PLACES
+    D_V_URPRIVS
+    D_V_AGENT_SOCIAL_STATES
+    D_V_AGENT_ORPH_CATEGORIES
+    D_V_PERSMEDCARD_BASE
+    D_V_HOME_CALL_JOUR_BASE
+    D_V_EMPLOYERS
+    D_V_VISITPURPOSES
+    D_V_HOME_CALL_JOUR
+    D_V_SITES_BASE
+    D_V_CONTRACTS_BASE
+    D_V_CONTR_AMI_DIRECTS
+    D_V_HOME_CALL_STATES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_INITS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_TYPES
+    D_DIR_REG_TYPES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_QUOTA_GROUPS
+    D_DISEASECASES
+    D_HOSP_HISTORIES
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_PAYMENT_KIND
+    D_SERVICES_PAYS
+    D_SOCIALSTATE_PAYS
+    D_HOME_CALL_BULLETINES
+    D_SERVICES_STR
+    D_NR_NEWBORN_CARD
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_AGENT_DEPS
+    D_JOBTITLES
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_SOCIALCATEGORIES
+    D_AGENT_ORPH_CATEGORIES
+    D_HOME_CALL_JOUR
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_VISITPURPOSES
+    D_SITES
+    D_HOME_CALL_STATES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_CONTRACTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_HOME_CALL_JOUR.PASS
+    D_PKG_DISEASECASES.ADD
+    D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_GEOGRAFY.GET_FULL
+    D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_HC_PAYMENTS.GET_PAYMENT_DATA_TO_CURSOR
+    D_PKG_PERSMEDCARD.ADD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB
+    D_PKG_PRICELIST_SERVS.GET_PRICE
+    D_PKG_PRICELIST_SERVS.COLLECT_PRICELIST
+    D_PKG_PRICELIST_SERVS.GET_DISCOUNT
+    D_PKG_UNITPROPS.GET_NVAL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    HomeCallRegType
+    CheckExistHCsInOneDay
+    InitiatorForCallToHome
+    ProvideInactiveServices
+    DSPCheckSocPays
+    CreateContract
+    HomeCallPurposeDefaultHH
+    HomeCallPurposeDefault
+    VISIT_PURPOSE_DEFAULT
+    VISITPURPOSES
+    ServiceForCallToHome
+    ServiceForCallToHomeChild
+    SERVICES
+    CloseEditHomeСallRegDate
+    HCTransferDailyMaximumReached
+    CheckCopyHCPass
+    PaymentKindForCallToHome
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="VISITPURPOSES" composition="DEF"
+
+БРОКЕРЫ:
+    unit:HOME_CALL_JOUR;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 30
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: createDirectionService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getBaseServiceData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: createDiseasecase
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getActualReg
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPersmedcardData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getExistHomeCallJour
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultVisitPurpose
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultPaymentKind
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: selectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertUpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getAdditionalInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkRegDate
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkExistPMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CopyHCJPass
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefPrice
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkMaxHomeCall
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCallState
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOME_CALL_INITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HC_CAUSES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOME_CALL_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HC_REG_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_SITES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_LPU_SOURCE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DISEASECASES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGlobalPaymentKinds
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGetAvailablePKByService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGetAvailablePKBySocState
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_BULLETINES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_question.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_question.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_pass.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_pass.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/HomeCalls/home_call_pass.d
+            └── home_call_pass.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/HomeCalls/home_call_pass.d
+            └── smp.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HomeCalls/home_call_question.frm
+     HomeCalls/home_call_spec_reject.frm
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_JOUR
+    D_V_SERVICES
+    D_V_HOME_CALL_JOUR_BASE
+    D_V_EMPLOYERS
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_JOUR
+    D_SITES
+    D_HOME_CALL_INITS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_AGENTS
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_SERVICES
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITPURPOSES
+    D_DIRECTION_SERVICES
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_HOME_CALL_BULLETINES
+    D_DIR_REG_TYPES
+    D_SERVICES_STR
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_BLOODGROUPE
+    D_RHESUS
+    D_CABLAB
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_HOME_CALL_JOUR.PASS
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_UNITPROPS.GET_NVAL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    HomeCallTransferService
+    ProvideInactiveServices
+    HCTransferDailyMaximumReached
+    HCAllow2ToSameDocInDay
+    HCAllow2ToSameDocSpecInDay
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:EMPLOYERS  composition:EMP_RET_SURNAME;
+    unit:SERVICES  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: OPTION_SERVICE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SERVICE_DATA
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getBaseServiceData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkIDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkSpecIDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getConfMsg
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: passHC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setDefault
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkMaxHomeCall
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/select_price.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reception/select_price.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PRICELISTS
+    D_V_PRICELIST_SERVS
+    D_V_PRICELIST_SERVS_DEGREES
+    D_V_EMPLOYER_DEGREES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_PAYMENT_KIND
+    D_PRICELIST_DMS
+    D_DIVISIONS
+    D_CONTRACTS
+    D_PRICELISTS
+    D_PRICELIST_SERV_DMS
+    D_SERVICES_STR
+    D_PRICELIST_SERVS
+    D_SERVICES
+    D_SERVTYPES
+    D_PRICELIST_SERVS_DEGREES
+    D_SKILL_CATEGORIES
+    D_DEGREES
+    D_SERVPROFILES
+    D_PF_CATEGORIES
+    D_LPU_SERVICES
+    D_EMPLOYER_DEGREES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.STR_IN_STR
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PriceShowRegPeriod
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SERVICE_PRICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/PmcSearch/search_patient.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Registry/PmcSearch/search_patient.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlania =====
+        КАТАЛОГ: UserFormsAlania/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        КАТАЛОГ: UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        КАТАЛОГ: UserFormsKrasnodarOD/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        КАТАЛОГ: UserFormsMoscowNIIBlohina/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+
+     ===== UserFormsRostov =====
+        КАТАЛОГ: UserFormsRostov/Registry/PmcSearch/search_patient.d
+            └── tfoms.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── search_patient.dfrm
+
+     ===== UserFormsTver =====
+        КАТАЛОГ: UserFormsTver/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsVOKOD =====
+        КАТАЛОГ: UserFormsVOKOD/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+
+SubForm:
+     barcode_listeners/oms_all
+     SignalInformation/si_actions
+     Persmedcard/сhanging_data_patient_card_subform
+     Markers/subscripts/subscript_markers
+     PatientSearch/subforms/check_search_fields
+     Markers/subforms/subforms_markers
+     Persmedcard/pmc_markers/pmc_markers_scripts
+
+Список вызываемых форм в JS:
+     Persmedcard/persmedcard_add_by_agent.frm
+     HomeCalls/add_child_without_docs.frm
+     Persmedcard/persmedcard_edit.frm
+     Persmedcard/persmedcard_add_full.frm
+     Agents/agents_add.frm
+     Agents/agent_contacts/agent_contacts_edit.frm
+     Agents/agent_polis/agent_polis_edit.frm
+     Agents/agent_persdocs/agent_persdocs_edit.frm
+     Agents/agent_addrs/agent_addrs_for_pmc_edit.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="P_PATIENTS"
+    └── "Добавить ребенка"
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_ADDRS
+    D_V_PMC_MARKERS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENT_CONTACTS_V2
+    D_V_CONTROL_CARD_BASE
+    D_V_AGENTS
+    D_V_PERSMEDCARD
+    D_V_PERSMEDCARD_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_ADDRS
+    D_GEOGRAFY
+    D_RAIONS
+    D_PMC_MARKERS
+    D_MARKERS
+    D_SCHEDULE_COLORS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_CONTROL_CARD
+    D_AGENTS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_ADDRS.GET_FULL_ADDRESS_BY_ID
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.GET_VAL
+    D_PKG_PATSEARCH.PATSEARCH2_PPL
+    D_PKG_AGENT_CONTACTS.GET_MAIN_PHONE
+    D_PKG_DAT_TOOLS.FULL_YEARS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    RequiredNumberOMSFilter
+    PMCChildAllow
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 8
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getPatientInfoByAgent
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_REQ_NUMBER_OMS_F
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_ADDRES_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_AGENT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CHECK_18_YEARS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: findAgentIDByPMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: findPMCByAgentID
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: PATIENTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/services/select_by_in_lpu.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/services/select_by_in_lpu.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Autopsist/SubForms/check_inactive_service
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SERVTYPES
+    D_V_SERVICES_BASE
+    D_V_EMP_SERVICES
+    D_V_LPU_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVTYPES
+    D_SERVICES
+    D_EMP_SERVICES
+    D_LPU_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EMPLOYERS.GET_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_SERVICE_NAME
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_EMP_SERVICE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reg/select_discounts.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reg/select_discounts.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_PRICELIST_SERVS.GET_DISCOUNT_LIST_SHORT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_DISCOUNTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SERVICE_PRICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_set_state.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_set_state.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HomeCalls/in_results_jour_note.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_HOME_CALL_JOUR.SET_STATE
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: setViewStatus
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_spec_reject.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_spec_reject.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EMPLOYERS
+    D_V_HOME_CALL_JOUR
+    D_V_PERSMEDCARD_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_HOME_CALL_JOUR
+    D_SITES
+    D_HOME_CALL_INITS
+    D_PERSMEDCARD
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_SERVICES
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITPURPOSES
+    D_DIRECTION_SERVICES
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_HOME_CALL_BULLETINES
+    D_DIR_REG_TYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SPECIALITY
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONREJ
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Autopsist/SubForms/check_inactive_service.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Autopsist/SubForms/check_inactive_service.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Autopsist/SubForms/select_service_form.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ProvideInactiveServices
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_SO_SERVICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_ACTIVE_SERVICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/in_results_jour_note.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/in_results_jour_note.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_JOUR_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_JOUR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_HOME_CALL_JOUR.SET_STATE
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getSTATES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setCallStatus
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setDefault
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_patient_ami_directs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_patient_ami_directs.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agent_polis/checking_relevance_polis
+     Contracts/subforms/checking_relevance_contract
+
+Список вызываемых форм в JS:
+     Directions/select_patient_ami_direct_edit.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        1337 (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTR_AMI_DIRECTS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pGPAD"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    ├── "Удалить"
+    └── (AutoPopup "CONTR_AMI_DIRECTS") - REP_TYPE="WEB-конструктор" - REP_CODE="1337" "1337" ("hahaloldebil")  
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_POLIS_DMS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENT_RELATIVES
+    D_V_PERSMEDCARD_BASE
+    D_V_PERSMEDCARD_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+    D_EMPLOYERS
+    D_PERSMEDCARD
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 4
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_PATIENT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CONTRACT_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_GPAD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PATIENT_AMI_DIR
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/subforms/checking_relevance_contract.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/subforms/checking_relevance_contract.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTRACTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACTS
+    D_AGENTS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    TermContractForIndividuals
+    TermContractForLegalEntity
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getRelevanceContractSO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getContractInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/checking_relevance_polis.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agent_polis/checking_relevance_polis.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+СИСТЕМНЫЕ ОПЦИИ:
+    TermPeriodForDMSPolis
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getRelevanceDMSPolisSO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_patient_ami_direct_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_patient_ami_direct_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Directions/select_contract_by_type.frm
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PERSMEDCARD
+    D_V_CONTRACT_TYPES
+    D_V_CONTR_AMI_DIRECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_CONTRACT_TYPES
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EMPLOYERS.GET_ID
+
+БРОКЕРЫ:
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GetConType
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RootCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdAddAct
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AUTOSELECT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_POLIS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_contract_by_type.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_contract_by_type.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTRACT_TYPES
+    D_V_CONTRACTS
+    D_V_CATALOGS
+    D_V_PAYMENT_KIND
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACT_TYPES
+    D_CONTRACTS
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_CATALOGS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PKPeopleMoney
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getSYS_DATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_PARAMS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_COUNT_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_BY_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/PmcSearch/patient_info.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Registry/PmcSearch/patient_info.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsBarsMED =====
+        КАТАЛОГ: UserFormsBarsMED/Registry/PmcSearch/patient_info.d
+            └── printreab.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d
+            └── add_un_exc.dfrm
+            └── PERSMEDCARD_ID.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsHosp =====
+        КАТАЛОГ: UserFormsHosp/Registry/PmcSearch/patient_info.d
+            └── printreab.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRKB3 =====
+        КАТАЛОГ: UserFormsRKB3/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRKOD =====
+        КАТАЛОГ: UserFormsRKOD/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRostov =====
+        КАТАЛОГ: UserFormsRostov/Registry/PmcSearch/patient_info.d
+            └── script.dfrm
+
+     ===== UserFormsSakhalin =====
+        КАТАЛОГ: UserFormsSakhalin/Registry/PmcSearch/patient_info.d
+            └── data.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Registry/PmcSearch/patient_info.d
+            └── patient_info_lpu.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     writeWaitQueue/writeWaitQueue.frm
+     Lpu_Services/compl_ds_list.frm
+     Persmedcard/persmedcard_edit.frm
+     Reception/search_patient_records.frm
+     Registry/PmcSearch/amb_reports_list.frm
+     PatientSearch/directions_prescribes.frm
+     writeWaitQueue/writeWaitQueueAddEdit.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        persm_list;
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_CATEGORIES
+    D_V_PERSMEDCARD
+    D_V_AGENT_INABILITIES
+    D_V_WL_RECORDS
+    D_V_HOSP_PLAN_KINDS
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_DIR_REG_TYPES
+    D_V_EMPLOYERS_FIO
+    D_V_FACIAL_ACCOUNTS
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENT_REGISTRATION
+    D_V_PMC_REG_NUMS
+    D_V_PMC_REGISTRATION
+    D_V_LPU
+    D_V_SERVICES_BASE
+    D_V_RESERVATION
+    D_V_WL_SCH_RESOURCES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_CATEGORIES
+    D_CATEGORIES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_LPUDICT
+    D_WL_RECORDS
+    D_SERVICES
+    D_DIRECTION_SERVICES
+    D_PAYMENT_KIND
+    D_EX_SYSTEMS
+    D_WAIT_LISTS
+    D_SPECIALITIES
+    D_HOSP_PLAN_KINDS
+    D_DIRECTIONS
+    D_DIR_REG_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_REGISTRATION
+    D_REGISTER_PURPOSES
+    D_SITES
+    D_REGISTRATION_TYPES
+    D_REG_CATEGORIES
+    D_PMC_REG_NUMS
+    D_LPU
+    D_GEOGRAFY
+    D_RESERVATION
+    D_WL_SCH_RESOURCES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DIRECTIONS.GET_LAST_REG
+    D_PKG_PERSMEDCARD.GET_ALL_PRIVS_AS_STRING
+    D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_PERSMEDCARD.CHECK_FOR_OMS
+    D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_PMC_SPECIAL_CASES.GET_ACTUAL_ON_DATE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckSNILS
+    CheckForOMS_ShowRes
+    CheckForOMS
+    ERHospPlanKind
+    CheckForOMS_CardType
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: showPatientInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: showReservationInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ACT_SEL_WAIL_LIST
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_contract_by_pk.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_contract_by_pk.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Contracts/subforms/checking_relevance_contract
+
+Список вызываемых форм в JS:
+     Contracts/contracts_edit.frm
+     Reports/ContractsReports/contract_paid_kursk.frm
+     Reports/MedCard/025y.frm
+     Reports/MedCard/025y2.frm
+     Reports/AmbReps/amb_talon_025_A4.frm
+     Reports/ContractsReports/contract_paid_child.frm
+     Reports/MedCard/025y_child.frm
+     Reports/Reestr/pats_get_med_services.frm
+     Reports/ContractsReports/exec_contracts.frm
+     Reports/MedCard/025y_2025.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        contract_paid_kursk (WEB-форма) Reports/ContractsReports/contract_paid_kursk.frm;
+        025/y_cope_test (WEB-форма) Reports/MedCard/025y.frm;
+        SOGL_RAST (WEB-конструктор);
+        proba11 (WEB-конструктор);
+        RKKVD_DOG_PATIENT_URIDI (WEB-конструктор);
+        reception_contractKKOD (Составной);
+        reception_contract_kod (WEB-конструктор);
+        reception_agreement_base (WEB-конструктор);
+        RKKVD_DOG_PATIENT (WEB-конструктор);
+        reception_contract_cancellation_full (WEB-конструктор);
+        025/y2 (WEB-форма) Reports/MedCard/025y2.frm;
+        Contract_UserFormsSpasenie (WEB-конструктор);
+        INF_ZAIAV_UserFormsSaranskBacha (WEB-конструктор);
+        Kvitantsiya_kassaТест (WEB-конструктор);
+        amb_talon_025_A4 (WEB-форма) Reports/AmbReps/amb_talon_025_A4.frm;
+        Recep_contr111 (WEB-конструктор);
+        reception_contract_krok (WEB-конструктор);
+        Act_UserFormsSpasenie (WEB-конструктор);
+        Kvitantsiya_kassaТест1 (WEB-конструктор);
+        contract_paid_child (WEB-форма) Reports/ContractsReports/contract_paid_child.frm;
+        contract_test (WEB-конструктор);
+        Contract_UserFormsSaranskBacha (WEB-конструктор);
+        INF_ZAIAV_UserFormsSaranskBacha2 (WEB-конструктор);
+        MED_VK_OTB_VMP_SSH (WEB-конструктор);
+        reception_contract_cancellation (WEB-конструктор);
+        025/y_child (WEB-форма) Reports/MedCard/025y_child.frm;
+        reception_contract2003 (WEB-конструктор);
+        contract_samara (WEB-конструктор);
+        reception_contract____ (WEB-конструктор);
+        reception_contract_pk_pmu (Составной);
+        reception_contract_pk (WEB-конструктор);
+        reception_agreement_base_pk (WEB-конструктор);
+        reception_contract_cancellation_full_pk (WEB-конструктор);
+        vozmezdnogo_okazania_disp (WEB-конструктор);
+        vozmezdnogo_okazaniya_medosmotr (WEB-конструктор);
+        025/y ЛПУ 007 (WEB-форма) Reports/MedCard/025y.frm;
+        pats_get_med_services (WEB-форма) Reports/Reestr/pats_get_med_services.frm;
+        exec_contracts (WEB-форма) Reports/ContractsReports/exec_contracts.frm;
+        contract_samara_kdl3 (WEB-конструктор);
+        025/y (WEB-форма) Reports/MedCard/025y_2025.frm;
+        reception_contract_MEDDEV-112533 (WEB-конструктор);
+        025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm;
+        DS_prog_year_attach (WEB-конструктор);
+        contract_samara_kdl3_v01 (WEB-конструктор);
+        contract_samara_kdl3_v02 (WEB-конструктор);
+        contract_samara_kdl3_v03 (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTRACTS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pCONTRACTS"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Копировать"
+    ├── "Редактировать"
+    ├── "Удалить"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="contract_paid_kursk"                  "Договор на оказание ПУ" ("Договор на оказание ПУ")   Form="Reports/ContractsReports/contract_paid_kursk.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y_cope_test"                      "Медицинская карта ФНКЦ" ("Медицинская карта пациента")   Form="Reports/MedCard/025y.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="SOGL_RAST"                            "Соглашение о расторжении" ("Соглашение о расторжении")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="proba11"                              "Соглашение о расторжении" ("proba")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="RKKVD_DOG_PATIENT_URIDI"              "Договор для РККВД с юр организациями КПМО" ("Договор(Потребитель)(РККВД)_Юридические лица")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="Составной"       - REP_CODE="reception_contractKKOD"               "Договор на оказание платных медицинских услуг" ("Договор, смета, квитанция")  
+    │                                     ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_kod"   "VIEW_RESULTS" ("Договор на платные услуги")  
+    │                                     ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_base" "Согласие на платные услуги" ("Согласие на платные услуги")  
+    │                                     └── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_base" "Согласие на платные услуги" ("Согласие на платные услуги")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="RKKVD_DOG_PATIENT"                    "111" ("Договор(Потребитель)(РККВД)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_cancellation_full" "Соглашение о расторжении ККОД" ("Соглашение о расторжении всех услуг")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y2"                               "Медицинская карта ФНКЦ" ("Медицинская карта пациента для иностранного гражданина (ф. 025/у)")   Form="Reports/MedCard/025y2.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSpasenie"           "Договор с пациентом Спасение НИЖНЕКАМСК" ("Договор с Пациентом  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"      "ИНФ СОГЛ и Заявление САРАНСК" ("Инф согл и заявление Составной")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSpasenie"           "Договор с пациентом Спасение НИЖНЕКАМСК" ("Договор с Пациентом  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSpasenie"           "Договор с пациентом Спасение НИЖНЕКАМСК" ("Договор с Пациентом  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Kvitantsiya_kassaТест"                "ФНКЦ тест" ("Тест квитанция ФНКЦ")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_025_A4"                     "старый ТАП_А4" ("025-12/уТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4 БАЗОВАЯ")   Form="Reports/AmbReps/amb_talon_025_A4.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Recep_contr111"                       "Договор конструктор" ("Договор конструктор111")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_krok"              "krok" ("Договор с Пациентомююю")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Act_UserFormsSpasenie"                "Акт к договору (Спасение НИЖНЕКАМСК)" ("Акт для договора  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Act_UserFormsSpasenie"                "Акт к договору (Спасение НИЖНЕКАМСК)" ("Акт для договора  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Kvitantsiya_kassaТест1"               "ФНКЦ 1" ("Тест квитанция ФНКЦ1")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="contract_paid_child"                  "Договор на оказание ПУ несовершеннолетним" ("Договор на оказание ПУ несовершеннолетним")   Form="Reports/ContractsReports/contract_paid_child.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_test"                        "contract_test" ("contract_test")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSaranskBacha"       "Договор с пациентом Саранск1" ("Договор с Пациентом  (Саранск РКОБ)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"     "ИНФ СОГЛ и Заявление САРАНСК (вариант 2)" ("Инф согл и заявление (Саранск РКОБ)2")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="MED_VK_OTB_VMP_SSH"                   "198612" ("Протокол отбора на ВМП")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_cancellation"      "Соглашение о частичном расторжении договора ККОД" ("Соглашение о частичном расторжении договора о оказании услуг")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y_child"                          "Медицинская карта ФНКЦ" ("Медицинская карта пациента (ф. 025/у_child)")   Form="Reports/MedCard/025y_child.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_test"                        "contract_test" ("contract_test")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSaranskBacha"       "Договор с пациентом Саранск1" ("Договор с Пациентом  (Саранск РКОБ)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"     "ИНФ СОГЛ и Заявление САРАНСК (вариант 2)" ("Инф согл и заявление (Саранск РКОБ)2")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"      "ИНФ СОГЛ и Заявление САРАНСК" ("Инф согл и заявление Составной")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSpasenie"           "Договор с пациентом Спасение НИЖНЕКАМСК" ("Договор с Пациентом  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Act_UserFormsSpasenie"                "Акт к договору (Спасение НИЖНЕКАМСК)" ("Акт для договора  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="RKKVD_DOG_PATIENT_URIDI"              "Договор для РККВД с юр организациями КПМО" ("Договор(Потребитель)(РККВД)_Юридические лица")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract2003"               "Отчет2003" ("reception_contract2003")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara"                      "платные услуги Самара" ("платные услуги САМАРА")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract2003"               "Отчет2003" ("reception_contract2003")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara"                      "платные услуги Самара" ("платные услуги САМАРА")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract____"               "Договор на оказание ПМУ" ("Договор_Пациент_КДО_12122020")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="Составной"       - REP_CODE="reception_contract_pk_pmu"            "Договоры на оказание ПМУ (Приморье)" ("Договор на оказание ПМУ (Приморье)")  
+    │                                     ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_pk"                   "" ("Договор на платные услуги (Приморье)")  
+    │                                     ├── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_base_pk"             "" ("Согласие на платные услуги (Приморье)")  
+    │                                     └── - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_cancellation_full_pk" "" ("Соглашение о расторжении всех услуг (Приморье)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="vozmezdnogo_okazania_disp"            "Магадан - Возмездного оказания" ("Магадан - Договор возмездного оказания медицинских услуг по проведению диспансеризации государственных гражданских служащих")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="vozmezdnogo_okazaniya_medosmotr"      "Магадан Возмездного оказания Медосмотры" ("Договор возмездного оказании услуг по проведению периодических медицинских осмотров 302 Н (обследований)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y ЛПУ 007"                        "Медицинская карта ФНКЦ" ("Медицинская карта пациента (ф. 025/у)")   Form="Reports/MedCard/025y.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="pats_get_med_services"                "ДАФАФАФА" ("Реестр пациентов, получивших медицинские услуги")   Form="Reports/Reestr/pats_get_med_services.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="exec_contracts"                       "Отчет по выполнению контрактов (договоров)" ("Отчет по выполнению контрактов (договоров)")   Form="Reports/ContractsReports/exec_contracts.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_test"                        "contract_test" ("contract_test")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSaranskBacha"       "Договор с пациентом Саранск1" ("Договор с Пациентом  (Саранск РКОБ)")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha2"     "ИНФ СОГЛ и Заявление САРАНСК (вариант 2)" ("Инф согл и заявление (Саранск РКОБ)2")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_ZAIAV_UserFormsSaranskBacha"      "ИНФ СОГЛ и Заявление САРАНСК" ("Инф согл и заявление Составной")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Contract_UserFormsSpasenie"           "Договор с пациентом Спасение НИЖНЕКАМСК" ("Договор с Пациентом  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Act_UserFormsSpasenie"                "Акт к договору (Спасение НИЖНЕКАМСК)" ("Акт для договора  (Спасение Нижнекамск))")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="RKKVD_DOG_PATIENT_URIDI"              "Договор для РККВД с юр организациями КПМО" ("Договор(Потребитель)(РККВД)_Юридические лица")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract2003"               "Отчет2003" ("reception_contract2003")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara"                      "платные услуги Самара" ("платные услуги САМАРА")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara_kdl3"                 "!!!!!! contract_samara_kdl3" ("Договор на платные")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y"                                "Медицинская карта ФНКЦ" ("специально для печати из завершения записи")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_contract_MEDDEV-112533"     "Договор с пациентом" ("Договор с пациентом MEDDEV-112533")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/у_2025"                           "Медицинская карта ФНКЦ" ("Медицинская карта пациента, получающего медицинскую помощь в амбулаторных условиях_2025")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="DS_prog_year_attach"                  "Дополнительное соглашение №1" ("Доп. соглашение № 1")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara_kdl3_v01"             "!!!!!! contract_samara_kdl3 MEDDEV-82446" ("Договор на платные copy")  
+    ├── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara_kdl3_v02"             "contract_samara_kdl3 MEDDEV-82446__v2" ("Договор на платные v02")  
+    └── (AutoPopup "CONTRACTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_samara_kdl3_v03"             "contract_samara_kdl3 MEDDEV-82446__Актуально" ("Договор на платные v03")  
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTRACT_TYPES
+    D_V_CONTRACTS
+    D_V_CATALOGS
+    D_V_PAYMENT_KIND
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACT_TYPES
+    D_CONTRACTS
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_CATALOGS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PKPeopleMoney
+
+БРОКЕРЫ:
+    unit:CONTRACTS;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 7
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getSYS_DATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_CONTRACTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_PARAMS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_COUNT_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_BY_PK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/AmbReps/amb_talon_025_A4.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/AmbReps/amb_talon_025_A4.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SYS_PATSHED
+    D_V_PAYMENT_KIND
+    D_V_VISITPLACES
+    D_V_HOME_CALL_JOUR
+    D_V_PERSMEDCARD
+    D_V_VISITPURPOSES
+    D_V_VISITS
+    D_V_LPU
+    D_V_VIS_DIAGNOSISES
+    D_V_AMB_TALON_MKBS
+    D_V_RECIPS
+    D_V_ISSUED_BULLETINES
+    D_V_BJ_BULLETIN_CONTENTS
+    D_V_AMB_TALON_VISITS
+    D_V_DIRECTION_SERVICES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_DIRECTION_SERVICES
+    D_DIRECTIONS
+    D_DS_SERV_STATUSES
+    D_SERVICES
+    D_CABLAB
+    D_EMPLOYERS
+    D_OUTER_DIRECTIONS
+    D_VISITS
+    D_LPU
+    D_LPUDICT
+    D_DISEASECASES
+    D_HOME_CALL_JOUR
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_DIR_REG_TYPES
+    D_PMC_MARKERS
+    D_MARKERS
+    D_PAYMENT_KIND
+    D_VISITPLACES
+    D_SITES
+    D_HOME_CALL_INITS
+    D_PERSMEDCARD
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITPURPOSES
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_HOME_CALL_BULLETINES
+    D_BLOODGROUPE
+    D_RHESUS
+    D_GEOGRAFY
+    D_DISEASECHARACTERS
+    D_INJURE_KINDS
+    D_DISEASE_STAGES
+    D_CL_OBSERV_CATEGORIES
+    D_PATIENTS_DGROUP
+    D_DIAGNOSIS_TYPES
+    D_DIAGNOSIS_STAGES
+    D_RISAR_STAGES
+    D_AMB_TALON_MKBS
+    D_RECIPS
+    D_PRIVILEGES
+    D_CONTINGENTS
+    D_FINSOURCES
+    D_PRIV_DIS_GROUPS
+    D_RECIPE_PRIVTYPES
+    D_PRIV_NOS_GROUPS
+    D_PURPOSE_PRIV
+    D_BJ_BULLETIN_CONTENTS
+    D_BJ_BULL_CONT_EXTS
+    D_HOSP_HISTORY_DEPS
+    D_DISABILITY_TYPES
+    D_BJ_BULLETINES
+    D_BULLETIN_JOURNALS
+    D_BULL_RESULTS
+    D_DIRECTORIES_DATA_VER
+    D_BULLETIN_STATES
+    D_AMB_TALONS_VIS_BULLS
+    D_AMB_TALON_VISITS
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_REFERENCE_KINDS
+    D_DEPS
+    D_REG_TYPES
+    D_SCHEDULE_TIME_TYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_FEDERAL_PRIVS.GET_PRIVS_CODES
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AMB_TALONS.GET_AMB_TALON
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PaymentKindForCallToHome
+    VisitPlaceForCallToHome
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getHCData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetInfoByVisit
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getLpuData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDirectionFromHC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RepAmb
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getAmbVisit
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RepDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_REP_PATSHED
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/MedCard/025y.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/MedCard/025y.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsVOKOD/Reports/MedCard/025y.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsChechnya =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsChechnya/Reports/MedCard/025y.frm
+
+     ===== UserFormsEgis3Novosib =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsEgis3Novosib/Reports/MedCard/025y.frm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsKaliningrad/Reports/MedCard/025y.frm
+
+     ===== UserFormsKrasnodarOD =====
+        КАТАЛОГ: UserFormsKrasnodarOD/Reports/MedCard/025y.d
+            └── 025y.dfrm
+
+     ===== UserFormsMagadan =====
+        КАТАЛОГ: UserFormsMagadan/Reports/MedCard/025y.d
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsMoscowNIIBlohina/Reports/MedCard/025y.frm
+
+     ===== UserFormsNewLook73 =====
+        КАТАЛОГ: UserFormsNewLook73/Reports/MedCard/025y.d
+            └── 025y.dfrm
+
+     ===== UserFormsNiiSerb =====
+        КАТАЛОГ: UserFormsNiiSerb/Reports/MedCard/025y.d
+            └── 025y.dfrm
+            └── bar_code.dfrm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/Reports/MedCard/025y.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsRKB3 =====
+        КАТАЛОГ: UserFormsRKB3/Reports/MedCard/025y.d
+            └── 025y.dfrm
+
+     ===== UserFormsRostov =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsRostov/Reports/MedCard/025y.frm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Reports/MedCard/025y.d
+            └── 025y.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/Reports/MedCard/025y.d
+            └── 025y.dfrm
+            └── agent_id.dfrm
+            └── format.dfrm
+
+     ===== UserFormsTver =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsTver/Reports/MedCard/025y.frm
+
+     ===== UserFormsVOKB1 =====
+        КАТАЛОГ: UserFormsVOKB1/Reports/MedCard/025y.d
+            └── 025y.dfrm
+
+     ===== UserFormsVOKOD =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsVOKOD/Reports/MedCard/025y.frm
+
+     ===== UserFormsVita =====
+        КАТАЛОГ: UserFormsVita/Reports/MedCard/025y.d
+            └── ds_data.dfrm
+            └── others.dfrm
+            └── page_format.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTROL_CARD
+    D_V_DISEASECASES
+    D_V_HOSP_HISTORIES
+    D_V_VISITS_BASE
+    D_V_VIS_DIAGNOSISES
+    D_V_EDUCATION_TYPES
+    D_V_AGENT_INABILITIES
+    D_V_DIRECTORIES_FN_DATA
+    D_V_PERSMEDCARD
+    D_V_AGENT_ADDRS
+    D_V_AGENT_CONTACTS
+    D_V_AGENT_POLIS
+    D_V_AGENT_PERSDOCS
+    D_V_AGENT_MARITAL_STATES
+    D_V_AGENT_SOCIAL_STATES
+    D_V_AGENT_WORK_PLACES
+    D_V_AGENT_FEDERAL_PRIVS
+    D_V_COUNTRIES
+    D_V_LPU
+    D_V_VISITS
+    D_V_PERSMEDCARD_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_AGENTS
+    D_V_GEOGRAFY
+    D_V_AGENT_ADDRS_BASE
+    D_V_RAIONS
+    D_V_AGENT_CATEGORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTROL_CARD
+    D_MKB10
+    D_DISP_PLAN
+    D_NR_REMOVE_REASONS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_AGENTS
+    D_DISEASECASES
+    D_DISCASES_DISCOVER
+    D_CONTROL_CARD_GROUPS
+    D_NOS_REGISTR_TYPES
+    D_NOS_REGISTRS
+    D_PATIENTS_DGROUP
+    D_CC_DEATH_REASON
+    D_DISEASECASE_TYPES
+    D_DC_SOURCES
+    D_MESES
+    D_AGENT_RELATIVES
+    D_HOSP_HISTORIES
+    D_HOSP_REASONS
+    D_HOSPITALIZATION_TYPES
+    D_TRANSPORTATION_KINDS
+    D_LPUDICT
+    D_HOSP_RESULTS
+    D_DEPS
+    D_HPK_PLAN_JOURNALS
+    D_HPKPJ_VMP_STATES
+    D_HOSP_OUTCOMES
+    D_HOSP_HOURS
+    D_HH_TRANSFER_REASONS
+    D_ABILITY_STATUS
+    D_DIRECTORIES_DATA_VER
+    D_HOSP_INCOMES
+    D_DIRECTION_HOSP
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_DISEASECHARACTERS
+    D_INJURE_KINDS
+    D_DISEASE_STAGES
+    D_CL_OBSERV_CATEGORIES
+    D_DIAGNOSIS_TYPES
+    D_DIAGNOSIS_STAGES
+    D_RISAR_STAGES
+    D_EDUCATION_TYPES
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_DIRECTORIES_FN_DATA
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+    D_AGENT_ADDRS
+    D_GEOGRAFY
+    D_RAIONS
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_AGENT_POLIS
+    D_INSURANCE_COMPANIES
+    D_AGENT_POLIS_KINDS
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+    D_AGENT_MARITAL_STATES
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_SOCIALCATEGORIES
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_AGENT_DEPS
+    D_JOBTITLES
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_AGENT_FEDERAL_PRIVS
+    D_PRIVILEGES
+    D_FLR_VERSION
+    D_LPU
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_DIRECTIONS
+    D_GEOGRAFYTYPES
+    D_AGENT_CATEGORIES
+    D_CATEGORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_ALLERG_ANAMNESIS.GET_BY_STRING
+    D_PKG_FLR.GET_FEDD_PRIVS_STR
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 7
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getLpuData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPAT_ID
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GEOGRAFY
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CHECK_BENEFIT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTROL_CARD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DISEASECASES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DATA
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/ContractsReports/exec_contracts.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/ContractsReports/exec_contracts.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_INCOMINGDOC_SPECS
+    D_V_INCOMINGDOC_BASE
+    D_V_STORE_OPER_BASE
+    D_V_NOMMODIF_CHANGE_BASE
+    D_V_CONTRACTS_BASE
+    D_V_CONTRACT_SUPPLY_MED
+    D_V_NOMMODIF_PACKING_BASE
+    D_V_INCOMINGDOC_SPECS_BASE
+    D_V_FINANSOURCES
+    D_V_UNITPROP_VALUES
+    D_V_NOMMODIF_BASE
+    D_V_NOMBASE_BASE
+    D_V_NOMBASE_MNN_ACTIVE_BASE
+    D_V_NOMBASE_MNN
+    D_V_ACC_FARM_PROD
+    D_V_LPU_BASE
+    D_V_GEOGRAFY_BASE
+    D_V_GEOGRAFYTYPES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_MLP_SGTIN_INFO
+    D_INCOMINGDOC_SPECS
+    D_INCOMINGDOC
+    D_NOMMODIF
+    D_NOMBASE
+    D_TAXGR
+    D_NOMMODIF_PACKING
+    D_COUNTRIES
+    D_AGENTS
+    D_FINANSOURCES
+    D_MEASURES
+    D_ACC_FARM_PROD
+    D_STORE_OPER
+    D_NOMMODIF_CHANGE
+    D_CONTRACTS
+    D_CONTRACT_SUPPLY_MED
+    D_UNITPROP_VALUES
+    D_NOMBASE_MNN_ACTIVE
+    D_NOMBASE_MNN
+    D_LPU
+    D_GEOGRAFY
+    D_GEOGRAFYTYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_UNITPROPS.GET_SVAL
+    D_PKG_ACC_FARM_PROD.GET_ROUNDED_VALUE
+    D_PKG_STD.FRM_D
+    D_PKG_UNITPROPS.GET_ID_BY_CODE
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_CL_STR
+    D_STRAGG_COMMA
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: InitAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DS_CONTRACTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contracts_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/contracts_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlaniaSKMMC =====
+        КАТАЛОГ: UserFormsAlaniaSKMMC/Contracts/contracts_edit.d
+            └── contracts_edit.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Contracts/contracts_edit.d
+            └── add_tab.dfrm
+
+
+SubForm:
+     Sklad/SubForms/validate_price_number
+     Contracts/supply_med/contract_supply_med
+
+Список вызываемых форм в JS:
+     Agents/agent_relatives/represents.frm
+     Contracts/contract_reports.frm
+     ProfCard/pc_patients_import.frm
+     Contracts/contr_ami_directs/contr_ami_directs_edit.frm
+     Contracts/patients_multi_sel.frm
+     Persmedcard/persmedcard_edit.frm
+     Agents/agent_work_places/agent_work_places_history.frm
+     Contracts/select_prof_cards_by_service.frm
+     ProfCard/profcard_edit.frm
+     ProfCard/prof_card_model_add.frm
+     Contracts/contract_finansource_edit.frm
+     Agents/agents_filter.frm
+     Agents/agents.frm
+     Reports/ProfCard/rep_prof_card_final_act_29n.frm
+     Reports/ProfCard/dispensary_card_131y_mk_other.frm
+     Reports/ProfCard/025_7y.frm
+     Reports/MedCardAmb/pc_medcardamb.frm
+     Reports/ProfCard/dispensary_anormality.frm
+     Reports/ProfCard/dispensary_card_131y.frm
+     Reports/ProfCard/dispensary_card_131y_GS.frm
+     Reports/MedCardAmb/medcardamb.frm
+     Reports/ProfCard/dispensary_card_131y_869n.frm
+     Reports/ProfCard/dispensary_card_131y_124n.frm
+     Reports/ProfCard/dispensary_card_131y_1207n.frm
+     Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+     Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+     Reports/ProfCard/prof_card_minor.frm
+     Reports/ProfCard/med_cert_086y.frm
+     Reports/MedCard/025y_2025.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        prof_card_final_act_29n (WEB-форма) Reports/ProfCard/rep_prof_card_final_act_29n.frm;
+        dispensary_card_131y_mk_other (WEB-форма) Reports/ProfCard/dispensary_card_131y_mk_other.frm;
+        025_7y (WEB-форма) Reports/ProfCard/025_7y.frm;
+        AmbtPC (WEB-форма) Reports/MedCardAmb/pc_medcardamb.frm;
+        dispensary_anormality (WEB-форма) Reports/ProfCard/dispensary_anormality.frm;
+        dispensary_card_131y (WEB-форма) Reports/ProfCard/dispensary_card_131y.frm;
+        dispensary_card_131y_GS (WEB-форма) Reports/ProfCard/dispensary_card_131y_GS.frm;
+        pakage_for_DGS (Составной);
+        Ambt1 (WEB-форма) Reports/MedCardAmb/medcardamb.frm;
+        CARD_DISPANSARY_REP (WEB-конструктор);
+        prof_osmotr_nesov_514n2 (WEB-конструктор);
+        prof_osmotr_nesov_514n(copy 13.01.2020) (WEB-конструктор);
+        dispensary_card_131y_869n (WEB-форма) Reports/ProfCard/dispensary_card_131y_869n.frm;
+        amb_card_new (WEB-форма) Reports/MedCardAmb/medcardamb.frm;
+        dispensary_card_131y_124n (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n.frm;
+        dispensary_card_131y_1207n (WEB-форма) Reports/ProfCard/dispensary_card_131y_1207n.frm;
+        dispensary_card_131y_124n_v2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2.frm;
+        dispensary_card_131y_124n_v2_2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm;
+        SamGMU125u (WEB-конструктор);
+        prof_card_minor (WEB-форма) Reports/ProfCard/prof_card_minor.frm;
+        prof_osmotr_nesov_514n_old (WEB-конструктор);
+        Med_cert_086/y (WEB-форма) Reports/ProfCard/med_cert_086y.frm;
+        025/y (WEB-форма) Reports/MedCard/025y_2025.frm;
+        025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm;
+        DC_logs (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        PROF_CARD;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="CONTR_AMI_DIRECTS_SHORT_joinpopup"
+│   └── "Массовое добавление"
+│   
+└── name="p_PC"
+    ├── "Обновить"
+    ├── "Карта пациента"
+    ├── "Хроника: место работы"
+    ├── "Обновить место работы во всех картах"
+    ├── "Добавление"
+    ├── "Добавление по шаблону"
+    ├── "Редактирование"
+    ├── "Удаление"
+    ├── "Загрузить пациентов из файла"
+    ├── "Заключительный акт"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_mk_other"           "Маршрутная карта диспансеризации (профилактического медицинского осмотра). Другие отметки медицинских работников" ("Маршрутная карта диспансеризации (профилактического медицинского осмотра) 2 лист")   Form="Reports/ProfCard/dispensary_card_131y_mk_other.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025_7y"                                  "Статистическая карта профилактического медицинского осмотра (скрининга) ребенка" ("Статистическая карта профосмотра (скрининга) ребенка (№025-7/у)")   Form="Reports/ProfCard/025_7y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="AmbtPC"                                  "Амбулаторная карта профосмотра" ("Амбулаторная карта профосмотра")   Form="Reports/MedCardAmb/pc_medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_anormality"                   "Сводный отчет по диспансеризации" ("Сводный отчет по диспансеризации")   Form="Reports/ProfCard/dispensary_anormality.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y"                    "Карта учета диспансеризации (профилактических медицинских осмотров) 87н" ("Карта учета диспансеризации (профилактических медицинских осмотров)")   Form="Reports/ProfCard/dispensary_card_131y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_GS"                 "131/у-ГС Карта учета диспансеризации (профилактических медицинских осмотров)" ("131/у-ГС Карта учета диспансеризации государственного служащего")   Form="Reports/ProfCard/dispensary_card_131y_GS.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    │                                     ├── - REP_TYPE="WEB-форма"       - REP_CODE="Ambt1"               "Амбулаторная Карта" ("Амбулаторная карта1")   Form="Reports/MedCardAmb/medcardamb.frm"
+    │                                     ├── - REP_TYPE="WEB-форма"       - REP_CODE="Ambt1"               "Амб. карта" ("Амбулаторная карта1")   Form="Reports/MedCardAmb/medcardamb.frm"
+    │                                     └── - REP_TYPE="WEB-конструктор" - REP_CODE="CARD_DISPANSARY_REP" "" ("Карта учета диспансеризации")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n2"                 "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("2Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n(copy 13.01.2020)" "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)(copy 13.01.2020)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_869n"               "Карта учета диспансеризации (профилактических медицинских осмотров) 869н" ("Карта учета диспансеризации (профилактических медицинских осмотров) приказ 869н")   Form="Reports/ProfCard/dispensary_card_131y_869n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="amb_card_new"                            "медицинская карта пациента" ("amb_card_new")   Form="Reports/MedCardAmb/medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n"               "Карта учета диспансеризации (профилактических медицинских осмотров) 124н" ("Карта учета диспансеризации (профилактических медицинских осмотров) по приказу 124н")   Form="Reports/ProfCard/dispensary_card_131y_124n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="amb_card_new"                            "медицинская карта пациента" ("amb_card_new")   Form="Reports/MedCardAmb/medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_1207n"              "!!!!!Карта учета диспансеризации (профилактических медицинских осмотров) 1207н" ("Карта учета диспансеризации (профилактических медицинских осмотров) по приказу 1207н")   Form="Reports/ProfCard/dispensary_card_131y_1207n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n_v2"            "Карта учета диспансеризации (профилактических медицинских осмотров) 124н Магадан" ("Карта учета диспансеризации (I) этап (профилактических медицинских осмотров) Магадан")   Form="Reports/ProfCard/dispensary_card_131y_124n_v2.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n_v2_2"          "Карта учета диспансеризации (профилактических медицинских осмотров) Магадан" ("Карта учета диспансеризации (II) этап (профилактических медицинских осмотров) Магадан")   Form="Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="SamGMU125u"                              "СамГМУ паспорт здоровья" ("125/у-ПЗ Паспорт здоровья (диспансеризация взрослого населения)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="prof_card_minor"                         "030-ПО/у-17 Карта профилактического медосмотра несовершеннолетнего" ("030-ПО/у-17 Карта профилактического медосмотра несовершеннолетнего")   Form="Reports/ProfCard/prof_card_minor.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n_old"              "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)_old")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="SamGMU125u"                              "СамГМУ паспорт здоровья" ("125/у-ПЗ Паспорт здоровья (диспансеризация взрослого населения)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="Med_cert_086/y"                          "Med_cert_086/y" ("Медицинская справка 086/у")   Form="Reports/ProfCard/med_cert_086y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025/y"                                   "025_2025" ("специально для печати из завершения записи")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025/у_2025"                              "025_2025" ("Медицинская карта пациента, получающего медицинскую помощь в амбулаторных условиях_2025")   Form="Reports/MedCard/025y_2025.frm"
+    └── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="DC_logs"                                 "PROF_CARD_L" ("Информация по случаю (в случае ошибок с СЗ или ТАП или контракта)")  
+
+SQL ЗАПРОСЫ (15):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PAYMENT_KIND
+    D_V_CONTRACT_TYPES
+    D_V_AGENT_DECRETIV_GROUPS
+    D_V_PROF_CARD_CONCLUSIONS
+    D_V_PROF_CARD
+    D_V_CONTRACT_AGENT_CONS
+    D_V_CONTRACT_SERVICE_CONS
+    D_V_CONTRACT_SUPPLY_MED
+    D_V_CONTRACT_FINANSOURCE
+    D_V_AGENTS_BASE
+    D_V_CONTRACT_PAYMENTS
+    D_V_CONTRACTS
+    D_V_PERSMEDCARD_BASE
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_PROF_CARD_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_PROF_CARD_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PAYMENT_KIND
+    D_CONTRACT_TYPES
+    D_AGENT_DECRETIV_GROUPS
+    D_PROF_CARD_CONCLUSIONS
+    D_PC_CONCLUSIONS
+    D_PATIENTS_DGROUP
+    D_MKB10
+    D_VIEW_RESULTS
+    D_EMPLOYERS
+    D_AGENTS
+    D_SPECIALITIES
+    D_DISP_SERVICES
+    D_VISITS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_PATIENTS_UDGROUP
+    D_PROF_CARD
+    D_LPU
+    D_VISITPURPOSES
+    D_PERSMEDCARD
+    D_JOBTITLES
+    D_CONTRACTS
+    D_PROF_CARD_TYPES
+    D_DECRETIV_GROUPS
+    D_PC_CLOSE_REASONS
+    D_PC_RESULTS
+    D_CABLAB
+    D_CONTRACT_AGENT_CONS
+    D_CONTRACT_SERVICE_CONS
+    D_CONTRACT_SUPPLY_MED
+    D_NOMMODIF
+    D_NOMMODIF_PACKING
+    D_COUNTRIES
+    D_FINANSOURCES
+    D_MEASURES
+    D_CONTRACT_FINANSOURCE
+    D_CONTRACT_PAYMENTS
+    D_FACIAL_ACCOUNTS
+    D_DIR_SERV_PAYMENTS
+    D_DEPS
+    D_PROF_CARD_SERVICES
+    D_SERVTYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_CONTRACT_AGENT_CONS.ADD
+    D_PKG_CONTRACT_SERVICE_CONS.ADD
+    D_PKG_CONTRACT_SUPPLY_MED.ADD
+    D_PKG_CONTRACT_FINANSOURCE.ADD
+    D_PKG_CONTRACT_FINANSOURCE.DEL
+    D_PKG_CONTRACT_SUPPLY_MED.DEL
+    D_PKG_CONTRACTS.DEL
+    D_PKG_NUM_TOOLS.TO_STR_WITH_DELIMETER
+    D_PKG_CONTRACTS.UPD
+    D_PKG_CONTRACTS.GET_SUMM
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_CONTRACT_AGENT_CONS.DEL
+    D_PKG_CONTR_AMI_DIRECTS.UPDATE_PATIENT_WORKPLACE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CONTR_CENTER_TYPE
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="NATURAL_RETURN_NAME"
+    unit="AGENTS" composition="JURISTIC_NAME_DEFCAT"
+    unit="CONTRACTS" composition="CONTR"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:LPU_SERVICES  composition:GRID;
+    unit:LPU_SERVICES;GRIDN  composition:GRID;
+
+БРОКЕРЫ:
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:CONTRACTS  action:GET_PREF_DEFAULT;
+    unit:CONTRACTS  action:GEN_DOCNUMB;
+    unit:CONTRACT_AGENT_CONS  action:INSERT;
+    unit:PROF_CARD  action:DELETE;
+    unit:CONTRACT_SERVICE_CONS  action:INSERT;
+    unit:PROF_CARD_SERVICES  action:RECOUNT_CONTRACT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 23
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getCONTR_CENTER_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SAVE_JOIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RootCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PAYMENT_KIND
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ADDUPDATE_ACTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_ACTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_AGENT_NAME_AND_SYSDATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_SUMM
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GEN_PREF
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GEN_DOCNUMB
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CONTRACT_AGENT_CONS_INSERT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CONTRACT_AGENT_CONS_DEL
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CONTRACT_AGENT_CONS_CHECK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AcDel_PC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AcCheckDel_PC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MASS_CHANGE_WORK_PLACE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CONTRACT_SERVICE_CONS_INSERT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CONTRACT_SERVICE_CONS_INSERT_ONE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: PROF_CARD_SERVICES_RECOUNT_CONTRACT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PAYMENT_KINDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PROF_CARD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Sklad/SubForms/validate_price_number.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Sklad/SubForms/validate_price_number.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_relatives/represents.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agent_relatives/represents.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_relatives/agent_relatives_add.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="cPopUp"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_RELATIVES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+
+БРОКЕРЫ:
+    unit:AGENT_RELATIVES  action:DELETE;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: delRepresent
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DsRepresent
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/supply_med/contract_supply_med.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/supply_med/contract_supply_med.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsMoscowNIIBlohina =====
+        КАТАЛОГ: UserFormsMoscowNIIBlohina/Contracts/supply_med/contract_supply_med.d
+            └── data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     UniversalForms/text_area_d3.frm
+     Contracts/supply_med/add_med.frm
+     Contracts/supply_med/edit_med.frm
+     Sklad/reverselist/store_operations_journal.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="Popup_CONTRACT_SUPPLY_MED"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Журнал складских операций"
+    ├── "Изменить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_INCOMINGDOC_SPECS_BASE
+    D_V_INCOMINGDOC_BASE
+    D_V_CONTRACT_SUPPLY_MED
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_INCOMINGDOC_SPECS
+    D_INCOMINGDOC
+    D_CONTRACT_SUPPLY_MED
+    D_NOMMODIF
+    D_NOMMODIF_PACKING
+    D_COUNTRIES
+    D_AGENTS
+    D_FINANSOURCES
+    D_MEASURES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_NUM_TOOLS.TO_STR_WITH_DELIMETER
+    D_PKG_SYNONYMS.GET_SYNONUM
+    D_PKG_ACC_FARM_PROD.GET_ROUNDED_VALUE
+    D_PKG_CONTRACT_SUPPLY_MED.GET_KOL_MED
+    D_PKG_CONTRACT_SUPPLY_MED.GET_KOL_MED_OUT
+
+БРОКЕРЫ:
+    unit:CONTRACT_SUPPLY_MED  action:DELETE;
+    unit:CONTRACTS;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: DEL_CONTRACT_SUPPLY_MED
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_CONTRACTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_SUPPLY_MED
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Contracts/contr_ami_directs/select_contract_by_type.frm
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PERSMEDCARD_FIO
+    D_V_AGENT_POLIS_DMS
+    D_V_CONTRACTS
+    D_V_PERSMEDCARD_BASE
+    D_V_EMPLOYERS_FIO
+    D_V_CONTR_AMI_DIRECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_STR_TOOLS.FIO
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PERSMEDCARD" composition="PMC_FIO_AG"
+    unit="AGENT_POLIS" composition="DMS"
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 7
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_PATIENT_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CONTRACT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPATID
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_SYSDATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetEmployerInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ADDUPDATE_ACTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/patients_multi_sel.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/patients_multi_sel.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EMPLOYERS.GET_ID
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS  action:INSERT;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GetCurrentEmployer
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/pc_patients_import.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/ProfCard/pc_patients_import.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     System/say_hello.frm
+     UnitExportImport/Logs/import_error_log.frm
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PROF_CARD_TYPES
+    D_V_CATALOGS
+    D_V_CONTRACTS
+    D_V_PAYMENT_KIND
+    D_V_PROF_CARD_MODELS
+    D_V_IMP_LOG
+    D_V_IMP_LOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PROF_CARD_TYPES
+    D_REGISTER_PURPOSES
+    D_CATALOGS
+    D_CONTRACTS
+    D_CONTRACT_TYPES
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_JOBTITLES
+    D_VISITPURPOSES
+    D_SERVICES
+    D_PROF_CARD_MODELS
+    D_IMP_LOG
+    D_IMP_LOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="JURISTIC"
+    unit="PROF_CARD_MODELS" composition="GRID"
+    unit="VISITPURPOSES" composition="DEFAULT"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+    unit:CONTRACTS  composition:GRID_CURRENT;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 5
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: InitAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetPaymentKindInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ProfCardModelsAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ImportAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PROF_CARD_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_work_places/agent_work_places_history.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agent_work_places/agent_work_places_history.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsEgis3Tomsk/Agents/agent_work_places/agent_work_places_history.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsEgis3Tomsk/Agents/agent_work_places/agent_work_places_history.frm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_work_places/agent_work_places_edit.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+БРОКЕРЫ:
+    unit:AGENT_WORK_PLACES;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: AGENT_WORK_PLACES_DEL
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contract_reports.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/contract_reports.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Reports/ProfCard/rep_prof_card _cost_uncrypto.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        prof_card_cost;
+        prof_card_cost_uncrypto (WEB-форма) Reports/ProfCard/rep_prof_card _cost_uncrypto.frm;
+        prof_card_cost_final;
+        prof_card_final_act;
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_DEPS
+    D_V_URPRIVS
+    D_V_USERS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_DEPS
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+
+СИСТЕМНЫЕ ОПЦИИ:
+    Region
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CONSTANTS  composition:MO;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_CONST
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_AGN_DEPS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/select_prof_cards_by_service.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/select_prof_cards_by_service.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agent_work_places/agent_work_places_history.frm
+     ProfCard/profcard_edit.frm
+     ProfCard/prof_card_model_add.frm
+     Reports/ProfCard/dispensary_card_131y_mk_other.frm
+     Reports/ProfCard/025_7y.frm
+     Reports/MedCardAmb/pc_medcardamb.frm
+     Reports/ProfCard/dispensary_anormality.frm
+     Reports/ProfCard/dispensary_card_131y.frm
+     Reports/ProfCard/dispensary_card_131y_GS.frm
+     Reports/MedCardAmb/medcardamb.frm
+     Reports/ProfCard/dispensary_card_131y_869n.frm
+     Reports/ProfCard/dispensary_card_131y_124n.frm
+     Reports/ProfCard/dispensary_card_131y_1207n.frm
+     Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+     Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+     Reports/ProfCard/prof_card_minor.frm
+     Reports/ProfCard/med_cert_086y.frm
+     Reports/MedCard/025y_2025.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        dispensary_card_131y_mk_other (WEB-форма) Reports/ProfCard/dispensary_card_131y_mk_other.frm;
+        025_7y (WEB-форма) Reports/ProfCard/025_7y.frm;
+        AmbtPC (WEB-форма) Reports/MedCardAmb/pc_medcardamb.frm;
+        dispensary_anormality (WEB-форма) Reports/ProfCard/dispensary_anormality.frm;
+        dispensary_card_131y (WEB-форма) Reports/ProfCard/dispensary_card_131y.frm;
+        dispensary_card_131y_GS (WEB-форма) Reports/ProfCard/dispensary_card_131y_GS.frm;
+        pakage_for_DGS (Составной);
+        Ambt1 (WEB-форма) Reports/MedCardAmb/medcardamb.frm;
+        CARD_DISPANSARY_REP (WEB-конструктор);
+        prof_osmotr_nesov_514n2 (WEB-конструктор);
+        prof_osmotr_nesov_514n(copy 13.01.2020) (WEB-конструктор);
+        dispensary_card_131y_869n (WEB-форма) Reports/ProfCard/dispensary_card_131y_869n.frm;
+        amb_card_new (WEB-форма) Reports/MedCardAmb/medcardamb.frm;
+        dispensary_card_131y_124n (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n.frm;
+        dispensary_card_131y_1207n (WEB-форма) Reports/ProfCard/dispensary_card_131y_1207n.frm;
+        dispensary_card_131y_124n_v2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2.frm;
+        dispensary_card_131y_124n_v2_2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm;
+        SamGMU125u (WEB-конструктор);
+        prof_card_minor (WEB-форма) Reports/ProfCard/prof_card_minor.frm;
+        prof_osmotr_nesov_514n_old (WEB-конструктор);
+        Med_cert_086/y (WEB-форма) Reports/ProfCard/med_cert_086y.frm;
+        025/y (WEB-форма) Reports/MedCard/025y_2025.frm;
+        025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm;
+        DC_logs (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        PROF_CARD;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="p_PC"
+    ├── "Обновить"
+    ├── "Карта пациента"
+    ├── "Хроника: место работы"
+    ├── "Добавление"
+    ├── "Добавление по шаблону"
+    ├── "Редактирование"
+    ├── "Удаление"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_mk_other"           "Маршрутная карта диспансеризации (профилактического медицинского осмотра). Другие отметки медицинских работников" ("Маршрутная карта диспансеризации (профилактического медицинского осмотра) 2 лист")   Form="Reports/ProfCard/dispensary_card_131y_mk_other.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025_7y"                                  "Статистическая карта профилактического медицинского осмотра (скрининга) ребенка" ("Статистическая карта профосмотра (скрининга) ребенка (№025-7/у)")   Form="Reports/ProfCard/025_7y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="AmbtPC"                                  "Амбулаторная карта профосмотра" ("Амбулаторная карта профосмотра")   Form="Reports/MedCardAmb/pc_medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_anormality"                   "Сводный отчет по диспансеризации" ("Сводный отчет по диспансеризации")   Form="Reports/ProfCard/dispensary_anormality.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y"                    "Карта учета диспансеризации (профилактических медицинских осмотров) 87н" ("Карта учета диспансеризации (профилактических медицинских осмотров)")   Form="Reports/ProfCard/dispensary_card_131y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_GS"                 "131/у-ГС Карта учета диспансеризации (профилактических медицинских осмотров)" ("131/у-ГС Карта учета диспансеризации государственного служащего")   Form="Reports/ProfCard/dispensary_card_131y_GS.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    │                                     ├── - REP_TYPE="WEB-форма"       - REP_CODE="Ambt1"               "Амбулаторная Карта" ("Амбулаторная карта1")   Form="Reports/MedCardAmb/medcardamb.frm"
+    │                                     ├── - REP_TYPE="WEB-форма"       - REP_CODE="Ambt1"               "Амб. карта" ("Амбулаторная карта1")   Form="Reports/MedCardAmb/medcardamb.frm"
+    │                                     └── - REP_TYPE="WEB-конструктор" - REP_CODE="CARD_DISPANSARY_REP" "" ("Карта учета диспансеризации")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n2"                 "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("2Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n(copy 13.01.2020)" "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)(copy 13.01.2020)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_869n"               "Карта учета диспансеризации (профилактических медицинских осмотров) 869н" ("Карта учета диспансеризации (профилактических медицинских осмотров) приказ 869н")   Form="Reports/ProfCard/dispensary_card_131y_869n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="amb_card_new"                            "медицинская карта пациента" ("amb_card_new")   Form="Reports/MedCardAmb/medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n"               "Карта учета диспансеризации (профилактических медицинских осмотров) 124н" ("Карта учета диспансеризации (профилактических медицинских осмотров) по приказу 124н")   Form="Reports/ProfCard/dispensary_card_131y_124n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="amb_card_new"                            "медицинская карта пациента" ("amb_card_new")   Form="Reports/MedCardAmb/medcardamb.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_1207n"              "!!!!!Карта учета диспансеризации (профилактических медицинских осмотров) 1207н" ("Карта учета диспансеризации (профилактических медицинских осмотров) по приказу 1207н")   Form="Reports/ProfCard/dispensary_card_131y_1207n.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n_v2"            "Карта учета диспансеризации (профилактических медицинских осмотров) 124н Магадан" ("Карта учета диспансеризации (I) этап (профилактических медицинских осмотров) Магадан")   Form="Reports/ProfCard/dispensary_card_131y_124n_v2.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_card_131y_124n_v2_2"          "Карта учета диспансеризации (профилактических медицинских осмотров) Магадан" ("Карта учета диспансеризации (II) этап (профилактических медицинских осмотров) Магадан")   Form="Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="SamGMU125u"                              "СамГМУ паспорт здоровья" ("125/у-ПЗ Паспорт здоровья (диспансеризация взрослого населения)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="prof_card_minor"                         "030-ПО/у-17 Карта профилактического медосмотра несовершеннолетнего" ("030-ПО/у-17 Карта профилактического медосмотра несовершеннолетнего")   Form="Reports/ProfCard/prof_card_minor.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="Составной"       - REP_CODE="pakage_for_DGS"                          "Пакет документов по ДГС" ("Пакет документов для ДГС")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="prof_osmotr_nesov_514n_old"              "Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)" ("Карта профилактического медицинского осмотра несовершеннолетнего (030-ПО/у-17)_old")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="SamGMU125u"                              "СамГМУ паспорт здоровья" ("125/у-ПЗ Паспорт здоровья (диспансеризация взрослого населения)")  
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="Med_cert_086/y"                          "Med_cert_086/y" ("Медицинская справка 086/у")   Form="Reports/ProfCard/med_cert_086y.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025/y"                                   "025_2025" ("специально для печати из завершения записи")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-форма"       - REP_CODE="025/у_2025"                              "025_2025" ("Медицинская карта пациента, получающего медицинскую помощь в амбулаторных условиях_2025")   Form="Reports/MedCard/025y_2025.frm"
+    └── (AutoPopup "PROF_CARD") - REP_TYPE="WEB-конструктор" - REP_CODE="DC_logs"                                 "PROF_CARD_L" ("Информация по случаю (в случае ошибок с СЗ или ТАП или контракта)")  
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PROF_CARD_SERVICES_EX
+    D_V_PROF_CARD
+    D_V_PERSMEDCARD_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LABMED_DIRECTION_LINE
+    D_LBM_DIRLINE_STATUSES
+    D_DIRECTION_SERVICES
+    D_CABLAB
+    D_VISIT_FIELDS
+    D_VISIT_TAB_FIELDS
+    D_ADD_DIR_VALUES
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_AMB_TALON_OTHER_VISITS
+    D_PC_SERV_OTHER_RESULTS
+    D_DIRECTIONS
+    D_LPUDICT
+    D_LABMED_PATJOUR
+    D_LABMED_RSRCH_JOUR
+    D_LABMED_RSRCH_JOURSP
+    D_LABMED_RESEARCH_RES
+    D_MEASURES
+    D_PROF_CARD_SERVICES
+    D_PROF_CARD_DIR_SERVS
+    D_VISITS
+    D_EMPLOYERS
+    D_PROF_CARD
+    D_DISP_SERVICES
+    D_DISPS_SERVICES
+    D_PROF_CARD_MODELS_SR
+    D_PROF_CARD_TYPES
+    D_PROF_CARD_CONCLUSIONS
+    D_PC_CONCLUSIONS
+    D_SERVICES
+    D_SERVTYPES
+    D_DEPS
+    D_LPU
+    D_VISITPURPOSES
+    D_PAYMENT_KIND
+    D_PERSMEDCARD
+    D_AGENTS
+    D_JOBTITLES
+    D_CONTRACTS
+    D_PATIENTS_DGROUP
+    D_DECRETIV_GROUPS
+    D_PC_CLOSE_REASONS
+    D_PC_RESULTS
+
+БРОКЕРЫ:
+    unit:PROF_CARD  action:DELETE;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: AcDel_PC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PROF_CARD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/prof_card_model_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/ProfCard/prof_card_model_add.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/ProfCard/prof_card_model_add.d
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/ProfCard/prof_card_model_add.d
+            └── data.dfrm
+            └── script.dfrm
+
+
+SubForm:
+     ProfCard/SubForms/contraindications_weapons
+     ProfCard/SubForms/catalog_validation
+     ProfCard/SubForms/check_double_read
+     ProfCard/SubForms/second_step_check
+
+Список вызываемых форм в JS:
+     Persmedcard/persmedcard_edit.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     ProfCard/profcard_edit.frm
+     ProfCard/pc_first_step_select.frm
+
+SQL ЗАПРОСЫ (21):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PROF_CARD_MODELS
+    D_V_PROF_CARD_BASE
+    D_V_PROF_CARD_SERVICES
+    D_V_VISITS
+    D_V_PC_CLOSE_REASONS
+    D_V_PROF_CARD
+    D_V_CONTR_AMI_DIRECTS
+    D_V_SINFO_SET_PARAMS
+    D_V_SIGNAL_INFO_SETS
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENTS_BASE
+    D_V_PROF_CARD_DIR_SERVS
+    D_V_DIRECTION_SERVICES
+    D_V_PROF_CARD_SERVICES_BASE
+    D_V_PROF_CARD_DIR_SERVS_BASE
+    D_V_DIR_SERV_PAYMENTS
+    D_V_CONTRACT_PAYMENTS_BASE
+    D_V_PAYMENT_KIND
+    D_V_CONTRACTS
+    D_V_PERSMEDCARD_FIO
+    D_V_AGENT_WORK_PLACES
+    D_V_CATALOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_JOBTITLES
+    D_VISITPURPOSES
+    D_PAYMENT_KIND
+    D_SERVICES
+    D_PROF_CARD_MODELS
+    D_PROF_CARD_TYPES
+    D_PROF_CARD
+    D_PC_SERV_STATES
+    D_DEPS
+    D_CABLAB
+    D_PROF_CARD_DIR_SERVS
+    D_VISITS
+    D_PROF_CARD_SERVICES
+    D_SERVTYPES
+    D_DIRECTION_SERVICES
+    D_PC_CLOSE_REASONS
+    D_LPU
+    D_PERSMEDCARD
+    D_AGENTS
+    D_CONTRACTS
+    D_EMPLOYERS
+    D_PATIENTS_DGROUP
+    D_DECRETIV_GROUPS
+    D_PC_RESULTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_SINFO_SET_PARAMS
+    D_SIGNAL_INFO_SETS
+    D_ICONS
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_REFERENCE_KINDS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_DIR_SERV_PAYMENTS
+    D_CONTRACT_PAYMENTS
+    D_CONTRACT_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_RAIONS
+    D_AGENT_DEPS
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_CATALOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_PROF_CARD.EXIST_DISP_CHILD_AGE_CAT
+    D_PKG_PROF_CARD_MODELS.CHECK_FIRST_PERIOD
+    D_PKG_STD.TREF
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_PROF_CARD.CLOSE_PROF_CARD
+    D_PKG_PROF_CARD.OPEN_PROF_CARD
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_BPENV.AFTERBP
+    D_PKG_CONTRACTS.SET_END_DATE
+    D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+    D_PKG_CATALOGS.FIND_ROOT_CATALOG
+    D_PKG_CATALOGS.GET_ID_BY_NAME
+    D_PKG_DAT_TOOLS.FULL_YEARS
+
+КОНСТАНТЫ:
+    TERAP
+    CloseContract
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckCloseProfCard
+    CheckPCAge
+    PC_CheckOpenProfChild
+    PC_CLOSE_REASONS
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="PROF_CARD_MODELS" composition="GRID"
+    unit="CATALOGS" composition="DEFAULT"
+    unit="PERSMEDCARD" composition="PMC"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:PROF_CARD_MODELS  composition:GRID;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 21
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: checkOpenProfChild
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getFirstStepPcIdByNumber
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkLastService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkFirstPeriod
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getProfCardTypeData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: reCloseProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: returnreCloseProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: returnProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getFirstStepData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkVisitPurpose_getAmiDir
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: actCheckPCAge
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setContractDateEnd
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: Patient_FIO_Search
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CATALOG
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CONTRACT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_VP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getStringFullYears
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: validatePcModels
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_COMPLETER_PC_MODELS_1
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/contract_finansource_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/contract_finansource_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_FINANSOURCES
+    D_V_CONTRACTS_BASE
+    D_V_CONTRACT_FINANSOURCE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FINANSOURCES
+    D_CONTRACTS
+    D_AGENTS
+    D_CONTRACT_FINANSOURCE
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DAT_TOOLS.DATE_RANGES_ERROR
+    D_PKG_NUM_TOOLS.TO_STR
+
+БРОКЕРЫ:
+    unit:CONTRACT_FINANSOURCE;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 4
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_PARAMS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ACT_SAVE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsFinansources
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_filter.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_filter.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Persmedcard/persmedcard_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Persmedcard/persmedcard_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAltay =====
+        КАТАЛОГ: UserFormsAltay/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Persmedcard/persmedcard_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        КАТАЛОГ: UserFormsKhabarovsk/Persmedcard/persmedcard_edit.d
+            └── data.dfrm
+            └── foms_request.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        КАТАЛОГ: UserFormsMoscowNIIBlohina/Persmedcard/persmedcard_edit.d
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsNiiSerb =====
+        КАТАЛОГ: UserFormsNiiSerb/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/Persmedcard/persmedcard_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsRKOD =====
+        КАТАЛОГ: UserFormsRKOD/Persmedcard/persmedcard_edit.d
+            └── remove_from_registry.dfrm
+
+     ===== UserFormsSakhalin =====
+        КАТАЛОГ: UserFormsSakhalin/Persmedcard/persmedcard_edit.d
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/Persmedcard/persmedcard_edit.d
+            └── persmedcard_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/base
+     Agents/subscript/zaprossnils
+     Agents/subscript/enrichRequestCall
+     Persmedcard/anonym/anonym
+     Agents/subscript/accuracyDateCheck
+     Int/MedicBk/api
+     Persmedcard/subforms_fields/is_emp
+     Agents/subforms_view/polis_oms
+     Agents/subforms_view/polis_dms
+     Persmedcard/subforms_view/registration
+     Persmedcard/subforms_view/application
+     Agents/subforms_view/social_state
+     Persmedcard/subforms_view/special_case
+     Agents/subforms_view/orphan_category
+     Agents/subforms_view/agent_ability
+     Agents/subforms_view/contingent
+     Persmedcard/subforms_view/life_categories
+     Persmedcard/subforms_view/mobility_group
+     Persmedcard/subforms_view/const_care
+     Agents/subforms_view/contact
+     Persmedcard/subforms_fields/antro
+     Agents/subforms_view/consitution
+     Agents/subforms_view/pregnancy
+     Vimis/agentMonitoringVimis/agentMonitoringVimis
+     Agents/subforms_view/persdocs
+     Agents/subforms_view/addr
+     Agents/subforms_view/orphan_place
+     Agents/subforms_view/marital_state
+     Agents/subforms_view/agent_relatives_docs
+     Agents/subforms_view/agent_details
+     Agents/subforms_view/work_place
+     Agents/subforms_view/agent_lgot_tabs
+     Persmedcard/subforms_view/CAMI
+     Agents/subforms_view/decretiv_group
+     Agents/subforms_view/gr_vaccination
+     Agents/subforms_view/gr_rentgenograph
+     Agents/subforms_view/flu
+     Agents/subforms_view/names
+     Agents/subforms_fields/death
+     InformedAgreement/Patient/patient_ia_tab
+     Agents/subforms_fields/allergic_anamnes
+     Agents/subforms_fields/trf_anamnesis
+     Agents/subforms_fields/monitoring_indication_of_diagnoses
+     Agents/subforms_fields/PmcVaccinations
+     Markers/pmc_markers
+     Agents/subforms_fields/bad_habits
+     Agents/subforms_fields/inherited_diseases
+     Agents/subforms_fields/infertility
+     Agents/agent_gynec/agent_gynec_contraception
+     Agents/subforms_fields/medical_reports
+
+Список вызываемых форм в JS:
+     Persmedcard/pmc_regional_privs/pmc_regional_privs_edit.frm
+     NosRegistrs/registr_ssz.frm
+     Agents/agent_relatives/agent_relatives_add.frm
+     Agents/subforms_fields/data_from_edit.frm
+     /Forms/MentalHistory/mental_history.frm
+
+SQL ЗАПРОСЫ (24):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_FED_NATIONALITIES
+    D_V_EX_SYSTEMS
+    D_V_EX_SYSTEM_VALUES
+    D_V_PERSMEDCARD
+    D_V_INSURANCE_COMPANIES_BASE
+    D_V_GEOGRAFY_BASE
+    D_V_AGENT_PERSDOCS
+    D_V_PERSDOCTYPES
+    D_V_COUNTRIES
+    D_V_PERSMEDCARD_EXTERNAL_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_COUNTRIES_BASE
+    D_V_AGENT_ADDRS
+    D_V_GEOGRAFY
+    D_V_AGENT_CONTACTS_BASE
+    D_V_NR_PATIENTS
+    D_V_NR_REMOVE_REASONS
+    D_V_NOS_REGISTRS
+    D_V_R_SSZ_OUT
+    D_V_AGENTS_BASE
+    D_V_BJ_BULLETIN_CONTENTS_BASE
+    D_V_ZNO_DATA
+    D_V_ZNO_DATA_REGISTR_OUT
+    D_V_PMC_BLOODGROUPE_CHRON_BASE
+    D_V_AGENT_POLIS_BASE
+    D_V_AGENT_GYNEC
+    D_V_AGENT_PSY_ANAMNESIS
+    D_V_LPU_BASE
+    D_V_URPRIVS
+    D_V_AGENT_ORPH_CATEGORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FED_NATIONALITIES
+    D_EX_SYSTEMS
+    D_EX_SYSTEM_VALUES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_INSURANCE_COMPANIES
+    D_GEOGRAFY
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_COUNTRIES
+    D_NORESIDENT_STATUS
+    D_MASKS
+    D_PERSMEDCARD_EXTERNAL
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_GEOGRAFYTYPES
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_NR_PATIENTS
+    D_NOS_REGISTRS
+    D_LPUDICT
+    D_MKB10
+    D_NR_REMOVE_REASONS
+    D_R_SSZ_OUT
+    D_BJ_BULLETIN_CONTENTS
+    D_ZNO_DATA
+    D_ONKO_AFFECTED_SIDE
+    D_ONKO_MULTI_PRIM
+    D_ONKO_CIRCUMSTANCES
+    D_ONKO_MORPH_TYPES
+    D_ONKO_TNM_T
+    D_ONKO_TNM_N
+    D_ONKO_TNM_M
+    D_ONKO_STAGES
+    D_JOBTITLES
+    D_ONKO_REGISTR_KINDS
+    D_ZNO_DATA_CL_GROUPS
+    D_ONKO_DIFFERENTIATION
+    D_ONKO_CLINICAL_GROUPS
+    D_ONKO_MORPH_TYPES_ICDO3
+    D_ONKO_TOPIC_TYPES_ICDO3
+    D_ONKO_TUMOR_STATUSES
+    D_ONKO_FORM_CRIZ
+    D_ONKO_MIELPHASES
+    D_R_ONKO_GIST_GROUPS
+    D_ICCC_3
+    D_R_ONKO_VISIT_CAUSE
+    D_SOURCE_MED_INF
+    D_CHAR_PROCESS_DIS
+    D_ONKO_CLASSIFICATION
+    D_ONKO_ANAT_LOCAL
+    D_R_ONKO_TNM_EXTRA
+    D_ONKO_LATERALITY
+    D_ONKO_LAB_RESEARCH
+    D_ZNO_DATA_REGISTR_OUT
+    D_PMC_BLOODGROUPE_CHRON
+    D_AGENT_POLIS
+    D_AGENT_GYNEC
+    D_DIRECTORIES_DATA_VER
+    D_AGENT_PSY_ANAMNESIS
+    D_LPU
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+    D_AGENT_ORPH_CATEGORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_STD.FRM_D
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.SET_VAL
+    D_PKG_NR_REQUEST.ADD
+    D_PKG_R_SSZ_OUT.ADD
+    D_PKG_NR_REQUEST.UPD
+    D_PKG_R_SSZ_OUT.UPD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB_UNKNOWN
+    D_PKG_PERSMEDCARD.DEL_CARD_NUMB_UNKNOWN
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_PERSMEDCARD.CHECK_ALL
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+    D_PKG_AGENT_PSY_ANAMNESIS.GET_LAST
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_URPRIVS.CHECK_EMP_BPPRIV
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_VIEW_EMPLOYERS_ACTION.ADD
+    D_PKG_AGENT_POLIS.ADD
+    D_PKG_USERS.GET_ID
+    D_PKG_PMC_CARD_LOCATIONS.ADD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB
+    D_PKG_PERSMEDCARD.UPD_FULL
+    D_PKG_STD.FRM_DT
+    D_PKG_PERSMEDCARD.SGCC_MESSAGE
+    D_PKG_PERSMEDCARD.UPD_ANTHRO
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PMC_GEN_NUMB_UNKNOWN
+    PMC_UPD_UNKNOWN
+    SszAutoCloseNoticeDeath
+    AgentInfChangeLN
+    AgentFIOadd
+    TransferENP
+    AgentDeathDateCheck
+    ShowSignByAge
+    GenAnonimNumb
+    AgentAddrIsReg
+    GenEmployersNumb
+    hideFERZLButton
+    MaxAllowAge
+    WEBIOMED_hide
+    MedicBK_hide
+    VisibleStatusLgot
+    IntegrationEnabled
+    CheckFor_UNKNOWN
+    CheckPMC_SNILS
+    FrlloManualSend
+    PmcGetPolicOMC
+    AgnPersDocsCitizCheck
+    SpecLpuType
+    hideInfoMax
+    LogEmployersAction
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="GEOGRAFY" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:PMC_REGIONAL_PRIVS  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+    D_P_EXC
+    D_INSERT_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 25
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: checkRepAgent
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkAgentMoscowPolic
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AgnPersDocsCitizCheck
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getOIP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPersDocValues
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: saveErzlValues
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPmcGenNumbUnknownAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPmcUpdUnknownAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: saveDeath
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkSszAutoCloseNoticeDeath
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCardNumbUnknownAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: delCardNumbUnknownAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkSOInfEdit
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkNosRegistr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: A_regionalPrivsDelete
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getAgentFioAdd
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: executeAllChecks
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InitAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getActualPolisOMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPolisOMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SetNewCardLocation
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CARD_NUMB
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UPDATE_FULL
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UPDATE_ANTHRO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_NATIONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/MedCard/025y_2025.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/MedCard/025y_2025.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Reports/UniversalDataSets/visit
+     Reports/UniversalDataSets/visit_hh
+     Reports/UniversalDataSets/visit_dirs
+     Reports/UniversalDataSets/visit_physiotherapy
+     Reports/UniversalDataSets/visit_recipe
+     Reports/UniversalDataSets/visit_bull
+     Reports/UniversalDataSets/nazn_by_visit
+     Reports/UniversalDataSets/visit_nazn
+     Reports/UniversalDataSets/agent
+     Reports/UniversalDataSets/persmedcard
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (23):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_COUNTRIES_BASE
+    D_V_AGENT_CONTACTS_BASE
+    D_V_GEOGRAFY
+    D_V_AGENT_INABILITIES
+    D_V_DIRECTORIES_FN_DATA
+    D_V_AGENT_PALLIATIVE_BASE
+    D_V_PERSMEDCARD
+    D_V_AGENT_ADDRS
+    D_V_AGENT_POLIS
+    D_V_AGENT_PERSDOCS
+    D_V_AGENT_SOCIAL_STATES
+    D_V_AGENT_RELATIVES
+    D_V_AGENT_WORK_PLACES
+    D_V_AGENT_FEDERAL_PRIVS
+    D_V_CONTROL_CARD
+    D_V_DISEASECASES
+    D_V_EMPLOYERS
+    D_V_HOSP_HISTORIES_BASE
+    D_V_VISITS_BASE
+    D_V_VIS_DIAGNOSISES_BASE
+    D_V_RHESUS
+    D_V_BLOODGROUPE
+    D_V_PMC_BLOODGROUPE_CHRON_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENT_ALLERG_ANAMNESIS
+    D_V_AGENT_AA_REACTIONS
+    D_V_AGENT_CONSITUTIONS_BASE
+    D_V_AGENT_CONSITUTION_SPS
+    D_V_MKB10
+    D_V_BJ_BULL_CONT_EXTS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_BJ_BULLETIN_CONTENTS
+    D_V_MP_PRESCRIBES
+    D_V_EMPLOYERS_FIO
+    D_V_RECIPS_COMM
+    D_V_RECIPS_COMM_SPECS
+    D_V_PMC_INF_AGREEMENT_BASE
+    D_V_TYPE_INF_AGREEMENT
+    D_V_KIND_INF_AGREEMENT
+    D_V_SERVICES_BASE
+    D_V_FORM30_SERVICES
+    D_V_LPU_BASE
+    D_V_MKB10_BASE
+    D_V_DISEASECASES_BASE
+    D_V_SERV_DOSE_INFLUENCE
+    D_V_DIRECTION_SERVICES
+    D_V_VISITS
+    D_V_LABMED_PATJOUR_BASE
+    D_V_LABMED_RSRCH_JOUR_BASE
+    D_V_LABMED_RSRCH_JOURSP
+    D_V_LABMED_RSRCH_JOUR
+    D_V_CERT_CONDEATH_STATUSES
+    D_V_CF_DEATH_CONTENTS_BASE
+    D_V_CERTIFICATE_FORMS_BASE
+    D_V_LPU
+    D_V_CF_DEATH_CAUSES_BASE
+    D_V_MEDICAL_COMMISSIONS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_COUNTRIES
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_GEOGRAFY
+    D_GEOGRAFYTYPES
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_LPUDICT
+    D_DIRECTORIES_FN_DATA
+    D_AGENT_PALLIATIVE
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_AGENT_POLIS
+    D_INSURANCE_COMPANIES
+    D_AGENT_POLIS_KINDS
+    D_AGENT_PERSDOCS
+    D_PERSDOCTYPES
+    D_NORESIDENT_STATUS
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_SOCIALCATEGORIES
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_REPRESENT_LSTATUSES
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_AGENT_DEPS
+    D_JOBTITLES
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_AGENT_FEDERAL_PRIVS
+    D_PRIVILEGES
+    D_FLR_VERSION
+    D_CONTROL_CARD
+    D_MKB10
+    D_DISP_PLAN
+    D_NR_REMOVE_REASONS
+    D_DISEASECASES
+    D_DISCASES_DISCOVER
+    D_CONTROL_CARD_GROUPS
+    D_NOS_REGISTR_TYPES
+    D_NOS_REGISTRS
+    D_PATIENTS_DGROUP
+    D_CC_DEATH_REASON
+    D_DISEASECASE_TYPES
+    D_DC_SOURCES
+    D_MESES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_HOSP_HISTORIES
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_PMC_BLOODGROUPE_CHRON
+    D_AGENT_ALLERG_ANAMNESIS
+    D_ATX
+    D_NOMBASE_MNN
+    D_NOMBASE
+    D_MED_FORMS
+    D_ALLERG_POWER
+    D_ALLERG_ANAMNESIS_TYPES
+    D_AGENT_AA_REACTIONS
+    D_AGENT_CONSITUTIONS
+    D_CONSTITUTIONS
+    D_RES_INTERPRETATION
+    D_AGENT_CONSITUTION_SPS
+    D_ANTHROP
+    D_MEASURES
+    D_LATERALITY
+    D_BJ_BULL_CONT_EXTS
+    D_DIRECTION_SERVICES
+    D_BJ_BULLETIN_CONTENTS
+    D_DISABILITY_TYPES
+    D_BJ_BULLETINES
+    D_BULLETIN_JOURNALS
+    D_BULL_RESULTS
+    D_DIRECTORIES_DATA_VER
+    D_BULLETIN_STATES
+    D_MP_TYPES
+    D_DOSE_MEASURES
+    D_MP_CONDITIONES
+    D_MP_ADD_ATTRIBUTES
+    D_REASON_CANCEL_PRESCRIBE
+    D_HOSP_HISTORY_DEPS
+    D_MP_PRESCRIBES
+    D_NOMMODIF
+    D_MP_DESCRIBES
+    D_MED_USE_METHODS
+    D_RECIPS_COMM
+    D_REC_EXPPERIOD
+    D_RECIPS_COMM_SPECS
+    D_MNN_FED_PRIV
+    D_MED_USE_METHOD
+    D_PERIOD_RELEASE_OF_MED
+    D_TRN_FED_PRIV
+    D_MEDS
+    D_OKEI_MEARURES
+    D_PMC_INF_AGREEMENT
+    D_TYPE_INF_AGREEMENT
+    D_REPORTS
+    D_SERVICES
+    D_TYPE_MEDCARE
+    D_KIND_INF_AGREEMENT
+    D_FORM30_SERVICES
+    D_SERV_DOSE_INFLUENCE
+    D_MEAS_CATEGORIES
+    D_SERVICES_STR
+    D_VISITKINDS
+    D_VISITPURPOSES
+    D_REFERENCE_KINDS
+    D_DIRECTIONS
+    D_REG_TYPES
+    D_DS_SERV_STATUSES
+    D_SCHEDULE_TIME_TYPES
+    D_PAYMENT_KIND
+    D_LABMED_PATJOUR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_FLR.GET_FEDD_PRIVS_STR
+    D_PKG_AGENT_ALLERG_ANAMNESIS.GET_BY_STRING
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_NUM_TOOLS.TO_STR
+    D_PKG_VISIT_FIELDS.GET_VALUE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ManualAddrPrint025
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+    D_F_REP_GET_TMP_ADDR_025
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 23
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: getPersmedcard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getLpuData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getLists
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getSysdate
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsList1
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsControlCardList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsDiseasecasesList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsBloodgroupeChronList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsAllergReactionsList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsAllergAnamnesisList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsConsitutionsList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsExMkbNameList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsVisitBullList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsPrescribesList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsInfAgreementList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsResearchConsultList
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsCurrVisitEmployer
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsHospHistMKB
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsDcServices
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsServDose
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsZaklVisits
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsLabmedRes
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsDeathContents
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     UniversalForms/multilined_control
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PROF_CARD
+    D_V_PERSMEDCARD
+    D_V_PROF_CARD_BADFACTORS
+    D_V_PROF_CARD_BASE
+    D_V_PERSMEDCARD_FIO
+    D_V_PROF_CARD_RECOMMEND
+    D_V_MKB10
+    D_V_PROF_CARD_SERVICES
+    D_V_VISITS
+    D_V_VIS_DIAGNOSISES
+    D_V_VISITS_BASE
+    D_V_VISIT_FIELDS_BASE
+    D_V_VISIT_TAB_FIELDS_BASE
+    D_V_CONTRACTS_BASE
+    D_V_LPU_BASE
+    D_V_CONTRACTS
+    D_V_LPU
+    D_V_AGENTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PROF_CARD
+    D_LPU
+    D_VISITPURPOSES
+    D_PAYMENT_KIND
+    D_PERSMEDCARD
+    D_AGENTS
+    D_JOBTITLES
+    D_CONTRACTS
+    D_EMPLOYERS
+    D_PATIENTS_DGROUP
+    D_PROF_CARD_TYPES
+    D_DECRETIV_GROUPS
+    D_PC_CLOSE_REASONS
+    D_PC_RESULTS
+    D_CABLAB
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_PROF_CARD_BADFACTORS
+    D_PROF_CARD_RECOMMEND
+    D_RECOMMENDATIONS
+    D_SPECIALITIES
+    D_RECOM_DIR
+    D_MED_CARE_PROFILES
+    D_BED_TYPES
+    D_LPUDICT
+    D_SERVICES
+    D_MKB10
+    D_PC_SERV_STATES
+    D_DEPS
+    D_PROF_CARD_DIR_SERVS
+    D_VISITS
+    D_PROF_CARD_SERVICES
+    D_SERVTYPES
+    D_DIRECTION_SERVICES
+    D_VIS_DIAGNOSISES
+    D_DISEASECHARACTERS
+    D_INJURE_KINDS
+    D_DISEASE_STAGES
+    D_CL_OBSERV_CATEGORIES
+    D_DIAGNOSIS_TYPES
+    D_DIAGNOSIS_STAGES
+    D_RISAR_STAGES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+    D_PKG_PROF_CARD.GET_REP_BF_RESULT
+    D_PKG_UNITPROPS.GET_NVAL
+    D_PKG_DAT_TOOLS.DATE_TO_CHAR
+    D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+
+КОНСТАНТЫ:
+    MO_PK
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: getDefaultParams
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getHeaderInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem7
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem9
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem11
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem13
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem14
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem15
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsItem15_2
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/ProfCard/profcard_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/ProfCard/profcard_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/ProfCard/profcard_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/ProfCard/profcard_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/ProfCard/profcard_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     netrika/external_result_pdf
+     ProfCard/SubForms/prof_card_tabs_data
+     ProfCard/SubForms/contraindications_weapons
+     ProfCard/SubForms/font_weight_tabs
+     EDF/docsForSignAuto
+     ProfCard/SubForms/check_double_read
+     ControlCard/subforms/check_valid_dates
+     ProfCard/SubForms/second_step_check
+     ProfCard/SubForms/prof_card_gai_arms
+     ProfCard/prof_card_services_popup
+     ProfCard/return_MSE_talon_subform
+     ProfCard/profcard_edit_subforms/harmful_factors
+     ProfCard/profcard_edit_subforms/contraindications
+     ProfCard/profcard_edit_subforms/risk_factors
+     ProfCard/profcard_edit_subforms/health_status
+     ProfCard/profcard_edit_subforms/recommendations
+     ProfCard/profcard_edit_subforms/conclusion
+     ProfCard/profcard_edit_subforms/conclusion_harmful_factors
+     ProfCard/profcard_edit_subforms/appointments
+     ProfCard/SubForms/status_after_before
+     ProfCard/profcard_edit_subforms/health_status_before
+     ProfCard/SubForms/orphan_directories_data
+     ProfCard/profcard_edit_subforms/health_status_after
+     ProfCard/profcard_edit_subforms/conclusion_traffic_police
+     ProfCard/profcard_edit_subforms/services
+     ProfCard/profcard_edit_subforms/contracts
+     ProfCard/profcard_edit_subforms/prof_card_print_reports
+     EHR/simple_ehrdocs_form
+     footerStyle
+
+Список вызываемых форм в JS:
+     Components/Grid/profile.frm
+     ProfCard/services_direction_MSI.frm
+     Lis/Dirline/dirline_order_alt.frm
+     ProfCard/pc_healthgroups_show.frm
+     ProfCard/return_ticket_load.frm
+     Lis/Citology/direction_order.frm
+     Persmedcard/persmedcard_edit.frm
+     ProfCard/pc_pass_select.frm
+     Registry/reg_lpu_ds.frm
+     Registry/reg_select_time_short.frm
+     Registry/reg_prescr.frm
+     Registry/reg_select_lpu.frm
+     ProfCard/pc_first_step_select.frm
+     ProfCard/pc_recommendations.frm
+     ProfCard/prof_card_model_add.frm
+     ProfCard/prof_card_mass_write.frm
+     UniversalTemplate/UniversalTemplate.frm
+     GenRegistry/reg_lpu_ds.frm
+     GenRegistry/reg_select_time_full.frm
+     GenRegistry/reg_full.frm
+     ProfCard/pc_serv_other_results_edit.frm
+     ProfCard/current_contracts.frm
+     Labmed/labmed_analize_new.frm
+     Visit/vimis_routing_rejection.frm
+     ProfCard/pc_check_early_services.frm
+     EHR/simple_ehrdocs_form.frm
+     Reports/Visit/PrintVisit_mass.frm
+     Reports/ProfCard/pc_conclusion.frm
+     Reports/ProfCard/pc_passtitle.frm
+     Reports/Dir/msek_napravlenie.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        Reports/ProfCard/med_cert_086y_A5_call.frm;
+        Reports/ProfCard/conclusion_clinical_emp_call.frm;
+        Reports/ProfCard/med_cert_086y_call.frm;
+        Reports/PatientAgreement/IA_CALL.frm;
+        Visit_mass (WEB-форма) Reports/Visit/PrintVisit_mass.frm;
+        prof_card_conclusion (WEB-форма) Reports/ProfCard/pc_conclusion.frm;
+        prof_card_passtitle (WEB-форма) Reports/ProfCard/pc_passtitle.frm;
+        prof_card_kek;
+        msek_napravlenie (WEB-форма) Reports/Dir/msek_napravlenie.frm;
+
+SQL ЗАПРОСЫ (56):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PC_VISITING_TEAMS
+    D_V_PC_ORPHAN_BEFORE_DISP
+    D_V_VISITS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_PC_ORPHAN_AFTER_DISP
+    D_V_PROF_CARD_MODELS_SR
+    D_V_PROF_CARD_SERVICES_DS
+    D_V_PATIENTS_DGROUP_BASE
+    D_V_PATIENT_DGROUP_PCTS_BASE
+    D_V_PROF_CARD_CONCLUSIONS_BASE
+    D_V_PC_CONCLUSIONS
+    D_V_PC_SERV_OTHER_RESULTS
+    D_V_EHRS_BASE
+    D_V_EHR_STATES_BASE
+    D_V_INT_HL7V3_MSGS
+    D_V_PC_SERV_OTHER_RESULTS_ATOV
+    D_V_PROF_CARD_SERVICES_BASE
+    D_V_MEDICAL_COMMISSIONS
+    D_V_DISPS_SERVICES
+    D_V_PROF_CARD_BASE
+    D_V_DISEASECASES_BASE
+    D_V_AMB_TALONS_BASE
+    D_V_AMB_TALON_VISITS_BASE
+    D_V_SERVICES_STR
+    D_V_PROF_CARD_TYPES_BASE
+    D_V_PROF_CARD_CONCLUSIONS
+    D_V_PAYMENT_KIND_BASE
+    D_V_DIRECTORIES_DATA_VER
+    D_V_VISITPURPOSES
+    D_V_PROF_CARD_TYPES
+    D_V_PROF_CARD_TYPE_CRS
+    D_V_PAT_DGR_RESULTS_BASE
+    D_V_RESULTS_PCTS
+    D_V_PC_RESULTS
+    D_V_EX_SYSTEMS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_PC_ORPHAN_AFTER_DISP_BASE
+    D_V_PC_CLOSE_REASONS
+    D_V_PROF_CARD_RECOMMEND_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENT_REGISTRATION_BASE
+    D_V_PROF_CARD_SERVICES_EX
+    D_V_PERSMEDCARD_FIO
+    D_V_EMPLOYERS_FIO
+    D_V_LPU_BASE
+    D_V_PROF_CARD_DIR_SERVS_BASE
+    D_V_CONTRACTS_BASE
+    D_V_CATALOGS
+    D_V_PROF_CARD
+    D_V_CONTRACTS
+    D_V_EMPLOYERS
+    D_V_AGENT_WORK_PLACES
+    D_V_AGENT_DECRETIV_GROUPS
+    D_V_PC_ORPHAN_HEALTH
+    D_V_PC_HEALTH_DISORDERS
+    D_V_MOC_CONTENTS
+    D_V_MO_CERTIFICATE_FORMS
+    D_V_MOC_CONTENT_CONCLUSIONS
+    D_V_MOC_CONTENT_INDICATIONS
+    D_V_MOC_CONTENT_RESTRICTIONS
+    D_V_MOC_CONTENTS_ARMS
+    D_V_LOGS_MEDICAL_FORMS
+    D_V_MOCJ_EMPLOYERS
+    D_V_AGENTS_BASE
+    D_V_DECRETIV_GROUPS
+    D_V_AGENT_INABILITIES
+    D_V_PROF_CARD_SERVICES
+    D_V_DISP_SERVICES_BASE
+    D_V_VISITPURPOSES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PC_VISITING_TEAMS
+    D_DIRECTORIES_DATA_VER
+    D_PC_ORPHAN_BEFORE_DISP
+    D_VISITS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_PC_ORPHAN_AFTER_DISP
+    D_SERVICES_STR
+    D_PROF_CARD_MODELS_SR
+    D_PERIOD_VIEW
+    D_DEPS
+    D_CABLAB
+    D_SERVTYPES
+    D_LABMED_DIRECTION_LINE
+    D_LBM_DIRLINE_STATUSES
+    D_VISIT_FIELDS
+    D_VISIT_TAB_FIELDS
+    D_ADD_DIR_VALUES
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_AMB_TALON_OTHER_VISITS
+    D_PC_SERV_OTHER_RESULTS
+    D_DIRECTIONS
+    D_OUTER_DIRECTIONS
+    D_LPU
+    D_LPUDICT
+    D_LABMED_PATJOUR
+    D_LABMED_RSRCH_JOUR
+    D_LABMED_RSRCH_JOURSP
+    D_LABMED_RESEARCH_RES
+    D_MEASURES
+    D_PROF_CARD_SERVICES
+    D_PROF_CARD_DIR_SERVS
+    D_EMPLOYERS
+    D_AGENTS
+    D_PROF_CARD
+    D_DISP_SERVICES
+    D_DISPS_SERVICES
+    D_LBM_SAMPLE_DIRLINE
+    D_LABMED_SAMPLES
+    D_PROF_CARD_TYPES
+    D_PROF_CARD_CONCLUSIONS
+    D_PC_CONCLUSIONS
+    D_PATIENTS_DGROUP
+    D_PATIENT_DGROUP_PCTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_RESEARCH_RESULTS.GET_EX_RESULT_PDF
+    D_PKG_PROF_CARD.GET_PC_OBR_FILTER_SERVICE
+    D_PKG_EX_SYSTEMS.GET_ID_BY_CODE
+    D_PKG_PROF_CARD.EXIST_DISP_CHILD_AGE_CAT
+    D_PKG_EDF_TOOLS.CHECK_BEFORE_EDIT_MED_EVENT
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_AGENT_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_STD.TREF
+    D_PKG_MSG.RECORD_NOT_FOUND
+    D_PKG_PROF_CARD.CLOSE_PROF_CARD
+    D_PKG_STD.TLSTR
+    D_PKG_DAT_TOOLS.AGE_TO_STR
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_PROF_CARD.GET_RECOMENDATION
+    D_PKG_PROF_CARD.SET_REC_HEALTH_GROUP
+    D_PKG_VISITS.GET_TEMPLATE_INFO
+    D_PKG_PROF_CARD_SERVICES.ADD
+    D_PKG_PROF_CARD.UPD
+    D_PKG_PROF_CARD_SERVICES.DEL
+    D_PKG_DISEASECASES.SET_CLOSE
+    D_PKG_AMB_TALONS.SET_CLOSE
+    D_PKG_PROF_CARD.OPEN_PROF_CARD
+    D_PKG_CMP.NUM
+    D_PKG_CMP.STR
+    D_PKG_PC_ORPHAN_BEFORE_DISP.UPD
+    D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_DECRETIV_GROUPS.GET_ACTUAL_ON_DATE
+    D_PKG_PROF_CARD.GET_DATE_E
+    D_PKG_STD.FRM_D
+    D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+    D_PKG_PROF_CARD.GET_EKG_STATUS
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_PROF_CARD.GET_PCT
+    D_PKG_PROF_CARD_DIR_SERVS.ADD
+
+КОНСТАНТЫ:
+    EKG_FOR_DISP
+    TERAP
+
+СИСТЕМНЫЕ ОПЦИИ:
+    UpdateSSR
+    CDAServActMedSocExam
+    RemdEnabled
+    ReturnCdasForNetrica
+    PCRecommendNotNull
+    ProfCard_ShowTablePercent
+    PC_CheckOpenProfChild
+    ProfCardTypeLock
+    ExcludeProfCardTypeTemplate
+    EditProfService
+    ProfCardCreateSecondStep
+    RequiredSerNum
+    Prof_Card_Conclusions
+    ProfCardInstVisit
+    PC_CHANGE_PROHIBITION
+    EKG_FOR_DISP
+    CheckCloseProfCard
+    CloseProfCard
+    ProfCardCloseControl
+    NoCloseProfcard
+    LPUServiceStr
+    CheckEhrsIconsEnabled
+    LabDirLineEnabled
+    NecessaryVisitingTeam
+    LisDefaultDirButton
+    LISCitDirButton
+    PCButtonCheckServices
+    ToggleSecurityEDF
+    ProfCardServsAddFilter
+    ProfCardTypesCheckEMDO
+    MSE_CheckVisit
+    ProfCardServMse
+    PROF_CARD
+    GRD_ID
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="VISITPURPOSES" composition="DEFAULT_NAME"
+    unit="PERSMEDCARD" composition="PMC"
+    unit="EMPLOYERS" composition="SELECT_ID"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:Form.unitEditFields[ctrlName].unit  composition:Form.unitEditFields[ctrlName].composition;
+
+БРОКЕРЫ:
+    unit:PROF_CARD  action:ADD_ALL_SERVS;
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:PROF_CARD  action:OPEN_PROF_CARD;
+    unit:PROF_CARD  action:GEN_DOCNUMB;
+    unit:PC_ORPHAN_BEFORE_DISP  action:DELETE;
+    unit:PC_ORPHAN_AFTER_DISP  action:DELETE;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_F_GET_LABMED_EHRS
+    D_F_GET_DIR_SERV_LABMED
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 61
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getDefaultParams
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getFirstStepPcIdByNumber
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkOpenProfChild
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getEmdoData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkAccessToExSystems
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getAmiDir
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddAllServ
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkHaveHistPC_ORDB
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getSERVICE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefResultClinicExamin
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertDirServGroupRisk
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkExistReestr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CHECK_RECOMMEND_EXIST
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkAttachedUser
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ACT_CHECK_APPROVEMENT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkEditProfService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: updHG
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: reCloseProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: returnreCloseProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkProfCardServices
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: init
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: FinalService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: FinalServiceEnd
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: returnProfCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getProfCardStep
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getSecondStepData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getFirstStepData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getContractDate
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RootCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertUpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: OPEN_PROF_CARD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getSYS_DATE_AND_EMPLOYER
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ContractInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkServs
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: Patient_FIO_Search
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetPCNumb
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetPCNumbVar
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getStringFullYears
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getProfCardModel
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CHECK_EKG
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkLastService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CheckBeforeCloseCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ChServ
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PCT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsProfCardServ
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddProfCardServMSI
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: validateVisitPurpose
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_VISITING_TEAMS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_ORPHAN_BEFORE_DISP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_ORPHAN_AFTER_DISP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_SERVICES_SORT_TEMPLATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HEALTHGROUP
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PROF_CARD_SERVICES_GRID
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsPaymentKind
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: dsPcPlacesData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_COMPLETER_VISIT_PURPOSE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PC_CLOSE_REASONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RESULT_CLINIC_EXAMIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_edit.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/HomeCalls/home_call_edit.d
+            └── home_call_edit.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/HomeCalls/home_call_edit.d
+            └── form.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/HomeCalls/home_call_edit.d
+            └── dopinfo.dfrm
+
+     ===== UserFormsVolgograd =====
+        КАТАЛОГ: UserFormsVolgograd/HomeCalls/home_call_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     Registry/PmcSearch/search_patient
+     Registry/PmcSearch/patient_info
+
+Список вызываемых форм в JS:
+     HomeCalls/home_call_question.frm
+     Reception/select_price.frm
+     HomeCalls/home_call_pass.frm
+     services/select_by_in_lpu.frm
+     Directions/select_contract_by_pk.frm
+     Directions/select_patient_ami_directs.frm
+     Reg/select_discounts.frm
+     HomeCalls/home_call_set_state.frm
+
+SQL ЗАПРОСЫ (28):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_INITS
+    D_V_HOME_CALL_CAUSES
+    D_V_HOME_CALL_TYPES
+    D_V_DIR_REG_TYPES
+    D_V_PERSMEDCARD
+    D_V_LPU
+    D_V_QUOTA_GROUPS
+    D_V_DISEASECASES_OPEN
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_PAYMENT_KIND_BASE
+    D_V_SERVICES_PAYS_BASE
+    D_V_SOCIALSTATE_PAYS
+    D_V_HOME_CALL_BULLETINES
+    D_V_SERVICES
+    D_V_AGENTS_BASE
+    D_V_NR_NEWBORN_CARD
+    D_V_AGENT_ADDRS
+    D_V_AGENT_ADDRS_BASE
+    D_V_AGENT_WORK_PLACES
+    D_V_URPRIVS
+    D_V_AGENT_SOCIAL_STATES
+    D_V_AGENT_ORPH_CATEGORIES
+    D_V_PERSMEDCARD_BASE
+    D_V_HOME_CALL_JOUR_BASE
+    D_V_EMPLOYERS
+    D_V_VISITPURPOSES
+    D_V_HOME_CALL_JOUR
+    D_V_SITES_BASE
+    D_V_CONTRACTS_BASE
+    D_V_CONTR_AMI_DIRECTS
+    D_V_HOME_CALL_STATES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_INITS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_TYPES
+    D_DIR_REG_TYPES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_QUOTA_GROUPS
+    D_DISEASECASES
+    D_HOSP_HISTORIES
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_PAYMENT_KIND
+    D_SERVICES_PAYS
+    D_SOCIALSTATE_PAYS
+    D_HOME_CALL_BULLETINES
+    D_SERVICES_STR
+    D_NR_NEWBORN_CARD
+    D_AGENT_ADDRS
+    D_RAIONS
+    D_AGENT_WORK_PLACES
+    D_OKVED
+    D_AGENT_DEPS
+    D_JOBTITLES
+    D_EDU_LEVELS
+    D_EDUCATION_ORG_TYPES
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+    D_AGENT_SOCIAL_STATES
+    D_SOCIALSTATES
+    D_SOCIALCATEGORIES
+    D_AGENT_ORPH_CATEGORIES
+    D_HOME_CALL_JOUR
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_VISITPURPOSES
+    D_SITES
+    D_HOME_CALL_STATES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_CONTRACTS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_HOME_CALL_JOUR.PASS
+    D_PKG_DISEASECASES.ADD
+    D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_GEOGRAFY.GET_FULL
+    D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+    D_PKG_EMPLOYERS.GET_ID
+    D_PKG_HC_PAYMENTS.GET_PAYMENT_DATA_TO_CURSOR
+    D_PKG_PERSMEDCARD.ADD
+    D_PKG_PERSMEDCARD.GET_CARD_NUMB
+    D_PKG_PRICELIST_SERVS.GET_PRICE
+    D_PKG_PRICELIST_SERVS.COLLECT_PRICELIST
+    D_PKG_PRICELIST_SERVS.GET_DISCOUNT
+    D_PKG_UNITPROPS.GET_NVAL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    HomeCallRegType
+    CheckExistHCsInOneDay
+    InitiatorForCallToHome
+    ProvideInactiveServices
+    DSPCheckSocPays
+    CreateContract
+    HomeCallPurposeDefaultHH
+    HomeCallPurposeDefault
+    VISIT_PURPOSE_DEFAULT
+    VISITPURPOSES
+    ServiceForCallToHome
+    ServiceForCallToHomeChild
+    SERVICES
+    CloseEditHomeСallRegDate
+    HCTransferDailyMaximumReached
+    CheckCopyHCPass
+    PaymentKindForCallToHome
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="VISITPURPOSES" composition="DEF"
+
+БРОКЕРЫ:
+    unit:HOME_CALL_JOUR;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 30
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: createDirectionService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getBaseServiceData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: createDiseasecase
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getActualReg
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPersmedcardData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getExistHomeCallJour
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultVisitPurpose
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefaultPaymentKind
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: selectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertUpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getAdditionalInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkRegDate
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkExistPMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CopyHCJPass
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDefPrice
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkMaxHomeCall
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getCallState
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOME_CALL_INITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HC_CAUSES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HOME_CALL_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_HC_REG_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_SITES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_LPU_SOURCE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DISEASECASES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGlobalPaymentKinds
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGetAvailablePKByService
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSGetAvailablePKBySocState
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_BULLETINES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_question.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_question.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_pass.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_pass.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/HomeCalls/home_call_pass.d
+            └── home_call_pass.dfrm
+
+     ===== UserFormsKaliningrad =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/HomeCalls/home_call_pass.d
+            └── smp.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HomeCalls/home_call_question.frm
+     HomeCalls/home_call_spec_reject.frm
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_JOUR
+    D_V_SERVICES
+    D_V_HOME_CALL_JOUR_BASE
+    D_V_EMPLOYERS
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_JOUR
+    D_SITES
+    D_HOME_CALL_INITS
+    D_PERSMEDCARD
+    D_EMPLOYERS
+    D_AGENTS
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_SERVICES
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITPURPOSES
+    D_DIRECTION_SERVICES
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_HOME_CALL_BULLETINES
+    D_DIR_REG_TYPES
+    D_SERVICES_STR
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_BLOODGROUPE
+    D_RHESUS
+    D_CABLAB
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_HOME_CALL_JOUR.PASS
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_UNITPROPS.GET_NVAL
+
+СИСТЕМНЫЕ ОПЦИИ:
+    HomeCallTransferService
+    ProvideInactiveServices
+    HCTransferDailyMaximumReached
+    HCAllow2ToSameDocInDay
+    HCAllow2ToSameDocSpecInDay
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:EMPLOYERS  composition:EMP_RET_SURNAME;
+    unit:SERVICES  composition:DEFAULT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: OPTION_SERVICE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SERVICE_DATA
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getBaseServiceData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkIDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkSpecIDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getConfMsg
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: passHC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setDefault
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkMaxHomeCall
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reception/select_price.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reception/select_price.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PRICELISTS
+    D_V_PRICELIST_SERVS
+    D_V_PRICELIST_SERVS_DEGREES
+    D_V_EMPLOYER_DEGREES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_PAYMENT_KIND
+    D_PRICELIST_DMS
+    D_DIVISIONS
+    D_CONTRACTS
+    D_PRICELISTS
+    D_PRICELIST_SERV_DMS
+    D_SERVICES_STR
+    D_PRICELIST_SERVS
+    D_SERVICES
+    D_SERVTYPES
+    D_PRICELIST_SERVS_DEGREES
+    D_SKILL_CATEGORIES
+    D_DEGREES
+    D_SERVPROFILES
+    D_PF_CATEGORIES
+    D_LPU_SERVICES
+    D_EMPLOYER_DEGREES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.STR_IN_STR
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PriceShowRegPeriod
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SERVICE_PRICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/PmcSearch/search_patient.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Registry/PmcSearch/search_patient.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsAlania =====
+        КАТАЛОГ: UserFormsAlania/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKhabarovsk =====
+        КАТАЛОГ: UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── view.dfrm
+
+     ===== UserFormsKrasnodarOD =====
+        КАТАЛОГ: UserFormsKrasnodarOD/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsMoscowNIIBlohina =====
+        КАТАЛОГ: UserFormsMoscowNIIBlohina/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsPrimorie =====
+        КАТАЛОГ: UserFormsPrimorie/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+
+     ===== UserFormsRostov =====
+        КАТАЛОГ: UserFormsRostov/Registry/PmcSearch/search_patient.d
+            └── tfoms.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Registry/PmcSearch/search_patient.d
+            └── data.dfrm
+            └── search_patient.dfrm
+
+     ===== UserFormsTver =====
+        КАТАЛОГ: UserFormsTver/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+     ===== UserFormsVOKOD =====
+        КАТАЛОГ: UserFormsVOKOD/Registry/PmcSearch/search_patient.d
+            └── search_patient.dfrm
+
+
+SubForm:
+     barcode_listeners/oms_all
+     SignalInformation/si_actions
+     Persmedcard/сhanging_data_patient_card_subform
+     Markers/subscripts/subscript_markers
+     PatientSearch/subforms/check_search_fields
+     Markers/subforms/subforms_markers
+     Persmedcard/pmc_markers/pmc_markers_scripts
+
+Список вызываемых форм в JS:
+     Persmedcard/persmedcard_add_by_agent.frm
+     HomeCalls/add_child_without_docs.frm
+     Persmedcard/persmedcard_edit.frm
+     Persmedcard/persmedcard_add_full.frm
+     Agents/agents_add.frm
+     Agents/agent_contacts/agent_contacts_edit.frm
+     Agents/agent_polis/agent_polis_edit.frm
+     Agents/agent_persdocs/agent_persdocs_edit.frm
+     Agents/agent_addrs/agent_addrs_for_pmc_edit.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="P_PATIENTS"
+    └── "Добавить ребенка"
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_ADDRS
+    D_V_PMC_MARKERS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENT_CONTACTS_V2
+    D_V_CONTROL_CARD_BASE
+    D_V_AGENTS
+    D_V_PERSMEDCARD
+    D_V_PERSMEDCARD_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_ADDRS
+    D_GEOGRAFY
+    D_RAIONS
+    D_PMC_MARKERS
+    D_MARKERS
+    D_SCHEDULE_COLORS
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_AGENT_CONTACTS
+    D_CONTACT_TYPES
+    D_CONTROL_CARD
+    D_AGENTS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_AGENT_ADDRS.GET_FULL_ADDRESS_BY_ID
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.GET_VAL
+    D_PKG_PATSEARCH.PATSEARCH2_PPL
+    D_PKG_AGENT_CONTACTS.GET_MAIN_PHONE
+    D_PKG_DAT_TOOLS.FULL_YEARS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    RequiredNumberOMSFilter
+    PMCChildAllow
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 8
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getPatientInfoByAgent
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_REQ_NUMBER_OMS_F
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_ADDRES_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_AGENT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CHECK_18_YEARS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: findAgentIDByPMC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: findPMCByAgentID
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: PATIENTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/services/select_by_in_lpu.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/services/select_by_in_lpu.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Autopsist/SubForms/check_inactive_service
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SERVTYPES
+    D_V_SERVICES_BASE
+    D_V_EMP_SERVICES
+    D_V_LPU_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVTYPES
+    D_SERVICES
+    D_EMP_SERVICES
+    D_LPU_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EMPLOYERS.GET_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_SERVICE_NAME
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_EMP_SERVICE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Reg/select_discounts.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Reg/select_discounts.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_PRICELIST_SERVS.GET_DISCOUNT_LIST_SHORT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_DISCOUNTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SERVICE_PRICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_set_state.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_set_state.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     HomeCalls/in_results_jour_note.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_HOME_CALL_JOUR.SET_STATE
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: setViewStatus
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/home_call_spec_reject.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/home_call_spec_reject.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EMPLOYERS
+    D_V_HOME_CALL_JOUR
+    D_V_PERSMEDCARD_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_HOME_CALL_JOUR
+    D_SITES
+    D_HOME_CALL_INITS
+    D_PERSMEDCARD
+    D_HOME_CALL_TYPES
+    D_HOME_CALL_STATES
+    D_SERVICES
+    D_DIVISIONS
+    D_HOME_CALL_CAUSES
+    D_HOME_CALL_DIRECTIONS
+    D_VISITPURPOSES
+    D_DIRECTION_SERVICES
+    D_VISITS
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_HOME_CALL_BULLETINES
+    D_DIR_REG_TYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_STR_TOOLS.FIO
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_SPECIALITY
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONREJ
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Autopsist/SubForms/check_inactive_service.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Autopsist/SubForms/check_inactive_service.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Autopsist/SubForms/select_service_form.frm
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SERVICES_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ProvideInactiveServices
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_SO_SERVICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_ACTIVE_SERVICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/HomeCalls/in_results_jour_note.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/HomeCalls/in_results_jour_note.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_HOME_CALL_JOUR_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_HOME_CALL_JOUR
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_HOME_CALL_JOUR.SET_STATE
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getSTATES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setCallStatus
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setDefault
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_patient_ami_directs.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_patient_ami_directs.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/agent_polis/checking_relevance_polis
+     Contracts/subforms/checking_relevance_contract
+
+Список вызываемых форм в JS:
+     Directions/select_patient_ami_direct_edit.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        1337 (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        CONTR_AMI_DIRECTS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pGPAD"
+    ├── "Обновить"
+    ├── "Добавить"
+    ├── "Изменить"
+    ├── "Удалить"
+    └── (AutoPopup "CONTR_AMI_DIRECTS") - REP_TYPE="WEB-конструктор" - REP_CODE="1337" "1337" ("hahaloldebil")  
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_POLIS_DMS
+    D_V_CONTR_AMI_DIRECTS
+    D_V_AGENT_RELATIVES
+    D_V_PERSMEDCARD_BASE
+    D_V_PERSMEDCARD_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+    D_FN_RELATIVES_OTHER
+    D_FED_NSI_VERS
+    D_FED_NSI
+    D_LPUVERLIST_MAIN
+    D_AGENT_RELATIVES
+    D_RELATIONSHIPS
+    D_AGENTS
+    D_REPRESENT_LSTATUSES
+    D_EMPLOYERS
+    D_PERSMEDCARD
+
+БРОКЕРЫ:
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 4
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_PATIENT_INFO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CONTRACT_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_GPAD
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PATIENT_AMI_DIR
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Contracts/subforms/checking_relevance_contract.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Contracts/subforms/checking_relevance_contract.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTRACTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACTS
+    D_AGENTS
+
+СИСТЕМНЫЕ ОПЦИИ:
+    TermContractForIndividuals
+    TermContractForLegalEntity
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getRelevanceContractSO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getContractInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agent_polis/checking_relevance_polis.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agent_polis/checking_relevance_polis.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+СИСТЕМНЫЕ ОПЦИИ:
+    TermPeriodForDMSPolis
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getRelevanceDMSPolisSO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_patient_ami_direct_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_patient_ami_direct_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Directions/select_contract_by_type.frm
+
+SQL ЗАПРОСЫ (4):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_PERSMEDCARD
+    D_V_CONTRACT_TYPES
+    D_V_CONTR_AMI_DIRECTS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_CONTRACT_TYPES
+    D_AGENT_POLIS
+    D_CONTR_AMI_DIRECTS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_EMPLOYERS.GET_ID
+
+БРОКЕРЫ:
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:CONTR_AMI_DIRECTS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_NUMB
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GetConType
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RootCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdAddAct
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AUTOSELECT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_POLIS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Directions/select_contract_by_type.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Directions/select_contract_by_type.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CONTRACT_TYPES
+    D_V_CONTRACTS
+    D_V_CATALOGS
+    D_V_PAYMENT_KIND
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CONTRACT_TYPES
+    D_CONTRACTS
+    D_AGENTS
+    D_EMPLOYERS
+    D_FACIAL_ACCOUNTS
+    D_PAYMENT_KIND
+    D_CATALOGS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_CABLAB
+
+СИСТЕМНЫЕ ОПЦИИ:
+    PKPeopleMoney
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getSYS_DATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_PARAMS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_COUNT_PK_CODE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_TYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONTRACT_BY_TYPE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Registry/PmcSearch/patient_info.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Registry/PmcSearch/patient_info.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsBarsMED =====
+        КАТАЛОГ: UserFormsBarsMED/Registry/PmcSearch/patient_info.d
+            └── printreab.dfrm
+
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d
+            └── add_un_exc.dfrm
+            └── PERSMEDCARD_ID.dfrm
+
+     ===== UserFormsEgis3Tomsk =====
+        КАТАЛОГ: UserFormsEgis3Tomsk/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsHosp =====
+        КАТАЛОГ: UserFormsHosp/Registry/PmcSearch/patient_info.d
+            └── printreab.dfrm
+
+     ===== UserFormsKaliningrad =====
+        КАТАЛОГ: UserFormsKaliningrad/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRKB3 =====
+        КАТАЛОГ: UserFormsRKB3/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRKOD =====
+        КАТАЛОГ: UserFormsRKOD/Registry/PmcSearch/patient_info.d
+            └── patient_info.dfrm
+
+     ===== UserFormsRostov =====
+        КАТАЛОГ: UserFormsRostov/Registry/PmcSearch/patient_info.d
+            └── script.dfrm
+
+     ===== UserFormsSakhalin =====
+        КАТАЛОГ: UserFormsSakhalin/Registry/PmcSearch/patient_info.d
+            └── data.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Registry/PmcSearch/patient_info.d
+            └── patient_info_lpu.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     writeWaitQueue/writeWaitQueue.frm
+     Lpu_Services/compl_ds_list.frm
+     Persmedcard/persmedcard_edit.frm
+     Reception/search_patient_records.frm
+     Registry/PmcSearch/amb_reports_list.frm
+     PatientSearch/directions_prescribes.frm
+     writeWaitQueue/writeWaitQueueAddEdit.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        persm_list;
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_CATEGORIES
+    D_V_PERSMEDCARD
+    D_V_AGENT_INABILITIES
+    D_V_WL_RECORDS
+    D_V_HOSP_PLAN_KINDS
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_DIR_REG_TYPES
+    D_V_EMPLOYERS_FIO
+    D_V_FACIAL_ACCOUNTS
+    D_V_PERSMEDCARD_BASE
+    D_V_AGENT_REGISTRATION
+    D_V_PMC_REG_NUMS
+    D_V_PMC_REGISTRATION
+    D_V_LPU
+    D_V_SERVICES_BASE
+    D_V_RESERVATION
+    D_V_WL_SCH_RESOURCES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_CATEGORIES
+    D_CATEGORIES
+    D_PERSMEDCARD
+    D_AGENTS
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+    D_AGENT_INABILITIES
+    D_INABILITY_TYPES
+    D_INABILITY_STATUSES
+    D_INABILITY_GROUPS
+    D_LPUDICT
+    D_WL_RECORDS
+    D_SERVICES
+    D_DIRECTION_SERVICES
+    D_PAYMENT_KIND
+    D_EX_SYSTEMS
+    D_WAIT_LISTS
+    D_SPECIALITIES
+    D_HOSP_PLAN_KINDS
+    D_DIRECTIONS
+    D_DIR_REG_TYPES
+    D_FACIAL_ACCOUNTS
+    D_AGENT_REGISTRATION
+    D_REGISTER_PURPOSES
+    D_SITES
+    D_REGISTRATION_TYPES
+    D_REG_CATEGORIES
+    D_PMC_REG_NUMS
+    D_LPU
+    D_GEOGRAFY
+    D_RESERVATION
+    D_WL_SCH_RESOURCES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DIRECTIONS.GET_LAST_REG
+    D_PKG_PERSMEDCARD.GET_ALL_PRIVS_AS_STRING
+    D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_PERSMEDCARD.CHECK_FOR_OMS
+    D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+    D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+    D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+    D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+    D_PKG_PMC_SPECIAL_CASES.GET_ACTUAL_ON_DATE
+
+СИСТЕМНЫЕ ОПЦИИ:
+    CheckSNILS
+    CheckForOMS_ShowRes
+    CheckForOMS
+    ERHospPlanKind
+    CheckForOMS_CardType
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_C_ID
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: showPatientInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: showReservationInfo
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ACT_SEL_WAIL_LIST
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+

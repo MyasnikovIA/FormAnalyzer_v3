@@ -16578,3 +16578,2618 @@ Forms/Reception/reg_lpu.frm;формы JS;ProfCard/pc_serv_other_lpu.frm
 Forms/Reception/reg_lpu.frm;формы JS;Reception/reg_lpubased.frm
 Forms/ProfCard/pc_serv_other_lpu.frm;Универсальные композиции;unit=""LPUDICT"" composition=""LD_GRID""
 Forms/Reception/reg_lpubased.frm;subForm;Reception/step2
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Novosib/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Novosib/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Tomsk/HomeCalls/home_call_edit.d/home_call_edit.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/script.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsSamRMC/HomeCalls/home_call_edit.d/form.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsSaratov/HomeCalls/home_call_edit.d/dopinfo.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/script.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;subForm;Registry/PmcSearch/search_patient
+Forms/HomeCalls/home_call_edit.frm;subForm;Registry/PmcSearch/patient_info
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_question.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Reception/select_price.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;services/select_by_in_lpu.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Directions/select_contract_by_pk.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Directions/select_patient_ami_directs.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Reg/select_discounts.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_set_state.frm
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_INITS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DIR_REG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_LPU
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_QUOTA_GROUPS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DISEASECASES_OPEN
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PAYMENT_KIND_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES_PAYS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SOCIALSTATE_PAYS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_NR_NEWBORN_CARD
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ADDRS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_URPRIVS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_SOCIAL_STATES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ORPH_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SITES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_BLOODGROUPE
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_RHESUS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CABLAB
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_GEOGRAFY
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_QUOTA_GROUPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DISEASECASES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOSP_HISTORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_PAYMENT_KIND
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES_PAYS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALSTATE_PAYS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES_STR
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_NR_NEWBORN_CARD
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ADDRS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_RAIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_WORK_PLACES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_OKVED
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_DEPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EDU_LEVELS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EDUCATION_ORG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_URPRIVS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_USERROLES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_SOCIAL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALSTATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALCATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ORPH_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CONTRACTS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.PASS
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_DISEASECASES.ADD
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_GEOGRAFY.GET_FULL
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_HC_PAYMENTS.GET_PAYMENT_DATA_TO_CURSOR
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.ADD
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_CARD_NUMB
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_PRICE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.COLLECT_PRICELIST
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_DISCOUNT
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_NVAL
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallRegType
+Forms/HomeCalls/home_call_edit.frm;СО;CheckExistHCsInOneDay
+Forms/HomeCalls/home_call_edit.frm;СО;InitiatorForCallToHome
+Forms/HomeCalls/home_call_edit.frm;СО;ProvideInactiveServices
+Forms/HomeCalls/home_call_edit.frm;СО;DSPCheckSocPays
+Forms/HomeCalls/home_call_edit.frm;СО;CreateContract
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallPurposeDefaultHH
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallPurposeDefault
+Forms/HomeCalls/home_call_edit.frm;СО;VISIT_PURPOSE_DEFAULT
+Forms/HomeCalls/home_call_edit.frm;СО;VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;СО;ServiceForCallToHome
+Forms/HomeCalls/home_call_edit.frm;СО;ServiceForCallToHomeChild
+Forms/HomeCalls/home_call_edit.frm;СО;SERVICES
+Forms/HomeCalls/home_call_edit.frm;СО;CloseEditHomeСallRegDate
+Forms/HomeCalls/home_call_edit.frm;СО;HCTransferDailyMaximumReached
+Forms/HomeCalls/home_call_edit.frm;СО;CheckCopyHCPass
+Forms/HomeCalls/home_call_edit.frm;СО;PaymentKindForCallToHome
+Forms/HomeCalls/home_call_edit.frm;Универсальные композиции;unit=""VISITPURPOSES"" composition=""DEF""
+Forms/HomeCalls/home_call_edit.frm;Неопределенные;D_P_EXC
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsEgis3Tomsk/HomeCalls/home_call_pass.d/home_call_pass.dfrm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsSaratov/HomeCalls/home_call_pass.d/smp.dfrm
+Forms/HomeCalls/home_call_pass.frm;формы JS;HomeCalls/home_call_question.frm
+Forms/HomeCalls/home_call_pass.frm;формы JS;HomeCalls/home_call_spec_reject.frm
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SERVICES_STR
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_BLOODGROUPE
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_RHESUS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_CABLAB
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.PASS
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_NVAL
+Forms/HomeCalls/home_call_pass.frm;СО;HomeCallTransferService
+Forms/HomeCalls/home_call_pass.frm;СО;ProvideInactiveServices
+Forms/HomeCalls/home_call_pass.frm;СО;HCTransferDailyMaximumReached
+Forms/HomeCalls/home_call_pass.frm;СО;HCAllow2ToSameDocInDay
+Forms/HomeCalls/home_call_pass.frm;СО;HCAllow2ToSameDocSpecInDay
+Forms/HomeCalls/home_call_pass.frm;Универсальные композиции;"unit:EMPLOYERS  composition:EMP_RET_SURNAME,"
+Forms/HomeCalls/home_call_pass.frm;Универсальные композиции;"unit:SERVICES  composition:DEFAULT,"
+Forms/HomeCalls/home_call_pass.frm;Неопределенные;D_STRAGG
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELISTS
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELIST_SERVS
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELIST_SERVS_DEGREES
+Forms/Reception/select_price.frm;Вьюхи;D_V_EMPLOYER_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_AGENTS
+Forms/Reception/select_price.frm;Таблицы;D_PAYMENT_KIND
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_DMS
+Forms/Reception/select_price.frm;Таблицы;D_DIVISIONS
+Forms/Reception/select_price.frm;Таблицы;D_CONTRACTS
+Forms/Reception/select_price.frm;Таблицы;D_PRICELISTS
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERV_DMS
+Forms/Reception/select_price.frm;Таблицы;D_SERVICES_STR
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERVS
+Forms/Reception/select_price.frm;Таблицы;D_SERVICES
+Forms/Reception/select_price.frm;Таблицы;D_SERVTYPES
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERVS_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/Reception/select_price.frm;Таблицы;D_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_SERVPROFILES
+Forms/Reception/select_price.frm;Таблицы;D_PF_CATEGORIES
+Forms/Reception/select_price.frm;Таблицы;D_LPU_SERVICES
+Forms/Reception/select_price.frm;Таблицы;D_EMPLOYER_DEGREES
+Forms/Reception/select_price.frm;Пакеты и функции;D_PKG_STR_TOOLS.STR_IN_STR
+Forms/Reception/select_price.frm;СО;PriceShowRegPeriod
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsAlania/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/script.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKrasnodarOD/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsMoscowNIIBlohina/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsPrimorie/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsRostov/Registry/PmcSearch/search_patient.d/tfoms.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsTver/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsVOKOD/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;subForm;barcode_listeners/oms_all
+Forms/Registry/PmcSearch/search_patient.frm;subForm;SignalInformation/si_actions
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Persmedcard/сhanging_data_patient_card_subform
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Markers/subscripts/subscript_markers
+Forms/Registry/PmcSearch/search_patient.frm;subForm;PatientSearch/subforms/check_search_fields
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Markers/subforms/subforms_markers
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Persmedcard/pmc_markers/pmc_markers_scripts
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_add_by_agent.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;HomeCalls/add_child_without_docs.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_add_full.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agents_add.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_contacts/agent_contacts_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_polis/agent_polis_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_persdocs/agent_persdocs_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;фоForms/services/select_by_in_lpu.frm;subForm;Autopsist/SubForms/check_inactive_service
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_SERVTYPES
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_EMP_SERVICES
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_LPU_SERVICES_BASE
+Forms/services/select_by_in_lpu.frm;Таблицы;D_SERVTYPES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_SERVICES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_EMP_SERVICES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_LPU_SERVICES
+Forms/services/select_by_in_lpu.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+рмы JS;Agents/agent_addrs/agent_addrs_for_pmc_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PMC_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENT_CONTACTS_V2
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_CONTROL_CARD_BASE
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENTS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_ADDRS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_GEOGRAFY
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_RAIONS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_PMC_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_SCHEDULE_COLORS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_POLIS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_CONTACTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTACT_TYPES
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTROL_CARD
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_PERSMEDCARD
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_BLOODGROUPE
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_DIVISIONS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_RHESUS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_EMPLOYERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CABLAB
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_FULL_ADDRESS_BY_ID
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.CHECK_RIGHT
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_EX_SYSTEM_VALUES.GET_VAL
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_PATSEARCH.PATSEARCH2_PPL
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_MAIN_PHONE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/Registry/PmcSearch/search_patient.frm;СО;RequiredNumberOMSFilter
+Forms/Registry/PmcSearch/search_patient.frm;СО;PMCChildAllow
+Forms/Registry/PmcSearch/search_patient.frm;Неопределенные;D_STRAGG
+Forms/Reg/select_discounts.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_DISCOUNT_LIST_SHORT
+Forms/Reg/select_discounts.frm;Неопределенные;D_CL_DISCOUNTS
+Forms/HomeCalls/home_call_set_state.frm;формы JS;HomeCalls/in_results_jour_note.frm
+Forms/HomeCalls/home_call_set_state.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_STATE
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_spec_reject.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/HomeCalls/home_call_spec_reject.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/home_call_spec_reject.frm;Неопределенные;D_STRAGG
+Forms/Autopsist/SubForms/check_inactive_service.frm;формы JS;Autopsist/SubForms/select_service_form.frm
+Forms/Autopsist/SubForms/check_inactive_service.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/Autopsist/SubForms/check_inactive_service.frm;Таблицы;D_SERVICES
+Forms/Autopsist/SubForms/check_inactive_service.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/Autopsist/SubForms/check_inactive_service.frm;СО;ProvideInactiveServices
+Forms/Autopsist/SubForms/check_inactive_service.frm;Неопределенные;D_CL_ID
+Forms/HomeCalls/in_results_jour_note.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/in_results_jour_note.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/in_results_jour_note.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/in_results_jour_note.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_STATE
+Forms/Directions/select_patient_ami_directs.frm;subForm;Agents/agent_polis/checking_relevance_polis
+Forms/Directions/select_patient_ami_directs.frm;subForm;Contracts/subforms/checking_relevance_contract
+Forms/Directions/select_patient_ami_directs.frm;формы JS;Directions/select_patient_ami_direct_edit.frm
+Forms/Directions/select_patient_ami_directs.frm;"Отчеты, вызываемые на форме";1337 (WEB-конструктор)
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_AGENT_POLIS_DMS
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_AGENT_RELATIVES
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENT_POLIS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FN_RELATIVES_OTHER
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FED_NSI_VERS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FED_NSI
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_LPUVERLIST_MAIN
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENT_RELATIVES
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_RELATIONSHIPS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENTS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_REPRESENT_LSTATUSES
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_patient_ami_directs.frm;Неопределенные;D_NUMB
+Forms/Contracts/subforms/checking_relevance_contract.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/Contracts/subforms/checking_relevance_contract.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/subforms/checking_relevance_contract.frm;Таблицы;D_AGENTS
+Forms/Contracts/subforms/checking_relevance_contract.frm;СО;TermContractForIndividuals
+Forms/Contracts/subforms/checking_relevance_contract.frm;СО;TermContractForLegalEntity
+Forms/Agents/agent_polis/checking_relevance_polis.frm;СО;TermPeriodForDMSPolis
+Forms/Directions/select_patient_ami_direct_edit.frm;формы JS;Directions/select_contract_by_type.frm
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_AGENTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_BLOODGROUPE
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_DIVISIONS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_RHESUS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CABLAB
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/Directions/select_patient_ami_direct_edit.frm;Неопределенные;D_NUMB
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CONTRACTS
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CATALOGS
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CONTRACTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_AGENTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_PAYMENT_KIND
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CATALOGS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_BLOODGROUPE
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_DIVISIONS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_RHESUS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CABLAB
+Forms/Directions/select_contract_by_type.frm;СО;PKPeopleMoney
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsBarsMED/Registry/PmcSearch/patient_info.d/printreab.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d/add_un_exc.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d/PERSMEDCARD_ID.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Tomsk/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsHosp/Registry/PmcSearch/patient_info.d/printreab.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRKB3/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRKOD/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRostov/Registry/PmcSearch/patient_info.d/script.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsSakhalin/Registry/PmcSearch/patient_info.d/data.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/patient_info.d/patient_info_lpu.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;writeWaitQueue/writeWaitQueue.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Lpu_Services/compl_ds_list.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Reception/search_patient_records.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Registry/PmcSearch/amb_reports_list.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;PatientSearch/directions_prescribes.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;writeWaitQueue/writeWaitQueueAddEdit.frm
+Forms/Registry/PmcSearch/patient_info.frm;"Отчеты, вызываемые на форме";persm_list
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_INABILITIES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_WL_RECORDS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_HOSP_PLAN_KINDS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIRECTIONS_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIR_REG_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_FACIAL_ACCOUNTS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PMC_REG_NUMS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PMC_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_LPU
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_RESERVATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_WL_SCH_RESOURCES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PERSMEDCARD
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_BLOODGROUPE
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIVISIONS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_RHESUS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_EMPLOYERS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_CABLAB
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_INABILITIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_STATUSES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_GROUPS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_LPUDICT
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WL_RECORDS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SERVICES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PAYMENT_KIND
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_EX_SYSTEMS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WAIT_LISTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SPECIALITIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_HOSP_PLAN_KINDS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIRECTIONS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIR_REG_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REGISTER_PURPOSES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SITES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REGISTRATION_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REG_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PMC_REG_NUMS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_LPU
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_GEOGRAFY
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_RESERVATION
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WL_SCH_RESOURCES
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_DIRECTIONS.GET_LAST_REG
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_ALL_PRIVS_AS_STRING
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PERSMEDCARD.CHECK_FOR_OMS
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_SPECIAL_CASES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckSNILS
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS_ShowRes
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS
+Forms/Registry/PmcSearch/patient_info.frm;СО;ERHospPlanKind
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS_CardType
+Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_C_ID
+Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_P_EXC
+Forms/Directions/select_contract_by_pk.frm;subForm;Contracts/subforms/checking_relevance_contract
+Forms/Directions/select_contract_by_pk.frm;формы JS;Contracts/contracts_edit.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/ContractsReports/contract_paid_kursk.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/MedCard/025y.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/MedCard/025y2.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/AmbReps/amb_talon_025_A4.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/ContractsReports/contract_paid_child.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/MedCard/025y_child.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/Reestr/pats_get_med_services.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/ContractsReports/exec_contracts.frm
+Forms/Directions/select_contract_by_pk.frm;формы JS;Reports/MedCard/025y_2025.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_paid_kursk (WEB-форма) Reports/ContractsReports/contract_paid_kursk.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/y_cope_test (WEB-форма) Reports/MedCard/025y.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";SOGL_RAST (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";proba11 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";RKKVD_DOG_PATIENT_URIDI (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contractKKOD (Составной)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_kod (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_agreement_base (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";RKKVD_DOG_PATIENT (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_cancellation_full (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/y2 (WEB-форма) Reports/MedCard/025y2.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Contract_UserFormsSpasenie (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";INF_ZAIAV_UserFormsSaranskBacha (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Kvitantsiya_kassaТест (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";amb_talon_025_A4 (WEB-форма) Reports/AmbReps/amb_talon_025_A4.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Recep_contr111 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_krok (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Act_UserFormsSpasenie (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Kvitantsiya_kassaТест1 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_paid_child (WEB-форма) Reports/ContractsReports/contract_paid_child.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_test (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";Contract_UserFormsSaranskBacha (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";INF_ZAIAV_UserFormsSaranskBacha2 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";MED_VK_OTB_VMP_SSH (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_cancellation (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/y_child (WEB-форма) Reports/MedCard/025y_child.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract2003 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_samara (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract____ (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_pk_pmu (Составной)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_pk (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_agreement_base_pk (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_cancellation_full_pk (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";vozmezdnogo_okazania_disp (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";vozmezdnogo_okazaniya_medosmotr (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/y ЛПУ 007 (WEB-форма) Reports/MedCard/025y.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";pats_get_med_services (WEB-форма) Reports/Reestr/pats_get_med_services.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";exec_contracts (WEB-форма) Reports/ContractsReports/exec_contracts.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_samara_kdl3 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/y (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";reception_contract_MEDDEV-112533 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";DS_prog_year_attach (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_samara_kdl3_v01 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_samara_kdl3_v02 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;"Отчеты, вызываемые на форме";contract_samara_kdl3_v03 (WEB-конструктор)
+Forms/Directions/select_contract_by_pk.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Directions/select_contract_by_pk.frm;Вьюхи;D_V_CONTRACTS
+Forms/Directions/select_contract_by_pk.frm;Вьюхи;D_V_CATALOGS
+Forms/Directions/select_contract_by_pk.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/Directions/select_contract_by_pk.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_CONTRACTS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_AGENTS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_PAYMENT_KIND
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_CATALOGS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_BLOODGROUPE
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_DIVISIONS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_RHESUS
+Forms/Directions/select_contract_by_pk.frm;Таблицы;D_CABLAB
+Forms/Directions/select_contract_by_pk.frm;СО;PKPeopleMoney
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_SYS_PATSHED
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_VISITPLACES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_VISITPURPOSES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_VISITS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_LPU
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_VIS_DIAGNOSISES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_AMB_TALON_MKBS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_RECIPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_ISSUED_BULLETINES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_BJ_BULLETIN_CONTENTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_AMB_TALON_VISITS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Вьюхи;D_V_DIRECTION_SERVICES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_AGENTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIRECTIONS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DS_SERV_STATUSES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_SERVICES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_CABLAB
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_EMPLOYERS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_OUTER_DIRECTIONS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_VISITS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_LPU
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_LPUDICT
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DISEASECASES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_STATES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIR_REG_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PMC_MARKERS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_MARKERS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PAYMENT_KIND
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_VISITPLACES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_SITES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_INITS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PERSMEDCARD
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIVISIONS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_VISITPURPOSES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_MKB10
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BLOODGROUPE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_RHESUS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_GEOGRAFY
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DISEASECHARACTERS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_INJURE_KINDS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DISEASE_STAGES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_CL_OBSERV_CATEGORIES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIAGNOSIS_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIAGNOSIS_STAGES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_RISAR_STAGES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_AMB_TALON_MKBS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_RECIPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PRIVILEGES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_CONTINGENTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_FINSOURCES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PRIV_DIS_GROUPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_RECIPE_PRIVTYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PRIV_NOS_GROUPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_PURPOSE_PRIV
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BJ_BULLETIN_CONTENTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BJ_BULL_CONT_EXTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_HOSP_HISTORY_DEPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DISABILITY_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BJ_BULLETINES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BULLETIN_JOURNALS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BULL_RESULTS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DIRECTORIES_DATA_VER
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_BULLETIN_STATES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_AMB_TALONS_VIS_BULLS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_AMB_TALON_VISITS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_SERVICES_STR
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_VISITKINDS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_REFERENCE_KINDS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_DEPS
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_REG_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Таблицы;D_SCHEDULE_TIME_TYPES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_FEDERAL_PRIVS.GET_PRIVS_CODES
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Пакеты и функции;D_PKG_AMB_TALONS.GET_AMB_TALON
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;СО;PaymentKindForCallToHome
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;СО;VisitPlaceForCallToHome
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Неопределенные;D_STRAGG_EX
+Forms/Reports/AmbReps/amb_talon_025_A4.frm;Неопределенные;D_TP_STRAGG_REC
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVOKOD/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsChechnya/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsEgis3Novosib/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsKaliningrad/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsKrasnodarOD/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsMagadan/Reports/MedCard/025y.d/script.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsMagadan/Reports/MedCard/025y.d/view.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsMoscowNIIBlohina/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsNewLook73/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsNiiSerb/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsNiiSerb/Reports/MedCard/025y.d/bar_code.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsPrimorie/Reports/MedCard/025y.d/data.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsPrimorie/Reports/MedCard/025y.d/view.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsRKB3/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsRostov/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsSamRMC/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsSaratov/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsSaratov/Reports/MedCard/025y.d/agent_id.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsSaratov/Reports/MedCard/025y.d/format.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsTver/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVOKB1/Reports/MedCard/025y.d/025y.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVOKOD/Reports/MedCard/025y.frm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVita/Reports/MedCard/025y.d/ds_data.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVita/Reports/MedCard/025y.d/others.dfrm
+Forms/Reports/MedCard/025y.frm;Юзерформы;UserFormsVita/Reports/MedCard/025y.d/page_format.dfrm
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_CONTROL_CARD
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_DISEASECASES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_HOSP_HISTORIES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_VISITS_BASE
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_VIS_DIAGNOSISES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_EDUCATION_TYPES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_INABILITIES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_DIRECTORIES_FN_DATA
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_CONTACTS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_POLIS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_PERSDOCS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_MARITAL_STATES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_SOCIAL_STATES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_FEDERAL_PRIVS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_COUNTRIES
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_LPU
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_VISITS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_DIRECTIONS_BASE
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENTS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_GEOGRAFY
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_ADDRS_BASE
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_RAIONS
+Forms/Reports/MedCard/025y.frm;Вьюхи;D_V_AGENT_CATEGORIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CONTROL_CARD
+Forms/Reports/MedCard/025y.frm;Таблицы;D_MKB10
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISP_PLAN
+Forms/Reports/MedCard/025y.frm;Таблицы;D_NR_REMOVE_REASONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_PERSMEDCARD
+Forms/Reports/MedCard/025y.frm;Таблицы;D_EMPLOYERS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENTS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISEASECASES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISCASES_DISCOVER
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CONTROL_CARD_GROUPS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_NOS_REGISTR_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_NOS_REGISTRS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CC_DEATH_REASON
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISEASECASE_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DC_SOURCES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_MESES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_RELATIVES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_HISTORIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_REASONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSPITALIZATION_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_TRANSPORTATION_KINDS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_LPUDICT
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_RESULTS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DEPS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HPK_PLAN_JOURNALS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HPKPJ_VMP_STATES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_OUTCOMES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_HOURS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HH_TRANSFER_REASONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_ABILITY_STATUS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIRECTORIES_DATA_VER
+Forms/Reports/MedCard/025y.frm;Таблицы;D_HOSP_INCOMES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIRECTION_HOSP
+Forms/Reports/MedCard/025y.frm;Таблицы;D_VISITS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISEASECHARACTERS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_INJURE_KINDS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DISEASE_STAGES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CL_OBSERV_CATEGORIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIAGNOSIS_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIAGNOSIS_STAGES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_RISAR_STAGES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_EDUCATION_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_INABILITIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_INABILITY_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_INABILITY_STATUSES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_INABILITY_GROUPS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIRECTORIES_FN_DATA
+Forms/Reports/MedCard/025y.frm;Таблицы;D_BLOODGROUPE
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIVISIONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_RHESUS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CABLAB
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_ADDRS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_GEOGRAFY
+Forms/Reports/MedCard/025y.frm;Таблицы;D_RAIONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_CONTACTS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CONTACT_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_POLIS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_INSURANCE_COMPANIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_POLIS_KINDS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_PERSDOCS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_PERSDOCTYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_COUNTRIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_NORESIDENT_STATUS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_MARITAL_STATES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_SOCIAL_STATES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_SOCIALSTATES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_SOCIALCATEGORIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_WORK_PLACES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_OKVED
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_DEPS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_JOBTITLES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_EDU_LEVELS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_EDUCATION_ORG_TYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_FEDERAL_PRIVS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_PRIVILEGES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_FLR_VERSION
+Forms/Reports/MedCard/025y.frm;Таблицы;D_LPU
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_SERVICES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_DIRECTIONS
+Forms/Reports/MedCard/025y.frm;Таблицы;D_GEOGRAFYTYPES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_AGENT_CATEGORIES
+Forms/Reports/MedCard/025y.frm;Таблицы;D_CATEGORIES
+Forms/Reports/MedCard/025y.frm;Пакеты и функции;D_PKG_AGENT_ALLERG_ANAMNESIS.GET_BY_STRING
+Forms/Reports/MedCard/025y.frm;Пакеты и функции;D_PKG_FLR.GET_FEDD_PRIVS_STR
+Forms/Reports/MedCard/025y.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_INCOMINGDOC_SPECS
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_INCOMINGDOC_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_STORE_OPER_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMMODIF_CHANGE_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_CONTRACT_SUPPLY_MED
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMMODIF_PACKING_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_INCOMINGDOC_SPECS_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_FINANSOURCES
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_UNITPROP_VALUES
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMMODIF_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMBASE_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMBASE_MNN_ACTIVE_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_NOMBASE_MNN
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_ACC_FARM_PROD
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_LPU_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_GEOGRAFY_BASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Вьюхи;D_V_GEOGRAFYTYPES
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_MLP_SGTIN_INFO
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_INCOMINGDOC_SPECS
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_INCOMINGDOC
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMMODIF
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMBASE
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_TAXGR
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMMODIF_PACKING
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_COUNTRIES
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_AGENTS
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_FINANSOURCES
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_MEASURES
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_ACC_FARM_PROD
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_STORE_OPER
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMMODIF_CHANGE
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_CONTRACTS
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_CONTRACT_SUPPLY_MED
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_UNITPROP_VALUES
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMBASE_MNN_ACTIVE
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_NOMBASE_MNN
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_LPU
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_GEOGRAFY
+Forms/Reports/ContractsReports/exec_contracts.frm;Таблицы;D_GEOGRAFYTYPES
+Forms/Reports/ContractsReports/exec_contracts.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_SVAL
+Forms/Reports/ContractsReports/exec_contracts.frm;Пакеты и функции;D_PKG_ACC_FARM_PROD.GET_ROUNDED_VALUE
+Forms/Reports/ContractsReports/exec_contracts.frm;Пакеты и функции;D_PKG_STD.FRM_D
+Forms/Reports/ContractsReports/exec_contracts.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_ID_BY_CODE
+Forms/Reports/ContractsReports/exec_contracts.frm;Неопределенные;D_CL_ID
+Forms/Reports/ContractsReports/exec_contracts.frm;Неопределенные;D_CL_STR
+Forms/Reports/ContractsReports/exec_contracts.frm;Неопределенные;D_STRAGG_COMMA
+Forms/Contracts/contracts_edit.frm;Юзерформы;UserFormsAlaniaSKMMC/Contracts/contracts_edit.d/contracts_edit.dfrm
+Forms/Contracts/contracts_edit.frm;Юзерформы;UserFormsEgis3Novosib/Contracts/contracts_edit.d/add_tab.dfrm
+Forms/Contracts/contracts_edit.frm;subForm;Sklad/SubForms/validate_price_number
+Forms/Contracts/contracts_edit.frm;subForm;Contracts/supply_med/contract_supply_med
+Forms/Contracts/contracts_edit.frm;формы JS;Agents/agent_relatives/represents.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Contracts/contract_reports.frm
+Forms/Contracts/contracts_edit.frm;формы JS;ProfCard/pc_patients_import.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Contracts/contr_ami_directs/contr_ami_directs_edit.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Contracts/patients_multi_sel.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Agents/agent_work_places/agent_work_places_history.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Contracts/select_prof_cards_by_service.frm
+Forms/Contracts/contracts_edit.frm;формы JS;ProfCard/profcard_edit.frm
+Forms/Contracts/contracts_edit.frm;формы JS;ProfCard/prof_card_model_add.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Contracts/contract_finansource_edit.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Agents/agents_filter.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Agents/agents.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/rep_prof_card_final_act_29n.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_mk_other.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/025_7y.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/MedCardAmb/pc_medcardamb.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_anormality.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_GS.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_869n.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_1207n.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/prof_card_minor.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/ProfCard/med_cert_086y.frm
+Forms/Contracts/contracts_edit.frm;формы JS;Reports/MedCard/025y_2025.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";prof_card_final_act_29n (WEB-форма) Reports/ProfCard/rep_prof_card_final_act_29n.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_mk_other (WEB-форма) Reports/ProfCard/dispensary_card_131y_mk_other.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";025_7y (WEB-форма) Reports/ProfCard/025_7y.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";AmbtPC (WEB-форма) Reports/MedCardAmb/pc_medcardamb.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_anormality (WEB-форма) Reports/ProfCard/dispensary_anormality.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y (WEB-форма) Reports/ProfCard/dispensary_card_131y.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_GS (WEB-форма) Reports/ProfCard/dispensary_card_131y_GS.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";pakage_for_DGS (Составной)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";Ambt1 (WEB-форма) Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";CARD_DISPANSARY_REP (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n2 (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n(copy 13.01.2020) (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_869n (WEB-форма) Reports/ProfCard/dispensary_card_131y_869n.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";amb_card_new (WEB-форма) Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_1207n (WEB-форма) Reports/ProfCard/dispensary_card_131y_1207n.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n_v2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n_v2_2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";SamGMU125u (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";prof_card_minor (WEB-форма) Reports/ProfCard/prof_card_minor.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n_old (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";Med_cert_086/y (WEB-форма) Reports/ProfCard/med_cert_086y.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";025/y (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Contracts/contracts_edit.frm;"Отчеты, вызываемые на форме";DC_logs (WEB-конструктор)
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_AGENT_DECRETIV_GROUPS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PROF_CARD_CONCLUSIONS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PROF_CARD
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_AGENT_CONS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_SERVICE_CONS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_SUPPLY_MED
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_FINANSOURCE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_PAYMENTS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACTS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_CONTRACT_PAYMENTS_BASE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PROF_CARD_BASE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_DIR_SERV_PAYMENTS
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/Contracts/contracts_edit.frm;Вьюхи;D_V_PROF_CARD_SERVICES_BASE
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PAYMENT_KIND
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_AGENT_DECRETIV_GROUPS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PROF_CARD_CONCLUSIONS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PC_CONCLUSIONS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Contracts/contracts_edit.frm;Таблицы;D_MKB10
+Forms/Contracts/contracts_edit.frm;Таблицы;D_VIEW_RESULTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_AGENTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_SPECIALITIES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_DISP_SERVICES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_VISITS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_SERVICES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PATIENTS_UDGROUP
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PROF_CARD
+Forms/Contracts/contracts_edit.frm;Таблицы;D_LPU
+Forms/Contracts/contracts_edit.frm;Таблицы;D_VISITPURPOSES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/Contracts/contracts_edit.frm;Таблицы;D_JOBTITLES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_DECRETIV_GROUPS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PC_CLOSE_REASONS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PC_RESULTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CABLAB
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_AGENT_CONS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_SERVICE_CONS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_SUPPLY_MED
+Forms/Contracts/contracts_edit.frm;Таблицы;D_NOMMODIF
+Forms/Contracts/contracts_edit.frm;Таблицы;D_NOMMODIF_PACKING
+Forms/Contracts/contracts_edit.frm;Таблицы;D_COUNTRIES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_FINANSOURCES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_MEASURES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_FINANSOURCE
+Forms/Contracts/contracts_edit.frm;Таблицы;D_CONTRACT_PAYMENTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_DIR_SERV_PAYMENTS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_DEPS
+Forms/Contracts/contracts_edit.frm;Таблицы;D_PROF_CARD_SERVICES
+Forms/Contracts/contracts_edit.frm;Таблицы;D_SERVTYPES
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_AGENT_CONS.ADD
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_SERVICE_CONS.ADD
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_SUPPLY_MED.ADD
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_FINANSOURCE.ADD
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_FINANSOURCE.DEL
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_SUPPLY_MED.DEL
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACTS.DEL
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_NUM_TOOLS.TO_STR_WITH_DELIMETER
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACTS.UPD
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACTS.GET_SUMM
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTRACT_AGENT_CONS.DEL
+Forms/Contracts/contracts_edit.frm;Пакеты и функции;D_PKG_CONTR_AMI_DIRECTS.UPDATE_PATIENT_WORKPLACE
+Forms/Contracts/contracts_edit.frm;СО;CONTR_CENTER_TYPE
+Forms/Contracts/contracts_edit.frm;Универсальные композиции;unit=""AGENTS"" composition=""NATURAL_RETURN_NAME""
+Forms/Contracts/contracts_edit.frm;Универсальные композиции;unit=""AGENTS"" composition=""JURISTIC_NAME_DEFCAT""
+Forms/Contracts/contracts_edit.frm;Универсальные композиции;unit=""CONTRACTS"" composition=""CONTR""
+Forms/Contracts/contracts_edit.frm;Универсальные композиции;"unit:LPU_SERVICES  composition:GRID,"
+Forms/Contracts/contracts_edit.frm;Универсальные композиции;"unit:LPU_SERVICES,GRIDN  composition:GRID,"
+Forms/Contracts/contracts_edit.frm;Неопределенные;D_C_ID
+Forms/Contracts/contracts_edit.frm;Неопределенные;D_STRAGG
+Forms/Agents/agent_relatives/represents.frm;формы JS;Agents/agent_relatives/agent_relatives_add.frm
+Forms/Agents/agent_relatives/represents.frm;Вьюхи;D_V_AGENT_RELATIVES
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_FN_RELATIVES_OTHER
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_FED_NSI_VERS
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_FED_NSI
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_LPUVERLIST_MAIN
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_AGENT_RELATIVES
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_RELATIONSHIPS
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_AGENTS
+Forms/Agents/agent_relatives/represents.frm;Таблицы;D_REPRESENT_LSTATUSES
+Forms/Contracts/supply_med/contract_supply_med.frm;Юзерформы;UserFormsMoscowNIIBlohina/Contracts/supply_med/contract_supply_med.d/data.dfrm
+Forms/Contracts/supply_med/contract_supply_med.frm;формы JS;UniversalForms/text_area_d3.frm
+Forms/Contracts/supply_med/contract_supply_med.frm;формы JS;Contracts/supply_med/add_med.frm
+Forms/Contracts/supply_med/contract_supply_med.frm;формы JS;Contracts/supply_med/edit_med.frm
+Forms/Contracts/supply_med/contract_supply_med.frm;формы JS;Sklad/reverselist/store_operations_journal.frm
+Forms/Contracts/supply_med/contract_supply_med.frm;Вьюхи;D_V_INCOMINGDOC_SPECS_BASE
+Forms/Contracts/supply_med/contract_supply_med.frm;Вьюхи;D_V_INCOMINGDOC_BASE
+Forms/Contracts/supply_med/contract_supply_med.frm;Вьюхи;D_V_CONTRACT_SUPPLY_MED
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_INCOMINGDOC_SPECS
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_INCOMINGDOC
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_CONTRACT_SUPPLY_MED
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_NOMMODIF
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_NOMMODIF_PACKING
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_COUNTRIES
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_AGENTS
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_FINANSOURCES
+Forms/Contracts/supply_med/contract_supply_med.frm;Таблицы;D_MEASURES
+Forms/Contracts/supply_med/contract_supply_med.frm;Пакеты и функции;D_PKG_NUM_TOOLS.TO_STR_WITH_DELIMETER
+Forms/Contracts/supply_med/contract_supply_med.frm;Пакеты и функции;D_PKG_SYNONYMS.GET_SYNONUM
+Forms/Contracts/supply_med/contract_supply_med.frm;Пакеты и функции;D_PKG_ACC_FARM_PROD.GET_ROUNDED_VALUE
+Forms/Contracts/supply_med/contract_supply_med.frm;Пакеты и функции;D_PKG_CONTRACT_SUPPLY_MED.GET_KOL_MED
+Forms/Contracts/supply_med/contract_supply_med.frm;Пакеты и функции;D_PKG_CONTRACT_SUPPLY_MED.GET_KOL_MED_OUT
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;формы JS;Contracts/contr_ami_directs/select_contract_by_type.frm
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_AGENT_POLIS_DMS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_CONTRACTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_AGENTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_PAYMENT_KIND
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Универсальные композиции;unit=""PERSMEDCARD"" composition=""PMC_FIO_AG""
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Универсальные композиции;unit=""AGENT_POLIS"" composition=""DMS""
+Forms/Contracts/contr_ami_directs/contr_ami_directs_edit.frm;Неопределенные;D_NUMB
+Forms/Contracts/patients_multi_sel.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/ProfCard/pc_patients_import.frm;формы JS;System/say_hello.frm
+Forms/ProfCard/pc_patients_import.frm;формы JS;UnitExportImport/Logs/import_error_log.frm
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_PROF_CARD_TYPES
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_CATALOGS
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_CONTRACTS
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_PROF_CARD_MODELS
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_IMP_LOG
+Forms/ProfCard/pc_patients_import.frm;Вьюхи;D_V_IMP_LOGS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_REGISTER_PURPOSES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_CATALOGS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_CONTRACTS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_CONTRACT_TYPES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_AGENTS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_EMPLOYERS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_PAYMENT_KIND
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_JOBTITLES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_VISITPURPOSES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_SERVICES
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_PROF_CARD_MODELS
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_IMP_LOG
+Forms/ProfCard/pc_patients_import.frm;Таблицы;D_IMP_LOGS
+Forms/ProfCard/pc_patients_import.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/ProfCard/pc_patients_import.frm;Универсальные композиции;unit=""AGENTS"" composition=""JURISTIC""
+Forms/ProfCard/pc_patients_import.frm;Универсальные композиции;unit=""PROF_CARD_MODELS"" composition=""GRID""
+Forms/ProfCard/pc_patients_import.frm;Универсальные композиции;unit=""VISITPURPOSES"" composition=""DEFAULT""
+Forms/ProfCard/pc_patients_import.frm;Универсальные композиции;"unit:CATALOGS  composition:DEFAULT,"
+Forms/ProfCard/pc_patients_import.frm;Универсальные композиции;"unit:CONTRACTS  composition:GRID_CURRENT,"
+Forms/Agents/agent_work_places/agent_work_places_history.frm;Юзерформы;UserFormsEgis3Tomsk/Agents/agent_work_places/agent_work_places_history.frm
+Forms/Agents/agent_work_places/agent_work_places_history.frm;Юзерформы;UserFormsEgis3Tomsk/Agents/agent_work_places/agent_work_places_history.frm
+Forms/Agents/agent_work_places/agent_work_places_history.frm;формы JS;Agents/agent_work_places/agent_work_places_edit.frm
+Forms/Contracts/contract_reports.frm;формы JS;Reports/ProfCard/rep_prof_card _cost_uncrypto.frm
+Forms/Contracts/contract_reports.frm;"Отчеты, вызываемые на форме";prof_card_cost
+Forms/Contracts/contract_reports.frm;"Отчеты, вызываемые на форме";prof_card_cost_uncrypto (WEB-форма) Reports/ProfCard/rep_prof_card _cost_uncrypto.frm
+Forms/Contracts/contract_reports.frm;"Отчеты, вызываемые на форме";prof_card_cost_final
+Forms/Contracts/contract_reports.frm;"Отчеты, вызываемые на форме";prof_card_final_act
+Forms/Contracts/contract_reports.frm;Вьюхи;D_V_AGENT_DEPS
+Forms/Contracts/contract_reports.frm;Вьюхи;D_V_URPRIVS
+Forms/Contracts/contract_reports.frm;Вьюхи;D_V_USERS
+Forms/Contracts/contract_reports.frm;Таблицы;D_AGENT_DEPS
+Forms/Contracts/contract_reports.frm;Таблицы;D_URPRIVS
+Forms/Contracts/contract_reports.frm;Таблицы;D_USERS
+Forms/Contracts/contract_reports.frm;Таблицы;D_USERROLES
+Forms/Contracts/contract_reports.frm;СО;Region
+Forms/Contracts/contract_reports.frm;Универсальные композиции;"unit:CONSTANTS  composition:MO,"
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Agents/agent_work_places/agent_work_places_history.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;ProfCard/profcard_edit.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;ProfCard/prof_card_model_add.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_mk_other.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/025_7y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/MedCardAmb/pc_medcardamb.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_anormality.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_GS.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_869n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_1207n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/prof_card_minor.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/ProfCard/med_cert_086y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;формы JS;Reports/MedCard/025y_2025.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_mk_other (WEB-форма) Reports/ProfCard/dispensary_card_131y_mk_other.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";025_7y (WEB-форма) Reports/ProfCard/025_7y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";AmbtPC (WEB-форма) Reports/MedCardAmb/pc_medcardamb.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_anormality (WEB-форма) Reports/ProfCard/dispensary_anormality.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y (WEB-форма) Reports/ProfCard/dispensary_card_131y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_GS (WEB-форма) Reports/ProfCard/dispensary_card_131y_GS.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";pakage_for_DGS (Составной)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";Ambt1 (WEB-форма) Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";CARD_DISPANSARY_REP (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n2 (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n(copy 13.01.2020) (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_869n (WEB-форма) Reports/ProfCard/dispensary_card_131y_869n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";amb_card_new (WEB-форма) Reports/MedCardAmb/medcardamb.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_1207n (WEB-форма) Reports/ProfCard/dispensary_card_131y_1207n.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n_v2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";dispensary_card_131y_124n_v2_2 (WEB-форма) Reports/ProfCard/dispensary_card_131y_124n_v2_2.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";SamGMU125u (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";prof_card_minor (WEB-форма) Reports/ProfCard/prof_card_minor.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";prof_osmotr_nesov_514n_old (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";Med_cert_086/y (WEB-форма) Reports/ProfCard/med_cert_086y.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";025/y (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Contracts/select_prof_cards_by_service.frm;"Отчеты, вызываемые на форме";DC_logs (WEB-конструктор)
+Forms/Contracts/select_prof_cards_by_service.frm;Вьюхи;D_V_PROF_CARD_SERVICES_EX
+Forms/Contracts/select_prof_cards_by_service.frm;Вьюхи;D_V_PROF_CARD
+Forms/Contracts/select_prof_cards_by_service.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LABMED_DIRECTION_LINE
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LBM_DIRLINE_STATUSES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_CABLAB
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_VISIT_FIELDS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_VISIT_TAB_FIELDS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_ADD_DIR_VALUES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_MKB10
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_AMB_TALON_OTHER_VISITS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PC_SERV_OTHER_RESULTS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DIRECTIONS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LPUDICT
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LABMED_PATJOUR
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LABMED_RSRCH_JOUR
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LABMED_RSRCH_JOURSP
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LABMED_RESEARCH_RES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_MEASURES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD_SERVICES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD_DIR_SERVS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_VISITS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_EMPLOYERS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DISP_SERVICES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DISPS_SERVICES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD_MODELS_SR
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PROF_CARD_CONCLUSIONS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PC_CONCLUSIONS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_SERVICES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_SERVTYPES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DEPS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_LPU
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_VISITPURPOSES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PAYMENT_KIND
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PERSMEDCARD
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_AGENTS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_JOBTITLES
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_DECRETIV_GROUPS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PC_CLOSE_REASONS
+Forms/Contracts/select_prof_cards_by_service.frm;Таблицы;D_PC_RESULTS
+Forms/ProfCard/prof_card_model_add.frm;Юзерформы;UserFormsEgis3Novosib/ProfCard/prof_card_model_add.d/script.dfrm
+Forms/ProfCard/prof_card_model_add.frm;Юзерформы;UserFormsEgis3Novosib/ProfCard/prof_card_model_add.d/view.dfrm
+Forms/ProfCard/prof_card_model_add.frm;Юзерформы;UserFormsKaliningrad/ProfCard/prof_card_model_add.d/data.dfrm
+Forms/ProfCard/prof_card_model_add.frm;Юзерформы;UserFormsKaliningrad/ProfCard/prof_card_model_add.d/script.dfrm
+Forms/ProfCard/prof_card_model_add.frm;subForm;ProfCard/SubForms/contraindications_weapons
+Forms/ProfCard/prof_card_model_add.frm;subForm;ProfCard/SubForms/catalog_validation
+Forms/ProfCard/prof_card_model_add.frm;subForm;ProfCard/SubForms/check_double_read
+Forms/ProfCard/prof_card_model_add.frm;subForm;ProfCard/SubForms/second_step_check
+Forms/ProfCard/prof_card_model_add.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/ProfCard/prof_card_model_add.frm;формы JS;Directions/select_contract_by_pk.frm
+Forms/ProfCard/prof_card_model_add.frm;формы JS;Directions/select_patient_ami_directs.frm
+Forms/ProfCard/prof_card_model_add.frm;формы JS;ProfCard/profcard_edit.frm
+Forms/ProfCard/prof_card_model_add.frm;формы JS;ProfCard/pc_first_step_select.frm
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_MODELS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_SERVICES
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_VISITS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PC_CLOSE_REASONS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_SINFO_SET_PARAMS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_SIGNAL_INFO_SETS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_DIR_SERVS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_DIRECTION_SERVICES
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_SERVICES_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PROF_CARD_DIR_SERVS_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_DIR_SERV_PAYMENTS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_CONTRACT_PAYMENTS_BASE
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_CONTRACTS
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/ProfCard/prof_card_model_add.frm;Вьюхи;D_V_CATALOGS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_JOBTITLES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_VISITPURPOSES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PAYMENT_KIND
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SERVICES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PROF_CARD_MODELS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PROF_CARD
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PC_SERV_STATES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DEPS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CABLAB
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PROF_CARD_DIR_SERVS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_VISITS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PROF_CARD_SERVICES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SERVTYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PC_CLOSE_REASONS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_LPU
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PERSMEDCARD
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_AGENTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CONTRACTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_EMPLOYERS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DECRETIV_GROUPS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_PC_RESULTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_AGENT_POLIS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SINFO_SET_PARAMS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SIGNAL_INFO_SETS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_ICONS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SERVICES_STR
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_VISITKINDS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_REFERENCE_KINDS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DIRECTIONS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_REG_TYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DS_SERV_STATUSES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_SCHEDULE_TIME_TYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_DIR_SERV_PAYMENTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CONTRACT_PAYMENTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CONTRACT_TYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_AGENT_WORK_PLACES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_OKVED
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_RAIONS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_AGENT_DEPS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_EDU_LEVELS
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_EDUCATION_ORG_TYPES
+Forms/ProfCard/prof_card_model_add.frm;Таблицы;D_CATALOGS
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_PROF_CARD.EXIST_DISP_CHILD_AGE_CAT
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_PROF_CARD_MODELS.CHECK_FIRST_PERIOD
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_STD.TREF
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_MSG.RECORD_NOT_FOUND
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_PROF_CARD.CLOSE_PROF_CARD
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_PROF_CARD.OPEN_PROF_CARD
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_BPENV.AFTERBP
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_CONTRACTS.SET_END_DATE
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_CATALOGS.FIND_ROOT_CATALOG
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_CATALOGS.GET_ID_BY_NAME
+Forms/ProfCard/prof_card_model_add.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/ProfCard/prof_card_model_add.frm;СО;CheckCloseProfCard
+Forms/ProfCard/prof_card_model_add.frm;СО;CheckPCAge
+Forms/ProfCard/prof_card_model_add.frm;СО;PC_CheckOpenProfChild
+Forms/ProfCard/prof_card_model_add.frm;СО;PC_CLOSE_REASONS
+Forms/ProfCard/prof_card_model_add.frm;Универсальные композиции;unit=""PROF_CARD_MODELS"" composition=""GRID""
+Forms/ProfCard/prof_card_model_add.frm;Универсальные композиции;unit=""CATALOGS"" composition=""DEFAULT""
+Forms/ProfCard/prof_card_model_add.frm;Универсальные композиции;unit=""PERSMEDCARD"" composition=""PMC""
+Forms/ProfCard/prof_card_model_add.frm;Универсальные композиции;"unit:PROF_CARD_MODELS  composition:GRID,"
+Forms/ProfCard/prof_card_model_add.frm;Неопределенные;D_P_EXC
+Forms/Contracts/contract_finansource_edit.frm;Вьюхи;D_V_FINANSOURCES
+Forms/Contracts/contract_finansource_edit.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/Contracts/contract_finansource_edit.frm;Вьюхи;D_V_CONTRACT_FINANSOURCE
+Forms/Contracts/contract_finansource_edit.frm;Таблицы;D_FINANSOURCES
+Forms/Contracts/contract_finansource_edit.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/contract_finansource_edit.frm;Таблицы;D_AGENTS
+Forms/Contracts/contract_finansource_edit.frm;Таблицы;D_CONTRACT_FINANSOURCE
+Forms/Contracts/contract_finansource_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Contracts/contract_finansource_edit.frm;Пакеты и функции;D_PKG_DAT_TOOLS.DATE_RANGES_ERROR
+Forms/Contracts/contract_finansource_edit.frm;Пакеты и функции;D_PKG_NUM_TOOLS.TO_STR
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsAltay/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/Persmedcard/persmedcard_edit.d/data.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/Persmedcard/persmedcard_edit.d/script.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/Persmedcard/persmedcard_edit.d/view.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsEgis3Tomsk/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsKaliningrad/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsKhabarovsk/Persmedcard/persmedcard_edit.d/data.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsKhabarovsk/Persmedcard/persmedcard_edit.d/foms_request.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsKhabarovsk/Persmedcard/persmedcard_edit.d/script.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsKhabarovsk/Persmedcard/persmedcard_edit.d/view.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsMoscowNIIBlohina/Persmedcard/persmedcard_edit.d/script.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsMoscowNIIBlohina/Persmedcard/persmedcard_edit.d/view.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsNiiSerb/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsPrimorie/Persmedcard/persmedcard_edit.d/data.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsPrimorie/Persmedcard/persmedcard_edit.d/script.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsPrimorie/Persmedcard/persmedcard_edit.d/view.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsRKOD/Persmedcard/persmedcard_edit.d/remove_from_registry.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsSakhalin/Persmedcard/persmedcard_edit.d/script.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsSakhalin/Persmedcard/persmedcard_edit.d/view.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsSamRMC/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;Юзерформы;UserFormsSaratov/Persmedcard/persmedcard_edit.d/persmedcard_edit.dfrm
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/get_full_years
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/to_upper_case
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/snils
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/base
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/zaprossnils
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/enrichRequestCall
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/anonym/anonym
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subscript/accuracyDateCheck
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Int/MedicBk/api
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_fields/is_emp
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/polis_oms
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/polis_dms
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/registration
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/application
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/social_state
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/special_case
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/orphan_category
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/agent_ability
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/contingent
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/life_categories
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/mobility_group
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/const_care
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/contact
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_fields/antro
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/consitution
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/pregnancy
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Vimis/agentMonitoringVimis/agentMonitoringVimis
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/persdocs
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/addr
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/orphan_place
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/marital_state
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/agent_relatives_docs
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/agent_details
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/work_place
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/agent_lgot_tabs
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Persmedcard/subforms_view/CAMI
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/decretiv_group
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/gr_vaccination
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/gr_rentgenograph
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/flu
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_view/names
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/death
+Forms/Persmedcard/persmedcard_edit.frm;subForm;InformedAgreement/Patient/patient_ia_tab
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/allergic_anamnes
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/trf_anamnesis
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/monitoring_indication_of_diagnoses
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/PmcVaccinations
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Markers/pmc_markers
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/bad_habits
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/inherited_diseases
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/infertility
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/agent_gynec/agent_gynec_contraception
+Forms/Persmedcard/persmedcard_edit.frm;subForm;Agents/subforms_fields/medical_reports
+Forms/Persmedcard/persmedcard_edit.frm;формы JS;Persmedcard/pmc_regional_privs/pmc_regional_privs_edit.frm
+Forms/Persmedcard/persmedcard_edit.frm;формы JS;NosRegistrs/registr_ssz.frm
+Forms/Persmedcard/persmedcard_edit.frm;формы JS;Agents/agent_relatives/agent_relatives_add.frm
+Forms/Persmedcard/persmedcard_edit.frm;формы JS;Agents/subforms_fields/data_from_edit.frm
+Forms/Persmedcard/persmedcard_edit.frm;формы JS;/Forms/MentalHistory/mental_history.frm
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_FED_NATIONALITIES
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_EX_SYSTEMS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_EX_SYSTEM_VALUES
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_INSURANCE_COMPANIES_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_GEOGRAFY_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_PERSDOCS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_PERSDOCTYPES
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_COUNTRIES
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_PERSMEDCARD_EXTERNAL_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_COUNTRIES_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_GEOGRAFY
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_CONTACTS_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_NR_PATIENTS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_NR_REMOVE_REASONS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_NOS_REGISTRS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_R_SSZ_OUT
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_BJ_BULLETIN_CONTENTS_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_ZNO_DATA
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_ZNO_DATA_REGISTR_OUT
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_PMC_BLOODGROUPE_CHRON_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_POLIS_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_GYNEC
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_PSY_ANAMNESIS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_LPU_BASE
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_URPRIVS
+Forms/Persmedcard/persmedcard_edit.frm;Вьюхи;D_V_AGENT_ORPH_CATEGORIES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_FED_NATIONALITIES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_EX_SYSTEMS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_EX_SYSTEM_VALUES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENTS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_BLOODGROUPE
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_DIVISIONS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_RHESUS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_CABLAB
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_INSURANCE_COMPANIES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_GEOGRAFY
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_PERSDOCS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_PERSDOCTYPES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_COUNTRIES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_NORESIDENT_STATUS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_MASKS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_PERSMEDCARD_EXTERNAL
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_ADDRS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_RAIONS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_GEOGRAFYTYPES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_CONTACTS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_CONTACT_TYPES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_NR_PATIENTS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_NOS_REGISTRS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_LPUDICT
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_MKB10
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_NR_REMOVE_REASONS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_R_SSZ_OUT
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_BJ_BULLETIN_CONTENTS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ZNO_DATA
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_AFFECTED_SIDE
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_MULTI_PRIM
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_CIRCUMSTANCES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_MORPH_TYPES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_TNM_T
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_TNM_N
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_TNM_M
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_STAGES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_JOBTITLES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_REGISTR_KINDS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ZNO_DATA_CL_GROUPS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_DIFFERENTIATION
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_CLINICAL_GROUPS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_MORPH_TYPES_ICDO3
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_TOPIC_TYPES_ICDO3
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_TUMOR_STATUSES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_FORM_CRIZ
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_MIELPHASES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_R_ONKO_GIST_GROUPS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ICCC_3
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_R_ONKO_VISIT_CAUSE
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_SOURCE_MED_INF
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_CHAR_PROCESS_DIS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_CLASSIFICATION
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_ANAT_LOCAL
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_R_ONKO_TNM_EXTRA
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_LATERALITY
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ONKO_LAB_RESEARCH
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_ZNO_DATA_REGISTR_OUT
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_PMC_BLOODGROUPE_CHRON
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_GYNEC
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_DIRECTORIES_DATA_VER
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_PSY_ANAMNESIS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_LPU
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_URPRIVS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_USERS
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_USERROLES
+Forms/Persmedcard/persmedcard_edit.frm;Таблицы;D_AGENT_ORPH_CATEGORIES
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_STD.FRM_D
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_EX_SYSTEM_VALUES.SET_VAL
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_NR_REQUEST.ADD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_R_SSZ_OUT.ADD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_NR_REQUEST.UPD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_R_SSZ_OUT.UPD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_CARD_NUMB_UNKNOWN
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.DEL_CARD_NUMB_UNKNOWN
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.CHECK_ALL
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_PSY_ANAMNESIS.GET_LAST
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_URPRIVS.CHECK_EMP_BPPRIV
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_VIEW_EMPLOYERS_ACTION.ADD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_AGENT_POLIS.ADD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_USERS.GET_ID
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PMC_CARD_LOCATIONS.ADD
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_CARD_NUMB
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.UPD_FULL
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_STD.FRM_DT
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.SGCC_MESSAGE
+Forms/Persmedcard/persmedcard_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.UPD_ANTHRO
+Forms/Persmedcard/persmedcard_edit.frm;СО;PMC_GEN_NUMB_UNKNOWN
+Forms/Persmedcard/persmedcard_edit.frm;СО;PMC_UPD_UNKNOWN
+Forms/Persmedcard/persmedcard_edit.frm;СО;SszAutoCloseNoticeDeath
+Forms/Persmedcard/persmedcard_edit.frm;СО;AgentInfChangeLN
+Forms/Persmedcard/persmedcard_edit.frm;СО;AgentFIOadd
+Forms/Persmedcard/persmedcard_edit.frm;СО;TransferENP
+Forms/Persmedcard/persmedcard_edit.frm;СО;AgentDeathDateCheck
+Forms/Persmedcard/persmedcard_edit.frm;СО;ShowSignByAge
+Forms/Persmedcard/persmedcard_edit.frm;СО;GenAnonimNumb
+Forms/Persmedcard/persmedcard_edit.frm;СО;AgentAddrIsReg
+Forms/Persmedcard/persmedcard_edit.frm;СО;GenEmployersNumb
+Forms/Persmedcard/persmedcard_edit.frm;СО;hideFERZLButton
+Forms/Persmedcard/persmedcard_edit.frm;СО;MaxAllowAge
+Forms/Persmedcard/persmedcard_edit.frm;СО;WEBIOMED_hide
+Forms/Persmedcard/persmedcard_edit.frm;СО;MedicBK_hide
+Forms/Persmedcard/persmedcard_edit.frm;СО;VisibleStatusLgot
+Forms/Persmedcard/persmedcard_edit.frm;СО;IntegrationEnabled
+Forms/Persmedcard/persmedcard_edit.frm;СО;CheckFor_UNKNOWN
+Forms/Persmedcard/persmedcard_edit.frm;СО;CheckPMC_SNILS
+Forms/Persmedcard/persmedcard_edit.frm;СО;FrlloManualSend
+Forms/Persmedcard/persmedcard_edit.frm;СО;PmcGetPolicOMC
+Forms/Persmedcard/persmedcard_edit.frm;СО;AgnPersDocsCitizCheck
+Forms/Persmedcard/persmedcard_edit.frm;СО;SpecLpuType
+Forms/Persmedcard/persmedcard_edit.frm;СО;hideInfoMax
+Forms/Persmedcard/persmedcard_edit.frm;СО;LogEmployersAction
+Forms/Persmedcard/persmedcard_edit.frm;Универсальные композиции;unit=""GEOGRAFY"" composition=""DEFAULT""
+Forms/Persmedcard/persmedcard_edit.frm;Неопределенные;D_STRAGG
+Forms/Persmedcard/persmedcard_edit.frm;Неопределенные;D_P_EXC
+Forms/Persmedcard/persmedcard_edit.frm;Неопределенные;D_INSERT_ID
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_hh
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_dirs
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_physiotherapy
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_recipe
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_bull
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/nazn_by_visit
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/visit_nazn
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/agent
+Forms/Reports/MedCard/025y_2025.frm;subForm;Reports/UniversalDataSets/persmedcard
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_COUNTRIES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_CONTACTS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_GEOGRAFY
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_INABILITIES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_DIRECTORIES_FN_DATA
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_PALLIATIVE_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_POLIS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_PERSDOCS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_SOCIAL_STATES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_RELATIVES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_FEDERAL_PRIVS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_CONTROL_CARD
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_DISEASECASES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_EMPLOYERS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_HOSP_HISTORIES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_VISITS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_VIS_DIAGNOSISES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_RHESUS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_BLOODGROUPE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_PMC_BLOODGROUPE_CHRON_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_ALLERG_ANAMNESIS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_AA_REACTIONS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_CONSITUTIONS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_AGENT_CONSITUTION_SPS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_MKB10
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_BJ_BULL_CONT_EXTS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_BJ_BULLETIN_CONTENTS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_MP_PRESCRIBES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_RECIPS_COMM
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_RECIPS_COMM_SPECS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_PMC_INF_AGREEMENT_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_TYPE_INF_AGREEMENT
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_KIND_INF_AGREEMENT
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_FORM30_SERVICES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LPU_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_MKB10_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_DISEASECASES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_SERV_DOSE_INFLUENCE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_DIRECTION_SERVICES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_VISITS
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LABMED_PATJOUR_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LABMED_RSRCH_JOUR_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LABMED_RSRCH_JOURSP
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LABMED_RSRCH_JOUR
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_CERT_CONDEATH_STATUSES
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_CF_DEATH_CONTENTS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_CERTIFICATE_FORMS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_LPU
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_CF_DEATH_CAUSES_BASE
+Forms/Reports/MedCard/025y_2025.frm;Вьюхи;D_V_MEDICAL_COMMISSIONS_BASE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_COUNTRIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_CONTACTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CONTACT_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_GEOGRAFY
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_GEOGRAFYTYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_INABILITIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_INABILITY_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_INABILITY_STATUSES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_INABILITY_GROUPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_LPUDICT
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DIRECTORIES_FN_DATA
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_PALLIATIVE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PERSMEDCARD
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BLOODGROUPE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DIVISIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RHESUS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_EMPLOYERS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CABLAB
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_ADDRS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RAIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_POLIS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_INSURANCE_COMPANIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_POLIS_KINDS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_PERSDOCS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PERSDOCTYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NORESIDENT_STATUS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_SOCIAL_STATES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SOCIALSTATES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SOCIALCATEGORIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_FN_RELATIVES_OTHER
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_FED_NSI_VERS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_FED_NSI
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_LPUVERLIST_MAIN
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_RELATIVES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RELATIONSHIPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REPRESENT_LSTATUSES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_WORK_PLACES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_OKVED
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_DEPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_JOBTITLES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_EDU_LEVELS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_EDUCATION_ORG_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_FEDERAL_PRIVS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PRIVILEGES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_FLR_VERSION
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CONTROL_CARD
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MKB10
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DISP_PLAN
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NR_REMOVE_REASONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DISEASECASES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DISCASES_DISCOVER
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CONTROL_CARD_GROUPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NOS_REGISTR_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NOS_REGISTRS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CC_DEATH_REASON
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DISEASECASE_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DC_SOURCES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MESES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SPECIALITIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SPECIALITIES_ED
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DEPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DEPS_KINDS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_USERS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_ESIA
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_EMP_SKILL
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_LPU
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_HOSP_HISTORIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_VISITS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PMC_BLOODGROUPE_CHRON
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_ALLERG_ANAMNESIS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_ATX
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NOMBASE_MNN
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NOMBASE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MED_FORMS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_ALLERG_POWER
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_ALLERG_ANAMNESIS_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_AA_REACTIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_CONSITUTIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_CONSTITUTIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RES_INTERPRETATION
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_AGENT_CONSITUTION_SPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_ANTHROP
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MEASURES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_LATERALITY
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BJ_BULL_CONT_EXTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BJ_BULLETIN_CONTENTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DISABILITY_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BJ_BULLETINES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BULLETIN_JOURNALS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BULL_RESULTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DIRECTORIES_DATA_VER
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_BULLETIN_STATES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MP_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DOSE_MEASURES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MP_CONDITIONES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MP_ADD_ATTRIBUTES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REASON_CANCEL_PRESCRIBE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_HOSP_HISTORY_DEPS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MP_PRESCRIBES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_NOMMODIF
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MP_DESCRIBES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MED_USE_METHODS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RECIPS_COMM
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REC_EXPPERIOD
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_RECIPS_COMM_SPECS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MNN_FED_PRIV
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MED_USE_METHOD
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PERIOD_RELEASE_OF_MED
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_TRN_FED_PRIV
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MEDS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_OKEI_MEARURES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PMC_INF_AGREEMENT
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_TYPE_INF_AGREEMENT
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REPORTS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SERVICES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_TYPE_MEDCARE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_KIND_INF_AGREEMENT
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_FORM30_SERVICES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SERV_DOSE_INFLUENCE
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_MEAS_CATEGORIES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SERVICES_STR
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_VISITKINDS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_VISITPURPOSES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REFERENCE_KINDS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DIRECTIONS
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_REG_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_DS_SERV_STATUSES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_SCHEDULE_TIME_TYPES
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_PAYMENT_KIND
+Forms/Reports/MedCard/025y_2025.frm;Таблицы;D_LABMED_PATJOUR
+Forms/Reports/MedCard/025y_2025.frm;Пакеты и функции;D_PKG_FLR.GET_FEDD_PRIVS_STR
+Forms/Reports/MedCard/025y_2025.frm;Пакеты и функции;D_PKG_AGENT_ALLERG_ANAMNESIS.GET_BY_STRING
+Forms/Reports/MedCard/025y_2025.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Reports/MedCard/025y_2025.frm;Пакеты и функции;D_PKG_NUM_TOOLS.TO_STR
+Forms/Reports/MedCard/025y_2025.frm;Пакеты и функции;D_PKG_VISIT_FIELDS.GET_VALUE
+Forms/Reports/MedCard/025y_2025.frm;СО;ManualAddrPrint025
+Forms/Reports/MedCard/025y_2025.frm;Неопределенные;D_STRAGG
+Forms/Reports/MedCard/025y_2025.frm;Неопределенные;D_F_REP_GET_TMP_ADDR_025
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;subForm;UniversalForms/multilined_control
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PROF_CARD
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PROF_CARD_BADFACTORS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PROF_CARD_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PROF_CARD_RECOMMEND
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_MKB10
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_PROF_CARD_SERVICES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_VISITS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_VIS_DIAGNOSISES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_VISITS_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_VISIT_FIELDS_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_VISIT_TAB_FIELDS_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_LPU_BASE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_CONTRACTS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_LPU
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Вьюхи;D_V_AGENTS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_LPU
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_VISITPURPOSES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PAYMENT_KIND
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PERSMEDCARD
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_AGENTS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_JOBTITLES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_CONTRACTS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_EMPLOYERS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DECRETIV_GROUPS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PC_CLOSE_REASONS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PC_RESULTS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_CABLAB
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_BLOODGROUPE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DIVISIONS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_RHESUS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD_BADFACTORS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD_RECOMMEND
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_RECOMMENDATIONS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_SPECIALITIES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_RECOM_DIR
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_MED_CARE_PROFILES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_BED_TYPES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_LPUDICT
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_SERVICES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_MKB10
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PC_SERV_STATES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DEPS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD_DIR_SERVS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_VISITS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_PROF_CARD_SERVICES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_SERVTYPES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DISEASECHARACTERS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_INJURE_KINDS
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DISEASE_STAGES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_CL_OBSERV_CATEGORIES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DIAGNOSIS_TYPES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_DIAGNOSIS_STAGES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Таблицы;D_RISAR_STAGES
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Пакеты и функции;D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_REP_BF_RESULT
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_NVAL
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Пакеты и функции;D_PKG_DAT_TOOLS.DATE_TO_CHAR
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Пакеты и функции;D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+Forms/Reports/ProfCard/rep_prof_card_final_act_29n.frm;Неопределенные;D_STRAGG
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/ProfCard/profcard_edit.d/data.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/ProfCard/profcard_edit.d/script.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Novosib/ProfCard/profcard_edit.d/view.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Tomsk/ProfCard/profcard_edit.d/data.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Tomsk/ProfCard/profcard_edit.d/script.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsEgis3Tomsk/ProfCard/profcard_edit.d/view.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsSaratov/ProfCard/profcard_edit.d/data.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsSaratov/ProfCard/profcard_edit.d/script.dfrm
+Forms/ProfCard/profcard_edit.frm;Юзерформы;UserFormsSaratov/ProfCard/profcard_edit.d/view.dfrm
+Forms/ProfCard/profcard_edit.frm;subForm;netrika/external_result_pdf
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/prof_card_tabs_data
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/contraindications_weapons
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/font_weight_tabs
+Forms/ProfCard/profcard_edit.frm;subForm;EDF/docsForSignAuto
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/check_double_read
+Forms/ProfCard/profcard_edit.frm;subForm;ControlCard/subforms/check_valid_dates
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/second_step_check
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/prof_card_gai_arms
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/prof_card_services_popup
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/return_MSE_talon_subform
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/harmful_factors
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/contraindications
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/risk_factors
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/health_status
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/recommendations
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/conclusion
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/conclusion_harmful_factors
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/appointments
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/status_after_before
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/health_status_before
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/SubForms/orphan_directories_data
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/health_status_after
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/conclusion_traffic_police
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/services
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/contracts
+Forms/ProfCard/profcard_edit.frm;subForm;ProfCard/profcard_edit_subforms/prof_card_print_reports
+Forms/ProfCard/profcard_edit.frm;subForm;EHR/simple_ehrdocs_form
+Forms/ProfCard/profcard_edit.frm;subForm;footerStyle
+Forms/ProfCard/profcard_edit.frm;формы JS;Components/Grid/profile.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/services_direction_MSI.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Lis/Dirline/dirline_order_alt.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_healthgroups_show.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/return_ticket_load.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Lis/Citology/direction_order.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_pass_select.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Registry/reg_lpu_ds.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Registry/reg_select_time_short.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Registry/reg_prescr.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Registry/reg_select_lpu.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_first_step_select.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_recommendations.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/prof_card_model_add.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/prof_card_mass_write.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;UniversalTemplate/UniversalTemplate.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;GenRegistry/reg_lpu_ds.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;GenRegistry/reg_select_time_full.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;GenRegistry/reg_full.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_serv_other_results_edit.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/current_contracts.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Labmed/labmed_analize_new.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Visit/vimis_routing_rejection.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;ProfCard/pc_check_early_services.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;EHR/simple_ehrdocs_form.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Reports/Visit/PrintVisit_mass.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Reports/ProfCard/pc_conclusion.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Reports/ProfCard/pc_passtitle.frm
+Forms/ProfCard/profcard_edit.frm;формы JS;Reports/Dir/msek_napravlenie.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";Reports/ProfCard/med_cert_086y_A5_call.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";Reports/ProfCard/conclusion_clinical_emp_call.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";Reports/ProfCard/med_cert_086y_call.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";Reports/PatientAgreement/IA_CALL.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";Visit_mass (WEB-форма) Reports/Visit/PrintVisit_mass.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";prof_card_conclusion (WEB-форма) Reports/ProfCard/pc_conclusion.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";prof_card_passtitle (WEB-форма) Reports/ProfCard/pc_passtitle.frm
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";prof_card_kek
+Forms/ProfCard/profcard_edit.frm;"Отчеты, вызываемые на форме";msek_napravlenie (WEB-форма) Reports/Dir/msek_napravlenie.frm
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_VISITING_TEAMS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_ORPHAN_BEFORE_DISP
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_VISITS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_ORPHAN_AFTER_DISP
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_MODELS_SR
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_SERVICES_DS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PATIENTS_DGROUP_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PATIENT_DGROUP_PCTS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_CONCLUSIONS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_CONCLUSIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_SERV_OTHER_RESULTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_EHRS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_EHR_STATES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_INT_HL7V3_MSGS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_SERV_OTHER_RESULTS_ATOV
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_SERVICES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MEDICAL_COMMISSIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DISPS_SERVICES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DISEASECASES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AMB_TALONS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AMB_TALON_VISITS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_SERVICES_STR
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_TYPES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_CONCLUSIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PAYMENT_KIND_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DIRECTORIES_DATA_VER
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_VISITPURPOSES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_TYPES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_TYPE_CRS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PAT_DGR_RESULTS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_RESULTS_PCTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_RESULTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_EX_SYSTEMS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_ORPHAN_AFTER_DISP_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_CLOSE_REASONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_RECOMMEND_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AGENT_REGISTRATION_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_SERVICES_EX
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_LPU_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_DIR_SERVS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_CATALOGS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_CONTRACTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_EMPLOYERS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AGENT_DECRETIV_GROUPS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_ORPHAN_HEALTH
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PC_HEALTH_DISORDERS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOC_CONTENTS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MO_CERTIFICATE_FORMS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOC_CONTENT_CONCLUSIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOC_CONTENT_INDICATIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOC_CONTENT_RESTRICTIONS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOC_CONTENTS_ARMS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_LOGS_MEDICAL_FORMS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_MOCJ_EMPLOYERS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DECRETIV_GROUPS
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_AGENT_INABILITIES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_PROF_CARD_SERVICES
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_DISP_SERVICES_BASE
+Forms/ProfCard/profcard_edit.frm;Вьюхи;D_V_VISITPURPOSES_BASE
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PC_VISITING_TEAMS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DIRECTORIES_DATA_VER
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PC_ORPHAN_BEFORE_DISP
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_VISITS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_SERVICES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PC_ORPHAN_AFTER_DISP
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_SERVICES_STR
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD_MODELS_SR
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PERIOD_VIEW
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DEPS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_CABLAB
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_SERVTYPES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_DIRECTION_LINE
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LBM_DIRLINE_STATUSES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_VISIT_FIELDS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_VISIT_TAB_FIELDS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_ADD_DIR_VALUES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_MKB10
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_AMB_TALON_OTHER_VISITS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PC_SERV_OTHER_RESULTS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DIRECTIONS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_OUTER_DIRECTIONS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LPU
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LPUDICT
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_PATJOUR
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_RSRCH_JOUR
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_RSRCH_JOURSP
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_RESEARCH_RES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_MEASURES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD_SERVICES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD_DIR_SERVS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_EMPLOYERS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_AGENTS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DISP_SERVICES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_DISPS_SERVICES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LBM_SAMPLE_DIRLINE
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_LABMED_SAMPLES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD_TYPES
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PROF_CARD_CONCLUSIONS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PC_CONCLUSIONS
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PATIENTS_DGROUP
+Forms/ProfCard/profcard_edit.frm;Таблицы;D_PATIENT_DGROUP_PCTS
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_RESEARCH_RESULTS.GET_EX_RESULT_PDF
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_PC_OBR_FILTER_SERVICE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_EX_SYSTEMS.GET_ID_BY_CODE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.EXIST_DISP_CHILD_AGE_CAT
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_EDF_TOOLS.CHECK_BEFORE_EDIT_MED_EVENT
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.CHECK_RIGHT
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_AGENT_REGISTRATION.GET_ACTUAL_ON_DATE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_STD.TREF
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_MSG.RECORD_NOT_FOUND
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.CLOSE_PROF_CARD
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_STD.TLSTR
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_DAT_TOOLS.AGE_TO_STR
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_RECOMENDATION
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.SET_REC_HEALTH_GROUP
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_VISITS.GET_TEMPLATE_INFO
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD_SERVICES.ADD
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.UPD
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD_SERVICES.DEL
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_DISEASECASES.SET_CLOSE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_AMB_TALONS.SET_CLOSE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.OPEN_PROF_CARD
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_CMP.NUM
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_CMP.STR
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PC_ORPHAN_BEFORE_DISP.UPD
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_AGENT_WORK_PLACES.GET_ACTUAL_ON_DATE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_AGENT_DECRETIV_GROUPS.GET_ACTUAL_ON_DATE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_DATE_E
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_STD.FRM_D
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_AGENT_INABILITIES.GET_ACTUAL_ON_DATE
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_EKG_STATUS
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD.GET_PCT
+Forms/ProfCard/profcard_edit.frm;Пакеты и функции;D_PKG_PROF_CARD_DIR_SERVS.ADD
+Forms/ProfCard/profcard_edit.frm;СО;UpdateSSR
+Forms/ProfCard/profcard_edit.frm;СО;CDAServActMedSocExam
+Forms/ProfCard/profcard_edit.frm;СО;RemdEnabled
+Forms/ProfCard/profcard_edit.frm;СО;ReturnCdasForNetrica
+Forms/ProfCard/profcard_edit.frm;СО;PCRecommendNotNull
+Forms/ProfCard/profcard_edit.frm;СО;ProfCard_ShowTablePercent
+Forms/ProfCard/profcard_edit.frm;СО;PC_CheckOpenProfChild
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardTypeLock
+Forms/ProfCard/profcard_edit.frm;СО;ExcludeProfCardTypeTemplate
+Forms/ProfCard/profcard_edit.frm;СО;EditProfService
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardCreateSecondStep
+Forms/ProfCard/profcard_edit.frm;СО;RequiredSerNum
+Forms/ProfCard/profcard_edit.frm;СО;Prof_Card_Conclusions
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardInstVisit
+Forms/ProfCard/profcard_edit.frm;СО;PC_CHANGE_PROHIBITION
+Forms/ProfCard/profcard_edit.frm;СО;EKG_FOR_DISP
+Forms/ProfCard/profcard_edit.frm;СО;CheckCloseProfCard
+Forms/ProfCard/profcard_edit.frm;СО;CloseProfCard
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardCloseControl
+Forms/ProfCard/profcard_edit.frm;СО;NoCloseProfcard
+Forms/ProfCard/profcard_edit.frm;СО;LPUServiceStr
+Forms/ProfCard/profcard_edit.frm;СО;CheckEhrsIconsEnabled
+Forms/ProfCard/profcard_edit.frm;СО;LabDirLineEnabled
+Forms/ProfCard/profcard_edit.frm;СО;NecessaryVisitingTeam
+Forms/ProfCard/profcard_edit.frm;СО;LisDefaultDirButton
+Forms/ProfCard/profcard_edit.frm;СО;LISCitDirButton
+Forms/ProfCard/profcard_edit.frm;СО;PCButtonCheckServices
+Forms/ProfCard/profcard_edit.frm;СО;ToggleSecurityEDF
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardServsAddFilter
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardTypesCheckEMDO
+Forms/ProfCard/profcard_edit.frm;СО;MSE_CheckVisit
+Forms/ProfCard/profcard_edit.frm;СО;ProfCardServMse
+Forms/ProfCard/profcard_edit.frm;СО;PROF_CARD
+Forms/ProfCard/profcard_edit.frm;СО;GRD_ID
+Forms/ProfCard/profcard_edit.frm;Универсальные композиции;unit=""VISITPURPOSES"" composition=""DEFAULT_NAME""
+Forms/ProfCard/profcard_edit.frm;Универсальные композиции;unit=""PERSMEDCARD"" composition=""PMC""
+Forms/ProfCard/profcard_edit.frm;Универсальные композиции;unit=""EMPLOYERS"" composition=""SELECT_ID""
+Forms/ProfCard/profcard_edit.frm;Универсальные композиции;"unit:Form.unitEditFields[ctrlName].unit  composition:Form.unitEditFields[ctrlName].composition,"
+Forms/ProfCard/profcard_edit.frm;Неопределенные;D_CL_ID
+Forms/ProfCard/profcard_edit.frm;Неопределенные;D_F_GET_LABMED_EHRS
+Forms/ProfCard/profcard_edit.frm;Неопределенные;D_F_GET_DIR_SERV_LABMED
+Forms/ProfCard/profcard_edit.frm;Неопределенные;D_P_EXC
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Novosib/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Novosib/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsEgis3Tomsk/HomeCalls/home_call_edit.d/home_call_edit.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_edit.frm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/script.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsPrimorie/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsSamRMC/HomeCalls/home_call_edit.d/form.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsSaratov/HomeCalls/home_call_edit.d/dopinfo.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/data.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/script.dfrm
+Forms/HomeCalls/home_call_edit.frm;Юзерформы;UserFormsVolgograd/HomeCalls/home_call_edit.d/view.dfrm
+Forms/HomeCalls/home_call_edit.frm;subForm;Registry/PmcSearch/search_patient
+Forms/HomeCalls/home_call_edit.frm;subForm;Registry/PmcSearch/patient_info
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_question.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Reception/select_price.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;services/select_by_in_lpu.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Directions/select_contract_by_pk.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Directions/select_patient_ami_directs.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;Reg/select_discounts.frm
+Forms/HomeCalls/home_call_edit.frm;формы JS;HomeCalls/home_call_set_state.frm
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_INITS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DIR_REG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_LPU
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_QUOTA_GROUPS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DISEASECASES_OPEN
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PAYMENT_KIND_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES_PAYS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SOCIALSTATE_PAYS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_NR_NEWBORN_CARD
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ADDRS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_WORK_PLACES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_URPRIVS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_SOCIAL_STATES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_AGENT_ORPH_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_SITES_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/HomeCalls/home_call_edit.frm;Вьюхи;D_V_HOME_CALL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_BLOODGROUPE
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_RHESUS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CABLAB
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_GEOGRAFY
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_QUOTA_GROUPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DISEASECASES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOSP_HISTORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_PAYMENT_KIND
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES_PAYS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALSTATE_PAYS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SERVICES_STR
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_NR_NEWBORN_CARD
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ADDRS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_RAIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_WORK_PLACES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_OKVED
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_DEPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EDU_LEVELS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EDUCATION_ORG_TYPES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_URPRIVS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_USERROLES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_SOCIAL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALSTATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SOCIALCATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ORPH_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CONTRACTS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/HomeCalls/home_call_edit.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.PASS
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_DISEASECASES.ADD
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_GEOGRAFY.GET_FULL
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_HC_PAYMENTS.GET_PAYMENT_DATA_TO_CURSOR
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.ADD
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_CARD_NUMB
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_PRICE
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.COLLECT_PRICELIST
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_DISCOUNT
+Forms/HomeCalls/home_call_edit.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_NVAL
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallRegType
+Forms/HomeCalls/home_call_edit.frm;СО;CheckExistHCsInOneDay
+Forms/HomeCalls/home_call_edit.frm;СО;InitiatorForCallToHome
+Forms/HomeCalls/home_call_edit.frm;СО;ProvideInactiveServices
+Forms/HomeCalls/home_call_edit.frm;СО;DSPCheckSocPays
+Forms/HomeCalls/home_call_edit.frm;СО;CreateContract
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallPurposeDefaultHH
+Forms/HomeCalls/home_call_edit.frm;СО;HomeCallPurposeDefault
+Forms/HomeCalls/home_call_edit.frm;СО;VISIT_PURPOSE_DEFAULT
+Forms/HomeCalls/home_call_edit.frm;СО;VISITPURPOSES
+Forms/HomeCalls/home_call_edit.frm;СО;ServiceForCallToHome
+Forms/HomeCalls/home_call_edit.frm;СО;ServiceForCallToHomeChild
+Forms/HomeCalls/home_call_edit.frm;СО;SERVICES
+Forms/HomeCalls/home_call_edit.frm;СО;CloseEditHomeСallRegDate
+Forms/HomeCalls/home_call_edit.frm;СО;HCTransferDailyMaximumReached
+Forms/HomeCalls/home_call_edit.frm;СО;CheckCopyHCPass
+Forms/HomeCalls/home_call_edit.frm;СО;PaymentKindForCallToHome
+Forms/HomeCalls/home_call_edit.frm;Универсальные композиции;unit=""VISITPURPOSES"" composition=""DEF""
+Forms/HomeCalls/home_call_edit.frm;Неопределенные;D_P_EXC
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsEgis3Tomsk/HomeCalls/home_call_pass.d/home_call_pass.dfrm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsKaliningrad/HomeCalls/home_call_pass.frm
+Forms/HomeCalls/home_call_pass.frm;Юзерформы;UserFormsSaratov/HomeCalls/home_call_pass.d/smp.dfrm
+Forms/HomeCalls/home_call_pass.frm;формы JS;HomeCalls/home_call_question.frm
+Forms/HomeCalls/home_call_pass.frm;формы JS;HomeCalls/home_call_spec_reject.frm
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_pass.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SERVICES_STR
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_BLOODGROUPE
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_RHESUS
+Forms/HomeCalls/home_call_pass.frm;Таблицы;D_CABLAB
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.PASS
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/HomeCalls/home_call_pass.frm;Пакеты и функции;D_PKG_UNITPROPS.GET_NVAL
+Forms/HomeCalls/home_call_pass.frm;СО;HomeCallTransferService
+Forms/HomeCalls/home_call_pass.frm;СО;ProvideInactiveServices
+Forms/HomeCalls/home_call_pass.frm;СО;HCTransferDailyMaximumReached
+Forms/HomeCalls/home_call_pass.frm;СО;HCAllow2ToSameDocInDay
+Forms/HomeCalls/home_call_pass.frm;СО;HCAllow2ToSameDocSpecInDay
+Forms/HomeCalls/home_call_pass.frm;Универсальные композиции;"unit:EMPLOYERS  composition:EMP_RET_SURNAME,"
+Forms/HomeCalls/home_call_pass.frm;Универсальные композиции;"unit:SERVICES  composition:DEFAULT,"
+Forms/HomeCalls/home_call_pass.frm;Неопределенные;D_STRAGG
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELISTS
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELIST_SERVS
+Forms/Reception/select_price.frm;Вьюхи;D_V_PRICELIST_SERVS_DEGREES
+Forms/Reception/select_price.frm;Вьюхи;D_V_EMPLOYER_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_AGENTS
+Forms/Reception/select_price.frm;Таблицы;D_PAYMENT_KIND
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_DMS
+Forms/Reception/select_price.frm;Таблицы;D_DIVISIONS
+Forms/Reception/select_price.frm;Таблицы;D_CONTRACTS
+Forms/Reception/select_price.frm;Таблицы;D_PRICELISTS
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERV_DMS
+Forms/Reception/select_price.frm;Таблицы;D_SERVICES_STR
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERVS
+Forms/Reception/select_price.frm;Таблицы;D_SERVICES
+Forms/Reception/select_price.frm;Таблицы;D_SERVTYPES
+Forms/Reception/select_price.frm;Таблицы;D_PRICELIST_SERVS_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/Reception/select_price.frm;Таблицы;D_DEGREES
+Forms/Reception/select_price.frm;Таблицы;D_SERVPROFILES
+Forms/Reception/select_price.frm;Таблицы;D_PF_CATEGORIES
+Forms/Reception/select_price.frm;Таблицы;D_LPU_SERVICES
+Forms/Reception/select_price.frm;Таблицы;D_EMPLOYER_DEGREES
+Forms/Reception/select_price.frm;Пакеты и функции;D_PKG_STR_TOOLS.STR_IN_STR
+Forms/Reception/select_price.frm;СО;PriceShowRegPeriod
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsAlania/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/script.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKhabarovsk/Registry/PmcSearch/search_patient.d/view.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsKrasnodarOD/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsMoscowNIIBlohina/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsPrimorie/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsRostov/Registry/PmcSearch/search_patient.d/tfoms.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/search_patient.d/data.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsTver/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;Юзерформы;UserFormsVOKOD/Registry/PmcSearch/search_patient.d/search_patient.dfrm
+Forms/Registry/PmcSearch/search_patient.frm;subForm;barcode_listeners/oms_all
+Forms/Registry/PmcSearch/search_patient.frm;subForm;SignalInformation/si_actions
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Persmedcard/сhanging_data_patient_card_subform
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Markers/subscripts/subscript_markers
+Forms/Registry/PmcSearch/search_patient.frm;subForm;PatientSearch/subforms/check_search_fields
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Markers/subforms/subforms_markers
+Forms/Registry/PmcSearch/search_patient.frm;subForm;Persmedcard/pmc_markers/pmc_markers_scripts
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_add_by_agent.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;HomeCalls/add_child_without_docs.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Persmedcard/persmedcard_add_full.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agents_add.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_contacts/agent_contacts_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_polis/agent_polis_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_persdocs/agent_persdocs_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;формы JS;Agents/agent_addrs/agent_addrs_for_pmc_edit.frm
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENT_ADDRS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PMC_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENT_CONTACTS_V2
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_CONTROL_CARD_BASE
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_AGENTS
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Registry/PmcSearch/search_patient.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_ADDRS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_GEOGRAFY
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_RAIONS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_PMC_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_MARKERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_SCHEDULE_COLORS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_POLIS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENT_CONTACTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTACT_TYPES
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CONTROL_CARD
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_AGENTS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_PERSMEDCARD
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_BLOODGROUPE
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_DIVISIONS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_RHESUS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_EMPLOYERS
+Forms/Registry/PmcSearch/search_patient.frm;Таблицы;D_CABLAB
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_FULL_ADDRESS_BY_ID
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_PERSDOCS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.CHECK_RIGHT
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_EX_SYSTEM_VALUES.GET_VAL
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_PATSEARCH.PATSEARCH2_PPL
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_MAIN_PHONE
+Forms/Registry/PmcSearch/search_patient.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/Registry/PmcSearch/search_patient.frm;СО;RequiredNumberOMSFilter
+Forms/Registry/PmcSearch/search_patient.frm;СО;PMCChildAllow
+Forms/Registry/PmcSearch/search_patient.frm;Неопределенные;D_STRAGG
+Forms/services/select_by_in_lpu.frm;subForm;Autopsist/SubForms/check_inactive_service
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_SERVTYPES
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_EMP_SERVICES
+Forms/services/select_by_in_lpu.frm;Вьюхи;D_V_LPU_SERVICES_BASE
+Forms/services/select_by_in_lpu.frm;Таблицы;D_SERVTYPES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_SERVICES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_EMP_SERVICES
+Forms/services/select_by_in_lpu.frm;Таблицы;D_LPU_SERVICES
+Forms/services/select_by_in_lpu.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/Reg/select_discounts.frm;Пакеты и функции;D_PKG_PRICELIST_SERVS.GET_DISCOUNT_LIST_SHORT
+Forms/Reg/select_discounts.frm;Неопределенные;D_CL_DISCOUNTS
+Forms/HomeCalls/home_call_set_state.frm;формы JS;HomeCalls/in_results_jour_note.frm
+Forms/HomeCalls/home_call_set_state.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_STATE
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_EMPLOYERS
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_spec_reject.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_EMPLOYERS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_JOBTITLES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SPECIALITIES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SPECIALITIES_ED
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DEPS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DEPS_KINDS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_USERS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_AGENTS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_AGENT_ESIA
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_EMP_SKILL
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_LPU
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_LPUDICT
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SITES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_INITS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_PERSMEDCARD
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_TYPES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_STATES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_SERVICES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIVISIONS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_CAUSES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_DIRECTIONS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VISITPURPOSES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VISITS
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_MKB10
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_HOME_CALL_BULLETINES
+Forms/HomeCalls/home_call_spec_reject.frm;Таблицы;D_DIR_REG_TYPES
+Forms/HomeCalls/home_call_spec_reject.frm;Пакеты и функции;D_PKG_STR_TOOLS.FIO
+Forms/HomeCalls/home_call_spec_reject.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/home_call_spec_reject.frm;Неопределенные;D_STRAGG
+Forms/Autopsist/SubForms/check_inactive_service.frm;формы JS;Autopsist/SubForms/select_service_form.frm
+Forms/Autopsist/SubForms/check_inactive_service.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/Autopsist/SubForms/check_inactive_service.frm;Таблицы;D_SERVICES
+Forms/Autopsist/SubForms/check_inactive_service.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/Autopsist/SubForms/check_inactive_service.frm;СО;ProvideInactiveServices
+Forms/Autopsist/SubForms/check_inactive_service.frm;Неопределенные;D_CL_ID
+Forms/HomeCalls/in_results_jour_note.frm;Вьюхи;D_V_HOME_CALL_JOUR_BASE
+Forms/HomeCalls/in_results_jour_note.frm;Таблицы;D_HOME_CALL_JOUR
+Forms/HomeCalls/in_results_jour_note.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/HomeCalls/in_results_jour_note.frm;Пакеты и функции;D_PKG_HOME_CALL_JOUR.SET_STATE
+Forms/Directions/select_patient_ami_directs.frm;subForm;Agents/agent_polis/checking_relevance_polis
+Forms/Directions/select_patient_ami_directs.frm;subForm;Contracts/subforms/checking_relevance_contract
+Forms/Directions/select_patient_ami_directs.frm;формы JS;Directions/select_patient_ami_direct_edit.frm
+Forms/Directions/select_patient_ami_directs.frm;"Отчеты, вызываемые на форме";1337 (WEB-конструктор)
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_AGENT_POLIS_DMS
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_AGENT_RELATIVES
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Directions/select_patient_ami_directs.frm;Вьюхи;D_V_PERSMEDCARD_FIO
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENT_POLIS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FN_RELATIVES_OTHER
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FED_NSI_VERS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_FED_NSI
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_LPUVERLIST_MAIN
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENT_RELATIVES
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_RELATIONSHIPS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_AGENTS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_REPRESENT_LSTATUSES
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_patient_ami_directs.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_patient_ami_directs.frm;Неопределенные;D_NUMB
+Forms/Contracts/subforms/checking_relevance_contract.frm;Вьюхи;D_V_CONTRACTS_BASE
+Forms/Contracts/subforms/checking_relevance_contract.frm;Таблицы;D_CONTRACTS
+Forms/Contracts/subforms/checking_relevance_contract.frm;Таблицы;D_AGENTS
+Forms/Contracts/subforms/checking_relevance_contract.frm;СО;TermContractForIndividuals
+Forms/Contracts/subforms/checking_relevance_contract.frm;СО;TermContractForLegalEntity
+Forms/Agents/agent_polis/checking_relevance_polis.frm;СО;TermPeriodForDMSPolis
+Forms/Directions/select_patient_ami_direct_edit.frm;формы JS;Directions/select_contract_by_type.frm
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Directions/select_patient_ami_direct_edit.frm;Вьюхи;D_V_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_AGENTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_BLOODGROUPE
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_DIVISIONS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_RHESUS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CABLAB
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_AGENT_POLIS
+Forms/Directions/select_patient_ami_direct_edit.frm;Таблицы;D_CONTR_AMI_DIRECTS
+Forms/Directions/select_patient_ami_direct_edit.frm;Пакеты и функции;D_PKG_EMPLOYERS.GET_ID
+Forms/Directions/select_patient_ami_direct_edit.frm;Неопределенные;D_NUMB
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CONTRACT_TYPES
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CONTRACTS
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_CATALOGS
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_PAYMENT_KIND
+Forms/Directions/select_contract_by_type.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CONTRACT_TYPES
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CONTRACTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_AGENTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_EMPLOYERS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_PAYMENT_KIND
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CATALOGS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_PERSMEDCARD
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_BLOODGROUPE
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_DIVISIONS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_RHESUS
+Forms/Directions/select_contract_by_type.frm;Таблицы;D_CABLAB
+Forms/Directions/select_contract_by_type.frm;СО;PKPeopleMoney
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsBarsMED/Registry/PmcSearch/patient_info.d/printreab.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d/add_un_exc.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Novosib/Registry/PmcSearch/patient_info.d/PERSMEDCARD_ID.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsEgis3Tomsk/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsHosp/Registry/PmcSearch/patient_info.d/printreab.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsKaliningrad/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRKB3/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRKOD/Registry/PmcSearch/patient_info.d/patient_info.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsRostov/Registry/PmcSearch/patient_info.d/script.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsSakhalin/Registry/PmcSearch/patient_info.d/data.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;Юзерформы;UserFormsSamRMC/Registry/PmcSearch/patient_info.d/patient_info_lpu.dfrm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;writeWaitQueue/writeWaitQueue.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Lpu_Services/compl_ds_list.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Persmedcard/persmedcard_edit.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Reception/search_patient_records.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;Registry/PmcSearch/amb_reports_list.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;PatientSearch/directions_prescribes.frm
+Forms/Registry/PmcSearch/patient_info.frm;формы JS;writeWaitQueue/writeWaitQueueAddEdit.frm
+Forms/Registry/PmcSearch/patient_info.frm;"Отчеты, вызываемые на форме";persm_list
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_INABILITIES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_WL_RECORDS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_HOSP_PLAN_KINDS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIRECTIONS_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_DIR_REG_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_FACIAL_ACCOUNTS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_AGENT_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PMC_REG_NUMS
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_PMC_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_LPU
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_RESERVATION
+Forms/Registry/PmcSearch/patient_info.frm;Вьюхи;D_V_WL_SCH_RESOURCES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PERSMEDCARD
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_BLOODGROUPE
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIVISIONS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_RHESUS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_EMPLOYERS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_CABLAB
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_INABILITIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_STATUSES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_INABILITY_GROUPS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_LPUDICT
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WL_RECORDS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SERVICES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PAYMENT_KIND
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_EX_SYSTEMS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WAIT_LISTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SPECIALITIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_HOSP_PLAN_KINDS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIRECTIONS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_DIR_REG_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_FACIAL_ACCOUNTS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_AGENT_REGISTRATION
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REGISTER_PURPOSES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_SITES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REGISTRATION_TYPES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_REG_CATEGORIES
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_PMC_REG_NUMS
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_LPU
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_GEOGRAFY
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_RESERVATION
+Forms/Registry/PmcSearch/patient_info.frm;Таблицы;D_WL_SCH_RESOURCES
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_DIRECTIONS.GET_LAST_REG
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PERSMEDCARD.GET_ALL_PRIVS_AS_STRING
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.GET_ACTUAL_PHONE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PERSMEDCARD.CHECK_FOR_OMS
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_REGISTRATION.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_CARD_LOCATIONS.GET_ACTUAL
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_POLIS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_ADDRS.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_AGENT_SOCIAL_STATES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;Пакеты и функции;D_PKG_PMC_SPECIAL_CASES.GET_ACTUAL_ON_DATE
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckSNILS
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS_ShowRes
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS
+Forms/Registry/PmcSearch/patient_info.frm;СО;ERHospPlanKind
+Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS_CardType
+Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_C_ID
+Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_P_EXC

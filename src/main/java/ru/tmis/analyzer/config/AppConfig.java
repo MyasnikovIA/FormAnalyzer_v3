@@ -64,6 +64,7 @@ public class AppConfig {
     private boolean includeBrokerFunctions = true;
     private boolean skipDbOnError = true;
     private boolean llmPanelVisible = false;
+    private int parallelThreads = Runtime.getRuntime().availableProcessors();
 
 
     // ==================== GETTERS AND SETTERS ====================
@@ -176,6 +177,9 @@ public class AppConfig {
 
     public boolean isLlmPanelVisible() { return llmPanelVisible; }
     public void setLlmPanelVisible(boolean llmPanelVisible) { this.llmPanelVisible = llmPanelVisible; }
+
+    public int getParallelThreads() { return parallelThreads; }
+    public void setParallelThreads(int threads) { this.parallelThreads = threads; }
 
     /**
      * Загрузить конфигурацию из файла

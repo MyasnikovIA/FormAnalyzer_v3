@@ -61,6 +61,7 @@ public class SettingsDialog extends JDialog {
     private JCheckBox checkPostgresPackagesCheckbox;
     private JCheckBox enableCSVExportCheckbox;  // CSV Export
     private JCheckBox enableJSONExportCheckbox;
+    private JSpinner threadsSpinner;
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -81,6 +82,7 @@ public class SettingsDialog extends JDialog {
         tabbedPane.addTab("Подключения", createConnectionPanel());
         tabbedPane.addTab("Отчеты", createReportPanel());
 
+
         // ---исправить ошибку
         if (config.isLlmPanelVisible()) {
             tabbedPane.addTab("Инструкция для LLM", createLLMPanel());
@@ -97,13 +99,33 @@ public class SettingsDialog extends JDialog {
             saved = true;
             dispose();
         });
+
         cancelButton.addActionListener(e -> dispose());
 
+        createThreadsPanel(buttonPanel);
         buttonPanel.add(saveButton);
         buttonPanel.add(cancelButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
+
+    private void createThreadsPanel(JPanel buttonPanel) {
+        buttonPanel.add(new JLabel("Количество потоков для рекурсивного анализа:"));
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(
+                Runtime.getRuntime().availableProcessors(), // значение по умолчанию
+                0,                                          // минимум
+                Runtime.getRuntime().availableProcessors(), // максимум
+                1                                           // шаг
+        );
+        threadsSpinner = new JSpinner(spinnerModel);
+        threadsSpinner.setPreferredSize(new Dimension(60, 25));
+        buttonPanel.add(threadsSpinner);
+
+        JLabel infoLabel = new JLabel("(0 = все доступные ядра)");
+        infoLabel.setForeground(Color.GRAY);
+        buttonPanel.add(infoLabel);
+
     }
 
     private JPanel createConnectionPanel() {

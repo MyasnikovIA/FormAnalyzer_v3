@@ -6,6 +6,7 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
+import ru.tmis.analyzer.core.service.ParallelRecursiveReportBuilder;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
@@ -50,6 +51,7 @@ public class MainWindow extends JFrame {
     private PrintStream originalErr;
     private PipedInputStream pipeIn;
     private Thread logReader;
+    private ParallelRecursiveReportBuilder parallelBuilder;
 
 
     public MainWindow(SettingsModel settings, AppConfig config) {
@@ -128,6 +130,7 @@ public class MainWindow extends JFrame {
         return panel;
     }
 
+
     private JSplitPane createCenterPanel() {
         // Left panel - forms tree
         JPanel leftPanel = new JPanel(new BorderLayout());
@@ -157,9 +160,6 @@ public class MainWindow extends JFrame {
                             if (selectedPath != null) {
                                 formsTreePanel.expandPath(selectedPath);
                             }
-
-                            // УДАЛИТЬ ИЛИ ЗАКОММЕНТИРОВАТЬ ЭТУ СТРОКУ:
-                            // formsTreePanel.expandAllChildrenRecursive(formPath, selectedPath);
 
                             if (tabbedPane.getSelectedIndex() == 2) {
                                 loadLlmPromptToPanel(formPath);
@@ -192,20 +192,21 @@ public class MainWindow extends JFrame {
         leftPanel.add(formsTreePanel, BorderLayout.CENTER);
 
         formsTreePanel.setOnRecursiveAnalysisRequested(() -> {
-            if (!recursiveBuilder.isRunning()) {
-                startRecursiveAnalysis();
+            // Используем параллельный билдер вместо обычного
+            if (!parallelBuilder.isRunning()) {
+                startParallelRecursiveAnalysis();
             } else {
-                appendLog("Рекурсивный анализ уже выполняется");
+                appendLog("Параллельный рекурсивный анализ уже выполняется");
                 JOptionPane.showMessageDialog(this,
-                        "Рекурсивный анализ уже выполняется. Дождитесь завершения или нажмите Стоп.",
+                        "Параллельный рекурсивный анализ уже выполняется. Дождитесь завершения или нажмите Стоп.",
                         "Анализ запущен",
                         JOptionPane.WARNING_MESSAGE);
             }
         });
 
-       // В конструкторе или initUI() после создания formsTreePanel
-        recursiveBuilder = new RecursiveReportBuilder(settings, config, formsTreePanel);
-        recursiveBuilder.setLogger(new ILogger() {
+        // ИНИЦИАЛИЗАЦИЯ ПАРАЛЛЕЛЬНОГО БИЛДЕРА
+        parallelBuilder = new ParallelRecursiveReportBuilder(settings, config, formsTreePanel);
+        parallelBuilder.setLogger(new ILogger() {
             @Override
             public void log(String message) { appendLog(message); }
             @Override
@@ -214,38 +215,21 @@ public class MainWindow extends JFrame {
             public void debug(String message) { appendLog("[DEBUG] " + message); }
         });
 
-        recursiveBuilder.setOnLevelStart(message -> {
-            appendLog(message);
-            statusLabel.setText("Статус: " + message);
+        // Устанавливаем количество потоков из настроек (по умолчанию все ядра)
+        int threads = config.getParallelThreads();
+        if (threads <= 0) {
+            threads = Runtime.getRuntime().availableProcessors();
+        }
+        parallelBuilder.setParallelThreads(threads);
+        appendLog("Параллельный анализатор инициализирован. Потоков: " + threads);
+
+        parallelBuilder.setOnFormAnalyzed(formPath -> {
+            appendLog("  [Поток] Анализ формы: " + formPath);
         });
 
-        recursiveBuilder.setOnLevelComplete(count -> {
-            appendLog("  Уровень завершён. Обработано форм: " + count);
-            progressBar.setValue(0);
-        });
-
-        recursiveBuilder.setOnFormAnalyzed(formPath -> {
-            appendLog("  Анализ формы: " + formPath);
-        });
-
-        recursiveBuilder.setOnError(message -> {
-            appendLog("ОШИБКА: " + message);
-            statusLabel.setText("Статус: Ошибка");
-            progressBar.setIndeterminate(false);
-            progressBar.setValue(0);
-            startButton.setEnabled(true);
-            stopButton.setEnabled(false);
-            settingsButton.setEnabled(true);
-
-            // Обновляем дерево с сохранением состояния
+        parallelBuilder.setOnComplete(() -> {
             SwingUtilities.invokeLater(() -> {
-                formsTreePanel.refreshTreeWithState();
-            });
-        });
-
-        recursiveBuilder.setOnComplete(() -> {
-            SwingUtilities.invokeLater(() -> {
-                appendLog("Рекурсивное построение завершено!");
+                appendLog("Параллельный рекурсивный анализ завершён!");
                 statusLabel.setText("Статус: Готов");
                 progressBar.setIndeterminate(false);
                 progressBar.setValue(100);
@@ -267,6 +251,29 @@ public class MainWindow extends JFrame {
                 }
                 appendLog("Дерево форм обновлено, состояние восстановлено");
             });
+        });
+
+        parallelBuilder.setOnError(message -> {
+            SwingUtilities.invokeLater(() -> {
+                appendLog("ОШИБКА: " + message);
+                statusLabel.setText("Статус: Ошибка");
+                progressBar.setIndeterminate(false);
+                progressBar.setValue(0);
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+            });
+        });
+
+        // Обычный рекурсивный билдер больше не нужен, но оставим для совместимости
+        recursiveBuilder = new RecursiveReportBuilder(settings, config, formsTreePanel);
+        recursiveBuilder.setLogger(new ILogger() {
+            @Override
+            public void log(String message) { appendLog(message); }
+            @Override
+            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            @Override
+            public void debug(String message) { appendLog("[DEBUG] " + message); }
         });
 
         // Right panel with tabs
@@ -317,14 +324,14 @@ public class MainWindow extends JFrame {
         JButton saveResultBtn = new JButton("Сохранить результат в файл");
         saveResultBtn.addActionListener(e -> saveResultToFile());
 
-        resultButtons.add(deleteReportBtn);  // Добавить перед сохранением
+        resultButtons.add(deleteReportBtn);
         resultButtons.add(saveResultBtn);
         resultButtons.add(clearResultBtn);
         resultPanel.add(resultButtons, BorderLayout.NORTH);
 
         tabbedPane.addTab("Результат", resultPanel);
 
-        // Tab 3: LLM промпт (НОВАЯ ВКЛАДКА)
+        // Tab 3: LLM промпт
         JPanel llmPanel = new JPanel(new BorderLayout());
         llmPromptArea = new JTextArea();
         llmPromptArea.setEditable(false);
@@ -743,7 +750,20 @@ public class MainWindow extends JFrame {
         });
     }
     private void stopAnalysis() {
-        // Сначала проверяем рекурсивный анализатор
+        // Сначала проверяем параллельный рекурсивный анализатор
+        if (parallelBuilder != null && parallelBuilder.isRunning()) {
+            parallelBuilder.stop();
+            appendLog("Запрос на остановку параллельного рекурсивного анализа...");
+            stopButton.setEnabled(false);
+            startButton.setEnabled(true);
+            settingsButton.setEnabled(true);
+            progressBar.setIndeterminate(false);
+            progressBar.setValue(0);
+            statusLabel.setText("Статус: Остановка...");
+            return;
+        }
+
+        // Затем проверяем обычный рекурсивный анализатор (на всякий случай)
         if (recursiveBuilder != null && recursiveBuilder.isRunning()) {
             recursiveBuilder.stop();
             appendLog("Запрос на остановку рекурсивного анализа...");
@@ -1161,5 +1181,23 @@ public class MainWindow extends JFrame {
             outputDir = "SQL_info";
         }
         return outputDir + File.separator + "Forms" + File.separator + safeName + ".md";
+    }
+    private void startParallelRecursiveAnalysis() {
+        if (parallelBuilder.isRunning()) {
+            appendLog("Параллельный анализ уже выполняется");
+            return;
+        }
+
+        List<String> selectedForms = formsTreePanel.getSelectedForms();
+        List<String> startForms = selectedForms.isEmpty() ? null : selectedForms;
+
+        startButton.setEnabled(false);
+        stopButton.setEnabled(true);
+        settingsButton.setEnabled(false);
+        progressBar.setValue(0);
+        progressBar.setIndeterminate(true);
+        statusLabel.setText("Статус: Параллельный рекурсивный анализ...");
+
+        parallelBuilder.startRecursiveBuild(startForms);
     }
 }
