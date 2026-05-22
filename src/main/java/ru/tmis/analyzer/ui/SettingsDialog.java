@@ -641,6 +641,13 @@ public class SettingsDialog extends JDialog {
 
         settings.save();
 
+        DatabaseCacheManager.initDbConfig(
+                settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
+                settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
+                settings.getMisUser()
+        );
+        DatabaseCacheManager.checkConnections();
+
         // Сбросить статус подключения к БД и перепроверить
         DatabaseCacheManager.resetConnectionStatus();
         DatabaseCacheManager.initDbConfig(
