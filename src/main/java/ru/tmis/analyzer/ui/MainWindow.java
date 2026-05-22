@@ -4,6 +4,7 @@ import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.cache.FormCache;
+import ru.tmis.analyzer.core.db.DatabaseAvailabilityService;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
@@ -539,6 +540,12 @@ public class MainWindow extends JFrame {
      * Запускает анализ выбранных форм
      */
     private void startAnalysis() {
+        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
+        if (!checkDatabaseAvailabilityBeforeAnalysis()) {
+            return; // Пользователь отменил анализ
+        }
+        // =============================================
+
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
             int confirm = JOptionPane.showConfirmDialog(this,
@@ -552,7 +559,6 @@ public class MainWindow extends JFrame {
                 return;
             }
         }
-
         stopRequested = false;
 
         // Получаем выбранные формы
@@ -767,6 +773,12 @@ public class MainWindow extends JFrame {
      * Запускает полное сканирование проекта и анализ новых форм
      */
     private void startFullProjectScan() {
+        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
+        if (!checkDatabaseAvailabilityBeforeAnalysis()) {
+            return; // Пользователь отменил анализ
+        }
+        // =============================================
+
         stopRequested = false;
         isRunning.set(true);
         startButton.setEnabled(false);
@@ -1333,21 +1345,17 @@ public class MainWindow extends JFrame {
      * Запускает анализ для указанных форм
      */
     private void startAnalysisForForms(Set<String> formsSet) {
+        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
+        if (!checkDatabaseAvailabilityBeforeAnalysis()) {
+            return; // Пользователь отменил анализ
+        }
+        // =============================================
+
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
             return;
         }
 
-        if (!DatabaseCacheManager.isOracleAvailable()) {
-            appendLog("ОШИБКА: Oracle база данных недоступна");
-            JOptionPane.showMessageDialog(this,
-                    "Oracle база данных недоступна.\n" +
-                            "Проверьте подключение к сети и настройки подключения.\n\n" +
-                            "Анализ невозможен без доступа к Oracle.",
-                    "БД недоступна",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         stopRequested = false;
         isRunning.set(true);
@@ -1517,22 +1525,17 @@ public class MainWindow extends JFrame {
     }
 
     private void startParallelRecursiveAnalysis() {
+        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
+        if (!checkDatabaseAvailabilityBeforeAnalysis()) {
+            return; // Пользователь отменил анализ
+        }
+        // =============================================
+
         if (parallelBuilder.isRunning()) {
             appendLog("Параллельный анализ уже выполняется");
             return;
         }
 
-        // Проверка доступности Oracle БД перед запуском
-        if (!DatabaseCacheManager.isOracleAvailable()) {
-            appendLog("ОШИБКА: Oracle база данных недоступна");
-            JOptionPane.showMessageDialog(this,
-                    "Oracle база данных недоступна.\n" +
-                            "Проверьте подключение к сети и настройки подключения.\n\n" +
-                            "Анализ невозможен без доступа к Oracle.",
-                    "БД недоступна",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
         List<String> selectedForms = formsTreePanel.getSelectedForms();
         List<String> startForms = selectedForms.isEmpty() ? null : selectedForms;
 
@@ -1547,6 +1550,10 @@ public class MainWindow extends JFrame {
     }
 
     private void startParallelFullProjectScan() {
+        if (!checkDatabaseAvailabilityBeforeAnalysis()) {
+            return; // Пользователь отменил анализ
+        }
+
         // Проверяем, не запущен ли уже анализ
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
             appendLog("Параллельный анализ уже выполняется");
@@ -1564,17 +1571,6 @@ public class MainWindow extends JFrame {
             } else {
                 return;
             }
-        }
-        // Проверка доступности Oracle БД перед запуском
-        if (!DatabaseCacheManager.isOracleAvailable()) {
-            appendLog("ОШИБКА: Oracle база данных недоступна");
-            JOptionPane.showMessageDialog(this,
-                    "Oracle база данных недоступна.\n" +
-                            "Проверьте подключение к сети и настройки подключения.\n\n" +
-                            "Анализ невозможен без доступа к Oracle.",
-                    "БД недоступна",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
         }
 
         // Сброс флагов
@@ -1764,5 +1760,45 @@ public class MainWindow extends JFrame {
             appendLog("Использовано RAM: " + usedMemory + " МБ");
 
         }, "FormPreloader").start();
+    }
+    /**
+     * Проверяет доступность баз данных перед началом анализа
+     * @return true если можно продолжать анализ, false если отменено
+     */
+    private boolean checkDatabaseAvailabilityBeforeAnalysis() {
+        DatabaseAvailabilityService dbChecker = new DatabaseAvailabilityService(settings);
+        dbChecker.checkAllConnections();
+
+        // Показываем диалог с результатами
+        boolean continueAnalysis = dbChecker.showResultsDialog(this);
+
+        if (!continueAnalysis) {
+            appendLog("Анализ отменён пользователем из-за проблем с подключением к БД");
+            return false;
+        }
+
+        // Дополнительные предупреждения в лог
+        if (!dbChecker.isOracleConfigured()) {
+            appendLog("ВНИМАНИЕ: Oracle не настроен. Анализ будет выполняться ТОЛЬКО на основе XML файлов.");
+            appendLog("  Функции, требующие Oracle, будут недоступны.");
+        } else if (!dbChecker.isOracleAvailable()) {
+            appendLog("ВНИМАНИЕ: Oracle недоступен. Функции, требующие Oracle, будут ограничены.");
+            String error = dbChecker.getOracleError();
+            if (error != null) appendLog("  Причина: " + error);
+        } else {
+            appendLog("Oracle доступен.");
+        }
+
+        if (!dbChecker.isPostgresConfigured()) {
+            appendLog("ВНИМАНИЕ: PostgreSQL не настроен.");
+        } else if (!dbChecker.isPostgresAvailable()) {
+            appendLog("ВНИМАНИЕ: PostgreSQL недоступен.");
+            String error = dbChecker.getPostgresError();
+            if (error != null) appendLog("  Причина: " + error);
+        } else {
+            appendLog("PostgreSQL доступен.");
+        }
+
+        return true;
     }
 }
