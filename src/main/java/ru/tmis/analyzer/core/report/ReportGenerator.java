@@ -571,17 +571,13 @@ public class ReportGenerator {
             System.out.println("[DEBUG] writeViewTablesBlock: no tables extracted from views");
             return;
         }
-
-        // ========== СОХРАНЯЕМ ТАБЛИЦЫ В FormInfo ==========
         formInfo.setTablesFromViews(allTables);
         System.out.println("[DEBUG] Сохранено таблиц в FormInfo: " + allTables.size());
-
         writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
         for (String table : allTables) {
             writer.println("    " + table);
         }
         writer.println();
-
         System.out.println("[DEBUG] writeViewTablesBlock: wrote " + allTables.size() + " tables");
     }
 

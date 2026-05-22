@@ -80,7 +80,11 @@ public class SettingsDialog extends JDialog {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Подключения", createConnectionPanel());
         tabbedPane.addTab("Отчеты", createReportPanel());
-        tabbedPane.addTab("Инструкция для LLM", createLLMPanel());
+
+        // ---исправить ошибку
+        if (config.isLlmPanelVisible()) {
+            tabbedPane.addTab("Инструкция для LLM", createLLMPanel());
+        }
 
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -564,47 +568,40 @@ public class SettingsDialog extends JDialog {
         if (enableCSVExportCheckbox != null) {
             enableCSVExportCheckbox.setSelected(config.isEnableCSVExport());
         }
-
         if (enableJSONExportCheckbox != null) {
             enableJSONExportCheckbox.setSelected(config.isEnableJSONExport());
         }
 
-        // LLM settings
-        if (enableLLMExportCheckbox != null) {
-            enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
-        }
-        if (singleFileRadio != null && perFormRadio != null) {
-            if ("per_form".equals(config.getLlmExportMode())) {
-                perFormRadio.setSelected(true);
-            } else {
-                singleFileRadio.setSelected(true);
+        // LLM settings - ТОЛЬКО ЕСЛИ ПАНЕЛЬ ВИДИМА
+        if (config.isLlmPanelVisible()) {
+            if (enableLLMExportCheckbox != null) {
+                enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
             }
-        }
+            if (singleFileRadio != null && perFormRadio != null) {
+                if ("per_form".equals(config.getLlmExportMode())) {
+                    perFormRadio.setSelected(true);
+                } else {
+                    singleFileRadio.setSelected(true);
+                }
+            }
+            if (includeSqlQueriesCheckbox != null) {
+                includeSqlQueriesCheckbox.setSelected(config.isIncludeSqlQueries());
+                includePostgresViewsCheckbox.setSelected(config.isIncludePostgresViews());
+                includeOracleViewsCheckbox.setSelected(config.isIncludeOracleViews());
+                includePostgresTablesCheckbox.setSelected(config.isIncludePostgresTables());
+                includeOracleTablesCheckbox.setSelected(config.isIncludeOracleTables());
+                includeOracleFunctionsCheckbox.setSelected(config.isIncludeOracleFunctions());
+                includePostgresFunctionsCheckbox.setSelected(config.isIncludePostgresFunctions());
+                includeBrokerFunctionsCheckbox.setSelected(config.isIncludeBrokerFunctions());
+                includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
+            }
 
-
-        if ("per_form".equals(config.getLlmExportMode())) {
-            perFormRadio.setSelected(true);
-        } else {
-            singleFileRadio.setSelected(true);
-        }
-
-        if (includeSqlQueriesCheckbox != null) {
-            includeSqlQueriesCheckbox.setSelected(config.isIncludeSqlQueries());
-            includePostgresViewsCheckbox.setSelected(config.isIncludePostgresViews());
-            includeOracleViewsCheckbox.setSelected(config.isIncludeOracleViews());
-            includePostgresTablesCheckbox.setSelected(config.isIncludePostgresTables());
-            includeOracleTablesCheckbox.setSelected(config.isIncludeOracleTables());
-            includeOracleFunctionsCheckbox.setSelected(config.isIncludeOracleFunctions());
-            includePostgresFunctionsCheckbox.setSelected(config.isIncludePostgresFunctions());
-            includeBrokerFunctionsCheckbox.setSelected(config.isIncludeBrokerFunctions());
-            includePostgresPopupMenusCheckbox.setSelected(config.isIncludePostgresPopupMenus());
-        }
-
-        String instruction = config.getLlmInstructionText();
-        if (instruction == null || instruction.isEmpty()) {
-            instructionTextArea.setText(getInstructionM2());
-        } else {
-            instructionTextArea.setText(instruction);
+            String instruction = config.getLlmInstructionText();
+            if (instruction == null || instruction.isEmpty()) {
+                instructionTextArea.setText(getInstructionM2());
+            } else {
+                instructionTextArea.setText(instruction);
+            }
         }
     }
 
@@ -649,32 +646,35 @@ public class SettingsDialog extends JDialog {
         if (checkPostgresPackagesCheckbox != null) {
             config.setCheckPostgresPackages(checkPostgresPackagesCheckbox.isSelected());
         }
-
-        // LLM settings
-        if (enableLLMExportCheckbox != null) {
-            config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
+        if (enableCSVExportCheckbox != null) {
+            config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
         }
-        if (singleFileRadio != null && perFormRadio != null) {
-            config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
+        if (enableJSONExportCheckbox != null) {
+            config.setEnableJSONExport(enableJSONExportCheckbox.isSelected());
         }
 
-        config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
-
-        if (includeSqlQueriesCheckbox != null) {
-            config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
-            config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
-            config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
-            config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
-            config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
-            config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
-            config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
-            config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
-            config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
+        // LLM settings - ТОЛЬКО ЕСЛИ ПАНЕЛЬ ВИДИМА
+        if (config.isLlmPanelVisible()) {
+            if (enableLLMExportCheckbox != null) {
+                config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
+            }
+            if (singleFileRadio != null && perFormRadio != null) {
+                config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
+            }
+            if (includeSqlQueriesCheckbox != null) {
+                config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
+                config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
+                config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
+                config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
+                config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
+                config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
+                config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
+                config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
+                config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
+            }
+            config.setLlmInstructionText(instructionTextArea.getText());
         }
-
-        config.setLlmInstructionText(instructionTextArea.getText());
         config.save();
-
         JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
     }
 

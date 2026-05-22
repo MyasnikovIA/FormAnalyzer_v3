@@ -62,8 +62,8 @@ public class AppConfig {
     private boolean includeOracleFunctions = true;
     private boolean includePostgresFunctions = true;
     private boolean includeBrokerFunctions = true;
-
     private boolean skipDbOnError = true;
+    private boolean llmPanelVisible = false;
 
 
     // ==================== GETTERS AND SETTERS ====================
@@ -173,6 +173,9 @@ public class AppConfig {
 
     public boolean isSkipDbOnError() { return skipDbOnError; }
     public void setSkipDbOnError(boolean skip) { this.skipDbOnError = skip; }
+
+    public boolean isLlmPanelVisible() { return llmPanelVisible; }
+    public void setLlmPanelVisible(boolean llmPanelVisible) { this.llmPanelVisible = llmPanelVisible; }
 
     /**
      * Загрузить конфигурацию из файла

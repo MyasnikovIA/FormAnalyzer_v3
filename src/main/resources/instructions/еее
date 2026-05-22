@@ -1,0 +1,58 @@
+Forms/Reports/Pregnancy/OPB_096u20/OPB_096u20_6.frm	СО	,
+Forms/Reports/Pregnancy/birth_history_096-y20/bh_096u20_15_16.frm	СО	-
+Forms/Reports/Pregnancy/birth_history_096-y20/bh_096u20_25.frm	СО	,
+Forms/Reports/Pregnancy/indiv_card_111u_5_6.frm	СО	,
+Forms/Reports/Pregnancy/obmen_card_113u/obmen_card_113u_12_13.frm	СО	,
+Forms/Reports/Pregnancy/obmen_card_113u/obmen_card_113u_4.frm	СО	,
+Forms/Reports/MedCard/003_17_18_530n.frm	СО	,
+Forms/Reports/Statistic/birth_journal_010.frm	СО	****
+Forms/Reports/Statistic/birth_journal_010.frm	СО	,
+Forms/Reports/Statistic/history_newborn_097.frm	СО	,
+Forms/Reports/CardFluorogSur/CardFluorogSur.frm	СО	|
+Forms/HomeCalls/in_results_jour.frm	СО	***
+Forms/Directions/directions.frm	СО	3
+Forms/Directions/service_frequency.frm	СО	<br>
+Forms/NosRegistrs/OksRegister/oks_register.frm	СО	2
+Forms/NosRegistrs/OksRegister/forms/tabs/episodes/forms/oks_case_add.frm	СО	2
+Forms/LisAlt/Dirline/dirline_order_alt.frm	СО	,
+Forms/Vrt/patient_registry_edit/tabs/conclusions/vrt_patient_visits.frm	СО	,
+Forms/Reestr/hosp_reestr_add.frm	СО	,
+Forms/Lis/Dirline/dirline_order_alt.frm	СО	,
+
+Forms/Lis/LisAltPFM/Dirline/dirline_order_alt.frm	СО	,
+Forms/ArmPatientsInDep/hosp_history_end.frm	СО	****
+UserFormsEgis3Novosib/Registry/PmcSearch/search_patient.d/data.dfrm	СО	,
+UserFormsSakhalin/Reports/HospPlan/outhost_stat_card.frm	СО	,
+UserFormsAlaniaSKMMC/Lis/Dirline/dirline_order_alt.d/data.dfrm	СО	,
+UserFormsSaratov/SPARGO/Recipes/add_edit_7n_recipe.frm	СО	6320
+UserFormsSaratov/Reestr/hosp_reestr_add.frm	СО	,
+UserFormsKrasnodarOD/Reports/AmbReps/amb_talon_subform_new.frm	СО	,
+
+
+
+Forms/Lis/Material/subforms/material_reg_header.frm	СО	11111111111111
+
+
+Forms/Reports/Pregnancy/OPB_096u20/OPB_096u20_1.frm	СО	A15-A19.9
+Forms/Reports/Pregnancy/birth_history_096-y20/bh_096u20_1.frm	СО	A15-A19.9
+Forms/HomeCalls/home_call_edit.frm	СО	Карта создана автоматически при оформление вызова на дом.
+Forms/HomeCalls/in_results_jour.frm	СО	Вызов на дом
+Forms/GenRegistry/reg_write.frm	СО	Ошибка записи в таблицу Интеграции исследований с ЛИНС РИС
+Forms/VaccinationCards/vaccination_exec.frm	СО	Прививка выполнена, необходимо сформировать СЭМД
+Forms/Directions/select_lpu_services.frm	СО	Ошибка записи в таблицу Интеграции исследований с ЛИНС РИС
+Forms/Directions_ng/select_lpu_services_ng.frm	СО	Ошибка записи в таблицу Интеграции исследований с ЛИНС РИС
+Forms/CallCenter/v3/HomeCalls/home_call_edit.frm	СО	Карта создана автоматически при оформление вызова на дом.
+Forms/CallCenter/v3/HomeCalls/home_call_edit.frm	СО	Смена МО
+Forms/ArmPatientsInDep/hosp_history_archive.frm	СО	пациент не выписан из стационара
+Forms/ArmPatientsInDep/SubForms/mp_prescribes_process_store_d3.frm	СО	Автоматически созданное направление на услугу
+Forms/ArmPatientsInDep/SubForms/mp_prescribes_process_store.frm	СО	Автоматически созданное направление на услугу
+UserFormsEgis3Novosib/Prescriptions/prescriptions.d/data.dfrm	СО	Неявка
+UserFormsEgis3Novosib/Directions/directions.d/data.dfrm	СО	Неявка
+UserFormsRostov/Prescriptions/PrescriptionsROSTOV_old.frm	СО	Неявка
+UserFormsRostov/Prescriptions/PrescriptionsROSTOV.frm	СО	Неявка
+UserFormsKaliningrad/Oks/mp_prescribes_process_store.frm	СО	Автоматически созданное направление на услугу
+UserFormsKrasnodarOD/GenRegistry/reg_select_time.d/netrika.dfrm	СО	Создано по сервису СЗНП
+UserFormsKhabarovsk/GenRegistry/reg_select_time.d/netrika.dfrm	СО	Создано по сервису СЗНП
+UserFormsMoscowNIIBlohina/Prescriptions/prescriptions_vk.frm	СО	Неявка
+
+

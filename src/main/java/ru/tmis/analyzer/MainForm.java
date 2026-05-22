@@ -37,27 +37,6 @@ public class MainForm {
                         settings.getMisUser()
                 );
 
-                // Проверяем доступность БД
-                DatabaseCacheManager.checkConnections();
-
-                // Показываем предупреждение, если БД недоступна
-                if (!DatabaseCacheManager.isOracleAvailable()) {
-                    JOptionPane.showMessageDialog(null,
-                            "Oracle база данных недоступна!\n" +
-                                    "Некоторые функции анализа будут ограничены.\n" +
-                                    "Проверьте настройки подключения.",
-                            "Предупреждение",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-
-                if (!DatabaseCacheManager.isPostgresAvailable()) {
-                    JOptionPane.showMessageDialog(null,
-                            "PostgreSQL база данных недоступна!\n" +
-                                    "Некоторые функции анализа будут ограничены.\n" +
-                                    "Проверьте настройки подключения.",
-                            "Предупреждение",
-                            JOptionPane.WARNING_MESSAGE);
-                }
 
                 MainWindow window = new MainWindow(settings, config);
                 window.setVisible(true);

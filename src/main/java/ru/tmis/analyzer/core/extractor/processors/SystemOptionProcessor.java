@@ -1,3 +1,5 @@
+// core/extractor/processors/SystemOptionProcessor.java
+
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
@@ -13,6 +15,12 @@ import java.util.regex.Pattern;
  * Процессор для извлечения системных опций из D_PKG_OPTIONS.GET и D_PKG_OPTION_SPECS.GET
  */
 public class SystemOptionProcessor implements IXmlProcessor {
+
+    // Белый список допустимых форматов системных опций
+    private static final Pattern VALID_OPTION_PATTERN = Pattern.compile(
+            "^[A-Z][A-Z0-9_]*$",  // Только заглавные буквы, цифры и подчеркивания
+            Pattern.CASE_INSENSITIVE
+    );
 
     @Override
     public String getName() {
@@ -69,7 +77,7 @@ public class SystemOptionProcessor implements IXmlProcessor {
             addOption(m4.group(1), options);
         }
 
-        // 5. Универсальный паттерн (запасной) - ищем любую строку в кавычках после => или =&gt;
+        // 5. Универсальный паттерн (запасной)
         Pattern universalPattern = Pattern.compile(
                 "(?:D_PKG_OPTIONS|D_PKG_OPTION_SPECS)\\.GET[\\s\\S]*?(?:=>|=&gt;)\\s*'([^']+)'",
                 Pattern.DOTALL | Pattern.CASE_INSENSITIVE
@@ -87,8 +95,46 @@ public class SystemOptionProcessor implements IXmlProcessor {
     }
 
     private void addOption(String value, Set<String> options) {
-        if (value != null && !value.isEmpty()) {
-            options.add(value);
+        if (value == null) return;
+
+        String cleaned = value.trim();
+
+        // Очищаем от кавычек и служебных символов
+        cleaned = cleaned.replaceAll("^['\"]|['\"]$", "");
+
+        // Пропускаем пустые строки
+        if (cleaned.isEmpty()) return;
+
+        // Пропускаем одиночные символы-разделители
+        if (cleaned.length() == 1 && (cleaned.equals(",") || cleaned.equals(";") ||
+                cleaned.equals("-") || cleaned.equals("|") || cleaned.equals("*") ||
+                cleaned.equals(">") || cleaned.equals("<") || cleaned.equals("=") ||
+                cleaned.equals(" ") || cleaned.equals("\t") || cleaned.equals("\n"))) {
+            return;
+        }
+
+        // Пропускаем цифровые последовательности (мусор типа "6320", "11111111111111")
+        if (cleaned.matches("^\\d+$")) {
+            return;
+        }
+
+        // Пропускаем HTML теги
+        if (cleaned.startsWith("<") && cleaned.endsWith(">")) {
+            return;
+        }
+
+        // Пропускаем длинные строки (опции обычно короткие)
+        if (cleaned.length() > 50) {
+            return;
+        }
+
+        // Проверяем, что строка похожа на системную опцию:
+        // - содержит только заглавные буквы, цифры и подчеркивания
+        // - или начинается с заглавной буквы и содержит только буквы/цифры/подчеркивания
+        if (VALID_OPTION_PATTERN.matcher(cleaned).matches()) {
+            options.add(cleaned);
+        } else {
+            System.out.println("[SystemOptionProcessor] Отфильтрован мусор: " + cleaned);
         }
     }
 }

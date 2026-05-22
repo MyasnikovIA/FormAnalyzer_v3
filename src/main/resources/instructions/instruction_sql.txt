@@ -105,5 +105,1453 @@ select hmkb.ID,          -- ID диагноза
 - **Не удаляются** `debugger`, не переформатируется JS-код
 
 ---
+2) Все цифровые переменные  должны быть обернуты в to_number (пример: to_number(:pnLPU) )
+4) Все псевдонимы  в SQL запросах "t" должны быть заменены на аббревиатуры тех таблиц, которые они привязаны (пример core.v_job_workers_group t => jwg  или worg)
+5) Все переменные в запросах, которые содержать _ID или "ID" точно являются числами и должны быть обернуты to_number
+6) Все атрибуты cmpActionVar и cmpDataSetVar должны быить выстроены в одну линию по вертикали. закрывающийся тэг "/>" должен быть без пробелов между последним атрибутом
+7) SQL запросы  должны иметь следующий вид :
+   ```sql
+	<component cmptype="Action" name="initAction">
+        <![CDATA[
+        select jwg.ID,
+               jwg.CODE,
+               jwg.CNT_WORKERS,
+          from core.v_job_workers_group jwg
+         where jwg.ID = to_number(:id)
+        ]]>
+		***
+	```
+10) атрибуты функций должны начинаться в одну длинию по вертикали , каждый атрибут на новой строке
+11) Если в атрибутах cmpActionVar  есть атрибут put , тогда эту переменную необходимо получать в SQL запросе  через INTO (Если этого блока нет, тогда надо добавить его)
+   не правильно:
+   ```xml
+    <component cmptype="Action" name="AC_get_gw">
+        <![CDATA[
+        select
+            t.id,
+            t.code
+        from core.v_job_workers_group t
+        where id = :id
+        ]]>
+        <component cmptype="ActionVar"  name="id"   src="data"      srctype="var"/>
+        <component cmptype="ActionVar"  name="id"   src="tb_Ctrl"   srctype="ctrl" put=""/>
+        <component cmptype="ActionVar"  name="code" src="code_Ctrl" srctype="ctrl" put=""/>
+    </component>
+	```
+  правильно:
+   ```xml
+    <component cmptype="Action" name="AC_get_gw">
+        <![CDATA[
+        select jwg.id,
+               jwg.code
+	      into :pnID_TAB,
+		       :psCODE,
+          from CORE.V_JOB_WORKERS_GROUP jwg
+         where id = :pnID
+        ]]>
+        <component cmptype="ActionVar"  name="pnID"     src="data"     srctype="var"/>
+        <component cmptype="ActionVar"  name="pnID_TAB" src="ctrlTb"   srctype="ctrl" put=""/>
+        <component cmptype="ActionVar"  name="psCODE"   src="ctrlCode" srctype="ctrl" put=""/>
+    </component>
+	```
+14) имена таблиц в SQL запросах писать в верхнем регистре пример:
+    не правильно:  core.v_job_workers_group
+	правильно: CORE.V_JOB_WORKERS_GROUP
+
+23) все конструкции DDL писать в нижнем регистре (coalesce select from where and order by dense_rank);
+24) Все таблицы писать в верхнем регистре;
+25) все псевдонимы писать с маленькой буквы;
+26) все имена полей писать  в верхнем регистре;
+27) все SQL функции писать в верхнем регистре;
+28) to_number писать в нижнем регистре;
+29) ROWNUM писать в нижнем регистре;
+30) перемещать атрибуты put="" и len="17" вконец всех атрибутов испоользовать шаблон из блока "правильно:"
+     не правильно :
+        <component cmptype="ActionVar" name="pnD_INSERT_ID" put="v0" len="17" src="psNEW_ID" srctype="var"/>
+        <component cmptype="ActionVar" name="pnLPU"         get="v1"          src="LPU"      srctype="session"/>
+        <component cmptype="ActionVar" name="pnPID"         get="v2"          src="pnTEMP_ID" srctype="var"/>
+    правильно:
+        <component cmptype="ActionVar" name="pnLPU"         src="LPU"       srctype="session"/>
+        <component cmptype="ActionVar" name="pnD_INSERT_ID" src="psNEW_ID"  srctype="var"     put="" len="17"/>
+        <component cmptype="ActionVar" name="pnPID"         src="pnTEMP_ID" srctype="var"/>
+
+
+31) Если на форме нет cmpFetch или <component cmptype="Fetch" тогда все атрибуты get="" и put="" должны быть пустыми значениями в cmpActionVar и cmpDataSetVar
+    Если есть атрибут только get , без атрибута put , тогда этот атрибут удаляется
+
+40) необходимо все запросы на форме поместить в блоки Router которые имеют следующий вид.
+Для Action :
+```
+	<cmpAction name="ACT_SEL">
+        <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+                begin
+                    -- сюда необходимо поместить код для ORACLE (код на форме)
+                end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+                begin
+                    -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+                end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionVar name="LPU" src="LPU" srctype="session" type="integer"/>
+        <cmpActionVar name="RES" src="RES" srctype="var"/>
+        <cmpActionVar name="ACTION_RESULT" src="ACTION_RESULT:caption" srctype="ctrl" put="" len="4000"/>
+    </cmpAction>
+```
+Для DataSet :
+```
+	<cmpDataSet name="DS_SEL2" activateoncreate="false">
+        <cmpDataSetRouter  condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+                -- сюда необходимо поместить код для ORACLE (код на форме)
+            ]]>
+        </cmpDataSetRouter>
+        <cmpDataSetRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+                -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+            ]]>
+        </cmpDataSetRouter>
+        <cmpDataSetVar name="pnLPU" src="LPU" srctype="session"/>
+        <cmpDataSetVar name="pnPID" src="ID"  srctype="var"/>
+    </cmpDataSet>
+```
+Все атрибуты "src" остаются без изменений, а вот "name" нужно переименовывать согласно правилам , которе описаны в пункте 1
+
+41) Всевызываемые функции или процедуры должнывызываться через именованные атрибуты и на против каждого атрибута необходимо указать комментарий, за что отвечает этот атрибут. Это необходимо делать для всех видов зароса и блоков PLSQL в синтаксисе PostgreSQL и OracleSQL
+
+43) в POSTGRE необходимо принудительно конвертировать входящие переменные через "::"
+Пример:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = to_number(:pnLPU)
+                       and hmkb.pid = to_number(:pnHPK_ID)
+                       and hmkb.mkb_handle = :psHPK_ID
+```
+
+переработанный код:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = (:pnLPU)::numeric
+                       and hmkb.pid = (:pnHPK_ID)::numeric
+                       and hmkb.mkb_handle = (:psHPK_ID)::text
+```
+44) Все таблицы должны писаться в верхнем регистре, все имена полуй пишуться в верхним регистре, все псевданимы таблиц пишутся с маленькой буквы
+Пример:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = to_number(:pnLPU)
+                       and hmkb.pid = to_number(:pnHPK_ID)
+```
+Переработанный запрос:
+```
+                    select hmkb.ID,
+                           hmkb.MKB,
+                           hmkb.MKB_HANDLE,
+                           hmkb.MKB_OWN,
+                           hmkb.MAX_COUNT
+                      from D_V_HPK_MKBS hmkb
+                     where hmkb.LPU = to_number(:pnLPU)
+                       and hmkb.PID = to_number(:pnHPK_ID)
+```
+
+45) SQL запрос в DataSet начинаеся сразу же под "<![CDATA[" начала. select  должно быть на одной линии под "<![CDATA[" по вертикали
+Пример исходника :
+```
+            <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                    -- POSTGRESQL: выборка диагнозов для вида плана госпитализации
+                    -- pnLPU - идентификатор ЛПУ из сессии
+                    -- pnHPK_ID - идентификатор вида плана госпитализации
+                    select hmkb.ID,
+                           hmkb.MKB,
+                           hmkb.MKB_HANDLE,
+                           hmkb.MKB_OWN,
+                           hmkb.MAX_COUNT
+                      from D_V_HPK_MKBS hmkb
+                     where hmkb.LPU = (:pnLPU)::numeric
+                       and hmkb.PID = (:pnHPK_ID)::numeric
+                ]]>
+            </cmpDataSetRouter>
+```
+Исправленый вариант:
+```
+            <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                -- POSTGRESQL: выборка диагнозов для вида плана госпитализации
+                -- pnLPU - идентификатор ЛПУ из сессии
+                -- pnHPK_ID - идентификатор вида плана госпитализации
+                select hmkb.ID,
+                       hmkb.MKB,
+                       hmkb.MKB_HANDLE,
+                       hmkb.MKB_OWN,
+                       hmkb.MAX_COUNT
+                  from D_V_HPK_MKBS hmkb
+                 where hmkb.LPU = (:pnLPU)::numeric
+                   and hmkb.PID = (:pnHPK_ID)::numeric
+                ]]>
+            </cmpDataSetRouter>
+```
+
+46) необходимо в SQL запросах написать на против каждого поля комментарий "--" в котором описано что это за поле в запросе
+
+47)
+## ПРАВИЛО ПРЕОБРАЗОВАНИЯ ACTION С UNIT/ACTION ИЛИ ПРЯМЫМ ACTION
+
+### Тип 1: Action с атрибутами unit и action
+
+**Исходный вид:**
+```xml
+<component cmptype="Action" name="addHpkMkbs" unit="HPK_MKBS" action="INSERT">
+    <component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session"/>
+    <component cmptype="ActionVar" name="pnID" src="newid" srctype="var" put="v1" len="17"/>
+</component>
+```
+
+**Необходимо преобразовать в:**
+```xml
+<cmpAction name="addHpkMkbs">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnID,   -- Выходной ID записи
+                                  pnLPU         => :pnLPU); -- ЛПУ пользователя
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnLPU" src="LPU" srctype="session" type="integer"/>
+    <cmpActionVar name="pnID" src="newid" srctype="var" put="" len="17"/>
+</cmpAction>
+```
+
+**Исходный вид:**
+```xml
+<component cmptype="Action" name="addHpkMkbs" unit="HPK_MKBS" action="INSERT">
+    <component cmptype="ActionVar" name="pnLPU"        src="LPU"        srctype="session"/>
+    <component cmptype="Actionvar" name="pnID"         src="newid"      srctype="var"     put="v1" len="17"/>
+    <component cmptype="ActionVar" name="pnPID"        src="HPK_ID"     srctype="var" />
+    <component cmptype="ActionVar" name="pnMKB"        src="MKB"        srctype="var" />
+    <component cmptype="ActionVar" name="psMKB_HANDLE" src="MKB_HANDLE" srctype="var" />
+    <component cmptype="ActionVar" name="pnMKB_OWN"    src="MKB_OWN"    srctype="var" />
+    <component cmptype="ActionVar" name="pnMKB_COUNT"  src="MKB_COUNT"  srctype="var" />
+</component>
+```
+
+Необходимо преобразовать в:
+```xml
+<cmpAction name="addHpkMkbs">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnID,             -- Выходной ID записи
+                                  pnLPU         => :pnLPU,            -- ЛПУ пользователя
+                                  pnPID         => :pnPID,            -- Идентификатор родительской записи
+                                  pnMKB         => :pnMKB,            -- Код МКБ
+                                  psMKB_HANDLE  => :psMKB_HANDLE,     -- Признак основного МКБ
+                                  pnMKB_OWN     => :pnMKB_OWN,        -- Собственный код МКБ
+                                  pnMKB_COUNT   => :pnMKB_COUNT,      -- Максимальное количество
+                                  pnCID         => :pnCID);           -- Каталог
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnLPU"        src="LPU"        srctype="session"/>
+    <cmpActionVar name="pnID"         src="newid"      srctype="var"     put="" len="17"/>
+    <cmpActionVar name="pnPID"        src="HPK_ID"     srctype="var"/>
+    <cmpActionVar name="pnMKB"        src="MKB"        srctype="var"/>
+    <cmpActionVar name="psMKB_HANDLE" src="MKB_HANDLE" srctype="var"/>
+    <cmpActionVar name="pnMKB_OWN"    src="MKB_OWN"    srctype="var"/>
+    <cmpActionVar name="pnMKB_COUNT"  src="MKB_COUNT"  srctype="var"/>
+    <cmpActionVar name="pnCID"        src="CID"        srctype="var"/>
+</cmpAction>
+```
+
+### Тип 2: Action с прямым указанием функции в атрибуте action
+
+**Исходный вид:**
+```xml
+<cmpAction name="ZnoRiskContrRes1DelAction" repeatername="RptZnoRiskContrRes" execon="del"
+          action="D_PKG_R_ZNO_RISK_CONTR_RES.DEL">
+    <cmpActionVar name="pnLPU" src="LPU" srctype="session"/>
+    <cmpActionVar name="pnID" src="_clonedata_" srctype="var" property="ID" get="gID"/>
+</cmpAction>
+```
+
+**Необходимо преобразовать в:**
+```xml
+<cmpAction name="ZnoRiskContrRes1DelAction">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE" action="D_PKG_R_ZNO_RISK_CONTR_RES.DEL"/>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          call D_PKG_R_ZNO_RISK_CONTR_RES.DEL(pnLPU => :pnLPU,  -- ЛПУ пользователя
+                                              pnID  => :pnID ); -- Идентификатор записи
+
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnLPU" src="LPU" srctype="session" type="integer"/>
+    <cmpActionVar name="pnID" src="_clonedata_" srctype="var"/>
+</cmpAction>
+```
+
+**Правила преобразования для обоих типов:**
+
+47.1 Удалить атрибуты `unit` и `action` из основного тэга (для типа 1), или только `action` (для типа 2)
+47.2 Добавить `<cmpActionRouter condition="TYPE_DATABASE=ORACLE">` с исходными атрибутами
+47.3 Добавить `<cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">` с CDATA блоком
+47.4 В CDATA блоке вызвать функцию из `execproc` (для типа 1) или из `action` (для типа 2)
+47.5 Все параметры передавать через именованные атрибуты с комментариями
+47.6 Преобразовать имена переменных: `pnLPU`, `pnID` и т.д. (первые две буквы указывают тип: pn - число, ps - строка, pd - дата)
+47.7 Атрибуты `put=""` и `len` переместить в конец
+47.8 Удалить атрибуты `get=""` (если нет Fetch компонента на форме)
+
+
+48) Отступы внутри блоков CDATA для SQL/PLSQL
+
+**Правило:** Внутри блоков `CDATA` для **SQL запросов** (`cmpActionRouter` и `cmpDataSetRouter`) все вложенные конструкции должны иметь отступ **2 пробела** от начала строки. Для всех остальных блоков (например, JavaScript в `Script` компоненте) сохраняется отступ **4 пробела**.
+
+**Пример для PL/SQL блока в Action:**
+```xml
+<!-- Правильно (2 пробела) - только для SQL/PLSQL -->
+<cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- комментарий с 2 пробелами
+      call PROCEDURE_NAME(param => :value);
+    end;
+    ]]>
+</cmpActionRouter>
+```
+
+**Пример для SQL запроса в DataSet:**
+```xml
+<!-- Правильно (2 пробела) - только для SQL -->
+<cmpDataSetRouter condition="TYPE_DATABASE=ORACLE">
+    <![CDATA[
+    select tab.ID,
+           tab.NAME
+      from TABLE tab
+     where tab.ID = :pnID
+    ]]>
+</cmpDataSetRouter>
+```
+
+**Пример для JavaScript блока (сохраняем 4 пробела):**
+```xml
+<!-- Правильно (4 пробела) - для JavaScript -->
+<component cmptype="Script">
+    <![CDATA[
+    Form.onCreate = function() {
+        setVar('HPK_ID', getVar('HPK_ID', 1));
+    };
+
+    Form.onShow = function() {
+        // код с отступом 4 пробела
+    };
+    ]]>
+</component>
+```
+
+49) Выравнивание параметров в вызовах процедур/функций (только для SQL)
+
+**Правило:** При вызове процедуры с именованными параметрами внутри SQL/PLSQL блока, если параметры переносятся на новую строку, отступ должен быть **на 2 пробела больше** чем у `call`:
+
+```sql
+-- Правильно (для SQL/PLSQL блоков)
+call PROCEDURE_NAME(pnPARAM1 => :pnPARAM1,   -- отступ 2 пробела
+                    pnPARAM2 => :pnPARAM2,   -- отступ 2 пробела
+                    psPARAM3 => :psPARAM3);  -- отступ 2 пробела
+
+-- Альтернативный вариант (одна строка, если параметров мало)
+call PROCEDURE_NAME(pnPARAM1 => :pnPARAM1, pnPARAM2 => :pnPARAM2);
+```
+
+50) Отступы для многострочных комментариев в SQL/PLSQL блоках
+
+**Правило:** Комментарии внутри блоков CDATA для SQL/PLSQL должны иметь отступ **2 пробела**:
+
+```xml
+<![CDATA[
+begin
+  -- Это правильный комментарий (2 пробела)
+  call PROC(
+    pnID => :pnID);  -- Комментарий в конце строки (1 пробел до комментария)
+end;
+]]>
+```
+
+51) Структура begin/end блоков в SQL/PLSQL
+
+**Правило:** Ключевые слова `begin` и `end` должны быть на отдельных строках и не иметь отступа внутри CDATA (выровнены по левому краю относительно содержимого CDATA). Весь SQL/PLSQL код внутри блока имеет отступ **2 пробела**:
+
+```xml
+<![CDATA[
+begin
+  -- код с отступом 2 пробела
+  if condition then
+    -- вложенный код с отступом 4 пробела (2 + 2)
+    do_something;
+  end if;
+end;
+]]>
+```
+
+### 52) Смешанные блоки (SQL внутри JS не допускаются)
+
+**Правило:** Блоки SQL/PLSQL могут находиться только в компонентах `cmpActionRouter` и `cmpDataSetRouter`. В компоненте `Script` может быть только JavaScript код с отступом **4 пробела**. Не допускается смешивание SQL кода в JavaScript блоках.
+
+### 53) Общее правило отступов
+
+| Тип блока | Компонент | Отступ внутри CDATA |
+|-----------|-----------|---------------------|
+| SQL/PLSQL | `cmpActionRouter` | 2 пробела |
+| SQL/PLSQL | `cmpDataSetRouter` | 2 пробела |
+| JavaScript | `Script` | 4 пробела |
+| JavaScript | атрибуты событий (onclick, oncreate и т.д.) | 4 пробела |
+
+### 54) Форматирование SELECT запросов в DataSet
+
+**Правило:** В блоках `cmpDataSetRouter` SQL запрос должен начинаться сразу после `CDATA[` без дополнительных отступов. Ключевые слова SQL (`select`, `from`, `where`, `and`, `order by`) должны быть выровнены по вертикали:
+
+```xml
+<cmpDataSetRouter condition="TYPE_DATABASE=ORACLE">
+    <![CDATA[
+    select hmkb.ID,                         -- Уникальный идентификатор записи
+           hmkb.MKB,                        -- Код диагноза
+           hmkb.MKB_HANDLE                  -- Ручной ввод
+      from D_V_HPK_MKBS hmkb                -- Представление диагнозов
+     where hmkb.LPU = to_number(:pnLPU)     -- Фильтр по ЛПУ
+       and hmkb.PID = to_number(:pnHPK_ID)  -- Фильтр по виду плана
+    ]]>
+</cmpDataSetRouter>
+```
+
+
+55) Форматирование вызова процедур/функций в одну строку (предпочтительный вариант)
+
+**Правило:** Если количество параметров не превышает 3-х, вызов процедуры/функции должен быть оформлен **в одну строку**. Параметры разделяются запятой с пробелом после запятой. Комментарий к параметру ставится после `--` с одним пробелом.
+
+**Пример:**
+```sql
+-- Правильно (3 параметра в одну строку)
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnD_INSERT_ID => :pnD_INSERT_ID); -- Выходной ID записи
+```
+
+```sql
+-- Правильно (2 параметра в одну строку)
+call D_PKG_HPK_MKBS.DELETE(pnID  => :pnID,   -- Идентификатор записи
+                           pnLPU => :pnLPU); -- ЛПУ пользователя
+```
+
+```sql
+-- Правильно (1 параметр)
+call D_PKG_HPK_MKBS.GET(pnID => :pnID); -- Получить запись по ID
+```
+
+56) Форматирование вызова процедур/функций с переносом строк (для 4+ параметров)
+
+**Правило:** Если количество параметров 4 и более, вызов процедуры/функции оформляется с переносом строки после открывающей скобки. Каждый параметр на новой строке с отступом **2 пробела** от уровня `call`. Закрывающая скобка и точка с запятой на отдельной строке с отступом **2 пробела**.
+
+**Пример:**
+```sql
+-- Правильно (4+ параметров с переносом)
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnMKB         => :pnMKB,          -- Код МКБ
+                        pnMAX_COUNT   => :pnMAX_COUNT,    -- Максимальное количество
+                        pnCID         => :pnCID);         -- Каталог для проверки прав
+```
+
+ 57) Выравнивание параметров при вызове в одну строку
+
+**Правило:** При вызове в одну строку все параметры должны быть выровнены по вертикали относительно первого параметра. Отступ для последующих строк - **на 20 пробелов больше** чем у `call` (или выравнивание по открывающей скобке).
+
+```sql
+-- Правильно (выравнивание параметров)
+call PROCEDURE_NAME(pnPARAM1 => :pnPARAM1,      -- Комментарий
+                    pnPARAM2 => :pnPARAM2,      -- Комментарий
+                    psPARAM3 => :psPARAM3);     -- Комментарий
+```
+
+58) Пробелы вокруг оператора `=>`
+
+**Правило:** Вокруг оператора `=>` всегда должны быть пробелы: пробел до и пробел после.
+
+```sql
+-- Правильно
+call PROC(pnID => :pnID);
+
+-- Неправильно
+call PROC(pnID=>:pnID);
+call PROC(pnID =>:pnID);
+call PROC(pnID=> :pnID);
+```
+
+59) Комментарии к параметрам
+
+**Правило:** Комментарий к параметру ставится после запятой (или после значения параметра) через `--` с одним пробелом. Комментарий должен описывать назначение параметра на русском языке.
+
+```sql
+-- Правильно
+call PROC(pnID   => :pnID,    -- Идентификатор записи
+          pnLPU  => :pnLPU,   -- ЛПУ пользователя
+          psCODE => :psCODE); -- Код услуги
+
+-- Неправильно (нет пробела после --)
+call PROC(pnID => :pnID,--Идентификатор записи
+          pnLPU => :pnLPU,--ЛПУ пользователя);
+```
+
+60) Точка с запятой в конце вызова
+
+**Правило:** Вызов процедуры/функции всегда заканчивается точкой с запятой (`;`). При переносе строки точка с запятой ставится после закрывающей скобки на отдельной строке.
+
+```sql
+-- Правильно (одна строка)
+call PROC(pnID => :pnID);  -- точка с запятой в конце
+
+-- Правильно (многострочный)
+call PROC(pnID  => :pnID,
+          pnLPU => :pnLPU);  -- точка с запятой после закрывающей скобки
+```
+
+61) Пустые строки между секциями
+
+**Правило:** Между вызовом процедуры и закрывающим `end;` должна быть одна пустая строка для визуального разделения.
+
+```xml
+<![CDATA[
+begin
+  -- POSTGRESQL: комментарий
+  call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU,   -- ЛПУ пользователя
+                          pnPID => :pnPID);   -- Идентификатор вида плана
+
+end;
+]]>
+```
+
+
+62) Приоритет форматирования вызова
+
+**Правило:** Следовать следующему приоритету при форматировании:
+
+1. **1-3 параметра** → Одна строка с выравниванием параметров
+2. **4+ параметров** → Многострочный формат с переносом
+3. **Длинные значения параметров** (>50 символов) → Многострочный формат независимо от количества параметров
+
+63) Именованные параметры обязательны
+
+**Правило:** При вызове процедур/функций всегда использовать **именованные параметры** (синтаксис `name => value`). Позиционная передача параметров запрещена.
+
+```sql
+-- Правильно (именованные параметры)
+call PROC(pnID => :pnID, pnLPU => :pnLPU);
+
+-- Неправильно (позиционная передача)
+call PROC(:pnID, :pnLPU);
+```
+
+64) Регистр имен процедур и параметров
+
+**Правило:** Имена процедур/функций пишутся в **верхнем регистре**. Имена параметров в вызове пишутся в **нижнем регистре** с префиксом типа (`pn`, `ps`, `pd`).
+
+```sql
+-- Правильно
+call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU, pnPID => :pnPID);
+
+-- Неправильно (процедура в нижнем регистре)
+call d_pkg_hpk_mkbs.add(pnLPU => :pnLPU, pnPID => :pnPID);
+
+-- Неправильно (параметр в верхнем регистре)
+call D_PKG_HPK_MKBS.ADD(PNLPU => :pnLPU, PNPID => :pnPID);
+```
+
+
+65) Примеры правильного форматирования
+
+**Пример 1: 2 параметра (короткий вызов)**
+```sql
+call D_PKG_HPK_MKBS.DELETE(pnID  => :pnID,   -- Идентификатор записи
+                           pnLPU => :pnLPU); -- ЛПУ пользователя
+```
+
+**Пример 2: 3 параметра (средний вызов)**
+```sql
+call D_PKG_HPK_MKBS.UPDATE(pnID    => :pnID,        -- Идентификатор записи
+                           pnLPU   => :pnLPU,       -- ЛПУ пользователя
+                           psNAME  => :psNAME);     -- Наименование
+```
+
+**Пример 3: 5 параметров (многострочный вызов)**
+```sql
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnMKB         => :pnMKB,          -- Код МКБ
+                        pnMAX_COUNT   => :pnMAX_COUNT,    -- Максимальное количество
+                        pnCID         => :pnCID);         -- Каталог для проверки прав
+
+```
+
+**Пример 4: Длинное значение параметра (многострочный)**
+```sql
+call D_PKG_HPK_MKBS.SET_DESCRIPTION(
+  pnID    => :pnID,                  -- Идентификатор записи
+  psTEXT  => :psVERY_LONG_TEXT       -- Очень длинное описание параметра
+            || ' continued on next line'
+);
+```
+
+# ДОПОЛНЕНИЕ ПРАВИЛА №66: СТИЛЬ КОМПОНЕНТОВ ДЛЯ M2
+## Правило №66: Определение стиля компонентов на основе версии платформы
+
+### 66.1 Определение версии формы
+
+Перед преобразованием формы необходимо определить её версию на основе:
+1. **Исходного кода** - если в форме используются `cmptype="DataSet"` без префикса `cmp` - это M2
+2. **Контекста задачи** - явное указание "форма является M2"
+3. **Расширения файла** - `.frm` в пути `mis_MEDDEV-151210` указывает на M2
+### 66.2 Стиль компонентов для M2
+
+**Если форма является M2, используются следующие компоненты:**
+
+| Тип компонента | M2 синтаксис | D3 синтаксис (запрещен) |
+|----------------|--------------|------------------------|
+| **Action** | `<component cmptype="Action">` | `<cmpAction>` |
+| **DataSet** | `<component cmptype="DataSet">` | `<cmpDataSet>` |
+| **ActionRouter** | `<component cmptype="ActionRouter">` | `<cmpActionRouter>` |
+| **DataSetRouter** | `<component cmptype="DataSetRouter">` | `<cmpDataSetRouter>` |
+| **ActionVar** | `<component cmptype="ActionVar">` | `<cmpActionVar>` |
+| **DataSetVar** | `<component cmptype="Variable">` (в DataSet) | `<cmpDataSetVar>` |
+| **Grid** | `<component cmptype="Grid">` | `<cmpGrid>` |
+
+### 66.3 Пример для M2 Action с Router
+
+**Правильный M2 синтаксис:**
+```xml
+<!-- M2 стиль: component cmptype="Action" -->
+<component cmptype="Action" name="acAddHpkMkbs">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                                  pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                  pnPID         => :pnPID);          -- Идентификатор родительской записи
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU"         src="LPU"         srctype="session"/>
+    <component cmptype="ActionVar" name="pnD_INSERT_ID" src="newid"       srctype="var"     put="" len="17"/>
+    <component cmptype="ActionVar" name="pnPID"         src="HPK_ID"      srctype="var"/>
+</component>
+```
+
+### 66.4 Пример для M2 DataSet с Router
+
+**Правильный M2 синтаксис:**
+```xml
+<!-- M2 стиль: component cmptype="DataSet" -->
+<component cmptype="DataSet" name="dsHpkMkbs" mode="Range">
+    <component cmptype="DataSetRouter" condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        select hmkb.ID,                         -- Уникальный идентификатор записи
+               hmkb.MKB,                        -- Код диагноза МКБ
+               hmkb.MKB_HANDLE,                 -- Признак ручного ввода
+               hmkb.MKB_OWN,                    -- Собственный код МКБ
+               hmkb.MAX_COUNT                   -- Максимальное количество записей
+          from D_V_HPK_MKBS hmkb
+         where hmkb.LPU = to_number(:pnLPU)
+           and hmkb.PID = to_number(:pnHPK_ID)
+        ]]>
+    </component>
+    <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        select hmkb.ID,
+               hmkb.MKB,
+               hmkb.MKB_HANDLE,
+               hmkb.MKB_OWN,
+               hmkb.MAX_COUNT
+          from D_V_HPK_MKBS hmkb
+         where hmkb.LPU = (:pnLPU)::numeric
+           and hmkb.PID = (:pnHPK_ID)::numeric
+        ]]>
+    </component>
+    <component cmptype="Variable" name="pnLPU"    src="LPU"     srctype="session"/>
+    <component cmptype="Variable" name="pnHPK_ID" src="HPK_ID"  srctype="var"/>
+    <component cmptype="Variable" name="r1c"      src="r1c"     srctype="var"    default="10"/>
+    <component cmptype="Variable" name="r1s"      src="r1s"     srctype="var"    default="1"/>
+</component>
+```
+
+### 66.5 Сравнение M2 и D3 стилей
+
+| Элемент | M2 | D3 |
+|---------|-----|-----|
+| **Action** | `<component cmptype="Action">` | `<cmpAction>` |
+| **ActionRouter** | `<component cmptype="ActionRouter">` | `<cmpActionRouter>` |
+| **ActionVar** | `<component cmptype="ActionVar">` | `<cmpActionVar>` |
+| **DataSet** | `<component cmptype="DataSet">` | `<cmpDataSet>` |
+| **DataSetRouter** | `<component cmptype="DataSetRouter">` | `<cmpDataSetRouter>` |
+| **Variable (в DataSet)** | `<component cmptype="Variable">` | `<cmpDataSetVar>` |
+| **Grid** | `<component cmptype="Grid">` | `<cmpGrid>` |
+
+### 66.6 Полный пример M2 формы
+
+```xml
+<div cmptype="form" oncreate="base().onCreate();" onshow="base().onShow();" window_size="750x600">
+    <component cmptype="Script">
+        <![CDATA[
+            Form.onCreate = function() {
+                setVar('HPK_ID', getVar('HPK_ID', 1));
+            };
+
+            Form.addHpkMkbs = function() {
+                setVar('PRIMARY', null);
+                setVar('PARENT', getVar('HPK_ID'));
+                openWindow('HospitPlanning/hpk_mkbs_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            refreshDataSet('dsHpkMkbs');
+                        }
+                    });
+            };
+        ]]>
+    </component>
+
+    <component cmptype="Action" name="acAddHpkMkbs">
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            begin
+              call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                                      pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                      pnPID         => :pnPID);          -- Идентификатор родительской записи
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionVar" name="pnLPU"         src="LPU"         srctype="session"/>
+        <component cmptype="ActionVar" name="pnD_INSERT_ID" src="newid"       srctype="var"     put="" len="17"/>
+        <component cmptype="ActionVar" name="pnPID"         src="HPK_ID"      srctype="var"/>
+    </component>
+
+    <component cmptype="DataSet" name="dsHpkMkbs" mode="Range">
+        <component cmptype="DataSetRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            select hmkb.ID,                         -- Уникальный идентификатор записи
+                   hmkb.MKB,                        -- Код диагноза МКБ
+                   hmkb.MKB_HANDLE,                 -- Признак ручного ввода
+                   hmkb.MKB_OWN,                    -- Собственный код МКБ
+                   hmkb.MAX_COUNT                   -- Максимальное количество записей
+              from D_V_HPK_MKBS hmkb
+             where hmkb.LPU = (:pnLPU)::numeric
+               and hmkb.PID = (:pnHPK_ID)::numeric
+            ]]>
+        </component>
+        <component cmptype="Variable" name="pnLPU"    src="LPU"     srctype="session"/>
+        <component cmptype="Variable" name="pnHPK_ID" src="HPK_ID"  srctype="var"/>
+        <component cmptype="Variable" name="r1c"      src="r1c"     srctype="var"    default="10"/>
+        <component cmptype="Variable" name="r1s"      src="r1s"     srctype="var"    default="1"/>
+    </component>
+
+    <component cmptype="Grid" name="gridHpkMkbs" dataset="dsHpkMkbs" field="ID" selectlist="ID" grid_caption="Диагнозы">
+        <component cmptype="Column" caption="Диагноз" field="MKB"/>
+        <component cmptype="Column" caption="Диагноз: ручной ввод" field="MKB_HANDLE"/>
+        <component cmptype="Column" caption="Ограничение записи" field="MAX_COUNT"/>
+    </component>
+</div>
+```
+
+### 66.7 Важные замечания для M2
+
+1. **ActionVar** в M2 всегда имеет атрибуты `get` или `put` при необходимости
+2. **Variable** в DataSet (M2) не имеет префикса `pn` в имени, но должен иметь по правилу №1
+3. **ActionRouter** и **DataSetRouter** - это полноценные компоненты с атрибутом `condition`
+4. В M2 **не используется** синтаксис `cmpAction`, `cmpDataSet` и т.д. - это ошибка
+5. Закрывающий тэг `/>` должен быть без пробелов между последним атрибутом
+
+### 66.8 Обработка существующей формы hosp_plan_mkbs.frm
+
+Учитывая, что исходная форма использует:
+- `<component cmptype="Action">` (не `<cmpAction>`)
+- `<component cmptype="DataSet">` (не `<cmpDataSet>`)
+- `<component cmptype="Variable">` (не `<cmpDataSetVar>`)
+
+Форма **однозначно является M2**, следовательно:
+- ✅ Используем `<component cmptype="Action">`
+- ✅ Используем `<component cmptype="ActionRouter">`
+- ✅ Используем `<component cmptype="DataSet">`
+- ✅ Используем `<component cmptype="DataSetRouter">`
+- ✅ Используем `<component cmptype="Variable">`
+- ❌ НЕ используем `<cmpAction>`, `<cmpDataSet>`, `<cmpActionRouter>` и т.д.
+# ДОПОЛНЕНИЕ ПРАВИЛА №66: СТИЛЬ КОМПОНЕНТОВ ДЛЯ D3
+## Правило №66: Определение стиля компонентов на основе версии платформы (продолжение)
+### 66.9 Стиль компонентов для D3
+**Если форма является D3, используются следующие компоненты:**
+
+| Тип компонента | D3 синтаксис | M2 синтаксис (запрещен) |
+|----------------|--------------|------------------------|
+| **Action** | `<cmpAction>` | `<component cmptype="Action">` |
+| **DataSet** | `<cmpDataSet>` | `<component cmptype="DataSet">` |
+| **ActionRouter** | `<cmpActionRouter>` | `<component cmptype="ActionRouter">` |
+| **DataSetRouter** | `<cmpDataSetRouter>` | `<component cmptype="DataSetRouter">` |
+| **ActionVar** | `<cmpActionVar>` | `<component cmptype="ActionVar">` |
+| **DataSetVar** | `<cmpDataSetVar>` | `<component cmptype="Variable">` |
+| **Grid** | `<cmpGrid>` | `<component cmptype="Grid">` |
+
+### 66.10 Пример для D3 Action с Router
+
+**Правильный D3 синтаксис:**
+```xml
+<!-- D3 стиль: cmpAction -->
+<cmpAction name="acAddHpkMkbs">
+    <cmpActionRouter condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                                  pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                  pnPID         => :pnPID);          -- Идентификатор родительской записи
+        end;
+        ]]>
+    </cmpActionRouter>
+    <cmpActionVar name="pnLPU"         src="LPU"         srctype="session"/>
+    <cmpActionVar name="pnD_INSERT_ID" src="newid"       srctype="var"     put="" len="17"/>
+    <cmpActionVar name="pnPID"         src="HPK_ID"      srctype="var"/>
+</cmpAction>
+```
+
+### 66.11 Пример для D3 DataSet с Router
+
+**Правильный D3 синтаксис:**
+```xml
+<!-- D3 стиль: cmpDataSet -->
+<cmpDataSet name="dsHpkMkbs" mode="Range">
+    <cmpDataSetRouter condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        select hmkb.ID,                         -- Уникальный идентификатор записи
+               hmkb.MKB,                        -- Код диагноза МКБ
+               hmkb.MKB_HANDLE,                 -- Признак ручного ввода
+               hmkb.MKB_OWN,                    -- Собственный код МКБ
+               hmkb.MAX_COUNT                   -- Максимальное количество записей
+          from D_V_HPK_MKBS hmkb
+         where hmkb.LPU = to_number(:pnLPU)
+           and hmkb.PID = to_number(:pnHPK_ID)
+        ]]>
+    </cmpDataSetRouter>
+    <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        select hmkb.ID,
+               hmkb.MKB,
+               hmkb.MKB_HANDLE,
+               hmkb.MKB_OWN,
+               hmkb.MAX_COUNT
+          from D_V_HPK_MKBS hmkb
+         where hmkb.LPU = (:pnLPU)::numeric
+           and hmkb.PID = (:pnHPK_ID)::numeric
+        ]]>
+    </cmpDataSetRouter>
+    <cmpDataSetVar name="pnLPU"    src="LPU"     srctype="session"/>
+    <cmpDataSetVar name="pnHPK_ID" src="HPK_ID"  srctype="var"/>
+    <cmpDataSetVar name="r1c"      src="r1c"     srctype="var"    default="10"/>
+    <cmpDataSetVar name="r1s"      src="r1s"     srctype="var"    default="1"/>
+</cmpDataSet>
+```
+
+### 66.12 Полный пример D3 формы
+
+```xml
+<div cmptype="form" oncreate="base().onCreate();" onshow="base().onShow();" window_size="750x600">
+    <component cmptype="Script">
+        <![CDATA[
+            Form.onCreate = function() {
+                setVar('HPK_ID', getVar('HPK_ID', 1));
+            };
+
+            Form.addHpkMkbs = function() {
+                setVar('PRIMARY', null);
+                setVar('PARENT', getVar('HPK_ID'));
+                openWindow('HospitPlanning/hpk_mkbs_edit', true)
+                    .addListener('onafterclose', function() {
+                        if (+getVar('ModalResult') === 1) {
+                            refreshDataSet('dsHpkMkbs');
+                        }
+                    });
+            };
+        ]]>
+    </component>
+
+    <cmpAction name="acAddHpkMkbs">
+        <cmpActionRouter condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+        <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            begin
+              call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                                      pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                      pnPID         => :pnPID);          -- Идентификатор родительской записи
+            end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionVar name="pnLPU"         src="LPU"         srctype="session"/>
+        <cmpActionVar name="pnD_INSERT_ID" src="newid"       srctype="var"     put="" len="17"/>
+        <cmpActionVar name="pnPID"         src="HPK_ID"      srctype="var"/>
+    </cmpAction>
+
+    <cmpAction name="acDeleteHpkMkbs">
+        <cmpActionRouter condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="DELETE"/>
+        <cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            begin
+              call D_PKG_HPK_MKBS.DEL(pnID  => :pnID,    -- Идентификатор удаляемой записи
+                                      pnLPU => :pnLPU);  -- ЛПУ пользователя
+            end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionVar name="pnLPU" src="LPU"         srctype="session"/>
+        <cmpActionVar name="pnID"  src="HPK_MKBS"    srctype="var"/>
+    </cmpAction>
+
+    <cmpDataSet name="dsHpkMkbs" mode="Range">
+        <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            select hmkb.ID,                         -- Уникальный идентификатор записи
+                   hmkb.MKB,                        -- Код диагноза МКБ
+                   hmkb.MKB_HANDLE,                 -- Признак ручного ввода
+                   hmkb.MKB_OWN,                    -- Собственный код МКБ
+                   hmkb.MAX_COUNT                   -- Максимальное количество записей
+              from D_V_HPK_MKBS hmkb
+             where hmkb.LPU = (:pnLPU)::numeric
+               and hmkb.PID = (:pnHPK_ID)::numeric
+            ]]>
+        </cmpDataSetRouter>
+        <cmpDataSetVar name="pnLPU"    src="LPU"     srctype="session"/>
+        <cmpDataSetVar name="pnHPK_ID" src="HPK_ID"  srctype="var"/>
+        <cmpDataSetVar name="r1c"      src="r1c"     srctype="var"    default="10"/>
+        <cmpDataSetVar name="r1s"      src="r1s"     srctype="var"    default="1"/>
+    </cmpDataSet>
+
+    <cmpGrid name="gridHpkMkbs" dataset="dsHpkMkbs" field="ID" selectlist="ID" grid_caption="Диагнозы">
+        <component cmptype="Column" caption="Диагноз" field="MKB"/>
+        <component cmptype="Column" caption="Диагноз: ручной ввод" field="MKB_HANDLE"/>
+        <component cmptype="Column" caption="Ограничение записи" field="MAX_COUNT"/>
+        <component cmptype="GridFooter" separate="false">
+            <component count="10" cmptype="Range" varstart="r1s" varcount="r1c" valuecount="10" valuestart="1"/>
+        </component>
+    </cmpGrid>
+</div>
+```
+
+### 66.13 Дополнительные особенности D3
+
+
+### 66.14 Сравнительная таблица M2 vs D3
+
+| Характеристика | M2 | D3 |
+|----------------|-----|-----|
+| **Action** | `<component cmptype="Action">` | `<cmpAction>` |
+| **DataSet** | `<component cmptype="DataSet">` | `<cmpDataSet>` |
+| **Router Action** | `<component cmptype="ActionRouter">` | `<cmpActionRouter>` |
+| **Router DataSet** | `<component cmptype="DataSetRouter">` | `<cmpDataSetRouter>` |
+| **Параметры Action** | `<component cmptype="ActionVar">` | `<cmpActionVar>` |
+| **Параметры DataSet** | `<component cmptype="Variable">` | `<cmpDataSetVar>` |
+| **Grid** | `<component cmptype="Grid">` | `<cmpGrid>` |
+| **Поддержка GraphQL** | Нет | Да |
+| **Async/await** | Нет (колбэки) | Да |
+| **Реактивность** | Нет | Да |
+| **Service вызовы** | Нет | Да |
+| **Жизненный цикл** | onCreate, onShow, onClose | onInit, onMount, onRender, onDestroy |
+
+### 66.15 Определение версии формы (алгоритм)
+
+```javascript
+function determineFormVersion(formCode) {
+    // Признаки M2
+    const m2Patterns = [
+        /<component\s+cmptype="Action"\s+name=/,
+        /<component\s+cmptype="DataSet"\s+name=/,
+        /<component\s+cmptype="ActionRouter"/,
+        /<component\s+cmptype="DataSetRouter"/,
+        /<component\s+cmptype="Variable"\s+name=/
+    ];
+
+    // Признаки D3
+    const d3Patterns = [
+        /<cmpAction\s+name=/,
+        /<cmpDataSet\s+name=/,
+        /<cmpActionRouter\s+condition=/,
+        /<cmpDataSetRouter\s+condition=/,
+        /<cmpDataSetVar\s+name=/
+    ];
+
+    let m2Score = m2Patterns.filter(pattern => pattern.test(formCode)).length;
+    let d3Score = d3Patterns.filter(pattern => pattern.test(formCode)).length;
+
+    if (m2Score > d3Score) return 'M2';
+    if (d3Score > m2Score) return 'D3';
+
+    // По умолчанию или по контексту
+    return 'M2'; // или 'D3' в зависимости от контекста
+}
+```
+
+### 66.16 Важные замечания для D3
+
+1. **cmpActionVar** в D3 использует атрибуты `get` и `put` аналогично M2
+2. **cmpDataSetVar** в D3 имеет префикс `pn` в имени (согласно правилу №1)
+3. **cmpActionRouter** и **cmpDataSetRouter** - это сокращенная форма компонентов
+4. В D3 **не используется** синтаксис `<component cmptype="...">` для Action и DataSet - это ошибка
+5. Закрывающий тэг `/>` должен быть без пробелов между последним атрибутом
+6. D3 поддерживает смешанный стиль: для Grid можно использовать как `<cmpGrid>`, так и `<component cmptype="Grid">` (обратная совместимость)
+
+## Исправление правила №67 - Блок комментария формы
+
+Вы абсолютно правы! Форма в стиле M2 не может открываться методом D3, и наоборот. Блок комментария должен содержать **только один пример вызова**, соответствующий стилю самой формы.
+
+### Правило №67 (исправленное): Добавление блока документации в начало формы
+
+#### 67.1 Определение стиля формы для примера вызова
+
+**Для M2 формы** - пример вызова использует `openWindow()`
+**Для D3 формы** - пример вызова использует `openD3Form()`
+
+#### 67.2 Структура блока комментария (упрощенная)
+
+```xml
+<!--
+    ========================================================================
+    НАЗВАНИЕ ФОРМЫ: <Имя файла формы>
+    ОПИСАНИЕ: <Краткое описание назначения формы>
+
+    ВХОДНЫЕ ПАРАМЕТРЫ:
+    - <Имя переменной> : <Тип> - <Описание>
+
+    ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+    - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+    - return_id : number - Идентификатор добавленной/измененной записи (при наличии)
+
+    ПРИМЕР ВЫЗОВА:
+    <Пример вызова в стиле формы (M2 или D3)>
+    ========================================================================
+-->
+```
+
+#### 67.3 Пример для M2 формы
+
+```xml
+<!--
+    ========================================================================
+    НАЗВАНИЕ ФОРМЫ: HospitPlanning/hosp_plan_mkbs.frm
+    ОПИСАНИЕ: Форма редактирования диагнозов (МКБ) для видов планов госпитализации
+
+    ВХОДНЫЕ ПАРАМЕТРЫ:
+    - HPK_ID : number - Идентификатор вида плана госпитализации (HPK)
+
+    ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+    - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+    - return_id : number - Идентификатор добавленной/измененной записи (при сохранении)
+
+    ПРИМЕР ВЫЗОВА:
+    openWindow({
+        name: 'HospitPlanning/hosp_plan_mkbs',
+        vars: {
+            HPK_ID: getVar('HPK_ID')
+        }
+    }, true, 750, 600)
+        .addListener('onafterclose', function() {
+            if (getVar('ModalResult') == 1) {
+                refreshDataSet('dsHpkList');
+            }
+        });
+    ========================================================================
+-->
+```
+
+#### 67.4 Пример для D3 формы
+
+```xml
+<!--
+    ========================================================================
+    НАЗВАНИЕ ФОРМЫ: HospitPlanning/hosp_plan_mkbs.frm
+    ОПИСАНИЕ: Форма редактирования диагнозов (МКБ) для видов планов госпитализации
+
+    ВХОДНЫЕ ПАРАМЕТРЫ:
+    - HPK_ID : number - Идентификатор вида плана госпитализации (HPK)
+
+    ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+    - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+    - return_id : number - Идентификатор добавленной/измененной записи (при сохранении)
+
+    ПРИМЕР ВЫЗОВА:
+    openD3Form('HospitPlanning/hosp_plan_mkbs', true, {
+        width: '750px',
+        height: '600px',
+        vars: {
+            HPK_ID: getVar('HPK_ID')
+        },
+        onclose: (mod) => {
+            if (+mod?.ModalResult !== 1) return;
+            refreshDataSet('dsHpkList');
+        }
+    });
+    ========================================================================
+-->
+```
+
+#### 67.5 Алгоритм определения стиля формы
+
+```javascript
+function getFormStyle(formCode) {
+    // Признаки M2 формы
+    const m2Patterns = [
+        /<component\s+cmptype="Action"\s+name=/,
+        /<component\s+cmptype="DataSet"\s+name=/,
+        /<component\s+cmptype="ActionRouter"/,
+        /<component\s+cmptype="DataSetRouter"/,
+        /<component\s+cmptype="Variable"\s+name=/
+    ];
+
+    // Признаки D3 формы
+    const d3Patterns = [
+        /<cmpAction\s+name=/,
+        /<cmpDataSet\s+name=/,
+        /<cmpActionRouter\s+condition=/,
+        /<cmpDataSetRouter\s+condition=/,
+        /<cmpDataSetVar\s+name=/
+    ];
+
+    let m2Score = m2Patterns.filter(pattern => pattern.test(formCode)).length;
+    let d3Score = d3Patterns.filter(pattern => pattern.test(formCode)).length;
+
+    if (m2Score > d3Score) return 'M2';
+    if (d3Score > m2Score) return 'D3';
+
+    // Если не удалось определить - по умолчанию M2 (как в исходной задаче)
+    return 'M2';
+}
+```
+
+#### 67.6 Полный пример M2 формы с блоком комментария
+
+```xml
+<div cmptype="form" oncreate="base().onCreate();" onshow="base().onShow();" window_size="750x600">
+    <!--
+        ========================================================================
+        НАЗВАНИЕ ФОРМЫ: HospitPlanning/hosp_plan_mkbs.frm
+        ОПИСАНИЕ: Форма редактирования диагнозов (МКБ) для видов планов госпитализации
+
+        ВХОДНЫЕ ПАРАМЕТРЫ:
+        - HPK_ID : number - Идентификатор вида плана госпитализации (HPK)
+
+        ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+        - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+        - return_id : number - Идентификатор добавленной/измененной записи (при сохранении)
+
+        ПРИМЕР ВЫЗОВА:
+        openWindow({
+            name: 'HospitPlanning/hosp_plan_mkbs',
+            vars: {
+                HPK_ID: getVar('HPK_ID')
+            }
+        }, true, 750, 600)
+            .addListener('onafterclose', function() {
+                if (getVar('ModalResult') == 1) {
+                    refreshDataSet('dsHpkList');
+                }
+            });
+        ========================================================================
+    -->
+    <!-- ... остальной код формы ... -->
+</div>
+```
+
+
+#### 67.7 Шаблоны для быстрого добавления
+
+**Для M2 формы:**
+```xml
+<!--
+    ========================================================================
+    НАЗВАНИЕ ФОРМЫ: <Путь к форме>
+    ОПИСАНИЕ: <Описание формы>
+
+    ВХОДНЫЕ ПАРАМЕТРЫ:
+    - <VAR_NAME> : <type> - <description>
+
+    ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+    - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+    - return_id : number - Идентификатор добавленной/измененной записи (при наличии)
+
+    ПРИМЕР ВЫЗОВА:
+    openWindow({
+        name: '<Путь к форме>',
+        vars: {
+            <VAR_NAME>: getVar('<VAR_NAME>')
+        }
+    }, true, <width>, <height>)
+        .addListener('onafterclose', function() {
+            if (getVar('ModalResult') == 1) {
+                // Действия после закрытия
+            }
+        });
+    ========================================================================
+-->
+```
+
+**Для D3 формы:**
+```xml
+<!--
+    ========================================================================
+    НАЗВАНИЕ ФОРМЫ: <Путь к форме>
+    ОПИСАНИЕ: <Описание формы>
+
+    ВХОДНЫЕ ПАРАМЕТРЫ:
+    - <VAR_NAME> : <type> - <description>
+
+    ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+    - ModalResult : number - Результат модального окна (1 - сохранено, 0 - отменено)
+    - return_id : number - Идентификатор добавленной/измененной записи (при наличии)
+
+    ПРИМЕР ВЫЗОВА:
+    openD3Form('<Путь к форме>', true, {
+        width: '<width>px',
+        height: '<height>px',
+        vars: {
+            <VAR_NAME>: getVar('<VAR_NAME>')
+        },
+        onclose: (mod) => {
+            if (+mod?.ModalResult !== 1) return;
+            // Действия после закрытия
+        }
+    });
+    ========================================================================
+-->
+```
+
+#### 67.8 Важные замечания
+
+1. **Единый стиль:** Пример вызова должен строго соответствовать стилю формы (M2 или D3)
+2. **Не смешивать:** Нельзя указывать оба примера или пример для другого стиля
+3. **Обязательность:** Блок комментария добавляется в каждую форму
+4. **Позиция:** Сразу после открывающего тега `<div cmptype="form">`
+5. **Актуальность:** Параметры должны соответствовать фактической логике формы
+6. **Язык:** Комментарии на русском языке
+
+
+
+
+## Правило №70: Вызов процедур в PostgreSQL с использованием call
+
+### Правило №70: Использование CALL для вызова процедур в PostgreSQL
+
+В блоках `cmpActionRouter` для PostgreSQL необходимо использовать ключевое слово `call` для вызова хранимых процедур (функций, возвращающих void).
+
+#### 70.1 Синтаксис вызова
+
+**Правильный синтаксис PostgreSQL:**
+```sql
+call SCHEMA_NAME.PROCEDURE_NAME(parameter1 => value1, parameter2 => value2);
+```
+
+**Неправильный синтаксис (Oracle-style):**
+```sql
+-- Не использовать SELECT для вызова процедур
+select SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+
+-- Не использовать EXEC
+exec SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+
+-- Не использовать begin ... end без CALL
+begin
+  SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+end;
+```
+
+#### 70.2 Пример для Action (PostgreSQL)
+
+**Правильно:**
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- PostgreSQL: вызов процедуры добавления записи
+      call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                              pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                              pnPID         => :pnPID);          -- Идентификатор родителя
+    end;
+    ]]>
+</component>
+```
+
+**Неправильно:**
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- Ошибка: SELECT вместо CALL
+      select D_PKG_HPK_MKBS.ADD(:pnD_INSERT_ID, :pnLPU, :pnPID);
+    end;
+    ]]>
+</component>
+```
+
+#### 70.3 Полный пример Action с двумя маршрутами
+
+```xml
+<component cmptype="Action" name="acAddHpkMkbs">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          -- PostgreSQL: вызов процедуры добавления
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- ID новой записи
+                                  pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                  pnPID         => :pnPID,           -- ID родителя
+                                  pnMKB         => :pnMKB,           -- Код МКБ
+                                  psMKB_HANDLE  => :psMKB_HANDLE,    -- Признак ручного ввода
+                                  pnMKB_OWN     => :pnMKB_OWN,       -- Собственный код МКБ
+                                  pnMAX_COUNT   => :pnMAX_COUNT);    -- Максимальное количество
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU"         src="LPU"         srctype="session"/>
+    <component cmptype="ActionVar" name="pnD_INSERT_ID" src="newid"       srctype="var" put="" len="17"/>
+    <component cmptype="ActionVar" name="pnPID"         src="HPK_ID"      srctype="var"/>
+    <component cmptype="ActionVar" name="pnMKB"         src="MKB"         srctype="var"/>
+    <component cmptype="ActionVar" name="psMKB_HANDLE"  src="MKB_HANDLE"  srctype="var"/>
+    <component cmptype="ActionVar" name="pnMKB_OWN"     src="MKB_OWN"     srctype="var"/>
+    <component cmptype="ActionVar" name="pnMAX_COUNT"   src="MAX_COUNT"   srctype="var"/>
+</component>
+```
+
+#### 70.4 Пример для DELETE операции
+
+```xml
+<component cmptype="Action" name="acDeleteHpkMkbs">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="DELETE"/>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          -- PostgreSQL: вызов процедуры удаления
+          call D_PKG_HPK_MKBS.DEL(pnID  => :pnID,    -- ID удаляемой записи
+                                  pnLPU => :pnLPU);  -- ЛПУ пользователя
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU" src="LPU"     srctype="session"/>
+    <component cmptype="ActionVar" name="pnID"  src="HPK_ID"  srctype="var"/>
+</component>
+```
+
+#### 70.5 Основные требования
+
+1. **Обязательное использование `call`** - для всех вызовов процедур в PostgreSQL
+2. **Именованные параметры** - всегда использовать синтаксис `name => value`
+3. **Блок `begin ... end`** - обязательный для нескольких операторов
+4. **Точка с запятой** - обязательная в конце каждого оператора и после `end`
+5. **Комментарии** - для каждого параметра после `--`
+
+#### 70.6 Сравнение Oracle и PostgreSQL
+
+| Элемент | Oracle | PostgreSQL |
+|---------|--------|------------|
+| **Ключевое слово** | `BEGIN` (без CALL) | `CALL` |
+| **Синтаксис** | `procedure_name(params);` | `CALL procedure_name(params);` |
+| **Пакеты** | `PKG_NAME.PROC_NAME` | `PKG_NAME.PROC_NAME` |
+| **Параметры** | Именованные или позиционные | Именованные (рекомендуется) |
+
+#### 70.7 Ошибки, которых следует избегать
+
+```sql
+-- Ошибка 1: Отсутствие call
+begin
+  D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+end;
+
+-- Ошибка 2: Использование SELECT
+begin
+  select D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+end;
+
+-- Ошибка 3: Позиционные параметры (не рекомендуется)
+begin
+  call D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU, :pnPID);
+end;
+
+-- Ошибка 4: Отсутствие блока begin...end для нескольких операторов
+call D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+call D_PKG_HPK_MKBS.LOG(:pnID);  -- Без begin...end будет ошибка
+```
+
+#### 70.8 Шаблон для быстрого использования
+
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- PostgreSQL: комментарий действия
+      call SCHEMA.PROCEDURE_NAME(pnPARAM1 => :pnPARAM1,   -- Комментарий параметра 1
+                                 pnPARAM2 => :pnPARAM2,   -- Комментарий параметра 2
+                                 psPARAM3 => :psPARAM3);  -- Комментарий параметра 3
+    end;
+    ]]>
+</component>
+```
+## Правило №71: Сохранение имен переменных в JS и атрибутах src
+
+### Правило №71: Не переименовывать переменные в JS и атрибутах src
+
+При переработке формы **запрещается** изменять имена переменных, которые используются в:
+1. JavaScript коде (`setVar`, `getVar`, `getValue`, `setValue`)
+2. Атрибутах `src` компонентов (`ActionVar`, `Variable`)
+
+**Менять можно только** атрибуты `name` в компонентах (`Action`, `DataSet`, `ActionVar`, `Variable`).
+
+#### 71.1 Что НЕЛЬЗЯ менять
+
+**JavaScript переменные:**
+```javascript
+// НЕ МЕНЯТЬ - имена переменных в JS
+setVar('HPK_ID', getVar('HPK_ID', 1));
+setVar('PLAN_DAY_ENG', data.PLAN_DAY);
+getVar('ModalResult');
+getValue('ctrlHpkMkbs');
+```
+
+**Атрибуты src:**
+```xml
+<!-- НЕ МЕНЯТЬ - значения атрибутов src -->
+<component cmptype="ActionVar" name="pnLPU" src="LPU" srctype="session"/>
+<component cmptype="ActionVar" name="pnHPK_ID" src="HPK_ID" srctype="var"/>
+<component cmptype="Variable" name="pnHPK_ID" src="HPK_ID" srctype="var"/>
+<component cmptype="Variable" name="pnLPU" src="LPU" srctype="session"/>
+```
 
 Если нужен **только переработанный текст исходной формы** согласно этим SQL-правилам (без изменений JS и атрибутов `name`/`src`), пришли исходник формы, и я его обработаю.
+
+
+Исходник формы, который необходимо переработать:
+```
+<FORM>
+```
+Покажи только текст  переработанный  формы

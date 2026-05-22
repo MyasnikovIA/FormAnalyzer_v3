@@ -73,8 +73,10 @@ public class D3ApiShowFormProcessor implements IXmlProcessor {
         // Добавляем найденные формы
         for (String form : forms) {
             String normalizedPath = normalizeFormPath(form);
-            if (normalizedPath != null && !normalizedPath.isEmpty()) {
-                formInfo.addSubForm(normalizedPath);
+            if (normalizedPath != null && !normalizedPath.isEmpty() &&
+                    !normalizedPath.equals(formInfo.getFormPath()) &&
+                    !normalizedPath.equals("Forms/" + formInfo.getFormPath().replace("Forms/", ""))) {
+                formInfo.addJsForm(normalizedPath);
             }
         }
     }

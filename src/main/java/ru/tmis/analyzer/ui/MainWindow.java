@@ -79,7 +79,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.9 (от 21-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.11 (от 22-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -352,7 +352,9 @@ public class MainWindow extends JFrame {
         llmButtons.add(clearLlmBtn);
         llmPanel.add(llmButtons, BorderLayout.NORTH);
 
-        tabbedPane.addTab("LLM промпт", llmPanel);
+        if (config.isLlmPanelVisible()) {
+            tabbedPane.addTab("LLM промпт", llmPanel);
+        }
 
         tabbedPane.addChangeListener(e -> {
             TreePath selectedPath = formsTreePanel.getSelectedPath();

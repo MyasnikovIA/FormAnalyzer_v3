@@ -71,6 +71,11 @@ public class JsFormProcessor implements IXmlProcessor {
         Set<String> foundForms = new LinkedHashSet<>();
         Set<String> reportForms = new LinkedHashSet<>();
 
+        // Получаем текущую форму для исключения
+        String currentForm = formInfo.getFormPath();
+        // Убираем префикс Forms/ для сравнения
+        String currentFormSimple = currentForm.replace("Forms/", "");
+
         // Извлекаем все CDATA секции
         Matcher cdataMatcher = CDATA_PATTERN.matcher(html);
         while (cdataMatcher.find()) {
@@ -81,21 +86,30 @@ public class JsFormProcessor implements IXmlProcessor {
         // Обрабатываем весь HTML
         processJsContent(html, foundForms, reportForms);
 
-        // Добавляем обычные формы
+        // Добавляем обычные формы (исключая текущую)
         for (String form : foundForms) {
             String normalizedPath = normalizeFormPath(form);
             if (normalizedPath != null && !normalizedPath.isEmpty()) {
-                formInfo.addJsForm(normalizedPath);
+                // ПРОСТАЯ ПРОВЕРКА: не добавлять саму себя
+                String formSimple = normalizedPath.replace("Forms/", "");
+                if (!formSimple.equals(currentFormSimple)) {
+                    formInfo.addJsForm(normalizedPath);
+                } else {
+                    System.out.println("  [JsFormProcessor] Исключена самоссылка: " + normalizedPath);
+                }
             }
         }
 
-        // Добавляем формы отчетов
+        // Добавляем формы отчетов (аналогичная проверка)
         for (String reportForm : reportForms) {
             String normalizedPath = reportForm;
             if (!normalizedPath.endsWith(".frm") && !normalizedPath.endsWith(".dfrm")) {
                 normalizedPath = normalizedPath + ".frm";
             }
-            formInfo.addReport(normalizedPath);
+            String formSimple = normalizedPath.replace("Forms/", "");
+            if (!formSimple.equals(currentFormSimple)) {
+                formInfo.addReport(normalizedPath);
+            }
         }
     }
 
