@@ -67,26 +67,19 @@ public class MainWindow extends JFrame {
 
         initUI();
         loadWindowState();
-
+        // Отключаем стандартное поведение
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                saveState();
+                System.exit(0);  // Принудительно завершаем JVM
             }
         });
         redirectSystemOutToLog();
-        // Добавляем слушатель для восстановления при закрытии
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                restoreSystemOut();
-                saveState();
-            }
-        });
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.13 (от 22-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.14 (от 22-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -474,20 +467,29 @@ public class MainWindow extends JFrame {
         File reportFile = new File(reportPath);
 
         if (reportFile.exists()) {
-            try {
-                String content = new String(Files.readAllBytes(reportFile.toPath()),
-                        java.nio.charset.StandardCharsets.UTF_8);
-                resultArea.setText(content);
-                resultArea.setCaretPosition(0);
-                appendLog("Загружен отчёт для формы: " + formPath);
+            // Загружаем в отдельном потоке с таймаутом
+            SwingWorker<String, Void> worker = new SwingWorker<>() {
+                @Override
+                protected String doInBackground() throws Exception {
+                    return new String(Files.readAllBytes(reportFile.toPath()),
+                            java.nio.charset.StandardCharsets.UTF_8);
+                }
 
-                formsTreePanel.refreshChildForms(formPath);
-
-            } catch (IOException e) {
-                resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
-                appendLog("Ошибка загрузки отчёта для " + formPath + ": " + e.getMessage());
-                formsTreePanel.clearChildNodes(formPath);
-            }
+                @Override
+                protected void done() {
+                    try {
+                        String content = get();
+                        resultArea.setText(content);
+                        resultArea.setCaretPosition(0);
+                        appendLog("Загружен отчёт для формы: " + formPath);
+                        formsTreePanel.refreshChildForms(formPath);
+                    } catch (Exception e) {
+                        resultArea.setText("Ошибка загрузки отчёта: " + e.getMessage());
+                        appendLog("Ошибка загрузки отчёта: " + e.getMessage());
+                    }
+                }
+            };
+            worker.execute();
         } else {
             resultArea.setText("Отчёт для формы не найден.\n\nПуть: " + reportPath + "\n\nЗапустите анализ для создания отчёта.");
             formsTreePanel.clearChildNodes(formPath);
@@ -1547,5 +1549,42 @@ public class MainWindow extends JFrame {
             return String.format("%d мин %d сек", minutes, secs);
         }
         return String.format("%d сек", secs);
+    }
+    /**
+     * Корректное завершение всех потоков при закрытии окна
+     */
+    /**
+     * Быстрое завершение всех потоков при закрытии окна
+     */
+    private void shutdownAllExecutors() {
+        // Останавливаем параллельный билдер (без ожидания)
+        if (parallelBuilder != null) {
+            parallelBuilder.forceStop();
+        }
+
+        // Останавливаем рекурсивный билдер
+        if (recursiveBuilder != null) {
+            recursiveBuilder.stop();
+        }
+
+        // Завершаем executorService без ожидания
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdownNow();
+        }
+
+        // Завершаем executor без ожидания
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdownNow();
+        }
+
+        // Останавливаем таймер
+        if (progressTimer != null && progressTimer.isRunning()) {
+            progressTimer.stop();
+        }
+
+        // Останавливаем поток чтения лога
+        if (logReader != null && logReader.isAlive()) {
+            logReader.interrupt();
+        }
     }
 }

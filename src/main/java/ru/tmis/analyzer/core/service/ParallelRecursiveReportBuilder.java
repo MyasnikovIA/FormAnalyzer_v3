@@ -321,7 +321,7 @@ public class ParallelRecursiveReportBuilder {
     private class FormWorker implements Runnable {
         @Override
         public void run() {
-            while (!stopRequested.get() && isRunning.get()) {
+            while (!stopRequested.get() && isRunning.get() && !Thread.currentThread().isInterrupted()) {
                 // Проверка прерывания потока
                 if (Thread.currentThread().isInterrupted()) {
                     break;
@@ -575,11 +575,12 @@ public class ParallelRecursiveReportBuilder {
         log("Принудительная остановка...");
         stopRequested.set(true);
 
-        // Прерываем все рабочие потоки
+        // Прерываем все рабочие потоки (без ожидания)
         if (executor != null) {
             executor.shutdownNow();
-            executor = null;  // Очищаем для следующего запуска
+            executor = null;
         }
+
         if (scannerExecutor != null) {
             scannerExecutor.shutdownNow();
             scannerExecutor = null;
