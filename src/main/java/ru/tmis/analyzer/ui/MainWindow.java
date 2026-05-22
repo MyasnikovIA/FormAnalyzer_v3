@@ -79,7 +79,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.14 (от 22-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.15 (от 22-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -539,7 +539,6 @@ public class MainWindow extends JFrame {
             executorService = Executors.newSingleThreadExecutor();
         }
 
-
         // Получаем выбранные формы из дерева
         List<String> selectedForms = formsTreePanel.getSelectedForms();
 
@@ -606,6 +605,11 @@ public class MainWindow extends JFrame {
             appendLog("  - " + form);
         }
 
+        // ========== НОВЫЙ КОД: ПАРАЛЛЕЛЬНЫЙ АНАЛИЗ ==========
+        // Количество потоков = количество ядер процессора
+        int threads = Runtime.getRuntime().availableProcessors();
+        appendLog("Запуск параллельного анализа с " + threads + " потоками");
+
         stopRequested = false;
         isRunning.set(true);
         startButton.setEnabled(false);
@@ -613,18 +617,93 @@ public class MainWindow extends JFrame {
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
         progressBar.setIndeterminate(true);
-        statusLabel.setText("Статус: Анализ запущен");
+        statusLabel.setText("Статус: Параллельный анализ...");
 
+        // Создаём анализатор с параллельной обработкой
+        FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
+        analyzer.setParallelThreads(threads);
+        analyzer.setStopCondition(() -> stopRequested);
+        analyzer.setLogger(new ILogger() {
+            @Override
+            public void log(String message) {
+                appendLog(message);
+            }
+
+            @Override
+            public void error(String message) {
+                appendLog("ОШИБКА: " + message);
+            }
+
+            @Override
+            public void debug(String message) {
+                appendLog("[DEBUG] " + message);
+            }
+        });
+
+        // Прогресс callback
+        analyzer.setProgressCallback((processed, total, currentForm) -> {
+            SwingUtilities.invokeLater(() -> {
+                int percent = total > 0 ? (processed * 100 / total) : 0;
+                progressBar.setValue(percent);
+                progressBar.setString(String.format("%d из %d (%d%%)", processed, total, percent));
+                statusLabel.setText("Статус: " + currentForm);
+            });
+        });
+
+        // Callback при завершении анализа формы
+        analyzer.setFormAnalyzedCallback(formInfo -> {
+            if (stopRequested) return;
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+
+                SwingUtilities.invokeLater(() -> {
+                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                });
+            } catch (IOException e) {
+                appendLog("Ошибка сохранения отчёта: " + e.getMessage());
+            }
+        });
+
+        // Устанавливаем формы для анализа
+        analyzer.setFormsToAnalyze(normalizedForms);
+
+        // Запускаем анализ в отдельном потоке
         currentTask = executorService.submit(() -> {
             try {
-                runAnalysis(new ArrayList<>(normalizedForms));
-            } catch (Exception e) {
+                List<FormInfo> results = analyzer.analyzeAllForms();
+
+                if (stopRequested) {
+                    appendLog("Анализ остановлен пользователем");
+                    return;
+                }
+
+                // Генерация CSV отчета
+                try {
+                    CSVReportGenerator csvGen = new CSVReportGenerator(settings.getOutputDir());
+                    Path csvPath = csvGen.generateCSVReport(results);
+                    appendLog("CSV отчет сохранен: " + csvPath);
+                } catch (IOException e) {
+                    appendLog("Ошибка сохранения CSV отчета: " + e.getMessage());
+                }
+
+                appendLog("");
+                appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
+                appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
+                appendLog("Обработано форм: " + results.size());
+                appendLog("Отчеты сохранены в: " + settings.getOutputDir());
+
                 SwingUtilities.invokeLater(() -> {
-                    appendLog("ОШИБКА: " + e.getMessage());
-                    e.printStackTrace();
+                    formsTreePanel.refreshAllChildForms();
                 });
+
+            } catch (Exception e) {
+                appendLog("ОШИБКА: " + e.getMessage());
+                e.printStackTrace();
             } finally {
                 isRunning.set(false);
+                analyzer.shutdown(); // Завершаем пул потоков анализатора
                 SwingUtilities.invokeLater(() -> {
                     startButton.setEnabled(true);
                     stopButton.setEnabled(false);

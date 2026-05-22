@@ -30,6 +30,7 @@ public class ReportGenerator {
     private OracleService oracleService;
     private PostgresService postgresService;
     private transient ReportsFromDbService reportsService;
+    private final Object fileLock = new Object();
 
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -111,38 +112,35 @@ public class ReportGenerator {
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        // 1. Сохраняем отдельный файл для формы (TXT) в подкаталог Forms (ТОЛЬКО ЗДЕСЬ)
-        saveFormReportToFile(formInfo);
+        synchronized (fileLock) {
+            saveFormReportToFile(formInfo);
 
-        // 2. Добавляем в общий отчет (только в forms_report.txt, без создания дубликата)
-        Path outputPath = Paths.get(outputDir);
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
+            Path outputPath = Paths.get(outputDir);
+            if (!Files.exists(outputPath)) {
+                Files.createDirectories(outputPath);
+            }
 
-        Path reportPath = outputPath.resolve("forms_report.txt");
+            Path reportPath = outputPath.resolve("forms_report.txt");
 
-        if (!Files.exists(reportPath)) {
-            createMainReportHeader();
-        }
+            if (!Files.exists(reportPath)) {
+                createMainReportHeader();
+            }
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
-            writeFormReport(writer, formInfo);
-        }
+            try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
+                writeFormReport(writer, formInfo);
+            }
 
-        // 3. Генерация CSV отчета
-        if (config != null && config.isEnableCSVExport()) {
-            appendToCSVReport(formInfo);
-        }
+            if (config != null && config.isEnableCSVExport()) {
+                appendToCSVReport(formInfo);
+            }
 
-        // 4. Генерация JSON отчета
-        if (config != null && config.isEnableJSONExport()) {
-            appendToJSONReport(formInfo);
-        }
+            if (config != null && config.isEnableJSONExport()) {
+                appendToJSONReport(formInfo);
+            }
 
-        // 5. Генерация MD промпта
-        if (config != null && config.isEnableLLMExport()) {
-            generateLLMPromptForForm(formInfo);
+            if (config != null && config.isEnableLLMExport()) {
+                generateLLMPromptForForm(formInfo);
+            }
         }
     }
 

@@ -16,7 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,9 @@ public class FormAnalyzerService {
     private final UserFormsResolver userFormsResolver;
     private final ExtractorManager extractorManager;
     private Set<String> formsToAnalyze;
+
+    private ExecutorService executor;
+    private final Object reportLock = new Object(); // Для синхронизации записи отчётов
 
     public interface FormAnalyzedCallback {
         void onFormAnalyzed(FormInfo formInfo);
@@ -84,53 +88,72 @@ public class FormAnalyzerService {
         this.progressCallback = callback;
     }
 
-    public List<FormInfo> analyzeAllForms() throws IOException {
+    public List<FormInfo> analyzeAllForms() throws Exception {
         Set<String> formsToAnalyzeList = getFormsToAnalyze();
-
-        if (formsToAnalyzeList == null) {
-            System.out.println("Список форм пуст, требуется подтверждение пользователя");
-            return null;
+        if (formsToAnalyzeList == null || formsToAnalyzeList.isEmpty()) {
+            return new ArrayList<>();
         }
 
-        List<FormInfo> results = new ArrayList<>();
+        // Инициализируем пул потоков (по умолчанию - количество ядер)
+        if (executor == null || executor.isShutdown()) {
+            int threads = Runtime.getRuntime().availableProcessors();
+            executor = Executors.newFixedThreadPool(threads);
+            System.out.println("Параллельный анализ запущен с " + threads + " потоками");
+        }
 
-        System.out.println("Найдено форм для анализа: " + formsToAnalyzeList.size());
-
-        int processed = 0;
+        List<FormInfo> results = Collections.synchronizedList(new ArrayList<>());
+        List<Future<FormInfo>> futures = new ArrayList<>();
+        AtomicInteger processed = new AtomicInteger(0);
         int total = formsToAnalyzeList.size();
 
         for (String formPath : formsToAnalyzeList) {
-            // Проверка остановки
-            if (stopCondition.getAsBoolean()) {
-                System.out.println("Анализ остановлен пользователем");
-                break;
-            }
+            if (stopCondition.getAsBoolean()) break;
 
-            processed++;
-            if (progressCallback != null) {
-                progressCallback.onProgress(processed, total, formPath);
-            }
+            futures.add(executor.submit(() -> {
+                if (stopCondition.getAsBoolean()) return null;
 
-            System.out.print("Анализ [" + processed + "/" + total + "]: " + formPath + " ... ");
-
-            try {
-                FormInfo formInfo = analyzeForm(formPath);
-                if (formInfo != null) {
-                    results.add(formInfo);
-                    if (formAnalyzedCallback != null) {
-                        formAnalyzedCallback.onFormAnalyzed(formInfo);
-                    }
-                    if (formInfo.getSqlQueries() != null && !formInfo.getSqlQueries().isEmpty()) {
-                        System.out.println("OK (SQL: " + formInfo.getSqlQueries().size() + ")");
-                    } else {
-                        System.out.println("OK (SQL: 0)");
-                    }
-                } else {
-                    System.out.println("ПРОПУЩЕН");
+                int current = processed.incrementAndGet();
+                if (progressCallback != null) {
+                    progressCallback.onProgress(current, total, formPath);
                 }
+
+                System.out.print("Анализ [" + current + "/" + total + "]: " + formPath + " ... ");
+
+                try {
+                    FormInfo formInfo = analyzeForm(formPath);
+                    if (formInfo != null) {
+                        results.add(formInfo);
+                        if (formAnalyzedCallback != null) {
+                            // Синхронизация для callback
+                            synchronized (reportLock) {
+                                formAnalyzedCallback.onFormAnalyzed(formInfo);
+                            }
+                        }
+                        System.out.println("OK (SQL: " + formInfo.getSqlQueries().size() + ")");
+                        return formInfo;
+                    } else {
+                        System.out.println("ПРОПУЩЕН");
+                        return null;
+                    }
+                } catch (Exception e) {
+                    System.err.println("ОШИБКА: " + e.getMessage());
+                    return null;
+                }
+            }));
+        }
+
+        // Собираем результаты
+        for (Future<FormInfo> future : futures) {
+            try {
+                FormInfo form = future.get(60, TimeUnit.MINUTES);
+                if (form != null) {
+                    // Результат уже добавлен в results, ничего не делаем
+                }
+            } catch (TimeoutException e) {
+                System.err.println("Таймаут при анализе формы");
+                future.cancel(true);
             } catch (Exception e) {
-                System.err.println("ОШИБКА: " + e.getMessage());
-                e.printStackTrace();
+                System.err.println("Ошибка при получении результата: " + e.getMessage());
             }
         }
 
@@ -453,7 +476,7 @@ public class FormAnalyzerService {
     /**
      * Сканирует весь проект и анализирует только новые (необработанные) формы
      */
-    public List<FormInfo> scanAllFormsAndAnalyze() throws IOException {
+    public List<FormInfo> scanAllFormsAndAnalyze() throws Exception {
         Set<String> allForms = scanAllForms();
         Set<String> formsToProcess = new LinkedHashSet<>();
         String outputDir = settings.getOutputDir();
@@ -510,5 +533,28 @@ public class FormAnalyzerService {
         }
         String safeFileName = getSafeFileName(formPath);
         return Paths.get(outputDir, "Forms", safeFileName);
+    }
+
+    // Добавить метод для установки количества потоков:
+    public void setParallelThreads(int threads) {
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdownNow();
+        }
+        this.executor = Executors.newFixedThreadPool(threads);
+    }
+
+
+    public void shutdown() {
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                    executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
