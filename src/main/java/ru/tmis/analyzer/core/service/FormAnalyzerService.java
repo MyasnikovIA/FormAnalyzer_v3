@@ -87,7 +87,6 @@ public class FormAnalyzerService {
     public List<FormInfo> analyzeAllForms() throws IOException {
         Set<String> formsToAnalyzeList = getFormsToAnalyze();
 
-        // Если список пуст (null) - возвращаем null, чтобы вызвать предупреждение
         if (formsToAnalyzeList == null) {
             System.out.println("Список форм пуст, требуется подтверждение пользователя");
             return null;
@@ -101,6 +100,7 @@ public class FormAnalyzerService {
         int total = formsToAnalyzeList.size();
 
         for (String formPath : formsToAnalyzeList) {
+            // Проверка остановки
             if (stopCondition.getAsBoolean()) {
                 System.out.println("Анализ остановлен пользователем");
                 break;
@@ -135,6 +135,13 @@ public class FormAnalyzerService {
         }
 
         return results;
+    }
+    public void reset() {
+        if (formsToAnalyze != null) {
+            formsToAnalyze.clear();
+            formsToAnalyze = null;
+        }
+        viewDependenciesCache.clear();
     }
 
     public FormInfo analyzeForm(String formPath) {

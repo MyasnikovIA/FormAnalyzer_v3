@@ -1,0 +1,14 @@
+{
+  "projectPath": "/var/www/t-mis/mis",
+  "outputDir": "SQL_info",
+  "oracleUrl": "jdbc:oracle:thin:@192.168.241.141:1521/med2dev",
+  "oracleUser": "dev",
+  "oraclePassword": "def",
+  "postgresUrl": "jdbc:postgresql://192.168.241.137:5432/med2dev",
+  "postgresUser": "DEV",
+  "postgresPassword": "def",
+  "misUser": "$TSTESTZON",
+  "checkPostgresPackages": false,
+  "checkPostgresPK": false,
+  "checkNotNullConstraints": false
+}

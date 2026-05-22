@@ -1,4 +1,5 @@
 package ru.tmis.analyzer.ui;
+
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.log.ILogger;
@@ -72,8 +73,8 @@ public class MainWindow extends JFrame {
                 saveState();
             }
         });
-         redirectSystemOutToLog();
-       // Добавляем слушатель для восстановления при закрытии
+        redirectSystemOutToLog();
+        // Добавляем слушатель для восстановления при закрытии
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -146,7 +147,8 @@ public class MainWindow extends JFrame {
         leftPanel.setBorder(BorderFactory.createTitledBorder("Список форм для анализа"));
 
         formsTreePanel = new FormsTreePanel();
-        formsTreePanel.setOnFormsChanged(() -> {});
+        formsTreePanel.setOnFormsChanged(() -> {
+        });
 
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
             private boolean isLoadingChildren = false;
@@ -217,11 +219,19 @@ public class MainWindow extends JFrame {
         parallelBuilder = new ParallelRecursiveReportBuilder(settings, config, formsTreePanel);
         parallelBuilder.setLogger(new ILogger() {
             @Override
-            public void log(String message) { appendLog(message); }
+            public void log(String message) {
+                appendLog(message);
+            }
+
             @Override
-            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            public void error(String message) {
+                appendLog("ОШИБКА: " + message);
+            }
+
             @Override
-            public void debug(String message) { appendLog("[DEBUG] " + message); }
+            public void debug(String message) {
+                appendLog("[DEBUG] " + message);
+            }
         });
 
         // Устанавливаем количество потоков из настроек (по умолчанию все ядра)
@@ -284,11 +294,19 @@ public class MainWindow extends JFrame {
         recursiveBuilder = new RecursiveReportBuilder(settings, config, formsTreePanel);
         recursiveBuilder.setLogger(new ILogger() {
             @Override
-            public void log(String message) { appendLog(message); }
+            public void log(String message) {
+                appendLog(message);
+            }
+
             @Override
-            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            public void error(String message) {
+                appendLog("ОШИБКА: " + message);
+            }
+
             @Override
-            public void debug(String message) { appendLog("[DEBUG] " + message); }
+            public void debug(String message) {
+                appendLog("[DEBUG] " + message);
+            }
         });
 
         // Right panel with tabs
@@ -494,8 +512,30 @@ public class MainWindow extends JFrame {
     private void startAnalysis() {
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
-            return;
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Анализ уже выполняется. Остановить текущий и запустить новый?",
+                    "Анализ запущен",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                stopAnalysis();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            } else {
+                return;
+            }
         }
+
+        // Сбрасываем флаг остановки
+        stopRequested = false;
+
+        // Создаём новый executorService если старый был остановлен
+        if (executorService == null || executorService.isShutdown()) {
+            executorService = Executors.newSingleThreadExecutor();
+        }
+
 
         // Получаем выбранные формы из дерева
         List<String> selectedForms = formsTreePanel.getSelectedForms();
@@ -623,11 +663,19 @@ public class MainWindow extends JFrame {
 
                 analyzer.setLogger(new ILogger() {
                     @Override
-                    public void log(String message) { appendLog(message); }
+                    public void log(String message) {
+                        appendLog(message);
+                    }
+
                     @Override
-                    public void error(String message) { appendLog("ОШИБКА: " + message); }
+                    public void error(String message) {
+                        appendLog("ОШИБКА: " + message);
+                    }
+
                     @Override
-                    public void debug(String message) { appendLog("[DEBUG] " + message); }
+                    public void debug(String message) {
+                        appendLog("[DEBUG] " + message);
+                    }
                 });
 
                 analyzer.setStopCondition(() -> stopRequested);
@@ -717,23 +765,37 @@ public class MainWindow extends JFrame {
         appendLog("Всего форм для анализа: " + formsToAnalyze.size());
         appendLog("");
 
+
         ru.tmis.analyzer.core.service.FormAnalyzerService analyzer =
-                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings,config);
+                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings, config);
 
         Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
         analyzer.setFormsToAnalyze(formsSet);
 
         analyzer.setLogger(new ILogger() {
             @Override
-            public void log(String message) { appendLog(message); }
+            public void log(String message) {
+                appendLog(message);
+            }
+
             @Override
-            public void error(String message) { appendLog("ОШИБКА: " + message); }
+            public void error(String message) {
+                appendLog("ОШИБКА: " + message);
+            }
+
             @Override
-            public void debug(String message) { appendLog("[DEBUG] " + message); }
+            public void debug(String message) {
+                appendLog("[DEBUG] " + message);
+            }
         });
 
+        // Устанавливаем условие остановки
         analyzer.setStopCondition(() -> stopRequested);
+
         analyzer.setProgressCallback((processed, total, currentForm) -> {
+            // Проверка остановки
+            if (stopRequested) return;
+
             SwingUtilities.invokeLater(() -> {
                 int percent = total > 0 ? (processed * 100 / total) : 0;
                 progressBar.setValue(percent);
@@ -743,6 +805,9 @@ public class MainWindow extends JFrame {
         });
 
         analyzer.setFormAnalyzedCallback(formInfo -> {
+            // Проверка остановки
+            if (stopRequested) return;
+
             try {
                 ru.tmis.analyzer.core.report.ReportGenerator reportGen =
                         new ru.tmis.analyzer.core.report.ReportGenerator(settings.getOutputDir(), config);
@@ -758,32 +823,48 @@ public class MainWindow extends JFrame {
         });
 
         List<FormInfo> results = analyzer.analyzeAllForms();
-        analyzer.clearFormsToAnalyze();
         try {
-            CSVReportGenerator csvGen = new CSVReportGenerator(settings.getOutputDir());
-            Path csvPath = csvGen.generateCSVReport(results);
-            appendLog("CSV отчет сохранен: " + csvPath);
-        } catch (IOException e) {
-            appendLog("Ошибка сохранения CSV отчета: " + e.getMessage());
-        }
+            analyzer.clearFormsToAnalyze();
 
-        if (stopRequested) {
-            appendLog("Анализ остановлен пользователем");
-            if (!results.isEmpty()) {
-                appendLog("Сохранено частичных результатов: " + results.size() + " форм");
+            // Проверка остановки перед генерацией CSV
+            if (stopRequested) {
+                appendLog("Анализ остановлен пользователем");
+                return;
             }
-            return;
-        }
-        appendLog("");
-        appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
-        appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
-        appendLog("Обработано форм: " + results.size());
-        appendLog("Отчеты сохранены в: " + settings.getOutputDir());
 
-        SwingUtilities.invokeLater(() -> {
-            formsTreePanel.refreshAllChildForms();
-        });
+            try {
+                CSVReportGenerator csvGen = new CSVReportGenerator(settings.getOutputDir());
+                Path csvPath = csvGen.generateCSVReport(results);
+                appendLog("CSV отчет сохранен: " + csvPath);
+            } catch (IOException e) {
+                appendLog("Ошибка сохранения CSV отчета: " + e.getMessage());
+            }
+
+            if (stopRequested) {
+                appendLog("Анализ остановлен пользователем");
+                if (!results.isEmpty()) {
+                    appendLog("Сохранено частичных результатов: " + results.size() + " форм");
+                }
+                return;
+            }
+
+            appendLog("");
+            appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
+            appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
+            appendLog("Обработано форм: " + results.size());
+            appendLog("Отчеты сохранены в: " + settings.getOutputDir());
+
+            SwingUtilities.invokeLater(() -> {
+                formsTreePanel.refreshAllChildForms();
+            });
+
+        } finally {
+            // Гарантированно сбрасываем флаг при любом исходе
+            isRunning.set(false);
+            analyzer.clearFormsToAnalyze();
+        }
     }
+
     private void stopAnalysis() {
         // Останавливаем таймер прогресса
         if (progressTimer != null && progressTimer.isRunning()) {
@@ -792,38 +873,75 @@ public class MainWindow extends JFrame {
 
         // Сначала проверяем параллельный рекурсивный анализатор
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
-            parallelBuilder.stop();
-            appendLog("Запрос на остановку параллельного рекурсивного анализа...");
-            stopButton.setEnabled(false);
-            startButton.setEnabled(true);
-            settingsButton.setEnabled(true);
-            progressBar.setIndeterminate(false);
-            progressBar.setValue(0);
-            statusLabel.setText("Статус: Остановка...");
+            parallelBuilder.forceStop();
+            appendLog("Остановка параллельного рекурсивного анализа...");
+
+            // Сбрасываем флаги MainWindow
+            isRunning.set(false);
+            stopRequested = true;
+
+            SwingUtilities.invokeLater(() -> {
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+                progressBar.setIndeterminate(false);
+                progressBar.setValue(0);
+                progressBar.setString("Анализ остановлен");
+                statusLabel.setText("Статус: Анализ остановлен");
+            });
             return;
         }
 
-        // Затем проверяем обычный рекурсивный анализатор (на всякий случай)
-        if (recursiveBuilder != null && recursiveBuilder.isRunning()) {
-            recursiveBuilder.stop();
-            appendLog("Запрос на остановку рекурсивного анализа...");
-            stopButton.setEnabled(false);
-            startButton.setEnabled(true);
-            settingsButton.setEnabled(true);
-            progressBar.setIndeterminate(false);
-            progressBar.setValue(0);
-            statusLabel.setText("Статус: Остановка...");
-            return;
-        }
-
-        // Обычный анализ
-        if (currentTask != null && !currentTask.isDone()) {
+        // Затем проверяем обычный анализ (через executorService)
+        if (isRunning.get()) {
             appendLog("Запрос на остановку анализа...");
             stopRequested = true;
-            currentTask.cancel(true);
-            stopButton.setEnabled(false);
-            statusLabel.setText("Статус: Остановка...");
+
+            // Останавливаем текущую задачу
+            if (currentTask != null && !currentTask.isDone()) {
+                currentTask.cancel(true);
+            }
+
+            // Останавливаем executorService
+            if (executorService != null && !executorService.isShutdown()) {
+                executorService.shutdownNow();
+            }
+
+            // Создаём новый executorService для следующих запусков
+            executorService = Executors.newSingleThreadExecutor();
+
+            // Сбрасываем флаги
+            isRunning.set(false);
+
+            SwingUtilities.invokeLater(() -> {
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+                progressBar.setIndeterminate(false);
+                progressBar.setValue(0);
+                progressBar.setString("Анализ остановлен");
+                statusLabel.setText("Статус: Анализ остановлен");
+            });
+            return;
         }
+
+        // Затем проверяем обычный рекурсивный анализатор
+        if (recursiveBuilder != null && recursiveBuilder.isRunning()) {
+            recursiveBuilder.stop();
+            appendLog("Остановка рекурсивного анализа...");
+
+            SwingUtilities.invokeLater(() -> {
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+                progressBar.setIndeterminate(false);
+                progressBar.setValue(0);
+                statusLabel.setText("Статус: Анализ остановлен");
+            });
+            return;
+        }
+
+        appendLog("Нет активных процессов для остановки");
     }
 
     private void openSettings() {
@@ -977,6 +1095,7 @@ public class MainWindow extends JFrame {
             }
         }
     }
+
     /**
      * Восстанавливает оригинальные потоки вывода
      */
@@ -995,6 +1114,7 @@ public class MainWindow extends JFrame {
 
     /**
      * Загружает MD файл промпта для выбранной формы
+     *
      * @param formPath путь к форме
      */
     private void loadLlmPromptToPanel(String formPath) {
@@ -1228,6 +1348,7 @@ public class MainWindow extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /**
      * Формирует безопасное имя файла для удаления (без расширения)
      */
@@ -1242,6 +1363,7 @@ public class MainWindow extends JFrame {
         }
         return normalized.replace("/", "#").replace("\\", "#");
     }
+
     /**
      * Формирует путь к MD файлу промпта (в подкаталоге Forms)
      */
@@ -1260,6 +1382,7 @@ public class MainWindow extends JFrame {
         }
         return outputDir + File.separator + "Forms" + File.separator + safeName + ".md";
     }
+
     private void startParallelRecursiveAnalysis() {
         if (parallelBuilder.isRunning()) {
             appendLog("Параллельный анализ уже выполняется");
@@ -1278,11 +1401,31 @@ public class MainWindow extends JFrame {
 
         parallelBuilder.startRecursiveBuild(startForms);
     }
+
     private void startParallelFullProjectScan() {
-        if (parallelBuilder.isRunning()) {
+        // Проверяем, не запущен ли уже анализ
+        if (parallelBuilder != null && parallelBuilder.isRunning()) {
             appendLog("Параллельный анализ уже выполняется");
-            return;
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Анализ уже выполняется. Остановить текущий и запустить новый?",
+                    "Анализ запущен",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                parallelBuilder.forceStop();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            } else {
+                return;
+            }
         }
+
+        // Сброс флагов
+        stopRequested = false;
+        isRunning.set(false);
+
 
         int threads = (config != null) ? config.getParallelThreads() : Runtime.getRuntime().availableProcessors();
 
@@ -1326,6 +1469,7 @@ public class MainWindow extends JFrame {
 
         parallelBuilder.startRecursiveBuild(null);
     }
+
     private void updateScanProgress() {
         if (!parallelBuilder.isRunning()) {
             if (progressTimer != null) {

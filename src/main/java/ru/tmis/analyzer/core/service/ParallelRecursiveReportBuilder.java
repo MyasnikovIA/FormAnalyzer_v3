@@ -106,11 +106,18 @@ public class ParallelRecursiveReportBuilder {
      * Запуск параллельного рекурсивного построения
      */
     public void startRecursiveBuild(List<String> startForms) {
+        // Если уже запущен, сначала останавливаем
         if (isRunning.get()) {
-            log("Параллельное построение уже выполняется");
-            return;
+            log("Параллельное построение уже выполняется, сначала остановим");
+            forceStop();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
+        // Сброс состояния
         stopRequested.set(false);
         isRunning.set(true);
         processedForms.clear();
@@ -119,7 +126,7 @@ public class ParallelRecursiveReportBuilder {
         totalFound.set(0);
         activeTasks.set(0);
 
-        // Создаем пул потоков
+        // Создаём новый пул потоков
         executor = Executors.newFixedThreadPool(parallelThreads);
 
         log("=== ЗАПУСК ПАРАЛЛЕЛЬНОГО РЕКУРСИВНОГО ПОСТРОЕНИЯ ОТЧЁТОВ ===");
@@ -296,15 +303,20 @@ public class ParallelRecursiveReportBuilder {
         @Override
         public void run() {
             while (!stopRequested.get() && isRunning.get()) {
+                // Проверка прерывания потока
+                if (Thread.currentThread().isInterrupted()) {
+                    break;
+                }
+
                 try {
                     String formPath = formsQueue.poll(500, TimeUnit.MILLISECONDS);
                     if (formPath == null) {
                         continue;
                     }
 
-                    // Проверяем, не обработана ли уже форма
-                    if (!processedForms.add(formPath)) {
-                        continue;
+                    // Проверка на остановку перед обработкой
+                    if (stopRequested.get()) {
+                        break;
                     }
 
                     activeTasks.incrementAndGet();
@@ -486,12 +498,32 @@ public class ParallelRecursiveReportBuilder {
         if (isRunning.get()) {
             log("Запрос на остановку параллельного построения...");
             stopRequested.set(true);
+
+            // Прерываем все рабочие потоки
             if (executor != null) {
-                executor.shutdownNow();
+                executor.shutdownNow();  // immediately interrupt
+                try {
+                    if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                        log("Некоторые потоки не завершились, принудительное завершение");
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
+
+            // Останавливаем сканер
             if (scannerExecutor != null) {
                 scannerExecutor.shutdownNow();
             }
+
+            // Очищаем очередь
+            formsQueue.clear();
+            activeTasks.set(0);
+
+            // Сбрасываем флаг выполнения
+            isRunning.set(false);
+
+            log("Параллельное построение остановлено");
         }
     }
 
@@ -519,6 +551,32 @@ public class ParallelRecursiveReportBuilder {
 
     public int getActiveTasks() {
         return activeTasks.get();
+    }
+    public void forceStop() {
+        log("Принудительная остановка...");
+        stopRequested.set(true);
+
+        // Прерываем все рабочие потоки
+        if (executor != null) {
+            executor.shutdownNow();
+            executor = null;  // Очищаем для следующего запуска
+        }
+        if (scannerExecutor != null) {
+            scannerExecutor.shutdownNow();
+            scannerExecutor = null;
+        }
+
+        // Очищаем данные
+        formsQueue.clear();
+        activeTasks.set(0);
+        processedForms.clear();
+        totalProcessed.set(0);
+        totalFound.set(0);
+
+        // Сбрасываем флаг выполнения
+        isRunning.set(false);
+
+        log("Параллельное построение принудительно остановлено");
     }
 
 }
