@@ -11,6 +11,10 @@ import java.util.stream.Stream;
 
 public class FileScannerService {
 
+    private static Set<String> cachedAllForms = null;
+    private static long lastScanTime = 0;
+    private static final long CACHE_DURATION = 60000; // 1 минута
+
     private final String projectRoot;
     private final Path rootPath;
     private Set<String> allBaseForms;
@@ -21,8 +25,9 @@ public class FileScannerService {
     }
 
     public Set<String> findAllBaseForms() {
-        if (allBaseForms != null) {
-            return allBaseForms;
+        long now = System.currentTimeMillis();
+        if (cachedAllForms != null && (now - lastScanTime) < CACHE_DURATION) {
+            return cachedAllForms;
         }
 
         allBaseForms = new LinkedHashSet<>();

@@ -3,10 +3,12 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
 import ru.tmis.analyzer.core.report.ReportGenerator;
+import ru.tmis.analyzer.core.service.FileScannerService;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
 import ru.tmis.analyzer.core.service.ParallelRecursiveReportBuilder;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
@@ -24,6 +26,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainWindow extends JFrame {
 
@@ -67,15 +70,24 @@ public class MainWindow extends JFrame {
 
         initUI();
         loadWindowState();
-        // Отключаем стандартное поведение
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        preloadFormsToCache();
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);  // Принудительно завершаем JVM
+                saveState();
             }
         });
         redirectSystemOutToLog();
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                restoreSystemOut();
+                saveState();
+            }
+        });
     }
 
     private void initUI() {
@@ -455,6 +467,20 @@ public class MainWindow extends JFrame {
 
         panel.add(progressBar, BorderLayout.CENTER);
         panel.add(statusLabel, BorderLayout.SOUTH);
+        JLabel memoryLabel = new JLabel();
+        memoryLabel.setFont(new Font("Monospaced", Font.PLAIN, 10));
+        memoryLabel.setForeground(Color.GRAY);
+
+        // Таймер обновления памяти каждые 5 секунд
+        Timer memoryTimer = new Timer(5000, e -> {
+            Runtime rt = Runtime.getRuntime();
+            long used = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
+            long max = rt.maxMemory() / (1024 * 1024);
+            memoryLabel.setText(String.format("RAM: %d/%d MB", used, max));
+        });
+        memoryTimer.start();
+
+        panel.add(memoryLabel, BorderLayout.EAST);
 
         return panel;
     }
@@ -521,61 +547,40 @@ public class MainWindow extends JFrame {
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 stopAnalysis();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
             } else {
                 return;
             }
         }
 
-        // Сбрасываем флаг остановки
         stopRequested = false;
 
-        // Создаём новый executorService если старый был остановлен
-        if (executorService == null || executorService.isShutdown()) {
-            executorService = Executors.newSingleThreadExecutor();
-        }
-
-        // Получаем выбранные формы из дерева
+        // Получаем выбранные формы
         List<String> selectedForms = formsTreePanel.getSelectedForms();
-
-        // Нормализуем пути
         Set<String> normalizedForms = new LinkedHashSet<>();
+
         for (String form : selectedForms) {
             String normalized = form;
             if (normalized.contains("/Forms/") && normalized.lastIndexOf("/Forms/") > 0) {
                 normalized = normalized.substring(normalized.lastIndexOf("/Forms/") + 1);
             }
-            if (normalized.startsWith("/")) {
-                normalized = normalized.substring(1);
-            }
+            if (normalized.startsWith("/")) normalized = normalized.substring(1);
             if (!normalized.startsWith("Forms/") && !normalized.startsWith("UserForms")) {
                 normalized = "Forms/" + normalized;
             }
             normalizedForms.add(normalized);
         }
 
-        // Если ничего не выбрано - предлагаем выделить всё дерево
         if (normalizedForms.isEmpty()) {
             int confirm = JOptionPane.showConfirmDialog(this,
-                    "Не выбрано ни одной формы.\n\n" +
-                            "Выделить все формы в дереве и запустить анализ?",
+                    "Не выбрано ни одной формы.\n\nВыделить все формы в дереве и запустить анализ?",
                     "Выделить все формы",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
+                    JOptionPane.YES_NO_OPTION);
             if (confirm != JOptionPane.YES_OPTION) {
                 appendLog("Анализ отменён пользователем");
                 return;
             }
-
-            // Выделяем все узлы в дереве
             formsTreePanel.selectAllNodes();
-
-            // Повторно получаем выбранные формы после выделения
             selectedForms = formsTreePanel.getSelectedForms();
             normalizedForms.clear();
             for (String form : selectedForms) {
@@ -583,32 +588,32 @@ public class MainWindow extends JFrame {
                 if (normalized.contains("/Forms/") && normalized.lastIndexOf("/Forms/") > 0) {
                     normalized = normalized.substring(normalized.lastIndexOf("/Forms/") + 1);
                 }
-                if (normalized.startsWith("/")) {
-                    normalized = normalized.substring(1);
-                }
+                if (normalized.startsWith("/")) normalized = normalized.substring(1);
                 if (!normalized.startsWith("Forms/") && !normalized.startsWith("UserForms")) {
                     normalized = "Forms/" + normalized;
                 }
                 normalizedForms.add(normalized);
             }
-
             if (normalizedForms.isEmpty()) {
                 appendLog("Нет форм для анализа");
                 return;
             }
-
             appendLog("Выделено форм для анализа: " + normalizedForms.size());
         }
 
         appendLog("Выбрано форм для анализа: " + normalizedForms.size());
-        for (String form : normalizedForms) {
-            appendLog("  - " + form);
-        }
+        for (String form : normalizedForms) appendLog("  - " + form);
 
-        // ========== НОВЫЙ КОД: ПАРАЛЛЕЛЬНЫЙ АНАЛИЗ ==========
-        // Количество потоков = количество ядер процессора
-        int threads = Runtime.getRuntime().availableProcessors();
-        appendLog("Запуск параллельного анализа с " + threads + " потоками");
+        // ========== ОПТИМИЗИРОВАННЫЙ ПАРАЛЛЕЛЬНЫЙ АНАЛИЗ ==========
+
+        // Количество потоков = ядра * 2 (для IO-операций)
+        int cpuCores = Runtime.getRuntime().availableProcessors();
+        int threads = Math.min(cpuCores * 2, 32);
+
+        appendLog("=== ОПТИМИЗИРОВАННЫЙ ПАРАЛЛЕЛЬНЫЙ АНАЛИЗ ===");
+        appendLog("CPU ядер: " + cpuCores);
+        appendLog("Потоков анализа: " + threads);
+        appendLog("Всего форм: " + normalizedForms.size());
 
         stopRequested = false;
         isRunning.set(true);
@@ -616,63 +621,88 @@ public class MainWindow extends JFrame {
         stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
-        progressBar.setIndeterminate(true);
-        statusLabel.setText("Статус: Параллельный анализ...");
+        progressBar.setIndeterminate(false);
+        progressBar.setString("0%");
+        statusLabel.setText("Статус: Запуск анализа...");
 
-        // Создаём анализатор с параллельной обработкой
-        FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
-        analyzer.setParallelThreads(threads);
-        analyzer.setStopCondition(() -> stopRequested);
-        analyzer.setLogger(new ILogger() {
-            @Override
-            public void log(String message) {
-                appendLog(message);
-            }
+        List<String> formsList = new ArrayList<>(normalizedForms);
+        AtomicInteger processed = new AtomicInteger(0);
+        AtomicInteger successful = new AtomicInteger(0);
+        List<FormInfo> allResults = Collections.synchronizedList(new ArrayList<>());
 
-            @Override
-            public void error(String message) {
-                appendLog("ОШИБКА: " + message);
-            }
+        // Создаём пул потоков
+        ExecutorService analysisExecutor = Executors.newFixedThreadPool(threads);
+        List<Future<FormInfo>> futures = new ArrayList<>();
 
-            @Override
-            public void debug(String message) {
-                appendLog("[DEBUG] " + message);
-            }
-        });
+        long startTime = System.currentTimeMillis();
 
-        // Прогресс callback
-        analyzer.setProgressCallback((processed, total, currentForm) -> {
-            SwingUtilities.invokeLater(() -> {
-                int percent = total > 0 ? (processed * 100 / total) : 0;
-                progressBar.setValue(percent);
-                progressBar.setString(String.format("%d из %d (%d%%)", processed, total, percent));
-                statusLabel.setText("Статус: " + currentForm);
-            });
-        });
+        // Запускаем анализ всех форм параллельно
+        for (String formPath : formsList) {
+            futures.add(analysisExecutor.submit(() -> {
+                if (stopRequested) return null;
 
-        // Callback при завершении анализа формы
-        analyzer.setFormAnalyzedCallback(formInfo -> {
-            if (stopRequested) return;
-            try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();
-                reportGen.appendFormToMainReport(formInfo);
+                int current = processed.incrementAndGet();
+                int percent = (current * 100) / formsList.size();
 
                 SwingUtilities.invokeLater(() -> {
-                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                    progressBar.setValue(percent);
+                    progressBar.setString(String.format("%d из %d (%d%%)", current, formsList.size(), percent));
+                    statusLabel.setText("Статус: " + getShortFormName(formPath));
                 });
-            } catch (IOException e) {
-                appendLog("Ошибка сохранения отчёта: " + e.getMessage());
-            }
-        });
 
-        // Устанавливаем формы для анализа
-        analyzer.setFormsToAnalyze(normalizedForms);
+                // Создаём анализатор для одной формы
+                FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
+                analyzer.setStopCondition(() -> stopRequested);
+                analyzer.setLogger(new ILogger() {
+                    @Override public void log(String msg) { appendLog(msg); }
+                    @Override public void error(String msg) { appendLog("ОШИБКА: " + msg); }
+                    @Override public void debug(String msg) { appendLog("[DEBUG] " + msg); }
+                });
 
-        // Запускаем анализ в отдельном потоке
+                try {
+                    FormInfo formInfo = analyzer.analyzeForm(formPath);
+                    if (formInfo != null) {
+                        successful.incrementAndGet();
+                        // Асинхронная запись отчёта (не блокирует)
+                        analyzer.queueFormForReport(formInfo);
+
+                        SwingUtilities.invokeLater(() -> {
+                            formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                        });
+
+                        appendLog("✓ [" + current + "/" + formsList.size() + "] " + getShortFormName(formPath));
+                        return formInfo;
+                    } else {
+                        appendLog("✗ [" + current + "/" + formsList.size() + "] " + getShortFormName(formPath) + " (пропущена)");
+                        return null;
+                    }
+                } catch (Exception e) {
+                    appendLog("✗ [" + current + "/" + formsList.size() + "] " + getShortFormName(formPath) + " - ОШИБКА: " + e.getMessage());
+                    return null;
+                } finally {
+                    analyzer.shutdown();
+                }
+            }));
+        }
+
+        // Запускаем отдельный поток для мониторинга завершения
         currentTask = executorService.submit(() -> {
             try {
-                List<FormInfo> results = analyzer.analyzeAllForms();
+                for (Future<FormInfo> future : futures) {
+                    try {
+                        FormInfo form = future.get(5, TimeUnit.MINUTES);
+                        if (form != null) allResults.add(form);
+                    } catch (TimeoutException e) {
+                        future.cancel(true);
+                        appendLog("Таймаут анализа формы");
+                    } catch (Exception e) {
+                        appendLog("Ошибка: " + e.getMessage());
+                    }
+                }
+
+                analysisExecutor.shutdown();
+
+                long elapsed = (System.currentTimeMillis() - startTime) / 1000;
 
                 if (stopRequested) {
                     appendLog("Анализ остановлен пользователем");
@@ -682,20 +712,25 @@ public class MainWindow extends JFrame {
                 // Генерация CSV отчета
                 try {
                     CSVReportGenerator csvGen = new CSVReportGenerator(settings.getOutputDir());
-                    Path csvPath = csvGen.generateCSVReport(results);
+                    Path csvPath = csvGen.generateCSVReport(allResults);
                     appendLog("CSV отчет сохранен: " + csvPath);
                 } catch (IOException e) {
                     appendLog("Ошибка сохранения CSV отчета: " + e.getMessage());
                 }
 
                 appendLog("");
-                appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
+                appendLog("=".repeat(60));
                 appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
-                appendLog("Обработано форм: " + results.size());
+                appendLog("Время выполнения: " + elapsed + " сек");
+                appendLog("Всего форм: " + formsList.size());
+                appendLog("Успешно обработано: " + successful.get());
+                appendLog("Пропущено (отчёты уже есть): " + (formsList.size() - successful.get()));
+                appendLog("=".repeat(60));
                 appendLog("Отчеты сохранены в: " + settings.getOutputDir());
 
                 SwingUtilities.invokeLater(() -> {
                     formsTreePanel.refreshAllChildForms();
+                    formsTreePanel.refreshTreeWithState();
                 });
 
             } catch (Exception e) {
@@ -703,21 +738,26 @@ public class MainWindow extends JFrame {
                 e.printStackTrace();
             } finally {
                 isRunning.set(false);
-                analyzer.shutdown(); // Завершаем пул потоков анализатора
                 SwingUtilities.invokeLater(() -> {
                     startButton.setEnabled(true);
                     stopButton.setEnabled(false);
                     settingsButton.setEnabled(true);
                     statusLabel.setText("Статус: Готов");
                     progressBar.setIndeterminate(false);
-                    if (!stopRequested) {
-                        progressBar.setString("Анализ завершен");
-                    } else {
-                        progressBar.setString("Анализ остановлен");
-                    }
+                    progressBar.setString("Анализ завершен");
                 });
             }
         });
+    }
+
+    // Вспомогательный метод для короткого имени формы
+    private String getShortFormName(String formPath) {
+        if (formPath == null) return "";
+        int lastSlash = Math.max(formPath.lastIndexOf("/"), formPath.lastIndexOf("\\"));
+        if (lastSlash >= 0) {
+            return formPath.substring(lastSlash + 1);
+        }
+        return formPath;
     }
 
     /**
@@ -1665,5 +1705,64 @@ public class MainWindow extends JFrame {
         if (logReader != null && logReader.isAlive()) {
             logReader.interrupt();
         }
+    }
+
+    /**
+     * Предзагрузка всех форм в оперативную память (использует 124 ГБ RAM)
+     */
+    private void preloadFormsToCache() {
+        // Запускаем в отдельном потоке, чтобы не блокировать UI
+        new Thread(() -> {
+            appendLog("=== НАЧАЛО ПРЕДЗАГРУЗКИ ФОРМ В ПАМЯТЬ ===");
+            appendLog("Доступно RAM: " + Runtime.getRuntime().maxMemory() / (1024 * 1024 * 1024) + " ГБ");
+
+            long startTime = System.currentTimeMillis();
+
+            FileScannerService scanner = new FileScannerService(settings.getProjectPath());
+            Set<String> allForms = scanner.findAllBaseForms();
+            int totalForms = allForms.size();
+            int loaded = 0;
+            int errors = 0;
+
+            appendLog("Всего форм для загрузки: " + totalForms);
+
+            for (String formPath : allForms) {
+                try {
+                    Path physicalPath = scanner.getBaseFormPath(formPath);
+                    // Загружаем в кэш
+                    String content = FormCache.getFormContent(physicalPath, formPath);
+                    if (content != null) {
+                        loaded++;
+                    } else {
+                        errors++;
+                    }
+
+                    // Показываем прогресс каждые 100 форм
+                    if (loaded % 100 == 0) {
+                        long elapsed = System.currentTimeMillis() - startTime;
+                        double percent = (loaded * 100.0) / totalForms;
+                        appendLog(String.format("  Загружено: %d/%d (%.1f%%) за %d сек",
+                                loaded, totalForms, percent, elapsed / 1000));
+                    }
+                } catch (Exception e) {
+                    errors++;
+                    appendLog("  Ошибка загрузки: " + formPath + " - " + e.getMessage());
+                }
+            }
+
+            long totalTime = System.currentTimeMillis() - startTime;
+            appendLog("=== ПРЕДЗАГРУЗКА ЗАВЕРШЕНА ===");
+            appendLog("Загружено форм: " + loaded);
+            appendLog("Ошибок: " + errors);
+            appendLog("Всего: " + totalForms);
+            appendLog("Время: " + totalTime / 1000 + " сек");
+            appendLog("Форм в кэше: " + FormCache.getCachedFormsCount());
+
+            // Выводим использование памяти
+            Runtime rt = Runtime.getRuntime();
+            long usedMemory = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
+            appendLog("Использовано RAM: " + usedMemory + " МБ");
+
+        }, "FormPreloader").start();
     }
 }

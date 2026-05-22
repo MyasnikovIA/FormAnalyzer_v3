@@ -1,6 +1,7 @@
 // core/report/ReportGenerator.java
 package ru.tmis.analyzer.core.report;
 
+import com.google.gson.JsonObject;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
@@ -9,9 +10,10 @@ import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
 import ru.tmis.analyzer.core.model.*;
 
 import ru.tmis.analyzer.core.db.PostgresPackageChecker;
+import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
+import javax.swing.SwingUtilities;
 
-
-
+import javax.swing.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -31,6 +33,7 @@ public class ReportGenerator {
     private PostgresService postgresService;
     private transient ReportsFromDbService reportsService;
     private final Object fileLock = new Object();
+
 
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -112,36 +115,40 @@ public class ReportGenerator {
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        synchronized (fileLock) {
-            saveFormReportToFile(formInfo);
+        // 1. Сохраняем TXT в буфер
+        String txtContent = generateTxtContent(formInfo);
+        InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
 
-            Path outputPath = Paths.get(outputDir);
-            if (!Files.exists(outputPath)) {
-                Files.createDirectories(outputPath);
-            }
-
-            Path reportPath = outputPath.resolve("forms_report.txt");
-
-            if (!Files.exists(reportPath)) {
-                createMainReportHeader();
-            }
-
-            try (PrintWriter writer = new PrintWriter(new FileWriter(reportPath.toFile(), true))) {
-                writeFormReport(writer, formInfo);
-            }
-
-            if (config != null && config.isEnableCSVExport()) {
-                appendToCSVReport(formInfo);
-            }
-
-            if (config != null && config.isEnableJSONExport()) {
-                appendToJSONReport(formInfo);
-            }
-
-            if (config != null && config.isEnableLLMExport()) {
-                generateLLMPromptForForm(formInfo);
-            }
+        // 2. Добавляем в CSV буфер
+        if (config != null && config.isEnableCSVExport()) {
+            addToCsvBuffer(formInfo);
         }
+
+        // 3. Добавляем в JSON буфер
+        if (config != null && config.isEnableJSONExport()) {
+            addToJsonBuffer(formInfo);
+        }
+
+        // 4. Добавляем MD промпт в буфер
+        if (config != null && config.isEnableLLMExport()) {
+            String mdContent = generateMdContent(formInfo);
+            InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
+        }
+
+        // Обновляем дерево (если есть доступ к formsTreePanel, иначе убрать)
+        SwingUtilities.invokeLater(() -> {
+            // formsTreePanel.refreshChildForms(formInfo.getFormPath());
+        });
+    }
+    /**
+     * Генерирует текстовое содержимое отчёта
+     */
+    private String generateTxtContent(FormInfo formInfo) {
+        StringWriter sw = new StringWriter();
+        PrintWriter writer = new PrintWriter(sw);
+        writeFormReport(writer, formInfo);
+        writer.flush();
+        return sw.toString();
     }
 
 
@@ -1300,4 +1307,85 @@ public class ReportGenerator {
         System.out.println("  Отчёт сохранён: " + formReportPath);
     }
 
+
+
+
+
+    /**
+     * Генерирует MD содержимое промпта
+     */
+    private String generateMdContent(FormInfo formInfo) {
+        try {
+            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            // Временно создаём контекст для одной формы
+            LLMReportContext context = new LLMReportContext();
+            context.setAnalyzedForms(Collections.singletonList(formInfo));
+            context.setTotalForms(1);
+            context.setAllSqlQueries(formInfo.getSqlQueries());
+            context.setTotalSqlQueries(formInfo.getSqlQueries().size());
+
+            // Временно подменяем контекст
+            java.lang.reflect.Field field = LLMPromptGenerator.class.getDeclaredField("context");
+            field.setAccessible(true);
+            field.set(llmGen, context);
+
+            String prompt = llmGen.generateSingleFile();
+            field.set(llmGen, null);
+            return prompt;
+        } catch (Exception e) {
+            System.err.println("Ошибка генерации MD: " + e.getMessage());
+            return "";
+        }
+    }
+
+    /**
+     * Добавляет данные формы в CSV буфер (упрощённо)
+     */
+    private void addToCsvBuffer(FormInfo formInfo) {
+        String formName = formInfo.getFormPath();
+
+        // SubForm
+        for (String subForm : formInfo.getSubForms()) {
+            InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";subForm;" + escapeCSV(subForm));
+        }
+
+        // формы JS
+        for (String jsForm : formInfo.getJsForms()) {
+            InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";формы JS;" + escapeCSV(jsForm));
+        }
+
+        // Вьюхи
+        for (String tv : formInfo.getTablesViews()) {
+            if (tv.startsWith("D_V_")) {
+                InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";Вьюхи;" + escapeCSV(tv));
+            }
+        }
+
+        // Таблицы
+        Set<String> tables = formInfo.getTablesFromViews();
+        if (tables != null) {
+            for (String table : tables) {
+                InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";Таблицы;" + escapeCSV(table));
+            }
+        }
+
+        // Пакеты и функции
+        for (String pf : formInfo.getPackagesFunctions()) {
+            InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";Пакеты и функции;" + escapeCSV(pf));
+        }
+
+        // Системные опции
+        for (String opt : formInfo.getSystemOptions()) {
+            InMemoryReportBuffer.addCsvLine(escapeCSV(formName) + ";СО;" + escapeCSV(opt));
+        }
+    }
+
+    /**
+     * Добавляет JSON данные в буфер
+     */
+    private void addToJsonBuffer(FormInfo formInfo) {
+        JSONReportGenerator jsonGen = new JSONReportGenerator(outputDir, config);
+        JsonObject formJson = jsonGen.convertFormToJson(formInfo);
+        InMemoryReportBuffer.addJsonObject(formJson);
+    }
 }

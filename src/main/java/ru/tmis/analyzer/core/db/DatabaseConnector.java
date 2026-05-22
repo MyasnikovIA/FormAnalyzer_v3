@@ -6,8 +6,8 @@ import java.util.Properties;
 
 public class DatabaseConnector {
 
-    private static final int CONNECT_TIMEOUT = 5000;   // 5 секунд вместо 10
-    private static final int READ_TIMEOUT = 5000;      // 5 секунд вместо 30
+    private static final int CONNECT_TIMEOUT = 5000;
+    private static final int READ_TIMEOUT = 5000;
 
     public static Connection getOracleConnection(String url, String user, String password) throws SQLException {
         Properties props = new Properties();

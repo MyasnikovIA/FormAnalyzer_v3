@@ -3,10 +3,12 @@ package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.utils.CommentRemover;
 import ru.tmis.analyzer.utils.FormPathUtils;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
@@ -22,6 +24,11 @@ import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.concurrent.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class FormAnalyzerService {
 
@@ -31,6 +38,11 @@ public class FormAnalyzerService {
     private final UserFormsResolver userFormsResolver;
     private final ExtractorManager extractorManager;
     private Set<String> formsToAnalyze;
+
+    private final Set<String> existingReportsCache = ConcurrentHashMap.newKeySet();
+    private final BlockingQueue<FormInfo> reportQueue = new LinkedBlockingQueue<>();
+    private ExecutorService reportWriterExecutor;
+    private volatile boolean writerRunning = true;
 
     private ExecutorService executor;
     private final Object reportLock = new Object(); // Для синхронизации записи отчётов
@@ -49,12 +61,57 @@ public class FormAnalyzerService {
         void onProgress(int processed, int total, String currentForm);
     }
 
+    // В конструктор добавить запуск фонового писателя:
     public FormAnalyzerService(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
         this.extractorManager = new ExtractorManager(settings);
+
+        // Запускаем фоновый поток для записи отчётов
+        startReportWriter();
+    }
+
+    private void startReportWriter() {
+        reportWriterExecutor = Executors.newSingleThreadExecutor();
+        reportWriterExecutor.submit(() -> {
+            while (writerRunning) {
+                try {
+                    FormInfo formInfo = reportQueue.poll(500, TimeUnit.MILLISECONDS);
+                    if (formInfo != null) {
+                        ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                        reportGen.createMainReportHeader();
+                        reportGen.appendFormToMainReport(formInfo);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception e) {
+                    System.err.println("Ошибка записи отчёта: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    // Быстрая проверка существования отчёта (замена Files.exists)
+    private boolean hasReportFast(String formPath) {
+        String safeName = getSafeFileName(formPath);
+        if (existingReportsCache.contains(safeName)) {
+            return true;
+        }
+
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        Path reportPath = Paths.get(outputDir, "Forms", safeName);
+
+        if (Files.exists(reportPath)) {
+            existingReportsCache.add(safeName);
+            return true;
+        }
+        return false;
     }
 
     // Конструктор с одним параметром (загружает config)
@@ -167,6 +224,11 @@ public class FormAnalyzerService {
         viewDependenciesCache.clear();
     }
 
+    /**
+     * Анализ одной формы
+     * @param formPath путь к форме
+     * @return информация о форме или null, если форма пропущена
+     */
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
@@ -192,7 +254,8 @@ public class FormAnalyzerService {
         Path baseFormPathObj = scannerService.getBaseFormPath(normalizedPath);
         formInfo.setBaseFormPath(baseFormPathObj.toString());
 
-        String baseContent = scannerService.readFileContent(baseFormPathObj);
+        // ========== ИСПОЛЬЗУЕМ КЭШ ДЛЯ ЧТЕНИЯ ФАЙЛА ФОРМЫ ==========
+        String baseContent = FormCache.getFormContent(baseFormPathObj, normalizedPath);
         if (baseContent == null) {
             System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);
             return null;
@@ -240,6 +303,36 @@ public class FormAnalyzerService {
         return formInfo;
     }
 
+    /**
+     * Получает полный путь к файлу отчёта с учётом подкаталога Forms
+     */
+    private Path getReportPath(String formPath) {
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+        String safeFileName = getSafeFileName(formPath);
+        return Paths.get(outputDir, "Forms", safeFileName);
+    }
+
+    /**
+     * Формирует безопасное имя файла отчёта
+     */
+    private String getSafeFileName(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
+    }
+
+
+    // Добавить метод для асинхронного сохранения:
+    public void queueFormForReport(FormInfo formInfo) {
+        if (formInfo != null) {
+            reportQueue.offer(formInfo);
+        }
+    }
     private Set<String> getFormsToAnalyze() throws IOException {
         // Если установлен прямой список, используем его
         if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {
@@ -509,31 +602,6 @@ public class FormAnalyzerService {
         return analyzeAllForms();
     }
 
-    /**
-     * Формирует безопасное имя файла отчёта
-     */
-    /**
-     * Формирует безопасное имя файла отчёта
-     */
-    private String getSafeFileName(String formPath) {
-        String normalized = formPath;
-        if (normalized.startsWith("/")) {
-            normalized = normalized.substring(1);
-        }
-        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
-    }
-
-    /**
-     * Получает полный путь к файлу отчёта с учётом подкаталога Forms
-     */
-    private Path getReportPath(String formPath) {
-        String outputDir = settings.getOutputDir();
-        if (outputDir == null || outputDir.isEmpty()) {
-            outputDir = "SQL_info";
-        }
-        String safeFileName = getSafeFileName(formPath);
-        return Paths.get(outputDir, "Forms", safeFileName);
-    }
 
     // Добавить метод для установки количества потоков:
     public void setParallelThreads(int threads) {
@@ -545,15 +613,21 @@ public class FormAnalyzerService {
 
 
     public void shutdown() {
+        writerRunning = false;
+        if (reportWriterExecutor != null) {
+            reportWriterExecutor.shutdown();
+            try {
+                reportWriterExecutor.awaitTermination(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                reportWriterExecutor.shutdownNow();
+            }
+        }
         if (executor != null && !executor.isShutdown()) {
             executor.shutdown();
             try {
-                if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
-                    executor.shutdownNow();
-                }
+                executor.awaitTermination(30, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 executor.shutdownNow();
-                Thread.currentThread().interrupt();
             }
         }
     }

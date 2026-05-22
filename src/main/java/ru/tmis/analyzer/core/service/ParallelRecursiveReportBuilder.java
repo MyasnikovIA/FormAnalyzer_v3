@@ -4,6 +4,7 @@ import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
@@ -28,7 +29,7 @@ public class ParallelRecursiveReportBuilder {
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private final Set<String> processedForms = ConcurrentHashMap.newKeySet();
-    private final BlockingQueue<String> formsQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<String> formsQueue = new LinkedBlockingQueue<>(10000);
     private final AtomicInteger activeTasks = new AtomicInteger(0);
     private final AtomicInteger totalProcessed = new AtomicInteger(0);
     private final AtomicInteger totalFound = new AtomicInteger(0);
@@ -46,6 +47,9 @@ public class ParallelRecursiveReportBuilder {
     private ScheduledExecutorService scannerExecutor;
     private ScheduledFuture<?> scannerTask;
     private Path projectRoot;
+    private long startTime;
+    private int totalFormsEstimated = 0;
+
 
     public ParallelRecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
@@ -106,7 +110,7 @@ public class ParallelRecursiveReportBuilder {
      * Запуск параллельного рекурсивного построения
      */
     public void startRecursiveBuild(List<String> startForms) {
-        // Если уже запущен, сначала останавливаем
+        startTime = System.currentTimeMillis();
         if (isRunning.get()) {
             log("Параллельное построение уже выполняется, сначала остановим");
             forceStop();
@@ -467,48 +471,7 @@ public class ParallelRecursiveReportBuilder {
         return null;
     }
 
-    /**
-     * Завершение обработки
-     */
-    private void complete() {
-        if (isRunning.compareAndSet(true, false)) {
-            // Останавливаем сканер
-            if (scannerTask != null) {
-                scannerTask.cancel(false);
-                if (scannerExecutor != null) {
-                    scannerExecutor.shutdown();
-                }
-            }
 
-            // Останавливаем рабочие потоки
-            if (executor != null) {
-                executor.shutdown();
-                try {
-                    if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
-                        executor.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    executor.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
-            }
-
-            log("");
-            log("=== ПАРАЛЛЕЛЬНОЕ РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
-            log("Всего обработано форм: " + totalProcessed.get());
-            log("Всего найдено форм: " + totalFound.get());
-
-            // Принудительно обновляем всё дерево
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                formsTreePanel.refreshAllChildFormsWithCleanup();
-                formsTreePanel.refreshTreeWithState();
-            });
-
-            if (onComplete != null) {
-                javax.swing.SwingUtilities.invokeLater(onComplete);
-            }
-        }
-    }
 
     /**
      * Остановка обработки
@@ -598,5 +561,62 @@ public class ParallelRecursiveReportBuilder {
 
         log("Параллельное построение принудительно остановлено");
     }
+    private void updateProgress() {
+        long elapsed = System.currentTimeMillis() - startTime;
+        int processed = totalProcessed.get();
+        if (processed > 0 && elapsed > 0) {
+            long estimatedTotal = (long) (elapsed * totalFound.get() / (double) processed);
+            long remaining = estimatedTotal - elapsed;
+            // Показать оставшееся время
+        }
+    }
+    private void complete() {
+        if (isRunning.compareAndSet(true, false)) {
+            // Останавливаем сканер
+            if (scannerTask != null) {
+                scannerTask.cancel(false);
+                if (scannerExecutor != null) {
+                    scannerExecutor.shutdown();
+                }
+            }
 
+            // Останавливаем рабочие потоки
+            if (executor != null) {
+                executor.shutdown();
+                try {
+                    if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                        executor.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    executor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            log("");
+            log("=== ПАРАЛЛЕЛЬНОЕ РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
+            log("Всего обработано форм: " + totalProcessed.get());
+            log("Всего найдено форм: " + totalFound.get());
+
+            // ========== ВЫГРУЗКА БУФЕРА НА ДИСК ==========
+            log("Выгрузка отчётов на диск...");
+            try {
+                InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
+            } catch (IOException e) {
+                error("Ошибка выгрузки буфера: " + e.getMessage());
+                e.printStackTrace();
+            }
+            // ============================================
+
+            // Принудительно обновляем всё дерево
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                formsTreePanel.refreshAllChildFormsWithCleanup();
+                formsTreePanel.refreshTreeWithState();
+            });
+
+            if (onComplete != null) {
+                javax.swing.SwingUtilities.invokeLater(onComplete);
+            }
+        }
+    }
 }

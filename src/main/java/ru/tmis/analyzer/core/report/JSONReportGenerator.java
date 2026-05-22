@@ -101,7 +101,7 @@ public class JSONReportGenerator {
     /**
      * Конвертирует FormInfo в JSON объект
      */
-    private JsonObject convertFormToJson(FormInfo formInfo) {
+    public JsonObject convertFormToJson(FormInfo formInfo) {
         JsonObject formJson = new JsonObject();
 
         // Основная информация
@@ -413,4 +413,9 @@ public class JSONReportGenerator {
 
         return absolutePath;
     }
+    public String convertFormToJsonString(FormInfo formInfo) {
+        JsonObject formJson = convertFormToJson(formInfo);
+        return gson.toJson(formJson);
+    }
+
 }

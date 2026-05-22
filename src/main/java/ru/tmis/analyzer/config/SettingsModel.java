@@ -1,9 +1,7 @@
-// config/SettingsModel.java
 package ru.tmis.analyzer.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -32,24 +30,37 @@ public class SettingsModel {
 
     public SettingsModel() {}
 
+    public static SettingsModel getInstance() {
+        if (instance == null) {
+            instance = load();
+        }
+        return instance;
+    }
+
+    public static SettingsModel load() {
+        Path configPath = Paths.get(SETTINGS_FILE);
+        if (Files.exists(configPath)) {
+            try (Reader reader = new FileReader(configPath.toFile())) {
+                Gson gson = new Gson();
+                instance = gson.fromJson(reader, SettingsModel.class);
+                return instance;
+            } catch (IOException e) {
+                System.err.println("Ошибка загрузки настроек: " + e.getMessage());
+            }
+        }
+        return new SettingsModel();
+    }
+
     public void save() {
         try (Writer writer = new FileWriter(SETTINGS_FILE)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(this, writer);
-            System.out.println("Настройки сохранены в файл: " + SETTINGS_FILE);
-
-            // Обновляем конфигурацию в DatabaseCacheManager
-            DatabaseCacheManager.initDbConfig(
-                    getOracleUrl(), getOracleUser(), getOraclePassword(),
-                    getPostgresUrl(), getPostgresUser(), getPostgresPassword(),
-                    getMisUser()
-            );
         } catch (IOException e) {
             System.err.println("Ошибка сохранения настроек: " + e.getMessage());
         }
     }
 
-    // Getters and Setters
+    // Getters and Setters (оставить без изменений)
     public String getProjectPath() { return projectPath; }
     public void setProjectPath(String projectPath) { this.projectPath = projectPath; }
 
@@ -85,42 +96,4 @@ public class SettingsModel {
 
     public boolean isCheckNotNullConstraints() { return checkNotNullConstraints; }
     public void setCheckNotNullConstraints(boolean checkNotNullConstraints) { this.checkNotNullConstraints = checkNotNullConstraints; }
-
-
-    // Добавить этот метод
-    public static SettingsModel createDefault() {
-        return new SettingsModel();
-    }
-
-    public static SettingsModel getInstance() {
-        if (instance == null) {
-            instance = load();
-            // Если load() вернул null (что не должно происходить), создаём новый
-            if (instance == null) {
-                instance = createDefault();
-                instance.save(); // Сохраняем настройки по умолчанию
-            }
-        }
-        return instance;
-    }
-
-    public static SettingsModel load() {
-        Path configPath = Paths.get(SETTINGS_FILE);
-        if (Files.exists(configPath)) {
-            try (Reader reader = new FileReader(configPath.toFile())) {
-                Gson gson = new Gson();
-                SettingsModel model = gson.fromJson(reader, SettingsModel.class);
-                if (model != null) {
-                    System.out.println("Настройки загружены из файла: " + SETTINGS_FILE);
-                    return model;
-                }
-            } catch (IOException e) {
-                System.err.println("Ошибка загрузки настроек: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Файл настроек не найден, будут использованы настройки по умолчанию");
-        }
-        // Всегда возвращаем новый экземпляр, а не null
-        return createDefault();
-    }
 }
