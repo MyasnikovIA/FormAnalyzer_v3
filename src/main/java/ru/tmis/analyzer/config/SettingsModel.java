@@ -30,7 +30,7 @@ public class SettingsModel {
     // Singleton
     private static SettingsModel instance;
 
-    private SettingsModel() {}
+    public SettingsModel() {}
 
     public void save() {
         try (Writer writer = new FileWriter(SETTINGS_FILE)) {

@@ -191,6 +191,10 @@ public class FormsTreePanel extends JPanel {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
+        // Убираем префикс Forms/ для нормализации
+        if (normalized.startsWith("Forms/")) {
+            normalized = normalized.substring(6);
+        }
         String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
 
         // Возвращаем путь внутри подкаталога Forms
@@ -357,9 +361,13 @@ public class FormsTreePanel extends JPanel {
         String reportPath = getReportFilePath(actualFormPath);
         File reportFile = new File(reportPath);
 
+        // Получаем или создаём узел
         DefaultMutableTreeNode node = formNodeMap.get(actualFormPath);
         if (node == null) {
-            return;
+            // Узел не найден - нужно создать его в дереве
+            addFormToTree(actualFormPath);
+            node = formNodeMap.get(actualFormPath);
+            if (node == null) return;
         }
 
         if (!reportFile.exists()) {
@@ -393,15 +401,74 @@ public class FormsTreePanel extends JPanel {
                 childDisplayPath = "(sub)_" + childDisplayPath;
             }
 
-            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childDisplayPath);
-            childNode.setAllowsChildren(true);
-            node.add(childNode);
+            // Проверяем, существует ли уже такой узел
+            DefaultMutableTreeNode childNode = null;
+            for (int i = 0; i < node.getChildCount(); i++) {
+                DefaultMutableTreeNode existing = (DefaultMutableTreeNode) node.getChildAt(i);
+                if (existing.getUserObject().toString().equals(childDisplayPath)) {
+                    childNode = existing;
+                    break;
+                }
+            }
+
+            if (childNode == null) {
+                childNode = new DefaultMutableTreeNode(childDisplayPath);
+                childNode.setAllowsChildren(true);
+                node.add(childNode);
+            }
             formNodeMap.put(actualChildPath, childNode);
         }
 
         treeModel.reload(node);
         TreePath nodePath = new TreePath(node.getPath());
         tree.expandPath(nodePath);
+    }
+
+    /**
+     * Добавляет форму в дерево (создаёт узел)
+     */
+    private void addFormToTree(String formPath) {
+        // Определяем отображаемый путь
+        String displayPath = formPath;
+        if (displayPath.startsWith("/")) {
+            displayPath = displayPath.substring(1);
+        }
+        if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
+            displayPath = "Forms/" + displayPath;
+        }
+
+        // Разбиваем путь на части и создаём родительские узлы
+        String[] parts = displayPath.split("/");
+        DefaultMutableTreeNode currentNode = rootNode;
+
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (i == 0 && part.equals("Forms")) continue; // пропускаем Forms
+
+            boolean found = false;
+            for (int j = 0; j < currentNode.getChildCount(); j++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) currentNode.getChildAt(j);
+                if (child.getUserObject().toString().equals(part) ||
+                        child.getUserObject().toString().endsWith(part)) {
+                    currentNode = child;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(part);
+                newNode.setAllowsChildren(true);
+                currentNode.add(newNode);
+                currentNode = newNode;
+            }
+        }
+
+        // Сохраняем узел в map
+        formNodeMap.put(formPath, currentNode);
+
+        // Обновляем модель дерева
+        treeModel.reload(rootNode);
     }
 
 

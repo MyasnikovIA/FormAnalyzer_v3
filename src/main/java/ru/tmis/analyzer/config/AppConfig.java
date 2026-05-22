@@ -189,11 +189,18 @@ public class AppConfig {
         if (Files.exists(configPath)) {
             try (Reader reader = new FileReader(configPath.toFile())) {
                 Gson gson = new Gson();
-                return gson.fromJson(reader, AppConfig.class);
+                AppConfig config = gson.fromJson(reader, AppConfig.class);
+                if (config != null) {
+                    System.out.println("Конфигурация загружена из файла: " + CONFIG_FILE);
+                    return config;
+                }
             } catch (IOException e) {
                 System.err.println("Ошибка загрузки конфигурации: " + e.getMessage());
             }
+        } else {
+            System.out.println("Файл конфигурации не найден, создаём новый: " + CONFIG_FILE);
         }
+        // Всегда возвращаем новый объект, НИКОГДА null
         return new AppConfig();
     }
 

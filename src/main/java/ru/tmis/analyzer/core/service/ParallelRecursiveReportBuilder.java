@@ -277,8 +277,14 @@ public class ParallelRecursiveReportBuilder {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        String safeName = normalized.replace("/", "#").replace("\\", "#");
-        Path reportPath = Paths.get(outputDir, "Forms", safeName + ".txt");
+        if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
+        if (normalized.startsWith("Forms/")) {
+            normalized = normalized.substring(6);
+        }
+        String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
+        Path reportPath = Paths.get(outputDir, "Forms", safeName);
 
         return Files.exists(reportPath);
     }
@@ -302,7 +308,17 @@ public class ParallelRecursiveReportBuilder {
                     }
 
                     activeTasks.incrementAndGet();
-
+                    if (onLevelComplete != null) {
+                        int processed = totalProcessed.get();
+                        int found = totalFound.get();
+                        javax.swing.SwingUtilities.invokeLater(() -> {
+                            if (found > 0) {
+                                onLevelComplete.accept((processed * 100) / found);
+                            } else {
+                                onLevelComplete.accept(processed);
+                            }
+                        });
+                    }
                     try {
                         log("  [Поток " + Thread.currentThread().threadId() + "] Обработка формы: " + formPath);
 
@@ -377,17 +393,47 @@ public class ParallelRecursiveReportBuilder {
      * Сохранение отчёта
      */
     private void saveReport(FormInfo formInfo) {
-        try {
-            ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-            reportGen.createMainReportHeader();
-            reportGen.appendFormToMainReport(formInfo);
+        if (formInfo == null) return;
 
+        try {
+            // Синхронизация для предотвращения одновременной записи
+            synchronized (ReportGenerator.class) {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+            }
+
+            // Обновляем дерево после сохранения
             javax.swing.SwingUtilities.invokeLater(() -> {
-                formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                try {
+                    // Обновляем дочерние формы для только что обработанной формы
+                    formsTreePanel.refreshChildForms(formInfo.getFormPath());
+
+                    // Также обновляем родительскую форму (если есть)
+                    String parentPath = getParentPath(formInfo.getFormPath());
+                    if (parentPath != null) {
+                        formsTreePanel.refreshChildForms(parentPath);
+                    }
+                } catch (Exception e) {
+                    error("  Ошибка обновления дерева для " + formInfo.getFormPath() + ": " + e.getMessage());
+                }
             });
+
         } catch (IOException e) {
             error("  Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
         }
+    }
+
+    /**
+     * Получить путь родительской формы
+     */
+    private String getParentPath(String formPath) {
+        if (formPath == null) return null;
+        int lastSlash = formPath.lastIndexOf("/");
+        if (lastSlash > 0) {
+            return formPath.substring(0, lastSlash);
+        }
+        return null;
     }
 
     /**
@@ -421,6 +467,12 @@ public class ParallelRecursiveReportBuilder {
             log("Всего обработано форм: " + totalProcessed.get());
             log("Всего найдено форм: " + totalFound.get());
 
+            // Принудительно обновляем всё дерево
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                formsTreePanel.refreshAllChildFormsWithCleanup();
+                formsTreePanel.refreshTreeWithState();
+            });
+
             if (onComplete != null) {
                 javax.swing.SwingUtilities.invokeLater(onComplete);
             }
@@ -453,4 +505,20 @@ public class ParallelRecursiveReportBuilder {
         }
         return formPath;
     }
+    public int getTotalProcessed() {
+        return totalProcessed.get();
+    }
+
+    public int getTotalFound() {
+        return totalFound.get();
+    }
+
+    public int getQueueSize() {
+        return formsQueue.size();
+    }
+
+    public int getActiveTasks() {
+        return activeTasks.get();
+    }
+
 }

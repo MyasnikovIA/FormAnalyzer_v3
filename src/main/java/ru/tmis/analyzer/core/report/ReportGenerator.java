@@ -80,8 +80,11 @@ public class ReportGenerator {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        // Убираем маркер SubForm если есть
         if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
+        // Убираем лишний префикс Forms/ если он уже есть
+        if (normalized.startsWith("Forms/")) {
             normalized = normalized.substring(6);
         }
         String safeName = normalized.replace("/", "#").replace("\\", "#");
@@ -1269,20 +1272,34 @@ public class ReportGenerator {
             Files.createDirectories(outputPath);
         }
 
-        // Создаём подкаталог Forms внутри outputDir
-        Path formsSubDir = outputPath.resolve("Forms");
-        if (!Files.exists(formsSubDir)) {
-            Files.createDirectories(formsSubDir);
+        // Создаём поддиректорию Forms (только один раз)
+        Path formsDir = outputPath.resolve("Forms");
+        if (!Files.exists(formsDir)) {
+            Files.createDirectories(formsDir);
         }
 
+        // Получаем безопасное имя файла (уже без префикса Forms)
         String fileName = getSafeFileName(formInfo.getFormPath());
-        Path formReportPath = formsSubDir.resolve(fileName);
+        Path formReportPath = formsDir.resolve(fileName);
 
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(formReportPath))) {
-            writeFormReport(writer, formInfo);
+        // Убеждаемся, что родительская директория существует
+        Path parent = formReportPath.getParent();
+        if (parent != null && !Files.exists(parent)) {
+            Files.createDirectories(parent);
         }
 
-        System.out.println("Отчет для формы сохранен: " + formReportPath);
+        try (PrintWriter writer = new PrintWriter(
+                new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(formReportPath.toFile()),
+                        java.nio.charset.StandardCharsets.UTF_8)))) {
+            writeFormReport(writer, formInfo);
+            writer.flush();
+        } catch (IOException e) {
+            System.err.println("Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
+            throw e;
+        }
+
+        System.out.println("  Отчёт сохранён: " + formReportPath);
     }
 
 }

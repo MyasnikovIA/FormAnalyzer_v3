@@ -10,6 +10,7 @@ import ru.tmis.analyzer.core.service.ParallelRecursiveReportBuilder;
 import ru.tmis.analyzer.core.service.RecursiveReportBuilder;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.event.TreeSelectionEvent;
@@ -52,6 +53,8 @@ public class MainWindow extends JFrame {
     private PipedInputStream pipeIn;
     private Thread logReader;
     private ParallelRecursiveReportBuilder parallelBuilder;
+    private Timer progressTimer;
+    private long scanStartTime;
 
 
     public MainWindow(SettingsModel settings, AppConfig config) {
@@ -222,9 +225,12 @@ public class MainWindow extends JFrame {
         });
 
         // Устанавливаем количество потоков из настроек (по умолчанию все ядра)
-        int threads = config.getParallelThreads();
-        if (threads <= 0) {
-            threads = Runtime.getRuntime().availableProcessors();
+        int threads = Runtime.getRuntime().availableProcessors(); // значение по умолчанию
+        if (config != null) {
+            threads = config.getParallelThreads();
+            if (threads <= 0) {
+                threads = Runtime.getRuntime().availableProcessors();
+            }
         }
         parallelBuilder.setParallelThreads(threads);
         appendLog("Параллельный анализатор инициализирован. Потоков: " + threads);
@@ -235,6 +241,9 @@ public class MainWindow extends JFrame {
 
         parallelBuilder.setOnComplete(() -> {
             SwingUtilities.invokeLater(() -> {
+                if (progressTimer != null) {
+                    progressTimer.stop();
+                }
                 appendLog("Параллельный рекурсивный анализ завершён!");
                 statusLabel.setText("Статус: Готов");
                 progressBar.setIndeterminate(false);
@@ -359,7 +368,7 @@ public class MainWindow extends JFrame {
         llmButtons.add(clearLlmBtn);
         llmPanel.add(llmButtons, BorderLayout.NORTH);
 
-        if (config.isLlmPanelVisible()) {
+        if (config != null && config.isEnableLLMExport() && config.isLlmPanelVisible()) {
             tabbedPane.addTab("LLM промпт", llmPanel);
         }
 
@@ -776,6 +785,11 @@ public class MainWindow extends JFrame {
         });
     }
     private void stopAnalysis() {
+        // Останавливаем таймер прогресса
+        if (progressTimer != null && progressTimer.isRunning()) {
+            progressTimer.stop();
+        }
+
         // Сначала проверяем параллельный рекурсивный анализатор
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
             parallelBuilder.stop();
@@ -870,20 +884,28 @@ public class MainWindow extends JFrame {
     }
 
     private void loadWindowState() {
-        setSize(config.getWindowWidth(), config.getWindowHeight());
-        setLocation(config.getWindowX(), config.getWindowY());
-        if (config.getWindowExtendedState() != 0) {
-            setExtendedState(config.getWindowExtendedState());
+        if (config != null) {
+            setSize(config.getWindowWidth(), config.getWindowHeight());
+            setLocation(config.getWindowX(), config.getWindowY());
+            if (config.getWindowExtendedState() != 0) {
+                setExtendedState(config.getWindowExtendedState());
+            }
+        } else {
+            // Значения по умолчанию
+            setSize(1200, 800);
+            setLocationRelativeTo(null);
         }
     }
 
     private void saveState() {
-        config.setWindowWidth(getWidth());
-        config.setWindowHeight(getHeight());
-        config.setWindowX(getX());
-        config.setWindowY(getY());
-        config.setWindowExtendedState(getExtendedState());
-        config.save();
+        if (config != null) {
+            config.setWindowWidth(getWidth());
+            config.setWindowHeight(getHeight());
+            config.setWindowX(getX());
+            config.setWindowY(getY());
+            config.setWindowExtendedState(getExtendedState());
+            config.save();
+        }
         settings.save();
     }
 
@@ -1232,10 +1254,12 @@ public class MainWindow extends JFrame {
             return;
         }
 
+        int threads = (config != null) ? config.getParallelThreads() : Runtime.getRuntime().availableProcessors();
+
         int confirm = JOptionPane.showConfirmDialog(this,
                 "ПАРАЛЛЕЛЬНОЕ СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА\n\n" +
                         "Будут обработаны ТОЛЬКО формы, для которых ещё нет отчётов.\n" +
-                        "Количество потоков: " + config.getParallelThreads() + "\n" +
+                        "Количество потоков: " + threads + "\n" +
                         "Доступно ядер: " + Runtime.getRuntime().availableProcessors() + "\n\n" +
                         "Это может занять продолжительное время.\n" +
                         "Продолжить?",
@@ -1249,18 +1273,71 @@ public class MainWindow extends JFrame {
         }
 
         appendLog("Начинаем параллельное сканирование всего проекта...");
-        appendLog("Количество потоков: " + config.getParallelThreads());
+        appendLog("Количество потоков: " + threads);
 
-        // Включаем режим полного сканирования
         parallelBuilder.setFullProjectScan(true);
 
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
-        progressBar.setIndeterminate(true);
+        progressBar.setIndeterminate(false);
+        progressBar.setString("0 форм обработано");
         statusLabel.setText("Статус: Параллельное сканирование проекта...");
 
+        scanStartTime = System.currentTimeMillis();
+
+        // Запускаем таймер для обновления прогресса (каждую секунду)
+        if (progressTimer != null) {
+            progressTimer.stop();
+        }
+        progressTimer = new Timer(1000, e -> updateScanProgress());
+        progressTimer.start();
+
         parallelBuilder.startRecursiveBuild(null);
+    }
+    private void updateScanProgress() {
+        if (!parallelBuilder.isRunning()) {
+            if (progressTimer != null) {
+                progressTimer.stop();
+            }
+            return;
+        }
+
+        int processed = parallelBuilder.getTotalProcessed();
+        int found = parallelBuilder.getTotalFound();
+        int queueSize = parallelBuilder.getQueueSize();
+        int active = parallelBuilder.getActiveTasks();
+        long elapsed = (System.currentTimeMillis() - scanStartTime) / 1000;
+
+        StringBuilder sb = new StringBuilder();
+        if (found > 0) {
+            int percent = (processed * 100) / found;
+            sb.append(percent).append("%");
+            progressBar.setValue(percent);
+        } else {
+            progressBar.setIndeterminate(false);
+            progressBar.setValue(0);
+        }
+
+        sb.append(" | Обработано: ").append(processed);
+        if (found > 0) {
+            sb.append("/").append(found);
+        }
+        sb.append(" | Очередь: ").append(queueSize);
+        sb.append(" | Активных: ").append(active);
+        sb.append(" | ").append(formatTime(elapsed));
+
+        progressBar.setString(sb.toString());
+        statusLabel.setText("Статус: " + sb.toString());
+    }
+
+    private String formatTime(long seconds) {
+        long minutes = seconds / 60;
+        long secs = seconds % 60;
+        if (minutes > 0) {
+            return String.format("%d мин %d сек", minutes, secs);
+        }
+        return String.format("%d сек", secs);
     }
 }
