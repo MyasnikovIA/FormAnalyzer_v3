@@ -1,6 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.utils.NetworkUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -277,6 +278,12 @@ public class PostgresService {
     }
 
     public boolean testConnection() {
+        // Сначала проверяем доступность сервера
+        if (!NetworkUtils.isDatabaseServerAvailable(url)) {
+            System.err.println("[PostgreSQL] Сервер недоступен, подключение не выполняется");
+            return false;
+        }
+
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT 1")) {

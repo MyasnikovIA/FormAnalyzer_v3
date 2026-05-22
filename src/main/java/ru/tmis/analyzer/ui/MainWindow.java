@@ -72,7 +72,7 @@ public class MainWindow extends JFrame {
                 saveState();
             }
         });
-        redirectSystemOutToLog();
+         redirectSystemOutToLog();
        // Добавляем слушатель для восстановления при закрытии
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -84,7 +84,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.12 (от 22-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.13 (от 22-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -912,24 +912,30 @@ public class MainWindow extends JFrame {
     /**
      * Перенаправляет System.out и System.err в лог-панель
      */
+    /**
+     * Перенаправляет System.out и System.err в лог-панель с правильной кодировкой
+     */
     private void redirectSystemOutToLog() {
         try {
             // Сохраняем оригинальные потоки
             originalOut = System.out;
             originalErr = System.err;
 
-            // Создаем Piped потоки
+            // Создаем Piped потоки с UTF-8
             pipeIn = new PipedInputStream();
             PipedOutputStream pipeOut = new PipedOutputStream(pipeIn);
-            PrintStream customOut = new PrintStream(pipeOut, true);
+
+            // Используем PrintStream с UTF-8
+            PrintStream customOut = new PrintStream(pipeOut, true, "UTF-8");
 
             // Перенаправляем вывод
             System.setOut(customOut);
             System.setErr(customOut);
 
-            // Запускаем поток чтения
+            // Запускаем поток чтения с UTF-8
             logReader = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(pipeIn))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(pipeIn, "UTF-8"))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         final String finalLine = line;
@@ -945,6 +951,30 @@ public class MainWindow extends JFrame {
 
         } catch (IOException e) {
             appendLog("Не удалось перенаправить вывод: " + e.getMessage());
+        }
+    }
+
+    // Внутренний класс для захвата вывода
+    private class LogOutputStream extends OutputStream {
+        private final StringBuilder buffer = new StringBuilder();
+
+        @Override
+        public void write(int b) throws IOException {
+            char c = (char) b;
+            if (c == '\n') {
+                final String line = buffer.toString();
+                SwingUtilities.invokeLater(() -> appendLog(line));
+                buffer.setLength(0);
+            } else {
+                buffer.append(c);
+            }
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            for (int i = off; i < off + len; i++) {
+                write(b[i]);
+            }
         }
     }
     /**

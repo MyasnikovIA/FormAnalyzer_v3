@@ -1,5 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
+import ru.tmis.analyzer.utils.NetworkUtils;
+
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -276,6 +278,12 @@ public class OracleService {
     }
 
     public boolean testConnection() {
+        // Сначала проверяем доступность сервера
+        if (!NetworkUtils.isDatabaseServerAvailable(url)) {
+            System.err.println("[Oracle] Сервер недоступен, подключение не выполняется");
+            return false;
+        }
+
         try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT 1 FROM DUAL")) {
