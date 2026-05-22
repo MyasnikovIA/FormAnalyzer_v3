@@ -152,13 +152,15 @@ public class MainWindow extends JFrame {
                             // Загружаем отчёт текущей формы
                             loadFormResultToPanel(formPath);
 
-                            // ТОЛЬКО ОДИН УРОВЕНЬ: загружаем прямых детей и раскрываем узел
+                            // ТОЛЬКО ОДИН УРОВЕНЬ - НЕ РЕКУРСИВНО!
                             formsTreePanel.refreshChildForms(formPath);
                             if (selectedPath != null) {
                                 formsTreePanel.expandPath(selectedPath);
                             }
 
-                            // Если вкладка LLM промпт активна, загружаем MD файл
+                            // УДАЛИТЬ ИЛИ ЗАКОММЕНТИРОВАТЬ ЭТУ СТРОКУ:
+                            // formsTreePanel.expandAllChildrenRecursive(formPath, selectedPath);
+
                             if (tabbedPane.getSelectedIndex() == 2) {
                                 loadLlmPromptToPanel(formPath);
                             }
@@ -242,35 +244,27 @@ public class MainWindow extends JFrame {
         });
 
         recursiveBuilder.setOnComplete(() -> {
-            appendLog("Рекурсивное построение завершено!");
-            statusLabel.setText("Статус: Готов");
-            progressBar.setIndeterminate(false);
-            progressBar.setValue(100);
-            progressBar.setString("Готово");
-            startButton.setEnabled(true);
-            stopButton.setEnabled(false);
-            settingsButton.setEnabled(true);
-
-            // Обновляем дерево с сохранением состояния
             SwingUtilities.invokeLater(() -> {
-                // Сохраняем состояние до обновления
+                appendLog("Рекурсивное построение завершено!");
+                statusLabel.setText("Статус: Готов");
+                progressBar.setIndeterminate(false);
+                progressBar.setValue(100);
+                progressBar.setString("Готово");
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+
+                // Обновляем дерево с сохранением состояния
                 FormsTreePanel.TreeState state = formsTreePanel.saveTreeState();
-
-                // Очищаем неактуальные узлы и обновляем дочерние формы
                 formsTreePanel.refreshAllChildFormsWithCleanup();
-
-                // Раскрываем все узлы, которые были развёрнуты
                 if (state != null && state.expandedPaths != null) {
                     for (String pathStr : state.expandedPaths) {
                         formsTreePanel.expandPathByDisplayString(pathStr);
                     }
                 }
-
-                // Восстанавливаем выбранный элемент
                 if (state != null && state.selectedPath != null) {
                     formsTreePanel.restoreSelectedPath(state.selectedPath);
                 }
-
                 appendLog("Дерево форм обновлено, состояние восстановлено");
             });
         });
@@ -375,14 +369,15 @@ public class MainWindow extends JFrame {
     }
 
     private void startRecursiveAnalysis() {
+        // Блокируем повторный запуск
         if (recursiveBuilder.isRunning()) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "Рекурсивный анализ уже выполняется. Остановить?",
-                    "Анализ запущен",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                recursiveBuilder.stop();
-            }
+            appendLog("Рекурсивный анализ уже выполняется");
+            return;
+        }
+
+        // Дополнительная проверка по флагу isRunning из MainWindow
+        if (isRunning.get()) {
+            appendLog("Анализ уже выполняется, дождитесь завершения");
             return;
         }
 
@@ -398,17 +393,17 @@ public class MainWindow extends JFrame {
             if (confirm != JOptionPane.YES_OPTION) {
                 return;
             }
-            startForms = null; // будет использовать getAllRootForms()
+            startForms = null;
         } else {
             startForms = selectedForms;
         }
 
-        // БЛОК УПРАВЛЕНИЯ КНОПКАМИ - ВАЖНО!
+        // Управление кнопками
         startButton.setEnabled(false);
-        stopButton.setEnabled(true);      // Активируем кнопку остановки
+        stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
         progressBar.setValue(0);
-        progressBar.setIndeterminate(true);  // Показываем, что процесс идёт
+        progressBar.setIndeterminate(true);
         statusLabel.setText("Статус: Рекурсивный анализ...");
 
         recursiveBuilder.startRecursiveBuild(startForms);

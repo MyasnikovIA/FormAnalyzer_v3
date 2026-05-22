@@ -90,10 +90,10 @@ public class RecursiveReportBuilder {
      * Запуск рекурсивного построения отчётов
      * @param startForms список форм для старта (если null - используются все корневые формы)
      */
-    // RecursiveReportBuilder.java - проверьте метод startRecursiveBuild
     public void startRecursiveBuild(List<String> startForms) {
+        // Проверка на повторный запуск
         if (isRunning.get()) {
-            log("Рекурсивное построение уже выполняется");
+            System.err.println("RecursiveReportBuilder уже запущен, повторный запуск игнорируется");
             return;
         }
 
@@ -111,17 +111,22 @@ public class RecursiveReportBuilder {
             finalStartForms = new ArrayList<>(startForms);
             log("Стартовые формы: " + finalStartForms.size() + " шт.");
         }
+
         stopRequested.set(false);
         isRunning.set(true);
         currentLevel = 0;
         totalFormsProcessed = 0;
         formsPerLevel.clear();
 
-        // Множество для отслеживания уже обработанных форм
         final Set<String> processedForms = new HashSet<>();
 
         log("=== ЗАПУСК РЕКУРСИВНОГО ПОСТРОЕНИЯ ОТЧЁТОВ ===");
         log("Начальный уровень форм: " + finalStartForms.size() + " шт.");
+
+        // Отменяем предыдущую задачу если есть
+        if (currentTask != null && !currentTask.isDone()) {
+            currentTask.cancel(true);
+        }
 
         currentTask = executor.submit(() -> {
             try {
@@ -129,13 +134,16 @@ public class RecursiveReportBuilder {
             } catch (Exception e) {
                 error("Ошибка при рекурсивном построении: " + e.getMessage());
                 e.printStackTrace();
-                if (onError != null) onError.accept(e.getMessage());
+                if (onError != null) {
+                    javax.swing.SwingUtilities.invokeLater(() -> onError.accept(e.getMessage()));
+                }
             } finally {
                 isRunning.set(false);
-                // Важно: сбрасываем состояние кнопок через callback
-                if (onComplete != null) {
-                    javax.swing.SwingUtilities.invokeLater(onComplete);
-                }
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    if (onComplete != null) {
+                        onComplete.run();
+                    }
+                });
                 log("");
                 if (stopRequested.get()) {
                     log("=== РЕКУРСИВНОЕ ПОСТРОЕНИЕ ОСТАНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ ===");
@@ -236,14 +244,8 @@ public class RecursiveReportBuilder {
             log("");
             log("Переход на уровень " + (level + 1) + " (найдено новых дочерних форм: " + childList.size() + ")");
             processLevel(childList, level + 1, processedForms);
-        } else {
-            if (allChildForms.isEmpty()) {
-                log("Новые дочерние формы не найдены. Рекурсия завершена.");
-            }
         }
     }
-
-    // RecursiveReportBuilder.java - исправленный метод analyzeForms
 
     /**
      * Анализ списка форм с сохранением отчётов

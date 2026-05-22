@@ -87,21 +87,21 @@ public class FormsTreePanel extends JPanel {
         treeScroll.setBorder(BorderFactory.createTitledBorder("Список форм"));
         add(treeScroll, BorderLayout.CENTER);
 
-       // JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        // JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-       // addButton = new JButton("➕ Добавить формы");
-       // addButton.addActionListener(e -> showAddFormsDialog());
-       // removeButton = new JButton("🗑 Удалить выбранные");
-       // removeButton.addActionListener(e -> removeSelectedForms());
+        // addButton = new JButton("➕ Добавить формы");
+        // addButton.addActionListener(e -> showAddFormsDialog());
+        // removeButton = new JButton("🗑 Удалить выбранные");
+        // removeButton.addActionListener(e -> removeSelectedForms());
         //selectAllButton = new JButton("✓ Выбрать всё");
         //selectAllButton.addActionListener(e -> selectAllNodes());
         //deselectAllButton = new JButton("✗ Снять выделение");
         //deselectAllButton.addActionListener(e -> tree.clearSelection());
-       //buttonPanel.add(addButton);
-       //buttonPanel.add(removeButton);
-       //buttonPanel.add(selectAllButton);
-       //buttonPanel.add(deselectAllButton);
-       // add(buttonPanel, BorderLayout.SOUTH);
+        //buttonPanel.add(addButton);
+        //buttonPanel.add(removeButton);
+        //buttonPanel.add(selectAllButton);
+        //buttonPanel.add(deselectAllButton);
+        // add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public void addTreeSelectionListener(TreeSelectionListener listener) {
@@ -299,6 +299,7 @@ public class FormsTreePanel extends JPanel {
     }
 
     private void addFormWithChildrenToTree(String formPath, DefaultMutableTreeNode parentNode, Set<String> addedPaths) {
+        // Добавить флаг для предотвращения автоматической рекурсии
         if (addedPaths.contains(formPath)) {
             return;
         }
@@ -343,15 +344,6 @@ public class FormsTreePanel extends JPanel {
 
         String reportPath = getReportFilePath(actualFormPath);
         File reportFile = new File(reportPath);
-
-        if (reportFile.exists()) {
-            Set<String> childForms = loadChildFormsFromReport(actualFormPath);
-            childrenCache.put(actualFormPath, childForms);
-
-            for (String childForm : childForms) {
-                addFormWithChildrenToTree(childForm, formNode, addedPaths);
-            }
-        }
     }
 
     public void refreshChildForms(String formPath) {
@@ -745,6 +737,7 @@ public class FormsTreePanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
     private void selectAllNodes() {
         List<TreePath> allPaths = new ArrayList<>();
         // Собираем ВСЕ узлы (включая родительские и корневые)
@@ -811,6 +804,7 @@ public class FormsTreePanel extends JPanel {
     public void setOnRecursiveAnalysisRequested(Runnable callback) {
         this.onRecursiveAnalysisRequested = callback;
     }
+
     /**
      * Получить все корневые формы (без учёта иерархии)
      */
@@ -825,6 +819,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Сохраняет текущее состояние развёрнутости всех узлов дерева
+     *
      * @return карта: полный путь к форме -> был ли узел развёрнут
      */
     public Map<String, Boolean> saveExpandedState() {
@@ -856,6 +851,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Восстанавливает состояние развёрнутости узлов дерева
+     *
      * @param expandedState карта с сохранённым состоянием
      */
     public void restoreExpandedState(Map<String, Boolean> expandedState) {
@@ -961,8 +957,10 @@ public class FormsTreePanel extends JPanel {
             refreshChildForms(formPath);
         }
     }
+
     /**
      * Проверяет существование отчёта для формы и очищает дочерние узлы если отчёт удалён
+     *
      * @param formPath путь к форме
      * @return true если отчёт существует, false если нет
      */
@@ -1036,6 +1034,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Сохраняет полное состояние дерева (развёрнутость узлов и выбранный элемент)
+     *
      * @return объект состояния дерева
      */
     public TreeState saveTreeState() {
@@ -1047,6 +1046,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Восстанавливает состояние дерева
+     *
      * @param state сохранённое состояние
      */
     public void restoreTreeState(TreeState state) {
@@ -1182,6 +1182,7 @@ public class FormsTreePanel extends JPanel {
         public String selectedPath;
         public Set<String> expandedPaths;
     }
+
     /**
      * Раскрывает путь по строке отображаемых имён
      */
@@ -1193,11 +1194,11 @@ public class FormsTreePanel extends JPanel {
     }
 
 
-
     // FormsTreePanel.java - добавить методы
 
     /**
      * Раскрывает указанный путь в дереве
+     *
      * @param path путь для раскрытия
      */
     public void expandPath(TreePath path) {
@@ -1208,6 +1209,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Находит узел дерева по пути формы
+     *
      * @param formPath путь к форме (без маркера)
      * @return узел дерева или null
      */
@@ -1217,6 +1219,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Получает TreePath для узла
+     *
      * @param node узел дерева
      * @return TreePath или null
      */
@@ -1227,7 +1230,8 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Рекурсивно загружает все дочерние формы для указанного пути
-     * @param formPath путь к форме
+     *
+     * @param formPath        путь к форме
      * @param expandAfterLoad раскрывать ли узлы после загрузки
      */
     public void loadAllChildrenRecursively(String formPath, boolean expandAfterLoad) {
@@ -1257,6 +1261,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Загружает все дочерние формы для выбранного пути и раскрывает дерево
+     *
      * @param formPath путь к форме
      */
     public void loadFullTree(String formPath) {
@@ -1274,8 +1279,10 @@ public class FormsTreePanel extends JPanel {
             tree.setSelectionPath(path);
         }
     }
+
     /**
      * Устанавливает выбранный путь в дереве
+     *
      * @param path путь для выбора
      */
     public void setSelectedPath(TreePath path) {
@@ -1284,6 +1291,7 @@ public class FormsTreePanel extends JPanel {
             tree.scrollPathToVisible(path);
         }
     }
+
     /**
      * Обновить все дочерние формы (без сохранения состояния)
      */
@@ -1308,6 +1316,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Рекурсивно разворачивает все дочерние узлы для указанного пути
+     *
      * @param parentPath путь к родительскому узлу
      */
     public void expandAllChildren(TreePath parentPath) {
@@ -1331,6 +1340,7 @@ public class FormsTreePanel extends JPanel {
 
     /**
      * Рекурсивно разворачивает все дочерние узлы для формы по пути
+     *
      * @param formPath путь к форме
      */
     public void expandAllChildrenForForm(String formPath) {
@@ -1340,8 +1350,10 @@ public class FormsTreePanel extends JPanel {
             expandAllChildren(path);
         }
     }
+
     /**
      * Рекурсивно загружает и разворачивает все дочерние формы для указанного пути
+     *
      * @param formPath путь к форме
      * @param treePath путь в дереве
      */
