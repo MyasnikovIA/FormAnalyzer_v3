@@ -7,12 +7,15 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class ParallelRecursiveReportBuilder {
 
@@ -28,8 +31,10 @@ public class ParallelRecursiveReportBuilder {
     private final BlockingQueue<String> formsQueue = new LinkedBlockingQueue<>();
     private final AtomicInteger activeTasks = new AtomicInteger(0);
     private final AtomicInteger totalProcessed = new AtomicInteger(0);
+    private final AtomicInteger totalFound = new AtomicInteger(0);
 
-    private int parallelThreads = Runtime.getRuntime().availableProcessors(); // по умолчанию все ядра
+    private int parallelThreads = Runtime.getRuntime().availableProcessors();
+    private boolean fullProjectScan = false;  // Режим полного сканирования проекта
 
     private Runnable onComplete;
     private Consumer<String> onError;
@@ -37,19 +42,26 @@ public class ParallelRecursiveReportBuilder {
     private Consumer<String> onLevelStart;
     private Consumer<Integer> onLevelComplete;
 
+    // Сканер для поиска новых форм в фоне
+    private ScheduledExecutorService scannerExecutor;
+    private ScheduledFuture<?> scannerTask;
+    private Path projectRoot;
+
     public ParallelRecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
         this.config = config;
         this.formsTreePanel = formsTreePanel;
+        this.projectRoot = Paths.get(settings.getProjectPath());
     }
 
-    /**
-     * Установить количество параллельных потоков
-     */
     public void setParallelThreads(int threads) {
         if (threads > 0) {
             this.parallelThreads = threads;
         }
+    }
+
+    public void setFullProjectScan(boolean fullScan) {
+        this.fullProjectScan = fullScan;
     }
 
     public void setLogger(ILogger logger) {
@@ -99,25 +111,12 @@ public class ParallelRecursiveReportBuilder {
             return;
         }
 
-        List<String> finalStartForms;
-        if (startForms == null || startForms.isEmpty()) {
-            finalStartForms = formsTreePanel.getAllRootForms();
-            if (finalStartForms.isEmpty()) {
-                log("Нет форм для рекурсивного анализа");
-                if (onError != null) onError.accept("Нет форм для анализа");
-                return;
-            }
-            log("Стартовые формы не указаны. Используем все корневые формы (" + finalStartForms.size() + " шт.)");
-        } else {
-            finalStartForms = new ArrayList<>(startForms);
-            log("Стартовые формы: " + finalStartForms.size() + " шт.");
-        }
-
         stopRequested.set(false);
         isRunning.set(true);
         processedForms.clear();
         formsQueue.clear();
         totalProcessed.set(0);
+        totalFound.set(0);
         activeTasks.set(0);
 
         // Создаем пул потоков
@@ -125,19 +124,163 @@ public class ParallelRecursiveReportBuilder {
 
         log("=== ЗАПУСК ПАРАЛЛЕЛЬНОГО РЕКУРСИВНОГО ПОСТРОЕНИЯ ОТЧЁТОВ ===");
         log("Количество параллельных потоков: " + parallelThreads);
-        log("Начальный уровень форм: " + finalStartForms.size() + " шт.");
+        log("Доступно ядер: " + Runtime.getRuntime().availableProcessors());
 
-        // Добавляем стартовые формы в очередь
-        for (String form : finalStartForms) {
-            if (!processedForms.contains(form)) {
-                formsQueue.offer(form);
+        // Режим полного сканирования проекта
+        if (fullProjectScan || startForms == null || startForms.isEmpty()) {
+            log("Режим: СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА");
+            startFullProjectScan();
+        } else {
+            log("Режим: РЕКУРСИВНЫЙ АНАЛИЗ ВЫБРАННЫХ ФОРМ");
+            log("Стартовые формы: " + startForms.size() + " шт.");
+
+            // Добавляем стартовые формы в очередь
+            for (String form : startForms) {
+                if (!processedForms.contains(form)) {
+                    formsQueue.offer(form);
+                    totalFound.incrementAndGet();
+                }
+            }
+
+            // Запускаем обработку
+            for (int i = 0; i < parallelThreads; i++) {
+                executor.submit(new FormWorker());
             }
         }
+    }
 
-        // Запускаем обработку
+    /**
+     * Режим полного сканирования проекта
+     */
+    private void startFullProjectScan() {
+        // Запускаем фоновый сканер для поиска новых форм
+        scannerExecutor = Executors.newSingleThreadScheduledExecutor();
+        scannerTask = scannerExecutor.scheduleAtFixedRate(() -> {
+            if (stopRequested.get()) {
+                return;
+            }
+            try {
+                scanForNewForms();
+            } catch (Exception e) {
+                error("Ошибка сканирования: " + e.getMessage());
+            }
+        }, 0, 2, TimeUnit.SECONDS);  // Сканируем каждые 2 секунды
+
+        // Запускаем рабочие потоки
         for (int i = 0; i < parallelThreads; i++) {
             executor.submit(new FormWorker());
         }
+
+        // Запускаем поток мониторинга завершения
+        executor.submit(() -> {
+            while (!stopRequested.get() && isRunning.get()) {
+                try {
+                    Thread.sleep(1000);
+                    // Если очередь пуста, нет активных задач и сканер завершил первый проход
+                    if (activeTasks.get() == 0 && formsQueue.isEmpty()) {
+                        // Останавливаем сканер
+                        if (scannerTask != null) {
+                            scannerTask.cancel(false);
+                            scannerExecutor.shutdown();
+                        }
+                        complete();
+                        break;
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+    }
+
+    /**
+     * Сканирование файловой системы для поиска новых форм
+     */
+    private void scanForNewForms() {
+        Set<String> foundForms = new LinkedHashSet<>();
+
+        // Сканируем каталог Forms
+        Path formsPath = projectRoot.resolve("Forms");
+        if (Files.exists(formsPath)) {
+            try (Stream<Path> walk = Files.walk(formsPath)) {
+                walk.filter(Files::isRegularFile)
+                        .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
+                        .forEach(p -> {
+                            String relativePath = formsPath.relativize(p).toString().replace("\\", "/");
+                            String formPath = "Forms/" + relativePath;
+
+                            // Проверяем, есть ли уже отчёт
+                            if (!hasReport(formPath) && !processedForms.contains(formPath)) {
+                                foundForms.add(formPath);
+                            }
+                        });
+            } catch (IOException e) {
+                error("Ошибка сканирования Forms: " + e.getMessage());
+            }
+        }
+
+        // Сканируем каталоги UserForms
+        try (Stream<Path> list = Files.list(projectRoot)) {
+            list.filter(Files::isDirectory)
+                    .filter(p -> p.getFileName().toString().startsWith("UserForms"))
+                    .forEach(userFormsDir -> {
+                        String dirName = userFormsDir.getFileName().toString();
+                        try (Stream<Path> walk = Files.walk(userFormsDir)) {
+                            walk.filter(Files::isRegularFile)
+                                    .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
+                                    .forEach(p -> {
+                                        String relativePath = userFormsDir.relativize(p).toString().replace("\\", "/");
+                                        String formPath = dirName + "/" + relativePath;
+
+                                        if (!hasReport(formPath) && !processedForms.contains(formPath)) {
+                                            foundForms.add(formPath);
+                                        }
+                                    });
+                        } catch (IOException e) {
+                            error("Ошибка сканирования " + dirName + ": " + e.getMessage());
+                        }
+                    });
+        } catch (IOException e) {
+            error("Ошибка сканирования UserForms: " + e.getMessage());
+        }
+
+        // Добавляем найденные формы в очередь
+        if (!foundForms.isEmpty()) {
+            int newCount = 0;
+            for (String form : foundForms) {
+                if (!processedForms.contains(form) && !formsQueue.contains(form)) {
+                    formsQueue.offer(form);
+                    newCount++;
+                    totalFound.incrementAndGet();
+                }
+            }
+            if (newCount > 0) {
+                log("  [Сканер] Найдено новых форм: " + newCount + " (всего в очереди: " + formsQueue.size() + ")");
+                if (onLevelStart != null) {
+                    SwingUtilities.invokeLater(() -> onLevelStart.accept("Найдено форм: " + totalFound.get()));
+                }
+            }
+        }
+    }
+
+    /**
+     * Проверяет, существует ли уже отчёт для формы
+     */
+    private boolean hasReport(String formPath) {
+        String outputDir = settings.getOutputDir();
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        String safeName = normalized.replace("/", "#").replace("\\", "#");
+        Path reportPath = Paths.get(outputDir, "Forms", safeName + ".txt");
+
+        return Files.exists(reportPath);
     }
 
     /**
@@ -150,10 +293,6 @@ public class ParallelRecursiveReportBuilder {
                 try {
                     String formPath = formsQueue.poll(500, TimeUnit.MILLISECONDS);
                     if (formPath == null) {
-                        // Если очередь пуста и нет активных задач - завершаем
-                        if (activeTasks.get() == 0 && formsQueue.isEmpty()) {
-                            break;
-                        }
                         continue;
                     }
 
@@ -165,7 +304,7 @@ public class ParallelRecursiveReportBuilder {
                     activeTasks.incrementAndGet();
 
                     try {
-                        log("  [Поток " + Thread.currentThread().getId() + "] Обработка формы: " + formPath);
+                        log("  [Поток " + Thread.currentThread().threadId() + "] Обработка формы: " + formPath);
 
                         if (onFormAnalyzed != null) {
                             javax.swing.SwingUtilities.invokeLater(() -> onFormAnalyzed.accept(formPath));
@@ -193,12 +332,17 @@ public class ParallelRecursiveReportBuilder {
                                 }
                             }
 
-                            log("  [Поток " + Thread.currentThread().getId() + "] Форма " + getShortName(formPath) +
+                            log("  [Поток " + Thread.currentThread().threadId() + "] Форма " + getShortName(formPath) +
                                     " обработана, добавлено детей: " + newChildren);
+
+                            // Обновляем прогресс
+                            if (onLevelComplete != null) {
+                                javax.swing.SwingUtilities.invokeLater(() -> onLevelComplete.accept(totalProcessed.get()));
+                            }
                         }
 
                     } catch (Exception e) {
-                        error("  [Поток " + Thread.currentThread().getId() + "] Ошибка обработки " + formPath + ": " + e.getMessage());
+                        error("  [Поток " + Thread.currentThread().threadId() + "] Ошибка обработки " + formPath + ": " + e.getMessage());
                     } finally {
                         activeTasks.decrementAndGet();
                     }
@@ -207,11 +351,6 @@ public class ParallelRecursiveReportBuilder {
                     Thread.currentThread().interrupt();
                     break;
                 }
-            }
-
-            // Последний поток завершает работу
-            if (activeTasks.get() == 0 && formsQueue.isEmpty() && !stopRequested.get()) {
-                complete();
             }
         }
     }
@@ -256,19 +395,31 @@ public class ParallelRecursiveReportBuilder {
      */
     private void complete() {
         if (isRunning.compareAndSet(true, false)) {
-            executor.shutdown();
-            try {
-                if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
-                    executor.shutdownNow();
+            // Останавливаем сканер
+            if (scannerTask != null) {
+                scannerTask.cancel(false);
+                if (scannerExecutor != null) {
+                    scannerExecutor.shutdown();
                 }
-            } catch (InterruptedException e) {
-                executor.shutdownNow();
-                Thread.currentThread().interrupt();
+            }
+
+            // Останавливаем рабочие потоки
+            if (executor != null) {
+                executor.shutdown();
+                try {
+                    if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                        executor.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    executor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
             }
 
             log("");
             log("=== ПАРАЛЛЕЛЬНОЕ РЕКУРСИВНОЕ ПОСТРОЕНИЕ ЗАВЕРШЕНО ===");
             log("Всего обработано форм: " + totalProcessed.get());
+            log("Всего найдено форм: " + totalFound.get());
 
             if (onComplete != null) {
                 javax.swing.SwingUtilities.invokeLater(onComplete);
@@ -285,6 +436,9 @@ public class ParallelRecursiveReportBuilder {
             stopRequested.set(true);
             if (executor != null) {
                 executor.shutdownNow();
+            }
+            if (scannerExecutor != null) {
+                scannerExecutor.shutdownNow();
             }
         }
     }

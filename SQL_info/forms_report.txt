@@ -42005,3 +42005,3293 @@ SQL ЗАПРОСЫ (3):
     component[cmptype=Action]: ACT_SEL_WAIL_LIST
         Статус: ✗ НЕ КОНВЕРТИРОВАН
 
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/barcode.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/barcode.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/confirm.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/confirm.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/composition_filter.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/composition_filter.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     IPRA/select_lpu.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="DIVISIONS" composition="DEFAULT_NG"
+    unit="DEPS" composition="DEFAULT_NAME_NG"
+    unit="SITES" composition="DEFAULT_NG"
+
+
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: getBarcode
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/alert.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/alert.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/report_call.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/report_call.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     RepTemplates/rep_template_d3
+     RepTemplates/rep_template_footer_d3
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ACC_FARM_PROD" composition="GRID"
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpDataSet: DsYears
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/hintAutoFill.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/hintAutoFill.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     LpuDict/lpudict_short_list_d3.frm
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ONKO_DOCTYPES" composition="DEFAULT"
+    unit="LPUDICT" composition="SHORT_GRID_LPU_NAME"
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/dependences.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/dependences.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#templates/base_form.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#templates/base_form.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: init
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsMain
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#templates/form_with_grid.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#templates/form_with_grid.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="ppName"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: init
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsMain
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AboutUs/subforms/versions.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AboutUs/subforms/versions.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_VERSIONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AboutUs/versions.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AboutUs/versions.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/AboutUs/versions.d
+            └── view.dfrm
+
+
+SubForm:
+     AboutUs/subforms/versions
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_LAST_VERSION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/division_rights_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/division_rights_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/d_cse_accesses.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pDIVISIONS"
+    └── "Права записи"
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AboutUs/familiar.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AboutUs/familiar.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_DDL_VERSIONS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DDL_VERSIONS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DDL_VERSIONS.GET_LAST_VERSION
+    D_PKG_USERS.SET_IS_FAMILIAR
+    D_PKG_USERS.GET_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getCurrentVersion
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SetIsFamiliar
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/#examples/repeaters.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/#examples/repeaters.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_SIMPLE_UNIT
+    D_V_SIMPLE_UNIT_SP
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_SIMPLE_UNIT
+    D_SIMPLE_UNIT_SP
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_SIMPLE_UNIT.DEL
+    D_PKG_SIMPLE_UNIT.UPG
+    D_PKG_SIMPLE_UNIT_SP.DEL
+    D_PKG_SIMPLE_UNIT_SP.UPG
+
+БРОКЕРЫ:
+    action:D_PKG_SIMPLE_UNIT.DEL;
+    action:D_PKG_SIMPLE_UNIT.UPG;
+    action:D_PKG_SIMPLE_UNIT_SP.DEL;
+    action:D_PKG_SIMPLE_UNIT_SP.UPG;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: AddUpdAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DsSimpleUnit
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DsSimpleUnitSp
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AboutUs/aboutus.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AboutUs/aboutus.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     AboutUs/subforms/versions
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_DDL_VERSIONS
+    D_V_SYS_SESSION_INFO
+    D_V_LICENSE_MDCMPLX
+    D_V_LICENSE_MDCMPLX_MDLS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DDL_VERSIONS
+    SYS
+    PRODUCT_COMPONENT_VERSION
+    D_LICENSE_MDCMPLX
+    D_LICENSE_MDCMPLX_MDLS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DDL_VERSIONS.GET_LAST_VERSION
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_LICENSE_SHOW
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getLicense
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getDBVersion
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_BILLVERSION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_LISVERSION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_SYS_PARAM
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_MODCOMPLEX
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/d_cse_accesses.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/d_cse_accesses.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CSE_ACCESSES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pCJ"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CSE_ACS_SPECS
+    D_SPECIALITIES
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermission
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDerive
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermissionAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDeriveAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSPrincipals
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSRights
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSRightsAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/d_sce_accesses_subform.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/d_sce_accesses_subform.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        CSE_ACCESSES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pCJ"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CSE_ACS_SPECS
+    D_SPECIALITIES
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: TogglePermission
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: ToggleDerive
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: TogglePermissionAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: ToggleDeriveAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSPrincipals
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSRights
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSRightsAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/principal_search.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/principal_search.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/AccessRights/principal_search.d
+            └── data.dfrm
+            └── script.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/doc_rights.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/doc_rights.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="P_DOCTYPES"
+│   └── "Обновить"
+│   
+├── name="P_SETING_RIGHTS"
+│   ├── "Обновить"
+│   ├── "Добавить"
+│   └── "Удалить"
+│   
+├── name="P_RIGHTS"
+│   └── "Обновить"
+│   
+└── name="P_DOCSTATUS_RIGHTS"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_7VZN_APPL_TYPES
+    D_V_CSE_ACCESSES_RIGHTS
+    D_V_CSE_RIGHTS
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS_BASE
+    D_V_7VZN_APPLICATION_STATUS
+    D_V_CABLAB
+    D_V_SPECIALITIES
+    D_V_EMPLOYERS
+    D_V_ROLES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_7VZN_APPL_TYPES
+    D_EMPLOYERS
+    D_AGENTS
+    D_SPECIALITIES
+    D_CABLAB
+    D_ROLES
+    D_SERVICES
+    D_CSE_ACCESSES
+    D_CSE_RIGHTS
+    D_CSE_ACS_ALL_RIGHTS
+    D_CSE_ACS_EMPS
+    D_CSE_ACS_EMP_RIGHTS
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_SPEC_RIGHTS
+    D_CSE_ACS_CABLABS
+    D_CSE_ACS_CL_RIGHTS
+    D_CSE_ACS_ROLES
+    D_CSE_ACS_ROLE_RIGHTS
+    D_CSE_ACS_SERVS
+    D_CSE_ACS_SERV_RIGHTS
+    D_7VZN_APPLICATION_STATUS
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 12
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getRightIdForStatus
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DelPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddRight
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddPrincipalReq
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipalReq
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DOCTYPES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_SETING_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DOCSTATUS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_UNITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessToCSP/AccessToCSP.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessToCSP/AccessToCSP.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Lis/Styles/styles
+     Lis/Utils/grid_utils
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="popupGridExSystems"
+│   └── "Обновить"
+│   
+└── name="popupGridPrincipals"
+    ├── "Обновить"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (6):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EX_SYSTEMS
+    D_V_CSE_ACS_ALL
+    D_V_EMPLOYERS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EX_SYSTEMS
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CSE_ACS_SPECS
+    D_SPECIALITIES
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_STR
+    D_CL_CSE_ACS_RIGHTS
+    D_INSERT_ID
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 6
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: addPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: delPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: setRight
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsExSystems
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsPrincipals
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: dsRightAccess
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectories/adddirectories.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirectories/adddirectories.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AddDirectories/adddirectories_edit.frm
+     AddDirectories/adddirectories_move.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADD_DIRECTORIES.DEL
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: ACTION_DEL
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/emp_level_rights.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/emp_level_rights.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/AccessRights/emp_----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AccessRights/lpu_rights.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AccessRights/lpu_rights.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRiglevel_rights.d
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/d_cse_accesses.frm
+     AccessRights/principal_search.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        2637373_отчет (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        LPU;
+        CSE_ACCESSES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pGR_L_R"
+│   ├── "Обновить"
+    └── (AutoPopup "LPU") - REP_TYPE="WEB-конструктор" - REP_CODE="2637373_отчет" "1" ("2637373_отчет")  
+│   
+└── name="pGR_PRIN"
+    ├── "Обновить"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EMPGRADES
+    D_V_CABLAB
+    D_V_SPECIALITIES
+    D_V_EMPLOYERS
+    D_V_ROLES
+    D_V_CSE_RIGHTS
+    D_V_CSE_ACS_ALL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EMPGRADES
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_SPECIALITIES
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_ROLES
+    D_CSE_RIGHTS
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CSE_ACS_EMPS
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+БРОКЕРЫ:
+    unit:CSE_ACCESSES  action:ADD_SPECIALITY_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_ROLE_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_CABLAB_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_EMP_RIGHT;
+    unit:CSE_ACCESSES  action:DEL_ACCS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 16
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GetRight3Id
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_LOCATE_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SPEC_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_ROLE_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_CABLAB_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_EMP_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermission
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermissionAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDerive
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDeriveAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_L_R
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSUNITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectories/ADD_DIRECTORIES.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirectories/ADD_DIRECTORIES.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectories/adddirectories_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirectories/adddirectories_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIRECTORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADD_DIRECTORIES.ADD
+    D_PKG_ADD_DIRECTORIES.UPD
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectories/adddirectories_move.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirectories/adddirectories_move.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CATALOGS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CATALOGS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_DOCUMENT.DOC_MOVE
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: AMove
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CAT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+hts/d_cse_accesses.frm
+     AccessRights/principal_search.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        2637373_отчет (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        LPU;
+        CSE_ACCESSES;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pGR_L_R"
+│   ├── "Обновить"
+    └── (AutoPopup "LPU") - REP_TYPE="WEB-конструктор" - REP_CODE="2637373_отчет" "1" ("2637373_отчет")  
+│   
+└── name="pGR_PRIN"
+    ├── "Обновить"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (10):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_LPU
+    D_V_CABLAB
+    D_V_SPECIALITIES
+    D_V_EMPLOYERS
+    D_V_ROLES
+    D_V_CSE_RIGHTS
+    D_V_CSE_ACS_ALL
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_CABLAB
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_SPECIALITIES
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_ROLES
+    D_CSE_RIGHTS
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CSE_ACS_EMPS
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+
+БРОКЕРЫ:
+    unit:CSE_ACCESSES  action:ADD_SPECIALITY_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_ROLE_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_CABLAB_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_EMP_RIGHT;
+    unit:CSE_ACCESSES  action:DEL_ACCS;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_CSE_ACS_RIGHTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 16
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GetRight3Id
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_LOCATE_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SPEC_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_ROLE_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_CABLAB_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_EMP_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermission
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermissionAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDerive
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ToggleDeriveAll
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_L_R
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSUNITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirRights/add_dir_view.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirRights/add_dir_view.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AddDirRights/add_dir_otobr.frm
+     AddDirRights/add_dir_otobr_tree.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIRECTORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DSadddirs
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirRights/add_dir_otobr.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirRights/add_dir_otobr.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/d_cse_accesses.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES_VIEW_ID
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_URPRIVS
+    D_USERROLES
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DSadddir_otobr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirRights/add_dir_otobr_tree.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirRights/add_dir_otobr_tree.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/d_cse_accesses.frm
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES_VIEW_ID
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_URPRIVS
+    D_USERROLES
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DSadddir_otobr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirUser/add_dir_user_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirUser/add_dir_user_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Add_Dirs/add_dirs_edit
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirUser/adddirectories_choise.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirUser/adddirectories_choise.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pAD"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES
+    D_V_CATALOGS
+    D_V_EMPLOYERS
+    D_V_USERS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIRECTORIES
+    D_CATALOGS
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_F_GET_ADDDIRVAL_WITH_RIGHTS
+    D_CL_ADDDIRVAL
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_VERSION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_ADD_DIRS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AdditionalDataMO/subforms/modal.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AdditionalDataMO/subforms/modal.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADDITIONAL_DATA_MO_TEST
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADDITIONAL_DATA_MO_TEST
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADDITIONAL_DATA_MO_TEST.ADD
+    D_PKG_ADDITIONAL_DATA_MO_TEST.UPD
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: GET_ADDITIONAL_DATA_MO_ITEM
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: INSERT_OR_UPDATE_ADDITIONAL_DATA_MO_ITEM
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/adddirectories_choise.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/adddirectories_choise.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AddDirectories/adddirectories.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pAD"
+    ├── "Обновить"
+    └── "Работа с мед. словарями"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIRECTORIES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_ADD_DIRS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AdditionalDataMO/additionalDataMO.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AdditionalDataMO/additionalDataMO.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AdditionalDataMO/subforms/modal.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="POPUP_MENU_ADDITIONAL_DATA_MO"
+    ├── "Добавить"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_LPU_BASE
+    D_V_ADDITIONAL_DATA_MO_TEST
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_LPU
+    D_ADDITIONAL_DATA_MO_TEST
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADDITIONAL_DATA_MO_TEST.BULK_DELETE
+    D_PKG_ADDITIONAL_DATA_MO_TEST.DEL
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: DELETE_ADDITIONAL_DATA_MO_ITEM
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DS_LPU
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpDataSet: DS_ADDITIONAL_DATA_MO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="Dict_Tree_Grid_popup"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIR_ROWS
+    D_V_ADD_DIRECTORIES
+    D_V_ADD_DIR_COLUMNS
+    D_V_ADD_DATATYPES
+    D_V_ADD_DIR_VALUES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_ADD_DIR_COLUMNS
+    D_ADD_DATATYPES
+    D_ADD_DIR_VALUES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_ADD_DIR_VALUES.GET_ID
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_ROW
+    D_COLUMN_ID
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getDictParam
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getValueIdbyRowId
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: Sel
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dirs_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/add_dirs_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIR_COLUMNS
+    D_V_ADD_DIRECTORIES_VIEW_ID
+    D_V_ADD_DIR_VALUES
+    D_V_ADD_DATATYPES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_COLUMNS
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_URPRIVS
+    D_USERROLES
+    D_ADD_DIR_VALUES
+    D_ADD_DATATYPES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_STD.FRM_D
+    D_PKG_CLOB_BUFFER.GET
+    D_PKG_ADD_DIR_ROWS.ADD
+    D_PKG_STR_TOOLS.DEL_NONPRINTING_CHARS
+    D_PKG_ADD_DIR_VALUES.ADD
+    D_PKG_STR_TOOLS.DEL_NONPRINTING_CHARS_CLOB
+    D_PKG_CLOB_BUFFER.ADD
+    D_PKG_ADD_DATATYPES.ADD
+    D_PKG_ADD_DIR_COLUMNS.ADD
+    D_PKG_CSE_RIGHTS.GET_ID
+    D_PKG_CSE_ACCESSES.ADD_EMP_RIGHT
+    D_PKG_ADD_DIR_VALUES.UPD
+    D_PKG_CLOB_BUFFER.UPD
+    D_PKG_CLOB_BUFFER.DEL
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_COLUMN_ID
+    D_ROW
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 5
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: SelectActionAddaction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_CURSOR_POSITION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AddDirUser/add_dir_user.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AddDirUser/add_dir_user.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/AddDirUser/add_dir_user.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AddDirUser/add_dir_user_edit.frm
+     AddDirUser/adddirectories_choise.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        ADD_DIR_ROWS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pAdd_Dirs"
+    ├── "Переместить в начало"
+    ├── "Вверх"
+    ├── "Вниз"
+    ├── "Переместить в конец"
+    ├── "Добавить"
+    ├── "Добавить в узел"
+    ├── "Редактировать"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (9):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES_VIEW_ID
+    D_V_ADD_DIRECTORIES
+    D_V_CSE_ACS_ALL
+    D_V_CABLAB
+    D_V_EMPLOYERS
+    D_V_ADD_DIR_COLUMNS
+    D_V_ADD_DIR_VALUES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_ADD_DIRECTORIES
+    D_URPRIVS
+    D_USERROLES
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_CSE_ACS_SPECS
+    D_SPECIALITIES
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+    D_DEPS
+    D_DIVISIONS
+    D_BUILDINGS
+    D_BUILD_FLOORS
+    D_CABLAB_TYPE
+    D_JOBTITLES
+    D_SPECIALITIES_ED
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+    D_ADD_DIR_COLUMNS
+    D_ADD_DIR_VALUES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_ACCESSES.GET_WHO_HAVE_RIGHT
+    D_PKG_CSE_ACCESSES.CHECK_RIGHT
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_ADD_DIR_ROWS.CHANGE_ORDER
+    D_PKG_ADD_DIR_VALUES.DEL_ROW
+    D_PKG_ADD_DIR_ROWS.DEL
+    D_PKG_CSE_ACCESSES.GET_ID_WITH_EMP_RIGHTS
+    D_PKG_ADD_DIR_ROWS.DEL_HIERARCHY
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_ID
+    D_ROW
+    D_P_EXC
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 10
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: getDirDictData
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectUser
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MoveAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkDir
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: ACTION_DEL_ADDDIR
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_ADDDIR_HIERARCHY
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectActionHid
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DSadddir_otobr_with_r
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSadddir_otobr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: locatedataset
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dir_columns_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/add_dir_columns_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIR_COLUMNS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_COLUMNS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADD_DIR_COLUMNS.ADD
+    D_PKG_ADD_DIR_COLUMNS.UPD
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="ADD_DATATYPES" composition="DEFAULT"
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_T_ID
+    D_T
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: InsertAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UpdateAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dirs_popupmenu.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/add_dirs_popupmenu.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     UnitExportImport/export_to_lpu.frm
+     UnitExportImport/.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pADD_DIRECTORIES"
+│   └── "Назначить всем права на все записи"
+│   
+└── name="pEXPORT2LPU"
+    └── "Выгрузить в другие МО"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EI_SCHEME_STR
+    D_V_ADD_DIR_ROWS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EI_SCHEME_STR
+    D_ADD_DIR_ROWS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_CSE_RIGHTS.GET_ID
+    D_PKG_CSE_ACCESSES.ADD_ALL_RIGHTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: selectScheme
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Admin/tools.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Admin/tools.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/move_value_to_node.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/move_value_to_node.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ADD_DIRECTORIES_VIEW_CSE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ADD_DIR_ROWS
+    D_URPRIVS
+    D_USERROLES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_ADD_DIR_ROWS.UPD
+    D_PKG_ADD_DIR_ROWS.GET_NEW_ORDER
+    D_PKG_TOOLS.STR_SEPARATE
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CL_STR
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: AMove
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AMoveEx
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_ADD_DIRS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AgentGynecDiseases/add_upd.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AgentGynecDiseases/add_upd.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_GYNEC_DISEASES
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_DISEASES
+    D_MKB10
+
+СИСТЕМНЫЕ ОПЦИИ:
+    IncludeRisar
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="MKB10" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_GYNEC_DISEASES;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 3
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: getIncludeRisar
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: ACT_SEL
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: ADD_UPD_AGENT_GYNES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AgentGynecOperation/select/employer_operation.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AgentGynecOperation/select/employer_operation.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_EMPLOYERS
+    D_V_LPU_BASE
+    D_V_AGENTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_EMPLOYERS
+    D_JOBTITLES
+    D_SPECIALITIES
+    D_SPECIALITIES_ED
+    D_DEPS
+    D_DEPS_KINDS
+    D_USERS
+    D_AGENTS
+    D_AGENT_ESIA
+    D_EMP_SKILL
+    D_SKILL_CATEGORIES
+    D_LPU
+    D_LPUDICT
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpDataSet: dsEmployers
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dirs_enh_services.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/add_dirs_enh_services.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pCATALOGS"
+    ├── "Обновить"
+    ├── "Список"
+    └── "Список"
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CATALOGS
+    D_V_SERVICES
+    D_V_LPU_SERVICES
+    D_V_CATALOGS_SYS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CATALOGS
+    D_SERVICES_STR
+    D_SERVICES
+    D_LPU_SERVICES
+    D_SERVTYPES
+    D_SERVPROFILES
+    D_FED_SERVICES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=DataSet]: DS_CATALOGS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_SERVICES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AgentGynecOperation/add_upd.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AgentGynecOperation/add_upd.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AgentGynecOperation/select/rendered_operations.frm
+     AgentGynecOperation/select/employer_operation.frm
+
+SQL ЗАПРОСЫ (5):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENT_GYNEC_OPERATION
+    D_V_LINKS
+    D_V_VISITS_BASE
+    D_V_LPUDICT_BASE
+    D_V_SERVICES_BASE
+    D_V_AGENTS_BASE
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENT_GYNEC_OPERATION
+    D_LPUDICT
+    D_AGENTS
+    D_SERVICES
+    D_MKB10
+    D_LINKS
+    D_VISITS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_AGENT_GYNEC_OPERATION.UPG
+    D_PKG_LINKS.DEL
+    D_PKG_LINKS.ADD
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="SERVICES" composition="GRID_OPER"
+    unit="LPUDICT" composition="SHORT_GRID_NAME_MAIN"
+    unit="MKB10" composition="DEFAULT"
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 5
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpAction: selectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getOperCode
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getServiceCode
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: getDoctorAgnName
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    cmpAction: addUpdAgentGynes
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/additional_work_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/additional_work_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (3):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_DIRECTORIES
+    D_V_AGENT_ADDITIONAL_WORK
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_DIRECTORIES
+    D_AGENT_ADDITIONAL_WORK
+    D_AGENTS
+    D_WORK_CAT_KIND
+
+СИСТЕМНЫЕ ОПЦИИ:
+    SportPlace
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="WORK_CAT_KIND" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENT_ADDITIONAL_WORK;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_CODE
+    D_NAME
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 4
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: GET_AGENT_ADDITIONAL_WORK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_SPORT_PLACE_OPTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UPDATE_AGENT_ADDITIONAL_WORK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_DIRECTORIES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/AgentGynecOperation/select/rendered_operations.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/AgentGynecOperation/select/rendered_operations.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="popupRenderedOperations"
+    └── "Обновить"
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENTS_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_LPU
+    D_V_VIS_DIAGNOSISES_BASE
+    D_V_MKB10_BASE
+    D_V_AGENT_PREGNANCY_BASE
+    D_V_PERSMEDCARD_BASE
+    D_V_DIRECTIONS_BASE
+    D_V_DIRECTION_SERVICES_BASE
+    D_V_SERVICES_BASE
+    D_V_VISITS_BASE
+    D_V_EMPLOYERS_FIO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS
+    D_EMPLOYERS
+    D_LPU
+    D_LPUDICT
+    D_GEOGRAFY
+    D_VIS_DIAGNOSISES
+    D_MKB10
+    D_AGENT_PREGNANCY
+    D_PERSMEDCARD
+    D_DIRECTIONS
+    D_DIRECTION_SERVICES
+    D_SERVICES
+    D_VISITS
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_TP_SN
+    D_TP_NSS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 1
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    cmpDataSet: dsRenderedOperations
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_edit.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Agents/agents_edit.d
+            └── data.dfrm
+            └── script.dfrm
+            └── view.dfrm
+
+     ===== UserFormsSamRMC =====
+        КАТАЛОГ: UserFormsSamRMC/Agents/agents_edit.d
+            └── view.dfrm
+
+     ===== UserFormsSaratov =====
+        КАТАЛОГ: UserFormsSaratov/Agents/agents_edit.d
+            └── agents_edit.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/base
+     Agents/subscript/accuracyDateCheck
+     Agents/subscript/zaprossnils
+     Agents/subscript/birthdate
+     Agents/subscript/SPFRzaprossnils
+     Agents/subforms_view/polis_oms
+     Agents/subforms_view/polis_dms
+     Persmedcard/subforms_view/registration
+     Agents/subforms_view/social_state
+     Agents/subforms_view/orphan_category
+     Agents/subforms_view/consitution
+     Agents/subforms_view/pregnancy
+     Agents/subforms_view/persdocs
+     Agents/subforms_view/marital_state
+     Agents/subforms_view/agent_relatives_docs
+     Agents/subforms_view/agent_details
+     Agents/subforms_view/work_place
+     Agents/subforms_view/inability
+     Agents/agent_regional_privs/regional_priv
+     Agents/subforms_view/federal_priv
+     Agents/agent_nosology_privs/nosology_priv
+     Agents/subforms_view/decretiv_group
+     Agents/subforms_view/gr_vaccination
+     Agents/subforms_view/gr_rentgenograph
+     Agents/subforms_view/names
+     Agents/subforms_fields/death
+     Agents/subforms_view/addr
+     Agents/subforms_view/orphan_place
+     Agents/subforms_view/contact
+     Agents/subforms_view/names_jur
+     Agents/subforms_fields/allergic_anamnes
+     Agents/subforms_fields/trf_anamnesis
+     Agents/subforms_fields/bad_habits
+     Agents/subforms_fields/inherited_diseases
+     Agents/subforms_fields/infertility
+     Agents/subforms_fields/PmcVaccinations
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (8):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_FED_NATIONALITIES
+    D_V_BJ_BULLETIN_CONTENTS_BASE
+    D_V_EX_SYSTEM_VALUES
+    D_V_LPUDICT_BASE
+    D_V_EMPLOYERS_BASE
+    D_V_PERSMEDCARD_EXTERNAL_BASE
+    D_V_AGENTS
+    D_V_URPRIVS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_FED_NATIONALITIES
+    D_BJ_BULLETIN_CONTENTS
+    D_EX_SYSTEM_VALUES
+    D_LPUDICT
+    D_EMPLOYERS
+    D_PERSMEDCARD_EXTERNAL
+    D_GEOGRAFY
+    D_AGENTS
+    D_URPRIVS
+    D_USERS
+    D_USERROLES
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG
+    D_PKG_STD.FRM_D
+    D_PKG_STD.SFRM_T
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_DAT_TOOLS.FULL_YEARS
+    D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+    D_PKG_EX_SYSTEM_VALUES.GET_VAL
+    D_PKG_URPRIVS.CHECK_BPPRIV
+
+СИСТЕМНЫЕ ОПЦИИ:
+    AgentInfChangeLN
+    Lpu_UpdFromPassport
+    Empl_UpdFromRMR
+    AgentDeathDateCheck
+    ShowSignByAge
+    VisibleStatusLgot
+    IntegrationEnabled
+    CheckFor_UNKNOWN
+    hideInfoMax
+    PassportMO
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="OKVED" composition="OKV"
+    unit="OKFS" composition="DEFAULT"
+    unit="GEOGRAFY" composition="DEFAULT"
+
+БРОКЕРЫ:
+    unit:AGENTS  action:GEN_CODE;
+    unit:AGENTS;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 10
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: handleFhirAgentDirectUpdate
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: checkSOInfEdit
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: isLPUSyncEnabled
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_SYSDATE
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GenCodeAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: UPDATE_ACTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: getPassportMO
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: setIsChangeManual
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_NATIONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_fifo/agents_fifo_edit.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_fifo/agents_fifo_edit.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (1):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENTS_FIFO
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_AGENTS_FIFO
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="AGENTS" composition="JURISTIC"
+
+БРОКЕРЫ:
+    unit:AGENTS_FIFO;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 2
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: SelectAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: saveAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_filter.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_filter.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Add_Dirs/add_dirs_enh.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Add_Dirs/add_dirs_enh.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     AccessRights/principal_search.frm
+     Add_Dirs/add_dirs_edit.frm
+     AccessRights/d_cse_accesses.frm
+     Add_Dirs/adddirectories_choise.frm
+     Add_Dirs/move_value_to_node.frm
+     Add_Dirs/add_dirs_enh_services.frm
+
+Коды подключаемого AutoPopUp меню на форме:
+        ADD_DIR_ROWS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+├── name="pAdd_Dirs"
+│   ├── "Переместить в начало"
+│   ├── "Вверх"
+│   ├── "Вниз"
+│   ├── "Переместить в конец"
+│   ├── "Отсортировать в этом уровне иерархии по алфавиту"
+│   ├── "Добавить в узел"
+│   ├── "Добавить"
+│   ├── "Редактировать"
+│   ├── "Удалить"
+│   ├── "Удалить с подзначениями"
+│   └── "Переместить в узел"
+│   
+└── name="pPRIN"
+    ├── "Добавить"
+    └── "Удалить"
+
+SQL ЗАПРОСЫ (16):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_CSE_ACS_ALL_CABLAB
+    D_V_CSE_ACS_ALL_EMPLOYER
+    D_V_EMPLOYERS_BASE
+    D_V_DEPS_BASE
+    D_V_SPECIALITIES
+    D_V_CSE_ACS_ALL_SPECIALITY
+    D_V_CSE_ACS_ALL_ROLE
+    D_V_CSE_ACS_ALL_SERVICE
+    D_V_CSE_ACS_ALL
+    D_V_ADD_DIRECTORIES
+    D_V_ADD_DIRECTORIES_VIEW_ID
+    D_V_ADD_DIRECTORIES_VIEW_CSE
+    D_V_CSE_ACCESSES
+    D_V_CSE_ACS_CABLABS
+    D_V_CSE_ACS_CL_RIGHTS
+    D_V_CSE_ACS_SPECS
+    D_V_CSE_ACS_SPEC_RIGHTS
+    D_V_CSE_ACS_EMPS
+    D_V_CSE_ACS_EMP_RIGHTS
+    D_V_CSE_ACS_ROLES
+    D_V_CSE_ACS_ROLE_RIGHTS
+    D_V_CSE_ACS_SERVS
+    D_V_CSE_ACS_SERV_RIGHTS
+    D_V_CSE_RIGHTS
+    D_V_ADD_DIR_COLUMNS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_CSE_ACCESSES
+    D_CSE_ACS_CABLABS
+    D_CABLAB
+    D_CSE_ACS_EMPS
+    D_EMPLOYERS
+    D_AGENTS
+    D_DEPS
+    D_SPECIALITIES
+    D_CSE_ACS_SPECS
+    D_CSE_ACS_ROLES
+    D_ROLES
+    D_CSE_ACS_SERVS
+    D_SERVICES
+    D_ADD_DIRECTORIES
+    D_ADD_DIR_ROWS
+    D_URPRIVS
+    D_USERROLES
+    D_CSE_ACS_CL_RIGHTS
+    D_CSE_ACS_SPEC_RIGHTS
+    D_CSE_ACS_EMP_RIGHTS
+    D_CSE_ACS_ROLE_RIGHTS
+    D_CSE_ACS_SERV_RIGHTS
+    D_CSE_RIGHTS
+    D_ADD_DIR_COLUMNS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS_MULTI
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CSE_ACCESSES.DEL_ACCS
+    D_PKG_ADD_DIR_ROWS.CHANGE_ORDER
+    D_PKG_ADD_DIR_ROWS.ORDER_INTO_HID
+    D_PKG_CSE_ACCESSES.ADD_ACCS
+    D_PKG_CSE_ACCESSES.SET_RIGHT
+    D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+    D_PKG_TOOLS.STR_SEPARATE
+    D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+    D_PKG_ADD_DIR_ROWS.ADD
+    D_PKG_ADD_DIR_VALUES.ADD
+
+БРОКЕРЫ:
+    unit:CSE_ACCESSES  action:ADD_SPECIALITY_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_ROLE_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_CABLAB_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_EMP_RIGHT;
+    unit:CSE_ACCESSES  action:ADD_SERV_RIGHT;
+    unit:CSE_ACCESSES  action:DEL_ACCS;
+    unit:ADD_DIR_VALUES  action:DEL_ROW;
+    unit:ADD_DIR_ROWS  action:DELETE;
+    unit:ADD_DIR_ROWS  action:DELETE_HIERARHY;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_STRAGG_EX
+    D_TP_STRAGG_REC
+    D_CL_CSE_ACS_RIGHTS
+    D_P_EXC
+    D_CL_STR
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 28
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: SEARCH_CHILDS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SPECIALITIES_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_ROLES_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_CABLABS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_EMPLOYERS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SET_SERVICES_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MassDeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MoveAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SortByABC
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: AddPrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DeletePrincipal
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: TogglePermission
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: Post_HIER
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_ADDDIR_VALUES
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_ADDDIR_ROWS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_ADDDIR_HIERARCHY
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: SelectActionHid
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GetRight3Id
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_LOCATE_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_PRIN
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RIGHTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_RIGHTS_DETAILS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSadddirs
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: locatedataset
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSadddir_otobr
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSUNITS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSUNITS_FILTER
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DSPERMIT
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_add.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_add.frm
+СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА
+Файл замены: UserFormsEgis3Tomsk/Agents/agents_add.frm
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Tomsk =====
+        ПОЛНАЯ ЗАМЕНА: UserFormsEgis3Tomsk/Agents/agents_add.frm
+        КАТАЛОГ: UserFormsEgis3Tomsk/Agents/agents_add.d
+            └── data.dfrm
+
+
+SubForm:
+     Agents/subscript/get_full_years
+     Agents/subscript/to_upper_case
+     Agents/subscript/snils
+     Agents/subscript/accuracyDateCheck
+     Agents/subscript/zaprossnils
+     Agents/subscript/birthdate
+     Agents/subscript/SPFRzaprossnils
+     Agents/subforms_fields/polis_oms
+     Agents/subforms_fields/polis_dms
+     Agents/subforms_fields/social_state
+     Agents/subforms_fields/consitution
+     Agents/subforms_fields/persdocs
+     Agents/subforms_fields/marital_state
+     Agents/subforms_fields/agent_relatives
+     Agents/subforms_fields/agent_details
+     Agents/subforms_fields/work_place
+     Agents/subforms_fields/category
+     Agents/subforms_fields/inability
+     Agents/subforms_fields/federal_priv
+     Agents/subforms_fields/decretiv_group
+     Agents/subforms_fields/gr_rentgenograph
+     Agents/subforms_fields/gr_vaccination
+     Agents/subforms_fields/names
+     Agents/subforms_fields/death
+     Agents/subforms_fields/addr
+     Agents/subforms_fields/contact
+     Agents/subforms_fields/names_jur
+     footerStyle
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (7):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_ANTHROP
+    D_V_FED_NATIONALITIES
+    D_V_SOCIALSTATES
+    D_V_PERSDOCTYPES
+    D_V_FN_DOC_TYPES_FED
+    D_V_FED_NSI_LINKS
+    D_V_FED_NSI_LINK_SP
+    D_V_FED_NSI
+    D_V_FED_NSI_VERS
+    D_V_COUNTRIES
+    D_V_AGNBANKS
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_ANTHROP
+    D_MEASURES
+    D_FED_NATIONALITIES
+    D_SOCIALSTATES
+    D_PERSDOCTYPES
+    D_MASKS
+    D_FN_DOC_TYPES_FED
+    D_FED_NSI_LINKS
+    D_FED_NSI_LINK_SP
+    D_FED_NSI
+    D_FED_NSI_VERS
+    D_COUNTRIES
+    D_AGNBANKS
+
+ИСПОЛЬЗУЕМЫЕ ПАКЕТЫ И ФУНКЦИИ:
+    D_PKG_VERSIONS.GET_VERSION_BY_LPU
+    D_PKG_CATALOGS.GET_FULL
+    D_PKG_AGENT_CONTACTS.ADD
+
+СИСТЕМНЫЕ ОПЦИИ:
+    ANTHROP_VEIWLIST
+    InabiltyStatusAndGroupCheck
+    CheckFor_UNKNOWN
+    SetSocStateAuto
+    AgnPersDocsDefCitizenship
+    PersDocTypeDefault
+    PersDocsType_Absent
+    hideInfoMax
+
+ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):
+    unit="OKVED" composition="OKV"
+    unit="OKFS" composition="DEFAULT"
+    unit="GEOGRAFY" composition="DEFAULT"
+    unit="CURRENCIES" composition="CUR"
+    unit="BANKACCTYPES" composition="BN_TYPE"
+    unit="AGNBANKS" composition="AGNB"
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+
+БРОКЕРЫ:
+    unit:CATALOGS  action:FIND_ROOT_CATALOG;
+    unit:AGENTS;
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 9
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: INIT_ACTION
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_AGENT_BY_BANK
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GET_FULL_CATALOG
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: RootCatalog
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: GenCodeAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: CheckAddFullAgents
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONSITUTIONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_CONSITUTION_SPS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_NATIONS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_juristic_person_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_juristic_person_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     ExSystems/exsystem_values.frm
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="P_AGENTS_JURISTIC_PERSON"
+    └── "Внешние системы"
+        └── "Мониторинг проведения диспансеризации детей-сирот"
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_juristic_person_popup_d3.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_juristic_person_popup_d3.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     (не найдено)
+
+SQL ЗАПРОСЫ (0):
+     (содержимое скрыто)
+
+----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents.frm
+СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА
+
+ЮЗЕРФОРМЫ:
+     ===== UserFormsEgis3Novosib =====
+        КАТАЛОГ: UserFormsEgis3Novosib/Agents/agents.d
+            └── data.dfrm
+
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agents_add.frm
+     Persmedcard/persmedcard_add_by_agent.frm
+     Agents/agents_edit.frm
+     Reports/AmbReps/amb_talon_A4_reg.frm
+     Reports/DispenseryReport/dispensaryreport_2017.frm
+     Reports/Reception/list_diagnosis.frm
+     Reports/AmbReps/drugs_025-5y88.frm
+     Reports/Reception/agreement_oper_children.frm
+     Reports/MedCard/025y.frm
+     Reports/KLD39/dispensaryreport.frm
+     Reports/PatientAgreement/statement_prik_empty.frm
+     Reports/PatientAgreement/statement_prik_empty_pred.frm
+     Reports/CardFluorogSur/CardFluorogSur.frm
+     Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm
+     Reports/MedCard/025y_2025.frm
+     Reports/PatientAgreement/pat_zayav_prikrep.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        amb_talon_A4_reg (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        contract_stac (WEB-конструктор);
+        contract_stac_p (WEB-конструктор);
+        inf_sogl_p (WEB-конструктор);
+        inf_sogl_inf (WEB-конструктор);
+        inf_sogl_gosp (WEB-конструктор);
+        inf_sogl_gosp_p (WEB-конструктор);
+        ivoice_barcode_cn_marsh (WEB-конструктор);
+        ivoice_barcode_cn_test (WEB-конструктор);
+        barcode_polis (WEB-конструктор);
+        barcode_sample_bloxina (WEB-конструктор);
+        sprvk_summ_lech_pol_prikaz (WEB-конструктор);
+        INF_INVALID_IPR12 (WEB-конструктор);
+        barcode_sample_93 (WEB-конструктор);
+        barcode_id_card (WEB-конструктор);
+        amb_talon_A4_reg_4 (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        amb_talon_A4_reg (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm;
+        reception_agreement_personal_info88 (WEB-конструктор);
+        ----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_jur.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_jur.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     Agents/search_agent
+
+Список вызываемых форм в JS:
+     Agents/agents_add.frm
+     Agents/agents_edit.frm
+     Reports/AmbReps/amb_talon_A4_reg.frm
+     Reports/DispenseryReport/dispensaryreport_2017.frm
+     Reports/Reception/list_diagnosis.frm
+     Reports/AmbReps/drugs_025-5y88.frm
+     Reports/Reception/agreement_oper_children.frm
+     Reports/MedCard/025y.frm
+     Reports/KLD39/dispensaryreport.frm
+     Reports/PatientAgreement/statement_prik_empty.frm
+     Reports/PatientAgreement/statement_prik_empty_pred.frm
+     Reports/CardFluorogSur/CardFluorogSur.frm
+     Reporbarcode_invoice (WEB-конструктор);
+        amb_talon_A4_reg_1 (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm;
+        081_1y (WEB-конструктор);
+        ivoice_barcode_cn (WEB-конструктор);
+        list_diagnosis_old (WEB-форма) Reports/Reception/list_diagnosis.frm;
+        test_AGENT (WEB-конструктор);
+        pot_025-5у-88 (WEB-форма) Reports/AmbReps/drugs_025-5y88.frm;
+        reception_agreement_personal_info_tver (WEB-кts/GynecProfile/gynec_profile_card_025_y_8_9.frm
+     Reports/MedCard/025y_2025.frm
+     Reports/PatientAgreement/pat_zayav_prikrep.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        amb_talon_A4_reg (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        contract_stac (WEB-конструктор);
+        contract_stac_p (WEB-конструктор);
+        inf_sogl_p (WEB-конструктор);
+        inf_sogl_inf (WEB-конструктонструктор);
+        1234321 (WEB-форма) Reports/Reception/agreement_oper_children.frm;
+        ZAYAV_NA_PRIKREPLEN (WEB-конструктор);
+        barcode_invoice_09122020 (WEB-конструктор);
+        list_diagnosis (WEB-конструктор);
+        barcode_amb_card (WEB-конструктор);
+        025/y_cope_test (WEB-форма) Reports/MedCard/025y.frm;
+        dispensary_report_a4_half_kaliningrad (WEB-форма) Reports/KLD39/dispensaryreport.frm;
+      ----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_natural_return_fio_popup.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_natural_return_fio_popup.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agents_edit.frm
+     Agents/agents_add.frm
+     Reports/AmbReps/amb_talon_A4_reg.frm
+     Reports/DispenseryReport/dispensaryreport_2017.frm
+     Reports/Reception/list_diagnosis.frm
+     Reports/AmbReps/drugs_025-5y88.frm
+     Reports/Reception/agreement_oper_children.frm
+     Reports/MedCard/025y.frm
+     Reports/KLD39/dispensaryreport.frm
+     Reports/PatientAgreement/statement_prik_empty.frm
+     Reports/PatientAgreement/statement_prik_empty_pred.frm
+     Reports/  Child's_history_development_1 (WEB-конструктор);
+        statement_prik_empty (WEB-форма) Reports/PatientAgreement/statement_prik_empty.frm;
+        112/y_01 (WEB-конструктор);
+        statement_prik_empty_pred (WEB-форма) Reports/PatientAgreement/statement_prik_empty_pred.frm;
+        PSY_SPRAVKA_OTV (WEB-конструктор);
+        TEST_PMC_1 (WEB-конструктор);
+        CardFluorogSur (WEB-форма) Reports/CardFluorogSur/CardFluorogSur.frm;
+        gynec_profile_card_025_y_8_9 (WEB-форма) Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm;
+        infosogl (WEB-конструктор);
+        025/y (WEB-форма) Reports/MedCard/025y_2025.frm;
+        025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm;
+        pat_zayav_prikrep (WEB-форма) Reports/PatientAgreement/pat_zayav_prikrep.frm;
+        ZAYAVLENIE_EDF_PRINT (WEB-конструктор);
+
+Коды подключаемого AutoPopUp меню на форме:
+        AGENTS;
+
+
+Контекстное меню используемое на форме (ПКМ) – данные из OracleSQL:
+
+└── name="pAGENTS"
+    ├── "Обновить"
+    ├── "Редактировать"
+    ├── "Добавить"
+    ├── "Добавить карту пациента"
+    ├── "Переместить"
+    ├── "Удалить"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_reg"                       "ТАП(рег.форма)_Ростов" ("025-12/уТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4 РЕГИОНАЛЬНАЯ_Ростов")   Form="Reports/AmbReps/amb_talon_A4_reg.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_stac"                          "Согласие на предоставление сведений третьим лицам" ("договор (пациент) - стационар")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="contract_stac_p"                        "Согласие на предоставление сведений третьим лицам" ("договор (заказчик) - стационар")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="inf_sogl_p"                             "Согласие на предоставление сведений третьим лицам" ("информированное согласие (представитель)")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="inf_sogl_inf"                           "Согласие на предоставление сведений третьим лицам" ("информированное согласие на проведение обследования на ВИЧ-инфекцию")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="inf_sogl_gosp"                          "Согласие на предоставление сведений третьим лицам" ("информированное согласие на госпитализацию")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="inf_sogl_gosp_p"                        "Согласие на предоставление сведений третьим лицам" ("информированное согласие на госпитализацию (представитель)")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="ivoice_barcode_cn_marsh"                "Счет-заказ с ШК номер карты" ("Маршрутный лист с ШК номер карты")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="ivoice_barcode_cn_test"                 "Счет-заказ с ШК номер карты" ("Счет-заказ с ШК номер карты ТЕСТ")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_polis"                          "Амбулаторная карта с штрих-кодом" ("ТАП + штрихкод полис")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_sample_bloxina"                 "BARCODE" ("Пример встраивания штрихкода в веб конструктор Блохина ")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="sprvk_summ_lech_pol_prikaz"             "Справка о стоимости лечения (приказ)." ("Справка о стоимости лечения (по приказу) поликлиника")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="INF_INVALID_IPR12"                      "ИПР" ("Данные о инвалидах ИПР 12")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_sample_93"                      "шк 93" ("Пример встраивания штрихкода в веб конструктор (code 93)")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_id_card"                        "Идетнификационная карта" ("Идентификационная карта")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_reg_4"                     "ТАП(рег.форма)_Ростов" ("025-12/уТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4 РЕГИОНАЛЬНАЯ_Ростов")   Form="Reports/AmbReps/amb_talon_A4_reg.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_reg"                       "Талон амбулаторного пациента РТ" ("025-12/уТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4 РЕГИОНАЛЬНАЯ_Татарстан_")   Form="Reports/DispenseryReport/dispensaryreport_2017.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_personal_info88"    "testovyi" ("Пользовательское соглашение на обработку персональных данных88")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_invoice"                        "счет-заказ" ("Счет-заказ")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="amb_talon_A4_reg_1"                     "Талон амбулаторного пациента РТ" ("025-12/уТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА A4 РЕГИОНАЛЬНАЯ_Татарстан_")   Form="Reports/DispenseryReport/dispensaryreport_2017.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="081_1y"                                 "1Карта антибактериального лечения (к медицинской карте) больного туберкулезом" ("Карта антибактериального лечения (к медицинской карте) больного туберкулезом")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="ivoice_barcode_cn"                      "Счет-заказ с ШК номер карты" ("Счет-заказ с ШК номер карты")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="list_diagnosis_old"                     "Лист для записи заключительных (уточненных) диагнозов" ("Лист для записи заключительных (уточненных) диагнозов_old")   Form="Reports/Reception/list_diagnosis.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_AGENT"                             "Тест параметров AGENT и AGENT_ID" ("Тест переменной AGENT и AGENT_ID")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="pot_025-5у-88"                          "Мед.карта амбулаторного наркологического больного(025-5/у-88)" ("Медицинская карта амбулаторного наркологического больного (025-5/у-88)")   Form="Reports/AmbReps/drugs_025-5y88.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="sprvk_summ_lech_pol_prikaz"             "Справка о стоимости лечения (приказ)." ("Справка о стоимости лечения (по приказу) поликлиника")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_personal_info_tver" "231351" ("ИНФ СОГЛ")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="1234321"                                "Согласие " ("лолкек")   Form="Reports/Reception/agreement_oper_children.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_AGENT"                             "Тест параметров AGENT и AGENT_ID" ("Тест переменной AGENT и AGENT_ID")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="1234321"                                "Согласие " ("лолкек")   Form="Reports/Reception/agreement_oper_children.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="ZAYAV_NA_PRIKREPLEN"                    "Заявление на прикрепление" ("Заявление на прикрепление")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_invoice_09122020"               "счет-заказ" ("Счет-заказ_09122020")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="list_diagnosis"                         "Лист для записи заключительных (уточненных) диагнозов" ("Лист для записи заключительных (уточненных) диагнозов")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="barcode_amb_card"                       "Амбулаторная карта со штрих кодом" ("Амбулаторная карта пациента")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y_cope_test"                        "025/y" ("Медицинская карта пациента")   Form="Reports/MedCard/025y.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="dispensary_report_a4_half_kaliningrad"  "Талон амбулаторного пациента1111" ("ТАЛОН АМБУЛАТОРНОГО ПАЦИЕНТА половина A4 (Калининград)")   Form="Reports/KLD39/dispensaryreport.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="Child's_history_development_1"          "112/у История развития ребенка стр. 1" ("112/у История развития ребенка стр. 1")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="statement_prik_empty"                   "Заявление о прикреплении (взрослый)" ("Заявление о прикреплении (взрослый)")   Form="Reports/PatientAgreement/statement_prik_empty.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="112/y_01"                               "112/у стр1" ("112/у История развития ребенка  стр. 1")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="statement_prik_empty_pred"              "Заявление о прикреплении (ребенок)" ("Заявление о прикреплении (ребенок)")   Form="Reports/PatientAgreement/statement_prik_empty_pred.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="PSY_SPRAVKA_OTV"                        "Отчет псих" ("Ответ на запрос о нахождении пациента на учете в учреждениях оказывающих психиатрическую помощь")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="sprvk_summ_lech_pol_prikaz"             "Справка о стоимости лечения (приказ)." ("Справка о стоимости лечения (по приказу) поликлиника")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="reception_agreement_personal_info_tver" "231351" ("ИНФ СОГЛ")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="test_AGENT"                             "Тест параметров AGENT и AGENT_ID" ("Тест переменной AGENT и AGENT_ID")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="1234321"                                "Согласие " ("лолкек")   Form="Reports/Reception/agreement_oper_children.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="TEST_PMC_1"                             "Тест пмц 1" ("Тест пмц1")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="CardFluorogSur"                         "052/у - Карта профилактических флюорографических обследований" ("Карта профилактических флюорографических обследований (форма 052/у)")   Form="Reports/CardFluorogSur/CardFluorogSur.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="gynec_profile_card_025_y_8_9"           "025/у Карта пациента гинекологического профиля (8-9 листы)" ("025/у Карта пациента гинекологического профиля (8-9 листы)")   Form="Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="infosogl"                               "Информационное согласие" ("инфосогласие")  
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/y"                                  "025/y" ("специально для печати из завершения записи")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="025/у_2025"                             "025/y" ("Медицинская карта пациента, получающего медицинскую помощь в амбулаторных условиях_2025")   Form="Reports/MedCard/025y_2025.frm"
+    ├── (AutoPopup "AGENTS") - REP_TYPE="WEB-форма"       - REP_CODE="pat_zayav_prikrep"                      "Прикрепление" ("Заявление о прикреплении к участку")   Form="Reports/PatientAgreement/pat_zayav_prikrep.frm"
+    └── (AutoPopup "AGENTS") - REP_TYPE="WEB-конструктор" - REP_CODE="ZAYAVLENIE_EDF_PRINT"                   "Заявление на прикрепление" ("Заявление на ведение ЭМДО по пациенту в бумажной форме")  
+
+SQL ЗАПРОСЫ (2):
+     (содержимое скрыто)
+
+ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:
+    D_V_AGENTS
+    D_V_CATALOGS
+    D_V_PERSMEDCARD
+
+ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):
+    D_GEOGRAFY
+    D_AGENTS
+    D_CATALOGS
+    D_PERSMEDCARD
+    D_BLOODGROUPE
+    D_DIVISIONS
+    D_RHESUS
+    D_EMPLOYERS
+    D_CABLAB
+
+JS Unit Compositions (только из вызовов openWindow/openD3Form):
+    unit:CATALOGS  composition:DEFAULT;
+
+БРОКЕРЫ:
+    unit:AGENTS  action:DEL_FULL;
+    unit:AGENTS  action:MOVE_OUT;
+
+РАЗОБРАТЬ АНАЛИТИКОМ:
+    D_AGENTS
+
+СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:
+    Всего SQL запросов: 4
+    Конвертировано (с Router): 0
+    Процент конвертации: 0,0%
+    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА
+
+ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:
+    component[cmptype=Action]: checkPersMedCard
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: DEL_AGENTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=Action]: MoveAction
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+    component[cmptype=DataSet]: DS_AGENTS
+        Статус: ✗ НЕ КОНВЕРТИРОВАН
+
+CardFluorogSur/CardFluorogSur.frm
+     Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm
+     Reports/MedCard/025y_2025.frm
+     Reports/PatientAgreement/pat_zayav_prikrep.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        amb_talon_A4_reg (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        contract_stac (WEB-конструктор);
+        contract_stac_p (WEB-конструктор);
+        inf_sogl_p (WEB-конструктор);
+ор);
+        inf_sogl_gosp (WEB-конструктор);
+        inf_sogl_gosp_p (WEB-конструктор);
+        ivoice_barcode_cn_marsh (WEB-конструктор);
+        ivoice_barcode_cn_test (WEB-конструктор);
+        barcode_polis (WEB-конструктор);
+        barcode_sample_bloxina (WEB-конструктор);
+        sprvk_summ_lech_pol_prikaz (WEB-конструктор);
+        INF_INVALID_IPR12 (WEB-конструктор);
+        barcode_sample_93 (WEB-к----------------------------------------------------------------------------------------------------
+ФОРМА: Forms/Agents/agents_juristic_composition.frm
+----------------------------------------------------------------------------------------------------
+Базовая форма: Forms/Agents/agents_juristic_composition.frm
+СТАТУС: БАЗОВАЯ ФОРМА
+
+ЮЗЕРФОРМЫ:
+     (не найдено)
+
+SubForm:
+     (не найдено)
+
+Список вызываемых форм в JS:
+     Agents/agents_add.frm
+     Persmedcard/persmedcard_add_by_agent.frm
+     Agents/agents_edit.frm
+     Reports/AmbReps/amb_talon_A4_reg.frm
+     Reports/DispenseryReport/dispensaryreport_2017.frm
+     Reports/Reception/list_diagnosis.frm
+     Reports/AmbReps/drugs_025-5y88.frm
+     Reports/Reception/agreement_oper_children.frm
+     Reports/MedCard/025y.frm
+     Reports/KLD39/dispensaryreport.frm
+     Reports/PatientAgreement/statement_prik_empty.frm
+     Reports/PatientAgreement/statemонструктор);
+        barcode_id_card (WEB-конструктор);
+        amb_talon_A4_reg_4 (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        amb_talon_A4_reg (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm;
+        reception_agreement_personal_info88 (WEB-конструктор);
+        barcode_invoice (WEB-конструктор);
+        amb_talon_A4_reg_1 (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm;
+        081_1y (WEB-консent_prik_empty_pred.frm
+     Reports/CardFluorogSur/CardFluorogSur.frm
+     Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm
+     Reports/MedCard/025y_2025.frm
+     Reports/PatientAgreement/pat_zayav_prikrep.frm
+
+Отчеты вызываемые на форме (коды/формы отчета):
+        amb_talon_A4_reg (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm;
+        contract_stac (WEB-конструктор);
+        contract_stac_p (WEB-конструктор);
+        inf_        inf_sogl_inf (WEB-конструктор);
+        inf_sogl_gosp (WEB-конструктор);
+        inf_sogl_gosp_p (WEB-конструктор);
+        ivoice_barcode_cn_marsh (WEB-конструктор);
+        ivoice_barcode_cn_test (WEB-конструктор);
+        barcode_polis (WEB-конструктор);
+        barcode_sample_bloxina (WEB-конструктор);
+        sprvk_summ_lech_pol_prikaz (WEB-конструктор);
+        INF_INVALID_IPR12 (WEB-конструтруктор);
+        ivoice_barcode_cn (WEB-конструктор);
+        list_diagnosis_old (WEB-форма) Reports/Reception/list_diagnosis.frm;
+        test_AGENT (WEB-конструктор);
+        pot_025-5у-88 (WEB-форма) Reports/AmbReps/drugs_025-5y88.frm;
+        reception_agreement_personal_info_tver (WEB-конструктор);
+        1234321 (WEB-форма) Reports/Reception/agreement_oper_children.frm;
+        ZAYAV_NA_PRIKREPLEN (WEB-конструктор);
+        b

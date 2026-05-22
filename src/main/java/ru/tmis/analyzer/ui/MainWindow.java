@@ -81,7 +81,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.11 (от 22-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.12 (от 22-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -111,6 +111,12 @@ public class MainWindow extends JFrame {
         startButton = new JButton("Запуск анализа");
         startButton.setBackground(new Color(76, 175, 80));
         startButton.addActionListener(e -> startAnalysis());
+
+        JButton parallelScanButton = new JButton("🚀 Параллельное сканирование проекта");
+        parallelScanButton.setBackground(new Color(33, 150, 243));
+        parallelScanButton.addActionListener(e -> startParallelFullProjectScan());
+        buttonPanel.add(parallelScanButton);
+
 
         stopButton = new JButton("Остановка");
         stopButton.setEnabled(false);
@@ -473,8 +479,6 @@ public class MainWindow extends JFrame {
         return safeName + ".txt";
     }
 
-    // ui/MainWindow.java
-
     /**
      * Запускает анализ выбранных форм
      */
@@ -503,25 +507,48 @@ public class MainWindow extends JFrame {
             normalizedForms.add(normalized);
         }
 
-        // Если ничего не выбрано - спрашиваем о сканировании всего проекта
+        // Если ничего не выбрано - предлагаем выделить всё дерево
         if (normalizedForms.isEmpty()) {
             int confirm = JOptionPane.showConfirmDialog(this,
-                    "Сейчас будет просканирован весь проект и построен отчет.\n" +
-                            "Это может занять не один час.\n\n" +
-                            "Вы готовы подождать?",
-                    "Сканирование всего проекта",
+                    "Не выбрано ни одной формы.\n\n" +
+                            "Выделить все формы в дереве и запустить анализ?",
+                    "Выделить все формы",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.QUESTION_MESSAGE);
 
             if (confirm != JOptionPane.YES_OPTION) {
-                appendLog("Сканирование отменено пользователем");
+                appendLog("Анализ отменён пользователем");
                 return;
             }
 
-            appendLog("Начинаем сканирование всего проекта...");
-            startFullProjectScan();
-            return;
+            // Выделяем все узлы в дереве
+            formsTreePanel.selectAllNodes();
+
+            // Повторно получаем выбранные формы после выделения
+            selectedForms = formsTreePanel.getSelectedForms();
+            normalizedForms.clear();
+            for (String form : selectedForms) {
+                String normalized = form;
+                if (normalized.contains("/Forms/") && normalized.lastIndexOf("/Forms/") > 0) {
+                    normalized = normalized.substring(normalized.lastIndexOf("/Forms/") + 1);
+                }
+                if (normalized.startsWith("/")) {
+                    normalized = normalized.substring(1);
+                }
+                if (!normalized.startsWith("Forms/") && !normalized.startsWith("UserForms")) {
+                    normalized = "Forms/" + normalized;
+                }
+                normalizedForms.add(normalized);
+            }
+
+            if (normalizedForms.isEmpty()) {
+                appendLog("Нет форм для анализа");
+                return;
+            }
+
+            appendLog("Выделено форм для анализа: " + normalizedForms.size());
         }
+
         appendLog("Выбрано форм для анализа: " + normalizedForms.size());
         for (String form : normalizedForms) {
             appendLog("  - " + form);
@@ -561,7 +588,6 @@ public class MainWindow extends JFrame {
             }
         });
     }
-
 
     /**
      * Запускает полное сканирование проекта и анализ всех форм
@@ -1199,5 +1225,42 @@ public class MainWindow extends JFrame {
         statusLabel.setText("Статус: Параллельный рекурсивный анализ...");
 
         parallelBuilder.startRecursiveBuild(startForms);
+    }
+    private void startParallelFullProjectScan() {
+        if (parallelBuilder.isRunning()) {
+            appendLog("Параллельный анализ уже выполняется");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "ПАРАЛЛЕЛЬНОЕ СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА\n\n" +
+                        "Будут обработаны ТОЛЬКО формы, для которых ещё нет отчётов.\n" +
+                        "Количество потоков: " + config.getParallelThreads() + "\n" +
+                        "Доступно ядер: " + Runtime.getRuntime().availableProcessors() + "\n\n" +
+                        "Это может занять продолжительное время.\n" +
+                        "Продолжить?",
+                "Параллельное сканирование проекта",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            appendLog("Параллельное сканирование отменено пользователем");
+            return;
+        }
+
+        appendLog("Начинаем параллельное сканирование всего проекта...");
+        appendLog("Количество потоков: " + config.getParallelThreads());
+
+        // Включаем режим полного сканирования
+        parallelBuilder.setFullProjectScan(true);
+
+        startButton.setEnabled(false);
+        stopButton.setEnabled(true);
+        settingsButton.setEnabled(false);
+        progressBar.setValue(0);
+        progressBar.setIndeterminate(true);
+        statusLabel.setText("Статус: Параллельное сканирование проекта...");
+
+        parallelBuilder.startRecursiveBuild(null);
     }
 }

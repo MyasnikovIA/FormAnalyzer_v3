@@ -19193,3 +19193,857 @@ Forms/Registry/PmcSearch/patient_info.frm;СО;ERHospPlanKind
 Forms/Registry/PmcSearch/patient_info.frm;СО;CheckForOMS_CardType
 Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_C_ID
 Forms/Registry/PmcSearch/patient_info.frm;Неопределенные;D_P_EXC
+Forms/#examples/composition_filter.frm;формы JS;IPRA/select_lpu.frm
+Forms/#examples/composition_filter.frm;Универсальные композиции;unit=""DIVISIONS"" composition=""DEFAULT_NG""
+Forms/#examples/composition_filter.frm;Универсальные композиции;unit=""DEPS"" composition=""DEFAULT_NAME_NG""
+Forms/#examples/composition_filter.frm;Универсальные композиции;unit=""SITES"" composition=""DEFAULT_NG""
+Forms/#examples/report_call.frm;subForm;RepTemplates/rep_template_d3
+Forms/#examples/report_call.frm;subForm;RepTemplates/rep_template_footer_d3
+Forms/#examples/report_call.frm;Универсальные композиции;unit=""ACC_FARM_PROD"" composition=""GRID""
+Forms/#examples/hintAutoFill.frm;формы JS;LpuDict/lpudict_short_list_d3.frm
+Forms/#examples/hintAutoFill.frm;Универсальные композиции;unit=""ONKO_DOCTYPES"" composition=""DEFAULT""
+Forms/#examples/hintAutoFill.frm;Универсальные композиции;unit=""LPUDICT"" composition=""SHORT_GRID_LPU_NAME""
+Forms/AboutUs/versions.frm;Юзерформы;UserFormsEgis3Novosib/AboutUs/versions.d/view.dfrm
+Forms/AboutUs/versions.frm;subForm;AboutUs/subforms/versions
+Forms/AccessRights/division_rights_popup.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/AboutUs/familiar.frm;Вьюхи;D_V_DDL_VERSIONS
+Forms/AboutUs/familiar.frm;Таблицы;D_DDL_VERSIONS
+Forms/AboutUs/familiar.frm;Пакеты и функции;D_PKG_DDL_VERSIONS.GET_LAST_VERSION
+Forms/AboutUs/familiar.frm;Пакеты и функции;D_PKG_USERS.SET_IS_FAMILIAR
+Forms/AboutUs/familiar.frm;Пакеты и функции;D_PKG_USERS.GET_ID
+Forms/#examples/repeaters.frm;Вьюхи;D_V_SIMPLE_UNIT
+Forms/#examples/repeaters.frm;Вьюхи;D_V_SIMPLE_UNIT_SP
+Forms/#examples/repeaters.frm;Таблицы;D_SIMPLE_UNIT
+Forms/#examples/repeaters.frm;Таблицы;D_SIMPLE_UNIT_SP
+Forms/#examples/repeaters.frm;Пакеты и функции;D_PKG_SIMPLE_UNIT.DEL
+Forms/#examples/repeaters.frm;Пакеты и функции;D_PKG_SIMPLE_UNIT.UPG
+Forms/#examples/repeaters.frm;Пакеты и функции;D_PKG_SIMPLE_UNIT_SP.DEL
+Forms/#examples/repeaters.frm;Пакеты и функции;D_PKG_SIMPLE_UNIT_SP.UPG
+Forms/AboutUs/aboutus.frm;subForm;AboutUs/subforms/versions
+Forms/AboutUs/aboutus.frm;Вьюхи;D_V_DDL_VERSIONS
+Forms/AboutUs/aboutus.frm;Вьюхи;D_V_SYS_SESSION_INFO
+Forms/AboutUs/aboutus.frm;Вьюхи;D_V_LICENSE_MDCMPLX
+Forms/AboutUs/aboutus.frm;Вьюхи;D_V_LICENSE_MDCMPLX_MDLS
+Forms/AboutUs/aboutus.frm;Таблицы;D_DDL_VERSIONS
+Forms/AboutUs/aboutus.frm;Таблицы;SYS
+Forms/AboutUs/aboutus.frm;Таблицы;PRODUCT_COMPONENT_VERSION
+Forms/AboutUs/aboutus.frm;Таблицы;D_LICENSE_MDCMPLX
+Forms/AboutUs/aboutus.frm;Таблицы;D_LICENSE_MDCMPLX_MDLS
+Forms/AboutUs/aboutus.frm;Пакеты и функции;D_PKG_DDL_VERSIONS.GET_LAST_VERSION
+Forms/AboutUs/aboutus.frm;Неопределенные;D_P_LICENSE_SHOW
+Forms/AccessRights/d_cse_accesses.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessRights/d_cse_accesses.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessRights/d_cse_accesses.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CABLAB
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_EMPLOYERS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_AGENTS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_SPECIALITIES
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_ROLES
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessRights/d_cse_accesses.frm;Таблицы;D_SERVICES
+Forms/AccessRights/d_cse_accesses.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/AccessRights/d_cse_accesses.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessRights/d_cse_accesses.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.DEL_ACCS
+Forms/AccessRights/d_cse_accesses.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessRights/d_cse_accesses.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+Forms/AccessRights/d_cse_accesses.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/AccessRights/d_sce_accesses_subform.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessRights/d_sce_accesses_subform.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessRights/d_sce_accesses_subform.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CABLAB
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_EMPLOYERS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_AGENTS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_SPECIALITIES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_ROLES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_SERVICES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_JOBTITLES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_DEPS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_DEPS_KINDS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_USERS
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_AGENT_ESIA
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_EMP_SKILL
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_LPU
+Forms/AccessRights/d_sce_accesses_subform.frm;Таблицы;D_LPUDICT
+Forms/AccessRights/d_sce_accesses_subform.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessRights/d_sce_accesses_subform.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.DEL_ACCS
+Forms/AccessRights/d_sce_accesses_subform.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessRights/d_sce_accesses_subform.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+Forms/AccessRights/d_sce_accesses_subform.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/AccessRights/d_sce_accesses_subform.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/AccessRights/principal_search.frm;Юзерформы;UserFormsEgis3Novosib/AccessRights/principal_search.d/data.dfrm
+Forms/AccessRights/principal_search.frm;Юзерформы;UserFormsEgis3Novosib/AccessRights/principal_search.d/script.dfrm
+Forms/AccessRights/doc_rights.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_7VZN_APPL_TYPES
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_CSE_ACCESSES_RIGHTS
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_CSE_RIGHTS
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_7VZN_APPLICATION_STATUS
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_CABLAB
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_SPECIALITIES
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AccessRights/doc_rights.frm;Вьюхи;D_V_ROLES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_7VZN_APPL_TYPES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_EMPLOYERS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_AGENTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_SPECIALITIES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CABLAB
+Forms/AccessRights/doc_rights.frm;Таблицы;D_ROLES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_SERVICES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_ALL_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_EMP_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_SPEC_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_CL_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_ROLE_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CSE_ACS_SERV_RIGHTS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_7VZN_APPLICATION_STATUS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_DEPS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_DIVISIONS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_BUILDINGS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_BUILD_FLOORS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_CABLAB_TYPE
+Forms/AccessRights/doc_rights.frm;Таблицы;D_JOBTITLES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AccessRights/doc_rights.frm;Таблицы;D_DEPS_KINDS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_USERS
+Forms/AccessRights/doc_rights.frm;Таблицы;D_AGENT_ESIA
+Forms/AccessRights/doc_rights.frm;Таблицы;D_EMP_SKILL
+Forms/AccessRights/doc_rights.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AccessRights/doc_rights.frm;Таблицы;D_LPU
+Forms/AccessRights/doc_rights.frm;Таблицы;D_LPUDICT
+Forms/AccessRights/doc_rights.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AccessRights/doc_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessRights/doc_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.DEL_ACCS
+Forms/AccessRights/doc_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessRights/doc_rights.frm;Неопределенные;D_P_EXC
+Forms/AccessToCSP/AccessToCSP.frm;subForm;Lis/Styles/styles
+Forms/AccessToCSP/AccessToCSP.frm;subForm;Lis/Utils/grid_utils
+Forms/AccessToCSP/AccessToCSP.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessToCSP/AccessToCSP.frm;Вьюхи;D_V_EX_SYSTEMS
+Forms/AccessToCSP/AccessToCSP.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessToCSP/AccessToCSP.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_EX_SYSTEMS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CABLAB
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_EMPLOYERS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_AGENTS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_SPECIALITIES
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_ROLES
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessToCSP/AccessToCSP.frm;Таблицы;D_SERVICES
+Forms/AccessToCSP/AccessToCSP.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/AccessToCSP/AccessToCSP.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/AccessToCSP/AccessToCSP.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessToCSP/AccessToCSP.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.DEL_ACCS
+Forms/AccessToCSP/AccessToCSP.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessToCSP/AccessToCSP.frm;Неопределенные;D_CL_STR
+Forms/AccessToCSP/AccessToCSP.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/AccessToCSP/AccessToCSP.frm;Неопределенные;D_INSERT_ID
+Forms/AddDirectories/adddirectories.frm;формы JS;AddDirectories/adddirectories_edit.frm
+Forms/AddDirectories/adddirectories.frm;формы JS;AddDirectories/adddirectories_move.frm
+Forms/AddDirectories/adddirectories.frm;Пакеты и функции;D_PKG_ADD_DIRECTORIES.DEL
+Forms/AccessRights/emp_level_rights.frm;Юзерформы;UserFormsEgis3Novosib/AccessRights/emp_level_rights.d/script.dfrm
+Forms/AccessRights/emp_level_rights.frm;Юзерформы;UserFormsEgis3Novosib/AccessRights/emp_level_rights.d/view.dfrm
+Forms/AccessRights/emp_level_rights.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/AccessRights/emp_level_rights.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessRights/emp_level_rights.frm;"Отчеты, вызываемые на форме";2637373_отчет (WEB-конструктор)
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_EMPGRADES
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_CABLAB
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_SPECIALITIES
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_ROLES
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_CSE_RIGHTS
+Forms/AccessRights/emp_level_rights.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_EMPGRADES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CABLAB
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_DEPS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_DIVISIONS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_BUILDINGS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_BUILD_FLOORS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CABLAB_TYPE
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_SPECIALITIES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_EMPLOYERS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_JOBTITLES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_DEPS_KINDS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_USERS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_AGENTS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_AGENT_ESIA
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_EMP_SKILL
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_LPU
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_LPUDICT
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_ROLES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_RIGHTS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessRights/emp_level_rights.frm;Таблицы;D_SERVICES
+Forms/AccessRights/emp_level_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/AccessRights/emp_level_rights.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AccessRights/emp_level_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessRights/emp_level_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessRights/emp_level_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+Forms/AccessRights/emp_level_rights.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/AddDirectories/adddirectories_edit.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/AddDirectories/adddirectories_edit.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirectories/adddirectories_edit.frm;Пакеты и функции;D_PKG_ADD_DIRECTORIES.ADD
+Forms/AddDirectories/adddirectories_edit.frm;Пакеты и функции;D_PKG_ADD_DIRECTORIES.UPD
+Forms/AddDirectories/adddirectories_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AddDirectories/adddirectories_move.frm;Вьюхи;D_V_CATALOGS
+Forms/AddDirectories/adddirectories_move.frm;Таблицы;D_CATALOGS
+Forms/AddDirectories/adddirectories_move.frm;Пакеты и функции;D_PKG_DOCUMENT.DOC_MOVE
+Forms/AccessRights/lpu_rights.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/AccessRights/lpu_rights.frm;формы JS;AccessRights/principal_search.frm
+Forms/AccessRights/lpu_rights.frm;"Отчеты, вызываемые на форме";2637373_отчет (WEB-конструктор)
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_LPU
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_CABLAB
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_SPECIALITIES
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_ROLES
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_CSE_RIGHTS
+Forms/AccessRights/lpu_rights.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_LPU
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_LPUDICT
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_GEOGRAFY
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CABLAB
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_DEPS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_DIVISIONS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_BUILDINGS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_BUILD_FLOORS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CABLAB_TYPE
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_SPECIALITIES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_EMPLOYERS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_JOBTITLES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_DEPS_KINDS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_USERS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_AGENTS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_AGENT_ESIA
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_EMP_SKILL
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_ROLES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_RIGHTS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACCESSES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AccessRights/lpu_rights.frm;Таблицы;D_SERVICES
+Forms/AccessRights/lpu_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/AccessRights/lpu_rights.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AccessRights/lpu_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/AccessRights/lpu_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/AccessRights/lpu_rights.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+Forms/AccessRights/lpu_rights.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/AddDirRights/add_dir_view.frm;формы JS;AddDirRights/add_dir_otobr.frm
+Forms/AddDirRights/add_dir_view.frm;формы JS;AddDirRights/add_dir_otobr_tree.frm
+Forms/AddDirRights/add_dir_view.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/AddDirRights/add_dir_view.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirRights/add_dir_view.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AddDirRights/add_dir_otobr.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/AddDirRights/add_dir_otobr.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_ID
+Forms/AddDirRights/add_dir_otobr.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/AddDirRights/add_dir_otobr.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirRights/add_dir_otobr.frm;Таблицы;D_URPRIVS
+Forms/AddDirRights/add_dir_otobr.frm;Таблицы;D_USERROLES
+Forms/AddDirRights/add_dir_otobr_tree.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/AddDirRights/add_dir_otobr_tree.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_ID
+Forms/AddDirRights/add_dir_otobr_tree.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/AddDirRights/add_dir_otobr_tree.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirRights/add_dir_otobr_tree.frm;Таблицы;D_URPRIVS
+Forms/AddDirRights/add_dir_otobr_tree.frm;Таблицы;D_USERROLES
+Forms/AddDirUser/add_dir_user_edit.frm;subForm;Add_Dirs/add_dirs_edit
+Forms/AddDirUser/adddirectories_choise.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/AddDirUser/adddirectories_choise.frm;Вьюхи;D_V_CATALOGS
+Forms/AddDirUser/adddirectories_choise.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AddDirUser/adddirectories_choise.frm;Вьюхи;D_V_USERS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_CATALOGS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_EMPLOYERS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_JOBTITLES
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_SPECIALITIES
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_DEPS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_DEPS_KINDS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_USERS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_AGENTS
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_AGENT_ESIA
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_EMP_SKILL
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_LPU
+Forms/AddDirUser/adddirectories_choise.frm;Таблицы;D_LPUDICT
+Forms/AddDirUser/adddirectories_choise.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AddDirUser/adddirectories_choise.frm;Неопределенные;D_F_GET_ADDDIRVAL_WITH_RIGHTS
+Forms/AddDirUser/adddirectories_choise.frm;Неопределенные;D_CL_ADDDIRVAL
+Forms/AdditionalDataMO/subforms/modal.frm;Вьюхи;D_V_ADDITIONAL_DATA_MO_TEST
+Forms/AdditionalDataMO/subforms/modal.frm;Таблицы;D_ADDITIONAL_DATA_MO_TEST
+Forms/AdditionalDataMO/subforms/modal.frm;Пакеты и функции;D_PKG_ADDITIONAL_DATA_MO_TEST.ADD
+Forms/AdditionalDataMO/subforms/modal.frm;Пакеты и функции;D_PKG_ADDITIONAL_DATA_MO_TEST.UPD
+Forms/Add_Dirs/adddirectories_choise.frm;формы JS;AddDirectories/adddirectories.frm
+Forms/Add_Dirs/adddirectories_choise.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/Add_Dirs/adddirectories_choise.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/Add_Dirs/adddirectories_choise.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AdditionalDataMO/additionalDataMO.frm;формы JS;AdditionalDataMO/subforms/modal.frm
+Forms/AdditionalDataMO/additionalDataMO.frm;Вьюхи;D_V_LPU_BASE
+Forms/AdditionalDataMO/additionalDataMO.frm;Вьюхи;D_V_ADDITIONAL_DATA_MO_TEST
+Forms/AdditionalDataMO/additionalDataMO.frm;Таблицы;D_LPU
+Forms/AdditionalDataMO/additionalDataMO.frm;Таблицы;D_ADDITIONAL_DATA_MO_TEST
+Forms/AdditionalDataMO/additionalDataMO.frm;Пакеты и функции;D_PKG_ADDITIONAL_DATA_MO_TEST.BULK_DELETE
+Forms/AdditionalDataMO/additionalDataMO.frm;Пакеты и функции;D_PKG_ADDITIONAL_DATA_MO_TEST.DEL
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Вьюхи;D_V_ADD_DIR_ROWS
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Вьюхи;D_V_ADD_DIR_COLUMNS
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Вьюхи;D_V_ADD_DATATYPES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Вьюхи;D_V_ADD_DIR_VALUES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Таблицы;D_ADD_DIR_COLUMNS
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Таблицы;D_ADD_DATATYPES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Таблицы;D_ADD_DIR_VALUES
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Пакеты и функции;D_PKG_ADD_DIR_VALUES.GET_ID
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Неопределенные;D_ROW
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Неопределенные;D_COLUMN_ID
+Forms/AddDirectoriesDict/ADD_DIRECTORIES_DICT.frm;Неопределенные;D_P_EXC
+Forms/Add_Dirs/add_dirs_edit.frm;Вьюхи;D_V_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dirs_edit.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_ID
+Forms/Add_Dirs/add_dirs_edit.frm;Вьюхи;D_V_ADD_DIR_VALUES
+Forms/Add_Dirs/add_dirs_edit.frm;Вьюхи;D_V_ADD_DATATYPES
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_URPRIVS
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_USERROLES
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_ADD_DIR_VALUES
+Forms/Add_Dirs/add_dirs_edit.frm;Таблицы;D_ADD_DATATYPES
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_STD.FRM_D
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CLOB_BUFFER.GET
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.ADD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_STR_TOOLS.DEL_NONPRINTING_CHARS
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_VALUES.ADD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_STR_TOOLS.DEL_NONPRINTING_CHARS_CLOB
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CLOB_BUFFER.ADD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_ADD_DATATYPES.ADD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_COLUMNS.ADD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CSE_RIGHTS.GET_ID
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_EMP_RIGHT
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_VALUES.UPD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CLOB_BUFFER.UPD
+Forms/Add_Dirs/add_dirs_edit.frm;Пакеты и функции;D_PKG_CLOB_BUFFER.DEL
+Forms/Add_Dirs/add_dirs_edit.frm;Неопределенные;D_COLUMN_ID
+Forms/Add_Dirs/add_dirs_edit.frm;Неопределенные;D_ROW
+Forms/Add_Dirs/add_dirs_edit.frm;Неопределенные;D_P_EXC
+Forms/AddDirUser/add_dir_user.frm;Юзерформы;UserFormsEgis3Novosib/AddDirUser/add_dir_user.d/data.dfrm
+Forms/AddDirUser/add_dir_user.frm;Юзерформы;UserFormsEgis3Novosib/AddDirUser/add_dir_user.d/script.dfrm
+Forms/AddDirUser/add_dir_user.frm;Юзерформы;UserFormsEgis3Novosib/AddDirUser/add_dir_user.d/view.dfrm
+Forms/AddDirUser/add_dir_user.frm;формы JS;AddDirUser/add_dir_user_edit.frm
+Forms/AddDirUser/add_dir_user.frm;формы JS;AddDirUser/adddirectories_choise.frm
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_ID
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_CABLAB
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_ADD_DIR_COLUMNS
+Forms/AddDirUser/add_dir_user.frm;Вьюхи;D_V_ADD_DIR_VALUES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_URPRIVS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_USERROLES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACCESSES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CABLAB
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_EMPLOYERS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_AGENTS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_SPECIALITIES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_ROLES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_SERVICES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_DEPS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_DIVISIONS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_BUILDINGS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_BUILD_FLOORS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_CABLAB_TYPE
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_JOBTITLES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_DEPS_KINDS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_USERS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_AGENT_ESIA
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_EMP_SKILL
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_LPU
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_LPUDICT
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_ADD_DIR_COLUMNS
+Forms/AddDirUser/add_dir_user.frm;Таблицы;D_ADD_DIR_VALUES
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_WHO_HAVE_RIGHT
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.CHECK_RIGHT
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_RIGHTS
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.CHANGE_ORDER
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_ADD_DIR_VALUES.DEL_ROW
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.DEL
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ID_WITH_EMP_RIGHTS
+Forms/AddDirUser/add_dir_user.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.DEL_HIERARCHY
+Forms/AddDirUser/add_dir_user.frm;Неопределенные;D_CL_ID
+Forms/AddDirUser/add_dir_user.frm;Неопределенные;D_ROW
+Forms/AddDirUser/add_dir_user.frm;Неопределенные;D_P_EXC
+Forms/Add_Dirs/add_dir_columns_edit.frm;Вьюхи;D_V_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dir_columns_edit.frm;Таблицы;D_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dir_columns_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_COLUMNS.ADD
+Forms/Add_Dirs/add_dir_columns_edit.frm;Пакеты и функции;D_PKG_ADD_DIR_COLUMNS.UPD
+Forms/Add_Dirs/add_dir_columns_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Add_Dirs/add_dir_columns_edit.frm;Универсальные композиции;unit=""ADD_DATATYPES"" composition=""DEFAULT""
+Forms/Add_Dirs/add_dir_columns_edit.frm;Неопределенные;D_T_ID
+Forms/Add_Dirs/add_dir_columns_edit.frm;Неопределенные;D_T
+Forms/Add_Dirs/add_dirs_popupmenu.frm;формы JS;UnitExportImport/export_to_lpu.frm
+Forms/Add_Dirs/add_dirs_popupmenu.frm;формы JS;UnitExportImport/.frm
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Вьюхи;D_V_EI_SCHEME_STR
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Вьюхи;D_V_ADD_DIR_ROWS
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Таблицы;D_EI_SCHEME_STR
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Пакеты и функции;D_PKG_CSE_RIGHTS.GET_ID
+Forms/Add_Dirs/add_dirs_popupmenu.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ALL_RIGHTS
+Forms/Add_Dirs/move_value_to_node.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_CSE
+Forms/Add_Dirs/move_value_to_node.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/Add_Dirs/move_value_to_node.frm;Таблицы;D_URPRIVS
+Forms/Add_Dirs/move_value_to_node.frm;Таблицы;D_USERROLES
+Forms/Add_Dirs/move_value_to_node.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.UPD
+Forms/Add_Dirs/move_value_to_node.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.GET_NEW_ORDER
+Forms/Add_Dirs/move_value_to_node.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/Add_Dirs/move_value_to_node.frm;Неопределенные;D_CL_STR
+Forms/AgentGynecDiseases/add_upd.frm;Вьюхи;D_V_AGENT_GYNEC_DISEASES
+Forms/AgentGynecDiseases/add_upd.frm;Таблицы;D_AGENT_GYNEC_DISEASES
+Forms/AgentGynecDiseases/add_upd.frm;Таблицы;D_MKB10
+Forms/AgentGynecDiseases/add_upd.frm;СО;IncludeRisar
+Forms/AgentGynecDiseases/add_upd.frm;Универсальные композиции;unit=""MKB10"" composition=""DEFAULT""
+Forms/AgentGynecOperation/select/employer_operation.frm;Вьюхи;D_V_EMPLOYERS
+Forms/AgentGynecOperation/select/employer_operation.frm;Вьюхи;D_V_LPU_BASE
+Forms/AgentGynecOperation/select/employer_operation.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_EMPLOYERS
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_JOBTITLES
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_SPECIALITIES
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_SPECIALITIES_ED
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_DEPS
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_DEPS_KINDS
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_USERS
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_AGENTS
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_AGENT_ESIA
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_EMP_SKILL
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_SKILL_CATEGORIES
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_LPU
+Forms/AgentGynecOperation/select/employer_operation.frm;Таблицы;D_LPUDICT
+Forms/Add_Dirs/add_dirs_enh_services.frm;Вьюхи;D_V_CATALOGS
+Forms/Add_Dirs/add_dirs_enh_services.frm;Вьюхи;D_V_SERVICES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Вьюхи;D_V_LPU_SERVICES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Вьюхи;D_V_CATALOGS_SYS
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_CATALOGS
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_SERVICES_STR
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_SERVICES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_LPU_SERVICES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_SERVTYPES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_SERVPROFILES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Таблицы;D_FED_SERVICES
+Forms/Add_Dirs/add_dirs_enh_services.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AgentGynecOperation/add_upd.frm;формы JS;AgentGynecOperation/select/rendered_operations.frm
+Forms/AgentGynecOperation/add_upd.frm;формы JS;AgentGynecOperation/select/employer_operation.frm
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_AGENT_GYNEC_OPERATION
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_LINKS
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_VISITS_BASE
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_LPUDICT_BASE
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/AgentGynecOperation/add_upd.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_AGENT_GYNEC_OPERATION
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_LPUDICT
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_AGENTS
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_SERVICES
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_MKB10
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_LINKS
+Forms/AgentGynecOperation/add_upd.frm;Таблицы;D_VISITS
+Forms/AgentGynecOperation/add_upd.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/AgentGynecOperation/add_upd.frm;Пакеты и функции;D_PKG_AGENT_GYNEC_OPERATION.UPG
+Forms/AgentGynecOperation/add_upd.frm;Пакеты и функции;D_PKG_LINKS.DEL
+Forms/AgentGynecOperation/add_upd.frm;Пакеты и функции;D_PKG_LINKS.ADD
+Forms/AgentGynecOperation/add_upd.frm;Универсальные композиции;unit=""SERVICES"" composition=""GRID_OPER""
+Forms/AgentGynecOperation/add_upd.frm;Универсальные композиции;unit=""LPUDICT"" composition=""SHORT_GRID_NAME_MAIN""
+Forms/AgentGynecOperation/add_upd.frm;Универсальные композиции;unit=""MKB10"" composition=""DEFAULT""
+Forms/Agents/additional_work_edit.frm;Вьюхи;D_V_DIRECTORIES
+Forms/Agents/additional_work_edit.frm;Вьюхи;D_V_AGENT_ADDITIONAL_WORK
+Forms/Agents/additional_work_edit.frm;Таблицы;D_DIRECTORIES
+Forms/Agents/additional_work_edit.frm;Таблицы;D_AGENT_ADDITIONAL_WORK
+Forms/Agents/additional_work_edit.frm;Таблицы;D_AGENTS
+Forms/Agents/additional_work_edit.frm;Таблицы;D_WORK_CAT_KIND
+Forms/Agents/additional_work_edit.frm;СО;SportPlace
+Forms/Agents/additional_work_edit.frm;Универсальные композиции;unit=""WORK_CAT_KIND"" composition=""DEFAULT""
+Forms/Agents/additional_work_edit.frm;Неопределенные;D_CODE
+Forms/Agents/additional_work_edit.frm;Неопределенные;D_NAME
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_AGENTS_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_LPU
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_VIS_DIAGNOSISES_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_MKB10_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_AGENT_PREGNANCY_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_PERSMEDCARD_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_DIRECTIONS_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_DIRECTION_SERVICES_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_SERVICES_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_VISITS_BASE
+Forms/AgentGynecOperation/select/rendered_operations.frm;Вьюхи;D_V_EMPLOYERS_FIO
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_AGENTS
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_EMPLOYERS
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_LPU
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_LPUDICT
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_GEOGRAFY
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_VIS_DIAGNOSISES
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_MKB10
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_AGENT_PREGNANCY
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_PERSMEDCARD
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_DIRECTIONS
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_DIRECTION_SERVICES
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_SERVICES
+Forms/AgentGynecOperation/select/rendered_operations.frm;Таблицы;D_VISITS
+Forms/AgentGynecOperation/select/rendered_operations.frm;Неопределенные;D_TP_SN
+Forms/AgentGynecOperation/select/rendered_operations.frm;Неопределенные;D_TP_NSS
+Forms/Agents/agents_edit.frm;Юзерформы;UserFormsEgis3Novosib/Agents/agents_edit.d/data.dfrm
+Forms/Agents/agents_edit.frm;Юзерформы;UserFormsEgis3Novosib/Agents/agents_edit.d/script.dfrm
+Forms/Agents/agents_edit.frm;Юзерформы;UserFormsEgis3Novosib/Agents/agents_edit.d/view.dfrm
+Forms/Agents/agents_edit.frm;Юзерформы;UserFormsSamRMC/Agents/agents_edit.d/view.dfrm
+Forms/Agents/agents_edit.frm;Юзерформы;UserFormsSaratov/Agents/agents_edit.d/agents_edit.dfrm
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/get_full_years
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/to_upper_case
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/snils
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/base
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/accuracyDateCheck
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/zaprossnils
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/birthdate
+Forms/Agents/agents_edit.frm;subForm;Agents/subscript/SPFRzaprossnils
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/polis_oms
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/polis_dms
+Forms/Agents/agents_edit.frm;subForm;Persmedcard/subforms_view/registration
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/social_state
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/orphan_category
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/consitution
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/pregnancy
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/persdocs
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/marital_state
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/agent_relatives_docs
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/agent_details
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/work_place
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/inability
+Forms/Agents/agents_edit.frm;subForm;Agents/agent_regional_privs/regional_priv
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/federal_priv
+Forms/Agents/agents_edit.frm;subForm;Agents/agent_nosology_privs/nosology_priv
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/decretiv_group
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/gr_vaccination
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/gr_rentgenograph
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/names
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/death
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/addr
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/orphan_place
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/contact
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_view/names_jur
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/allergic_anamnes
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/trf_anamnesis
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/bad_habits
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/inherited_diseases
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/infertility
+Forms/Agents/agents_edit.frm;subForm;Agents/subforms_fields/PmcVaccinations
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_FED_NATIONALITIES
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_BJ_BULLETIN_CONTENTS_BASE
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_EX_SYSTEM_VALUES
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_LPUDICT_BASE
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_PERSMEDCARD_EXTERNAL_BASE
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_AGENTS
+Forms/Agents/agents_edit.frm;Вьюхи;D_V_URPRIVS
+Forms/Agents/agents_edit.frm;Таблицы;D_FED_NATIONALITIES
+Forms/Agents/agents_edit.frm;Таблицы;D_BJ_BULLETIN_CONTENTS
+Forms/Agents/agents_edit.frm;Таблицы;D_EX_SYSTEM_VALUES
+Forms/Agents/agents_edit.frm;Таблицы;D_LPUDICT
+Forms/Agents/agents_edit.frm;Таблицы;D_EMPLOYERS
+Forms/Agents/agents_edit.frm;Таблицы;D_PERSMEDCARD_EXTERNAL
+Forms/Agents/agents_edit.frm;Таблицы;D_GEOGRAFY
+Forms/Agents/agents_edit.frm;Таблицы;D_AGENTS
+Forms/Agents/agents_edit.frm;Таблицы;D_URPRIVS
+Forms/Agents/agents_edit.frm;Таблицы;D_USERS
+Forms/Agents/agents_edit.frm;Таблицы;D_USERROLES
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_FHIR_AGN_LUPD.HANDL_CHANGES_BY_LAST_LOG
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_STD.FRM_D
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_STD.SFRM_T
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_DAT_TOOLS.FULL_YEARS
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_AGENT_ORPH_CATEGORIES.GET_ACTUAL_ON_DATE
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_EX_SYSTEM_VALUES.GET_VAL
+Forms/Agents/agents_edit.frm;Пакеты и функции;D_PKG_URPRIVS.CHECK_BPPRIV
+Forms/Agents/agents_edit.frm;СО;AgentInfChangeLN
+Forms/Agents/agents_edit.frm;СО;Lpu_UpdFromPassport
+Forms/Agents/agents_edit.frm;СО;Empl_UpdFromRMR
+Forms/Agents/agents_edit.frm;СО;AgentDeathDateCheck
+Forms/Agents/agents_edit.frm;СО;ShowSignByAge
+Forms/Agents/agents_edit.frm;СО;VisibleStatusLgot
+Forms/Agents/agents_edit.frm;СО;IntegrationEnabled
+Forms/Agents/agents_edit.frm;СО;CheckFor_UNKNOWN
+Forms/Agents/agents_edit.frm;СО;hideInfoMax
+Forms/Agents/agents_edit.frm;СО;PassportMO
+Forms/Agents/agents_edit.frm;Универсальные композиции;unit=""OKVED"" composition=""OKV""
+Forms/Agents/agents_edit.frm;Универсальные композиции;unit=""OKFS"" composition=""DEFAULT""
+Forms/Agents/agents_edit.frm;Универсальные композиции;unit=""GEOGRAFY"" composition=""DEFAULT""
+Forms/Agents/agents_fifo/agents_fifo_edit.frm;Вьюхи;D_V_AGENTS_FIFO
+Forms/Agents/agents_fifo/agents_fifo_edit.frm;Таблицы;D_AGENTS_FIFO
+Forms/Agents/agents_fifo/agents_fifo_edit.frm;Универсальные композиции;unit=""AGENTS"" composition=""JURISTIC""
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;AccessRights/principal_search.frm
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;Add_Dirs/add_dirs_edit.frm
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;AccessRights/d_cse_accesses.frm
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;Add_Dirs/adddirectories_choise.frm
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;Add_Dirs/move_value_to_node.frm
+Forms/Add_Dirs/add_dirs_enh.frm;формы JS;Add_Dirs/add_dirs_enh_services.frm
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL_CABLAB
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL_EMPLOYER
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_EMPLOYERS_BASE
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_DEPS_BASE
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_SPECIALITIES
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL_SPECIALITY
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL_ROLE
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL_SERVICE
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ALL
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_ADD_DIRECTORIES
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_ID
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_ADD_DIRECTORIES_VIEW_CSE
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACCESSES
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_CABLABS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_CL_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_SPECS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_SPEC_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_EMPS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_EMP_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ROLES
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_ROLE_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_SERVS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_ACS_SERV_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_CSE_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Вьюхи;D_V_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACCESSES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_CABLABS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CABLAB
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_EMPS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_EMPLOYERS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_AGENTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_DEPS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_SPECIALITIES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_SPECS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_ROLES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_ROLES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_SERVS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_SERVICES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_ADD_DIRECTORIES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_ADD_DIR_ROWS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_URPRIVS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_USERROLES
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_CL_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_SPEC_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_EMP_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_ROLE_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_ACS_SERV_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_CSE_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Таблицы;D_ADD_DIR_COLUMNS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE_TO_IDS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS_MULTI
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.DEL_ACCS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.CHANGE_ORDER
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.ORDER_INTO_HID
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.ADD_ACCS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_RIGHT
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.SET_WITH_CHILDS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_TOOLS.STR_SEPARATE
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_CSE_ACCESSES.GET_ALL_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_ADD_DIR_ROWS.ADD
+Forms/Add_Dirs/add_dirs_enh.frm;Пакеты и функции;D_PKG_ADD_DIR_VALUES.ADD
+Forms/Add_Dirs/add_dirs_enh.frm;Неопределенные;D_STRAGG_EX
+Forms/Add_Dirs/add_dirs_enh.frm;Неопределенные;D_TP_STRAGG_REC
+Forms/Add_Dirs/add_dirs_enh.frm;Неопределенные;D_CL_CSE_ACS_RIGHTS
+Forms/Add_Dirs/add_dirs_enh.frm;Неопределенные;D_P_EXC
+Forms/Add_Dirs/add_dirs_enh.frm;Неопределенные;D_CL_STR
+Forms/Agents/agents_add.frm;Юзерформы;UserFormsEgis3Tomsk/Agents/agents_add.frm
+Forms/Agents/agents_add.frm;Юзерформы;UserFormsEgis3Tomsk/Agents/agents_add.frm
+Forms/Agents/agents_add.frm;Юзерформы;UserFormsEgis3Tomsk/Agents/agents_add.d/data.dfrm
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/get_full_years
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/to_upper_case
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/snils
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/accuracyDateCheck
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/zaprossnils
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/birthdate
+Forms/Agents/agents_add.frm;subForm;Agents/subscript/SPFRzaprossnils
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/polis_oms
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/polis_dms
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/social_state
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/consitution
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/persdocs
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/marital_state
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/agent_relatives
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/agent_details
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/work_place
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/category
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/inability
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/federal_priv
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/decretiv_group
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/gr_rentgenograph
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/gr_vaccination
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/names
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/death
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/addr
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/contact
+Forms/Agents/agents_add.frm;subForm;Agents/subforms_fields/names_jur
+Forms/Agents/agents_add.frm;subForm;footerStyle
+Forms/Agents/agents_add.frm;Вьюхи;D_V_ANTHROP
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FED_NATIONALITIES
+Forms/Agents/agents_add.frm;Вьюхи;D_V_SOCIALSTATES
+Forms/Agents/agents_add.frm;Вьюхи;D_V_PERSDOCTYPES
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FN_DOC_TYPES_FED
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FED_NSI_LINKS
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FED_NSI_LINK_SP
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FED_NSI
+Forms/Agents/agents_add.frm;Вьюхи;D_V_FED_NSI_VERS
+Forms/Agents/agents_add.frm;Вьюхи;D_V_COUNTRIES
+Forms/Agents/agents_add.frm;Вьюхи;D_V_AGNBANKS
+Forms/Agents/agents_add.frm;Таблицы;D_ANTHROP
+Forms/Agents/agents_add.frm;Таблицы;D_MEASURES
+Forms/Agents/agents_add.frm;Таблицы;D_FED_NATIONALITIES
+Forms/Agents/agents_add.frm;Таблицы;D_SOCIALSTATES
+Forms/Agents/agents_add.frm;Таблицы;D_PERSDOCTYPES
+Forms/Agents/agents_add.frm;Таблицы;D_MASKS
+Forms/Agents/agents_add.frm;Таблицы;D_FN_DOC_TYPES_FED
+Forms/Agents/agents_add.frm;Таблицы;D_FED_NSI_LINKS
+Forms/Agents/agents_add.frm;Таблицы;D_FED_NSI_LINK_SP
+Forms/Agents/agents_add.frm;Таблицы;D_FED_NSI
+Forms/Agents/agents_add.frm;Таблицы;D_FED_NSI_VERS
+Forms/Agents/agents_add.frm;Таблицы;D_COUNTRIES
+Forms/Agents/agents_add.frm;Таблицы;D_AGNBANKS
+Forms/Agents/agents_add.frm;Пакеты и функции;D_PKG_VERSIONS.GET_VERSION_BY_LPU
+Forms/Agents/agents_add.frm;Пакеты и функции;D_PKG_CATALOGS.GET_FULL
+Forms/Agents/agents_add.frm;Пакеты и функции;D_PKG_AGENT_CONTACTS.ADD
+Forms/Agents/agents_add.frm;СО;ANTHROP_VEIWLIST
+Forms/Agents/agents_add.frm;СО;InabiltyStatusAndGroupCheck
+Forms/Agents/agents_add.frm;СО;CheckFor_UNKNOWN
+Forms/Agents/agents_add.frm;СО;SetSocStateAuto
+Forms/Agents/agents_add.frm;СО;AgnPersDocsDefCitizenship
+Forms/Agents/agents_add.frm;СО;PersDocTypeDefault
+Forms/Agents/agents_add.frm;СО;PersDocsType_Absent
+Forms/Agents/agents_add.frm;СО;hideInfoMax
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""OKVED"" composition=""OKV""
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""OKFS"" composition=""DEFAULT""
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""GEOGRAFY"" composition=""DEFAULT""
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""CURRENCIES"" composition=""CUR""
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""BANKACCTYPES"" composition=""BN_TYPE""
+Forms/Agents/agents_add.frm;Универсальные композиции;unit=""AGNBANKS"" composition=""AGNB""
+Forms/Agents/agents_add.frm;Универсальные композиции;"unit:CATALOGS  composition:DEFAULT,"
+Forms/Agents/agents_juristic_person_popup.frm;формы JS;ExSystems/exsystem_values.frm
+Forms/Agents/agents.frm;Юзерформы;UserFormsEgis3Novosib/Agents/agents.d/data.dfrm
+Forms/Agents/agents.frm;формы JS;Agents/agents_add.frm
+Forms/Agents/agents.frm;формы JS;Persmedcard/persmedcard_add_by_agent.frm
+Forms/Agents/agents.frm;формы JS;Agents/agents_edit.frm
+Forms/Agents/agents.frm;формы JS;Reports/AmbReps/amb_talon_A4_reg.frm
+Forms/Agents/agents.frm;формы JS;Reports/DispenseryReport/dispensaryreport_2017.frm
+Forms/Agents/agents.frm;формы JS;Reports/Reception/list_diagnosis.frm
+Forms/Agents/agents.frm;формы JS;Reports/AmbReps/drugs_025-5y88.frm
+Forms/Agents/agents.frm;формы JS;Reports/Reception/agreement_oper_children.frm
+Forms/Agents/agents.frm;формы JS;Reports/MedCard/025y.frm
+Forms/Agents/agents.frm;формы JS;Reports/KLD39/dispensaryreport.frm
+Forms/Agents/agents.frm;формы JS;Reports/PatientAgreement/statement_prik_empty.frm
+Forms/Agents/agents.frm;формы JS;Reports/PatientAgreement/statement_prik_empty_pred.frm
+Forms/Agents/agents.frm;формы JS;Reports/CardFluorogSur/CardFluorogSur.frm
+Forms/Agents/agents.frm;формы JS;Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm
+Forms/Agents/agents.frm;формы JS;Reports/MedCard/025y_2025.frm
+Forms/Agents/agents.frm;формы JS;Reports/PatientAgreement/pat_zayav_prikrep.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";amb_talon_A4_reg (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";contract_stac (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";contract_stac_p (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";inf_sogl_p (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";inf_sogl_inf (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";inf_sogl_gosp (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";inf_sogl_gosp_p (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";ivoice_barcode_cn_marsh (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";ivoice_barcode_cn_test (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_polis (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_sample_bloxina (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";sprvk_summ_lech_pol_prikaz (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";INF_INVALID_IPR12 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_sample_93 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_id_card (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";amb_talon_A4_reg_4 (WEB-форма) Reports/AmbReps/amb_talon_A4_reg.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";amb_talon_A4_reg (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";reception_agreement_personal_info88 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_invoice (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";amb_talon_A4_reg_1 (WEB-форма) Reports/DispenseryReport/dispensaryreport_2017.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";081_1y (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";ivoice_barcode_cn (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";list_diagnosis_old (WEB-форма) Reports/Reception/list_diagnosis.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";test_AGENT (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";pot_025-5у-88 (WEB-форма) Reports/AmbReps/drugs_025-5y88.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";reception_agreement_personal_info_tver (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";1234321 (WEB-форма) Reports/Reception/agreement_oper_children.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";ZAYAV_NA_PRIKREPLEN (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_invoice_09122020 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";list_diagnosis (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";barcode_amb_card (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";025/y_cope_test (WEB-форма) Reports/MedCard/025y.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";dispensary_report_a4_half_kaliningrad (WEB-форма) Reports/KLD39/dispensaryreport.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";Child's_history_development_1 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";statement_prik_empty (WEB-форма) Reports/PatientAgreement/statement_prik_empty.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";112/y_01 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";statement_prik_empty_pred (WEB-форма) Reports/PatientAgreement/statement_prik_empty_pred.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";PSY_SPRAVKA_OTV (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";TEST_PMC_1 (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";CardFluorogSur (WEB-форма) Reports/CardFluorogSur/CardFluorogSur.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";gynec_profile_card_025_y_8_9 (WEB-форма) Reports/GynecProfile/gynec_profile_card_025_y_8_9.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";infosogl (WEB-конструктор)
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";025/y (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";025/у_2025 (WEB-форма) Reports/MedCard/025y_2025.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";pat_zayav_prikrep (WEB-форма) Reports/PatientAgreement/pat_zayav_prikrep.frm
+Forms/Agents/agents.frm;"Отчеты, вызываемые на форме";ZAYAVLENIE_EDF_PRINT (WEB-конструктор)
+Forms/Agents/agents.frm;Вьюхи;D_V_AGENTS
+Forms/Agents/agents.frm;Вьюхи;D_V_CATALOGS
+Forms/Agents/agents.frm;Вьюхи;D_V_PERSMEDCARD
+Forms/Agents/agents.frm;Таблицы;D_GEOGRAFY
+Forms/Agents/agents.frm;Таблицы;D_AGENTS
+Forms/Agents/agents.frm;Таблицы;D_CATALOGS
+Forms/Agents/agents.frm;Таблицы;D_PERSMEDCARD
+Forms/Agents/agents.frm;Таблицы;D_BLOODGROUPE
+Forms/Agents/agents.frm;Таблицы;D_DIVISIONS
+Forms/Agents/agents.frm;Таблицы;D_RHESUS
+Forms/Agents/agents.frm;Таблицы;D_EMPLOYERS
+Forms/Agents/agents.frm;Таблицы;D_CABLAB
+Forms/Agents/agents.frm;Универсальные композиции;"unit:CATALOGS  composition:DEFAULT,"
+Forms/Agents/agents.frm;Неопределенные;D_AGENTS

@@ -738,18 +738,25 @@ public class FormsTreePanel extends JPanel {
         }
     }
 
-    private void selectAllNodes() {
+    /**
+     * Выделяет все узлы в дереве (включая родительские)
+     */
+    public void selectAllNodes() {
         List<TreePath> allPaths = new ArrayList<>();
-        // Собираем ВСЕ узлы (включая родительские и корневые)
-        collectAllPaths(rootNode, new TreePath(rootNode), allPaths);
+        // Начинаем с детей корня, исключая сам корневой узел
+        for (int i = 0; i < rootNode.getChildCount(); i++) {
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) rootNode.getChildAt(i);
+            TreePath childPath = new TreePath(child.getPath());
+            collectAllPaths(child, childPath, allPaths);
+        }
         tree.setSelectionPaths(allPaths.toArray(new TreePath[0]));
     }
 
     /**
-     * Рекурсивно собирает ВСЕ пути в дереве (включая родительские узлы)
+     * Рекурсивно собирает ВСЕ пути в дереве
      */
     private void collectAllPaths(DefaultMutableTreeNode node, TreePath parentPath, List<TreePath> paths) {
-        // Добавляем текущий узел (даже если это не лист)
+        // Добавляем текущий узел
         paths.add(parentPath);
 
         // Рекурсивно обходим всех детей
