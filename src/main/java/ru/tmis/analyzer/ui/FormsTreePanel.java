@@ -148,23 +148,26 @@ public class FormsTreePanel extends JPanel {
 
         String displayName = nodes[nodes.length - 1].toString();
 
-        // Убираем маркер SubForm если есть (только для визуализации)
+        // Убираем маркер SubForm если есть
         String fileName = displayName;
         boolean isSubForm = fileName.startsWith("(sub)_");
         if (isSubForm) {
             fileName = fileName.substring(6);
         }
 
+        // Если уже содержит Forms/ или UserForms - возвращаем как есть
         if (fileName.startsWith("Forms/") || fileName.startsWith("UserForms")) {
-            return fileName;  // Возвращаем путь без маркера
+            return fileName;
         }
 
+        // Ищем в map
         for (Map.Entry<String, DefaultMutableTreeNode> entry : formNodeMap.entrySet()) {
             if (entry.getValue() == nodes[nodes.length - 1]) {
-                return entry.getKey();  // Возвращаем путь без маркера
+                return entry.getKey();
             }
         }
 
+        // Если не нашли, возвращаем с Forms/
         if (fileName.endsWith(".frm") || fileName.endsWith(".dfrm")) {
             return "Forms/" + fileName;
         }
@@ -181,7 +184,6 @@ public class FormsTreePanel extends JPanel {
     }
 
     public String getReportFilePath(String formPath) {
-        // Убираем маркер SubForm если есть
         String actualPath = formPath;
         if (actualPath.startsWith("(sub)_")) {
             actualPath = actualPath.substring(6);
@@ -191,14 +193,20 @@ public class FormsTreePanel extends JPanel {
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
-        // Убираем префикс Forms/ для нормализации
-        if (normalized.startsWith("Forms/")) {
-            normalized = normalized.substring(6);
-        }
-        String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
 
-        // Возвращаем путь внутри подкаталога Forms
+        String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
         return outputDir + File.separator + "Forms" + File.separator + safeName;
+    }
+
+    private String getSafeFileNameForReport(String formPath) {
+        String normalized = formPath;
+        if (normalized.endsWith(".frm")) {
+            normalized = normalized.substring(0, normalized.length() - 4);
+        }
+        if (normalized.endsWith(".dfrm")) {
+            normalized = normalized.substring(0, normalized.length() - 5);
+        }
+        return normalized.replace("/", "#").replace("\\", "#") + ".txt";
     }
 
     public Set<String> loadChildFormsFromReport(String formPath) {
@@ -237,7 +245,6 @@ public class FormsTreePanel extends JPanel {
                     }
 
                     String section = content.substring(subFormStartIndex, subFormEndIndex);
-
                     Pattern subFormPattern = Pattern.compile("^\\s+([^\\s]+)$", Pattern.MULTILINE);
                     Matcher subFormMatcher = subFormPattern.matcher(section);
 
@@ -245,6 +252,7 @@ public class FormsTreePanel extends JPanel {
                         String subForm = subFormMatcher.group(1).trim();
                         if (!subForm.isEmpty() && !subForm.equals("SubForm:")) {
                             String subFormFullPath;
+                            // Формируем ПОЛНЫЙ путь для SubForm
                             if (subForm.startsWith("Forms/") || subForm.startsWith("UserForms")) {
                                 subFormFullPath = subForm;
                             } else if (subForm.contains("/")) {
@@ -252,8 +260,7 @@ public class FormsTreePanel extends JPanel {
                             } else {
                                 subFormFullPath = "Forms/" + subForm;
                             }
-                            // Добавляем с маркером для визуализации, но путь сохраняем без маркера
-                            // Маркер будет использоваться только при отображении в дереве
+                            // Добавляем с маркером для визуализации SubForm
                             childForms.add("(sub)_" + subFormFullPath);
                         }
                     }
@@ -284,12 +291,35 @@ public class FormsTreePanel extends JPanel {
                         String childForm = formMatcher.group(1).trim();
                         if (!childForm.isEmpty()) {
                             String childFullPath;
+                            // Формируем ПОЛНЫЙ путь для JS формы
                             if (childForm.startsWith("Forms/") || childForm.startsWith("UserForms")) {
                                 childFullPath = childForm;
                             } else {
                                 childFullPath = "Forms/" + childForm;
                             }
                             childForms.add(childFullPath);
+                        }
+                    }
+                }
+
+                // ========== 3. ОБРАБОТКА БЛОКА "Отчеты вызываемые на форме" ==========
+                // Отчеты могут содержать пути к формам отчетов
+                int reportStartIndex = content.indexOf("Отчеты вызываемые на форме (коды/формы отчета):");
+                if (reportStartIndex != -1) {
+                    int reportEndIndex = content.indexOf("\n\n", reportStartIndex);
+                    if (reportEndIndex == -1) {
+                        reportEndIndex = content.length();
+                    }
+
+                    String section = content.substring(reportStartIndex, reportEndIndex);
+                    // Ищем формы отчетов в формате Reports/xxx.frm
+                    Pattern reportPattern = Pattern.compile("Reports/([^\\s;]+\\.frm)");
+                    Matcher reportMatcher = reportPattern.matcher(section);
+                    while (reportMatcher.find()) {
+                        String reportForm = reportMatcher.group(1);
+                        if (!reportForm.isEmpty()) {
+                            String reportFullPath = "Reports/" + reportForm;
+                            childForms.add(reportFullPath);
                         }
                     }
                 }
@@ -303,7 +333,6 @@ public class FormsTreePanel extends JPanel {
     }
 
     private void addFormWithChildrenToTree(String formPath, DefaultMutableTreeNode parentNode, Set<String> addedPaths) {
-        // Добавить флаг для предотвращения автоматической рекурсии
         if (addedPaths.contains(formPath)) {
             return;
         }
@@ -313,22 +342,20 @@ public class FormsTreePanel extends JPanel {
         boolean isSubForm = formPath.startsWith("(sub)_");
         String actualFormPath = isSubForm ? formPath.substring(6) : formPath;
 
-        // Для отображения используем полный путь, начинающийся с Forms/
-        String displayPath;
-        if (actualFormPath.startsWith("/")) {
-            displayPath = actualFormPath.substring(1);
-        } else {
-            displayPath = actualFormPath;
+        // Для отображения используем ПОЛНЫЙ путь
+        String displayPath = actualFormPath;
+        if (displayPath.startsWith("/")) {
+            displayPath = displayPath.substring(1);
         }
-        if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
-            displayPath = "Forms/" + displayPath;
-        }
+        // Убираем префикс Forms/ если он есть для отображения (но в реальности путь полный)
+        // НЕ добавляем лишний Forms/, так как actualFormPath уже содержит полный путь
 
         // Добавляем префикс для визуализации SubForm
         if (isSubForm) {
             displayPath = "(sub)_" + displayPath;
         }
 
+        // Проверяем, есть ли уже такой узел
         DefaultMutableTreeNode formNode = null;
         for (int i = 0; i < parentNode.getChildCount(); i++) {
             DefaultMutableTreeNode child = (DefaultMutableTreeNode) parentNode.getChildAt(i);
@@ -342,45 +369,33 @@ public class FormsTreePanel extends JPanel {
             formNode = new DefaultMutableTreeNode(displayPath);
             formNode.setAllowsChildren(true);
             parentNode.add(formNode);
-            // Сохраняем в map без маркера
+            // Сохраняем в map с полным путём без маркера
             formNodeMap.put(actualFormPath, formNode);
         }
-
-        String reportPath = getReportFilePath(actualFormPath);
-        File reportFile = new File(reportPath);
     }
 
     public void refreshChildForms(String formPath) {
-        // Убираем маркер SubForm если есть
         String actualFormPath = formPath;
         if (actualFormPath.startsWith("(sub)_")) {
             actualFormPath = actualFormPath.substring(6);
         }
 
-        // Проверяем существование отчёта
         String reportPath = getReportFilePath(actualFormPath);
         File reportFile = new File(reportPath);
 
-        // Получаем или создаём узел
         DefaultMutableTreeNode node = formNodeMap.get(actualFormPath);
         if (node == null) {
-            // Узел не найден - нужно создать его в дереве
-            addFormToTree(actualFormPath);
-            node = formNodeMap.get(actualFormPath);
-            if (node == null) return;
+            return;
         }
 
         if (!reportFile.exists()) {
-            // Отчёт не существует - очищаем дочерние узлы
             node.removeAllChildren();
             treeModel.reload(node);
             childrenCache.remove(actualFormPath);
             return;
         }
 
-        // Отчёт существует - обновляем дочерние формы
         node.removeAllChildren();
-
         Set<String> childForms = loadChildFormsFromReport(actualFormPath);
         childrenCache.put(actualFormPath, childForms);
 
@@ -388,14 +403,10 @@ public class FormsTreePanel extends JPanel {
             boolean isSubForm = childForm.startsWith("(sub)_");
             String actualChildPath = isSubForm ? childForm.substring(6) : childForm;
 
-            String childDisplayPath;
-            if (actualChildPath.startsWith("/")) {
-                childDisplayPath = actualChildPath.substring(1);
-            } else {
-                childDisplayPath = actualChildPath;
-            }
-            if (!childDisplayPath.startsWith("Forms/") && !childDisplayPath.startsWith("UserForms")) {
-                childDisplayPath = "Forms/" + childDisplayPath;
+            // Для отображения используем ПОЛНЫЙ путь
+            String childDisplayPath = actualChildPath;
+            if (childDisplayPath.startsWith("/")) {
+                childDisplayPath = childDisplayPath.substring(1);
             }
             if (isSubForm) {
                 childDisplayPath = "(sub)_" + childDisplayPath;
@@ -434,22 +445,32 @@ public class FormsTreePanel extends JPanel {
             displayPath = displayPath.substring(1);
         }
         if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
-            displayPath = "Forms/" + displayPath;
+            if (!displayPath.contains("Forms/")) {
+                displayPath = "Forms/" + displayPath;
+            }
         }
 
         // Разбиваем путь на части и создаём родительские узлы
         String[] parts = displayPath.split("/");
         DefaultMutableTreeNode currentNode = rootNode;
+        StringBuilder currentPath = new StringBuilder();
 
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
-            if (i == 0 && part.equals("Forms")) continue; // пропускаем Forms
+            if (i == 0 && part.equals("Forms")) continue;
+
+            if (currentPath.length() > 0) {
+                currentPath.append("/");
+            }
+            currentPath.append(part);
 
             boolean found = false;
             for (int j = 0; j < currentNode.getChildCount(); j++) {
                 DefaultMutableTreeNode child = (DefaultMutableTreeNode) currentNode.getChildAt(j);
-                if (child.getUserObject().toString().equals(part) ||
-                        child.getUserObject().toString().endsWith(part)) {
+                String childName = child.getUserObject().toString();
+                // Убираем маркер SubForm для сравнения
+                String childClean = childName.replace("(sub)_", "");
+                if (childClean.equals(part) || childClean.endsWith(part) || part.equals(childClean)) {
                     currentNode = child;
                     found = true;
                     break;
@@ -466,8 +487,6 @@ public class FormsTreePanel extends JPanel {
 
         // Сохраняем узел в map
         formNodeMap.put(formPath, currentNode);
-
-        // Обновляем модель дерева
         treeModel.reload(rootNode);
     }
 
@@ -575,8 +594,6 @@ public class FormsTreePanel extends JPanel {
                 addFormWithChildrenToTree(formPath, rootNode, addedPaths);
             }
         } else {
-            // Есть фильтр - строим плоский список (только корневой уровень)
-            // Сортируем найденные формы по алфавиту
             List<String> matchedForms = new ArrayList<>();
             for (String formPath : allForms) {
                 if (formPath.toLowerCase().contains(filter)) {
@@ -585,18 +602,13 @@ public class FormsTreePanel extends JPanel {
             }
             matchedForms.sort(String::compareToIgnoreCase);
 
-            // Добавляем каждую найденную форму как прямой дочерний узел корня
             for (String formPath : matchedForms) {
-                // Определяем отображаемое имя (полный путь)
+                // Отображаем ПОЛНЫЙ путь
                 String displayPath = formPath;
                 if (displayPath.startsWith("/")) {
                     displayPath = displayPath.substring(1);
                 }
-                if (!displayPath.startsWith("Forms/") && !displayPath.startsWith("UserForms")) {
-                    displayPath = "Forms/" + displayPath;
-                }
 
-                // Проверяем, нет ли уже такого узла
                 boolean exists = false;
                 for (int i = 0; i < rootNode.getChildCount(); i++) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) rootNode.getChildAt(i);
@@ -608,7 +620,7 @@ public class FormsTreePanel extends JPanel {
 
                 if (!exists) {
                     DefaultMutableTreeNode formNode = new DefaultMutableTreeNode(displayPath);
-                    formNode.setAllowsChildren(false); // В режиме фильтра дочерних нет
+                    formNode.setAllowsChildren(false);
                     rootNode.add(formNode);
                     formNodeMap.put(formPath, formNode);
                 }

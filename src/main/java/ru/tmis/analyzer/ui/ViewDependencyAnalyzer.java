@@ -16,6 +16,11 @@ public class ViewDependencyAnalyzer {
     private final SettingsModel settings;
     private static final Map<String, ViewTableDependencies> globalViewCache = new ConcurrentHashMap<>();
 
+    // Кэш статуса доступности PostgreSQL
+    private static Boolean postgresAvailable = null;
+    private static long lastPostgresCheck = 0;
+    private static final long CHECK_INTERVAL = 60000; // проверять раз в минуту
+
     // Статические поля для хранения конфигурации (для использования без экземпляра SettingsModel)
     private static String staticOracleUrl;
     private static String staticOracleUser;
@@ -103,27 +108,6 @@ public class ViewDependencyAnalyzer {
         return deps;
     }
 
-    private String getPostgresViewDDL(String viewName) {
-        String sql = "SELECT pg_get_viewdef(p.oid, true) as viewdef " +
-                "FROM pg_class p " +
-                "WHERE p.relname = ? AND p.relkind = 'v'";
-
-        try (Connection conn = getPostgresConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, viewName.toLowerCase());
-            pstmt.setQueryTimeout(30);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("viewdef");
-            }
-        } catch (SQLException e) {
-            System.err.println("  Ошибка получения DDL вьюхи " + viewName + " из PostgreSQL: " + e.getMessage());
-        }
-
-        return null;
-    }
 
     private Connection getPostgresConnection() throws SQLException {
         // Используем статические настройки, если они установлены, иначе берем из settings
@@ -281,6 +265,62 @@ public class ViewDependencyAnalyzer {
 
     public static boolean isInCache(String viewName) {
         return globalViewCache.containsKey(viewName.toUpperCase());
+    }
+    /**
+     * Проверяет доступность PostgreSQL
+     */
+    private boolean isPostgresAvailable() {
+        long now = System.currentTimeMillis();
+        if (postgresAvailable != null && (now - lastPostgresCheck) < CHECK_INTERVAL) {
+            return postgresAvailable;
+        }
+
+        try {
+            String url, user, password;
+            if (settings != null) {
+                url = settings.getPostgresUrl();
+                user = settings.getPostgresUser();
+                password = settings.getPostgresPassword();
+            } else {
+                postgresAvailable = false;
+                return false;
+            }
+
+            DriverManager.setLoginTimeout(3);
+            try (Connection conn = DriverManager.getConnection(url, user, password)) {
+                postgresAvailable = conn.isValid(2);
+            }
+        } catch (SQLException e) {
+            System.err.println("[PostgreSQL] Недоступна: " + e.getMessage());
+            postgresAvailable = false;
+        }
+        lastPostgresCheck = now;
+        return postgresAvailable;
+    }
+
+    private String getPostgresViewDDL(String viewName) {
+        // Быстрая проверка доступности PostgreSQL
+        if (!isPostgresAvailable()) {
+            System.err.println("  [PostgreSQL] База недоступна, пропускаем запрос для " + viewName);
+            return null;
+        }
+
+        String sql = "SELECT pg_get_viewdef(p.oid, true) as viewdef " +
+                "FROM pg_class p " +
+                "WHERE p.relname = ? AND p.relkind = 'v'";
+
+        try (Connection conn = getPostgresConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, viewName.toLowerCase());
+            pstmt.setQueryTimeout(5);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("viewdef");
+            }
+        } catch (SQLException e) {
+            System.err.println("  Ошибка получения DDL вьюхи " + viewName + " из PostgreSQL: " + e.getMessage());
+        }
+        return null;
     }
 
 }

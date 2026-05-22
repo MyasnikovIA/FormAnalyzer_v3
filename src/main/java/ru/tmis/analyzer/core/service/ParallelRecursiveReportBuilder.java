@@ -215,9 +215,9 @@ public class ParallelRecursiveReportBuilder {
                         .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
                         .forEach(p -> {
                             String relativePath = formsPath.relativize(p).toString().replace("\\", "/");
+                            // ПОЛНЫЙ путь: Forms/относительный/путь
                             String formPath = "Forms/" + relativePath;
 
-                            // Проверяем, есть ли уже отчёт
                             if (!hasReport(formPath) && !processedForms.contains(formPath)) {
                                 foundForms.add(formPath);
                             }
@@ -238,6 +238,7 @@ public class ParallelRecursiveReportBuilder {
                                     .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
                                     .forEach(p -> {
                                         String relativePath = userFormsDir.relativize(p).toString().replace("\\", "/");
+                                        // ПОЛНЫЙ путь: UserFormsXXX/относительный/путь
                                         String formPath = dirName + "/" + relativePath;
 
                                         if (!hasReport(formPath) && !processedForms.contains(formPath)) {
@@ -287,13 +288,31 @@ public class ParallelRecursiveReportBuilder {
         if (normalized.startsWith("(sub)_")) {
             normalized = normalized.substring(6);
         }
-        if (normalized.startsWith("Forms/")) {
-            normalized = normalized.substring(6);
-        }
-        String safeName = normalized.replace("/", "#").replace("\\", "#") + ".txt";
+
+        // Формируем имя файла как в ReportGenerator
+        String safeName = getSafeFileNameForReport(normalized);
         Path reportPath = Paths.get(outputDir, "Forms", safeName);
 
         return Files.exists(reportPath);
+    }
+
+    /**
+     * Формирует безопасное имя файла отчёта (как в ReportGenerator)
+     */
+    private String getSafeFileNameForReport(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        // Убираем расширение .frm или .dfrm для формирования имени
+        if (normalized.endsWith(".frm")) {
+            normalized = normalized.substring(0, normalized.length() - 4);
+        }
+        if (normalized.endsWith(".dfrm")) {
+            normalized = normalized.substring(0, normalized.length() - 5);
+        }
+        String safeName = normalized.replace("/", "#").replace("\\", "#");
+        return safeName + ".txt";
     }
 
     /**
