@@ -1,5 +1,7 @@
 package ru.tmis.analyzer.core.cache;
 
+import ru.tmis.analyzer.config.AppConfig;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -13,6 +15,25 @@ public class FormCache {
     private static final Map<String, Boolean> formExistsCache = new ConcurrentHashMap<>();
     private static final Map<String, Long> formLastModifiedCache = new ConcurrentHashMap<>();
 
+    private static volatile boolean enabled = true;  // По умолчанию включён
+
+    /**
+     * Включить/выключить кэширование форм
+     */
+    public static void setEnabled(boolean enabled) {
+        FormCache.enabled = enabled;
+        if (!enabled) {
+            clear();  // При выключении очищаем кэш
+            System.out.println("[FormCache] Кэширование форм ВЫКЛЮЧЕНО, кэш очищен");
+        } else {
+            System.out.println("[FormCache] Кэширование форм ВКЛЮЧЕНО");
+        }
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
     /**
      * Получить содержимое формы из кэша или загрузить с диска
      * @param filePath путь к файлу
@@ -20,6 +41,19 @@ public class FormCache {
      * @return содержимое формы
      */
     public static String getFormContent(Path filePath, String formPath) {
+        // Если кэширование выключено - всегда читаем с диска
+        if (!enabled) {
+            try {
+                if (Files.exists(filePath)) {
+                    return Files.readString(filePath);
+                }
+                return null;
+            } catch (Exception e) {
+                System.err.println("Ошибка чтения формы " + formPath + ": " + e.getMessage());
+                return null;
+            }
+        }
+
         String key = formPath;
 
         // Проверяем кэш
@@ -56,6 +90,7 @@ public class FormCache {
      * Проверить существование формы
      */
     public static boolean formExists(String formPath) {
+        if (!enabled) return false;
         return formExistsCache.getOrDefault(formPath, false);
     }
 
@@ -72,6 +107,7 @@ public class FormCache {
      * Получить количество форм в кэше
      */
     public static int getCachedFormsCount() {
+        if (!enabled) return 0;
         return formContentCache.size();
     }
 
@@ -79,6 +115,7 @@ public class FormCache {
      * Получить использование памяти кэшем в байтах
      */
     public static long getCacheMemoryUsage() {
+        if (!enabled) return 0;
         long total = 0;
         for (String content : formContentCache.values()) {
             if (content != null) {

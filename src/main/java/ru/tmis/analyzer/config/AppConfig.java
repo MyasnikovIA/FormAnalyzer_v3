@@ -65,7 +65,7 @@ public class AppConfig {
     private boolean skipDbOnError = true;
     private boolean llmPanelVisible = false;
     private int parallelThreads = Runtime.getRuntime().availableProcessors();
-
+    private boolean useMemoryCache = false;
 
     // ==================== GETTERS AND SETTERS ====================
 
@@ -180,7 +180,8 @@ public class AppConfig {
 
     public int getParallelThreads() { return parallelThreads; }
     public void setParallelThreads(int threads) { this.parallelThreads = threads; }
-
+    public boolean isUseMemoryCache() { return useMemoryCache; }
+    public void setUseMemoryCache(boolean useMemoryCache) { this.useMemoryCache = useMemoryCache; }
     /**
      * Загрузить конфигурацию из файла
      */

@@ -59,12 +59,20 @@ public class FormCacheManager {
     /**
      * Загружает все формы проекта в кэш (синхронно)
      * @param projectPath путь к проекту
-     * @param callback колбэк для логирования (может быть null)
      * @return количество загруженных форм
      */
     public int loadAllForms(String projectPath, java.util.function.Consumer<String> logCallback) {
         if (projectPath == null || projectPath.trim().isEmpty()) {
             if (logCallback != null) logCallback.accept("Путь проекта не указан, загрузка форм невозможна");
+            return 0;
+        }
+
+        // ========== ПРОВЕРКА: загружаем только если кэширование включено ==========
+        if (!FormCache.isEnabled()) {
+            if (logCallback != null) {
+                logCallback.accept("Режим кэширования форм ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
+                logCallback.accept("Формы будут читаться с диска по мере необходимости.");
+            }
             return 0;
         }
 

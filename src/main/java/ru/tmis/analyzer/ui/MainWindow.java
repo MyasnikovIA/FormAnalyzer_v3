@@ -5,6 +5,7 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.cache.FormCacheManager;
+import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.db.DatabaseAvailabilityService;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -1723,9 +1724,6 @@ public class MainWindow extends JFrame {
     /**
      * Корректное завершение всех потоков при закрытии окна
      */
-    /**
-     * Быстрое завершение всех потоков при закрытии окна
-     */
     private void shutdownAllExecutors() {
         // Останавливаем параллельный билдер (без ожидания)
         if (parallelBuilder != null) {
@@ -1755,6 +1753,15 @@ public class MainWindow extends JFrame {
         // Останавливаем поток чтения лога
         if (logReader != null && logReader.isAlive()) {
             logReader.interrupt();
+        }
+
+        if (config != null && config.isUseMemoryCache() && !parallelBuilder.isRunning()) {
+            try {
+                System.out.println("Выгрузка буфера на диск перед закрытием...");
+                InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
+            } catch (IOException e) {
+                System.err.println("Ошибка выгрузки буфера: " + e.getMessage());
+            }
         }
     }
 

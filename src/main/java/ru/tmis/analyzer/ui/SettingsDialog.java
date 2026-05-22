@@ -4,6 +4,7 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.cache.FormCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
@@ -24,6 +25,7 @@ public class SettingsDialog extends JDialog {
     private boolean saved = false;
     private String cachedInstructionM2 = null;
     private String cachedInstructionD3 = null;
+    private JCheckBox useMemoryCacheCheckbox;
 
     // Connection fields
     private JTextField projectPathField;
@@ -259,6 +261,28 @@ public class SettingsDialog extends JDialog {
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(titleLabel);
         contentPanel.add(Box.createVerticalStrut(15));
+
+        JCheckBox useMemoryCacheCheckbox = new JCheckBox("Работать через оперативную память");
+        useMemoryCacheCheckbox.setSelected(config.isUseMemoryCache());
+        useMemoryCacheCheckbox.addActionListener(e -> {
+            config.setUseMemoryCache(useMemoryCacheCheckbox.isSelected());
+            String status = useMemoryCacheCheckbox.isSelected() ?
+                    "ВКЛЮЧЕН (все данные в RAM, запись на диск после завершения)" :
+                    "ВЫКЛЮЧЕН (непосредственная запись на диск)";
+            JOptionPane.showMessageDialog(this,
+                    "Режим работы изменён на: " + status +
+                            "\n\nИзменение вступит в силу при следующем запуске анализа.",
+                    "Режим работы",
+                    JOptionPane.INFORMATION_MESSAGE);
+        });
+        contentPanel.add(createCheckboxWithDescription(useMemoryCacheCheckbox,
+                "Включить: все файлы форм загружаются в оперативную память, результаты анализа\n" +
+                        "накапливаются в RAM и только после завершения анализа записываются на диск.\n" +
+                        "Выключить: формы читаются с диска по мере необходимости, результаты пишутся\n" +
+                        "на диск сразу после обработки каждой формы.\n\n" +
+                        "Рекомендуется включать при наличии большого количества оперативной памяти (от 8 ГБ)\n" +
+                        "и частом повторном анализе одних и тех же форм."));
+        contentPanel.add(Box.createVerticalStrut(10));
 
         // SQL запросы
         includeSqlContentCheckbox = new JCheckBox("Показывать SQL запросы");
@@ -595,7 +619,10 @@ public class SettingsDialog extends JDialog {
             enableJSONExportCheckbox.setSelected(config.isEnableJSONExport());
         }
 
-        // LLM settings - ТОЛЬКО ЕСЛИ ПАНЕЛЬ ВИДИМА
+        if (useMemoryCacheCheckbox != null) {
+            useMemoryCacheCheckbox.setSelected(config.isUseMemoryCache());
+        }
+
         if (config.isLlmPanelVisible()) {
             if (enableLLMExportCheckbox != null) {
                 enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
@@ -642,7 +669,16 @@ public class SettingsDialog extends JDialog {
         settings.setPostgresPassword(new String(postgresPasswordField.getPassword()));
         settings.setMisUser(misUserField.getText());
 
+        if (useMemoryCacheCheckbox != null) {
+            config.setUseMemoryCache(useMemoryCacheCheckbox.isSelected());
+        }
+
         settings.save();
+
+        FormCache.setEnabled(config.isUseMemoryCache());
+        if (!config.isUseMemoryCache()) {
+            FormCacheManager.getInstance().clearCache();
+        }
 
         // ========== ОБРАБОТКА ИЗМЕНЕНИЯ ПУТИ ПРОЕКТА ==========
         String newProjectPath = projectPathField.getText();

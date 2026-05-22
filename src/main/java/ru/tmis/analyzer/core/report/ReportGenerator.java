@@ -115,30 +115,42 @@ public class ReportGenerator {
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        // 1. Сохраняем TXT в буфер
-        String txtContent = generateTxtContent(formInfo);
-        InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
+        AppConfig config = AppConfig.load();
+        boolean useMemoryCache = config != null && config.isUseMemoryCache();
 
-        // 2. Добавляем в CSV буфер
-        if (config != null && config.isEnableCSVExport()) {
-            addToCsvBuffer(formInfo);
+        if (useMemoryCache) {
+            // Режим памяти: сохраняем в буфер
+            String txtContent = generateTxtContent(formInfo);
+            InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
+
+            if (config.isEnableCSVExport()) {
+                addToCsvBuffer(formInfo);
+            }
+
+            if (config.isEnableJSONExport()) {
+                addToJsonBuffer(formInfo);
+            }
+
+            if (config.isEnableLLMExport()) {
+                String mdContent = generateMdContent(formInfo);
+                InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
+            }
+        } else {
+            // Режим диска: сразу пишем в файл
+            saveFormReportToFile(formInfo);
+
+            if (config.isEnableCSVExport()) {
+                appendToCSVReport(formInfo);
+            }
+
+            if (config.isEnableJSONExport()) {
+                appendToJSONReport(formInfo);
+            }
+
+            if (config.isEnableLLMExport()) {
+                generateLLMPromptForForm(formInfo);
+            }
         }
-
-        // 3. Добавляем в JSON буфер
-        if (config != null && config.isEnableJSONExport()) {
-            addToJsonBuffer(formInfo);
-        }
-
-        // 4. Добавляем MD промпт в буфер
-        if (config != null && config.isEnableLLMExport()) {
-            String mdContent = generateMdContent(formInfo);
-            InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
-        }
-
-        // Обновляем дерево (если есть доступ к formsTreePanel, иначе убрать)
-        SwingUtilities.invokeLater(() -> {
-            // formsTreePanel.refreshChildForms(formInfo.getFormPath());
-        });
     }
     /**
      * Генерирует текстовое содержимое отчёта

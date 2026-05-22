@@ -598,15 +598,21 @@ public class ParallelRecursiveReportBuilder {
             log("Всего обработано форм: " + totalProcessed.get());
             log("Всего найдено форм: " + totalFound.get());
 
-            // ========== ВЫГРУЗКА БУФЕРА НА ДИСК ==========
-            log("Выгрузка отчётов на диск...");
-            try {
-                InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
-            } catch (IOException e) {
-                error("Ошибка выгрузки буфера: " + e.getMessage());
-                e.printStackTrace();
+            // ========== ВЫГРУЗКА БУФЕРА НА ДИСК (только если используется режим памяти) ==========
+            AppConfig config = AppConfig.load();
+            if (config != null && config.isUseMemoryCache()) {
+                log("Выгрузка отчётов на диск (режим оперативной памяти)...");
+                try {
+                    InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
+                    log("Выгрузка завершена");
+                } catch (IOException e) {
+                    error("Ошибка выгрузки буфера: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                log("Режим прямой записи на диск (отчёты уже сохранены)");
             }
-            // ============================================
+            // ===============================================================
 
             // Принудительно обновляем всё дерево
             javax.swing.SwingUtilities.invokeLater(() -> {

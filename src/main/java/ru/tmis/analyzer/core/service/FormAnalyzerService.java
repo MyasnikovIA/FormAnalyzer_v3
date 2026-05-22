@@ -38,6 +38,7 @@ public class FormAnalyzerService {
     private final UserFormsResolver userFormsResolver;
     private final ExtractorManager extractorManager;
     private Set<String> formsToAnalyze;
+    private final boolean useMemoryCache;
 
     private final Set<String> existingReportsCache = ConcurrentHashMap.newKeySet();
     private final BlockingQueue<FormInfo> reportQueue = new LinkedBlockingQueue<>();
@@ -61,16 +62,22 @@ public class FormAnalyzerService {
         void onProgress(int processed, int total, String currentForm);
     }
 
-    // В конструктор добавить запуск фонового писателя:
     public FormAnalyzerService(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
         this.extractorManager = new ExtractorManager(settings);
+        this.useMemoryCache = config != null && config.isUseMemoryCache();
 
-        // Запускаем фоновый поток для записи отчётов
-        startReportWriter();
+        // ========== ВАЖНО: устанавливаем режим кэширования форм ==========
+        FormCache.setEnabled(useMemoryCache);
+        // =================================================================
+
+        // Запускаем фоновый поток для записи отчётов (только если не используем кэш)
+        if (!useMemoryCache) {
+            startReportWriter();
+        }
     }
 
     private void startReportWriter() {
@@ -227,9 +234,10 @@ public class FormAnalyzerService {
     /**
      * Анализ одной формы
      * @param formPath путь к форме
+     * @param skipCacheCheck пропустить проверку существования отчёта (для рекурсивного анализа)
      * @return информация о форме или null, если форма пропущена
      */
-    public FormInfo analyzeForm(String formPath) {
+    public FormInfo analyzeForm(String formPath, boolean skipCacheCheck) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
         System.out.println("  Проверка формы: " + normalizedPath);
@@ -240,12 +248,13 @@ public class FormAnalyzerService {
         }
 
         // ========== ПРОВЕРКА: ЕСЛИ ОТЧЁТ УЖЕ СУЩЕСТВУЕТ ==========
-        Path reportPath = getReportPath(normalizedPath);
-
-        if (Files.exists(reportPath)) {
-            log("Отчет уже существует: " + reportPath.toString());
-            log("  Форма пропущена (отчет построен ранее)");
-            return null;
+        if (!skipCacheCheck) {
+            Path reportPath = getReportPath(normalizedPath);
+            if (Files.exists(reportPath)) {
+                log("Отчет уже существует: " + reportPath.toString());
+                log("  Форма пропущена (отчет построен ранее)");
+                return null;
+            }
         }
         // =======================================================
 
@@ -254,12 +263,24 @@ public class FormAnalyzerService {
         Path baseFormPathObj = scannerService.getBaseFormPath(normalizedPath);
         formInfo.setBaseFormPath(baseFormPathObj.toString());
 
-        // ========== ИСПОЛЬЗУЕМ КЭШ ДЛЯ ЧТЕНИЯ ФАЙЛА ФОРМЫ ==========
-        String baseContent = FormCache.getFormContent(baseFormPathObj, normalizedPath);
-        if (baseContent == null) {
-            System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);
-            return null;
+        // ========== ПОЛУЧАЕМ СОДЕРЖИМОЕ ФОРМЫ (ИЗ КЭША ИЛИ С ДИСКА) ==========
+        String baseContent;
+        if (useMemoryCache) {
+            // Режим оперативной памяти: берём из кэша
+            baseContent = FormCache.getFormContent(baseFormPathObj, normalizedPath);
+            if (baseContent == null) {
+                System.err.println("Не удалось прочитать содержимое формы из кэша: " + baseFormPathObj);
+                return null;
+            }
+        } else {
+            // Режим диска: читаем напрямую
+            baseContent = scannerService.readFileContent(baseFormPathObj);
+            if (baseContent == null) {
+                System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);
+                return null;
+            }
         }
+        // ================================================================
 
         // Удаляем комментарии
         String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
@@ -300,7 +321,33 @@ public class FormAnalyzerService {
             }
         }
 
+        // ========== СОХРАНЕНИЕ ОТЧЁТА В ЗАВИСИМОСТИ ОТ РЕЖИМА ==========
+        if (useMemoryCache) {
+            // Режим оперативной памяти: добавляем в буфер
+            queueFormForReport(formInfo);
+        } else {
+            // Режим диска: сразу пишем на диск
+            try {
+                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
+                reportGen.createMainReportHeader();
+                reportGen.appendFormToMainReport(formInfo);
+                log("  Отчёт сохранён на диск: " + formInfo.getFormPath());
+            } catch (IOException e) {
+                error("  Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
+            }
+        }
+        // =================================================================
+
         return formInfo;
+    }
+
+    /**
+     * Анализ одной формы (с проверкой существования отчёта)
+     * @param formPath путь к форме
+     * @return информация о форме или null, если форма пропущена
+     */
+    public FormInfo analyzeForm(String formPath) {
+        return analyzeForm(formPath, false);
     }
 
     /**
