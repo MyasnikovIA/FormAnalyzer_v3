@@ -4,6 +4,7 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.FormCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
 
@@ -629,6 +630,8 @@ public class SettingsDialog extends JDialog {
 
 
     private void saveSettings() {
+        String oldProjectPath = settings.getProjectPath();
+
         settings.setProjectPath(projectPathField.getText());
         settings.setOutputDir(outputDirField.getText());
         settings.setOracleUrl(oracleUrlField.getText());
@@ -641,6 +644,14 @@ public class SettingsDialog extends JDialog {
 
         settings.save();
 
+        // ========== ОБРАБОТКА ИЗМЕНЕНИЯ ПУТИ ПРОЕКТА ==========
+        String newProjectPath = projectPathField.getText();
+        if (oldProjectPath != null && !oldProjectPath.equals(newProjectPath)) {
+            System.out.println("Путь проекта изменился: " + oldProjectPath + " -> " + newProjectPath);
+            System.out.println("Очищаем кэш форм...");
+            FormCacheManager.getInstance().clearCache();
+        }
+        // Обновляем конфигурацию БД
         DatabaseCacheManager.initDbConfig(
                 settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
                 settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
@@ -648,62 +659,6 @@ public class SettingsDialog extends JDialog {
         );
         DatabaseCacheManager.checkConnections();
 
-        // Сбросить статус подключения к БД и перепроверить
-        DatabaseCacheManager.resetConnectionStatus();
-        DatabaseCacheManager.initDbConfig(
-                settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
-                settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
-                settings.getMisUser()
-        );
-
-        // Report settings
-        if (includeSqlContentCheckbox != null) {
-            config.setIncludeSqlContent(includeSqlContentCheckbox.isSelected());
-        }
-        if (includeTablesViewsCheckbox != null) {
-            config.setIncludeTablesViews(includeTablesViewsCheckbox.isSelected());
-        }
-        if (includeJsUnitCompositionsCheckbox != null) {
-            config.setIncludeJsUnitCompositions(includeJsUnitCompositionsCheckbox.isSelected());
-        }
-        if (includeBrokerFunctionsReportCheckbox != null) {
-            config.setIncludeBrokerFunctions(includeBrokerFunctionsReportCheckbox.isSelected());
-        }
-        if (includePopupMenusCheckbox != null) {
-            config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected());
-        }
-        if (checkPostgresPackagesCheckbox != null) {
-            config.setCheckPostgresPackages(checkPostgresPackagesCheckbox.isSelected());
-        }
-        if (enableCSVExportCheckbox != null) {
-            config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
-        }
-        if (enableJSONExportCheckbox != null) {
-            config.setEnableJSONExport(enableJSONExportCheckbox.isSelected());
-        }
-
-        // LLM settings - ТОЛЬКО ЕСЛИ ПАНЕЛЬ ВИДИМА
-        if (config.isLlmPanelVisible()) {
-            if (enableLLMExportCheckbox != null) {
-                config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
-            }
-            if (singleFileRadio != null && perFormRadio != null) {
-                config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
-            }
-            if (includeSqlQueriesCheckbox != null) {
-                config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
-                config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
-                config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
-                config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
-                config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
-                config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
-                config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
-                config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
-                config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
-            }
-            config.setLlmInstructionText(instructionTextArea.getText());
-        }
-        config.save();
         JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
     }
 

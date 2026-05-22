@@ -4,6 +4,7 @@ import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.cache.FormCache;
+import ru.tmis.analyzer.core.cache.FormCacheManager;
 import ru.tmis.analyzer.core.db.DatabaseAvailabilityService;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -61,6 +62,7 @@ public class MainWindow extends JFrame {
     private ParallelRecursiveReportBuilder parallelBuilder;
     private Timer progressTimer;
     private long scanStartTime;
+    private final FormCacheManager formCacheManager = FormCacheManager.getInstance();
 
 
     public MainWindow(SettingsModel settings, AppConfig config) {
@@ -540,11 +542,26 @@ public class MainWindow extends JFrame {
      * Запускает анализ выбранных форм
      */
     private void startAnalysis() {
-        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
-            return; // Пользователь отменил анализ
+            return;
         }
-        // =============================================
+        // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
+        String projectPath = settings.getProjectPath();
+        if (formCacheManager.needsLoading(projectPath)) {
+            appendLog("Загрузка форм в оперативную память...");
+            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+            if (loaded == 0) {
+                appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
+                JOptionPane.showMessageDialog(this,
+                        "Не удалось загрузить формы.\nПроверьте путь к проекту в настройках.",
+                        "Ошибка загрузки",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            appendLog("Загружено " + loaded + " форм в оперативную память");
+        } else {
+            appendLog("Используем формы из кэша (" + formCacheManager.getCachedFormsCount() + " шт.)");
+        }
 
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
@@ -1527,9 +1544,27 @@ public class MainWindow extends JFrame {
     private void startParallelRecursiveAnalysis() {
         // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
-            return; // Пользователь отменил анализ
+            return;
         }
         // =============================================
+
+        // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
+        String projectPath = settings.getProjectPath();
+        if (formCacheManager.needsLoading(projectPath)) {
+            appendLog("Загрузка форм в оперативную память...");
+            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+            if (loaded == 0) {
+                appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
+                JOptionPane.showMessageDialog(this,
+                        "Не удалось загрузить формы.\nПроверьте путь к проекту в настройках.",
+                        "Ошибка загрузки",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            appendLog("Загружено " + loaded + " форм в оперативную память");
+        } else {
+            appendLog("Используем формы из кэша (" + formCacheManager.getCachedFormsCount() + " шт.)");
+        }
 
         if (parallelBuilder.isRunning()) {
             appendLog("Параллельный анализ уже выполняется");
@@ -1550,8 +1585,28 @@ public class MainWindow extends JFrame {
     }
 
     private void startParallelFullProjectScan() {
+        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
-            return; // Пользователь отменил анализ
+            return;
+        }
+        // =============================================
+
+        // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
+        String projectPath = settings.getProjectPath();
+        if (formCacheManager.needsLoading(projectPath)) {
+            appendLog("Загрузка форм в оперативную память...");
+            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+            if (loaded == 0) {
+                appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
+                JOptionPane.showMessageDialog(this,
+                        "Не удалось загрузить формы.\nПроверьте путь к проекту в настройках.",
+                        "Ошибка загрузки",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            appendLog("Загружено " + loaded + " форм в оперативную память");
+        } else {
+            appendLog("Используем формы из кэша (" + formCacheManager.getCachedFormsCount() + " шт.)");
         }
 
         // Проверяем, не запущен ли уже анализ
@@ -1707,59 +1762,9 @@ public class MainWindow extends JFrame {
      * Предзагрузка всех форм в оперативную память (использует 124 ГБ RAM)
      */
     private void preloadFormsToCache() {
-        // Запускаем в отдельном потоке, чтобы не блокировать UI
-        new Thread(() -> {
-            appendLog("=== НАЧАЛО ПРЕДЗАГРУЗКИ ФОРМ В ПАМЯТЬ ===");
-            appendLog("Доступно RAM: " + Runtime.getRuntime().maxMemory() / (1024 * 1024 * 1024) + " ГБ");
-
-            long startTime = System.currentTimeMillis();
-
-            FileScannerService scanner = new FileScannerService(settings.getProjectPath());
-            Set<String> allForms = scanner.findAllBaseForms();
-            int totalForms = allForms.size();
-            int loaded = 0;
-            int errors = 0;
-
-            appendLog("Всего форм для загрузки: " + totalForms);
-
-            for (String formPath : allForms) {
-                try {
-                    Path physicalPath = scanner.getBaseFormPath(formPath);
-                    // Загружаем в кэш
-                    String content = FormCache.getFormContent(physicalPath, formPath);
-                    if (content != null) {
-                        loaded++;
-                    } else {
-                        errors++;
-                    }
-
-                    // Показываем прогресс каждые 100 форм
-                    if (loaded % 100 == 0) {
-                        long elapsed = System.currentTimeMillis() - startTime;
-                        double percent = (loaded * 100.0) / totalForms;
-                        appendLog(String.format("  Загружено: %d/%d (%.1f%%) за %d сек",
-                                loaded, totalForms, percent, elapsed / 1000));
-                    }
-                } catch (Exception e) {
-                    errors++;
-                    appendLog("  Ошибка загрузки: " + formPath + " - " + e.getMessage());
-                }
-            }
-
-            long totalTime = System.currentTimeMillis() - startTime;
-            appendLog("=== ПРЕДЗАГРУЗКА ЗАВЕРШЕНА ===");
-            appendLog("Загружено форм: " + loaded);
-            appendLog("Ошибок: " + errors);
-            appendLog("Всего: " + totalForms);
-            appendLog("Время: " + totalTime / 1000 + " сек");
-            appendLog("Форм в кэше: " + FormCache.getCachedFormsCount());
-
-            // Выводим использование памяти
-            Runtime rt = Runtime.getRuntime();
-            long usedMemory = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
-            appendLog("Использовано RAM: " + usedMemory + " МБ");
-
-        }, "FormPreloader").start();
+        // Загрузка форм перенесена в момент начала анализа
+        // Этот метод оставлен для совместимости, но ничего не делает
+        appendLog("Кэширование форм будет выполнено при запуске анализа");
     }
     /**
      * Проверяет доступность баз данных перед началом анализа
