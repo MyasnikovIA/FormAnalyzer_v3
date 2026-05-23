@@ -65,13 +65,10 @@ public class FormCacheManager {
      * @param projectPath путь к проекту
      * @return количество загруженных форм
      */
-    /**
-     * ПРЕДЗАГРУЗКА всех форм в память (синхронно, с прогрессом)
-     */
     public int loadAllForms(String projectPath, java.util.function.Consumer<String> logCallback) {
         if (!FormCache.isEnabled()) {
             if (logCallback != null) {
-                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
+                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память, читаются с диска.");
             }
             return 0;
         }

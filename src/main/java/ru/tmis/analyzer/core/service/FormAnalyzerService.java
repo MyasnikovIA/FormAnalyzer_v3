@@ -242,8 +242,14 @@ public class FormAnalyzerService {
      * @param skipCacheCheck пропустить проверку существования отчёта (для рекурсивного анализа)
      * @return информация о форме или null, если форма пропущена
      */
+    // core/service/FormAnalyzerService.java
+    /**
+     * Анализ одной формы
+     * @param formPath путь к форме
+     * @param skipCacheCheck пропустить проверку существования отчёта (для рекурсивного анализа)
+     * @return информация о форме или null, если форма пропущена
+     */
     public FormInfo analyzeForm(String formPath, boolean skipCacheCheck) {
-        checkPause();
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
         System.out.println("  Проверка формы: " + normalizedPath);
@@ -269,17 +275,19 @@ public class FormAnalyzerService {
         Path baseFormPathObj = scannerService.getBaseFormPath(normalizedPath);
         formInfo.setBaseFormPath(baseFormPathObj.toString());
 
-        // ========== ПОЛУЧАЕМ СОДЕРЖИМОЕ ФОРМЫ (ИЗ КЭША ИЛИ С ДИСКА) ==========
+        // ========== ПОЛУЧАЕМ СОДЕРЖИМОЕ ФОРМЫ ==========
         String baseContent;
+
         if (useMemoryCache) {
-            // Режим оперативной памяти: берём из кэша
-            baseContent = FormCache.getFormContent(baseFormPathObj, normalizedPath);
+            // Режим оперативной памяти: берём из кэша (который загружен заранее)
+            baseContent = FormCache.getFormContent(normalizedPath);
             if (baseContent == null) {
-                System.err.println("Не удалось прочитать содержимое формы из кэша: " + baseFormPathObj);
+                System.err.println("Форма не найдена в кэше: " + normalizedPath);
+                System.err.println("Возможно, не была выполнена предзагрузка форм.");
                 return null;
             }
         } else {
-            // Режим диска: читаем напрямую
+            // Режим диска: читаем напрямую с диска
             baseContent = scannerService.readFileContent(baseFormPathObj);
             if (baseContent == null) {
                 System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);

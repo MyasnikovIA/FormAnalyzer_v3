@@ -572,6 +572,7 @@ public class MainWindow extends JFrame {
      * Запускает анализ выбранных форм
      */
     private void startAnalysis() {
+        ensureFormsPreloaded();
         paused.set(false);
         pauseButton.setText("⏸ Пауза");
         pauseButton.setEnabled(true);
@@ -579,6 +580,7 @@ public class MainWindow extends JFrame {
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
             return;
         }
+
         // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
         String projectPath = settings.getProjectPath();
         if (formCacheManager.needsLoading(projectPath)) {
@@ -1428,6 +1430,7 @@ public class MainWindow extends JFrame {
      * Запускает анализ для указанных форм
      */
     private void startAnalysisForForms(Set<String> formsSet) {
+        ensureFormsPreloaded();
         // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
             return; // Пользователь отменил анализ
@@ -1608,6 +1611,7 @@ public class MainWindow extends JFrame {
     }
 
     private void startParallelRecursiveAnalysis() {
+        ensureFormsPreloaded();
         paused.set(false);
         pauseButton.setText("⏸ Пауза");
         pauseButton.setEnabled(true);
@@ -1917,4 +1921,51 @@ public class MainWindow extends JFrame {
             }
         }
     }
+
+
+    /**
+     * Гарантированная предзагрузка форм в память (если включен режим)
+     */
+    private void ensureFormsPreloaded() {
+        if (!config.isUseMemoryCache()) {
+            appendLog("Режим оперативной памяти ВЫКЛЮЧЕН. Формы читаются с диска.");
+            return;
+        }
+
+        String projectPath = settings.getProjectPath();
+        if (projectPath == null || projectPath.trim().isEmpty()) {
+            appendLog("ОШИБКА: Путь к проекту не указан!");
+            return;
+        }
+
+        // Если уже загружены - пропускаем
+        if (formCacheManager.isFormsLoaded()) {
+            appendLog("Формы уже в памяти (" + formCacheManager.getCachedFormsCount() + " шт.)");
+            return;
+        }
+
+        // Предзагрузка
+        appendLog("");
+        appendLog("=== ПРЕДЗАГРУЗКА ФОРМ В ОПЕРАТИВНУЮ ПАМЯТЬ ===");
+
+        progressBar.setIndeterminate(true);
+        statusLabel.setText("Статус: Загрузка форм в память...");
+
+        // Синхронная загрузка (с прогрессом в логе)
+        int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+
+        progressBar.setIndeterminate(false);
+        statusLabel.setText("Статус: Готов к анализу");
+
+        if (loaded == 0 && config.isUseMemoryCache()) {
+            appendLog("ПРЕДУПРЕЖДЕНИЕ: Не удалось загрузить формы в память!");
+            appendLog("Будет использован режим прямого чтения с диска.");
+            config.setUseMemoryCache(false);
+        } else if (loaded > 0) {
+            appendLog("✓ Формы успешно загружены в оперативную память");
+            long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
+            appendLog("  Использовано RAM: ~" + memoryMB + " МБ");
+        }
+    }
+
 }

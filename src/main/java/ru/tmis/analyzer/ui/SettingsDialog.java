@@ -8,14 +8,13 @@ import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.cache.FormCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
+import ru.tmis.analyzer.utils.NetworkUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class SettingsDialog extends JDialog {
@@ -664,8 +663,11 @@ public class SettingsDialog extends JDialog {
     private void saveSettings() {
         String oldProjectPath = settings.getProjectPath();
 
+        // Сохраняем базовые настройки
         settings.setProjectPath(projectPathField.getText());
         settings.setOutputDir(outputDirField.getText());
+
+        // Сохраняем настройки подключений (даже если они недоступны)
         settings.setOracleUrl(oracleUrlField.getText());
         settings.setOracleUser(oracleUserField.getText());
         settings.setOraclePassword(new String(oraclePasswordField.getPassword()));
@@ -681,8 +683,62 @@ public class SettingsDialog extends JDialog {
             int threadsValue = (Integer) threadsSpinner.getValue();
             config.setParallelThreads(threadsValue);
         }
-        settings.save();
 
+        // Сохраняем настройки отчётов
+        if (includeSqlContentCheckbox != null) {
+            config.setIncludeSqlContent(includeSqlContentCheckbox.isSelected());
+        }
+        if (includeTablesViewsCheckbox != null) {
+            config.setIncludeTablesViews(includeTablesViewsCheckbox.isSelected());
+        }
+        if (includeJsUnitCompositionsCheckbox != null) {
+            config.setIncludeJsUnitCompositions(includeJsUnitCompositionsCheckbox.isSelected());
+        }
+        if (includeBrokerFunctionsReportCheckbox != null) {
+            config.setIncludeBrokerFunctions(includeBrokerFunctionsReportCheckbox.isSelected());
+        }
+        if (includePopupMenusCheckbox != null) {
+            config.setIncludePopupMenus(includePopupMenusCheckbox.isSelected());
+        }
+        if (checkPostgresPackagesCheckbox != null) {
+            config.setCheckPostgresPackages(checkPostgresPackagesCheckbox.isSelected());
+        }
+        if (enableCSVExportCheckbox != null) {
+            config.setEnableCSVExport(enableCSVExportCheckbox.isSelected());
+        }
+        if (enableJSONExportCheckbox != null) {
+            config.setEnableJSONExport(enableJSONExportCheckbox.isSelected());
+        }
+
+        // Сохраняем настройки LLM (если панель видна)
+        if (config.isLlmPanelVisible()) {
+            if (enableLLMExportCheckbox != null) {
+                config.setEnableLLMExport(enableLLMExportCheckbox.isSelected());
+            }
+            if (singleFileRadio != null && perFormRadio != null) {
+                config.setLlmExportMode(perFormRadio.isSelected() ? "per_form" : "single_file");
+            }
+            if (includeSqlQueriesCheckbox != null) {
+                config.setIncludeSqlQueries(includeSqlQueriesCheckbox.isSelected());
+                config.setIncludePostgresViews(includePostgresViewsCheckbox.isSelected());
+                config.setIncludeOracleViews(includeOracleViewsCheckbox.isSelected());
+                config.setIncludePostgresTables(includePostgresTablesCheckbox.isSelected());
+                config.setIncludeOracleTables(includeOracleTablesCheckbox.isSelected());
+                config.setIncludeOracleFunctions(includeOracleFunctionsCheckbox.isSelected());
+                config.setIncludePostgresFunctions(includePostgresFunctionsCheckbox.isSelected());
+                config.setIncludeBrokerFunctions(includeBrokerFunctionsCheckbox.isSelected());
+                config.setIncludePostgresPopupMenus(includePostgresPopupMenusCheckbox.isSelected());
+            }
+            if (instructionTextArea != null) {
+                config.setLlmInstructionText(instructionTextArea.getText());
+            }
+        }
+
+        // Сохраняем конфигурацию в файл
+        settings.save();
+        config.save();
+
+        // Обновляем режим кэширования
         FormCache.setEnabled(config.isUseMemoryCache());
         if (!config.isUseMemoryCache()) {
             FormCacheManager.getInstance().clearCache();
@@ -695,13 +751,9 @@ public class SettingsDialog extends JDialog {
             System.out.println("Очищаем кэш форм...");
             FormCacheManager.getInstance().clearCache();
         }
-        // Обновляем конфигурацию БД
-        DatabaseCacheManager.initDbConfig(
-                settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword(),
-                settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
-                settings.getMisUser()
-        );
-        DatabaseCacheManager.checkConnections();
+
+        // ========== ПРОВЕРКА ПОДКЛЮЧЕНИЙ К БД С ПРЕДВАРИТЕЛЬНЫМ PING ==========
+        testAndInitConnections();
 
         JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -898,6 +950,139 @@ public class SettingsDialog extends JDialog {
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    // ui/SettingsDialog.java
+    private void testAndInitConnections() {
+        String oracleUrl = settings.getOracleUrl();
+        String oracleUser = settings.getOracleUser();
+        String oraclePassword = settings.getOraclePassword();
+        String postgresUrl = settings.getPostgresUrl();
+        String postgresUser = settings.getPostgresUser();
+        String postgresPassword = settings.getPostgresPassword();
+        String misUser = settings.getMisUser();
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("ПРОВЕРКА ПОДКЛЮЧЕНИЙ К БАЗАМ ДАННЫХ");
+        System.out.println("========================================");
+
+        // ========== ПРОВЕРЯЕМ ORACLE (только TCP, без создания пула) ==========
+        boolean oracleConfigured = isOracleConfigured(settings);
+        boolean oracleNetworkOk = false;
+
+        if (oracleConfigured) {
+            long startTime = System.currentTimeMillis();
+            System.out.print("🟠 Проверка Oracle (" + oracleUrl + "): ");
+            oracleNetworkOk = NetworkUtils.isDatabaseServerAvailable(oracleUrl);
+            long elapsed = System.currentTimeMillis() - startTime;
+
+            if (!oracleNetworkOk) {
+                System.out.println("❌ НЕДОСТУПЕН (за " + elapsed + " мс)");
+                System.out.println("   Подключение к Oracle не будет выполнено");
+            } else {
+                System.out.println("✅ ДОСТУПЕН (за " + elapsed + " мс)");
+            }
+        } else {
+            System.out.println("🟠 Oracle: НЕ НАСТРОЕН");
+        }
+
+        // ========== ПРОВЕРЯЕМ POSTGRESQL ==========
+        boolean postgresConfigured = isPostgresConfigured(settings);
+        boolean postgresNetworkOk = false;
+
+        if (postgresConfigured) {
+            long startTime = System.currentTimeMillis();
+            System.out.print("🐘 Проверка PostgreSQL (" + postgresUrl + "): ");
+            postgresNetworkOk = NetworkUtils.isDatabaseServerAvailable(postgresUrl);
+            long elapsed = System.currentTimeMillis() - startTime;
+
+            if (!postgresNetworkOk) {
+                System.out.println("❌ НЕДОСТУПЕН (за " + elapsed + " мс)");
+                System.out.println("   Подключение к PostgreSQL не будет выполнено");
+            } else {
+                System.out.println("✅ ДОСТУПЕН (за " + elapsed + " мс)");
+            }
+        } else {
+            System.out.println("🐘 PostgreSQL: НЕ НАСТРОЕН");
+        }
+
+        System.out.println("========================================");
+        System.out.println();
+
+        // Инициализируем пулы соединений (только если сеть доступна)
+        // Передаём null для недоступных БД, чтобы пулы не создавались
+        DatabaseCacheManager.initDbConfig(
+                oracleNetworkOk ? oracleUrl : null,
+                oracleNetworkOk ? oracleUser : null,
+                oracleNetworkOk ? oraclePassword : null,
+                postgresNetworkOk ? postgresUrl : null,
+                postgresNetworkOk ? postgresUser : null,
+                postgresNetworkOk ? postgresPassword : null,
+                misUser
+        );
+    }
+
+    private boolean isOracleConfigured(SettingsModel settings) {
+        String url = settings.getOracleUrl();
+        String user = settings.getOracleUser();
+        String password = settings.getOraclePassword();
+
+        if (url == null || url.trim().isEmpty()) return false;
+        if (user == null || user.trim().isEmpty()) return false;
+        if (password == null) return false;
+
+        // Проверяем, что это не значения по умолчанию-заглушки
+        if (url.equals("jdbc:oracle:thin:@localhost:1521/XE") &&
+                user.equals("user") && password.equals("password")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isPostgresConfigured(SettingsModel settings) {
+        String url = settings.getPostgresUrl();
+        String user = settings.getPostgresUser();
+        String password = settings.getPostgresPassword();
+
+        if (url == null || url.trim().isEmpty()) return false;
+        if (user == null || user.trim().isEmpty()) return false;
+        if (password == null) return false;
+
+        // Проверяем, что это не значения по умолчанию-заглушки
+        if (url.equals("jdbc:postgresql://localhost:5432/postgres") &&
+                user.equals("postgres") && password.equals("password")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private String getShortErrorMessage(SQLException e) {
+        String message = e.getMessage();
+        if (message == null) return "Неизвестная ошибка";
+
+        if (message.contains("ORA-12541")) {
+            return "ORA-12541: Прослушиватель отсутствует (сервер недоступен)";
+        } else if (message.contains("ORA-12505")) {
+            return "ORA-12505: SID/сервис не найден";
+        } else if (message.contains("ORA-12514")) {
+            return "ORA-12514: Слушатель не знает о сервисе";
+        } else if (message.contains("ORA-01017")) {
+            return "ORA-01017: Неверное имя пользователя или пароль";
+        } else if (message.contains("password authentication failed")) {
+            return "Неверный пароль PostgreSQL";
+        } else if (message.contains("Connection refused")) {
+            return "Соединение отклонено: проверьте порт";
+        } else if (message.contains("timed out")) {
+            return "Таймаут подключения";
+        }
+
+        if (message.length() > 80) {
+            message = message.substring(0, 77) + "...";
+        }
+        return message;
     }
 
 }
