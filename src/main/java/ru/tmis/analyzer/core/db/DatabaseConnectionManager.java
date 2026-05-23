@@ -15,6 +15,10 @@ public class DatabaseConnectionManager {
     private static volatile ConnectionPool postgresPool;
     private static volatile boolean initialized = false;
 
+
+    private static final ThreadLocal<Connection> oracleConnectionHolder = new ThreadLocal<>();
+    private static final ThreadLocal<Connection> postgresConnectionHolder = new ThreadLocal<>();
+
     // Флаги доступности сети
     private static volatile boolean oracleNetworkAvailable = false;
     private static volatile boolean postgresNetworkAvailable = false;
@@ -210,4 +214,12 @@ public class DatabaseConnectionManager {
         }, intervalSeconds, intervalSeconds, TimeUnit.SECONDS);
     }
 
+    public static Connection getOracleConnectionForCurrentThread() throws SQLException {
+        Connection conn = oracleConnectionHolder.get();
+        if (conn == null || conn.isClosed()) {
+            conn = oraclePool.getConnection();
+            oracleConnectionHolder.set(conn);
+        }
+        return conn;
+    }
 }

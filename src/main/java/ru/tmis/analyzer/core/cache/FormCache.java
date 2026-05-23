@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Кэш для хранения содержимого форм в оперативной памяти
  */
 public class FormCache {
-    private static final Map<String, String> formContentCache = new ConcurrentHashMap<>();
+    private static final Map<String, String> formContentCache = new ConcurrentHashMap<>(25000);
     private static final Map<String, Boolean> formExistsCache = new ConcurrentHashMap<>();
     private static final Map<String, Long> formLastModifiedCache = new ConcurrentHashMap<>();
 

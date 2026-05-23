@@ -346,11 +346,7 @@ public class ParallelRecursiveReportBuilder {
             log("Всего найдено форм: " + totalFound.get());
 
             if (config != null && config.isUseMemoryCache()) {
-                try {
-                    InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
-                } catch (IOException e) {
-                    error("Ошибка выгрузки буфера: " + e.getMessage());
-                }
+                InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
             }
 
             SwingUtilities.invokeLater(() -> {

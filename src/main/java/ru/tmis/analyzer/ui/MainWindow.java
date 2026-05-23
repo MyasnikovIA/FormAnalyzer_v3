@@ -1769,12 +1769,8 @@ public class MainWindow extends JFrame {
         }
 
         if (config != null && config.isUseMemoryCache() && !parallelBuilder.isRunning()) {
-            try {
-                System.out.println("Выгрузка буфера на диск перед закрытием...");
-                InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
-            } catch (IOException e) {
-                System.err.println("Ошибка выгрузки буфера: " + e.getMessage());
-            }
+            System.out.println("Выгрузка буфера на диск перед закрытием...");
+            InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
         }
     }
 

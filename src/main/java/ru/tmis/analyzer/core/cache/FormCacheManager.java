@@ -78,26 +78,23 @@ public class FormCacheManager {
      * @param projectPath путь к проекту
      * @return количество загруженных форм
      */
-    // core/cache/FormCacheManager.java
-
+    /**
+     * Загружает все формы проекта в кэш (параллельно)
+     */
     public int loadAllForms(String projectPath, java.util.function.Consumer<String> logCallback) {
         if (!FormCache.isEnabled()) {
             if (logCallback != null) {
-                logCallback.accept("Проверка пути: " + projectPath);
-                logCallback.accept("Папка существует: " + Files.exists(Paths.get(projectPath)));
-                logCallback.accept("Папка Forms существует: " + Files.exists(Paths.get(projectPath, "Forms")));
+                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
             }
             return 0;
         }
 
-        // ========== ИСПРАВЛЕНИЕ: проверяем реальное состояние кэша ==========
-        if (FormCache.getCachedFormsCount() > 0) {
+        if (isLoaded.get()) {
             if (logCallback != null) {
                 logCallback.accept("Формы уже загружены в память (" + FormCache.size() + " шт.)");
             }
             return FormCache.size();
         }
-        // ===================================================================
 
         if (!isLoading.compareAndSet(false, true)) {
             if (logCallback != null) {
@@ -124,9 +121,8 @@ public class FormCacheManager {
             // Сканируем ВСЕ формы
             FileScannerService scanner = new FileScannerService(projectPath);
             Set<String> allForms = scanner.findAllForms();
-            int totalForms = allForms.size();
-            int loaded = 0;
-            int errors = 0;
+            List<String> formsList = new ArrayList<>(allForms);
+            int totalForms = formsList.size();
 
             if (logCallback != null) {
                 logCallback.accept("Всего форм для загрузки: " + totalForms);
@@ -135,36 +131,76 @@ public class FormCacheManager {
             if (totalForms == 0) {
                 if (logCallback != null) {
                     logCallback.accept("ОШИБКА: Не найдено ни одной формы по пути: " + projectPath);
-                    logCallback.accept("Проверьте, что путь указан правильно и содержит папку Forms/");
                 }
-                isLoaded.set(false);  // Сбрасываем флаг
+                isLoaded.set(false);
                 return 0;
             }
 
-            for (String formPath : allForms) {
-                try {
-                    Path physicalPath = scanner.getBaseFormPath(formPath);
-                    if (Files.exists(physicalPath)) {
-                        String content = Files.readString(physicalPath);
-                        FormCache.putFormContent(formPath, content);
-                        loaded++;
-                    } else {
-                        errors++;
-                    }
-                } catch (Exception e) {
-                    errors++;
-                    if (logCallback != null) {
-                        logCallback.accept("  [ОШИБКА] " + formPath + ": " + e.getMessage());
-                    }
-                }
+            // ========== ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА ==========
+            int threads = Math.min(Runtime.getRuntime().availableProcessors(), 16);
+            int formsPerThread = (int) Math.ceil((double) totalForms / threads);
 
-                if (logCallback != null && loaded % 100 == 0 && loaded > 0) {
-                    long elapsed = System.currentTimeMillis() - startTime;
-                    double percent = (loaded * 100.0) / totalForms;
-                    logCallback.accept(String.format("  Прогресс: %d/%d (%.1f%%) за %d сек",
-                            loaded, totalForms, percent, elapsed / 1000));
+            if (logCallback != null) {
+                logCallback.accept("Используется потоков: " + threads);
+                logCallback.accept("Форм на поток: ~" + formsPerThread);
+            }
+
+            ExecutorService executor = Executors.newFixedThreadPool(threads);
+            List<Future<LoadResult>> futures = new ArrayList<>();
+            AtomicInteger totalLoaded = new AtomicInteger(0);
+            AtomicInteger totalErrors = new AtomicInteger(0);
+
+            for (int i = 0; i < threads; i++) {
+                int startIdx = i * formsPerThread;
+                int endIdx = Math.min(startIdx + formsPerThread, totalForms);
+
+                if (startIdx >= totalForms) break;
+
+                List<String> batch = formsList.subList(startIdx, endIdx);
+                final int threadId = i;
+
+                futures.add(executor.submit(() -> {
+                    int loaded = 0;
+                    int errors = 0;
+                    for (String formPath : batch) {
+                        try {
+                            Path physicalPath = scanner.getBaseFormPath(formPath);
+                            if (Files.exists(physicalPath)) {
+                                String content = Files.readString(physicalPath);
+                                FormCache.putFormContent(formPath, content);
+                                loaded++;
+                            } else {
+                                errors++;
+                            }
+                        } catch (Exception e) {
+                            errors++;
+                        }
+
+                        // Логирование прогресса от каждого потока
+                        if (logCallback != null && loaded % 200 == 0 && loaded > 0) {
+                            logCallback.accept("  [Поток " + threadId + "] Загружено: " + loaded + "/" + batch.size());
+                        }
+                    }
+                    totalLoaded.addAndGet(loaded);
+                    totalErrors.addAndGet(errors);
+                    return new LoadResult(loaded, errors);
+                }));
+            }
+
+            // Ожидаем завершения
+            for (Future<LoadResult> future : futures) {
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    if (logCallback != null) {
+                        logCallback.accept("Ошибка в потоке загрузки: " + e.getMessage());
+                    }
                 }
             }
+
+            executor.shutdown();
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+            // ============================================
 
             long totalTime = System.currentTimeMillis() - startTime;
             long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
@@ -174,28 +210,36 @@ public class FormCacheManager {
                 logCallback.accept("========================================");
                 logCallback.accept("ЗАГРУЗКА ЗАВЕРШЕНА");
                 logCallback.accept("========================================");
-                logCallback.accept("Загружено форм: " + loaded);
-                logCallback.accept("Ошибок: " + errors);
+                logCallback.accept("Загружено форм: " + totalLoaded.get());
+                logCallback.accept("Ошибок: " + totalErrors.get());
                 logCallback.accept("Всего: " + totalForms);
                 logCallback.accept("Время: " + totalTime / 1000 + " сек");
+                logCallback.accept("Скорость: " + (totalLoaded.get() * 1000 / Math.max(1, totalTime)) + " форм/сек");
                 logCallback.accept("RAM использовано: ~" + memoryMB + " МБ");
                 logCallback.accept("========================================");
                 logCallback.accept("");
             }
 
-            isLoaded.set(loaded > 0);
+            isLoaded.set(totalLoaded.get() > 0);
             lastLoadedProjectPath.set(normalizePath(projectPath));
-            return loaded;
+            return totalLoaded.get();
 
         } catch (Exception e) {
             if (logCallback != null) {
                 logCallback.accept("Ошибка загрузки форм: " + e.getMessage());
             }
-            isLoaded.set(false);  // Сбрасываем флаг при ошибке
+            isLoaded.set(false);
             return 0;
         } finally {
             isLoading.set(false);
         }
+    }
+
+    // Вспомогательный класс
+    private static class LoadResult {
+        final int loaded;
+        final int errors;
+        LoadResult(int loaded, int errors) { this.loaded = loaded; this.errors = errors; }
     }
 
     /**
@@ -409,9 +453,4 @@ public class FormCacheManager {
         }
     }
 
-    private static class LoadResult {
-        final int loaded;
-        final int errors;
-        LoadResult(int loaded, int errors) { this.loaded = loaded; this.errors = errors; }
-    }
 }
