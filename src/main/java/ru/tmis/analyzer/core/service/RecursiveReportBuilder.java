@@ -41,6 +41,10 @@ public class RecursiveReportBuilder {
     private int totalFormsProcessed = 0;
     private Map<Integer, Integer> formsPerLevel = new LinkedHashMap<>();
 
+    private final AtomicBoolean paused = new AtomicBoolean(false);
+    private final Object pauseLock = new Object();
+
+
     public RecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
         this.config = config;  // должно быть сохранено
@@ -166,6 +170,8 @@ public class RecursiveReportBuilder {
      * @param processedForms множество уже обработанных форм (для предотвращения зацикливания)
      */
     private void processLevel(List<String> formsToAnalyze, int level, Set<String> processedForms) throws Exception {
+
+        checkPause();
         if (stopRequested.get()) {
             log("Построение остановлено пользователем на уровне " + level);
             return;
@@ -357,4 +363,26 @@ public class RecursiveReportBuilder {
         }
         return formPath;
     }
+
+    public void setPaused(boolean paused) {
+        this.paused.set(paused);
+        if (!paused) {
+            synchronized (pauseLock) {
+                pauseLock.notifyAll();
+            }
+        }
+    }
+
+    private void checkPause() {
+        if (paused.get()) {
+            synchronized (pauseLock) {
+                try {
+                    pauseLock.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
 }

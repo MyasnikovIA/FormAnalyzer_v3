@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
@@ -56,7 +57,10 @@ public class FormAnalyzerService {
 
     private BooleanSupplier stopCondition = () -> false;
     private ProgressCallback progressCallback;
-    private ILogger logger;  // <-- Добавить логгер
+    private ILogger logger;
+
+    private final AtomicBoolean paused = new AtomicBoolean(false);
+    private final Object pauseLock = new Object();
 
     public interface ProgressCallback {
         void onProgress(int processed, int total, String currentForm);
@@ -171,6 +175,7 @@ public class FormAnalyzerService {
         int total = formsToAnalyzeList.size();
 
         for (String formPath : formsToAnalyzeList) {
+            checkPause();
             if (stopCondition.getAsBoolean()) break;
 
             futures.add(executor.submit(() -> {
@@ -238,6 +243,7 @@ public class FormAnalyzerService {
      * @return информация о форме или null, если форма пропущена
      */
     public FormInfo analyzeForm(String formPath, boolean skipCacheCheck) {
+        checkPause();
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
         System.out.println("  Проверка формы: " + normalizedPath);
@@ -675,6 +681,32 @@ public class FormAnalyzerService {
                 executor.awaitTermination(30, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 executor.shutdownNow();
+            }
+        }
+    }
+    // Геттер/сеттер для паузы
+    public void setPaused(boolean paused) {
+        this.paused.set(paused);
+        if (!paused) {
+            synchronized (pauseLock) {
+                pauseLock.notifyAll();
+            }
+        }
+    }
+
+    public boolean isPaused() {
+        return paused.get();
+    }
+
+    // Метод проверки паузы
+    private void checkPause() {
+        if (paused.get()) {
+            synchronized (pauseLock) {
+                try {
+                    pauseLock.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }

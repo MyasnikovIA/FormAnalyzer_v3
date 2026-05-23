@@ -49,6 +49,8 @@ public class ParallelRecursiveReportBuilder {
     private Path projectRoot;
     private long startTime;
     private int totalFormsEstimated = 0;
+    private final AtomicBoolean paused = new AtomicBoolean(false);
+    private final Object pauseLock = new Object();
 
 
     public ParallelRecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
@@ -209,6 +211,8 @@ public class ParallelRecursiveReportBuilder {
      * Сканирование файловой системы для поиска новых форм
      */
     private void scanForNewForms() {
+
+        if (paused.get()) return;
         Set<String> foundForms = new LinkedHashSet<>();
 
         // Сканируем каталог Forms
@@ -326,7 +330,7 @@ public class ParallelRecursiveReportBuilder {
         @Override
         public void run() {
             while (!stopRequested.get() && isRunning.get() && !Thread.currentThread().isInterrupted()) {
-                // Проверка прерывания потока
+                checkPause();
                 if (Thread.currentThread().isInterrupted()) {
                     break;
                 }
@@ -336,6 +340,7 @@ public class ParallelRecursiveReportBuilder {
                     if (formPath == null) {
                         continue;
                     }
+                    checkPause();
 
                     // Проверка на остановку перед обработкой
                     if (stopRequested.get()) {
@@ -625,4 +630,30 @@ public class ParallelRecursiveReportBuilder {
             }
         }
     }
+    public void setPaused(boolean paused) {
+        this.paused.set(paused);
+        if (!paused) {
+            synchronized (pauseLock) {
+                pauseLock.notifyAll();
+            }
+        }
+    }
+
+    public boolean isPaused() {
+        return paused.get();
+    }
+
+    // Метод проверки паузы
+    private void checkPause() {
+        if (paused.get()) {
+            synchronized (pauseLock) {
+                try {
+                    pauseLock.wait(1000); // Проверяем каждую секунду
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
 }

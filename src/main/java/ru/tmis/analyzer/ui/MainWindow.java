@@ -64,6 +64,9 @@ public class MainWindow extends JFrame {
     private Timer progressTimer;
     private long scanStartTime;
     private final FormCacheManager formCacheManager = FormCacheManager.getInstance();
+    private JButton pauseButton;
+    private final AtomicBoolean paused = new AtomicBoolean(false);
+    private final Object pauseLock = new Object();
 
 
     public MainWindow(SettingsModel settings, AppConfig config) {
@@ -126,11 +129,16 @@ public class MainWindow extends JFrame {
         startButton.setBackground(new Color(76, 175, 80));
         startButton.addActionListener(e -> startAnalysis());
 
+        // НОВАЯ КНОПКА ПАУЗЫ
+        pauseButton = new JButton("⏸ Пауза");
+        pauseButton.setEnabled(false);
+        pauseButton.setBackground(new Color(255, 193, 7));
+        pauseButton.addActionListener(e -> togglePause());
+
+        // КНОПКА ПАРАЛЛЕЛЬНОГО СКАНИРОВАНИЯ ПРОЕКТА
         JButton parallelScanButton = new JButton("🚀 Параллельное сканирование проекта");
         parallelScanButton.setBackground(new Color(33, 150, 243));
         parallelScanButton.addActionListener(e -> startParallelFullProjectScan());
-        buttonPanel.add(parallelScanButton);
-
 
         stopButton = new JButton("Остановка");
         stopButton.setEnabled(false);
@@ -140,13 +148,15 @@ public class MainWindow extends JFrame {
         JButton openOutputButton = new JButton("Открыть отчеты");
         openOutputButton.addActionListener(e -> openOutputDirectory());
 
+        // ДОБАВЛЯЕМ ВСЕ КНОПКИ В ПАНЕЛЬ
         buttonPanel.add(settingsButton);
         buttonPanel.add(openOutputButton);
         buttonPanel.add(startButton);
+        buttonPanel.add(pauseButton);
+        buttonPanel.add(parallelScanButton);  // ← ЭТА СТРОЧКА БЫЛА ПРОПУЩЕНА!
         buttonPanel.add(stopButton);
 
         panel.add(buttonPanel, BorderLayout.EAST);
-
         return panel;
     }
 
@@ -469,7 +479,26 @@ public class MainWindow extends JFrame {
         statusLabel = new JLabel("Готов к работе");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        JLabel pauseIndicator = new JLabel();
+        pauseIndicator.setFont(new Font("Monospaced", Font.BOLD, 12));
+
+        // Таймер для обновления индикатора паузы
+        Timer pauseIndicatorTimer = new Timer(500, e -> {
+            if (paused.get()) {
+                pauseIndicator.setText("⏸ ПАУЗА");
+                pauseIndicator.setForeground(new Color(255, 140, 0));
+            } else {
+                pauseIndicator.setText("");
+            }
+        });
+        pauseIndicatorTimer.start();
+
         panel.add(progressBar, BorderLayout.CENTER);
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(statusLabel, BorderLayout.WEST);
+        southPanel.add(pauseIndicator, BorderLayout.EAST);
+        panel.add(southPanel, BorderLayout.SOUTH);
+
         panel.add(statusLabel, BorderLayout.SOUTH);
         JLabel memoryLabel = new JLabel();
         memoryLabel.setFont(new Font("Monospaced", Font.PLAIN, 10));
@@ -543,6 +572,10 @@ public class MainWindow extends JFrame {
      * Запускает анализ выбранных форм
      */
     private void startAnalysis() {
+        paused.set(false);
+        pauseButton.setText("⏸ Пауза");
+        pauseButton.setEnabled(true);
+        pauseButton.setBackground(new Color(255, 193, 7));
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
             return;
         }
@@ -572,7 +605,11 @@ public class MainWindow extends JFrame {
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 stopAnalysis();
-                try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             } else {
                 return;
             }
@@ -678,9 +715,20 @@ public class MainWindow extends JFrame {
                 FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
                 analyzer.setStopCondition(() -> stopRequested);
                 analyzer.setLogger(new ILogger() {
-                    @Override public void log(String msg) { appendLog(msg); }
-                    @Override public void error(String msg) { appendLog("ОШИБКА: " + msg); }
-                    @Override public void debug(String msg) { appendLog("[DEBUG] " + msg); }
+                    @Override
+                    public void log(String msg) {
+                        appendLog(msg);
+                    }
+
+                    @Override
+                    public void error(String msg) {
+                        appendLog("ОШИБКА: " + msg);
+                    }
+
+                    @Override
+                    public void debug(String msg) {
+                        appendLog("[DEBUG] " + msg);
+                    }
                 });
 
                 try {
@@ -1018,6 +1066,9 @@ public class MainWindow extends JFrame {
     }
 
     private void stopAnalysis() {
+        paused.set(false);
+        pauseButton.setEnabled(false);
+        pauseButton.setText("⏸ Пауза");
         // Останавливаем таймер прогресса
         if (progressTimer != null && progressTimer.isRunning()) {
             progressTimer.stop();
@@ -1116,8 +1167,22 @@ public class MainWindow extends JFrame {
 
     private void appendLog(String message) {
         SwingUtilities.invokeLater(() -> {
-            logArea.append("[" + new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message + "\n");
+            // Добавляем сообщение с временной меткой
+            String timestamp = "[" + new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()) + "] ";
+            logArea.append(timestamp + message + "\n");
+
+            // Автоматическая прокрутка вниз
+            // Метод 1: установка каретки в конец
             logArea.setCaretPosition(logArea.getDocument().getLength());
+
+            // Метод 2: дополнительная прокрутка JScrollPane (на случай, если каретка не сработала)
+            JScrollPane scrollPane = (JScrollPane) logArea.getParent().getParent();
+            if (scrollPane != null) {
+                JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
+                if (verticalBar != null) {
+                    verticalBar.setValue(verticalBar.getMaximum());
+                }
+            }
         });
     }
 
@@ -1543,11 +1608,13 @@ public class MainWindow extends JFrame {
     }
 
     private void startParallelRecursiveAnalysis() {
-        // ========== ПРОВЕРКА ДОСТУПНОСТИ БД ==========
+        paused.set(false);
+        pauseButton.setText("⏸ Пауза");
+        pauseButton.setEnabled(true);
+
         if (!checkDatabaseAvailabilityBeforeAnalysis()) {
             return;
         }
-        // =============================================
 
         // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
         String projectPath = settings.getProjectPath();
@@ -1635,26 +1702,13 @@ public class MainWindow extends JFrame {
 
 
         int threads = (config != null) ? config.getParallelThreads() : Runtime.getRuntime().availableProcessors();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "ПАРАЛЛЕЛЬНОЕ СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА\n\n" +
-                        "Будут обработаны ТОЛЬКО формы, для которых ещё нет отчётов.\n" +
-                        "Количество потоков: " + threads + "\n" +
-                        "Доступно ядер: " + Runtime.getRuntime().availableProcessors() + "\n\n" +
-                        "Это может занять продолжительное время.\n" +
-                        "Продолжить?",
-                "Параллельное сканирование проекта",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-
-        if (confirm != JOptionPane.YES_OPTION) {
-            appendLog("Параллельное сканирование отменено пользователем");
-            return;
-        }
-
+        appendLog("ПАРАЛЛЕЛЬНОЕ СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА\n");
+        appendLog("Будут обработаны ТОЛЬКО формы, для которых ещё нет отчётов.");
+        appendLog("Количество потоков: " + threads + "");
+        appendLog("Доступно ядер: " + Runtime.getRuntime().availableProcessors() + "\n");
+        appendLog("Это может занять продолжительное время.");
         appendLog("Начинаем параллельное сканирование всего проекта...");
         appendLog("Количество потоков: " + threads);
-
         parallelBuilder.setFullProjectScan(true);
 
         startButton.setEnabled(false);
@@ -1721,6 +1775,7 @@ public class MainWindow extends JFrame {
         }
         return String.format("%d сек", secs);
     }
+
     /**
      * Корректное завершение всех потоков при закрытии окна
      */
@@ -1773,8 +1828,10 @@ public class MainWindow extends JFrame {
         // Этот метод оставлен для совместимости, но ничего не делает
         appendLog("Кэширование форм будет выполнено при запуске анализа");
     }
+
     /**
      * Проверяет доступность баз данных перед началом анализа
+     *
      * @return true если можно продолжать анализ, false если отменено
      */
     private boolean checkDatabaseAvailabilityBeforeAnalysis() {
@@ -1812,5 +1869,52 @@ public class MainWindow extends JFrame {
         }
 
         return true;
+    }
+
+    // Метод для переключения паузы
+    private void togglePause() {
+        if (paused.get()) {
+            // Возобновляем
+            synchronized (pauseLock) {
+                paused.set(false);
+                pauseLock.notifyAll();
+            }
+
+            // Если используется parallelBuilder, возобновляем его
+            if (parallelBuilder != null) {
+                parallelBuilder.setPaused(false);
+            }
+
+            pauseButton.setText("⏸ Пауза");
+            pauseButton.setBackground(new Color(255, 193, 7));
+            appendLog("▶ Процесс возобновлён");
+            statusLabel.setText("Статус: Возобновлён");
+        } else {
+            // Ставим на паузу
+            paused.set(true);
+
+            // Если используется parallelBuilder, ставим его на паузу
+            if (parallelBuilder != null) {
+                parallelBuilder.setPaused(true);
+            }
+
+            pauseButton.setText("▶ Возобновить");
+            pauseButton.setBackground(new Color(76, 175, 80));
+            appendLog("⏸ Процесс поставлен на паузу");
+            statusLabel.setText("Статус: На паузе");
+        }
+    }
+
+    // Метод для проверки паузы (должен вызываться в рабочих потоках)
+    private void checkPause() {
+        if (paused.get()) {
+            synchronized (pauseLock) {
+                try {
+                    pauseLock.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
     }
 }

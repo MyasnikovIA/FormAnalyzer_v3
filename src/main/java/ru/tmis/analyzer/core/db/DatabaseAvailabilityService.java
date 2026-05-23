@@ -5,7 +5,6 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.utils.NetworkUtils;
 
-import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,7 +29,7 @@ public class DatabaseAvailabilityService {
 
     /**
      * Проверяет доступность обеих БД и инициализирует DatabaseCacheManager
-     * @return true если хотя бы одна БД доступна (или ни одна не настроена)
+     * @return true всегда (автоматически продолжаем выполнение)
      */
     public boolean checkAllConnections() {
         // Проверяем, настроены ли подключения
@@ -68,14 +67,100 @@ public class DatabaseAvailabilityService {
             postgresError = "Подключение не настроено (заполните настройки)";
         }
 
-        // Выводим статистику
-        System.out.println("[DatabaseAvailability] === РЕЗУЛЬТАТЫ ПРОВЕРКИ ПОДКЛЮЧЕНИЙ ===");
-        System.out.println("[DatabaseAvailability] Oracle: " + (oracleAvailable ? "ДОСТУПНА" : "НЕДОСТУПНА") +
-                (oracleError != null ? " (" + oracleError + ")" : ""));
-        System.out.println("[DatabaseAvailability] PostgreSQL: " + (postgresAvailable ? "ДОСТУПНА" : "НЕДОСТУПНА") +
-                (postgresError != null ? " (" + postgresError + ")" : ""));
+        // Выводим статистику в консоль
+        printResultsToConsole();
 
-        return true; // Всегда возвращаем true, чтобы приложение запустилось
+        return true; // Всегда возвращаем true, продолжаем выполнение
+    }
+
+    /**
+     * Выводит результаты проверки в консоль (без диалогов)
+     */
+    private void printResultsToConsole() {
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("ПРОВЕРКА ПОДКЛЮЧЕНИЯ К БАЗАМ ДАННЫХ");
+        System.out.println("========================================");
+
+        // Oracle
+        System.out.print("🟠 ORACLE: ");
+        if (!oracleConfigured) {
+            System.out.println("НЕ НАСТРОЕН");
+            System.out.println("     Заполните настройки подключения в меню 'Настройки'");
+        } else if (oracleAvailable) {
+            System.out.println("ДОСТУПНА ✓");
+        } else {
+            System.out.println("НЕДОСТУПНА ✗");
+            if (oracleError != null) {
+                System.out.println("     Причина: " + oracleError);
+            }
+        }
+
+        // PostgreSQL
+        System.out.print("🐘 POSTGRESQL: ");
+        if (!postgresConfigured) {
+            System.out.println("НЕ НАСТРОЕН");
+            System.out.println("     Заполните настройки подключения в меню 'Настройки'");
+        } else if (postgresAvailable) {
+            System.out.println("ДОСТУПНА ✓");
+        } else {
+            System.out.println("НЕДОСТУПНА ✗");
+            if (postgresError != null) {
+                System.out.println("     Причина: " + postgresError);
+            }
+        }
+
+        System.out.println("----------------------------------------");
+
+        // Определяем режим работы и выводим предупреждения в консоль
+        if (!oracleConfigured && !postgresConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: НИ ОДНА БАЗА ДАННЫХ НЕ НАСТРОЕНА");
+            System.out.println("   Анализ форм будет выполняться ТОЛЬКО на основе XML файлов.");
+            System.out.println("   Следующие функции будут недоступны:");
+            System.out.println("     • Детальный анализ вьюх (DDL, количество записей)");
+            System.out.println("     • Проверка пакетов/функций");
+            System.out.println("     • Загрузка отчётов из БД");
+            System.out.println("     • Проверка первичных ключей и NOT NULL");
+            System.out.println("     • LLM промпт с DDL объектов");
+
+        } else if (!oracleAvailable && !postgresAvailable && oracleConfigured && postgresConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: Обе базы данных недоступны!");
+            System.out.println("   Проверьте:");
+            System.out.println("     • Доступность серверов по сети");
+            System.out.println("     • Правильность URL, логина и пароля");
+            System.out.println("     • Работу firewall");
+            System.out.println("   Анализ форм будет сильно ограничен.");
+
+        } else if (!oracleAvailable && oracleConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: Oracle недоступна!");
+            System.out.println("   Следующие функции будут недоступны:");
+            System.out.println("     • Детальный анализ вьюх (DDL, количество записей)");
+            System.out.println("     • Проверка пакетов/функций");
+            System.out.println("     • Загрузка отчётов из D_REPORTS_LINKS");
+            System.out.println("     • Проверка первичных ключей и NOT NULL");
+            System.out.println("     • Oracle часть LLM промпта");
+            if (postgresAvailable) {
+                System.out.println("   PostgreSQL доступна. Продолжаем анализ.");
+            } else {
+                System.out.println("   PostgreSQL также недоступна. Анализ будет ограничен.");
+            }
+
+        } else if (!postgresAvailable && postgresConfigured) {
+            System.out.println("ℹ ИНФОРМАЦИЯ: PostgreSQL недоступна");
+            System.out.println("   Следующие функции будут недоступны:");
+            System.out.println("     • Детальный анализ вьюх из PostgreSQL");
+            System.out.println("     • Проверка первичных ключей (PostgreSQL часть)");
+            System.out.println("     • PostgreSQL контекстное меню");
+            System.out.println("     • PostgreSQL часть LLM промпта");
+            System.out.println("   Oracle доступна. Продолжаем анализ.");
+
+        } else {
+            System.out.println("✓ Обе базы данных настроены и доступны!");
+            System.out.println("   Анализ будет выполнен в полном объёме.");
+        }
+
+        System.out.println("========================================");
+        System.out.println();
     }
 
     /**
@@ -243,158 +328,14 @@ public class DatabaseAvailabilityService {
     }
 
     /**
-     * Показывает диалог с результатами проверки
-     * @param parent родительский компонент
-     * @return true если пользователь решил продолжить
+     * Заглушка для совместимости (больше не показывает диалоги)
+     * @param parent родительский компонент (игнорируется)
+     * @return всегда true
      */
     public boolean showResultsDialog(Component parent) {
-        StringBuilder message = new StringBuilder();
-        message.append("=== ПРОВЕРКА ПОДКЛЮЧЕНИЯ К БАЗАМ ДАННЫХ ===\n\n");
-
-        // Oracle
-        message.append("🟠 ORACLE:\n");
-        if (!oracleConfigured) {
-            message.append("   ⚠ НЕ НАСТРОЕН\n");
-            message.append("     Заполните настройки подключения в меню 'Настройки'\n");
-        } else if (oracleAvailable) {
-            message.append("   ✓ ДОСТУПНА\n");
-        } else {
-            message.append("   ✗ НЕДОСТУПНА\n");
-            if (oracleError != null) {
-                message.append("     Причина: ").append(oracleError).append("\n");
-            }
-        }
-
-        // PostgreSQL
-        message.append("\n🐘 POSTGRESQL:\n");
-        if (!postgresConfigured) {
-            message.append("   ⚠ НЕ НАСТРОЕН\n");
-            message.append("     Заполните настройки подключения в меню 'Настройки'\n");
-        } else if (postgresAvailable) {
-            message.append("   ✓ ДОСТУПНА\n");
-        } else {
-            message.append("   ✗ НЕДОСТУПНА\n");
-            if (postgresError != null) {
-                message.append("     Причина: ").append(postgresError).append("\n");
-            }
-        }
-
-        message.append("\n");
-        message.append("─".repeat(45)).append("\n\n");
-
-        // Определяем режим работы
-        if (!oracleConfigured && !postgresConfigured) {
-            message.append("ℹ НИ ОДНА БАЗА ДАННЫХ НЕ НАСТРОЕНА\n\n");
-            message.append("Анализ форм будет выполняться ТОЛЬКО на основе XML файлов.\n");
-            message.append("Следующие функции будут недоступны:\n");
-            message.append("  • Детальный анализ вьюх (DDL, количество записей)\n");
-            message.append("  • Проверка пакетов/функций\n");
-            message.append("  • Загрузка отчётов из БД\n");
-            message.append("  • Проверка первичных ключей и NOT NULL\n");
-            message.append("  • LLM промпт с DDL объектов\n\n");
-            message.append("Нажмите 'Продолжить' для запуска приложения,\n");
-            message.append("или 'Настройки' для заполнения параметров подключения.\n\n");
-
-            Object[] options = {"Продолжить", "Открыть настройки", "Выход"};
-            int result = JOptionPane.showOptionDialog(parent, message.toString(),
-                    "Подключения к БД не настроены",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null, options, options[0]);
-
-            if (result == 1) { // Открыть настройки
-                openSettingsDialog(parent);
-                return true; // После настроек продолжаем
-            } else if (result == 2) { // Выход
-                return false;
-            }
-            return true;
-
-        } else if (!oracleAvailable && !postgresAvailable && oracleConfigured && postgresConfigured) {
-            message.append("⚠ ВНИМАНИЕ: Обе базы данных недоступны!\n\n");
-            message.append("Проверьте:\n");
-            message.append("  • Доступность серверов по сети\n");
-            message.append("  • Правильность URL, логина и пароля\n");
-            message.append("  • Работу firewall\n\n");
-            message.append("Анализ форм будет сильно ограничен.\n");
-            message.append("Продолжить?");
-
-            int result = JOptionPane.showConfirmDialog(parent, message.toString(),
-                    "Ошибка подключения к БД",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-            return result == JOptionPane.YES_OPTION;
-
-        } else if (!oracleAvailable && oracleConfigured) {
-            message.append("⚠ ВНИМАНИЕ: Oracle недоступна!\n\n");
-            message.append("Следующие функции будут недоступны:\n");
-            message.append("  • Детальный анализ вьюх (DDL, количество записей)\n");
-            message.append("  • Проверка пакетов/функций\n");
-            message.append("  • Загрузка отчётов из D_REPORTS_LINKS\n");
-            message.append("  • Проверка первичных ключей и NOT NULL\n");
-            message.append("  • Oracle часть LLM промпта\n\n");
-
-            if (postgresAvailable) {
-                message.append("PostgreSQL доступна. Продолжить?");
-            } else {
-                message.append("PostgreSQL также недоступна. Продолжить?");
-            }
-
-            int result = JOptionPane.showConfirmDialog(parent, message.toString(),
-                    "Oracle недоступна",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-            return result == JOptionPane.YES_OPTION;
-
-        } else if (!postgresAvailable && postgresConfigured) {
-            message.append("ℹ ИНФОРМАЦИЯ: PostgreSQL недоступна\n\n");
-            message.append("Следующие функции будут недоступны:\n");
-            message.append("  • Детальный анализ вьюх из PostgreSQL\n");
-            message.append("  • Проверка первичных ключей (PostgreSQL часть)\n");
-            message.append("  • PostgreSQL контекстное меню\n");
-            message.append("  • PostgreSQL часть LLM промпта\n\n");
-            message.append("Oracle доступна. Продолжить?");
-
-            int result = JOptionPane.showConfirmDialog(parent, message.toString(),
-                    "PostgreSQL недоступна",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE);
-            return result == JOptionPane.YES_OPTION;
-        } else {
-            // Всё хорошо
-            message.append("✓ Обе базы данных настроены и доступны!\n");
-            message.append("Анализ будет выполнен в полном объёме.");
-            JOptionPane.showMessageDialog(parent, message.toString(),
-                    "Подключения к БД",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        }
-    }
-
-    /**
-     * Открывает диалог настроек
-     */
-    private void openSettingsDialog(Component parent) {
-        try {
-            Class<?> settingsDialogClass = Class.forName("ru.tmis.analyzer.ui.SettingsDialog");
-            java.lang.reflect.Constructor<?> constructor = settingsDialogClass.getConstructor(
-                    JFrame.class, SettingsModel.class, AppConfig.class);
-
-            JFrame parentFrame = parent instanceof JFrame ? (JFrame) parent :
-                    (JFrame) SwingUtilities.getWindowAncestor(parent);
-
-            AppConfig config = AppConfig.load();
-            Object dialog = constructor.newInstance(parentFrame, settings, config);
-            java.lang.reflect.Method showMethod = dialog.getClass().getMethod("setVisible", boolean.class);
-            showMethod.invoke(dialog, true);
-
-        } catch (Exception e) {
-            System.err.println("Не удалось открыть диалог настроек: " + e.getMessage());
-            JOptionPane.showMessageDialog(parent,
-                    "Пожалуйста, настройте подключения к БД в меню 'Настройки'",
-                    "Настройка БД",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
+        // Ничего не показываем, просто возвращаем true
+        // Результаты уже выведены в консоль в checkAllConnections()
+        return true;
     }
 
     // Public Getters
