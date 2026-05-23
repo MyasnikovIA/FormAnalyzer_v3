@@ -17,6 +17,7 @@ public class DatabaseObjectChecker {
     // ==================== PK CHECK METHODS ====================
 
     public static class PrimaryKeyInfo {
+        // ... без изменений ...
         private final String tableName;
         private final boolean hasPKInOracle;
         private final boolean hasPKInPostgres;
@@ -37,38 +38,14 @@ public class DatabaseObjectChecker {
             this.postgresConstraintName = postgresConstraintName;
         }
 
-        // Геттеры
-        public String getTableName() {
-            return tableName;
-        }
-
-        public boolean hasPKInOracle() {
-            return hasPKInOracle;
-        }
-
-        public boolean hasPKInPostgres() {
-            return hasPKInPostgres;
-        }
-
-        public List<String> getOracleColumns() {
-            return oracleColumns;
-        }
-
-        public List<String> getPostgresColumns() {
-            return postgresColumns;
-        }
-
-        public String getOracleConstraintName() {
-            return oracleConstraintName;
-        }
-
-        public String getPostgresConstraintName() {
-            return postgresConstraintName;
-        }
-
-        public boolean isMatch() {
-            return hasPKInOracle == hasPKInPostgres;
-        }
+        public String getTableName() { return tableName; }
+        public boolean hasPKInOracle() { return hasPKInOracle; }
+        public boolean hasPKInPostgres() { return hasPKInPostgres; }
+        public List<String> getOracleColumns() { return oracleColumns; }
+        public List<String> getPostgresColumns() { return postgresColumns; }
+        public String getOracleConstraintName() { return oracleConstraintName; }
+        public String getPostgresConstraintName() { return postgresConstraintName; }
+        public boolean isMatch() { return hasPKInOracle == hasPKInPostgres; }
 
         public boolean isColumnsMatch() {
             if (!hasPKInOracle || !hasPKInPostgres) return false;
@@ -81,8 +58,7 @@ public class DatabaseObjectChecker {
 
         public String getStatus() {
             if (hasPKInOracle && !hasPKInPostgres) return "ОШИБКА: PK есть в Oracle, но отсутствует в PostgreSQL";
-            if (!hasPKInOracle && hasPKInPostgres)
-                return "ПРЕДУПРЕЖДЕНИЕ: PK есть в PostgreSQL, но отсутствует в Oracle";
+            if (!hasPKInOracle && hasPKInPostgres) return "ПРЕДУПРЕЖДЕНИЕ: PK есть в PostgreSQL, но отсутствует в Oracle";
             if (hasPKInOracle && hasPKInPostgres) {
                 if (isColumnsMatch()) return "OK (PK присутствует, поля совпадают)";
                 else return "ПРЕДУПРЕЖДЕНИЕ: PK присутствует, но поля различаются";
@@ -91,31 +67,29 @@ public class DatabaseObjectChecker {
         }
     }
 
+    /**
+     * Получение соединения с Oracle через пул
+     */
     private Connection getOracleConnection() throws SQLException {
-        Properties props = new Properties();
-        props.setProperty("user", settings.getOracleUser());
-        props.setProperty("password", settings.getOraclePassword());
-        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
-        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
-        return DriverManager.getConnection(settings.getOracleUrl(), props);
+        return DatabaseConnector.getOracleConnection(
+                settings.getOracleUrl(),
+                settings.getOracleUser(),
+                settings.getOraclePassword()
+        );
     }
 
+    /**
+     * Получение соединения с PostgreSQL через пул с контекстом МИС
+     */
     private Connection getPostgresConnection() throws SQLException {
-        DriverManager.setLoginTimeout(10);
-        Connection conn = DriverManager.getConnection(settings.getPostgresUrl(),
-                settings.getPostgresUser(), settings.getPostgresPassword());
-        conn.setAutoCommit(true);
-        String misUser = settings.getMisUser();
-        if (misUser != null && !misUser.trim().isEmpty()) {
-            try (Statement stmt = conn.createStatement()) {
-                stmt.execute("SELECT set_config('mis.user', '" + misUser + "', false)");
-            } catch (SQLException e) {
-                System.err.println("  [PostgreSQL] Ошибка установки контекста: " + e.getMessage());
-            }
-        }
-        return conn;
+        // Используем DatabaseConnector с контекстом МИС
+        return DatabaseConnector.getPostgresConnectionWithContext(
+                settings.getPostgresUrl(),
+                settings.getPostgresUser(),
+                settings.getPostgresPassword(),
+                settings.getMisUser()
+        );
     }
-
 
     public PrimaryKeyInfo checkPrimaryKey(String tableName) {
         return DatabaseCacheManager.getPrimaryKeyInfo(tableName, () -> {
@@ -184,26 +158,12 @@ public class DatabaseObjectChecker {
             this.isNotNullInPostgres = isNotNullInPostgres;
         }
 
-        // Геттеры
-        public String getTableName() {
-            return tableName;
-        }
+        public String getTableName() { return tableName; }
+        public String getColumnName() { return columnName; }
+        public boolean isNotNullInOracle() { return isNotNullInOracle; }
+        public boolean isNotNullInPostgres() { return isNotNullInPostgres; }
 
-        public String getColumnName() {
-            return columnName;
-        }
-
-        public boolean isNotNullInOracle() {
-            return isNotNullInOracle;
-        }
-
-        public boolean isNotNullInPostgres() {
-            return isNotNullInPostgres;
-        }
-
-        public boolean isMatch() {
-            return isNotNullInOracle == isNotNullInPostgres;
-        }
+        public boolean isMatch() { return isNotNullInOracle == isNotNullInPostgres; }
 
         public String getStatus() {
             if (isNotNullInOracle && !isNotNullInPostgres)

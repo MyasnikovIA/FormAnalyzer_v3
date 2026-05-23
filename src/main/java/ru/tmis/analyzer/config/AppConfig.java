@@ -67,6 +67,8 @@ public class AppConfig {
     private int parallelThreads = Runtime.getRuntime().availableProcessors();
     private boolean useMemoryCache = false;
 
+    private int dbConnectionPoolSize = 10;
+
     // ==================== GETTERS AND SETTERS ====================
 
     // Настройки окна
@@ -182,6 +184,9 @@ public class AppConfig {
     public void setParallelThreads(int threads) { this.parallelThreads = threads; }
     public boolean isUseMemoryCache() { return useMemoryCache; }
     public void setUseMemoryCache(boolean useMemoryCache) { this.useMemoryCache = useMemoryCache; }
+
+    public int getDbConnectionPoolSize() { return dbConnectionPoolSize; }
+    public void setDbConnectionPoolSize(int size) { this.dbConnectionPoolSize = size; }
     /**
      * Загрузить конфигурацию из файла
      */

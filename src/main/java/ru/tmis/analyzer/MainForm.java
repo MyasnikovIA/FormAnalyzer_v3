@@ -1,7 +1,9 @@
+// MainForm.java
 package ru.tmis.analyzer;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.ui.MainWindow;
 
 import javax.swing.*;
@@ -16,19 +18,28 @@ public class MainForm {
                 SettingsModel settings = SettingsModel.load();
                 AppConfig config = AppConfig.load();
 
-                if (config == null) {
-                    System.err.println("ОШИБКА: config = null, создаём новый");
-                    config = new AppConfig();
-                }
-                if (settings == null) {
-                    System.err.println("ОШИБКА: settings = null, создаём новый");
-                    settings = new SettingsModel();
-                }
-
-                // Проверку БД НЕ делаем здесь - переносим в момент начала анализа
+                // ========== ИНИЦИАЛИЗАЦИЯ ПУЛА СОЕДИНЕНИЙ ==========
+                DatabaseConnectionManager.init(
+                        settings.getOracleUrl(),
+                        settings.getOracleUser(),
+                        settings.getOraclePassword(),
+                        settings.getPostgresUrl(),
+                        settings.getPostgresUser(),
+                        settings.getPostgresPassword(),
+                        settings.getMisUser()
+                );
+                // =================================================
 
                 MainWindow window = new MainWindow(settings, config);
                 window.setVisible(true);
+
+                // При закрытии окна закрываем пулы
+                window.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        DatabaseConnectionManager.shutdown();
+                    }
+                });
 
             } catch (Exception e) {
                 e.printStackTrace();

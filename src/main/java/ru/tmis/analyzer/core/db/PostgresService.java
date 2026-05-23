@@ -22,10 +22,9 @@ public class PostgresService {
     }
 
     private Connection getConnection() throws SQLException {
-        if (misUser != null && !misUser.trim().isEmpty()) {
-            return DatabaseConnector.getPostgresConnectionWithContext(url, user, password, misUser);
-        }
-        return DatabaseConnector.getPostgresConnection(url, user, password);
+        return DatabaseConnector.getPostgresConnectionWithContext(
+                url, user, password, misUser
+        );
     }
 
     // ==================== ОСНОВНЫЕ МЕТОДЫ С КЭШИРОВАНИЕМ ====================

@@ -2,7 +2,7 @@
 
 package ru.tmis.analyzer.core.cache;
 
-import ru.tmis.analyzer.core.db.DatabaseObjectChecker;
+import ru.tmis.analyzer.core.db.*;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -79,6 +80,11 @@ public class DatabaseCacheManager {
 
         // Выполняем проверку
         checkConnections();
+
+        // Инициализируем пул соединений через DatabaseConnectionManager
+        DatabaseConnectionManager.init(oracleUrl, oracleUser, oraclePassword,
+                postgresUrl, postgresUser, postgresPassword,
+                postgresMisUser);
     }
 
     /**
@@ -95,7 +101,7 @@ public class DatabaseCacheManager {
 
     private static void checkOracleConnection() {
         if (oracleChecked) {
-            return; // Уже проверяли в этой сессии
+            return;
         }
 
         if (cachedOracleUrl == null || cachedOracleUrl.isEmpty()) {
@@ -117,7 +123,7 @@ public class DatabaseCacheManager {
 
     private static void checkPostgresConnection() {
         if (postgresChecked) {
-            return; // Уже проверяли в этой сессии
+            return;
         }
 
         if (cachedPostgresUrl == null || cachedPostgresUrl.isEmpty()) {

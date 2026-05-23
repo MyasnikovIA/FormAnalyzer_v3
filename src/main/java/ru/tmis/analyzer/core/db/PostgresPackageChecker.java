@@ -62,8 +62,7 @@ public class PostgresPackageChecker {
     }
 
     private Connection getConnection() throws SQLException {
-        DriverManager.setLoginTimeout(10);
-        return DriverManager.getConnection(url, user, password);
+        return DatabaseConnector.getPostgresConnection(url, user, password);
     }
 
     private String cleanFunctionSignature(String arguments) {

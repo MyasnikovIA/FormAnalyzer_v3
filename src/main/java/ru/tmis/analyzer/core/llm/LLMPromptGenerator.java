@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.llm;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.db.DatabaseConnector;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.model.BrokerInfo;
@@ -404,11 +405,10 @@ public class LLMPromptGenerator {
     private String findExecProc(String unit, String action) {
         return DatabaseCacheManager.getBrokerExecProc(unit, action, () -> {
             String sql = "SELECT execproc FROM D_UNITBPS WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
-            Properties props = new Properties();
-            props.setProperty("user", settings.getOracleUser());
-            props.setProperty("password", settings.getOraclePassword());
-
-            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+            try (Connection conn = DatabaseConnector.getOracleConnection(
+                    settings.getOracleUrl(),
+                    settings.getOracleUser(),
+                    settings.getOraclePassword());
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + unit.toUpperCase() + "%");
                 pstmt.setString(2, "%" + action.toUpperCase() + "%");

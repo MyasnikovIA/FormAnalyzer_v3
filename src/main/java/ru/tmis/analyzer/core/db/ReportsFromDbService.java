@@ -54,7 +54,10 @@ public class ReportsFromDbService {
             props.setProperty("oracle.jdbc.ReadTimeout", "5000");
             props.setProperty("oracle.jdbc.defaultNChar", "true");
 
-            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+            try (Connection conn = DatabaseConnector.getOracleConnection(
+                    settings.getOracleUrl(),
+                    settings.getOracleUser(),
+                    settings.getOraclePassword());
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 pstmt.setString(1, unitCode);
@@ -125,14 +128,10 @@ public class ReportsFromDbService {
                             "WHERE t.PID = ? " +
                             "ORDER BY t.SORT";
 
-            Properties props = new Properties();
-            props.setProperty("user", settings.getOracleUser());
-            props.setProperty("password", settings.getOraclePassword());
-            props.setProperty("oracle.net.CONNECT_TIMEOUT", "5000");
-            props.setProperty("oracle.jdbc.ReadTimeout", "5000");
-            props.setProperty("oracle.jdbc.defaultNChar", "true");
-
-            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+            try (Connection conn = DatabaseConnector.getOracleConnection(
+                    settings.getOracleUrl(),
+                    settings.getOracleUser(),
+                    settings.getOraclePassword());
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 pstmt.setInt(1, parentReportId);
@@ -196,13 +195,10 @@ public class ReportsFromDbService {
                     "SELECT ID, LPU, REP_CODE, REP_NAME, REP_TYPE, REP_FILENAME, IS_SHARE " +
                             "FROM D_REPORTS WHERE REP_CODE = ? AND IS_SHARE = 1";
 
-            Properties props = new Properties();
-            props.setProperty("user", settings.getOracleUser());
-            props.setProperty("password", settings.getOraclePassword());
-            props.setProperty("oracle.net.CONNECT_TIMEOUT", "5000");
-            props.setProperty("oracle.jdbc.ReadTimeout", "5000");
-
-            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+            try (Connection conn = DatabaseConnector.getOracleConnection(
+                    settings.getOracleUrl(),
+                    settings.getOracleUser(),
+                    settings.getOraclePassword());
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 pstmt.setString(1, repCode);
