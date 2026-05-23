@@ -62,6 +62,7 @@ public class DatabaseCacheManager {
     /**
      * Инициализация конфигурации БД (вызывается при старте и при сохранении настроек)
      */
+    // core/cache/DatabaseCacheManager.java - метод initDbConfig
     public static void initDbConfig(String oracleUrl, String oracleUser, String oraclePassword,
                                     String postgresUrl, String postgresUser, String postgresPassword,
                                     String postgresMisUser) {
@@ -81,10 +82,14 @@ public class DatabaseCacheManager {
         // Выполняем проверку
         checkConnections();
 
-        // Инициализируем пул соединений через DatabaseConnectionManager
+        // Инициализируем пул соединений через DatabaseConnectionManager (ТОЛЬКО ПОСЛЕ ПРОВЕРКИ ДОСТУПНОСТИ)
         DatabaseConnectionManager.init(oracleUrl, oracleUser, oraclePassword,
                 postgresUrl, postgresUser, postgresPassword,
                 postgresMisUser);
+
+        // Обновляем статусы на основе проверки сети
+        oracleAvailable = DatabaseConnectionManager.isOracleNetworkAvailable();
+        postgresAvailable = DatabaseConnectionManager.isPostgresNetworkAvailable();
     }
 
     /**

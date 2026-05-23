@@ -1,3 +1,4 @@
+// core/db/DatabaseAvailabilityService.java
 package ru.tmis.analyzer.core.db;
 
 import ru.tmis.analyzer.config.AppConfig;
@@ -10,9 +11,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Сервис для проверки доступности баз данных при старте приложения
- */
 public class DatabaseAvailabilityService {
 
     private final SettingsModel settings;
@@ -23,16 +21,15 @@ public class DatabaseAvailabilityService {
     private boolean oracleConfigured = false;
     private boolean postgresConfigured = false;
 
+    // Флаги доступности по сети (ping)
+    private boolean oracleNetworkReachable = false;
+    private boolean postgresNetworkReachable = false;
+
     public DatabaseAvailabilityService(SettingsModel settings) {
         this.settings = settings;
     }
 
-    /**
-     * Проверяет доступность обеих БД и инициализирует DatabaseCacheManager
-     * @return true всегда (автоматически продолжаем выполнение)
-     */
     public boolean checkAllConnections() {
-        // Проверяем, настроены ли подключения
         oracleConfigured = isOracleConfiguredInternal();
         postgresConfigured = isPostgresConfiguredInternal();
 
@@ -40,7 +37,26 @@ public class DatabaseAvailabilityService {
         System.out.println("[DatabaseAvailability]   Oracle: " + (oracleConfigured ? "настроен" : "НЕ НАСТРОЕН"));
         System.out.println("[DatabaseAvailability]   PostgreSQL: " + (postgresConfigured ? "настроен" : "НЕ НАСТРОЕН"));
 
-        // Инициализируем конфигурацию в DatabaseCacheManager (даже если пустая)
+        // ========== СНАЧАЛА ПРОВЕРЯЕМ СЕТЬ (ПИНГ) ==========
+        if (oracleConfigured) {
+            oracleNetworkReachable = NetworkUtils.isDatabaseServerAvailable(settings.getOracleUrl());
+            if (!oracleNetworkReachable) {
+                oracleAvailable = false;
+                oracleError = "Сервер недоступен по сети (не отвечает на ping/порт)";
+                System.out.println("[DatabaseAvailability] Oracle: ❌ сервер НЕДОСТУПЕН по сети, подключение не требуется");
+            }
+        }
+
+        if (postgresConfigured) {
+            postgresNetworkReachable = NetworkUtils.isDatabaseServerAvailable(settings.getPostgresUrl());
+            if (!postgresNetworkReachable) {
+                postgresAvailable = false;
+                postgresError = "Сервер недоступен по сети (не отвечает на ping/порт)";
+                System.out.println("[DatabaseAvailability] PostgreSQL: ❌ сервер НЕДОСТУПЕН по сети, подключение не требуется");
+            }
+        }
+
+        // ========== ТОЛЬКО ПОСЛЕ ПРОВЕРКИ СЕТИ ИНИЦИАЛИЗИРУЕМ ПУЛЫ ==========
         DatabaseCacheManager.initDbConfig(
                 settings.getOracleUrl() != null ? settings.getOracleUrl() : "",
                 settings.getOracleUser() != null ? settings.getOracleUser() : "",
@@ -51,31 +67,23 @@ public class DatabaseAvailabilityService {
                 settings.getMisUser() != null ? settings.getMisUser() : ""
         );
 
-        // Проверяем Oracle только если настроен
-        if (oracleConfigured) {
+        // ========== ПЫТАЕМСЯ ПОДКЛЮЧИТЬСЯ ТОЛЬКО ЕСЛИ СЕТЬ ДОСТУПНА ==========
+        if (oracleConfigured && oracleNetworkReachable) {
             oracleAvailable = testOracleConnection();
-        } else {
+        } else if (oracleConfigured && !oracleNetworkReachable) {
             oracleAvailable = false;
-            oracleError = "Подключение не настроено (заполните настройки)";
         }
 
-        // Проверяем PostgreSQL только если настроен
-        if (postgresConfigured) {
+        if (postgresConfigured && postgresNetworkReachable) {
             postgresAvailable = testPostgresConnection();
-        } else {
+        } else if (postgresConfigured && !postgresNetworkReachable) {
             postgresAvailable = false;
-            postgresError = "Подключение не настроено (заполните настройки)";
         }
 
-        // Выводим статистику в консоль
         printResultsToConsole();
-
-        return true; // Всегда возвращаем true, продолжаем выполнение
+        return true;
     }
 
-    /**
-     * Выводит результаты проверки в консоль (без диалогов)
-     */
     private void printResultsToConsole() {
         System.out.println();
         System.out.println("========================================");
@@ -86,13 +94,17 @@ public class DatabaseAvailabilityService {
         System.out.print("🟠 ORACLE: ");
         if (!oracleConfigured) {
             System.out.println("НЕ НАСТРОЕН");
-            System.out.println("     Заполните настройки подключения в меню 'Настройки'");
+        } else if (!oracleNetworkReachable) {
+            System.out.println("СЕТЬ НЕДОСТУПНА ✗");
+            if (oracleError != null) {
+                System.out.println("     " + oracleError);
+            }
         } else if (oracleAvailable) {
             System.out.println("ДОСТУПНА ✓");
         } else {
             System.out.println("НЕДОСТУПНА ✗");
             if (oracleError != null) {
-                System.out.println("     Причина: " + oracleError);
+                System.out.println("     " + oracleError);
             }
         }
 
@@ -100,72 +112,37 @@ public class DatabaseAvailabilityService {
         System.out.print("🐘 POSTGRESQL: ");
         if (!postgresConfigured) {
             System.out.println("НЕ НАСТРОЕН");
-            System.out.println("     Заполните настройки подключения в меню 'Настройки'");
+        } else if (!postgresNetworkReachable) {
+            System.out.println("СЕТЬ НЕДОСТУПНА ✗");
+            if (postgresError != null) {
+                System.out.println("     " + postgresError);
+            }
         } else if (postgresAvailable) {
             System.out.println("ДОСТУПНА ✓");
         } else {
             System.out.println("НЕДОСТУПНА ✗");
             if (postgresError != null) {
-                System.out.println("     Причина: " + postgresError);
+                System.out.println("     " + postgresError);
             }
         }
 
         System.out.println("----------------------------------------");
 
-        // Определяем режим работы и выводим предупреждения в консоль
-        if (!oracleConfigured && !postgresConfigured) {
-            System.out.println("⚠ ВНИМАНИЕ: НИ ОДНА БАЗА ДАННЫХ НЕ НАСТРОЕНА");
-            System.out.println("   Анализ форм будет выполняться ТОЛЬКО на основе XML файлов.");
-            System.out.println("   Следующие функции будут недоступны:");
-            System.out.println("     • Детальный анализ вьюх (DDL, количество записей)");
-            System.out.println("     • Проверка пакетов/функций");
-            System.out.println("     • Загрузка отчётов из БД");
-            System.out.println("     • Проверка первичных ключей и NOT NULL");
-            System.out.println("     • LLM промпт с DDL объектов");
-
-        } else if (!oracleAvailable && !postgresAvailable && oracleConfigured && postgresConfigured) {
-            System.out.println("⚠ ВНИМАНИЕ: Обе базы данных недоступны!");
-            System.out.println("   Проверьте:");
-            System.out.println("     • Доступность серверов по сети");
-            System.out.println("     • Правильность URL, логина и пароля");
-            System.out.println("     • Работу firewall");
-            System.out.println("   Анализ форм будет сильно ограничен.");
-
-        } else if (!oracleAvailable && oracleConfigured) {
-            System.out.println("⚠ ВНИМАНИЕ: Oracle недоступна!");
-            System.out.println("   Следующие функции будут недоступны:");
-            System.out.println("     • Детальный анализ вьюх (DDL, количество записей)");
-            System.out.println("     • Проверка пакетов/функций");
-            System.out.println("     • Загрузка отчётов из D_REPORTS_LINKS");
-            System.out.println("     • Проверка первичных ключей и NOT NULL");
-            System.out.println("     • Oracle часть LLM промпта");
-            if (postgresAvailable) {
-                System.out.println("   PostgreSQL доступна. Продолжаем анализ.");
-            } else {
-                System.out.println("   PostgreSQL также недоступна. Анализ будет ограничен.");
-            }
-
-        } else if (!postgresAvailable && postgresConfigured) {
-            System.out.println("ℹ ИНФОРМАЦИЯ: PostgreSQL недоступна");
-            System.out.println("   Следующие функции будут недоступны:");
-            System.out.println("     • Детальный анализ вьюх из PostgreSQL");
-            System.out.println("     • Проверка первичных ключей (PostgreSQL часть)");
-            System.out.println("     • PostgreSQL контекстное меню");
-            System.out.println("     • PostgreSQL часть LLM промпта");
-            System.out.println("   Oracle доступна. Продолжаем анализ.");
-
-        } else {
-            System.out.println("✓ Обе базы данных настроены и доступны!");
-            System.out.println("   Анализ будет выполнен в полном объёме.");
+        if (!oracleNetworkReachable && !postgresNetworkReachable && oracleConfigured && postgresConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: Оба сервера БД недоступны по сети!");
+            System.out.println("   Проверьте сетевое подключение, firewall и доступность серверов.");
+        } else if (!oracleNetworkReachable && oracleConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: Oracle сервер недоступен по сети!");
+            System.out.println("   Проверьте хост " + NetworkUtils.extractHostFromUrl(settings.getOracleUrl()));
+        } else if (!postgresNetworkReachable && postgresConfigured) {
+            System.out.println("⚠ ВНИМАНИЕ: PostgreSQL сервер недоступен по сети!");
+            System.out.println("   Проверьте хост " + NetworkUtils.extractHostFromUrl(settings.getPostgresUrl()));
         }
 
         System.out.println("========================================");
         System.out.println();
     }
 
-    /**
-     * Проверяет, настроено ли подключение к Oracle
-     */
     private boolean isOracleConfiguredInternal() {
         String url = settings.getOracleUrl();
         String user = settings.getOracleUser();
@@ -175,18 +152,13 @@ public class DatabaseAvailabilityService {
         if (user == null || user.trim().isEmpty()) return false;
         if (password == null) return false;
 
-        // Проверяем, что это не значения по умолчанию-заглушки
         if (url.equals("jdbc:oracle:thin:@localhost:1521/XE") &&
                 user.equals("user") && password.equals("password")) {
             return false;
         }
-
         return true;
     }
 
-    /**
-     * Проверяет, настроено ли подключение к PostgreSQL
-     */
     private boolean isPostgresConfiguredInternal() {
         String url = settings.getPostgresUrl();
         String user = settings.getPostgresUser();
@@ -196,40 +168,32 @@ public class DatabaseAvailabilityService {
         if (user == null || user.trim().isEmpty()) return false;
         if (password == null) return false;
 
-        // Проверяем, что это не значения по умолчанию-заглушки
         if (url.equals("jdbc:postgresql://localhost:5432/postgres") &&
                 user.equals("postgres") && password.equals("password")) {
             return false;
         }
-
         return true;
     }
 
-    /**
-     * Проверка подключения к Oracle
-     */
     private boolean testOracleConnection() {
         String url = settings.getOracleUrl();
         String user = settings.getOracleUser();
         String password = settings.getOraclePassword();
 
-        // Дополнительная проверка на валидность URL
         if (url == null || !url.toLowerCase().contains("jdbc:oracle:thin:@")) {
-            oracleError = "Неверный формат URL (должен быть jdbc:oracle:thin:@хост:порт/сервис)";
+            oracleError = "Неверный формат URL";
             return false;
         }
 
-        // Проверяем доступность сети
+        // Сетевая доступность уже проверена в checkAllConnections, но проверим ещё раз
         if (!NetworkUtils.isDatabaseServerAvailable(url)) {
-            oracleError = "Сервер недоступен по сети (проверьте хост и порт)";
+            oracleError = "Сервер недоступен по сети";
             return false;
         }
 
-        // Пробуем подключиться
         try (Connection conn = DriverManager.getConnection(url, user, password);
              var stmt = conn.createStatement();
              var rs = stmt.executeQuery("SELECT 1 FROM DUAL")) {
-
             boolean connected = rs.next();
             if (connected) {
                 oracleError = null;
@@ -244,41 +208,33 @@ public class DatabaseAvailabilityService {
         }
     }
 
-    /**
-     * Проверка подключения к PostgreSQL
-     */
     private boolean testPostgresConnection() {
         String url = settings.getPostgresUrl();
         String user = settings.getPostgresUser();
         String password = settings.getPostgresPassword();
 
-        // Дополнительная проверка на валидность URL
         if (url == null || !url.toLowerCase().contains("jdbc:postgresql://")) {
-            postgresError = "Неверный формат URL (должен быть jdbc:postgresql://хост:порт/база)";
+            postgresError = "Неверный формат URL";
             return false;
         }
 
-        // Проверяем доступность сети
+        // Сетевая доступность уже проверена в checkAllConnections, но проверим ещё раз
         if (!NetworkUtils.isDatabaseServerAvailable(url)) {
-            postgresError = "Сервер недоступен по сети (проверьте хост и порт)";
+            postgresError = "Сервер недоступен по сети";
             return false;
         }
 
-        // Пробуем подключиться
         try (Connection conn = DriverManager.getConnection(url, user, password);
              var stmt = conn.createStatement();
              var rs = stmt.executeQuery("SELECT 1")) {
-
             boolean connected = rs.next();
             if (connected) {
-                // Если указан пользователь МИС, пробуем установить контекст
                 String misUser = settings.getMisUser();
                 if (misUser != null && !misUser.trim().isEmpty()) {
                     try (var ctxStmt = conn.createStatement()) {
                         ctxStmt.execute("SELECT set_config('mis.user', '" + misUser + "', false)");
-                        System.out.println("[DatabaseAvailability] Контекст МИС установлен: " + misUser);
                     } catch (SQLException e) {
-                        System.err.println("[DatabaseAvailability] Предупреждение: не удалось установить контекст МИС: " + e.getMessage());
+                        System.err.println("[DatabaseAvailability] Предупреждение: не удалось установить контекст МИС");
                     }
                 }
                 postgresError = null;
@@ -293,9 +249,6 @@ public class DatabaseAvailabilityService {
         }
     }
 
-    /**
-     * Преобразует SQLException в понятное пользователю сообщение
-     */
     private String getFriendlyErrorMessage(SQLException e) {
         String message = e.getMessage();
         if (message == null) return "Неизвестная ошибка";
@@ -320,29 +273,23 @@ public class DatabaseAvailabilityService {
             return "Неизвестный хост: проверьте имя сервера";
         }
 
-        // Укорачиваем слишком длинные сообщения
         if (message.length() > 100) {
             message = message.substring(0, 97) + "...";
         }
         return message;
     }
 
-    /**
-     * Заглушка для совместимости (больше не показывает диалоги)
-     * @param parent родительский компонент (игнорируется)
-     * @return всегда true
-     */
     public boolean showResultsDialog(Component parent) {
-        // Ничего не показываем, просто возвращаем true
-        // Результаты уже выведены в консоль в checkAllConnections()
         return true;
     }
 
-    // Public Getters
+    // Getters
     public boolean isOracleAvailable() { return oracleAvailable; }
     public boolean isPostgresAvailable() { return postgresAvailable; }
     public String getOracleError() { return oracleError; }
     public String getPostgresError() { return postgresError; }
     public boolean isOracleConfigured() { return oracleConfigured; }
     public boolean isPostgresConfigured() { return postgresConfigured; }
+    public boolean isOracleNetworkReachable() { return oracleNetworkReachable; }
+    public boolean isPostgresNetworkReachable() { return postgresNetworkReachable; }
 }

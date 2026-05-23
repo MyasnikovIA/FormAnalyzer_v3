@@ -71,6 +71,11 @@ public class OracleService {
     // ==================== РЕАЛЬНЫЕ ЗАПРОСЫ К БД ====================
 
     private String fetchViewDDL(String viewName) {
+        // Быстрая проверка доступности сети перед запросом
+        if (!DatabaseConnectionManager.isOracleNetworkAvailable()) {
+            System.out.println("[OracleService] Сервер недоступен по сети, пропускаем запрос для " + viewName);
+            return null;
+        }
         String sql = "SELECT TEXT FROM ALL_VIEWS WHERE VIEW_NAME = ?";
 
         System.out.println("[OracleService] ========== SQL ЗАПРОС ==========");

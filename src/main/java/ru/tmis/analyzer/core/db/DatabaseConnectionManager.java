@@ -1,5 +1,7 @@
-// core/db/DatabaseConnectionManager.java (НОВЫЙ ФАЙЛ)
+// core/db/DatabaseConnectionManager.java
 package ru.tmis.analyzer.core.db;
+
+import ru.tmis.analyzer.utils.NetworkUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +17,10 @@ public class DatabaseConnectionManager {
     private static volatile ConnectionPool postgresPool;
     private static volatile boolean initialized = false;
 
+    // Флаги доступности сети
+    private static volatile boolean oracleNetworkAvailable = false;
+    private static volatile boolean postgresNetworkAvailable = false;
+
     public static synchronized void init(String oracleUrl, String oracleUser, String oraclePassword,
                                          String postgresUrl, String postgresUser, String postgresPassword,
                                          String misUser) {
@@ -22,16 +28,27 @@ public class DatabaseConnectionManager {
 
         int poolSize = Math.max(5, Runtime.getRuntime().availableProcessors());
 
+        // ========== СНАЧАЛА ПРОВЕРЯЕМ СЕТЬ ==========
         if (oracleUrl != null && !oracleUrl.isEmpty() &&
                 oracleUser != null && !oracleUser.isEmpty()) {
-            oraclePool = new ConnectionPool(oracleUrl, oracleUser, oraclePassword, poolSize);
-            System.out.println("[DB] Oracle пул инициализирован, размер: " + poolSize);
+            oracleNetworkAvailable = NetworkUtils.isDatabaseServerAvailable(oracleUrl);
+            if (oracleNetworkAvailable) {
+                oraclePool = new ConnectionPool(oracleUrl, oracleUser, oraclePassword, poolSize, false);
+                System.out.println("[DB] Oracle пул инициализирован, размер: " + poolSize);
+            } else {
+                System.out.println("[DB] Oracle сервер НЕДОСТУПЕН по сети, пул НЕ создан");
+            }
         }
 
         if (postgresUrl != null && !postgresUrl.isEmpty() &&
                 postgresUser != null && !postgresUser.isEmpty()) {
-            postgresPool = new ConnectionPool(postgresUrl, postgresUser, postgresPassword, poolSize);
-            System.out.println("[DB] PostgreSQL пул инициализирован, размер: " + poolSize);
+            postgresNetworkAvailable = NetworkUtils.isDatabaseServerAvailable(postgresUrl);
+            if (postgresNetworkAvailable) {
+                postgresPool = new ConnectionPool(postgresUrl, postgresUser, postgresPassword, poolSize, false);
+                System.out.println("[DB] PostgreSQL пул инициализирован, размер: " + poolSize);
+            } else {
+                System.out.println("[DB] PostgreSQL сервер НЕДОСТУПЕН по сети, пул НЕ создан");
+            }
         }
 
         initialized = true;
@@ -39,27 +56,24 @@ public class DatabaseConnectionManager {
 
     public static Connection getOracleConnection() throws SQLException {
         if (oraclePool == null) {
-            throw new SQLException("Oracle pool not initialized");
+            throw new SQLException("Oracle pool not initialized - server unreachable");
         }
         return oraclePool.getConnection();
     }
 
     public static Connection getPostgresConnection() throws SQLException {
         if (postgresPool == null) {
-            throw new SQLException("PostgreSQL pool not initialized");
+            throw new SQLException("PostgreSQL pool not initialized - server unreachable");
         }
         return postgresPool.getConnection();
     }
 
-    public static void releaseConnection(Connection conn, String dbType) {
-        if (conn == null) return;
-        if ("oracle".equalsIgnoreCase(dbType) && oraclePool != null) {
-            oraclePool.releaseConnection(conn);
-        } else if ("postgres".equalsIgnoreCase(dbType) && postgresPool != null) {
-            postgresPool.releaseConnection(conn);
-        } else {
-            try { conn.close(); } catch (SQLException ignored) {}
-        }
+    public static boolean isOracleNetworkAvailable() {
+        return oracleNetworkAvailable;
+    }
+
+    public static boolean isPostgresNetworkAvailable() {
+        return postgresNetworkAvailable;
     }
 
     public static void shutdown() {
@@ -76,18 +90,20 @@ public class DatabaseConnectionManager {
         private final AtomicInteger activeCount = new AtomicInteger(0);
         private volatile boolean closed = false;
 
-        public ConnectionPool(String url, String user, String password, int maxSize) {
+        public ConnectionPool(String url, String user, String password, int maxSize, boolean preCreate) {
             this.url = url;
             this.user = user;
             this.password = password;
             this.pool = new LinkedBlockingQueue<>(maxSize);
 
-            // Создаём минимум соединений (2-3 штуки)
-            for (int i = 0; i < Math.min(maxSize, 3); i++) {
-                try {
-                    pool.offer(createConnection());
-                } catch (SQLException e) {
-                    System.err.println("[ConnectionPool] Ошибка создания: " + e.getMessage());
+            // НЕ создаём соединения заранее, если сеть не проверена
+            if (preCreate) {
+                for (int i = 0; i < Math.min(maxSize, 3); i++) {
+                    try {
+                        pool.offer(createConnection());
+                    } catch (SQLException e) {
+                        System.err.println("[ConnectionPool] Ошибка создания: " + e.getMessage());
+                    }
                 }
             }
         }

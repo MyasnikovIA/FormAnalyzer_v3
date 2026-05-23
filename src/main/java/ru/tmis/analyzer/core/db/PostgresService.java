@@ -78,6 +78,11 @@ public class PostgresService {
     // ==================== РЕАЛЬНЫЕ ЗАПРОСЫ К БД ====================
 
     private String fetchViewDDL(String viewName) {
+        // Быстрая проверка доступности сети перед запросом
+        if (!DatabaseConnectionManager.isPostgresNetworkAvailable()) {
+            System.out.println("[PostgresService] Сервер недоступен по сети, пропускаем запрос для " + viewName);
+            return null;
+        }
         try (Connection conn = getConnection()) {
             int oid = DatabaseCacheManager.getPostgresViewOid(viewName, () -> {
                 String getOidSql = "SELECT oid FROM pg_class WHERE relname = ? AND relkind = 'v'";

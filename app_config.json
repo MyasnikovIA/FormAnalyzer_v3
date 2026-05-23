@@ -35,5 +35,6 @@
   "skipDbOnError": false,
   "llmPanelVisible": true,
   "parallelThreads": 4,
-  "useMemoryCache": false
+  "useMemoryCache": false,
+  "dbConnectionPoolSize": 10
 }
