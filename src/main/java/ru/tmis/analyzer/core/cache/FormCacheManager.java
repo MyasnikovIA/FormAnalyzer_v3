@@ -65,10 +65,11 @@ public class FormCacheManager {
      * @param projectPath путь к проекту
      * @return количество загруженных форм
      */
+    // core/cache/FormCacheManager.java
     public int loadAllForms(String projectPath, java.util.function.Consumer<String> logCallback) {
         if (!FormCache.isEnabled()) {
             if (logCallback != null) {
-                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память, читаются с диска.");
+                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
             }
             return 0;
         }
@@ -102,9 +103,9 @@ public class FormCacheManager {
             // Очищаем старый кэш
             FormCache.clear();
 
-            // Сканируем ВСЕ формы
+            // ========== ИСПОЛЬЗУЕМ ЕДИНЫЙ МЕТОД СКАНИРОВАНИЯ ==========
             FileScannerService scanner = new FileScannerService(projectPath);
-            Set<String> allForms = scanner.findAllBaseForms();
+            Set<String> allForms = scanner.findAllForms();  // ← ЕДИНЫЙ МЕТОД!
             int totalForms = allForms.size();
             int loaded = 0;
             int errors = 0;
@@ -161,12 +162,14 @@ public class FormCacheManager {
             }
 
             isLoaded.set(loaded > 0);
+            lastLoadedProjectPath.set(normalizePath(projectPath));
             return loaded;
 
         } finally {
             isLoading.set(false);
         }
     }
+
     /**
      * Асинхронная предзагрузка
      */

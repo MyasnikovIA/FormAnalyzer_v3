@@ -9,8 +9,16 @@ import ru.tmis.analyzer.ui.MainWindow;
 import javax.swing.*;
 
 public class MainForm {
-
+    static {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Драйвер БД не найден: " + e.getMessage());
+        }
+    }
     public static void main(String[] args) {
+
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -163,13 +163,56 @@ public class ParallelRecursiveReportBuilder {
     }
 
     /**
-     * Режим полного сканирования проекта
+     * Сканирование файловой системы для поиска новых форм
+     * ИСПОЛЬЗУЕТ ЕДИНЫЙ МЕТОД findAllForms()
      */
+    private void scanForNewForms() {
+        if (paused.get()) return;
+
+        // ========== ИСПОЛЬЗУЕМ ЕДИНЫЙ МЕТОД ==========
+        FileScannerService scanner = new FileScannerService(settings.getProjectPath());
+        Set<String> allFormsInProject = scanner.findAllForms();  // ← ЕДИНЫЙ МЕТОД!
+
+        // Фильтруем только те формы, для которых ещё нет отчётов
+        Set<String> formsToProcess = new LinkedHashSet<>();
+        for (String formPath : allFormsInProject) {
+            if (!hasReport(formPath) && !processedForms.contains(formPath) && !formsQueue.contains(formPath)) {
+                formsToProcess.add(formPath);
+            }
+        }
+
+        // Добавляем в очередь
+        if (!formsToProcess.isEmpty()) {
+            for (String form : formsToProcess) {
+                formsQueue.offer(form);
+                totalFound.incrementAndGet();
+            }
+            log("  [Сканер] Найдено новых форм: " + formsToProcess.size() + " (всего в очереди: " + formsQueue.size() + ")");
+        }
+
+        // Если первый проход завершён, останавливаем сканер
+        if (!scannerTaskRunning && totalFound.get() > 0) {
+            // Сканируем один раз при старте
+            scannerTaskRunning = true;
+        }
+    }
+
+    // Добавьте поле
+    private volatile boolean scannerTaskRunning = false;
+
+    // В startFullProjectScan() - инициализируем общее количество форм
     private void startFullProjectScan() {
-        // Запускаем фоновый сканер для поиска новых форм
+        // ========== ОПРЕДЕЛЯЕМ ОБЩЕЕ КОЛИЧЕСТВО ФОРМ ПЕРЕД СТАРТОМ ==========
+        FileScannerService scanner = new FileScannerService(settings.getProjectPath());
+        Set<String> allFormsInProject = scanner.findAllForms();
+        totalFound.set(allFormsInProject.size());
+        log("Всего форм в проекте: " + totalFound.get());
+        // ===================================================================
+
+        // Запускаем фоновый сканер
         scannerExecutor = Executors.newSingleThreadScheduledExecutor();
         scannerTask = scannerExecutor.scheduleAtFixedRate(() -> {
-            if (stopRequested.get()) {
+            if (stopRequested.get() || paused.get()) {
                 return;
             }
             try {
@@ -177,106 +220,11 @@ public class ParallelRecursiveReportBuilder {
             } catch (Exception e) {
                 error("Ошибка сканирования: " + e.getMessage());
             }
-        }, 0, 2, TimeUnit.SECONDS);  // Сканируем каждые 2 секунды
+        }, 0, 5, TimeUnit.SECONDS);
 
         // Запускаем рабочие потоки
         for (int i = 0; i < parallelThreads; i++) {
             executor.submit(new FormWorker());
-        }
-
-        // Запускаем поток мониторинга завершения
-        executor.submit(() -> {
-            while (!stopRequested.get() && isRunning.get()) {
-                try {
-                    Thread.sleep(1000);
-                    // Если очередь пуста, нет активных задач и сканер завершил первый проход
-                    if (activeTasks.get() == 0 && formsQueue.isEmpty()) {
-                        // Останавливаем сканер
-                        if (scannerTask != null) {
-                            scannerTask.cancel(false);
-                            scannerExecutor.shutdown();
-                        }
-                        complete();
-                        break;
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        });
-    }
-
-    /**
-     * Сканирование файловой системы для поиска новых форм
-     */
-    private void scanForNewForms() {
-
-        if (paused.get()) return;
-        Set<String> foundForms = new LinkedHashSet<>();
-
-        // Сканируем каталог Forms
-        Path formsPath = projectRoot.resolve("Forms");
-        if (Files.exists(formsPath)) {
-            try (Stream<Path> walk = Files.walk(formsPath)) {
-                walk.filter(Files::isRegularFile)
-                        .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
-                        .forEach(p -> {
-                            String relativePath = formsPath.relativize(p).toString().replace("\\", "/");
-                            // ПОЛНЫЙ путь: Forms/относительный/путь
-                            String formPath = "Forms/" + relativePath;
-
-                            if (!hasReport(formPath) && !processedForms.contains(formPath)) {
-                                foundForms.add(formPath);
-                            }
-                        });
-            } catch (IOException e) {
-                error("Ошибка сканирования Forms: " + e.getMessage());
-            }
-        }
-
-        // Сканируем каталоги UserForms
-        try (Stream<Path> list = Files.list(projectRoot)) {
-            list.filter(Files::isDirectory)
-                    .filter(p -> p.getFileName().toString().startsWith("UserForms"))
-                    .forEach(userFormsDir -> {
-                        String dirName = userFormsDir.getFileName().toString();
-                        try (Stream<Path> walk = Files.walk(userFormsDir)) {
-                            walk.filter(Files::isRegularFile)
-                                    .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
-                                    .forEach(p -> {
-                                        String relativePath = userFormsDir.relativize(p).toString().replace("\\", "/");
-                                        // ПОЛНЫЙ путь: UserFormsXXX/относительный/путь
-                                        String formPath = dirName + "/" + relativePath;
-
-                                        if (!hasReport(formPath) && !processedForms.contains(formPath)) {
-                                            foundForms.add(formPath);
-                                        }
-                                    });
-                        } catch (IOException e) {
-                            error("Ошибка сканирования " + dirName + ": " + e.getMessage());
-                        }
-                    });
-        } catch (IOException e) {
-            error("Ошибка сканирования UserForms: " + e.getMessage());
-        }
-
-        // Добавляем найденные формы в очередь
-        if (!foundForms.isEmpty()) {
-            int newCount = 0;
-            for (String form : foundForms) {
-                if (!processedForms.contains(form) && !formsQueue.contains(form)) {
-                    formsQueue.offer(form);
-                    newCount++;
-                    totalFound.incrementAndGet();
-                }
-            }
-            if (newCount > 0) {
-                log("  [Сканер] Найдено новых форм: " + newCount + " (всего в очереди: " + formsQueue.size() + ")");
-                if (onLevelStart != null) {
-                    SwingUtilities.invokeLater(() -> onLevelStart.accept("Найдено форм: " + totalFound.get()));
-                }
-            }
         }
     }
 

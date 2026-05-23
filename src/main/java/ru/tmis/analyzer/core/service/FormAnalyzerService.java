@@ -59,7 +59,7 @@ public class FormAnalyzerService {
     private ProgressCallback progressCallback;
     private ILogger logger;
 
-    private final AtomicBoolean paused = new AtomicBoolean(false);
+    private BooleanSupplier pausedCondition = () -> false;
     private final Object pauseLock = new Object();
 
     public interface ProgressCallback {
@@ -156,15 +156,16 @@ public class FormAnalyzerService {
         this.progressCallback = callback;
     }
 
-    public List<FormInfo> analyzeAllForms() throws Exception {
+    // core/service/FormAnalyzerService.java
+    public List<FormInfo> analyzeAllForms(int parallelThreads) throws Exception {
         Set<String> formsToAnalyzeList = getFormsToAnalyze();
         if (formsToAnalyzeList == null || formsToAnalyzeList.isEmpty()) {
             return new ArrayList<>();
         }
 
-        // Инициализируем пул потоков (по умолчанию - количество ядер)
+        // Используем переданное количество потоков
         if (executor == null || executor.isShutdown()) {
-            int threads = Runtime.getRuntime().availableProcessors();
+            int threads = parallelThreads > 0 ? parallelThreads : Runtime.getRuntime().availableProcessors();
             executor = Executors.newFixedThreadPool(threads);
             System.out.println("Параллельный анализ запущен с " + threads + " потоками");
         }
@@ -193,7 +194,6 @@ public class FormAnalyzerService {
                     if (formInfo != null) {
                         results.add(formInfo);
                         if (formAnalyzedCallback != null) {
-                            // Синхронизация для callback
                             synchronized (reportLock) {
                                 formAnalyzedCallback.onFormAnalyzed(formInfo);
                             }
@@ -215,9 +215,7 @@ public class FormAnalyzerService {
         for (Future<FormInfo> future : futures) {
             try {
                 FormInfo form = future.get(60, TimeUnit.MINUTES);
-                if (form != null) {
-                    // Результат уже добавлен в results, ничего не делаем
-                }
+                // результат уже добавлен
             } catch (TimeoutException e) {
                 System.err.println("Таймаут при анализе формы");
                 future.cancel(true);
@@ -228,6 +226,12 @@ public class FormAnalyzerService {
 
         return results;
     }
+
+    // Перегруженный метод для обратной совместимости
+    public List<FormInfo> analyzeAllForms() throws Exception {
+        return analyzeAllForms(Runtime.getRuntime().availableProcessors());
+    }
+
     public void reset() {
         if (formsToAnalyze != null) {
             formsToAnalyze.clear();
@@ -394,79 +398,33 @@ public class FormAnalyzerService {
             reportQueue.offer(formInfo);
         }
     }
+
+    /**
+     * Возвращает список форм для анализа
+     * ИСПОЛЬЗУЕТ ТОЛЬКО findAllForms() - единый метод сканирования
+     */
     private Set<String> getFormsToAnalyze() throws IOException {
-        // Если установлен прямой список, используем его
+        // Если установлен прямой список (например, из дерева форм), используем его
         if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {
             System.out.println("Используем прямой список форм (" + formsToAnalyze.size() + " шт.)");
             return formsToAnalyze;
         }
 
-        // Иначе читаем из файла как обычно
-        Set<String> forms = new LinkedHashSet<>();
-        Path listFile = Paths.get("forms_list.txt");
+        // ========== ЕДИНЫЙ МЕТОД СКАНИРОВАНИЯ ==========
+        FileScannerService scanner = new FileScannerService(settings.getProjectPath());
+        Set<String> allForms = scanner.findAllForms();
 
-        if (Files.exists(listFile)) {
-            List<String> lines = Files.readAllLines(listFile);
-            for (String line : lines) {
-                String trimmed = line.trim();
-                if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
-                    String normalized = FormPathUtils.normalizeFormPath(trimmed);
-                    forms.add(normalized);
-                    System.out.println("  Добавлена форма из списка: " + normalized);
-                }
-            }
-            if (!forms.isEmpty()) {
-                return forms;
-            }
-        }
-
-        // Если список пуст - возвращаем null, чтобы вызвать предупреждение
-        System.out.println("Список форм пуст");
-        return null;
-    }
-
-    private Set<String> scanAllForms() throws IOException {
-        Set<String> allForms = new LinkedHashSet<>();
-        Path rootPath = Paths.get(settings.getProjectPath());
-
-        // Сканируем Forms
-        Path formsPath = rootPath.resolve("Forms");
-        if (Files.exists(formsPath)) {
-            try (Stream<Path> walk = Files.walk(formsPath)) {
-                walk.filter(Files::isRegularFile)
-                        .filter(p -> p.toString().endsWith(".frm"))
-                        .forEach(p -> {
-                            String relativePath = formsPath.relativize(p).toString().replace("\\", "/");
-                            allForms.add("Forms/" + relativePath);
-                            System.out.println("  Найдена форма: Forms/" + relativePath);
-                        });
-            }
-        }
-
-        // Сканируем UserForms
-        try (Stream<Path> list = Files.list(rootPath)) {
-            list.filter(Files::isDirectory)
-                    .filter(p -> p.getFileName().toString().startsWith("UserForms"))
-                    .forEach(userFormsDir -> {
-                        String dirName = userFormsDir.getFileName().toString();
-                        try (Stream<Path> walk = Files.walk(userFormsDir)) {
-                            walk.filter(Files::isRegularFile)
-                                    .filter(p -> p.toString().endsWith(".frm") || p.toString().endsWith(".dfrm"))
-                                    .forEach(p -> {
-                                        String relativePath = userFormsDir.relativize(p).toString().replace("\\", "/");
-                                        allForms.add(dirName + "/" + relativePath);
-                                        System.out.println("  Найдена форма: " + dirName + "/" + relativePath);
-                                    });
-                        } catch (IOException e) {
-                            System.err.println("Ошибка сканирования " + dirName + ": " + e.getMessage());
-                        }
-                    });
-        }
-
-        System.out.println("Всего найдено форм: " + allForms.size());
+        System.out.println("Найдено форм при сканировании: " + allForms.size());
         return allForms;
     }
 
+    /**
+     * @deprecated Используйте FileScannerService.findAllForms() вместо этого метода
+     */
+    @Deprecated
+    private Set<String> scanAllForms() throws IOException {
+        return new FileScannerService(settings.getProjectPath()).findAllForms();
+    }
 
     /**
      * Загрузка зависимостей вьюх (какие таблицы используются внутри каждой вьюхи)
@@ -692,23 +650,13 @@ public class FormAnalyzerService {
             }
         }
     }
-    // Геттер/сеттер для паузы
-    public void setPaused(boolean paused) {
-        this.paused.set(paused);
-        if (!paused) {
-            synchronized (pauseLock) {
-                pauseLock.notifyAll();
-            }
-        }
+
+    public void setPaused(BooleanSupplier condition) {
+        this.pausedCondition = condition;
     }
 
-    public boolean isPaused() {
-        return paused.get();
-    }
-
-    // Метод проверки паузы
     private void checkPause() {
-        if (paused.get()) {
+        if (pausedCondition != null && pausedCondition.getAsBoolean()) {
             synchronized (pauseLock) {
                 try {
                     pauseLock.wait();
