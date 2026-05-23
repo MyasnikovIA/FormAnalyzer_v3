@@ -7,6 +7,7 @@ import ru.tmis.analyzer.core.cache.FormCache;
 import ru.tmis.analyzer.core.cache.FormCacheManager;
 import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.db.DatabaseAvailabilityService;
+import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
@@ -585,6 +586,9 @@ public class MainWindow extends JFrame {
     /**
      * Запускает анализ выбранных форм
      */
+    /**
+     * Запускает анализ выбранных форм
+     */
     private void startAnalysis() {
         ensureFormsPreloaded();
         paused.set(false);
@@ -694,8 +698,6 @@ public class MainWindow extends JFrame {
         // ✅ ОДИН анализатор для всех форм
         FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
         analyzer.setStopCondition(() -> stopRequested);
-
-        // Передаём условие паузы
         analyzer.setPaused(() -> MainWindow.this.paused.get());
 
         analyzer.setLogger(new ILogger() {
@@ -734,7 +736,7 @@ public class MainWindow extends JFrame {
         });
 
         // Запускаем анализ в отдельном потоке
-        final int finalThreads = threads;  // ← необходимо для лямбды
+        final int finalThreads = threads;
         currentTask = executorService.submit(() -> {
             try {
                 List<FormInfo> results = analyzer.analyzeAllForms(finalThreads);
@@ -1576,7 +1578,7 @@ public class MainWindow extends JFrame {
         String projectPath = settings.getProjectPath();
         if (formCacheManager.needsLoading(projectPath)) {
             appendLog("Загрузка форм в оперативную память...");
-            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);  // ← ОШИБКА ЗДЕСЬ
             if (loaded == 0) {
                 appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
                 JOptionPane.showMessageDialog(this,
@@ -1793,6 +1795,7 @@ public class MainWindow extends JFrame {
     private boolean checkDatabaseAvailabilityBeforeAnalysis() {
         DatabaseAvailabilityService dbChecker = new DatabaseAvailabilityService(settings);
         dbChecker.checkAllConnections();
+        DatabaseConnectionManager.printStats();
 
         // Показываем диалог с результатами
         boolean continueAnalysis = dbChecker.showResultsDialog(this);
@@ -1890,30 +1893,30 @@ public class MainWindow extends JFrame {
             return;
         }
 
-        // Если уже загружены - пропускаем
-        if (formCacheManager.isFormsLoaded()) {
-            appendLog("Формы уже в памяти (" + formCacheManager.getCachedFormsCount() + " шт.)");
+        // ========== ИСПРАВЛЕНИЕ: проверяем реальное состояние кэша ==========
+        if (FormCache.getCachedFormsCount() > 0) {
+            appendLog("Формы уже в памяти (" + FormCache.getCachedFormsCount() + " шт.)");
             return;
         }
+        // ===================================================================
 
-        // Предзагрузка
         appendLog("");
         appendLog("=== ПРЕДЗАГРУЗКА ФОРМ В ОПЕРАТИВНУЮ ПАМЯТЬ ===");
 
         progressBar.setIndeterminate(true);
         statusLabel.setText("Статус: Загрузка форм в память...");
 
-        // Синхронная загрузка (с прогрессом в логе)
         int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
 
         progressBar.setIndeterminate(false);
         statusLabel.setText("Статус: Готов к анализу");
 
-        if (loaded == 0 && config.isUseMemoryCache()) {
+        if (loaded == 0) {
             appendLog("ПРЕДУПРЕЖДЕНИЕ: Не удалось загрузить формы в память!");
+            appendLog("Проверьте путь к проекту: " + projectPath);
             appendLog("Будет использован режим прямого чтения с диска.");
             config.setUseMemoryCache(false);
-        } else if (loaded > 0) {
+        } else {
             appendLog("✓ Формы успешно загружены в оперативную память");
             long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
             appendLog("  Использовано RAM: ~" + memoryMB + " МБ");

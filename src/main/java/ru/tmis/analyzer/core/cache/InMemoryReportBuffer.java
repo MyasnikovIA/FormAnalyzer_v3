@@ -14,7 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InMemoryReportBuffer {
 
     // Хранилище TXT отчётов в памяти
-    private static final Map<String, String> txtBuffer = new ConcurrentHashMap<>();
+    private static final Map<String, String> txtBuffer = new HashMap<>(25000);
+
 
     // Хранилище CSV строк
     private static final List<String> csvLines = Collections.synchronizedList(new ArrayList<>());
@@ -26,10 +27,19 @@ public class InMemoryReportBuffer {
     private static final Map<String, String> mdBuffer = new ConcurrentHashMap<>();
 
     private static int totalForms = 0;
+    private static final Object bufferLock = new Object();
 
     public static void addTxtReport(String formPath, String content) {
-        txtBuffer.put(formPath, content);
-        totalForms++;
+        synchronized (bufferLock) {
+            txtBuffer.put(formPath, content);
+            totalForms++;
+        }
+
+        // Диагностика каждые 1000 форм
+        if (totalForms % 1000 == 0) {
+            System.out.println("[Buffer] Накоплено TXT отчётов: " + txtBuffer.size() +
+                    ", RAM: ~" + (totalForms * 50 / 1024) + " МБ");
+        }
     }
 
     public static void addCsvLine(String line) {

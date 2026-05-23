@@ -33,8 +33,14 @@ public class FileScannerService {
 
         Set<String> allForms = new LinkedHashSet<>();
 
+        System.out.println("[FileScanner] Проект root: " + rootPath.toAbsolutePath());
+        System.out.println("[FileScanner] Существует: " + Files.exists(rootPath));
+
         // 1. Сканируем Forms
         Path formsPath = rootPath.resolve("Forms");
+        System.out.println("[FileScanner] Forms path: " + formsPath);
+        System.out.println("[FileScanner] Forms существует: " + Files.exists(formsPath));
+
         if (Files.exists(formsPath)) {
             try (Stream<Path> walk = Files.walk(formsPath)) {
                 walk.filter(Files::isRegularFile)

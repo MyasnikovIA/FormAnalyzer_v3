@@ -15,6 +15,10 @@ public class CSVReportGenerator {
     private final SettingsModel settings;  // Добавить
     private transient ReportsFromDbService reportsService;
 
+    private final List<String> csvBuffer = Collections.synchronizedList(new ArrayList<>());
+    private static final int CSV_BATCH_SIZE = 500;
+
+
     public CSVReportGenerator(String outputDir) {
         this.outputDir = outputDir;
         this.settings = SettingsModel.getInstance();
@@ -266,5 +270,87 @@ public class CSVReportGenerator {
             case 6: return "Составной";
             default: return "Неизвестный тип (" + repType + ")";
         }
+    }
+    /**
+     * Добавляет данные формы в CSV буфер (пакетная запись)
+     */
+    public void appendFormToCSVBatch(FormInfo formInfo) {
+        String formName = formInfo.getFormPath();
+
+        // SubForm
+        for (String subForm : formInfo.getSubForms()) {
+            csvBuffer.add(escapeCSV(formName) + ";subForm;" + escapeCSV(subForm));
+        }
+
+        // формы JS
+        for (String jsForm : formInfo.getJsForms()) {
+            csvBuffer.add(escapeCSV(formName) + ";формы JS;" + escapeCSV(jsForm));
+        }
+
+        // Вьюхи
+        for (String tv : formInfo.getTablesViews()) {
+            if (tv.startsWith("D_V_")) {
+                csvBuffer.add(escapeCSV(formName) + ";Вьюхи;" + escapeCSV(tv));
+            }
+        }
+
+        // Таблицы
+        Set<String> tables = formInfo.getTablesFromViews();
+        if (tables != null) {
+            for (String table : tables) {
+                csvBuffer.add(escapeCSV(formName) + ";Таблицы;" + escapeCSV(table));
+            }
+        }
+
+        // Пакеты и функции
+        for (String pf : formInfo.getPackagesFunctions()) {
+            csvBuffer.add(escapeCSV(formName) + ";Пакеты и функции;" + escapeCSV(pf));
+        }
+
+        // Системные опции
+        for (String opt : formInfo.getSystemOptions()) {
+            csvBuffer.add(escapeCSV(formName) + ";СО;" + escapeCSV(opt));
+        }
+
+        // Брокеры
+        for (String broker : formInfo.getBrokers()) {
+            String normalized = broker.replaceAll(";", "").replaceAll(",", "").replaceAll("\"", "");
+            csvBuffer.add(escapeCSV(formName) + ";Брокеры;" + escapeCSV(normalized));
+        }
+
+        // Периодически сбрасываем буфер на диск
+        if (csvBuffer.size() >= CSV_BATCH_SIZE) {
+            try {
+                flushCSV();
+            } catch (IOException e) {
+                System.err.println("Ошибка сброса CSV буфера: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Сбрасывает накопленные CSV строки на диск
+     */
+    public void flushCSV() throws IOException {
+        if (csvBuffer.isEmpty()) return;
+
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        Path csvPath = outputPath.resolve("forms_export.csv");
+        boolean exists = Files.exists(csvPath);
+
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(csvPath.toFile(), true)))) {
+            if (!exists) {
+                writer.println("ФОРМА;БЛОК;ЗНАЧЕНИЕ");
+            }
+            for (String line : csvBuffer) {
+                writer.println(line);
+            }
+            writer.flush();
+        }
+        csvBuffer.clear();
     }
 }

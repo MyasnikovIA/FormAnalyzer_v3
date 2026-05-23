@@ -6,9 +6,7 @@ import ru.tmis.analyzer.utils.NetworkUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DatabaseConnectionManager {
@@ -20,6 +18,7 @@ public class DatabaseConnectionManager {
     // Флаги доступности сети
     private static volatile boolean oracleNetworkAvailable = false;
     private static volatile boolean postgresNetworkAvailable = false;
+    private static ScheduledExecutorService statsScheduler;
 
     public static synchronized void init(String oracleUrl, String oracleUser, String oraclePassword,
                                          String postgresUrl, String postgresUser, String postgresPassword,
@@ -52,6 +51,7 @@ public class DatabaseConnectionManager {
         }
 
         initialized = true;
+        startStatsLogging(30);
     }
 
     public static Connection getOracleConnection() throws SQLException {
@@ -79,6 +79,9 @@ public class DatabaseConnectionManager {
     public static void shutdown() {
         if (oraclePool != null) oraclePool.close();
         if (postgresPool != null) postgresPool.close();
+        if (statsScheduler != null && !statsScheduler.isShutdown()) {
+            statsScheduler.shutdown();
+        }
     }
 
     // Внутренний класс пула
@@ -96,7 +99,6 @@ public class DatabaseConnectionManager {
             this.password = password;
             this.pool = new LinkedBlockingQueue<>(maxSize);
 
-            // НЕ создаём соединения заранее, если сеть не проверена
             if (preCreate) {
                 for (int i = 0; i < Math.min(maxSize, 3); i++) {
                     try {
@@ -156,5 +158,56 @@ public class DatabaseConnectionManager {
                 activeCount.decrementAndGet();
             }
         }
+
+        // ========== ДОБАВЬТЕ ЭТИ МЕТОДЫ ==========
+        public int getActiveCount() {
+            return activeCount.get();
+        }
+
+        public int getPoolSize() {
+            return pool.size();
+        }
     }
+
+    /**
+     * Выводит статистику пулов соединений в лог
+     */
+    public static void printStats() {
+        if (oraclePool != null) {
+            System.out.println("[DB Pool] Oracle: активных=" + oraclePool.getActiveCount() +
+                    ", в пуле=" + oraclePool.getPoolSize() +
+                    ", всего=" + (oraclePool.getActiveCount() + oraclePool.getPoolSize()));
+        } else {
+            System.out.println("[DB Pool] Oracle: пул не инициализирован");
+        }
+
+        if (postgresPool != null) {
+            System.out.println("[DB Pool] PostgreSQL: активных=" + postgresPool.getActiveCount() +
+                    ", в пуле=" + postgresPool.getPoolSize() +
+                    ", всего=" + (postgresPool.getActiveCount() + postgresPool.getPoolSize()));
+        } else {
+            System.out.println("[DB Pool] PostgreSQL: пул не инициализирован");
+        }
+    }
+
+    /**
+     * Периодический вывод статистики (каждые N секунд)
+     */
+
+    /**
+     * Периодический вывод статистики (каждые N секунд)
+     */
+    public static void startStatsLogging(int intervalSeconds) {
+        if (statsScheduler != null && !statsScheduler.isShutdown()) {
+            return;
+        }
+        statsScheduler = Executors.newSingleThreadScheduledExecutor();
+        statsScheduler.scheduleAtFixedRate(() -> {
+            if (oraclePool != null || postgresPool != null) {
+                System.out.println("--- СТАТИСТИКА ПУЛОВ СОЕДИНЕНИЙ ---");
+                printStats();
+            }
+        }, intervalSeconds, intervalSeconds, TimeUnit.SECONDS);
+    }
+
 }

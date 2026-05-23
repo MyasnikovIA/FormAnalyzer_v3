@@ -1,19 +1,24 @@
-// core/service/FormAnalyzerService.java (исправленный)
+// core/service/FormAnalyzerService.java
 package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.FormCache;
+import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.core.report.CSVReportGenerator;
+import ru.tmis.analyzer.core.report.JSONReportGenerator;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.utils.CommentRemover;
 import ru.tmis.analyzer.utils.FormPathUtils;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,11 +30,6 @@ import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import java.util.concurrent.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 
 public class FormAnalyzerService {
 
@@ -47,7 +47,11 @@ public class FormAnalyzerService {
     private volatile boolean writerRunning = true;
 
     private ExecutorService executor;
-    private final Object reportLock = new Object(); // Для синхронизации записи отчётов
+    private final Object reportLock = new Object();
+
+    // Генераторы для CSV и JSON
+    private final CSVReportGenerator csvGenerator;
+    private final JSONReportGenerator jsonGenerator;
 
     public interface FormAnalyzedCallback {
         void onFormAnalyzed(FormInfo formInfo);
@@ -74,11 +78,13 @@ public class FormAnalyzerService {
         this.extractorManager = new ExtractorManager(settings);
         this.useMemoryCache = config != null && config.isUseMemoryCache();
 
-        // ========== ВАЖНО: устанавливаем режим кэширования форм ==========
-        FormCache.setEnabled(useMemoryCache);
-        // =================================================================
+        // Инициализация генераторов
+        this.csvGenerator = new CSVReportGenerator(settings.getOutputDir());
+        this.jsonGenerator = new JSONReportGenerator(settings.getOutputDir(), config);
 
-        // Запускаем фоновый поток для записи отчётов (только если не используем кэш)
+        FormCache.setEnabled(useMemoryCache);
+
+        // Запускаем фоновый поток для записи отчётов (только для режима диска)
         if (!useMemoryCache) {
             startReportWriter();
         }
@@ -94,6 +100,12 @@ public class FormAnalyzerService {
                         ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
                         reportGen.createMainReportHeader();
                         reportGen.appendFormToMainReport(formInfo);
+
+                        // CSV и JSON также записываем
+                        csvGenerator.appendFormToCSVBatch(formInfo);
+                        if (config != null && config.isEnableJSONExport()) {
+                            jsonGenerator.appendFormToJSON(formInfo);
+                        }
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -105,7 +117,6 @@ public class FormAnalyzerService {
         });
     }
 
-    // Быстрая проверка существования отчёта (замена Files.exists)
     private boolean hasReportFast(String formPath) {
         String safeName = getSafeFileName(formPath);
         if (existingReportsCache.contains(safeName)) {
@@ -125,7 +136,6 @@ public class FormAnalyzerService {
         return false;
     }
 
-    // Конструктор с одним параметром (загружает config)
     public FormAnalyzerService(SettingsModel settings) {
         this(settings, AppConfig.load());
     }
@@ -140,13 +150,13 @@ public class FormAnalyzerService {
         }
         System.out.println(message);
     }
+
     private void error(String message) {
         if (logger != null) {
             logger.error(message);
         }
         System.err.println(message);
     }
-
 
     public void setStopCondition(BooleanSupplier condition) {
         this.stopCondition = condition;
@@ -156,14 +166,12 @@ public class FormAnalyzerService {
         this.progressCallback = callback;
     }
 
-    // core/service/FormAnalyzerService.java
     public List<FormInfo> analyzeAllForms(int parallelThreads) throws Exception {
         Set<String> formsToAnalyzeList = getFormsToAnalyze();
         if (formsToAnalyzeList == null || formsToAnalyzeList.isEmpty()) {
             return new ArrayList<>();
         }
 
-        // Используем переданное количество потоков
         if (executor == null || executor.isShutdown()) {
             int threads = parallelThreads > 0 ? parallelThreads : Runtime.getRuntime().availableProcessors();
             executor = Executors.newFixedThreadPool(threads);
@@ -211,11 +219,9 @@ public class FormAnalyzerService {
             }));
         }
 
-        // Собираем результаты
         for (Future<FormInfo> future : futures) {
             try {
-                FormInfo form = future.get(60, TimeUnit.MINUTES);
-                // результат уже добавлен
+                future.get(60, TimeUnit.MINUTES);
             } catch (TimeoutException e) {
                 System.err.println("Таймаут при анализе формы");
                 future.cancel(true);
@@ -227,7 +233,6 @@ public class FormAnalyzerService {
         return results;
     }
 
-    // Перегруженный метод для обратной совместимости
     public List<FormInfo> analyzeAllForms() throws Exception {
         return analyzeAllForms(Runtime.getRuntime().availableProcessors());
     }
@@ -241,17 +246,85 @@ public class FormAnalyzerService {
     }
 
     /**
-     * Анализ одной формы
-     * @param formPath путь к форме
-     * @param skipCacheCheck пропустить проверку существования отчёта (для рекурсивного анализа)
-     * @return информация о форме или null, если форма пропущена
+     * Сохранение отчёта с учётом режима работы (RAM или DISK)
      */
-    // core/service/FormAnalyzerService.java
+    private void saveReport(FormInfo formInfo) {
+        if (useMemoryCache) {
+            // ========== РЕЖИМ RAM: всё в буфер ==========
+            String txtContent = generateTxtContent(formInfo);
+            InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
+
+            // CSV в буфер
+            csvGenerator.appendFormToCSVBatch(formInfo);
+
+            // JSON в буфер
+            if (config != null && config.isEnableJSONExport()) {
+                try {
+                    jsonGenerator.appendFormToJSON(formInfo);
+                } catch (IOException e) {
+                    error("Ошибка JSON: " + e.getMessage());
+                }
+            }
+
+            // MD в буфер
+            if (config != null && config.isEnableLLMExport()) {
+                String mdContent = generateMdContent(formInfo);
+                InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
+            }
+        } else {
+            // ========== РЕЖИМ DISK: асинхронная запись ==========
+            queueFormForReport(formInfo);
+            csvGenerator.appendFormToCSVBatch(formInfo);
+            if (config != null && config.isEnableJSONExport()) {
+                try {
+                    jsonGenerator.appendFormToJSON(formInfo);
+                } catch (IOException e) {
+                    error("Ошибка JSON: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * Генерация TXT содержимого для буфера (режим RAM)
+     */
+    private String generateTxtContent(FormInfo formInfo) {
+        StringWriter sw = new StringWriter();
+        PrintWriter writer = new PrintWriter(sw);
+
+        writer.println("-".repeat(100));
+        writer.println("ФОРМА: " + formInfo.getFormPath());
+        writer.println("-".repeat(100));
+        writer.println("Базовая форма: " + formInfo.getBaseFormPath());
+        if (formInfo.isFullyReplaced()) {
+            writer.println("СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА");
+            writer.println("Файл замены: " + formInfo.getReplacementPath());
+        } else if (!formInfo.getOverrides().isEmpty()) {
+            writer.println("СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА");
+        } else {
+            writer.println("СТАТУС: БАЗОВАЯ ФОРМА");
+        }
+        writer.println();
+
+        writer.flush();
+        return sw.toString();
+    }
+
+    /**
+     * Генерация MD содержимого для буфера (режим RAM)
+     */
+    private String generateMdContent(FormInfo formInfo) {
+        try {
+            LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            return llmGen.generateForSingleForm(formInfo, settings.getOutputDir());
+        } catch (Exception e) {
+            error("Ошибка генерации MD: " + e.getMessage());
+            return "";
+        }
+    }
+
     /**
      * Анализ одной формы
-     * @param formPath путь к форме
-     * @param skipCacheCheck пропустить проверку существования отчёта (для рекурсивного анализа)
-     * @return информация о форме или null, если форма пропущена
      */
     public FormInfo analyzeForm(String formPath, boolean skipCacheCheck) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
@@ -263,7 +336,6 @@ public class FormAnalyzerService {
             return null;
         }
 
-        // ========== ПРОВЕРКА: ЕСЛИ ОТЧЁТ УЖЕ СУЩЕСТВУЕТ ==========
         if (!skipCacheCheck) {
             Path reportPath = getReportPath(normalizedPath);
             if (Files.exists(reportPath)) {
@@ -272,18 +344,14 @@ public class FormAnalyzerService {
                 return null;
             }
         }
-        // =======================================================
 
         FormInfo formInfo = userFormsResolver.resolveOverrides(normalizedPath);
 
         Path baseFormPathObj = scannerService.getBaseFormPath(normalizedPath);
         formInfo.setBaseFormPath(baseFormPathObj.toString());
 
-        // ========== ПОЛУЧАЕМ СОДЕРЖИМОЕ ФОРМЫ ==========
         String baseContent;
-
         if (useMemoryCache) {
-            // Режим оперативной памяти: берём из кэша (который загружен заранее)
             baseContent = FormCache.getFormContent(normalizedPath);
             if (baseContent == null) {
                 System.err.println("Форма не найдена в кэше: " + normalizedPath);
@@ -291,25 +359,17 @@ public class FormAnalyzerService {
                 return null;
             }
         } else {
-            // Режим диска: читаем напрямую с диска
             baseContent = scannerService.readFileContent(baseFormPathObj);
             if (baseContent == null) {
                 System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);
                 return null;
             }
         }
-        // ================================================================
 
-        // Удаляем комментарии
         String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
-
-        // Передаём в процессор очищенное содержимое
         extractorManager.process(contentWithoutComments, formInfo);
-
-        // Извлекаем AutoPopupMenu
         extractAutoPopupMenus(contentWithoutComments, formInfo);
 
-        // Собираем все вьюхи, используемые в этой форме
         Set<String> viewNames = new LinkedHashSet<>();
         for (String tv : formInfo.getTablesViews()) {
             if (tv.startsWith("D_V_")) {
@@ -317,7 +377,6 @@ public class FormAnalyzerService {
             }
         }
 
-        // Загружаем зависимости вьюх
         if (!viewNames.isEmpty()) {
             Map<String, ViewTableDependencies> viewDeps = loadViewDependencies(viewNames);
             formInfo.setViewDependencies(viewDeps);
@@ -328,49 +387,17 @@ public class FormAnalyzerService {
             }
         }
 
-        // Генерация LLM промпта для формы (если включено в настройках)
-        if (formInfo != null && config != null && config.isEnableLLMExport()) {
-            try {
-                LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
-                String mdFilePath = llmGen.generateForSingleForm(formInfo, settings.getOutputDir());
-                log("  LLM промпт сохранен: " + mdFilePath);
-            } catch (Exception e) {
-                error("  Ошибка сохранения LLM промпта: " + e.getMessage());
-            }
-        }
-
-        // ========== СОХРАНЕНИЕ ОТЧЁТА В ЗАВИСИМОСТИ ОТ РЕЖИМА ==========
-        if (useMemoryCache) {
-            // Режим оперативной памяти: добавляем в буфер
-            queueFormForReport(formInfo);
-        } else {
-            // Режим диска: сразу пишем на диск
-            try {
-                ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();
-                reportGen.appendFormToMainReport(formInfo);
-                log("  Отчёт сохранён на диск: " + formInfo.getFormPath());
-            } catch (IOException e) {
-                error("  Ошибка сохранения отчёта для " + formInfo.getFormPath() + ": " + e.getMessage());
-            }
-        }
-        // =================================================================
+        // ========== СОХРАНЯЕМ ОТЧЁТ ==========
+        saveReport(formInfo);
+        // ====================================
 
         return formInfo;
     }
 
-    /**
-     * Анализ одной формы (с проверкой существования отчёта)
-     * @param formPath путь к форме
-     * @return информация о форме или null, если форма пропущена
-     */
     public FormInfo analyzeForm(String formPath) {
         return analyzeForm(formPath, false);
     }
 
-    /**
-     * Получает полный путь к файлу отчёта с учётом подкаталога Forms
-     */
     private Path getReportPath(String formPath) {
         String outputDir = settings.getOutputDir();
         if (outputDir == null || outputDir.isEmpty()) {
@@ -380,9 +407,6 @@ public class FormAnalyzerService {
         return Paths.get(outputDir, "Forms", safeFileName);
     }
 
-    /**
-     * Формирует безопасное имя файла отчёта
-     */
     private String getSafeFileName(String formPath) {
         String normalized = formPath;
         if (normalized.startsWith("/")) {
@@ -391,44 +415,44 @@ public class FormAnalyzerService {
         return normalized.replace("/", "#").replace("\\", "#") + ".txt";
     }
 
-
-    // Добавить метод для асинхронного сохранения:
     public void queueFormForReport(FormInfo formInfo) {
         if (formInfo != null) {
             reportQueue.offer(formInfo);
         }
     }
 
-    /**
-     * Возвращает список форм для анализа
-     * ИСПОЛЬЗУЕТ ТОЛЬКО findAllForms() - единый метод сканирования
-     */
     private Set<String> getFormsToAnalyze() throws IOException {
-        // Если установлен прямой список (например, из дерева форм), используем его
         if (formsToAnalyze != null && !formsToAnalyze.isEmpty()) {
             System.out.println("Используем прямой список форм (" + formsToAnalyze.size() + " шт.)");
             return formsToAnalyze;
         }
 
-        // ========== ЕДИНЫЙ МЕТОД СКАНИРОВАНИЯ ==========
+        Set<String> forms = new LinkedHashSet<>();
+        Path listFile = Paths.get("forms_list.txt");
+
+        if (Files.exists(listFile)) {
+            List<String> lines = Files.readAllLines(listFile);
+            for (String line : lines) {
+                String trimmed = line.trim();
+                if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
+                    String normalized = FormPathUtils.normalizeFormPath(trimmed);
+                    forms.add(normalized);
+                }
+            }
+            if (!forms.isEmpty()) {
+                return forms;
+            }
+        }
+
         FileScannerService scanner = new FileScannerService(settings.getProjectPath());
         Set<String> allForms = scanner.findAllForms();
-
         System.out.println("Найдено форм при сканировании: " + allForms.size());
         return allForms;
     }
 
-    /**
-     * @deprecated Используйте FileScannerService.findAllForms() вместо этого метода
-     */
-    @Deprecated
     private Set<String> scanAllForms() throws IOException {
         return new FileScannerService(settings.getProjectPath()).findAllForms();
     }
-
-    /**
-     * Загрузка зависимостей вьюх (какие таблицы используются внутри каждой вьюхи)
-     */
 
     private Map<String, ViewTableDependencies> loadViewDependencies(Set<String> viewNames) {
         if (viewNames.isEmpty()) {
@@ -447,7 +471,6 @@ public class FormAnalyzerService {
             }
             count++;
 
-            // Проверяем глобальный кэш
             if (ViewDependencyAnalyzer.isInCache(viewName)) {
                 System.out.println("    [" + count + "/" + viewNames.size() + "] " + viewName + " (из кэша)");
                 ViewTableDependencies deps = analyzer.analyzeViewPublic(viewName);
@@ -455,7 +478,6 @@ public class FormAnalyzerService {
                 continue;
             }
 
-            // Проверяем локальный кэш формы
             if (viewDependenciesCache.containsKey(viewName)) {
                 System.out.println("    [" + count + "/" + viewNames.size() + "] " + viewName + " (из локального кэша)");
                 result.put(viewName, viewDependenciesCache.get(viewName));
@@ -486,24 +508,11 @@ public class FormAnalyzerService {
         this.formAnalyzedCallback = callback;
     }
 
-
-    //Вынести в отдельный класс  AutoPopupMenuExtractorService
-    /**
-     * Извлечь unit из AutoPopupMenu компонентов
-     * Поддерживает:
-     * - D3: <cmpAutoPopupMenu unit="..."/>
-     * - M2: <component cmptype="AutoPopupMenu" unit="..."/>
-     * - D3 с пробелами: <cmpAutoPopupMenu ... unit="..." .../>
-     * - M2 с другими атрибутами: <component cmptype="AutoPopupMenu" name="..." unit="..." .../>
-     */
     private void extractAutoPopupMenus(String content, FormInfo formInfo) {
         if (content == null || content.isEmpty()) return;
 
         Set<String> foundUnits = new LinkedHashSet<>();
 
-        // Паттерн 1: D3 синтаксис - cmpAutoPopupMenu с unit
-        // Пример: <cmpAutoPopupMenu unit="DIRECTION_SERVICES"/>
-        //         <cmpAutoPopupMenu name="someName" unit="DIRECTION_SERVICES"/>
         Pattern d3Pattern = Pattern.compile(
                 "<cmpAutoPopupMenu\\s+[^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*/?>",
                 Pattern.DOTALL | Pattern.CASE_INSENSITIVE
@@ -517,9 +526,6 @@ public class FormAnalyzerService {
             }
         }
 
-        // Паттерн 2: M2 синтаксис - component с cmptype="AutoPopupMenu" и unit
-        // Пример: <component cmptype="AutoPopupMenu" unit="DIRECTION_SERVICES"/>
-        //         <component name="pm" cmptype="AutoPopupMenu" unit="DIRECTION_SERVICES"/>
         Pattern m2Pattern = Pattern.compile(
                 "<component\\s+[^>]*?cmptype\\s*=\\s*['\"]AutoPopupMenu['\"][^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*/?>",
                 Pattern.DOTALL | Pattern.CASE_INSENSITIVE
@@ -533,7 +539,6 @@ public class FormAnalyzerService {
             }
         }
 
-        // Паттерн 3: Обратный порядок (unit может быть до cmptype)
         Pattern m2PatternReverse = Pattern.compile(
                 "<component\\s+[^>]*?\\bunit\\s*=\\s*['\"]([^'\"]+)['\"][^>]*?cmptype\\s*=\\s*['\"]AutoPopupMenu['\"][^>]*/?>",
                 Pattern.DOTALL | Pattern.CASE_INSENSITIVE
@@ -547,7 +552,6 @@ public class FormAnalyzerService {
             }
         }
 
-        // Паттерн 4: Сокращенная форма D3 (без пробелов между атрибутами)
         Pattern d3CompactPattern = Pattern.compile(
                 "<cmpAutoPopupMenu\\s+unit\\s*=\\s*['\"]([^'\"]+)['\"]\\s*/?>",
                 Pattern.DOTALL | Pattern.CASE_INSENSITIVE
@@ -561,33 +565,21 @@ public class FormAnalyzerService {
             }
         }
 
-        // Добавляем все найденные unit в FormInfo
         for (String unit : foundUnits) {
             formInfo.addAutoPopupMenu(unit);
         }
 
         System.out.println("  [AutoPopupMenu] Всего найдено unit: " + foundUnits.size());
     }
-    /**
-     * Устанавливает список форм для анализа напрямую (без чтения из файла)
-     */
+
     public void setFormsToAnalyze(Set<String> forms) {
         this.formsToAnalyze = forms;
     }
 
-    /**
-     * Очищает прямой список форм
-     */
     public void clearFormsToAnalyze() {
         this.formsToAnalyze = null;
     }
 
-    /**
-     * Сканирует весь проект и анализирует все найденные формы
-     */
-    /**
-     * Сканирует весь проект и анализирует только новые (необработанные) формы
-     */
     public List<FormInfo> scanAllFormsAndAnalyze() throws Exception {
         Set<String> allForms = scanAllForms();
         Set<String> formsToProcess = new LinkedHashSet<>();
@@ -596,7 +588,6 @@ public class FormAnalyzerService {
             outputDir = "SQL_info";
         }
 
-        // Фильтруем формы - оставляем только те, у которых нет отчёта
         for (String formPath : allForms) {
             String normalized = FormPathUtils.normalizeFormPath(formPath);
             String safeFileName = getSafeFileName(normalized);
@@ -621,15 +612,12 @@ public class FormAnalyzerService {
         return analyzeAllForms();
     }
 
-
-    // Добавить метод для установки количества потоков:
     public void setParallelThreads(int threads) {
         if (executor != null && !executor.isShutdown()) {
             executor.shutdownNow();
         }
         this.executor = Executors.newFixedThreadPool(threads);
     }
-
 
     public void shutdown() {
         writerRunning = false;
@@ -648,6 +636,13 @@ public class FormAnalyzerService {
             } catch (InterruptedException e) {
                 executor.shutdownNow();
             }
+        }
+
+        // Сбрасываем буфер CSV
+        try {
+            csvGenerator.flushCSV();
+        } catch (IOException e) {
+            error("Ошибка сброса CSV: " + e.getMessage());
         }
     }
 

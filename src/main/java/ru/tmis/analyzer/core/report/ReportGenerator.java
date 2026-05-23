@@ -15,9 +15,11 @@ import javax.swing.SwingUtilities;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReportGenerator {
 
@@ -34,6 +36,14 @@ public class ReportGenerator {
     private transient ReportsFromDbService reportsService;
     private final Object fileLock = new Object();
 
+    private final List<FormInfo> batchBuffer = Collections.synchronizedList(new ArrayList<>());
+    private static final int BATCH_SIZE = 100;
+    private final Object batchLock = new Object();
+
+    private final BlockingQueue<FormInfo> reportQueue = new LinkedBlockingQueue<>();
+    private ExecutorService reportWriterExecutor;
+    private volatile boolean writerRunning = true;
+    private final AtomicInteger pendingReports = new AtomicInteger(0);
 
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -43,6 +53,11 @@ public class ReportGenerator {
         this.oracleService = new OracleService(settings.getOracleUrl(), settings.getOracleUser(), settings.getOraclePassword());
         this.postgresService = new PostgresService(settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(), settings.getMisUser());
         this.reportsService = new ReportsFromDbService(settings);
+
+        // Запускаем поток для асинхронной записи отчётов (только для режима диска)
+        if (config != null && !config.isUseMemoryCache()) {
+            startReportWriter();
+        }
     }
 
 
@@ -114,43 +129,44 @@ public class ReportGenerator {
     /**
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
+    // core/report/ReportGenerator.java
+
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
         AppConfig config = AppConfig.load();
         boolean useMemoryCache = config != null && config.isUseMemoryCache();
 
         if (useMemoryCache) {
-            // Режим памяти: сохраняем в буфер
+            // Режим памяти
             String txtContent = generateTxtContent(formInfo);
             InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
 
-            if (config.isEnableCSVExport()) {
-                addToCsvBuffer(formInfo);
-            }
-
-            if (config.isEnableJSONExport()) {
-                addToJsonBuffer(formInfo);
-            }
+            // CSV и JSON также в буфер
+            addToCsvBuffer(formInfo);
+            addToJsonBuffer(formInfo);
 
             if (config.isEnableLLMExport()) {
                 String mdContent = generateMdContent(formInfo);
                 InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
             }
         } else {
-            // Режим диска: сразу пишем в файл
+            // Режим диска
             saveFormReportToFile(formInfo);
 
-            if (config.isEnableCSVExport()) {
-                appendToCSVReport(formInfo);
-            }
+            // CSV - пакетная запись
+            appendToCSVReport(formInfo);
 
-            if (config.isEnableJSONExport()) {
-                appendToJSONReport(formInfo);
-            }
+            // JSON - пакетная запись
+            appendToJSONReport(formInfo);
 
             if (config.isEnableLLMExport()) {
                 generateLLMPromptForForm(formInfo);
             }
         }
+    }
+
+    private void appendToCSVReport(FormInfo formInfo) throws IOException {
+        CSVReportGenerator csvGen = new CSVReportGenerator(outputDir);
+        csvGen.appendFormToCSVBatch(formInfo);
     }
     /**
      * Генерирует текстовое содержимое отчёта
@@ -835,7 +851,7 @@ public class ReportGenerator {
     }
 
 
-    private void appendToCSVReport(FormInfo formInfo) throws IOException {
+    private void appendToCSVReport_old(FormInfo formInfo) throws IOException {
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
@@ -1399,5 +1415,129 @@ public class ReportGenerator {
         JSONReportGenerator jsonGen = new JSONReportGenerator(outputDir, config);
         JsonObject formJson = jsonGen.convertFormToJson(formInfo);
         InMemoryReportBuffer.addJsonObject(formJson);
+    }
+
+    /**
+     * Добавляет форму в буфер для пакетной записи
+     */
+    public void appendFormToMainReportBatch(FormInfo formInfo) throws IOException {
+        if (formInfo == null) return;
+
+        synchronized (batchLock) {
+            batchBuffer.add(formInfo);
+
+            if (batchBuffer.size() >= BATCH_SIZE) {
+                flushBatch();
+            }
+        }
+    }
+
+    /**
+     * Сбрасывает буфер отчётов на диск
+     */
+    public void flushBatch() throws IOException {
+        synchronized (batchLock) {
+            if (batchBuffer.isEmpty()) return;
+
+            List<FormInfo> toWrite = new ArrayList<>(batchBuffer);
+            batchBuffer.clear();
+
+            // Сортируем для лучшей читаемости
+            toWrite.sort(Comparator.comparing(FormInfo::getFormPath));
+
+            Path outputPath = Paths.get(outputDir);
+            if (!Files.exists(outputPath)) {
+                Files.createDirectories(outputPath);
+            }
+
+            Path mainReportPath = outputPath.resolve("forms_report.txt");
+
+            try (PrintWriter writer = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(mainReportPath.toFile(), true), StandardCharsets.UTF_8)))) {
+                for (FormInfo form : toWrite) {
+                    writeFormReport(writer, form);
+                    writer.flush();
+                }
+            }
+        }
+    }
+
+    /**
+     * Сохраняет отчёт для отдельной формы (синхронно, для режима диска)
+     */
+    public void saveFormReportSync(FormInfo formInfo) throws IOException {
+        Path formsDir = Paths.get(outputDir, "Forms");
+        if (!Files.exists(formsDir)) {
+            Files.createDirectories(formsDir);
+        }
+
+        String fileName = getSafeFileName(formInfo.getFormPath());
+        Path formReportPath = formsDir.resolve(fileName);
+
+        try (PrintWriter writer = new PrintWriter(
+                new BufferedWriter(new OutputStreamWriter(new FileOutputStream(formReportPath.toFile()), StandardCharsets.UTF_8)))) {
+            writeFormReport(writer, formInfo);
+            writer.flush();
+        }
+    }
+    /**
+     * Запускает фоновый поток для записи отчётов
+     */
+    private void startReportWriter() {
+        reportWriterExecutor = Executors.newSingleThreadExecutor();
+        reportWriterExecutor.submit(() -> {
+            while (writerRunning) {
+                try {
+                    FormInfo formInfo = reportQueue.poll(500, TimeUnit.MILLISECONDS);
+                    if (formInfo != null) {
+                        try {
+                            saveFormReportSync(formInfo);
+                            pendingReports.decrementAndGet();
+                        } catch (IOException e) {
+                            System.err.println("Ошибка записи отчёта: " + e.getMessage());
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+    }
+
+    /**
+     * Добавляет отчёт в очередь на запись (асинхронно)
+     */
+    public void queueFormForReport(FormInfo formInfo) {
+        if (formInfo != null) {
+            pendingReports.incrementAndGet();
+            reportQueue.offer(formInfo);
+        }
+    }
+
+    /**
+     * Ожидает завершения всех записей
+     */
+    public void awaitReportCompletion() {
+        while (pendingReports.get() > 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+
+    public void shutdownReportWriter() {
+        writerRunning = false;
+        if (reportWriterExecutor != null) {
+            reportWriterExecutor.shutdown();
+            try {
+                reportWriterExecutor.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                reportWriterExecutor.shutdownNow();
+            }
+        }
     }
 }

@@ -225,6 +225,7 @@ public class ParallelRecursiveReportBuilder {
         private final int threadId;
         private final List<String> forms;
         private final FormAnalyzerService analyzer;
+        private int localProcessed = 0;
 
         public FormProcessor(int threadId, List<String> forms) {
             this.threadId = threadId;
@@ -289,10 +290,17 @@ public class ParallelRecursiveReportBuilder {
                 } catch (Exception e) {
                     error("Ошибка обработки " + formPath + ": " + e.getMessage());
                 }
+
+                localProcessed++;
+                // Обновляем глобальный счётчик только раз в 10 форм
+                if (localProcessed % 10 == 0) {
+                    totalProcessed.addAndGet(10);
+                }
             }
 
             analyzer.shutdown();
             log("Поток " + threadId + " завершил работу, обработано " + processedInThread + " форм");
+            totalProcessed.addAndGet(localProcessed % 10);
         }
     }
 
