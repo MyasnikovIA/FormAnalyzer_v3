@@ -34,5 +34,6 @@
   "includeBrokerFunctions": true,
   "skipDbOnError": false,
   "llmPanelVisible": true,
-  "parallelThreads": 4
+  "parallelThreads": 4,
+  "useMemoryCache": false
 }

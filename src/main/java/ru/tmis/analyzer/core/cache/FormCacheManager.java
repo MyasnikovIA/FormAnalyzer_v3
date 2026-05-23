@@ -3,9 +3,11 @@ package ru.tmis.analyzer.core.cache;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.service.FileScannerService;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -15,9 +17,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class FormCacheManager {
 
     private static final FormCacheManager instance = new FormCacheManager();
-
     private final AtomicBoolean isLoading = new AtomicBoolean(false);
     private final AtomicBoolean isLoaded = new AtomicBoolean(false);
+
+
+
     private final AtomicReference<String> lastLoadedProjectPath = new AtomicReference<>(null);
 
     private FormCacheManager() {}
@@ -61,128 +65,127 @@ public class FormCacheManager {
      * @param projectPath путь к проекту
      * @return количество загруженных форм
      */
+    /**
+     * ПРЕДЗАГРУЗКА всех форм в память (синхронно, с прогрессом)
+     */
     public int loadAllForms(String projectPath, java.util.function.Consumer<String> logCallback) {
-        if (projectPath == null || projectPath.trim().isEmpty()) {
-            if (logCallback != null) logCallback.accept("Путь проекта не указан, загрузка форм невозможна");
-            return 0;
-        }
-
-        // ========== ПРОВЕРКА: загружаем только если кэширование включено ==========
         if (!FormCache.isEnabled()) {
             if (logCallback != null) {
-                logCallback.accept("Режим кэширования форм ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
-                logCallback.accept("Формы будут читаться с диска по мере необходимости.");
+                logCallback.accept("Режим кэширования ВЫКЛЮЧЕН. Формы НЕ загружаются в память.");
             }
             return 0;
         }
 
-        // Проверяем, нужно ли загружать
-        if (!needsLoading(projectPath)) {
-            if (logCallback != null) logCallback.accept("Формы уже загружены в память (" + FormCache.getCachedFormsCount() + " шт.)");
-            return FormCache.getCachedFormsCount();
+        if (isLoaded.get()) {
+            if (logCallback != null) {
+                logCallback.accept("Формы уже загружены в память (" + FormCache.size() + " шт.)");
+            }
+            return FormCache.size();
         }
 
-        // Если загрузка уже выполняется, ждём
-        if (isLoading.get()) {
-            if (logCallback != null) logCallback.accept("Загрузка форм уже выполняется, ожидание...");
+        if (!isLoading.compareAndSet(false, true)) {
+            if (logCallback != null) {
+                logCallback.accept("Загрузка форм уже выполняется, ожидание...");
+            }
             waitForLoading();
-            return FormCache.getCachedFormsCount();
+            return FormCache.size();
         }
-
-        isLoading.set(true);
 
         try {
+            long startTime = System.currentTimeMillis();
+
             if (logCallback != null) {
                 logCallback.accept("");
-                logCallback.accept("=== НАЧАЛО ЗАГРУЗКИ ФОРМ В ПАМЯТЬ ===");
+                logCallback.accept("========================================");
+                logCallback.accept("ЗАГРУЗКА ФОРМ В ОПЕРАТИВНУЮ ПАМЯТЬ");
+                logCallback.accept("========================================");
                 logCallback.accept("Путь проекта: " + projectPath);
             }
 
-            long startTime = System.currentTimeMillis();
+            // Очищаем старый кэш
+            FormCache.clear();
 
-            // Очищаем старый кэш если путь изменился
-            if (hasProjectPathChanged(projectPath)) {
-                if (logCallback != null) logCallback.accept("Путь проекта изменился, очищаем старый кэш...");
-                FormCache.clear();
-            }
-
-            // Сканируем и загружаем все формы
+            // Сканируем ВСЕ формы
             FileScannerService scanner = new FileScannerService(projectPath);
             Set<String> allForms = scanner.findAllBaseForms();
             int totalForms = allForms.size();
             int loaded = 0;
             int errors = 0;
 
-            if (logCallback != null) logCallback.accept("Всего форм для загрузки: " + totalForms);
+            if (logCallback != null) {
+                logCallback.accept("Всего форм для загрузки: " + totalForms);
+            }
 
+            // ЗАГРУЖАЕМ КАЖДУЮ ФОРМУ В ПАМЯТЬ
             for (String formPath : allForms) {
                 try {
                     Path physicalPath = scanner.getBaseFormPath(formPath);
-                    String content = FormCache.getFormContent(physicalPath, formPath);
-                    if (content != null) {
+                    if (Files.exists(physicalPath)) {
+                        String content = Files.readString(physicalPath);
+                        FormCache.putFormContent(formPath, content);
                         loaded++;
                     } else {
                         errors++;
-                    }
-
-                    // Прогресс каждые 100 форм
-                    if (loaded % 100 == 0 && logCallback != null) {
-                        long elapsed = System.currentTimeMillis() - startTime;
-                        logCallback.accept(String.format("  Загружено: %d/%d (%.1f%%) за %d сек",
-                                loaded, totalForms, (loaded * 100.0) / totalForms, elapsed / 1000));
+                        if (logCallback != null) {
+                            logCallback.accept("  [ОШИБКА] Файл не найден: " + formPath);
+                        }
                     }
                 } catch (Exception e) {
                     errors++;
-                    if (logCallback != null) logCallback.accept("  Ошибка загрузки: " + formPath + " - " + e.getMessage());
+                    if (logCallback != null) {
+                        logCallback.accept("  [ОШИБКА] " + formPath + ": " + e.getMessage());
+                    }
+                }
+
+                // Прогресс каждые 100 форм
+                if (logCallback != null && loaded % 100 == 0) {
+                    long elapsed = System.currentTimeMillis() - startTime;
+                    double percent = (loaded * 100.0) / totalForms;
+                    logCallback.accept(String.format("  Прогресс: %d/%d (%.1f%%) за %d сек",
+                            loaded, totalForms, percent, elapsed / 1000));
                 }
             }
 
             long totalTime = System.currentTimeMillis() - startTime;
+            long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
 
             if (logCallback != null) {
-                logCallback.accept("=== ЗАГРУЗКА ФОРМ ЗАВЕРШЕНА ===");
+                logCallback.accept("");
+                logCallback.accept("========================================");
+                logCallback.accept("ЗАГРУЗКА ЗАВЕРШЕНА");
+                logCallback.accept("========================================");
                 logCallback.accept("Загружено форм: " + loaded);
                 logCallback.accept("Ошибок: " + errors);
                 logCallback.accept("Всего: " + totalForms);
                 logCallback.accept("Время: " + totalTime / 1000 + " сек");
-                logCallback.accept("Форм в кэше: " + FormCache.getCachedFormsCount());
-
-                long usedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
-                logCallback.accept("Использовано RAM: " + usedMemory + " МБ");
+                logCallback.accept("RAM использовано: ~" + memoryMB + " МБ");
+                logCallback.accept("========================================");
                 logCallback.accept("");
             }
 
-            lastLoadedProjectPath.set(normalizePath(projectPath));
-            isLoaded.set(true);
-
+            isLoaded.set(loaded > 0);
             return loaded;
 
-        } catch (Exception e) {
-            if (logCallback != null) logCallback.accept("Ошибка загрузки форм: " + e.getMessage());
-            e.printStackTrace();
-            return 0;
         } finally {
             isLoading.set(false);
         }
     }
-
     /**
-     * Асинхронная загрузка форм
+     * Асинхронная предзагрузка
      */
-    public void loadAllFormsAsync(String projectPath, java.util.function.Consumer<String> logCallback, Runnable onComplete) {
-        Thread loaderThread = new Thread(() -> {
-            int loaded = loadAllForms(projectPath, logCallback);
-            if (onComplete != null) {
-                onComplete.run();
-            }
-        }, "FormCacheLoader");
-        loaderThread.setDaemon(true);
-        loaderThread.start();
+    public CompletableFuture<Integer> loadAllFormsAsync(String projectPath,
+                                                        java.util.function.Consumer<String> logCallback) {
+        return CompletableFuture.supplyAsync(() -> loadAllForms(projectPath, logCallback));
     }
 
-    /**
-     * Ожидание завершения загрузки
-     */
+    public boolean isLoaded() {
+        return isLoaded.get();
+    }
+
+    public int getLoadedCount() {
+        return FormCache.size();
+    }
+
     private void waitForLoading() {
         while (isLoading.get()) {
             try {

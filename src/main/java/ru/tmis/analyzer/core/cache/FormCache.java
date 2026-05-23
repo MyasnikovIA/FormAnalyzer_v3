@@ -15,7 +15,7 @@ public class FormCache {
     private static final Map<String, Boolean> formExistsCache = new ConcurrentHashMap<>();
     private static final Map<String, Long> formLastModifiedCache = new ConcurrentHashMap<>();
 
-    private static volatile boolean enabled = true;  // По умолчанию включён
+    private static volatile boolean enabled = true;
 
     /**
      * Включить/выключить кэширование форм
@@ -23,7 +23,7 @@ public class FormCache {
     public static void setEnabled(boolean enabled) {
         FormCache.enabled = enabled;
         if (!enabled) {
-            clear();  // При выключении очищаем кэш
+            clear();
             System.out.println("[FormCache] Кэширование форм ВЫКЛЮЧЕНО, кэш очищен");
         } else {
             System.out.println("[FormCache] Кэширование форм ВКЛЮЧЕНО");
@@ -35,13 +35,31 @@ public class FormCache {
     }
 
     /**
-     * Получить содержимое формы из кэша или загрузить с диска
-     * @param filePath путь к файлу
-     * @param formPath путь к форме (ключ для кэша)
-     * @return содержимое формы
+     * Получить содержимое формы - ТОЛЬКО ИЗ ПАМЯТИ!
      */
+    public static String getFormContent(String formPath) {
+        if (!enabled) {
+            return null;
+        }
+        return formContentCache.get(formPath);
+    }
+
+    /**
+     * Загрузить форму в память (вызывается только при предзагрузке)
+     */
+    public static void putFormContent(String formPath, String content) {
+        if (enabled && content != null) {
+            formContentCache.put(formPath, content);
+            formExistsCache.put(formPath, true);
+        }
+    }
+
+    /**
+     * Получить содержимое формы с поддержкой физического пути (для обратной совместимости)
+     * @deprecated Используйте getFormContent(String formPath)
+     */
+    @Deprecated
     public static String getFormContent(Path filePath, String formPath) {
-        // Если кэширование выключено - всегда читаем с диска
         if (!enabled) {
             try {
                 if (Files.exists(filePath)) {
@@ -54,32 +72,21 @@ public class FormCache {
             }
         }
 
-        String key = formPath;
-
-        // Проверяем кэш
-        if (formContentCache.containsKey(key)) {
-            // Проверяем, не изменился ли файл на диске
-            try {
-                long lastModified = Files.getLastModifiedTime(filePath).toMillis();
-                Long cachedModified = formLastModifiedCache.get(key);
-                if (cachedModified != null && cachedModified == lastModified) {
-                    return formContentCache.get(key); // Кэш актуален
-                }
-            } catch (Exception e) {
-                // Игнорируем ошибки
-            }
+        // Сначала проверяем память
+        String cached = formContentCache.get(formPath);
+        if (cached != null) {
+            return cached;
         }
 
-        // Загружаем с диска
+        // Если нет в памяти, читаем с диска
         try {
             if (Files.exists(filePath)) {
                 String content = Files.readString(filePath);
-                formContentCache.put(key, content);
-                formExistsCache.put(key, true);
-                formLastModifiedCache.put(key, Files.getLastModifiedTime(filePath).toMillis());
+                formContentCache.put(formPath, content);
+                formExistsCache.put(formPath, true);
                 return content;
             }
-            formExistsCache.put(key, false);
+            formExistsCache.put(formPath, false);
         } catch (Exception e) {
             System.err.println("Ошибка чтения формы " + formPath + ": " + e.getMessage());
         }
@@ -87,7 +94,7 @@ public class FormCache {
     }
 
     /**
-     * Проверить существование формы
+     * Проверить существование формы в кэше
      */
     public static boolean formExists(String formPath) {
         if (!enabled) return false;
@@ -95,26 +102,31 @@ public class FormCache {
     }
 
     /**
-     * Очистить кэш
+     * Проверить, есть ли форма в кэше
      */
-    public static void clear() {
-        formContentCache.clear();
-        formExistsCache.clear();
-        formLastModifiedCache.clear();
+    public static boolean contains(String formPath) {
+        return formContentCache.containsKey(formPath);
     }
 
     /**
      * Получить количество форм в кэше
      */
-    public static int getCachedFormsCount() {
+    public static int size() {
         if (!enabled) return 0;
         return formContentCache.size();
     }
 
     /**
+     * Получить количество форм в кэше (алиас для size)
+     */
+    public static int getCachedFormsCount() {
+        return size();
+    }
+
+    /**
      * Получить использование памяти кэшем в байтах
      */
-    public static long getCacheMemoryUsage() {
+    public static long getMemoryUsageBytes() {
         if (!enabled) return 0;
         long total = 0;
         for (String content : formContentCache.values()) {
@@ -129,6 +141,15 @@ public class FormCache {
      * Получить использование памяти в МБ
      */
     public static long getCacheMemoryUsageMB() {
-        return getCacheMemoryUsage() / (1024 * 1024);
+        return getMemoryUsageBytes() / (1024 * 1024);
+    }
+
+    /**
+     * Очистить кэш
+     */
+    public static void clear() {
+        formContentCache.clear();
+        formExistsCache.clear();
+        formLastModifiedCache.clear();
     }
 }

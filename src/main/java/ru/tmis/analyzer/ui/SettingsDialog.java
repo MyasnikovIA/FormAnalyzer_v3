@@ -114,12 +114,14 @@ public class SettingsDialog extends JDialog {
     }
 
     private void createThreadsPanel(JPanel buttonPanel) {
-        buttonPanel.add(new JLabel("Количество потоков для рекурсивного анализа:"));
+        int defaultValue = config != null ? config.getParallelThreads() : Runtime.getRuntime().availableProcessors();
+        if (defaultValue <= 0) defaultValue = Runtime.getRuntime().availableProcessors();
+
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(
-                Runtime.getRuntime().availableProcessors(), // значение по умолчанию
-                0,                                          // минимум
-                Runtime.getRuntime().availableProcessors(), // максимум
-                1                                           // шаг
+                defaultValue,  // ← использовать сохранённое значение
+                0,
+                Runtime.getRuntime().availableProcessors(),
+                1
         );
         threadsSpinner = new JSpinner(spinnerModel);
         threadsSpinner.setPreferredSize(new Dimension(60, 25));
@@ -262,9 +264,10 @@ public class SettingsDialog extends JDialog {
         contentPanel.add(titleLabel);
         contentPanel.add(Box.createVerticalStrut(15));
 
-        JCheckBox useMemoryCacheCheckbox = new JCheckBox("Работать через оперативную память");
-        useMemoryCacheCheckbox.setSelected(config.isUseMemoryCache());
-        useMemoryCacheCheckbox.addActionListener(e -> {
+        this.useMemoryCacheCheckbox = new JCheckBox("Работать через оперативную память");
+        this.useMemoryCacheCheckbox.setSelected(config.isUseMemoryCache());  // Загрузить состояние
+        this.useMemoryCacheCheckbox.addActionListener(e -> {
+            config.setUseMemoryCache(this.useMemoryCacheCheckbox.isSelected());
             config.setUseMemoryCache(useMemoryCacheCheckbox.isSelected());
             String status = useMemoryCacheCheckbox.isSelected() ?
                     "ВКЛЮЧЕН (все данные в RAM, запись на диск после завершения)" :
@@ -622,7 +625,9 @@ public class SettingsDialog extends JDialog {
         if (useMemoryCacheCheckbox != null) {
             useMemoryCacheCheckbox.setSelected(config.isUseMemoryCache());
         }
-
+        if (threadsSpinner != null && config != null) {
+            threadsSpinner.setValue(config.getParallelThreads());
+        }
         if (config.isLlmPanelVisible()) {
             if (enableLLMExportCheckbox != null) {
                 enableLLMExportCheckbox.setSelected(config.isEnableLLMExport());
@@ -672,7 +677,10 @@ public class SettingsDialog extends JDialog {
         if (useMemoryCacheCheckbox != null) {
             config.setUseMemoryCache(useMemoryCacheCheckbox.isSelected());
         }
-
+        if (threadsSpinner != null) {
+            int threadsValue = (Integer) threadsSpinner.getValue();
+            config.setParallelThreads(threadsValue);
+        }
         settings.save();
 
         FormCache.setEnabled(config.isUseMemoryCache());
