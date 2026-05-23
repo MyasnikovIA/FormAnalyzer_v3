@@ -3,6 +3,8 @@ package ru.tmis.analyzer;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.FormCache;
+import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.ui.MainWindow;
 
@@ -48,6 +50,12 @@ public class MainForm {
                         DatabaseConnectionManager.shutdown();
                     }
                 });
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("Закрытие соединений с БД...");
+                    DatabaseConnectionManager.shutdown();
+                    FormCache.clear();
+                    InMemoryReportBuffer.clear();
+                }));
 
             } catch (Exception e) {
                 e.printStackTrace();

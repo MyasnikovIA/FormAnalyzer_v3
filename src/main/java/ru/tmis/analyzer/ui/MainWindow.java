@@ -75,6 +75,8 @@ public class MainWindow extends JFrame {
     private final List<String> pendingRefresh = Collections.synchronizedList(new ArrayList<>());
     private Timer batchUpdateTimer;
 
+    private ScheduledExecutorService diagnosticsScheduler;
+
 
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
@@ -482,14 +484,14 @@ public class MainWindow extends JFrame {
 
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
+        // Убираем лишний statusLabel, так как информация уже в progressBar
+        // statusLabel = new JLabel("Готов к работе");
+        // statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        statusLabel = new JLabel("Готов к работе");
-        statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
+        // Индикатор паузы (оставляем)
         JLabel pauseIndicator = new JLabel();
         pauseIndicator.setFont(new Font("Monospaced", Font.BOLD, 12));
 
-        // Таймер для обновления индикатора паузы
         Timer pauseIndicatorTimer = new Timer(500, e -> {
             if (paused.get()) {
                 pauseIndicator.setText("⏸ ПАУЗА");
@@ -501,17 +503,18 @@ public class MainWindow extends JFrame {
         pauseIndicatorTimer.start();
 
         panel.add(progressBar, BorderLayout.CENTER);
+
+        // Упрощённая нижняя панель (без дублирования)
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(statusLabel, BorderLayout.WEST);
+        // statusLabel убран, так как информация дублируется
         southPanel.add(pauseIndicator, BorderLayout.EAST);
         panel.add(southPanel, BorderLayout.SOUTH);
 
-        panel.add(statusLabel, BorderLayout.SOUTH);
+        // Индикатор памяти (оставляем)
         JLabel memoryLabel = new JLabel();
         memoryLabel.setFont(new Font("Monospaced", Font.PLAIN, 10));
         memoryLabel.setForeground(Color.GRAY);
 
-        // Таймер обновления памяти каждые 5 секунд
         Timer memoryTimer = new Timer(5000, e -> {
             Runtime rt = Runtime.getRuntime();
             long used = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
@@ -597,6 +600,7 @@ public class MainWindow extends JFrame {
      */
     private void startAnalysis() {
         ensureFormsPreloaded();
+        startDiagnostics();
         startBatchUpdater();
         paused.set(false);
         pauseButton.setText("⏸ Пауза");
@@ -1051,6 +1055,7 @@ public class MainWindow extends JFrame {
     }
 
     private void stopAnalysis() {
+        stopDiagnostics();
         paused.set(false);
         pauseButton.setEnabled(false);
         pauseButton.setText("⏸ Пауза");
@@ -1666,6 +1671,22 @@ public class MainWindow extends JFrame {
 
         // Проверяем, не запущен ли уже анализ
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
+
+            parallelBuilder.setOnProgress((processed, total, percent, active, remaining) -> {
+                SwingUtilities.invokeLater(() -> {
+                    if (total > 0) {
+                        progressBar.setValue(percent);
+                        progressBar.setString(String.format("%d%% | %d/%d форм | Активных потоков: %d | Осталось: %d",
+                                percent, processed, total, active, remaining));
+                        statusLabel.setText(String.format("Статус: %d/%d (%d%%) - %d потоков",
+                                processed, total, percent, active));
+                    } else {
+                        progressBar.setString(String.format("Обработано: %d | Активных потоков: %d", processed, active));
+                        statusLabel.setText(String.format("Статус: %d форм обработано, %d потоков активно", processed, active));
+                    }
+                });
+            });
+
             appendLog("Параллельный анализ уже выполняется");
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Анализ уже выполняется. Остановить текущий и запустить новый?",
@@ -1718,6 +1739,8 @@ public class MainWindow extends JFrame {
         parallelBuilder.startRecursiveBuild(null);
     }
 
+    // MainWindow.java
+
     private void updateScanProgress() {
         if (!parallelBuilder.isRunning()) {
             if (progressTimer != null) {
@@ -1728,30 +1751,32 @@ public class MainWindow extends JFrame {
 
         int processed = parallelBuilder.getTotalProcessed();
         int found = parallelBuilder.getTotalFound();
-        int queueSize = parallelBuilder.getQueueSize();
         int active = parallelBuilder.getActiveTasks();
+        int remaining = found - processed;
         long elapsed = (System.currentTimeMillis() - scanStartTime) / 1000;
 
+        // Формируем строку для прогресс-бара (только одна информация)
         StringBuilder sb = new StringBuilder();
         if (found > 0) {
             int percent = (processed * 100) / found;
             sb.append(percent).append("%");
             progressBar.setValue(percent);
         } else {
-            progressBar.setIndeterminate(false);
             progressBar.setValue(0);
         }
 
-        sb.append(" | Обработано: ").append(processed);
-        if (found > 0) {
-            sb.append("/").append(found);
-        }
-        sb.append(" | Очередь: ").append(queueSize);
-        sb.append(" | Активных: ").append(active);
+        // Только одна строка с информацией
+        sb.append(" | Обработано: ").append(processed).append("/").append(found);
+        sb.append(" | Активных потоков: ").append(active);
+        sb.append(" | Осталось: ").append(remaining);
         sb.append(" | ").append(formatTime(elapsed));
 
+        // Устанавливаем ТОЛЬКО в progressBar.setString()
         progressBar.setString(sb.toString());
-        statusLabel.setText("Статус: " + sb.toString());
+
+        // statusLabel обновляем отдельно (более кратко)
+        statusLabel.setText(String.format("Статус: %d/%d (%d%%) - %d потоков активны",
+                processed, found, (processed * 100) / Math.max(1, found), active));
     }
 
     private String formatTime(long seconds) {
@@ -1801,6 +1826,7 @@ public class MainWindow extends JFrame {
             System.out.println("Выгрузка буфера на диск перед закрытием...");
             InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
         }
+        DatabaseConnectionManager.shutdown();
     }
 
     /**
@@ -1965,4 +1991,26 @@ public class MainWindow extends JFrame {
             formsTreePanel.refreshChildForms(formPath);
         }
     }
+
+    private void startDiagnostics() {
+        diagnosticsScheduler = Executors.newSingleThreadScheduledExecutor();
+        diagnosticsScheduler.scheduleAtFixedRate(() -> {
+            System.out.println("=== ДИАГНОСТИКА ===");
+            System.out.println("Время: " + new java.util.Date());
+            DatabaseConnectionManager.printActiveConnections();
+
+            Runtime rt = Runtime.getRuntime();
+            long used = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
+            System.out.println("Память: " + used + " MB / " + rt.maxMemory() / (1024 * 1024) + " MB");
+            System.out.println("Активных потоков: " + Thread.activeCount());
+        }, 60, 60, TimeUnit.SECONDS);
+    }
+
+    private void stopDiagnostics() {
+        if (diagnosticsScheduler != null && !diagnosticsScheduler.isShutdown()) {
+            diagnosticsScheduler.shutdown();
+        }
+        DatabaseConnectionManager.stopConnectionMonitor();
+    }
+
 }

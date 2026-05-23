@@ -46,10 +46,6 @@ public class ParallelRecursiveReportBuilder {
     private Consumer<String> onFormAnalyzed;
     private ProgressCallback onProgress;
 
-    public interface ProgressCallback {
-        void onProgress(int processed, int total, int percent);
-    }
-
     public ParallelRecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
         this.config = config;
@@ -78,9 +74,6 @@ public class ParallelRecursiveReportBuilder {
         this.onFormAnalyzed = callback;
     }
 
-    public void setOnProgress(ProgressCallback callback) {
-        this.onProgress = callback;
-    }
 
     public void setFullProjectScan(boolean fullScan) {
         // Для совместимости
@@ -219,6 +212,8 @@ public class ParallelRecursiveReportBuilder {
         });
     }
 
+    // core/service/ParallelRecursiveReportBuilder.java
+
     /**
      * Воркер для обработки группы форм (ОДИН НА ПОТОК)
      */
@@ -226,7 +221,7 @@ public class ParallelRecursiveReportBuilder {
         private final int threadId;
         private final List<String> forms;
         private final FormAnalyzerService analyzer;
-        private int localProcessed = 0;
+        private int localProcessed = 0;  // локальный счётчик для этого потока
 
         public FormProcessor(int threadId, List<String> forms) {
             this.threadId = threadId;
@@ -238,73 +233,77 @@ public class ParallelRecursiveReportBuilder {
                 @Override public void debug(String msg) { ParallelRecursiveReportBuilder.this.log("[Поток " + threadId + "] [DEBUG] " + msg); }
             });
             this.analyzer.setStopCondition(() -> stopRequested.get());
-            // Передаём условие паузы в анализатор
             this.analyzer.setPaused(() -> paused.get());
+
+            // Увеличиваем счётчик активных задач
+            activeTasks.incrementAndGet();
         }
 
         @Override
         public void run() {
             log("Поток " + threadId + " запущен, обработает " + forms.size() + " форм");
 
-            int processedInThread = 0;
-            for (String formPath : forms) {
-                // Проверка остановки
-                if (stopRequested.get()) {
-                    log("Поток " + threadId + " остановлен");
-                    break;
-                }
-
-                // Проверка паузы
-                if (paused.get()) {
-                    log("Поток " + threadId + " на паузе");
-                    checkPause();
-                }
-
-                try {
-                    if (onFormAnalyzed != null) {
-                        SwingUtilities.invokeLater(() -> onFormAnalyzed.accept(formPath));
+            try {
+                for (String formPath : forms) {
+                    if (stopRequested.get()) {
+                        log("Поток " + threadId + " остановлен");
+                        break;
                     }
 
-                    log("Обработка: " + formPath);
-
-                    FormInfo formInfo = analyzer.analyzeForm(formPath);
-
-                    if (formInfo != null) {
-                        saveReport(formInfo);
-
-                        SwingUtilities.invokeLater(() -> {
-                            formsTreePanel.refreshChildForms(formInfo.getFormPath());
-                        });
+                    if (paused.get()) {
+                        checkPause();
                     }
 
-                    processedInThread++;
-                    int totalProcessedSoFar = totalProcessed.incrementAndGet();
-                    int percent = totalFound.get() > 0 ? (totalProcessedSoFar * 100) / totalFound.get() : 0;
+                    try {
+                        if (onFormAnalyzed != null) {
+                            SwingUtilities.invokeLater(() -> onFormAnalyzed.accept(formPath));
+                        }
 
-                    if (onProgress != null) {
-                        final int processed = totalProcessedSoFar;
-                        final int total = totalFound.get();
-                        final int percentVal = percent;
-                        SwingUtilities.invokeLater(() -> onProgress.onProgress(processed, total, percentVal));
+                        log("Обработка: " + formPath);
+
+                        FormInfo formInfo = analyzer.analyzeForm(formPath);
+
+                        if (formInfo != null) {
+                            saveReport(formInfo);
+                            SwingUtilities.invokeLater(() -> {
+                                formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                            });
+                        }
+
+                        localProcessed++;
+                        int totalProcessedSoFar = totalProcessed.incrementAndGet();
+
+                        // Обновляем прогресс
+                        updateProgress(totalProcessedSoFar);
+
+                    } catch (Exception e) {
+                        error("Ошибка обработки " + formPath + ": " + e.getMessage());
                     }
+                }
+            } finally {
+                analyzer.shutdown();
+                // Уменьшаем счётчик активных задач
+                int remaining = activeTasks.decrementAndGet();
+                log("Поток " + threadId + " завершил работу, обработано " + localProcessed +
+                        " форм, осталось активных потоков: " + remaining);
 
-                } catch (Exception e) {
-                    error("Ошибка обработки " + formPath + ": " + e.getMessage());
-                } finally {
-                    // ========== ВАЖНО: закрываем соединения ПОСЛЕ обработки всех форм ==========
-                    DatabaseConnectionManager.closeThreadConnections();
-                    log("Поток " + threadId + " закрыл соединения с БД");
-                }
-                localProcessed++;
-                // Обновляем глобальный счётчик только раз в 10 форм
-                if (localProcessed % 10 == 0) {
-                    totalProcessed.addAndGet(10);
-                }
+                // Финальное обновление прогресса
+                updateProgress(totalProcessed.get());
             }
+        }
 
-            analyzer.shutdown();
-            log("Поток " + threadId + " завершил работу, обработано " + processedInThread + " форм");
-            totalProcessed.addAndGet(localProcessed % 10);
+        private void updateProgress(int processed) {
+            if (onProgress != null) {
+                final int current = processed;
+                final int total = totalFound.get();
+                final int percent = total > 0 ? (current * 100) / total : 0;
+                final int active = activeTasks.get();
+                final int remaining = total - current;
+
+                SwingUtilities.invokeLater(() -> {
+                    onProgress.onProgress(current, total, percent, active, remaining);
+                });
+            }
         }
     }
 
@@ -400,5 +399,12 @@ public class ParallelRecursiveReportBuilder {
 
     public int getActiveTasks() {
         return activeTasks.get();
+    }
+    public interface ProgressCallback {
+        void onProgress(int processed, int total, int percent, int activeTasks, int remaining);
+    }
+
+    public void setOnProgress(ProgressCallback callback) {
+        this.onProgress = callback;
     }
 }

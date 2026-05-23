@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DatabaseConnectionManager {
 
@@ -29,6 +30,12 @@ public class DatabaseConnectionManager {
 
     private static volatile boolean initialized = false;
     private static ScheduledExecutorService statsScheduler;
+
+
+    private static final AtomicLong totalQueries = new AtomicLong(0);
+    private static final AtomicLong slowQueries = new AtomicLong(0);
+
+    private static ScheduledExecutorService monitorScheduler;
 
 
     public static synchronized void init(String oracleUrl, String oracleUser, String oraclePassword,
@@ -63,6 +70,9 @@ public class DatabaseConnectionManager {
 
         initialized = true;
         startStatsLogging(30);
+        if (oraclePool != null || postgresPool != null) {
+            startConnectionMonitor(60);
+        }
     }
 
     public static Connection getOracleConnection() throws SQLException {
@@ -96,7 +106,7 @@ public class DatabaseConnectionManager {
     }
 
     // Внутренний класс пула
-    private static class ConnectionPool {
+    private static class ConnectionPool implements AutoCloseable {
         private final BlockingQueue<Connection> pool;
         private final String url;
         private final String user;
@@ -161,13 +171,18 @@ public class DatabaseConnectionManager {
             }
         }
 
+        @Override
         public void close() {
             closed = true;
             Connection conn;
             while ((conn = pool.poll()) != null) {
-                try { conn.close(); } catch (SQLException ignored) {}
-                activeCount.decrementAndGet();
+                try {
+                    conn.close();
+                    activeCount.decrementAndGet();
+                } catch (SQLException ignored) {}
             }
+            System.out.println("[ConnectionPool] Закрыто " +
+                    (pool.size() + activeCount.get()) + " соединений");
         }
 
         // ========== ДОБАВЬТЕ ЭТИ МЕТОДЫ ==========
@@ -199,6 +214,10 @@ public class DatabaseConnectionManager {
         } else {
             System.out.println("[DB Pool] PostgreSQL: пул не инициализирован");
         }
+        System.out.println("=== СТАТИСТИКА ЗАПРОСОВ К БД ===");
+        System.out.println("Всего запросов: " + totalQueries.get());
+        System.out.println("Медленных запросов (>5с): " + slowQueries.get());
+
     }
 
     /**
@@ -292,4 +311,38 @@ public class DatabaseConnectionManager {
         }
     }
 
+    public static void recordQuery(long durationMs) {
+        totalQueries.incrementAndGet();
+        if (durationMs > 5000) { // >5 сек
+            slowQueries.incrementAndGet();
+            System.err.println("[DB] Медленный запрос: " + durationMs + " мс");
+        }
+    }
+    public static void printActiveConnections() {
+        if (oraclePool != null) {
+            System.out.println("[Oracle] Активных соединений: " + oraclePool.getActiveCount() +
+                    ", в пуле: " + oraclePool.getPoolSize());
+        }
+        if (postgresPool != null) {
+            System.out.println("[PostgreSQL] Активных соединений: " + postgresPool.getActiveCount() +
+                    ", в пуле: " + postgresPool.getPoolSize());
+        }
+    }
+
+    public static void startConnectionMonitor(int intervalSeconds) {
+        if (monitorScheduler != null && !monitorScheduler.isShutdown()) {
+            return;
+        }
+        monitorScheduler = Executors.newSingleThreadScheduledExecutor();
+        monitorScheduler.scheduleAtFixedRate(() -> {
+            System.out.println("--- " + new java.util.Date() + " ---");
+            printActiveConnections();
+        }, intervalSeconds, intervalSeconds, TimeUnit.SECONDS);
+    }
+
+    public static void stopConnectionMonitor() {
+        if (monitorScheduler != null && !monitorScheduler.isShutdown()) {
+            monitorScheduler.shutdown();
+        }
+    }
 }
