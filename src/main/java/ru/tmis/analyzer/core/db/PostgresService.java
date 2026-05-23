@@ -22,9 +22,19 @@ public class PostgresService {
     }
 
     private Connection getConnection() throws SQLException {
-        return DatabaseConnector.getPostgresConnectionWithContext(
-                url, user, password, misUser
-        );
+        // Используем соединение из ThreadLocal
+        Connection conn = DatabaseConnectionManager.getPostgresConnectionForThread();
+
+        // Устанавливаем контекст МИС при первом использовании
+        if (misUser != null && !misUser.trim().isEmpty()) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("SELECT set_config('mis.user', '" + misUser + "', false)");
+            } catch (SQLException e) {
+                System.err.println("  [PostgreSQL] Ошибка установки контекста: " + e.getMessage());
+            }
+        }
+
+        return conn;
     }
 
     // ==================== ОСНОВНЫЕ МЕТОДЫ С КЭШИРОВАНИЕМ ====================

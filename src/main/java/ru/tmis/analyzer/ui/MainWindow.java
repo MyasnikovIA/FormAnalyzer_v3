@@ -70,6 +70,12 @@ public class MainWindow extends JFrame {
     private final Object pauseLock = new Object();
 
 
+    private final AtomicInteger lastProgressUpdate = new AtomicInteger(0);
+    private final AtomicInteger lastLogUpdate = new AtomicInteger(0);
+    private final List<String> pendingRefresh = Collections.synchronizedList(new ArrayList<>());
+    private Timer batchUpdateTimer;
+
+
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
@@ -591,6 +597,7 @@ public class MainWindow extends JFrame {
      */
     private void startAnalysis() {
         ensureFormsPreloaded();
+        startBatchUpdater();
         paused.set(false);
         pauseButton.setText("⏸ Пауза");
         pauseButton.setEnabled(true);
@@ -712,13 +719,28 @@ public class MainWindow extends JFrame {
 
         // Устанавливаем callback для прогресса
         analyzer.setProgressCallback((processed, total, currentForm) -> {
-            SwingUtilities.invokeLater(() -> {
-                int percent = (processed * 100) / total;
-                progressBar.setValue(percent);
-                progressBar.setString(String.format("%d из %d (%d%%) - %s",
-                        processed, total, percent, getShortFormName(currentForm)));
-                statusLabel.setText("Статус: " + getShortFormName(currentForm));
-            });
+            int current = processed;
+            int last = lastProgressUpdate.get();
+
+            // Обновляем UI не чаще чем раз в 100 форм
+            if (current - last >= 100 || current == total) {
+                lastProgressUpdate.set(current);
+                final int percent = (current * 100) / total;
+                final String shortName = getShortFormName(currentForm);
+
+                SwingUtilities.invokeLater(() -> {
+                    progressBar.setValue(percent);
+                    progressBar.setString(String.format("%d из %d (%d%%)", current, total, percent));
+                    statusLabel.setText("Статус: " + shortName);
+                });
+            }
+
+            // Логируем не чаще чем раз в 500 форм
+            int lastLog = lastLogUpdate.get();
+            if (current - lastLog >= 500 || current == total) {
+                lastLogUpdate.set(current);
+                appendLog("Обработано " + current + " из " + total + " форм");
+            }
         });
 
         // Устанавливаем callback для сохранения отчётов
@@ -728,6 +750,7 @@ public class MainWindow extends JFrame {
                 reportGen.createMainReportHeader();
                 reportGen.appendFormToMainReport(formInfo);
                 SwingUtilities.invokeLater(() -> {
+                    pendingRefresh.add(formInfo.getFormPath());
                     formsTreePanel.refreshChildForms(formInfo.getFormPath());
                 });
             } catch (IOException e) {
@@ -783,6 +806,10 @@ public class MainWindow extends JFrame {
                     pauseButton.setEnabled(false);
                     statusLabel.setText("Статус: Готов");
                     progressBar.setString("Анализ завершен");
+                    if (batchUpdateTimer != null) {
+                        batchUpdateTimer.stop();
+                    }
+                    flushFormRefresh(); // финальный сброс
                 });
             }
         });
@@ -853,6 +880,7 @@ public class MainWindow extends JFrame {
                             formsTreePanel.refreshChildForms(formInfo.getFormPath());
                         });
                     } catch (IOException e) {
+                        pendingRefresh.add(formInfo.getFormPath());
                         appendLog("Ошибка сохранения отчёта: " + e.getMessage());
                     }
                 });
@@ -972,6 +1000,7 @@ public class MainWindow extends JFrame {
 
                 SwingUtilities.invokeLater(() -> {
                     formsTreePanel.refreshChildForms(formInfo.getFormPath());
+                    pendingRefresh.add(formInfo.getFormPath());
                 });
             } catch (IOException e) {
                 appendLog("Ошибка сохранения отчёта: " + e.getMessage());
@@ -1919,4 +1948,21 @@ public class MainWindow extends JFrame {
         }
     }
 
+    private void startBatchUpdater() {
+        batchUpdateTimer = new Timer(2000, e -> {  // Каждые 2 секунды
+            flushFormRefresh();
+        });
+        batchUpdateTimer.start();
+    }
+
+    private void flushFormRefresh() {
+        if (pendingRefresh.isEmpty()) return;
+        List<String> toRefresh = new ArrayList<>(pendingRefresh);
+        pendingRefresh.clear();
+
+        // Обновляем дерево в фоне, а не в EDT
+        for (String formPath : toRefresh) {
+            formsTreePanel.refreshChildForms(formPath);
+        }
+    }
 }

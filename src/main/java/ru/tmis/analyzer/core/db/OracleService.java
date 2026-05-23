@@ -71,21 +71,12 @@ public class OracleService {
     // ==================== РЕАЛЬНЫЕ ЗАПРОСЫ К БД ====================
 
     private String fetchViewDDL(String viewName) {
-        // Быстрая проверка доступности сети перед запросом
-        if (!DatabaseConnectionManager.isOracleNetworkAvailable()) {
-            System.out.println("[OracleService] Сервер недоступен по сети, пропускаем запрос для " + viewName);
-            return null;
-        }
         String sql = "SELECT TEXT FROM ALL_VIEWS WHERE VIEW_NAME = ?";
 
-        System.out.println("[OracleService] ========== SQL ЗАПРОС ==========");
-        System.out.println("[OracleService] Цель: Получение DDL вьюхи");
-        System.out.println("[OracleService] Параметры: viewName = " + viewName);
-        System.out.println("[OracleService] SQL: " + sql.replace("?", "'" + viewName.toUpperCase() + "'"));
-        System.out.println("[OracleService] ==================================");
-
-        try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
+        // Используем соединение из ThreadLocal
+        try (Connection conn = DatabaseConnectionManager.getOracleConnectionForThread();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, viewName.toUpperCase());
             pstmt.setQueryTimeout(30);
             ResultSet rs = pstmt.executeQuery();

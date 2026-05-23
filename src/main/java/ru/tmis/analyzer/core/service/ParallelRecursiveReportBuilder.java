@@ -4,6 +4,7 @@ package ru.tmis.analyzer.core.service;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
+import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.ReportGenerator;
@@ -289,8 +290,11 @@ public class ParallelRecursiveReportBuilder {
 
                 } catch (Exception e) {
                     error("Ошибка обработки " + formPath + ": " + e.getMessage());
+                } finally {
+                    // ========== ВАЖНО: закрываем соединения ПОСЛЕ обработки всех форм ==========
+                    DatabaseConnectionManager.closeThreadConnections();
+                    log("Поток " + threadId + " закрыл соединения с БД");
                 }
-
                 localProcessed++;
                 // Обновляем глобальный счётчик только раз в 10 форм
                 if (localProcessed % 10 == 0) {

@@ -60,9 +60,11 @@ public class ViewDependencyAnalyzer {
     }
 
     public ViewTableDependencies analyzeView(String viewName) {
+        // Используем глобальный кэш
         return DatabaseCacheManager.getViewDependencies(viewName, () -> {
             ViewTableDependencies deps = new ViewTableDependencies(viewName);
 
+            // Получаем DDL через сервис (который тоже использует кэш)
             String ddl = getViewDDL(viewName);
             if (ddl != null && !ddl.isEmpty()) {
                 deps.setExistsInOracle(true);
@@ -72,7 +74,7 @@ public class ViewDependencyAnalyzer {
                 deps.setOracleError("Вьюха не найдена в Oracle");
             }
 
-            return doAnalyzeView(viewName);
+            return deps;
         });
     }
 

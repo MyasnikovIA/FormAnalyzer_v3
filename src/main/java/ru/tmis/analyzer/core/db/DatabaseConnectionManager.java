@@ -11,9 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DatabaseConnectionManager {
 
-    private static volatile ConnectionPool oraclePool;
-    private static volatile ConnectionPool postgresPool;
-    private static volatile boolean initialized = false;
 
 
     private static final ThreadLocal<Connection> oracleConnectionHolder = new ThreadLocal<>();
@@ -22,7 +19,17 @@ public class DatabaseConnectionManager {
     // Флаги доступности сети
     private static volatile boolean oracleNetworkAvailable = false;
     private static volatile boolean postgresNetworkAvailable = false;
+
+    private static volatile ConnectionPool oraclePool;
+    private static volatile ConnectionPool postgresPool;
+
+    // ThreadLocal соединения для каждого потока
+    private static final ThreadLocal<Connection> oracleThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<Connection> postgresThreadLocal = new ThreadLocal<>();
+
+    private static volatile boolean initialized = false;
     private static ScheduledExecutorService statsScheduler;
+
 
     public static synchronized void init(String oracleUrl, String oracleUser, String oraclePassword,
                                          String postgresUrl, String postgresUser, String postgresPassword,
@@ -222,4 +229,67 @@ public class DatabaseConnectionManager {
         }
         return conn;
     }
+
+
+    /**
+     * Получить Oracle соединение для текущего потока (одно на поток)
+     */
+    public static Connection getOracleConnectionForThread() throws SQLException {
+        if (oraclePool == null) {
+            throw new SQLException("Oracle pool not initialized");
+        }
+
+        Connection conn = oracleThreadLocal.get();
+        if (conn == null || conn.isClosed()) {
+            conn = oraclePool.getConnection();
+            oracleThreadLocal.set(conn);
+            System.out.println("[DB] Поток " + Thread.currentThread().threadId() +
+                    " получил Oracle соединение");
+        }
+        return conn;
+    }
+
+    /**
+     * Получить PostgreSQL соединение для текущего потока (одно на поток)
+     */
+    public static Connection getPostgresConnectionForThread() throws SQLException {
+        if (postgresPool == null) {
+            throw new SQLException("PostgreSQL pool not initialized");
+        }
+
+        Connection conn = postgresThreadLocal.get();
+        if (conn == null || conn.isClosed()) {
+            conn = postgresPool.getConnection();
+            postgresThreadLocal.set(conn);
+            System.out.println("[DB] Поток " + Thread.currentThread().threadId() +
+                    " получил PostgreSQL соединение");
+        }
+        return conn;
+    }
+
+    /**
+     * Закрыть все соединения текущего потока
+     */
+    public static void closeThreadConnections() {
+        try {
+            Connection conn = oracleThreadLocal.get();
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+                oracleThreadLocal.remove();
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка закрытия Oracle соединения: " + e.getMessage());
+        }
+
+        try {
+            Connection conn = postgresThreadLocal.get();
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+                postgresThreadLocal.remove();
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка закрытия PostgreSQL соединения: " + e.getMessage());
+        }
+    }
+
 }
