@@ -107,6 +107,11 @@ public class PostgresPackageChecker {
 
 
     private FunctionInfo doCheckFunction(String functionName) {
+        if (!DatabaseCacheManager.isPostgresServerAvailable()) {
+            return new FunctionInfo(functionName, null,
+                    List.of("PostgreSQL сервер недоступен"), List.of(), false);
+        }
+
         String cleanName = functionName.toLowerCase();
         try (Connection conn = getConnection()) {
             // Получить сигнатуру

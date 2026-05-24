@@ -53,7 +53,13 @@ public class ReportsFromDbService {
      * @param unitCode код unit'а (например, 'HOSP_HISTORIES')
      * @return список отчетов
      */
+
     public List<DbReportInfo> getReportsByUnit(String unitCode) {
+        // Проверка доступности сервера
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            System.out.println("[ReportsFromDbService] Oracle сервер недоступен, пропускаем запрос для unit=" + unitCode);
+            return Collections.emptyList();
+        }
         return DatabaseCacheManager.getOracleReports(unitCode, () -> {
             List<DbReportInfo> result = new ArrayList<>();
             if (!isOracleAvailable()) {
@@ -422,16 +428,22 @@ public class ReportsFromDbService {
     }
 
     private boolean isOracleAvailable() {
-        // Проверка на остановку анализа
-        if (Thread.currentThread().isInterrupted()) {
-            return false;
-        }
+        // Проверяем прерывание
+        if (Thread.currentThread().isInterrupted()) return false;
 
         long now = System.currentTimeMillis();
         if (oracleAvailable != null && (now - lastCheckTime) < CHECK_INTERVAL) {
             return oracleAvailable;
         }
 
+        // Сначала быстрая проверка через ping
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            oracleAvailable = false;
+            lastCheckTime = now;
+            return false;
+        }
+
+        // Затем полноценное подключение
         try {
             Properties props = new Properties();
             props.setProperty("user", settings.getOracleUser());
@@ -439,14 +451,13 @@ public class ReportsFromDbService {
             props.setProperty("oracle.net.CONNECT_TIMEOUT", "5000");
             props.setProperty("oracle.jdbc.ReadTimeout", "5000");
 
-            DriverManager.setLoginTimeout(3); // Уменьшаем таймаут до 3 секунд
+            DriverManager.setLoginTimeout(3);
             try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery("SELECT 1 FROM DUAL")) {
                 oracleAvailable = rs.next();
             }
         } catch (SQLException e) {
-            // Не выводим ошибку при прерывании
             if (!Thread.currentThread().isInterrupted()) {
                 System.err.println("[ReportsFromDbService] Oracle недоступна: " + e.getMessage());
             }

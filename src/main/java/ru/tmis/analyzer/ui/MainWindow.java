@@ -110,6 +110,11 @@ public class MainWindow extends JFrame {
         settingsButton = new JButton("Настройки");
         settingsButton.addActionListener(e -> openSettings());
 
+        // Новая кнопка для заполнения кэша
+        JButton populateCacheButton = new JButton("Заполнить кэш БД");
+        populateCacheButton.setBackground(new Color(33, 150, 243));
+        populateCacheButton.addActionListener(e -> openCachePopulator());
+
         startButton = new JButton("Запуск анализа");
         startButton.setBackground(new Color(76, 175, 80));
         startButton.addActionListener(e -> startAnalysis());
@@ -122,6 +127,7 @@ public class MainWindow extends JFrame {
         JButton openOutputButton = new JButton("Открыть отчеты");
         openOutputButton.addActionListener(e -> openOutputDirectory());
 
+        buttonPanel.add(populateCacheButton);  // Добавить кнопку
         buttonPanel.add(settingsButton);
         buttonPanel.add(openOutputButton);
         buttonPanel.add(startButton);
@@ -130,6 +136,11 @@ public class MainWindow extends JFrame {
         panel.add(buttonPanel, BorderLayout.EAST);
 
         return panel;
+    }
+
+    private void openCachePopulator() {
+        CachePopulatorDialog dialog = new CachePopulatorDialog(this, settings);
+        dialog.setVisible(true);
     }
 
     private JSplitPane createCenterPanel() {

@@ -5,11 +5,14 @@ package ru.tmis.analyzer.core.cache;
 import ru.tmis.analyzer.core.db.DatabaseObjectChecker;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.utils.NetworkUtils;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,8 +64,6 @@ public class DatabaseCacheManager {
     // ==================== СТАТУСЫ ПОДКЛЮЧЕНИЯ ====================
     private static volatile boolean oracleAvailable = true;
     private static volatile boolean postgresAvailable = true;
-    private static volatile boolean oracleChecked = false;
-    private static volatile boolean postgresChecked = false;
 
     // Конфигурация БД (кэшируем для проверки)
     private static volatile String cachedOracleUrl;
@@ -71,6 +72,56 @@ public class DatabaseCacheManager {
     private static volatile String cachedPostgresUrl;
     private static volatile String cachedPostgresUser;
     private static volatile String cachedPostgresPassword;
+
+    private static volatile boolean oracleChecked = false;
+    private static volatile boolean postgresChecked = false;
+
+
+    // Кэш для D_PKG_CONSTANTS (константы)
+    private static final Map<String, String> constantsCache = new ConcurrentHashMap<>();
+
+    // Кэш для D_PKG_OPTIONS (системные опции)
+    private static final Map<String, String> systemOptionsCache = new ConcurrentHashMap<>();
+
+    // Кэш для информации о таблицах (колонки, типы)
+    private static final Map<String, List<ColumnInfo>> tableColumnsCache = new ConcurrentHashMap<>();
+
+    // Кэш для информации о внешних ключах
+    private static final Map<String, List<ForeignKeyInfo>> foreignKeysCache = new ConcurrentHashMap<>();
+
+    // Кэш для информации об индексах
+    private static final Map<String, List<IndexInfo>> indexesCache = new ConcurrentHashMap<>();
+
+    // Кэш для последовательностей (Oracle)
+    private static final Map<String, SequenceInfo> sequencesCache = new ConcurrentHashMap<>();
+
+    // Кэш для синонимов (Oracle)
+    private static final Map<String, String> synonymsCache = new ConcurrentHashMap<>();
+
+    // Кэш для триггеров
+    private static final Map<String, List<TriggerInfo>> triggersCache = new ConcurrentHashMap<>();
+
+    // Кэш для информации о партициях
+    private static final Map<String, PartitionInfo> partitionsCache = new ConcurrentHashMap<>();
+
+    // Кэш для статистики таблиц
+    private static final Map<String, TableStatistics> tableStatisticsCache = new ConcurrentHashMap<>();
+
+    // Кэш для user-defined типов
+    private static final Map<String, String> userTypesCache = new ConcurrentHashMap<>();
+
+    // Кэш для материализованных вьюх
+    private static final Map<String, String> materializedViewsCache = new ConcurrentHashMap<>();
+
+    // Кэш для пакетных спецификаций (без тела)
+    private static final Map<String, String> packageSpecCache = new ConcurrentHashMap<>();
+
+    // Кэш для процедур (не в пакетах)
+    private static final Map<String, String> standaloneProceduresCache = new ConcurrentHashMap<>();
+
+    // Кэш для информации о grant/privileges
+    private static final Map<String, List<String>> privilegesCache = new ConcurrentHashMap<>();
+
 
     // ==================== ИНИЦИАЛИЗАЦИЯ И ПРОВЕРКИ ====================
 
@@ -109,49 +160,6 @@ public class DatabaseCacheManager {
         System.out.println("  PostgreSQL: " + (postgresAvailable ? "ДОСТУПНА" : "НЕДОСТУПНА"));
     }
 
-    private static void checkOracleConnection() {
-        if (oracleChecked) {
-            return; // Уже проверяли в этой сессии
-        }
-
-        if (cachedOracleUrl == null || cachedOracleUrl.isEmpty()) {
-            oracleAvailable = false;
-            oracleChecked = true;
-            System.err.println("[DB] Oracle URL не настроен");
-            return;
-        }
-
-        try (Connection conn = DriverManager.getConnection(
-                cachedOracleUrl, cachedOracleUser, cachedOraclePassword)) {
-            oracleAvailable = conn.isValid(5);
-        } catch (SQLException e) {
-            oracleAvailable = false;
-            System.err.println("[DB] Oracle недоступен: " + e.getMessage());
-        }
-        oracleChecked = true;
-    }
-
-    private static void checkPostgresConnection() {
-        if (postgresChecked) {
-            return; // Уже проверяли в этой сессии
-        }
-
-        if (cachedPostgresUrl == null || cachedPostgresUrl.isEmpty()) {
-            postgresAvailable = false;
-            postgresChecked = true;
-            System.err.println("[DB] PostgreSQL URL не настроен");
-            return;
-        }
-
-        try (Connection conn = DriverManager.getConnection(
-                cachedPostgresUrl, cachedPostgresUser, cachedPostgresPassword)) {
-            postgresAvailable = conn.isValid(5);
-        } catch (SQLException e) {
-            postgresAvailable = false;
-            System.err.println("[DB] PostgreSQL недоступен: " + e.getMessage());
-        }
-        postgresChecked = true;
-    }
 
     /**
      * Принудительно сбросить статус проверки (при изменении настроек)
@@ -767,6 +775,335 @@ public class DatabaseCacheManager {
         String key = viewName.toLowerCase();
         return postgresViewOidCache.computeIfAbsent(key, k -> {
             Integer value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+    public static boolean isOracleServerAvailable() {
+        if (cachedOracleUrl == null || cachedOracleUrl.isEmpty()) return false;
+        return NetworkUtils.isDatabaseServerAvailableWithCache(cachedOracleUrl);
+    }
+
+    public static boolean isPostgresServerAvailable() {
+        if (cachedPostgresUrl == null || cachedPostgresUrl.isEmpty()) return false;
+        return NetworkUtils.isDatabaseServerAvailableWithCache(cachedPostgresUrl);
+    }
+
+    // Модифицировать метод checkOracleConnection
+    private static void checkOracleConnection() {
+        if (oracleChecked) return;
+
+        if (cachedOracleUrl == null || cachedOracleUrl.isEmpty()) {
+            oracleAvailable = false;
+            oracleChecked = true;
+            System.err.println("[DB] Oracle URL не настроен");
+            return;
+        }
+
+        // Сначала проверяем доступность сервера через ping
+        if (!isOracleServerAvailable()) {
+            oracleAvailable = false;
+            oracleChecked = true;
+            System.err.println("[DB] Oracle сервер недоступен (ping/telnet failed)");
+            return;
+        }
+
+        // Если сервер доступен, пробуем реальное подключение
+        try (Connection conn = DriverManager.getConnection(
+                cachedOracleUrl, cachedOracleUser, cachedOraclePassword)) {
+            oracleAvailable = conn.isValid(5);
+        } catch (SQLException e) {
+            oracleAvailable = false;
+            System.err.println("[DB] Oracle недоступен: " + e.getMessage());
+        }
+        oracleChecked = true;
+    }
+
+    private static void checkPostgresConnection() {
+        if (postgresChecked) return;
+
+        if (cachedPostgresUrl == null || cachedPostgresUrl.isEmpty()) {
+            postgresAvailable = false;
+            postgresChecked = true;
+            System.err.println("[DB] PostgreSQL URL не настроен");
+            return;
+        }
+
+        // Сначала проверяем доступность сервера через ping
+        if (!isPostgresServerAvailable()) {
+            postgresAvailable = false;
+            postgresChecked = true;
+            System.err.println("[DB] PostgreSQL сервер недоступен (ping/telnet failed)");
+            return;
+        }
+
+        // Если сервер доступен, пробуем реальное подключение
+        try (Connection conn = DriverManager.getConnection(
+                cachedPostgresUrl, cachedPostgresUser, cachedPostgresPassword)) {
+            postgresAvailable = conn.isValid(5);
+        } catch (SQLException e) {
+            postgresAvailable = false;
+            System.err.println("[DB] PostgreSQL недоступен: " + e.getMessage());
+        }
+        postgresChecked = true;
+    }
+    public static String getConstant(String constCode, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = constCode.toUpperCase();
+        return constantsCache.computeIfAbsent(key, k -> {
+            String value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+
+    public static String getSystemOption(String optionCode, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = optionCode.toUpperCase();
+        return systemOptionsCache.computeIfAbsent(key, k -> {
+            String value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+
+    public static List<ColumnInfo> getTableColumns(String tableName, Supplier<List<ColumnInfo>> loader) {
+        if (!isOracleAvailable()) return Collections.emptyList();
+        String key = tableName.toUpperCase();
+        return tableColumnsCache.computeIfAbsent(key, k -> {
+            List<ColumnInfo> value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+
+    public static List<ForeignKeyInfo> getForeignKeys(String tableName, Supplier<List<ForeignKeyInfo>> loader) {
+        if (!isOracleAvailable()) return Collections.emptyList();
+        String key = tableName.toUpperCase();
+        return foreignKeysCache.computeIfAbsent(key, k -> {
+            List<ForeignKeyInfo> value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+
+    public static List<IndexInfo> getIndexes(String tableName, Supplier<List<IndexInfo>> loader) {
+        if (!isOracleAvailable()) return Collections.emptyList();
+        String key = tableName.toUpperCase();
+        return indexesCache.computeIfAbsent(key, k -> {
+            List<IndexInfo> value = loader.get();
+            markChanged();
+            return value;
+        });
+    }
+
+// ==================== ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ ====================
+
+    public static class ColumnInfo implements Serializable {
+        private final String columnName;
+        private final String dataType;
+        private final int dataLength;
+        private final Integer precision;
+        private final Integer scale;
+        private final boolean nullable;
+        private final String defaultValue;
+        private final String comment;
+
+        public ColumnInfo(String columnName, String dataType, int dataLength,
+                          Integer precision, Integer scale, boolean nullable,
+                          String defaultValue, String comment) {
+            this.columnName = columnName;
+            this.dataType = dataType;
+            this.dataLength = dataLength;
+            this.precision = precision;
+            this.scale = scale;
+            this.nullable = nullable;
+            this.defaultValue = defaultValue;
+            this.comment = comment;
+        }
+
+        // Геттеры
+        public String getColumnName() { return columnName; }
+        public String getDataType() { return dataType; }
+        public int getDataLength() { return dataLength; }
+        public Integer getPrecision() { return precision; }
+        public Integer getScale() { return scale; }
+        public boolean isNullable() { return nullable; }
+        public String getDefaultValue() { return defaultValue; }
+        public String getComment() { return comment; }
+
+        @Override
+        public String toString() {
+            return String.format("%s %s%s%s", columnName, dataType,
+                    dataLength > 0 ? "(" + dataLength + ")" : "",
+                    !nullable ? " NOT NULL" : "");
+        }
+    }
+
+    public static class ForeignKeyInfo implements Serializable {
+        private final String constraintName;
+        private final String foreignTable;
+        private final String foreignColumn;
+        private final String referencedTable;
+        private final String referencedColumn;
+        private final String deleteRule;
+
+        public ForeignKeyInfo(String constraintName, String foreignTable, String foreignColumn,
+                              String referencedTable, String referencedColumn, String deleteRule) {
+            this.constraintName = constraintName;
+            this.foreignTable = foreignTable;
+            this.foreignColumn = foreignColumn;
+            this.referencedTable = referencedTable;
+            this.referencedColumn = referencedColumn;
+            this.deleteRule = deleteRule;
+        }
+
+        // Геттеры
+        public String getConstraintName() { return constraintName; }
+        public String getForeignTable() { return foreignTable; }
+        public String getForeignColumn() { return foreignColumn; }
+        public String getReferencedTable() { return referencedTable; }
+        public String getReferencedColumn() { return referencedColumn; }
+        public String getDeleteRule() { return deleteRule; }
+    }
+
+    public static class IndexInfo implements Serializable {
+        private final String indexName;
+        private final String columnName;
+        private final boolean unique;
+        private final String indexType;
+        private final int position;
+
+        public IndexInfo(String indexName, String columnName, boolean unique,
+                         String indexType, int position) {
+            this.indexName = indexName;
+            this.columnName = columnName;
+            this.unique = unique;
+            this.indexType = indexType;
+            this.position = position;
+        }
+
+        // Геттеры
+        public String getIndexName() { return indexName; }
+        public String getColumnName() { return columnName; }
+        public boolean isUnique() { return unique; }
+        public String getIndexType() { return indexType; }
+        public int getPosition() { return position; }
+    }
+
+    public static class SequenceInfo implements Serializable {
+        private final String sequenceName;
+        private final long minValue;
+        private final long maxValue;
+        private final long incrementBy;
+        private final long lastNumber;
+
+        public SequenceInfo(String sequenceName, long minValue, long maxValue,
+                            long incrementBy, long lastNumber) {
+            this.sequenceName = sequenceName;
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+            this.incrementBy = incrementBy;
+            this.lastNumber = lastNumber;
+        }
+
+        // Геттеры
+        public String getSequenceName() { return sequenceName; }
+        public long getMinValue() { return minValue; }
+        public long getMaxValue() { return maxValue; }
+        public long getIncrementBy() { return incrementBy; }
+        public long getLastNumber() { return lastNumber; }
+    }
+
+    public static class TriggerInfo implements Serializable {
+        private final String triggerName;
+        private final String tableName;
+        private final String triggeringEvent;
+        private final String timing;
+        private final String status;
+        private final String description;
+
+        public TriggerInfo(String triggerName, String tableName, String triggeringEvent,
+                           String timing, String status, String description) {
+            this.triggerName = triggerName;
+            this.tableName = tableName;
+            this.triggeringEvent = triggeringEvent;
+            this.timing = timing;
+            this.status = status;
+            this.description = description;
+        }
+
+        // Геттеры
+        public String getTriggerName() { return triggerName; }
+        public String getTableName() { return tableName; }
+        public String getTriggeringEvent() { return triggeringEvent; }
+        public String getTiming() { return timing; }
+        public String getStatus() { return status; }
+        public String getDescription() { return description; }
+    }
+
+    public static class PartitionInfo implements Serializable {
+        private final String partitionName;
+        private final String partitionPosition;
+        private final String highValue;
+        private final String tablespaceName;
+
+        public PartitionInfo(String partitionName, String partitionPosition,
+                             String highValue, String tablespaceName) {
+            this.partitionName = partitionName;
+            this.partitionPosition = partitionPosition;
+            this.highValue = highValue;
+            this.tablespaceName = tablespaceName;
+        }
+
+        // Геттеры
+        public String getPartitionName() { return partitionName; }
+        public String getPartitionPosition() { return partitionPosition; }
+        public String getHighValue() { return highValue; }
+        public String getTablespaceName() { return tablespaceName; }
+    }
+
+    public static class TableStatistics implements Serializable {
+        private final long numRows;
+        private final long blocks;
+        private final long emptyBlocks;
+        private final long avgSpace;
+        private final long chainCnt;
+        private final long avgRowLen;
+        private final Date lastAnalyzed;
+
+        public TableStatistics(long numRows, long blocks, long emptyBlocks,
+                               long avgSpace, long chainCnt, long avgRowLen, Date lastAnalyzed) {
+            this.numRows = numRows;
+            this.blocks = blocks;
+            this.emptyBlocks = emptyBlocks;
+            this.avgSpace = avgSpace;
+            this.chainCnt = chainCnt;
+            this.avgRowLen = avgRowLen;
+            this.lastAnalyzed = lastAnalyzed;
+        }
+
+        // Геттеры
+        public long getNumRows() { return numRows; }
+        public long getBlocks() { return blocks; }
+        public long getEmptyBlocks() { return emptyBlocks; }
+        public long getAvgSpace() { return avgSpace; }
+        public long getChainCnt() { return chainCnt; }
+        public long getAvgRowLen() { return avgRowLen; }
+        public Date getLastAnalyzed() { return lastAnalyzed; }
+    }
+
+    /**
+     * Получить целевую таблицу для синонима из кэша или загрузить
+     * @param synonymName имя синонима
+     * @param loader загрузчик, который возвращает имя целевой таблицы
+     * @return имя целевой таблицы или null
+     */
+    public static String getSynonymTarget(String synonymName, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = synonymName.toUpperCase();
+        return synonymsCache.computeIfAbsent(key, k -> {
+            String value = loader.get();
             markChanged();
             return value;
         });

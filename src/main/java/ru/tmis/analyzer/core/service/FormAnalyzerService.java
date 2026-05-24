@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.service;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -296,6 +297,12 @@ public class FormAnalyzerService {
 
     private Map<String, ViewTableDependencies> loadViewDependencies(Set<String> viewNames) {
         if (viewNames.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        // Проверяем доступность Oracle (нужна для получения DDL вьюх)
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            log("  Oracle сервер недоступен, пропускаем загрузку зависимостей вьюх");
             return Collections.emptyMap();
         }
 

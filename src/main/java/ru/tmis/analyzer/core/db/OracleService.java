@@ -19,11 +19,19 @@ public class OracleService {
     }
 
     public String getViewDDL(String viewName) {
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            System.err.println("[Oracle] Сервер недоступен, пропускаем запрос для вьюхи: " + viewName);
+            return null;
+        }
         String key = viewName.toUpperCase();
         return DatabaseCacheManager.getOracleViewDDL(key, () -> fetchViewDDL(viewName));
     }
 
     public String getTableDDL(String tableName) {
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            System.err.println("[Oracle] Сервер недоступен, пропускаем запрос для таблицы: " + tableName);
+            return null;
+        }
         String key = tableName.toUpperCase();
         return DatabaseCacheManager.getOracleTableDDL(key, () -> fetchTableDDL(tableName));
     }

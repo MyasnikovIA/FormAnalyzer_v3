@@ -102,6 +102,12 @@ public class LLMPromptGenerator {
     }
 
     private void loadPostgresData() {
+        if (!DatabaseCacheManager.isPostgresServerAvailable()) {
+            System.out.println("[PostgreSQL] Сервер недоступен, пропускаем загрузку данных");
+            context.setPostgresViewDDL(Collections.emptyMap());
+            context.setPostgresViewTables(Collections.emptyMap());
+            return;
+        }
         Map<String, String> pgViewsDDL = new LinkedHashMap<>();
         Map<String, Set<String>> pgViewTables = new LinkedHashMap<>();
         int count = 0;
@@ -154,6 +160,12 @@ public class LLMPromptGenerator {
     }
 
     private void loadOracleData() {
+        if (!DatabaseCacheManager.isOracleServerAvailable()) {
+            System.out.println("[Oracle] Сервер недоступен, пропускаем загрузку данных");
+            context.setOracleViewDDL(Collections.emptyMap());
+            context.setOracleViewTables(Collections.emptyMap());
+            return;
+        }
         Map<String, String> oraViewsDDL = new LinkedHashMap<>();
         Map<String, Set<String>> oraViewTables = new LinkedHashMap<>();
 
