@@ -210,18 +210,6 @@ public class FormAnalyzerService {
                 error("  Ошибка сохранения LLM промпта: " + e.getMessage());
             }
         }
-
-        // ========== НОВЫЙ ФУНКЦИОНАЛ: Генерация отдельного CSV отчета для формы ==========
-        if (config != null && config.isEnableCSVExport()) {
-            try {
-                SingleFormCSVReportGenerator singleCsvGen = new SingleFormCSVReportGenerator(settings.getOutputDir());
-                Path singleCsvPath = singleCsvGen.saveFormCSVReport(formInfo);
-                log("  Отдельный CSV отчет сохранен: " + singleCsvPath);
-            } catch (IOException e) {
-                error("  Ошибка сохранения отдельного CSV отчета: " + e.getMessage());
-            }
-        }
-        // ==============================================================================
         return formInfo;
     }
 

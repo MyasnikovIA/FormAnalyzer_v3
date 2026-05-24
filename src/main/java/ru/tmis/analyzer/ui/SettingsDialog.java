@@ -607,6 +607,7 @@ public class SettingsDialog extends JDialog {
 
 
     private void saveSettings() {
+
         settings.setProjectPath(projectPathField.getText());
         settings.setOutputDir(outputDirField.getText());
         settings.setOracleUrl(oracleUrlField.getText());
@@ -618,6 +619,7 @@ public class SettingsDialog extends JDialog {
         settings.setMisUser(misUserField.getText());
 
         settings.save();
+        DatabaseCacheManager.setCacheOutputDir(settings.getOutputDir());
 
         // Сбросить статус подключения к БД и перепроверить
         DatabaseCacheManager.resetConnectionStatus();
@@ -626,6 +628,9 @@ public class SettingsDialog extends JDialog {
                 settings.getPostgresUrl(), settings.getPostgresUser(), settings.getPostgresPassword(),
                 settings.getMisUser()
         );
+        // Обновляем директорию кэша и перезагружаем
+        DatabaseCacheManager.setCacheOutputDir(settings.getOutputDir());
+        JOptionPane.showMessageDialog(this, "Настройки сохранены", "Успешно", JOptionPane.INFORMATION_MESSAGE);
 
         // Report settings
         if (includeSqlContentCheckbox != null) {

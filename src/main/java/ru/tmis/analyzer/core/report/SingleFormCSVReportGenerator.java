@@ -9,12 +9,15 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SingleFormCSVReportGenerator {
 
     private final String outputDir;
     private final SettingsModel settings;
     private transient ReportsFromDbService reportsService;
+    private final AtomicBoolean stopRequested = new AtomicBoolean(false);
+
 
     public SingleFormCSVReportGenerator(String outputDir) {
         this.outputDir = outputDir;
@@ -171,29 +174,6 @@ public class SingleFormCSVReportGenerator {
         }
     }
 
-    private String formatReportWithDbInfo(String report) {
-        if (report.contains("/") || report.endsWith(".frm")) {
-            return report;
-        }
-
-        DbReportInfo dbReport = reportsService.getReportByCode(report);
-        if (dbReport != null) {
-            String typeName = getRepTypeName(dbReport.getRepType());
-            StringBuilder sb = new StringBuilder();
-            sb.append(report).append(" (").append(typeName).append(")");
-
-            if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
-                String formPath = dbReport.getRepFilename();
-                if (!formPath.endsWith(".frm")) formPath = formPath + ".frm";
-                if (!formPath.startsWith("Reports/")) formPath = "Reports/" + formPath;
-                sb.append(" ").append(formPath);
-            }
-            return sb.toString();
-        }
-
-        return report;
-    }
-
     private String getRepTypeName(int repType) {
         switch (repType) {
             case 0: return "Crystal Reports";
@@ -264,5 +244,48 @@ public class SingleFormCSVReportGenerator {
         }
 
         return relativePath;
+    }
+
+    public void setStopRequested(boolean stop) {
+        this.stopRequested.set(stop);
+    }
+
+    public boolean isStopRequested() {
+        return stopRequested.get();
+    }
+
+    private String formatReportWithDbInfo(String report) {
+        // Проверка на остановку
+        if (stopRequested.get()) {
+            return report;
+        }
+
+        if (report.contains("/") || report.endsWith(".frm")) {
+            return report;
+        }
+
+        try {
+            DbReportInfo dbReport = reportsService.getReportByCode(report);
+            if (dbReport != null) {
+                String typeName = getRepTypeName(dbReport.getRepType());
+                StringBuilder sb = new StringBuilder();
+                sb.append(report).append(" (").append(typeName).append(")");
+
+                if (dbReport.getRepType() == 1 && dbReport.getRepFilename() != null && !dbReport.getRepFilename().isEmpty()) {
+                    String formPath = dbReport.getRepFilename();
+                    if (!formPath.endsWith(".frm")) formPath = formPath + ".frm";
+                    if (!formPath.startsWith("Reports/")) formPath = "Reports/" + formPath;
+                    sb.append(" ").append(formPath);
+                }
+                return sb.toString();
+            }
+        } catch (Exception e) {
+            // При остановке не выводим ошибку
+            if (!stopRequested.get()) {
+                System.err.println("[SingleFormCSV] Ошибка получения информации об отчёте " + report + ": " + e.getMessage());
+            }
+        }
+
+        return report;
     }
 }

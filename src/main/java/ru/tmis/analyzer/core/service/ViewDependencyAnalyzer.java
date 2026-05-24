@@ -59,34 +59,26 @@ public class ViewDependencyAnalyzer {
         staticPostgresMisUser = misUser;
     }
 
+
     public ViewTableDependencies analyzeView(String viewName) {
-        return DatabaseCacheManager.getViewDependencies(viewName, () -> {
-            ViewTableDependencies deps = new ViewTableDependencies(viewName);
-
-            String ddl = getViewDDL(viewName);
-            if (ddl != null && !ddl.isEmpty()) {
-                deps.setExistsInOracle(true);
-                extractTablesFromDDL(ddl, deps);
-            } else {
-                deps.setExistsInOracle(false);
-                deps.setOracleError("Вьюха не найдена в Oracle");
-            }
-
-            return doAnalyzeView(viewName);
-        });
+        return DatabaseCacheManager.getViewDependencies(viewName, () -> doAnalyzeView(viewName));
     }
 
     private ViewTableDependencies doAnalyzeView(String viewName) {
         ViewTableDependencies deps = new ViewTableDependencies(viewName);
+
+        System.out.println("  [ViewDependencyAnalyzer] Загрузка вьюхи: " + viewName);
 
         // Получаем DDL вьюхи из Oracle
         String ddl = getViewDDL(viewName);
         if (ddl != null && !ddl.isEmpty()) {
             deps.setExistsInOracle(true);
             extractTablesFromDDL(ddl, deps);
+            System.out.println("  [ViewDependencyAnalyzer] Oracle DDL получен, таблиц: " + deps.getOracleTables().size());
         } else {
             deps.setExistsInOracle(false);
             deps.setOracleError("Вьюха не найдена в Oracle");
+            System.out.println("  [ViewDependencyAnalyzer] Oracle DDL НЕ НАЙДЕН");
         }
 
         // Получаем DDL вьюхи из PostgreSQL
@@ -95,13 +87,16 @@ public class ViewDependencyAnalyzer {
             deps.setExistsInPostgres(true);
             Set<String> postgresTables = extractTablesFromPostgresDDL(postgresDDL);
             deps.addAllPostgresTables(postgresTables);
+            System.out.println("  [ViewDependencyAnalyzer] PostgreSQL DDL получен, таблиц: " + postgresTables.size());
         } else {
             deps.setExistsInPostgres(false);
             deps.setPostgresError("Вьюха не найдена в PostgreSQL");
+            System.out.println("  [ViewDependencyAnalyzer] PostgreSQL DDL НЕ НАЙДЕН");
         }
 
         return deps;
     }
+
 
     private String getPostgresViewDDL(String viewName) {
         String sql = "SELECT pg_get_viewdef(p.oid, true) as viewdef " +

@@ -108,7 +108,7 @@ public class ReportGenerator {
      * Сохраняет отчет для отдельной формы в отдельный файл
      */
     public void appendFormToMainReport(FormInfo formInfo) throws IOException {
-        // 1. Сохраняем отдельный файл для формы (TXT) в подкаталог Forms (ТОЛЬКО ЗДЕСЬ)
+        // 1. Сохраняем отдельный файл для формы (TXT)
         saveFormReportToFile(formInfo);
 
         // 2. Добавляем в общий отчет (только в forms_report.txt, без создания дубликата)
@@ -127,17 +127,22 @@ public class ReportGenerator {
             writeFormReport(writer, formInfo);
         }
 
-        // 3. Генерация CSV отчета
+        // 3. Генерация CSV отчета (ОДИН РАЗ)
         if (config != null && config.isEnableCSVExport()) {
             appendToCSVReport(formInfo);
+
+            // 4. Генерация отдельного CSV файла для формы
+            SingleFormCSVReportGenerator singleCsvGen = new SingleFormCSVReportGenerator(outputDir);
+            Path singleCsvPath = singleCsvGen.saveFormCSVReport(formInfo);
+            System.out.println("  Отдельный CSV отчет сохранен: " + singleCsvPath);
         }
 
-        // 4. Генерация JSON отчета
+        // 5. Генерация JSON отчета
         if (config != null && config.isEnableJSONExport()) {
             appendToJSONReport(formInfo);
         }
 
-        // 5. Генерация MD промпта
+        // 6. Генерация MD промпта
         if (config != null && config.isEnableLLMExport()) {
             generateLLMPromptForForm(formInfo);
         }

@@ -1,6 +1,7 @@
 package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
@@ -52,11 +53,17 @@ public class MainWindow extends JFrame {
     private Thread logReader;
 
 
+
     public MainWindow(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.config = config;
         this.executor = Executors.newSingleThreadExecutor();
         this.executorService = Executors.newSingleThreadExecutor();
+
+        // Инициализация кэша с указанием директории
+        DatabaseCacheManager.setCacheOutputDir(settings.getOutputDir());
+        DatabaseCacheManager.initAutoSave();  // <-- ЗАПУСКАЕМ АВТОСОХРАНЕНИЕ
+        DatabaseCacheManager.loadFromDisk();
 
         initUI();
         loadWindowState();
@@ -64,18 +71,15 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                saveState();
-            }
-        });
-        redirectSystemOutToLog();
-       // Добавляем слушатель для восстановления при закрытии
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
+                // Принудительное сохранение перед закрытием
+                DatabaseCacheManager.forceSaveToDisk();
+                DatabaseCacheManager.shutdownAutoSave();
                 restoreSystemOut();
                 saveState();
             }
         });
+
+        redirectSystemOutToLog();
     }
 
     private void initUI() {
@@ -571,25 +575,11 @@ public class MainWindow extends JFrame {
     }
 
 
+
     /**
      * Запускает полное сканирование проекта и анализ новых форм
      */
     private void startFullProjectScan() {
-        // ========== НОВЫЙ КОД: Склеивание существующих CSV отчетов ==========
-        try {
-            FormAnalyzerService tempAnalyzer = new FormAnalyzerService(settings, config);
-            if (tempAnalyzer.shouldMergeCsvReports()) {
-                appendLog("Обнаружены отдельные CSV отчеты. Выполняется склеивание...");
-                int mergedCount = tempAnalyzer.mergeExistingCsvReports();
-                appendLog("Склеено CSV файлов: " + mergedCount);
-            } else {
-                appendLog("Склеивание CSV отчетов не требуется");
-            }
-        } catch (IOException e) {
-            appendLog("Ошибка при склеивании CSV отчетов: " + e.getMessage());
-        }
-        // ===================================================================
-
         stopRequested = false;
         isRunning.set(true);
         startButton.setEnabled(false);
@@ -603,6 +593,21 @@ public class MainWindow extends JFrame {
             try {
                 appendLog("=== СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА ===");
                 appendLog("Будут обработаны только формы, для которых ещё нет отчётов");
+
+                // ========== СКЛЕИВАНИЕ СУЩЕСТВУЮЩИХ CSV ОТЧЕТОВ ==========
+                try {
+                    FormAnalyzerService tempAnalyzer = new FormAnalyzerService(settings, config);
+                    if (tempAnalyzer.shouldMergeCsvReports()) {
+                        appendLog("Обнаружены отдельные CSV отчеты. Выполняется склеивание...");
+                        int mergedCount = tempAnalyzer.mergeExistingCsvReports();
+                        appendLog("Склеено CSV файлов: " + mergedCount);
+                    } else {
+                        appendLog("Склеивание CSV отчетов не требуется");
+                    }
+                } catch (IOException e) {
+                    appendLog("Ошибка при склеивании CSV отчетов: " + e.getMessage());
+                }
+                // =======================================================
 
                 FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
 
@@ -866,6 +871,10 @@ public class MainWindow extends JFrame {
         config.setWindowExtendedState(getExtendedState());
         config.save();
         settings.save();
+
+        System.out.println("[Cache] Сохранение кэшированных данных на диск...");
+        DatabaseCacheManager.saveToDisk();
+        System.out.println("[Cache] Сохранение завершено");
     }
 
     /**

@@ -1,5 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
+import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,54 +18,24 @@ public class OracleService {
         this.password = password;
     }
 
-    // ==================== ОСНОВНЫЕ МЕТОДЫ С КЭШИРОВАНИЕМ ====================
-
     public String getViewDDL(String viewName) {
         String key = viewName.toUpperCase();
-
-        // Проверяем кэш (будет добавлен позже через DatabaseCacheManager)
-        String cached = getCachedViewDDL(key);
-        if (cached != null) return cached;
-
-        String ddl = fetchViewDDL(viewName);
-        if (ddl != null) {
-            putCachedViewDDL(key, ddl);
-        }
-        return ddl;
+        return DatabaseCacheManager.getOracleViewDDL(key, () -> fetchViewDDL(viewName));
     }
 
     public String getTableDDL(String tableName) {
         String key = tableName.toUpperCase();
-        String cached = getCachedTableDDL(key);
-        if (cached != null) return cached;
-
-        String ddl = fetchTableDDL(tableName);
-        if (ddl != null) {
-            putCachedTableDDL(key, ddl);
-        }
-        return ddl;
+        return DatabaseCacheManager.getOracleTableDDL(key, () -> fetchTableDDL(tableName));
     }
 
     public String getFunctionBody(String packageName, String functionName) {
         String key = (packageName + "." + functionName).toUpperCase();
-        String cached = getCachedFunctionBody(key);
-        if (cached != null) return cached;
-
-        String body = fetchFunctionBody(packageName, functionName);
-        if (body != null) {
-            putCachedFunctionBody(key, body);
-        }
-        return body;
+        return DatabaseCacheManager.getOracleFunctionBody(key, () -> fetchFunctionBody(packageName, functionName));
     }
 
     public long getTableCount(String objectName) {
         String key = objectName.toUpperCase();
-        Long cached = getCachedTableCount(key);
-        if (cached != null) return cached;
-
-        long count = fetchTableCount(objectName);
-        putCachedTableCount(key, count);
-        return count;
+        return DatabaseCacheManager.getOracleCount(key, () -> fetchTableCount(objectName));
     }
 
     // ==================== РЕАЛЬНЫЕ ЗАПРОСЫ К БД ====================

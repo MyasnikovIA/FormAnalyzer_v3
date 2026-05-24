@@ -1,4 +1,4 @@
-// Launcher.java
+// MainForm.java
 package ru.tmis.analyzer;
 
 import ru.tmis.analyzer.config.AppConfig;
@@ -37,6 +37,12 @@ public class MainForm {
                         settings.getMisUser()
                 );
 
+                // ========== НОВЫЙ КОД: Загрузка кэша с диска ==========
+                System.out.println("[Cache] Загрузка кэшированных данных с диска...");
+                DatabaseCacheManager.setCacheOutputDir(settings.getOutputDir());
+                DatabaseCacheManager.loadFromDisk();
+                System.out.println("[Cache] Загрузка завершена");
+                // =====================================================
 
                 MainWindow window = new MainWindow(settings, config);
                 window.setVisible(true);
