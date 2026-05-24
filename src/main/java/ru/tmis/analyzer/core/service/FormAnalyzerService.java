@@ -7,6 +7,8 @@ import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.core.report.CSVMergeService;
+import ru.tmis.analyzer.core.report.SingleFormCSVReportGenerator;
 import ru.tmis.analyzer.utils.CommentRemover;
 import ru.tmis.analyzer.utils.FormPathUtils;
 import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
@@ -137,6 +139,8 @@ public class FormAnalyzerService {
         return results;
     }
 
+    // core/service/FormAnalyzerService.java
+
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
@@ -207,6 +211,17 @@ public class FormAnalyzerService {
             }
         }
 
+        // ========== НОВЫЙ ФУНКЦИОНАЛ: Генерация отдельного CSV отчета для формы ==========
+        if (config != null && config.isEnableCSVExport()) {
+            try {
+                SingleFormCSVReportGenerator singleCsvGen = new SingleFormCSVReportGenerator(settings.getOutputDir());
+                Path singleCsvPath = singleCsvGen.saveFormCSVReport(formInfo);
+                log("  Отдельный CSV отчет сохранен: " + singleCsvPath);
+            } catch (IOException e) {
+                error("  Ошибка сохранения отдельного CSV отчета: " + e.getMessage());
+            }
+        }
+        // ==============================================================================
         return formInfo;
     }
 
@@ -504,4 +519,38 @@ public class FormAnalyzerService {
         String safeFileName = getSafeFileName(formPath);
         return Paths.get(outputDir, "Forms", safeFileName);
     }
+
+    /**
+     * Выполняет склеивание всех существующих CSV отчетов перед началом анализа новых форм
+     * @return количество склеенных файлов
+     */
+    public int mergeExistingCsvReports() throws IOException {
+        CSVMergeService mergeService = new CSVMergeService(settings.getOutputDir());
+        return mergeService.mergeAllCsvReports();
+    }
+
+    /**
+     * Проверяет, нужно ли склеивать CSV отчеты перед анализом
+     * @return true если есть отдельные CSV файлы и нет общего отчета
+     */
+    public boolean shouldMergeCsvReports() {
+        CSVMergeService mergeService = new CSVMergeService(settings.getOutputDir());
+
+        boolean hasSingleCsv = false;
+        Path csvReportsDir = Paths.get(settings.getOutputDir(), "CSV_reports");
+        if (Files.exists(csvReportsDir)) {
+            try (Stream<Path> walk = Files.walk(csvReportsDir)) {
+                hasSingleCsv = walk.filter(Files::isRegularFile)
+                        .anyMatch(p -> p.toString().endsWith(".csv"));
+            } catch (IOException e) {
+                // ignore
+            }
+        }
+
+        boolean hasCommonCsv = mergeService.commonCsvExists();
+
+        // Нужно склеить, если есть отдельные CSV файлы, но нет общего отчета
+        return hasSingleCsv && !hasCommonCsv;
+    }
+
 }

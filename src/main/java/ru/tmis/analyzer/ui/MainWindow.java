@@ -477,6 +477,21 @@ public class MainWindow extends JFrame {
             return;
         }
 
+        // ========== НОВЫЙ КОД: Склеивание существующих CSV отчетов ==========
+        try {
+            FormAnalyzerService tempAnalyzer = new FormAnalyzerService(settings, config);
+            if (tempAnalyzer.shouldMergeCsvReports()) {
+                appendLog("Обнаружены отдельные CSV отчеты. Выполняется склеивание...");
+                int mergedCount = tempAnalyzer.mergeExistingCsvReports();
+                appendLog("Склеено CSV файлов: " + mergedCount);
+            } else {
+                appendLog("Склеивание CSV отчетов не требуется");
+            }
+        } catch (IOException e) {
+            appendLog("Ошибка при склеивании CSV отчетов: " + e.getMessage());
+        }
+        // ===================================================================
+
         // Получаем выбранные формы из дерева
         List<String> selectedForms = formsTreePanel.getSelectedForms();
 
@@ -557,12 +572,24 @@ public class MainWindow extends JFrame {
 
 
     /**
-     * Запускает полное сканирование проекта и анализ всех форм
-     */
-    /**
      * Запускает полное сканирование проекта и анализ новых форм
      */
     private void startFullProjectScan() {
+        // ========== НОВЫЙ КОД: Склеивание существующих CSV отчетов ==========
+        try {
+            FormAnalyzerService tempAnalyzer = new FormAnalyzerService(settings, config);
+            if (tempAnalyzer.shouldMergeCsvReports()) {
+                appendLog("Обнаружены отдельные CSV отчеты. Выполняется склеивание...");
+                int mergedCount = tempAnalyzer.mergeExistingCsvReports();
+                appendLog("Склеено CSV файлов: " + mergedCount);
+            } else {
+                appendLog("Склеивание CSV отчетов не требуется");
+            }
+        } catch (IOException e) {
+            appendLog("Ошибка при склеивании CSV отчетов: " + e.getMessage());
+        }
+        // ===================================================================
+
         stopRequested = false;
         isRunning.set(true);
         startButton.setEnabled(false);

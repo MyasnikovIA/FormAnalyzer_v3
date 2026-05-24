@@ -816,12 +816,21 @@ public class ReportGenerator {
 
 
     private void appendToCSVReport(FormInfo formInfo) throws IOException {
+        if (!config.isEnableCSVExport()) return;
+
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
         }
 
         Path csvPath = outputPath.resolve("forms_export.csv");
+
+        // Проверяем, есть ли уже эта форма в CSV
+        if (Files.exists(csvPath) && isFormAlreadyInCsv(csvPath, formInfo.getFormPath())) {
+            System.out.println("[CSV] Форма уже есть в общем CSV, пропускаем: " + formInfo.getFormPath());
+            return;
+        }
+
         boolean fileExists = Files.exists(csvPath);
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
@@ -1284,5 +1293,33 @@ public class ReportGenerator {
 
         System.out.println("Отчет для формы сохранен: " + formReportPath);
     }
+    /**
+     * Проверяет, есть ли уже форма в общем CSV отчете
+     */
+    private boolean isFormAlreadyInCsv(Path csvPath, String formName) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(csvPath)) {
+            String line;
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue;
+                }
+                if (line.trim().isEmpty()) continue;
 
+                // Извлекаем имя формы из первой колонки
+                String[] parts = line.split(";", 3);
+                if (parts.length >= 1) {
+                    String existingForm = parts[0];
+                    if (existingForm.startsWith("\"") && existingForm.endsWith("\"")) {
+                        existingForm = existingForm.substring(1, existingForm.length() - 1);
+                    }
+                    if (existingForm.equals(formName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
