@@ -21,6 +21,9 @@ public class InMemoryReportBuffer {
     private static final List<JsonObject> jsonObjects = Collections.synchronizedList(new ArrayList<>());
     private static final Map<String, String> mdBuffer = new ConcurrentHashMap<>();
 
+    // НОВЫЙ БУФЕР: для отдельных CSV-файлов форм (ключ = safeFileName, значение = содержимое CSV)
+    private static final Map<String, String> formCsvBuffer = new ConcurrentHashMap<>();
+
     private static final AtomicInteger totalForms = new AtomicInteger(0);
 
     // ========== НАСТРОЙКИ ПЕРИОДИЧЕСКОЙ ЗАПИСИ ==========
@@ -36,6 +39,7 @@ public class InMemoryReportBuffer {
     private static final AtomicInteger txtFlushCount = new AtomicInteger(0);
     private static final AtomicInteger csvFlushCount = new AtomicInteger(0);
     private static final AtomicInteger jsonFlushCount = new AtomicInteger(0);
+    private static final AtomicInteger formCsvFlushCount = new AtomicInteger(0);
 
     /**
      * Инициализация буфера с фоновой периодической записью
@@ -78,13 +82,21 @@ public class InMemoryReportBuffer {
             needFlush = true;
         }
 
-        if (!needFlush && (txtBuffer.size() > 0 || csvLines.size() > 0 || jsonObjects.size() > 0)) {
+        if (formCsvBuffer.size() >= FLUSH_BATCH_SIZE) {
+            System.out.println("[Buffer] Достигнут порог форм CSV буфера (" + formCsvBuffer.size() + "), сброс...");
+            flushFormCsvs();
+            needFlush = true;
+        }
+
+        if (!needFlush && (txtBuffer.size() > 0 || csvLines.size() > 0 || jsonObjects.size() > 0 || formCsvBuffer.size() > 0)) {
             // Если есть данные, но порог не достигнут, всё равно сбрасываем раз в минуту
             System.out.println("[Buffer] Периодический сброс (TXT=" + txtBuffer.size() +
-                    ", CSV=" + csvLines.size() + ", JSON=" + jsonObjects.size() + ")");
+                    ", CSV=" + csvLines.size() + ", JSON=" + jsonObjects.size() +
+                    ", формCSV=" + formCsvBuffer.size() + ")");
             flushTxt();
             flushCsv();
             flushJson();
+            flushFormCsvs();
         }
     }
 
@@ -115,6 +127,15 @@ public class InMemoryReportBuffer {
      */
     public static void addMdPrompt(String formPath, String content) {
         mdBuffer.put(formPath, content);
+    }
+
+    /**
+     * Добавление отдельного CSV-файла формы в буфер (режим RAM)
+     */
+    public static void addFormCsv(String formPath, String csvContent) {
+        String safeFileName = getSafeFileNameForFormCsv(formPath);
+        formCsvBuffer.put(safeFileName, csvContent);
+        totalForms.incrementAndGet();
     }
 
     /**
@@ -259,6 +280,71 @@ public class InMemoryReportBuffer {
     }
 
     /**
+     * Сброс буфера отдельных CSV-файлов форм на диск
+     */
+    public static void flushFormCsvs() {
+        if (formCsvBuffer.isEmpty()) return;
+
+        try {
+            Path csvDir = Paths.get(outputDir, "CSV");
+            if (!Files.exists(csvDir)) {
+                Files.createDirectories(csvDir);
+            }
+
+            int count = 0;
+            for (Map.Entry<String, String> entry : formCsvBuffer.entrySet()) {
+                Path csvPath = csvDir.resolve(entry.getKey() + ".csv");
+                Files.writeString(csvPath, entry.getValue(), StandardCharsets.UTF_8);
+                count++;
+            }
+
+            formCsvFlushCount.incrementAndGet();
+            System.out.println("[Buffer] Форм CSV сброшено: " + count + " файлов (всего сбросов: " + formCsvFlushCount.get() + ")");
+            formCsvBuffer.clear();
+
+        } catch (IOException e) {
+            System.err.println("[Buffer] Ошибка сброса форм CSV: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Загрузить существующие CSV-файлы форм с диска в буфер (при старте)
+     */
+    public static void loadFormCsvsFromDisk(String outputDirParam) {
+        if (outputDirParam == null) return;
+
+        Path csvDir = Paths.get(outputDirParam, "CSV");
+        if (!Files.exists(csvDir)) return;
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(csvDir, "*.csv")) {
+            int loaded = 0;
+            for (Path csvFile : stream) {
+                String fileName = csvFile.getFileName().toString();
+                String key = fileName.replace(".csv", "");
+                String content = Files.readString(csvFile, StandardCharsets.UTF_8);
+                if (!formCsvBuffer.containsKey(key)) {
+                    formCsvBuffer.put(key, content);
+                    loaded++;
+
+                    // Также добавляем строки в общий CSV буфер для итогового файла
+                    List<String> lines = Files.readAllLines(csvFile, StandardCharsets.UTF_8);
+                    for (int i = 1; i < lines.size(); i++) {
+                        String line = lines.get(i);
+                        if (line != null && !line.trim().isEmpty()) {
+                            if (!csvLines.contains(line)) {
+                                csvLines.add(line);
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println("[Buffer] Загружено форм CSV с диска: " + loaded);
+        } catch (IOException e) {
+            System.err.println("[Buffer] Ошибка загрузки форм CSV: " + e.getMessage());
+        }
+    }
+
+    /**
      * Полный сброс всех буферов (вызывается при завершении)
      */
     public static void flushToDisk(String outputDirParam) {
@@ -282,11 +368,13 @@ public class InMemoryReportBuffer {
         flushCsv();
         flushJson();
         flushMd();
+        flushFormCsvs();
 
         System.out.println("[Buffer] Финальный сброс завершён. Всего форм: " + totalForms.get());
         System.out.println("[Buffer] Статистика: TXT сбросов=" + txtFlushCount.get() +
                 ", CSV сбросов=" + csvFlushCount.get() +
-                ", JSON сбросов=" + jsonFlushCount.get());
+                ", JSON сбросов=" + jsonFlushCount.get() +
+                ", Форм CSV сбросов=" + formCsvFlushCount.get());
     }
 
     /**
@@ -297,6 +385,7 @@ public class InMemoryReportBuffer {
         csvLines.clear();
         jsonObjects.clear();
         mdBuffer.clear();
+        formCsvBuffer.clear();
         totalForms.set(0);
     }
 
@@ -314,6 +403,10 @@ public class InMemoryReportBuffer {
 
     public static int getJsonBufferSize() {
         return jsonObjects.size();
+    }
+
+    public static int getFormCsvBufferSize() {
+        return formCsvBuffer.size();
     }
 
     private static String getSafeFileName(String formPath) {
@@ -334,5 +427,15 @@ public class InMemoryReportBuffer {
         if (normalized.endsWith(".frm")) normalized = normalized.substring(0, normalized.length() - 4);
         if (normalized.endsWith(".dfrm")) normalized = normalized.substring(0, normalized.length() - 5);
         return normalized.replace("/", "#").replace("\\", "#") + ".md";
+    }
+
+    private static String getSafeFileNameForFormCsv(String formPath) {
+        String normalized = formPath;
+        if (normalized.startsWith("/")) normalized = normalized.substring(1);
+        if (normalized.startsWith("(sub)_")) normalized = normalized.substring(6);
+        if (normalized.startsWith("Forms/")) normalized = normalized.substring(6);
+        if (normalized.endsWith(".frm")) normalized = normalized.substring(0, normalized.length() - 4);
+        if (normalized.endsWith(".dfrm")) normalized = normalized.substring(0, normalized.length() - 5);
+        return normalized.replace("/", "#").replace("\\", "#");
     }
 }

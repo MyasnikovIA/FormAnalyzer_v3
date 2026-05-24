@@ -1,6 +1,7 @@
 package ru.tmis.analyzer.core.db;
 
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.PostgresDataCache;
 import ru.tmis.analyzer.utils.NetworkUtils;
 
 import java.sql.*;
@@ -93,8 +94,11 @@ public class PostgresService {
             System.out.println("[PostgresService] Сервер недоступен по сети, пропускаем запрос для " + viewName);
             return null;
         }
+
         try (Connection conn = getConnection()) {
-            int oid = DatabaseCacheManager.getPostgresViewOid(viewName, () -> {
+            // Используем кэш для OID
+            PostgresDataCache dataCache = PostgresDataCache.getInstance();
+            int oid = dataCache.getViewOid(viewName, () -> {
                 String getOidSql = "SELECT oid FROM pg_class WHERE relname = ? AND relkind = 'v'";
                 try (PreparedStatement oidStmt = conn.prepareStatement(getOidSql)) {
                     oidStmt.setString(1, viewName.toLowerCase());

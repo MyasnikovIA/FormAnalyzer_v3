@@ -2,17 +2,22 @@
 
 package ru.tmis.analyzer.core.cache;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import ru.tmis.analyzer.core.db.*;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -20,6 +25,9 @@ import java.util.function.Supplier;
  * Централизованное управление кэшами для БД объектов
  */
 public class DatabaseCacheManager {
+
+    private static final String CACHE_FILE = "db_cache.json";
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     // ==================== СУЩЕСТВУЮЩИЕ КЭШИ ====================
     private static final Map<String, String> oracleViewDDLCache = new ConcurrentHashMap<>();
@@ -432,7 +440,121 @@ public class DatabaseCacheManager {
         postgresCountCache.clear();
         brokerExecProcCache.clear();
         cacheTimestamps.clear();
+        OracleDataCache.getInstance().clearAll();
+        PostgresDataCache.getInstance().clearAll();
         System.out.println("[КЭШ] Все кэши БД очищены");
     }
+    /**
+     * Сохранить все кэши на диск
+     */
+    public static void saveToDisk(String outputDir) {
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
 
+        try {
+            Path cacheDir = Paths.get(outputDir, "DataCache");
+            if (!Files.exists(cacheDir)) {
+                Files.createDirectories(cacheDir);
+            }
+
+            Path cachePath = cacheDir.resolve(CACHE_FILE);
+
+            Map<String, Object> allCaches = new LinkedHashMap<>();
+            allCaches.put("oracleViewDDL", new HashMap<>(oracleViewDDLCache));
+            allCaches.put("postgresViewDDL", new HashMap<>(postgresViewDDLCache));
+            allCaches.put("oracleTableDDL", new HashMap<>(oracleTableDDLCache));
+            allCaches.put("postgresTableDDL", new HashMap<>(postgresTableDDLCache));
+            allCaches.put("oracleFunctionBody", new HashMap<>(oracleFunctionBodyCache));
+            allCaches.put("postgresFunctionBody", new HashMap<>(postgresFunctionBodyCache));
+            allCaches.put("oracleCount", new HashMap<>(oracleCountCache));
+            allCaches.put("postgresCount", new HashMap<>(postgresCountCache));
+            allCaches.put("brokerExecProc", new HashMap<>(brokerExecProcCache));
+            allCaches.put("viewDependencies", new HashMap<>(viewDependenciesCache));
+
+            String json = gson.toJson(allCaches);
+            Files.writeString(cachePath, json, StandardCharsets.UTF_8);
+
+            System.out.println("[DatabaseCacheManager] Кэш сохранён на диск: " + cachePath);
+
+        } catch (IOException e) {
+            System.err.println("[DatabaseCacheManager] Ошибка сохранения кэша: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Загрузить кэш с диска
+     */
+    @SuppressWarnings("unchecked")
+    public static void loadFromDisk(String outputDir) {
+        if (outputDir == null || outputDir.isEmpty()) {
+            outputDir = "SQL_info";
+        }
+
+        Path cachePath = Paths.get(outputDir, "DataCache", CACHE_FILE);
+
+        if (!Files.exists(cachePath)) {
+            System.out.println("[DatabaseCacheManager] Файл кэша не найден: " + cachePath);
+            return;
+        }
+
+        try {
+            String json = Files.readString(cachePath, StandardCharsets.UTF_8);
+            Map<String, Object> loaded = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+
+            if (loaded == null) return;
+
+            // Восстанавливаем кэши (с проверкой типов)
+            if (loaded.containsKey("oracleViewDDL")) {
+                oracleViewDDLCache.putAll((Map<String, String>) loaded.get("oracleViewDDL"));
+            }
+            if (loaded.containsKey("postgresViewDDL")) {
+                postgresViewDDLCache.putAll((Map<String, String>) loaded.get("postgresViewDDL"));
+            }
+            if (loaded.containsKey("oracleTableDDL")) {
+                oracleTableDDLCache.putAll((Map<String, String>) loaded.get("oracleTableDDL"));
+            }
+            if (loaded.containsKey("postgresTableDDL")) {
+                postgresTableDDLCache.putAll((Map<String, String>) loaded.get("postgresTableDDL"));
+            }
+            if (loaded.containsKey("oracleFunctionBody")) {
+                oracleFunctionBodyCache.putAll((Map<String, String>) loaded.get("oracleFunctionBody"));
+            }
+            if (loaded.containsKey("postgresFunctionBody")) {
+                postgresFunctionBodyCache.putAll((Map<String, String>) loaded.get("postgresFunctionBody"));
+            }
+            if (loaded.containsKey("oracleCount")) {
+                oracleCountCache.putAll((Map<String, Long>) loaded.get("oracleCount"));
+            }
+            if (loaded.containsKey("postgresCount")) {
+                postgresCountCache.putAll((Map<String, Long>) loaded.get("postgresCount"));
+            }
+            if (loaded.containsKey("brokerExecProc")) {
+                brokerExecProcCache.putAll((Map<String, String>) loaded.get("brokerExecProc"));
+            }
+            if (loaded.containsKey("oracleReports")) {
+                oracleReportsCache.putAll((Map<String, List<DbReportInfo>>) loaded.get("oracleReports"));
+            }
+            if (loaded.containsKey("oracleCompositeReports")) {
+                oracleCompositeReportsCache.putAll((Map<String, List<DbReportInfo>>) loaded.get("oracleCompositeReports"));
+            }
+            if (loaded.containsKey("postgresReports")) {
+                postgresReportsCache.putAll((Map<String, List<DbReportInfo>>) loaded.get("postgresReports"));
+            }
+            if (loaded.containsKey("postgresCompositeReports")) {
+                postgresCompositeReportsCache.putAll((Map<String, List<DbReportInfo>>) loaded.get("postgresCompositeReports"));
+            }
+            if (loaded.containsKey("viewDependencies")) {
+                viewDependenciesCache.putAll((Map<String, ViewTableDependencies>) loaded.get("viewDependencies"));
+            }
+
+            System.out.println("[DatabaseCacheManager] Кэш загружен с диска: " + cachePath);
+            printStats();
+
+        } catch (IOException e) {
+            System.err.println("[DatabaseCacheManager] Ошибка загрузки кэша: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("[DatabaseCacheManager] Ошибка восстановления кэша: " + e.getMessage());
+        }
+    }
 }

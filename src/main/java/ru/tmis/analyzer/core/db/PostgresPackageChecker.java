@@ -1,6 +1,7 @@
+// core/db/PostgresPackageChecker.java
 package ru.tmis.analyzer.core.db;
 
-import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.PostgresDataCache;
 
 import java.sql.*;
 import java.util.*;
@@ -12,13 +13,13 @@ public class PostgresPackageChecker {
     private final String user;
     private final String password;
     private Consumer<String> logCallback;
-
-    private static final Map<String, FunctionInfo> cache = new LinkedHashMap<>();
+    private final PostgresDataCache dataCache;
 
     public PostgresPackageChecker(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
+        this.dataCache = PostgresDataCache.getInstance();
     }
 
     public void setLogCallback(Consumer<String> callback) {
@@ -73,7 +74,7 @@ public class PostgresPackageChecker {
             String trimmed = p.trim();
             trimmed = trimmed.replaceAll("(?i)\\s+DEFAULT\\s+.*$", "");
             trimmed = trimmed.replaceAll("(?i)^\\s*(INOUT|IN|OUT)\\s+", "");
-            trimmed = trimmed.replaceAll("^[a-z_][a-z0-9_]*\\s+", ""); // remove param name
+            trimmed = trimmed.replaceAll("^[a-z_][a-z0-9_]*\\s+", "");
             String norm = normalizeType(trimmed);
             if (!norm.isEmpty()) clean.add(norm);
         }
@@ -96,15 +97,37 @@ public class PostgresPackageChecker {
         return t.replaceAll("^[a-z_][a-z0-9_]*\\s+", "");
     }
 
-
-
+    /**
+     * Проверка одной функции (с использованием кэша)
+     */
     public FunctionInfo checkFunction(String functionName) {
-        return DatabaseCacheManager.getPostgresFunctionCheck(functionName, () -> {
+        return dataCache.getFunctionInfo(functionName, () -> {
+            log("  Реальный запрос к БД для функции: " + functionName);
             return doCheckFunction(functionName);
         });
     }
 
+    /**
+     * Проверка нескольких функций (пакетная загрузка с использованием кэша)
+     */
+    public Map<String, FunctionInfo> checkFunctions(Set<String> functionNames) {
+        if (functionNames == null || functionNames.isEmpty()) {
+            return Collections.emptyMap();
+        }
 
+        return dataCache.getFunctionsInfo(functionNames, (missing) -> {
+            log("  Реальный запрос к БД для " + missing.size() + " функций...");
+            Map<String, FunctionInfo> result = new LinkedHashMap<>();
+            for (String name : missing) {
+                result.put(name, doCheckFunction(name));
+            }
+            return result;
+        });
+    }
+
+    /**
+     * Реальная проверка функции (соединение с БД)
+     */
     private FunctionInfo doCheckFunction(String functionName) {
         String cleanName = functionName.toLowerCase();
         try (Connection conn = getConnection()) {
@@ -190,21 +213,7 @@ public class PostgresPackageChecker {
         }
     }
 
-    public Map<String, FunctionInfo> checkFunctions(Set<String> functionNames) {
-        Map<String, FunctionInfo> result = new LinkedHashMap<>();
-        log("Проверка пакетов/функций в PostgreSQL (" + functionNames.size() + " шт.)...");
-        int i = 0;
-        for (String name : functionNames) {
-            i++;
-            log("  [" + i + "/" + functionNames.size() + "] " + name);
-            FunctionInfo info = checkFunction(name);
-            result.put(name, info);
-            log("    " + info.getStatus());
-            for (String err : info.getErrors()) log("      ОШИБКА: " + err);
-            for (String warn : info.getWarnings()) log("      ПРЕДУПРЕЖДЕНИЕ: " + warn);
-        }
-        return result;
+    public static void clearCache() {
+        PostgresDataCache.getInstance().clearAll();
     }
-
-    public static void clearCache() { cache.clear(); }
 }

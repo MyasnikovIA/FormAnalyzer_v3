@@ -1,0 +1,12 @@
+{
+  "oracleViewDDL": {},
+  "postgresViewDDL": {},
+  "oracleTableDDL": {},
+  "postgresTableDDL": {},
+  "oracleFunctionBody": {},
+  "postgresFunctionBody": {},
+  "oracleCount": {},
+  "postgresCount": {},
+  "brokerExecProc": {},
+  "viewDependencies": {}
+}

@@ -10,6 +10,7 @@ import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
+import ru.tmis.analyzer.core.report.FormCSVWriter;
 import ru.tmis.analyzer.core.report.JSONReportGenerator;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.utils.CommentRemover;
@@ -66,6 +67,8 @@ public class FormAnalyzerService {
     private BooleanSupplier pausedCondition = () -> false;
     private final Object pauseLock = new Object();
 
+    private FormCSVWriter formCSVWriter;
+
     public interface ProgressCallback {
         void onProgress(int processed, int total, String currentForm);
     }
@@ -77,6 +80,7 @@ public class FormAnalyzerService {
         this.userFormsResolver = new UserFormsResolver(scannerService);
         this.extractorManager = new ExtractorManager(settings);
         this.useMemoryCache = config != null && config.isUseMemoryCache();
+        this.formCSVWriter = new FormCSVWriter(settings.getOutputDir());
 
         // Инициализация генераторов
         this.csvGenerator = new CSVReportGenerator(settings.getOutputDir());
@@ -88,6 +92,7 @@ public class FormAnalyzerService {
         if (!useMemoryCache) {
             startReportWriter();
         }
+        this.formCSVWriter = new FormCSVWriter(settings.getOutputDir());
     }
 
     private void startReportWriter() {
@@ -248,16 +253,29 @@ public class FormAnalyzerService {
     /**
      * Сохранение отчёта с учётом режима работы (RAM или DISK)
      */
+    // core/service/FormAnalyzerService.java
+
     private void saveReport(FormInfo formInfo) {
         if (useMemoryCache) {
             // ========== РЕЖИМ RAM: всё в буфер ==========
+
+            // 1. TXT в буфер
             String txtContent = generateTxtContent(formInfo);
             InMemoryReportBuffer.addTxtReport(formInfo.getFormPath(), txtContent);
 
-            // CSV в буфер
-            csvGenerator.appendFormToCSVBatch(formInfo);
+            // 2. CSV формы в буфер (НЕ на диск!)
+            String csvContent = formCSVWriter.generateCsvContent(formInfo);
+            InMemoryReportBuffer.addFormCsv(formInfo.getFormPath(), csvContent);
 
-            // JSON в буфер
+            // 3. Также добавляем строки в общий CSV буфер
+            String[] lines = csvContent.split("\n");
+            for (int i = 1; i < lines.length; i++) {
+                if (lines[i] != null && !lines[i].trim().isEmpty()) {
+                    InMemoryReportBuffer.addCsvLine(lines[i]);
+                }
+            }
+
+            // 4. JSON в буфер
             if (config != null && config.isEnableJSONExport()) {
                 try {
                     jsonGenerator.appendFormToJSON(formInfo);
@@ -266,15 +284,25 @@ public class FormAnalyzerService {
                 }
             }
 
-            // MD в буфер
+            // 5. MD в буфер
             if (config != null && config.isEnableLLMExport()) {
                 String mdContent = generateMdContent(formInfo);
                 InMemoryReportBuffer.addMdPrompt(formInfo.getFormPath(), mdContent);
             }
+
         } else {
-            // ========== РЕЖИМ DISK: асинхронная запись ==========
+            // ========== РЕЖИМ DISK: сразу на диск ==========
+
+            // 1. CSV формы сразу на диск
+            formCSVWriter.saveFormCSV(formInfo);
+
+            // 2. TXT отчёт
             queueFormForReport(formInfo);
+
+            // 3. CSV строки в буфер для итогового файла
             csvGenerator.appendFormToCSVBatch(formInfo);
+
+            // 4. JSON
             if (config != null && config.isEnableJSONExport()) {
                 try {
                     jsonGenerator.appendFormToJSON(formInfo);
@@ -390,6 +418,11 @@ public class FormAnalyzerService {
         // ========== СОХРАНЯЕМ ОТЧЁТ ==========
         saveReport(formInfo);
         // ====================================
+
+        if (formInfo != null && !useMemoryCache) {
+            formCSVWriter.saveFormCSV(formInfo);
+            System.out.println("  CSV сохранён для формы: " + formPath);
+        }
 
         return formInfo;
     }

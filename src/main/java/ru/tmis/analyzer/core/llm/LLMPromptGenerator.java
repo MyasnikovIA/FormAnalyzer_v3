@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.llm;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.cache.OracleDataCache;
 import ru.tmis.analyzer.core.db.DatabaseConnector;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
@@ -403,7 +404,8 @@ public class LLMPromptGenerator {
 
 
     private String findExecProc(String unit, String action) {
-        return DatabaseCacheManager.getBrokerExecProc(unit, action, () -> {
+        // Используем кэш OracleDataCache
+        return OracleDataCache.getInstance().getBrokerExecProc(unit, action, () -> {
             String sql = "SELECT execproc FROM D_UNITBPS WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
             try (Connection conn = DatabaseConnector.getOracleConnection(
                     settings.getOracleUrl(),

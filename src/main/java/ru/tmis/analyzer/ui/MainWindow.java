@@ -2,15 +2,13 @@ package ru.tmis.analyzer.ui;
 
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
-import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
-import ru.tmis.analyzer.core.cache.FormCache;
-import ru.tmis.analyzer.core.cache.FormCacheManager;
-import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
+import ru.tmis.analyzer.core.cache.*;
 import ru.tmis.analyzer.core.db.DatabaseAvailabilityService;
 import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
+import ru.tmis.analyzer.core.report.FormCSVWriter;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.core.service.FileScannerService;
 import ru.tmis.analyzer.core.service.FormAnalyzerService;
@@ -92,6 +90,9 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+                OracleDataCache.getInstance().printStats();
+                PostgresDataCache.getInstance().printStats();
+                DatabaseCacheManager.saveToDisk(settings.getOutputDir());
                 saveState();
             }
         });
@@ -100,6 +101,9 @@ public class MainWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+                OracleDataCache.getInstance().printStats();
+                PostgresDataCache.getInstance().printStats();
+                DatabaseCacheManager.saveToDisk(settings.getOutputDir());
                 restoreSystemOut();
                 saveState();
             }
@@ -107,6 +111,13 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
+        OracleDataCache.getInstance().init(settings.getOutputDir());
+        OracleDataCache.getInstance().printStats();
+        PostgresDataCache.getInstance().init(settings.getOutputDir());
+        PostgresDataCache.getInstance().printStats();
+        DatabaseCacheManager.loadFromDisk(settings.getOutputDir());
+
+
         setTitle("TMIS Form Analyzer v2.0.16 (от 22-05-2026) server");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
@@ -280,6 +291,11 @@ public class MainWindow extends JFrame {
 
         parallelBuilder.setOnComplete(() -> {
             SwingUtilities.invokeLater(() -> {
+                appendLog("Объединение CSV-файлов...");
+                FormCSVWriter csvWriter = new FormCSVWriter(settings.getOutputDir());
+                int lines = csvWriter.mergeAllToMainCSV();
+                appendLog("Объединено " + lines + " строк в forms_export.csv");
+
                 if (progressTimer != null) {
                     progressTimer.stop();
                 }
@@ -484,11 +500,12 @@ public class MainWindow extends JFrame {
 
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
-        // Убираем лишний statusLabel, так как информация уже в progressBar
-        // statusLabel = new JLabel("Готов к работе");
-        // statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Индикатор паузы (оставляем)
+        // Создаём statusLabel (ЭТА СТРОЧКА ОБЯЗАТЕЛЬНА)
+        statusLabel = new JLabel("Готов к работе");
+        statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Индикатор паузы
         JLabel pauseIndicator = new JLabel();
         pauseIndicator.setFont(new Font("Monospaced", Font.BOLD, 12));
 
@@ -504,13 +521,13 @@ public class MainWindow extends JFrame {
 
         panel.add(progressBar, BorderLayout.CENTER);
 
-        // Упрощённая нижняя панель (без дублирования)
+        // Нижняя панель со статусом
         JPanel southPanel = new JPanel(new BorderLayout());
-        // statusLabel убран, так как информация дублируется
+        southPanel.add(statusLabel, BorderLayout.CENTER);
         southPanel.add(pauseIndicator, BorderLayout.EAST);
         panel.add(southPanel, BorderLayout.SOUTH);
 
-        // Индикатор памяти (оставляем)
+        // Индикатор памяти
         JLabel memoryLabel = new JLabel();
         memoryLabel.setFont(new Font("Monospaced", Font.PLAIN, 10));
         memoryLabel.setForeground(Color.GRAY);
@@ -1059,17 +1076,52 @@ public class MainWindow extends JFrame {
         paused.set(false);
         pauseButton.setEnabled(false);
         pauseButton.setText("⏸ Пауза");
-        // Останавливаем таймер прогресса
+
         if (progressTimer != null && progressTimer.isRunning()) {
             progressTimer.stop();
         }
+
+        // ========== СОХРАНЕНИЕ КЭША И РЕЗУЛЬТАТОВ ПРИ ОСТАНОВКЕ ==========
+        boolean useMemoryCache = config != null && config.isUseMemoryCache();
+
+        if (useMemoryCache) {
+            appendLog("=== СОХРАНЕНИЕ КЭША И РЕЗУЛЬТАТОВ ПРИ ОСТАНОВКЕ ===");
+
+            // 1. Сохраняем буфер отчётов из RAM на диск
+            appendLog("  Сохранение буфера отчётов на диск...");
+            InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
+
+            // 2. Сохраняем кэш Oracle
+            appendLog("  Сохранение кэша Oracle...");
+            ru.tmis.analyzer.core.cache.OracleDataCache.getInstance().saveReportsCacheToDiskSync();
+
+            // 3. Сохраняем кэш PostgreSQL
+            appendLog("  Сохранение кэша PostgreSQL...");
+            ru.tmis.analyzer.core.cache.PostgresDataCache.getInstance().saveReportsCacheToDiskSync();
+
+            // 4. Сохраняем общий кэш БД
+            appendLog("  Сохранение общего кэша БД...");
+            ru.tmis.analyzer.core.cache.DatabaseCacheManager.saveToDisk(settings.getOutputDir());
+
+            appendLog("=== СОХРАНЕНИЕ ЗАВЕРШЕНО ===");
+        }
+
+        // ВСЕГДА объединяем CSV (для обоих режимов)
+        appendLog("Объединение CSV-файлов при остановке...");
+        try {
+            ru.tmis.analyzer.core.report.FormCSVWriter csvWriter = new ru.tmis.analyzer.core.report.FormCSVWriter(settings.getOutputDir());
+            csvWriter.mergeAllToMainCSV(true);
+            appendLog("CSV объединён.");
+        } catch (Exception e) {
+            appendLog("Ошибка объединения CSV: " + e.getMessage());
+        }
+        // =================================================================
 
         // Сначала проверяем параллельный рекурсивный анализатор
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
             parallelBuilder.forceStop();
             appendLog("Остановка параллельного рекурсивного анализа...");
 
-            // Сбрасываем флаги MainWindow
             isRunning.set(false);
             stopRequested = true;
 
@@ -1077,10 +1129,14 @@ public class MainWindow extends JFrame {
                 startButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 settingsButton.setEnabled(true);
-                progressBar.setIndeterminate(false);
-                progressBar.setValue(0);
-                progressBar.setString("Анализ остановлен");
-                statusLabel.setText("Статус: Анализ остановлен");
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setValue(0);
+                    progressBar.setString("Анализ остановлен");
+                }
+                if (statusLabel != null) {
+                    statusLabel.setText("Статус: Анализ остановлен");
+                }
             });
             return;
         }
@@ -1090,30 +1146,30 @@ public class MainWindow extends JFrame {
             appendLog("Запрос на остановку анализа...");
             stopRequested = true;
 
-            // Останавливаем текущую задачу
             if (currentTask != null && !currentTask.isDone()) {
                 currentTask.cancel(true);
             }
 
-            // Останавливаем executorService
             if (executorService != null && !executorService.isShutdown()) {
                 executorService.shutdownNow();
             }
 
-            // Создаём новый executorService для следующих запусков
             executorService = Executors.newSingleThreadExecutor();
 
-            // Сбрасываем флаги
             isRunning.set(false);
 
             SwingUtilities.invokeLater(() -> {
                 startButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 settingsButton.setEnabled(true);
-                progressBar.setIndeterminate(false);
-                progressBar.setValue(0);
-                progressBar.setString("Анализ остановлен");
-                statusLabel.setText("Статус: Анализ остановлен");
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setValue(0);
+                    progressBar.setString("Анализ остановлен");
+                }
+                if (statusLabel != null) {
+                    statusLabel.setText("Статус: Анализ остановлен");
+                }
             });
             return;
         }
@@ -1127,9 +1183,13 @@ public class MainWindow extends JFrame {
                 startButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 settingsButton.setEnabled(true);
-                progressBar.setIndeterminate(false);
-                progressBar.setValue(0);
-                statusLabel.setText("Статус: Анализ остановлен");
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setValue(0);
+                }
+                if (statusLabel != null) {
+                    statusLabel.setText("Статус: Анализ остановлен");
+                }
             });
             return;
         }
@@ -1651,38 +1711,85 @@ public class MainWindow extends JFrame {
         }
         // =============================================
 
-        // ========== ЗАГРУЗКА ФОРМ В ПАМЯТЬ ==========
+        boolean useMemoryCache = config != null && config.isUseMemoryCache();
+
+        // ========== ЗАГРУЗКА ФОРМ (В ЗАВИСИМОСТИ ОТ РЕЖИМА) ==========
         String projectPath = settings.getProjectPath();
-        if (formCacheManager.needsLoading(projectPath)) {
-            appendLog("Загрузка форм в оперативную память...");
-            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
-            if (loaded == 0) {
-                appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
+
+        if (useMemoryCache) {
+            // Режим RAM - загружаем в память
+            if (formCacheManager.needsLoading(projectPath)) {
+                appendLog("Загрузка форм в оперативную память...");
+                int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+                if (loaded == 0) {
+                    appendLog("ОШИБКА: Не удалось загрузить формы. Проверьте путь к проекту.");
+                    JOptionPane.showMessageDialog(this,
+                            "Не удалось загрузить формы.\nПроверьте путь к проекту в настройках.",
+                            "Ошибка загрузки",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                appendLog("Загружено " + loaded + " форм в оперативную память");
+            } else {
+                appendLog("Используем формы из кэша (" + formCacheManager.getCachedFormsCount() + " шт.)");
+            }
+        } else {
+            // Режим DISK - проверяем, что путь существует
+            appendLog("Режим работы: прямое чтение с диска");
+            if (projectPath == null || projectPath.trim().isEmpty()) {
+                appendLog("ОШИБКА: Путь к проекту не указан!");
                 JOptionPane.showMessageDialog(this,
-                        "Не удалось загрузить формы.\nПроверьте путь к проекту в настройках.",
-                        "Ошибка загрузки",
+                        "Путь к проекту не указан.\nУкажите путь в настройках.",
+                        "Ошибка",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            appendLog("Загружено " + loaded + " форм в оперативную память");
-        } else {
-            appendLog("Используем формы из кэша (" + formCacheManager.getCachedFormsCount() + " шт.)");
+
+            Path projectDir = Paths.get(projectPath);
+            if (!Files.exists(projectDir)) {
+                appendLog("ОШИБКА: Путь к проекту не существует: " + projectPath);
+                JOptionPane.showMessageDialog(this,
+                        "Путь к проекту не существует:\n" + projectPath,
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Path formsDir = projectDir.resolve("Forms");
+            if (!Files.exists(formsDir)) {
+                appendLog("ОШИБКА: Директория Forms не найдена: " + formsDir);
+                JOptionPane.showMessageDialog(this,
+                        "Директория Forms не найдена в проекте:\n" + formsDir,
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            appendLog("Путь к проекту существует, формы будут читаться с диска.");
         }
+        // =============================================================
 
         // Проверяем, не запущен ли уже анализ
         if (parallelBuilder != null && parallelBuilder.isRunning()) {
 
             parallelBuilder.setOnProgress((processed, total, percent, active, remaining) -> {
                 SwingUtilities.invokeLater(() -> {
-                    if (total > 0) {
-                        progressBar.setValue(percent);
-                        progressBar.setString(String.format("%d%% | %d/%d форм | Активных потоков: %d | Осталось: %d",
-                                percent, processed, total, active, remaining));
-                        statusLabel.setText(String.format("Статус: %d/%d (%d%%) - %d потоков",
-                                processed, total, percent, active));
-                    } else {
-                        progressBar.setString(String.format("Обработано: %d | Активных потоков: %d", processed, active));
-                        statusLabel.setText(String.format("Статус: %d форм обработано, %d потоков активно", processed, active));
+                    if (progressBar != null) {
+                        if (total > 0) {
+                            progressBar.setValue(percent);
+                            progressBar.setString(String.format("%d%% | %d/%d форм | Активных потоков: %d | Осталось: %d",
+                                    percent, processed, total, active, remaining));
+                        } else {
+                            progressBar.setString(String.format("Обработано: %d | Активных потоков: %d", processed, active));
+                        }
+                    }
+                    if (statusLabel != null) {
+                        if (total > 0) {
+                            statusLabel.setText(String.format("Статус: %d/%d (%d%%) - %d потоков",
+                                    processed, total, percent, active));
+                        } else {
+                            statusLabel.setText(String.format("Статус: %d форм обработано, %d потоков активно", processed, active));
+                        }
                     }
                 });
             });
@@ -1708,24 +1815,75 @@ public class MainWindow extends JFrame {
         stopRequested = false;
         isRunning.set(false);
 
+        // ========== ЗАГРУЗКА СУЩЕСТВУЮЩИХ CSV В БУФЕР (ДЛЯ РЕЖИМА RAM) ==========
+        if (useMemoryCache) {
+            appendLog("Загрузка существующих CSV в буфер...");
+            InMemoryReportBuffer.loadFormCsvsFromDisk(settings.getOutputDir());
+            appendLog("Загружено CSV форм в буфер: " + InMemoryReportBuffer.getFormCsvBufferSize());
+        }
+        // =========================================================================
+
+        // ========== ПРОВЕРКА УЖЕ ОБРАБОТАННЫХ ФОРМ ==========
+        Set<String> allProcessed = new HashSet<>();
+
+        // 1. Проверяем CSV-файлы форм (на диске)
+        try {
+            ru.tmis.analyzer.core.report.FormCSVWriter csvWriter = new ru.tmis.analyzer.core.report.FormCSVWriter(settings.getOutputDir());
+            Set<String> processedByCsv = csvWriter.getProcessedForms();
+            allProcessed.addAll(processedByCsv);
+            appendLog("Обработано форм (по CSV-файлам на диске): " + processedByCsv.size());
+        } catch (Exception e) {
+            appendLog("Ошибка чтения CSV-файлов: " + e.getMessage());
+        }
+
+        // 2. Дополнительно проверяем TXT отчёты (для обратной совместимости)
+        Path formsDir = Paths.get(settings.getOutputDir(), "Forms");
+        if (Files.exists(formsDir)) {
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(formsDir, "*.txt")) {
+                for (Path entry : stream) {
+                    String fileName = entry.getFileName().toString();
+                    String formName = fileName.replace(".txt", "").replace("#", "/");
+                    if (!formName.endsWith(".frm") && !formName.endsWith(".dfrm")) {
+                        formName = formName + ".frm";
+                    }
+                    if (!formName.startsWith("Forms/") && !formName.startsWith("UserForms")) {
+                        formName = "Forms/" + formName;
+                    }
+                    allProcessed.add(formName);
+                }
+            } catch (IOException e) {
+                appendLog("Ошибка сканирования TXT отчётов: " + e.getMessage());
+            }
+        }
+
+        appendLog("Всего уже обработано форм (по диску): " + allProcessed.size());
+        // ====================================================
 
         int threads = (config != null) ? config.getParallelThreads() : Runtime.getRuntime().availableProcessors();
         appendLog("ПАРАЛЛЕЛЬНОЕ СКАНИРОВАНИЕ ВСЕГО ПРОЕКТА\n");
         appendLog("Будут обработаны ТОЛЬКО формы, для которых ещё нет отчётов.");
-        appendLog("Количество потоков: " + threads + "");
+        appendLog("Количество потоков: " + threads);
         appendLog("Доступно ядер: " + Runtime.getRuntime().availableProcessors() + "\n");
         appendLog("Это может занять продолжительное время.");
         appendLog("Начинаем параллельное сканирование всего проекта...");
-        appendLog("Количество потоков: " + threads);
+
+        // Передаём список уже обработанных форм в parallelBuilder
+        parallelBuilder.setSkipProcessedForms(allProcessed);
         parallelBuilder.setFullProjectScan(true);
 
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
         settingsButton.setEnabled(false);
-        progressBar.setValue(0);
-        progressBar.setIndeterminate(false);
-        progressBar.setString("0 форм обработано");
-        statusLabel.setText("Статус: Параллельное сканирование проекта...");
+
+        if (progressBar != null) {
+            progressBar.setValue(0);
+            progressBar.setIndeterminate(false);
+            progressBar.setString("0 форм обработано");
+        }
+
+        if (statusLabel != null) {
+            statusLabel.setText("Статус: Параллельное сканирование проекта...");
+        }
 
         scanStartTime = System.currentTimeMillis();
 
@@ -1736,10 +1894,59 @@ public class MainWindow extends JFrame {
         progressTimer = new Timer(1000, e -> updateScanProgress());
         progressTimer.start();
 
+        // Запускаем анализ
         parallelBuilder.startRecursiveBuild(null);
-    }
 
-    // MainWindow.java
+        // ========== СОХРАНЯЕМ КЭШ И ОБЪЕДИНЯЕМ CSV ПОСЛЕ ЗАВЕРШЕНИЯ АНАЛИЗА ==========
+        parallelBuilder.setOnComplete(() -> {
+            SwingUtilities.invokeLater(() -> {
+                appendLog("=== ЗАВЕРШЕНИЕ АНАЛИЗА ===");
+
+                // 1. Сохраняем буферы на диск (для режима RAM)
+                if (useMemoryCache) {
+                    appendLog("Сохранение буферов на диск...");
+                    InMemoryReportBuffer.flushToDisk(settings.getOutputDir());
+                }
+
+                // 2. Сохраняем кэш на диск
+                appendLog("Сохранение кэша БД на диск...");
+                ru.tmis.analyzer.core.cache.DatabaseCacheManager.saveToDisk(settings.getOutputDir());
+
+                // 3. Объединяем CSV-файлы (для обоих режимов)
+                appendLog("Объединение CSV-файлов...");
+                try {
+                    ru.tmis.analyzer.core.report.FormCSVWriter csvWriter = new ru.tmis.analyzer.core.report.FormCSVWriter(settings.getOutputDir());
+                    int lines = csvWriter.mergeAllToMainCSV();
+                    appendLog("Объединено " + lines + " строк в forms_export.csv");
+                } catch (Exception e) {
+                    appendLog("Ошибка объединения CSV: " + e.getMessage());
+                }
+
+                // 4. Обновляем дерево
+                formsTreePanel.refreshAllChildFormsWithCleanup();
+                formsTreePanel.refreshTreeWithState();
+
+                appendLog("Параллельное сканирование завершено!");
+                if (statusLabel != null) {
+                    statusLabel.setText("Статус: Готов");
+                }
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setValue(100);
+                    progressBar.setString("Готово");
+                }
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                settingsButton.setEnabled(true);
+                pauseButton.setEnabled(false);
+
+                if (progressTimer != null) {
+                    progressTimer.stop();
+                }
+            });
+        });
+        // ========================================================================
+    }
 
     private void updateScanProgress() {
         if (!parallelBuilder.isRunning()) {
@@ -1932,45 +2139,89 @@ public class MainWindow extends JFrame {
     /**
      * Гарантированная предзагрузка форм в память (если включен режим)
      */
+    /**
+     * Гарантированная предзагрузка форм в память (если включен режим)
+     */
     private void ensureFormsPreloaded() {
         if (!config.isUseMemoryCache()) {
             appendLog("Режим оперативной памяти ВЫКЛЮЧЕН. Формы читаются с диска.");
+
+            // Проверяем, что путь к проекту существует и там есть файлы форм
+            String projectPath = settings.getProjectPath();
+            if (projectPath == null || projectPath.trim().isEmpty()) {
+                appendLog("ОШИБКА: Путь к проекту не указан!");
+                JOptionPane.showMessageDialog(this,
+                        "Путь к проекту не указан.\nУкажите путь в настройках.",
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Path projectDir = Paths.get(projectPath);
+            if (!Files.exists(projectDir)) {
+                appendLog("ОШИБКА: Путь к проекту не существует: " + projectPath);
+                JOptionPane.showMessageDialog(this,
+                        "Путь к проекту не существует:\n" + projectPath,
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Проверяем наличие хотя бы одной формы
+            Path formsDir = projectDir.resolve("Forms");
+            if (!Files.exists(formsDir)) {
+                appendLog("ОШИБКА: Директория Forms не найдена: " + formsDir);
+                JOptionPane.showMessageDialog(this,
+                        "Директория Forms не найдена в проекте:\n" + formsDir,
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            appendLog("Путь к проекту существует, формы будут читаться с диска.");
             return;
         }
 
+        // Режим RAM - загружаем в память
         String projectPath = settings.getProjectPath();
         if (projectPath == null || projectPath.trim().isEmpty()) {
             appendLog("ОШИБКА: Путь к проекту не указан!");
             return;
         }
 
-        // ========== ИСПРАВЛЕНИЕ: проверяем реальное состояние кэша ==========
-        if (FormCache.getCachedFormsCount() > 0) {
-            appendLog("Формы уже в памяти (" + FormCache.getCachedFormsCount() + " шт.)");
-            return;
-        }
-        // ===================================================================
+        // Проверяем, нужно ли загружать формы
+        if (formCacheManager.needsLoading(projectPath)) {
+            appendLog("");
+            appendLog("=== ПРЕДЗАГРУЗКА ФОРМ В ОПЕРАТИВНУЮ ПАМЯТЬ ===");
 
-        appendLog("");
-        appendLog("=== ПРЕДЗАГРУЗКА ФОРМ В ОПЕРАТИВНУЮ ПАМЯТЬ ===");
+            if (progressBar != null) {
+                progressBar.setIndeterminate(true);
+            }
+            if (statusLabel != null) {
+                statusLabel.setText("Статус: Загрузка форм в память...");
+            }
 
-        progressBar.setIndeterminate(true);
-        statusLabel.setText("Статус: Загрузка форм в память...");
+            int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
 
-        int loaded = formCacheManager.loadAllForms(projectPath, this::appendLog);
+            if (progressBar != null) {
+                progressBar.setIndeterminate(false);
+            }
+            if (statusLabel != null) {
+                statusLabel.setText("Статус: Готов к анализу");
+            }
 
-        progressBar.setIndeterminate(false);
-        statusLabel.setText("Статус: Готов к анализу");
-
-        if (loaded == 0) {
-            appendLog("ПРЕДУПРЕЖДЕНИЕ: Не удалось загрузить формы в память!");
-            appendLog("Проверьте путь к проекту: " + projectPath);
-            appendLog("Будет использован режим прямого чтения с диска.");
-            config.setUseMemoryCache(false);
+            if (loaded == 0) {
+                appendLog("ПРЕДУПРЕЖДЕНИЕ: Не удалось загрузить формы в память!");
+                appendLog("Проверьте путь к проекту: " + projectPath);
+                appendLog("Будет использован режим прямого чтения с диска.");
+                config.setUseMemoryCache(false);
+            } else {
+                appendLog("✓ Формы успешно загружены в оперативную память");
+                long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
+                appendLog("  Использовано RAM: ~" + memoryMB + " МБ");
+            }
         } else {
-            appendLog("✓ Формы успешно загружены в оперативную память");
-            long memoryMB = FormCache.getMemoryUsageBytes() / (1024 * 1024);
-            appendLog("  Использовано RAM: ~" + memoryMB + " МБ");
+            appendLog("Формы уже в памяти (" + FormCache.getCachedFormsCount() + " шт.)");
         }
     }
 
@@ -2013,4 +2264,23 @@ public class MainWindow extends JFrame {
         DatabaseConnectionManager.stopConnectionMonitor();
     }
 
+    /**
+     * Сохранить список форм в файл
+     */
+    private void saveFormsListToFile() {
+        List<String> forms = formsTreePanel.getFormsList();
+        if (forms == null || forms.isEmpty()) return;
+
+        try {
+            Path formsFile = Paths.get(settings.getOutputDir(), "forms_list_saved.txt");
+            StringBuilder sb = new StringBuilder();
+            for (String form : forms) {
+                sb.append(form).append("\n");
+            }
+            Files.writeString(formsFile, sb.toString());
+            appendLog("    Сохранено форм: " + forms.size());
+        } catch (IOException e) {
+            appendLog("    Ошибка сохранения списка форм: " + e.getMessage());
+        }
+    }
 }

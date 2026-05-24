@@ -34,7 +34,7 @@
   "includeBrokerFunctions": true,
   "skipDbOnError": false,
   "llmPanelVisible": true,
-  "parallelThreads": 2,
-  "useMemoryCache": true,
+  "parallelThreads": 1,
+  "useMemoryCache": false,
   "dbConnectionPoolSize": 10
 }

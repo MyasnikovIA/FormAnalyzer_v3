@@ -7,6 +7,7 @@ import ru.tmis.analyzer.core.cache.InMemoryReportBuffer;
 import ru.tmis.analyzer.core.db.DatabaseConnectionManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.report.FormCSVWriter;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
@@ -45,11 +46,15 @@ public class ParallelRecursiveReportBuilder {
     private Consumer<String> onError;
     private Consumer<String> onFormAnalyzed;
     private ProgressCallback onProgress;
+    private Set<String> skipForms = new HashSet<>();
+    private FormCSVWriter formCSVWriter;
+
 
     public ParallelRecursiveReportBuilder(SettingsModel settings, AppConfig config, FormsTreePanel formsTreePanel) {
         this.settings = settings;
         this.config = config;
         this.formsTreePanel = formsTreePanel;
+        this.formCSVWriter = new FormCSVWriter(settings.getOutputDir());  // ← ДОБАВИТЬ
     }
 
     public void setParallelThreads(int threads) {
@@ -146,43 +151,53 @@ public class ParallelRecursiveReportBuilder {
         log("Доступно ядер: " + Runtime.getRuntime().availableProcessors());
 
         // Получаем список всех форм для обработки
+        List<String> formsToProcess;
+
         if (startForms == null || startForms.isEmpty()) {
             // Полное сканирование проекта
             FileScannerService scanner = new FileScannerService(settings.getProjectPath());
             Set<String> allForms = scanner.findAllForms();
             allFormsList = new ArrayList<>(allForms);
 
-            // Фильтруем: оставляем только формы без отчётов
-            allFormsList.removeIf(formPath -> hasReport(formPath));
+            // Фильтруем: оставляем только формы без отчётов И не в списке пропуска
+            allFormsList.removeIf(formPath -> hasReport(formPath) || shouldSkipForm(formPath));
 
-            totalFound.set(allFormsList.size());
+            formsToProcess = allFormsList;
+            totalFound.set(formsToProcess.size());
             log("Всего форм в проекте: " + allForms.size());
             log("Форм без отчётов: " + totalFound.get());
+            if (!skipForms.isEmpty()) {
+                log("Пропущено уже обработанных форм: " + skipForms.size());
+            }
         } else {
             // Рекурсивный анализ выбранных форм
-            allFormsList = new ArrayList<>(startForms);
-            totalFound.set(allFormsList.size());
+            formsToProcess = new ArrayList<>(startForms);
+            formsToProcess.removeIf(formPath -> shouldSkipForm(formPath));
+            totalFound.set(formsToProcess.size());
             log("Выбрано форм для анализа: " + totalFound.get());
+            if (!skipForms.isEmpty()) {
+                log("Из них уже обработано (пропущено): " + (startForms.size() - formsToProcess.size()));
+            }
         }
 
-        if (allFormsList.isEmpty()) {
+        if (formsToProcess.isEmpty()) {
             log("Нет форм для анализа");
             complete();
             return;
         }
 
         // Разделяем формы между потоками
-        int formsPerThread = (int) Math.ceil((double) allFormsList.size() / parallelThreads);
+        int formsPerThread = (int) Math.ceil((double) formsToProcess.size() / parallelThreads);
         executor = Executors.newFixedThreadPool(parallelThreads);
         futures = new ArrayList<>();
 
         for (int threadId = 0; threadId < parallelThreads; threadId++) {
             int startIdx = threadId * formsPerThread;
-            int endIdx = Math.min(startIdx + formsPerThread, allFormsList.size());
+            int endIdx = Math.min(startIdx + formsPerThread, formsToProcess.size());
 
-            if (startIdx >= allFormsList.size()) break;
+            if (startIdx >= formsToProcess.size()) break;
 
-            List<String> threadForms = allFormsList.subList(startIdx, endIdx);
+            List<String> threadForms = formsToProcess.subList(startIdx, endIdx);
 
             log("Поток " + threadId + ": получил " + threadForms.size() + " форм");
 
@@ -309,6 +324,9 @@ public class ParallelRecursiveReportBuilder {
 
     private void saveReport(FormInfo formInfo) {
         try {
+            // ВСЕГДА сохраняем CSV для формы
+            formCSVWriter.saveFormCSV(formInfo);
+
             ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
             reportGen.createMainReportHeader();
             reportGen.appendFormToMainReport(formInfo);
@@ -406,5 +424,22 @@ public class ParallelRecursiveReportBuilder {
 
     public void setOnProgress(ProgressCallback callback) {
         this.onProgress = callback;
+    }
+
+    /**
+     * Установить список форм, которые нужно пропустить (уже обработаны)
+     */
+    public void setSkipProcessedForms(Set<String> processedForms) {
+        if (processedForms != null) {
+            this.skipForms = new HashSet<>(processedForms);
+            log("Будут пропущены уже обработанные формы: " + skipForms.size() + " шт.");
+        }
+    }
+
+    /**
+     * Проверить, нужно ли пропустить форму
+     */
+    private boolean shouldSkipForm(String formPath) {
+        return skipForms.contains(formPath);
     }
 }
