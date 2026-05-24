@@ -13,6 +13,8 @@ import ru.tmis.analyzer.utils.NetworkUtils;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.sql.*;
 
@@ -64,6 +66,9 @@ public class SettingsDialog extends JDialog {
     private JCheckBox enableCSVExportCheckbox;  // CSV Export
     private JCheckBox enableJSONExportCheckbox;
     private JSpinner threadsSpinner;
+
+    private JTextField oracleDdlPathField;
+    private JTextField postgresDdlPathField;
 
     public SettingsDialog(JFrame parent, SettingsModel settings, AppConfig config) {
         super(parent, "Настройки", true);
@@ -140,19 +145,7 @@ public class SettingsDialog extends JDialog {
 
         int row = 0;
 
-        // Project Path
-        gbc.gridx = 0; gbc.gridy = row;
-        panel.add(new JLabel("Путь к проекту:"), gbc);
-        gbc.gridx = 1; gbc.weightx = 1.0;
-        projectPathField = new JTextField();
-        panel.add(projectPathField, gbc);
-        gbc.gridx = 2; gbc.weightx = 0;
-        JButton browseButton = new JButton("Обзор...");
-        browseButton.addActionListener(e -> browseFolder(projectPathField));
-        panel.add(browseButton, gbc);
-        row++;
-
-        // Output Directory
+        // ========== 1. Output Directory ==========
         gbc.gridx = 0; gbc.gridy = row;
         panel.add(new JLabel("Каталог отчетов:"), gbc);
         gbc.gridx = 1;
@@ -162,6 +155,46 @@ public class SettingsDialog extends JDialog {
         JButton browseOutputButton = new JButton("Обзор...");
         browseOutputButton.addActionListener(e -> browseFolder(outputDirField));
         panel.add(browseOutputButton, gbc);
+        row++;
+
+
+        // ========== 2. Project Path ==========
+        gbc.gridx = 0; gbc.gridy = row;
+        panel.add(createLabelWithLink("Путь к проекту:", "https://stash-medmis.bars-open.ru/projects/MED"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        projectPathField = new JTextField();
+        panel.add(projectPathField, gbc);
+        gbc.gridx = 2; gbc.weightx = 0;
+        JButton browseButton = new JButton("Обзор...");
+        browseButton.addActionListener(e -> browseFolder(projectPathField));
+        panel.add(browseButton, gbc);
+        row++;
+
+
+        // ========== 3. Oracle DDL Path (НОВЫЙ) ==========
+        gbc.gridx = 0; gbc.gridy = row;
+        panel.add(createLabelWithLink("Путь к DDL файлам БД OracleSQL:",
+                "https://stash-medmis.bars-open.ru/projects/MED/repos/ddl_store/browse"), gbc);
+        gbc.gridx = 1;
+        oracleDdlPathField = new JTextField();
+        panel.add(oracleDdlPathField, gbc);
+        gbc.gridx = 2;
+        JButton browseOracleDdlButton = new JButton("Обзор...");
+        browseOracleDdlButton.addActionListener(e -> browseFolder(oracleDdlPathField));
+        panel.add(browseOracleDdlButton, gbc);
+        row++;
+
+        // ========== 4. PostgreSQL DDL Path (НОВЫЙ) ==========
+        gbc.gridx = 0; gbc.gridy = row;
+        panel.add(createLabelWithLink("Путь к DDL файлам БД PostgreSQL:",
+                "https://stash-medmis.bars-open.ru/projects/MED/repos/mis_db_pg/browse"), gbc);
+        gbc.gridx = 1;
+        postgresDdlPathField = new JTextField();
+        panel.add(postgresDdlPathField, gbc);
+        gbc.gridx = 2;
+        JButton browsePostgresDdlButton = new JButton("Обзор...");
+        browsePostgresDdlButton.addActionListener(e -> browseFolder(postgresDdlPathField));
+        panel.add(browsePostgresDdlButton, gbc);
         row++;
 
         // Oracle separator
@@ -240,7 +273,6 @@ public class SettingsDialog extends JDialog {
         JLabel hintLabel = new JLabel("(контекст PostgreSQL)");
         hintLabel.setForeground(Color.GRAY);
         panel.add(hintLabel, gbc);
-
 
         JPanel testButtonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton testAllButton = new JButton("Проверить все подключения");
@@ -594,6 +626,8 @@ public class SettingsDialog extends JDialog {
         postgresUserField.setText(settings.getPostgresUser());
         postgresPasswordField.setText(settings.getPostgresPassword());
         misUserField.setText(settings.getMisUser());
+        oracleDdlPathField.setText(settings.getOracleDdlPath());
+        postgresDdlPathField.setText(settings.getPostgresDdlPath());
 
         // Report settings
         if (includeSqlContentCheckbox != null) {
@@ -675,6 +709,8 @@ public class SettingsDialog extends JDialog {
         settings.setPostgresUser(postgresUserField.getText());
         settings.setPostgresPassword(new String(postgresPasswordField.getPassword()));
         settings.setMisUser(misUserField.getText());
+        settings.setOracleDdlPath(oracleDdlPathField.getText());
+        settings.setPostgresDdlPath(postgresDdlPathField.getText());
 
         if (useMemoryCacheCheckbox != null) {
             config.setUseMemoryCache(useMemoryCacheCheckbox.isSelected());
@@ -1085,4 +1121,32 @@ public class SettingsDialog extends JDialog {
         return message;
     }
 
+    /**
+     * Создаёт панель с JLabel (текст + иконка), при клике на которую открывается браузер
+     * @param text текст метки
+     * @param url URL для открытия
+     * @return панель с меткой и иконкой
+     */
+    private JPanel createLabelWithLink(String text, String url) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+        JLabel label = new JLabel(text);
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        label.setForeground(new Color(0, 100, 200));
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new java.net.URI(url));
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(SettingsDialog.this,
+                            "Не удалось открыть браузер: " + ex.getMessage(),
+                            "Ошибка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        panel.add(label);
+        return panel;
+    }
 }

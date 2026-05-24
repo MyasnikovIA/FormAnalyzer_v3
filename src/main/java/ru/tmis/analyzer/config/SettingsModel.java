@@ -25,6 +25,10 @@ public class SettingsModel {
     private boolean checkPostgresPK = false;
     private boolean checkNotNullConstraints = false;
 
+    // НОВЫЕ ПОЛЯ: пути к DDL файлам
+    private String oracleDdlPath = "";
+    private String postgresDdlPath = "";
+
     // Singleton
     private static SettingsModel instance;
 
@@ -60,7 +64,7 @@ public class SettingsModel {
         }
     }
 
-    // Getters and Setters (оставить без изменений)
+    // Getters and Setters (существующие)
     public String getProjectPath() { return projectPath; }
     public void setProjectPath(String projectPath) { this.projectPath = projectPath; }
 
@@ -96,4 +100,11 @@ public class SettingsModel {
 
     public boolean isCheckNotNullConstraints() { return checkNotNullConstraints; }
     public void setCheckNotNullConstraints(boolean checkNotNullConstraints) { this.checkNotNullConstraints = checkNotNullConstraints; }
+
+    // НОВЫЕ ГЕТТЕРЫ И СЕТТЕРЫ
+    public String getOracleDdlPath() { return oracleDdlPath; }
+    public void setOracleDdlPath(String oracleDdlPath) { this.oracleDdlPath = oracleDdlPath; }
+
+    public String getPostgresDdlPath() { return postgresDdlPath; }
+    public void setPostgresDdlPath(String postgresDdlPath) { this.postgresDdlPath = postgresDdlPath; }
 }

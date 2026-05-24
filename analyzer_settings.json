@@ -10,5 +10,7 @@
   "misUser": "$TSTESTZON",
   "checkPostgresPackages": false,
   "checkPostgresPK": false,
-  "checkNotNullConstraints": false
+  "checkNotNullConstraints": false,
+  "oracleDdlPath": "",
+  "postgresDdlPath": ""
 }
