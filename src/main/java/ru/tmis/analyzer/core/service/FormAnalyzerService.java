@@ -26,6 +26,8 @@ import java.util.stream.Stream;
 
 public class FormAnalyzerService {
 
+    private boolean csvFileCreatedDuringSession = false;
+
     private final SettingsModel settings;
     private final AppConfig config;
     private final FileScannerService scannerService;
@@ -141,6 +143,7 @@ public class FormAnalyzerService {
 
     // core/service/FormAnalyzerService.java
 
+    // В методе analyzeForm изменить проверку отчёта
     public FormInfo analyzeForm(String formPath) {
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
@@ -446,10 +449,9 @@ public class FormAnalyzerService {
     /**
      * Сканирует весь проект и анализирует все найденные формы
      */
-    /**
-     * Сканирует весь проект и анализирует только новые (необработанные) формы
-     */
     public List<FormInfo> scanAllFormsAndAnalyze() throws IOException {
+        csvFileCreatedDuringSession = false; // Сброс флага при новом сканировании
+
         Set<String> allForms = scanAllForms();
         Set<String> formsToProcess = new LinkedHashSet<>();
         String outputDir = settings.getOutputDir();
@@ -460,8 +462,7 @@ public class FormAnalyzerService {
         // Фильтруем формы - оставляем только те, у которых нет отчёта
         for (String formPath : allForms) {
             String normalized = FormPathUtils.normalizeFormPath(formPath);
-            String safeFileName = getSafeFileName(normalized);
-            Path reportPath = Paths.get(outputDir, safeFileName);
+            Path reportPath = getReportPath(normalized);
 
             if (!Files.exists(reportPath)) {
                 formsToProcess.add(formPath);
@@ -482,9 +483,6 @@ public class FormAnalyzerService {
         return analyzeAllForms();
     }
 
-    /**
-     * Формирует безопасное имя файла отчёта
-     */
     /**
      * Формирует безопасное имя файла отчёта
      */
@@ -539,6 +537,9 @@ public class FormAnalyzerService {
 
         // Нужно склеить, если есть отдельные CSV файлы, но нет общего отчета
         return hasSingleCsv && !hasCommonCsv;
+    }
+    public boolean isCsvFileCreatedDuringSession() {
+        return csvFileCreatedDuringSession;
     }
 
 }

@@ -51,7 +51,7 @@ public class MainWindow extends JFrame {
     private PrintStream originalErr;
     private PipedInputStream pipeIn;
     private Thread logReader;
-
+    private ReportGenerator currentReportGenerator;
 
 
     public MainWindow(SettingsModel settings, AppConfig config) {
@@ -572,6 +572,30 @@ public class MainWindow extends JFrame {
                 });
             }
         });
+        currentTask = executorService.submit(() -> {
+            try {
+                runAnalysis(new ArrayList<>(normalizedForms));
+            } catch (Exception e) {
+                SwingUtilities.invokeLater(() -> {
+                    appendLog("ОШИБКА: " + e.getMessage());
+                    e.printStackTrace();
+                });
+            } finally {
+                isRunning.set(false);
+                SwingUtilities.invokeLater(() -> {
+                    startButton.setEnabled(true);
+                    stopButton.setEnabled(false);
+                    settingsButton.setEnabled(true);
+                    statusLabel.setText("Статус: Готов");
+                    progressBar.setIndeterminate(false);
+                    if (!stopRequested) {
+                        progressBar.setString("Анализ завершен");
+                    } else {
+                        progressBar.setString("Анализ остановлен");
+                    }
+                });
+            }
+        });
     }
 
 
@@ -611,6 +635,14 @@ public class MainWindow extends JFrame {
 
                 FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
 
+                // СОЗДАЁМ ReportGenerator
+                currentReportGenerator = new ReportGenerator(settings.getOutputDir(), config);
+                currentReportGenerator.createMainReportHeader();
+
+                if (stopRequested) {
+                    currentReportGenerator.markStopped();
+                }
+
                 analyzer.setLogger(new ILogger() {
                     @Override
                     public void log(String message) { appendLog(message); }
@@ -632,9 +664,7 @@ public class MainWindow extends JFrame {
 
                 analyzer.setFormAnalyzedCallback(formInfo -> {
                     try {
-                        ReportGenerator reportGen = new ReportGenerator(settings.getOutputDir(), config);
-                        reportGen.createMainReportHeader();
-                        reportGen.appendFormToMainReport(formInfo);
+                        currentReportGenerator.appendFormToMainReport(formInfo);
                         SwingUtilities.invokeLater(() -> {
                             formsTreePanel.refreshChildForms(formInfo.getFormPath());
                         });
@@ -643,12 +673,15 @@ public class MainWindow extends JFrame {
                     }
                 });
 
-                // Сканируем и анализируем только новые формы
                 List<FormInfo> results = analyzer.scanAllFormsAndAnalyze();
                 analyzer.clearFormsToAnalyze();
 
                 if (stopRequested) {
                     appendLog("Анализ остановлен пользователем");
+                    if (currentReportGenerator != null) {
+                        currentReportGenerator.cleanupCsvOnStop();
+                        appendLog("Неполный CSV файл удалён");
+                    }
                     return;
                 }
 
@@ -671,7 +704,6 @@ public class MainWindow extends JFrame {
                     formsTreePanel.refreshAllChildForms();
                 });
 
-                // Показываем сообщение о завершении
                 SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(MainWindow.this,
                             "Анализ завершен!\n" +
@@ -707,12 +739,14 @@ public class MainWindow extends JFrame {
         appendLog("Всего форм для анализа: " + formsToAnalyze.size());
         appendLog("");
 
-        ru.tmis.analyzer.core.service.FormAnalyzerService analyzer =
-                new ru.tmis.analyzer.core.service.FormAnalyzerService(settings,config);
-
+        FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
+        currentReportGenerator = new ReportGenerator(settings.getOutputDir(), config);
+        currentReportGenerator.createMainReportHeader();
+        if (stopRequested) {
+            currentReportGenerator.markStopped();
+        }
         Set<String> formsSet = new LinkedHashSet<>(formsToAnalyze);
         analyzer.setFormsToAnalyze(formsSet);
-
         analyzer.setLogger(new ILogger() {
             @Override
             public void log(String message) { appendLog(message); }
@@ -734,11 +768,7 @@ public class MainWindow extends JFrame {
 
         analyzer.setFormAnalyzedCallback(formInfo -> {
             try {
-                ru.tmis.analyzer.core.report.ReportGenerator reportGen =
-                        new ru.tmis.analyzer.core.report.ReportGenerator(settings.getOutputDir(), config);
-                reportGen.createMainReportHeader();
-                reportGen.appendFormToMainReport(formInfo);
-
+                currentReportGenerator.appendFormToMainReport(formInfo);
                 SwingUtilities.invokeLater(() -> {
                     formsTreePanel.refreshChildForms(formInfo.getFormPath());
                 });
@@ -749,6 +779,8 @@ public class MainWindow extends JFrame {
 
         List<FormInfo> results = analyzer.analyzeAllForms();
         analyzer.clearFormsToAnalyze();
+
+        // Генерация CSV отчета
         try {
             CSVReportGenerator csvGen = new CSVReportGenerator(settings.getOutputDir());
             Path csvPath = csvGen.generateCSVReport(results);
@@ -759,11 +791,17 @@ public class MainWindow extends JFrame {
 
         if (stopRequested) {
             appendLog("Анализ остановлен пользователем");
+            // Удаляем неполный CSV файл
+            if (currentReportGenerator != null) {
+                currentReportGenerator.cleanupCsvOnStop();
+                appendLog("Неполный CSV файл удалён");
+            }
             if (!results.isEmpty()) {
                 appendLog("Сохранено частичных результатов: " + results.size() + " форм");
             }
             return;
         }
+
         appendLog("");
         appendLog("=== ГЕНЕРАЦИЯ ОТЧЕТОВ ===");
         appendLog("=== АНАЛИЗ ЗАВЕРШЕН ===");
@@ -774,6 +812,8 @@ public class MainWindow extends JFrame {
             formsTreePanel.refreshAllChildForms();
         });
     }
+
+
     private void stopAnalysis() {
         // Сначала проверяем рекурсивный анализатор
         if (recursiveBuilder != null && recursiveBuilder.isRunning()) {

@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ReportGenerator {
 
@@ -30,6 +31,10 @@ public class ReportGenerator {
     private OracleService oracleService;
     private PostgresService postgresService;
     private transient ReportsFromDbService reportsService;
+
+    private boolean csvFileCreated = false;
+    private Path csvPath;
+    private final AtomicBoolean isAnalysisStopped = new AtomicBoolean(false);
 
     public ReportGenerator(String outputDir, AppConfig config) {
         this.outputDir = outputDir;
@@ -823,12 +828,18 @@ public class ReportGenerator {
     private void appendToCSVReport(FormInfo formInfo) throws IOException {
         if (!config.isEnableCSVExport()) return;
 
+        // Если анализ остановлен - не добавляем новые записи
+        if (isAnalysisStopped.get()) {
+            System.out.println("[CSV] Анализ остановлен, запись в CSV прекращена");
+            return;
+        }
+
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
         }
 
-        Path csvPath = outputPath.resolve("forms_export.csv");
+        csvPath = outputPath.resolve("forms_export.csv");
 
         // Проверяем, есть ли уже эта форма в CSV
         if (Files.exists(csvPath) && isFormAlreadyInCsv(csvPath, formInfo.getFormPath())) {
@@ -838,27 +849,27 @@ public class ReportGenerator {
 
         boolean fileExists = Files.exists(csvPath);
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
-            if (!fileExists) {
+        // Если файл не существует - создаём его (пустой с заголовком)
+        if (!fileExists) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile()))) {
                 writer.println("ФОРМА;БЛОК;ЗНАЧЕНИЕ");
+                System.out.println("[CSV] Создан новый CSV файл: " + csvPath);
             }
+            csvFileCreated = true;
+        }
 
+        // Добавляем данные формы
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
             String formName = formInfo.getFormPath();
 
-            // 1. Юзерформы
+            // ... остальной код записи блоков ...
             writeCSVBlock(writer, formName, "Юзерформы", formInfo.getOverrides(),
                     formInfo.isFullyReplaced(), formInfo.getReplacementPath());
-
-            // 2. subForm
             writeCSVBlock(writer, formName, "subForm", formInfo.getSubForms());
-
-            // 3. формы JS
             writeCSVBlock(writer, formName, "формы JS", formInfo.getJsForms());
-
-            // 4. Отчеты, вызываемые на форме
             writeCSVBlock(writer, formName, "Отчеты, вызываемые на форме", formInfo.getReports());
 
-            // 5. Вьюхи (D_V_*)
+            // Вьюхи (D_V_*)
             Set<String> views = new LinkedHashSet<>();
             for (String tv : formInfo.getTablesViews()) {
                 if (tv.startsWith("D_V_")) {
@@ -867,22 +878,25 @@ public class ReportGenerator {
             }
             writeCSVBlock(writer, formName, "Вьюхи", views);
 
-            // 6. Таблицы - берём из FormInfo (уже сохранены при генерации TXT)
+            // Таблицы
             Set<String> tables = formInfo.getTablesFromViews();
             if (tables == null || tables.isEmpty()) {
-                System.out.println("[CSV] Таблицы не найдены в FormInfo для формы: " + formName);
-            } else {
-                System.out.println("[CSV] Найдено таблиц в FormInfo: " + tables.size());
+                tables = new LinkedHashSet<>();
+            }
+            for (String tv : formInfo.getTablesViews()) {
+                if (tv.startsWith("D_") && !tv.startsWith("D_V_")) {
+                    tables.add(tv);
+                }
             }
             writeCSVBlock(writer, formName, "Таблицы", tables);
 
-            // 7. Пакеты и функции
+            // Пакеты и функции
             writeCSVBlock(writer, formName, "Пакеты и функции", formInfo.getPackagesFunctions());
 
-            // 8. СО (системные опции)
+            // СО
             writeCSVBlock(writer, formName, "СО", formInfo.getSystemOptions());
 
-            // 9. Универсальные композиции
+            // Универсальные композиции
             Set<String> allCompositions = new LinkedHashSet<>();
             if (formInfo.getUnitCompositions() != null) {
                 allCompositions.addAll(formInfo.getUnitCompositions());
@@ -892,8 +906,10 @@ public class ReportGenerator {
             }
             writeCSVBlock(writer, formName, "Универсальные композиции", allCompositions);
 
-            // 10. Неопределенные
+            // Неопределенные
             writeCSVBlock(writer, formName, "Неопределенные", formInfo.getUnknownObjects());
+
+            System.out.println("[CSV] Данные формы добавлены в CSV: " + formName);
         }
     }
 
@@ -1327,4 +1343,19 @@ public class ReportGenerator {
         }
         return false;
     }
+    // Добавить метод для отметки остановки
+    public void markStopped() {
+        isAnalysisStopped.set(true);
+    }
+    public void cleanupCsvOnStop() {
+        if (csvFileCreated && csvPath != null && Files.exists(csvPath)) {
+            try {
+                Files.delete(csvPath);
+                System.out.println("[CSV] Удалён неполный CSV файл: " + csvPath);
+            } catch (IOException e) {
+                System.err.println("[CSV] Ошибка удаления CSV файла: " + e.getMessage());
+            }
+        }
+    }
+
 }
