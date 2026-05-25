@@ -96,7 +96,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.13 (от 25-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.14 (от 25-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);

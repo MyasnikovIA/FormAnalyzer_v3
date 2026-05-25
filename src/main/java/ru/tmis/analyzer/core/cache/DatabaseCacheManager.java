@@ -27,6 +27,19 @@ import java.util.function.Supplier;
  * Централизованное управление кэшами для БД объектов
  */
 public class DatabaseCacheManager {
+    static {
+        // Статическая инициализация драйверов
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("[DB] Oracle JDBC driver not found in static init: " + e.getMessage());
+        }
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("[DB] PostgreSQL JDBC driver not found in static init: " + e.getMessage());
+        }
+    }
 
     private static DiskCacheManager diskCacheManager = new DiskCacheManager();
 
@@ -99,6 +112,21 @@ public class DatabaseCacheManager {
     public static void initDbConfig(String oracleUrl, String oracleUser, String oraclePassword,
                                     String postgresUrl, String postgresUser, String postgresPassword,
                                     String postgresMisUser) {
+        // Загружаем драйверы ПЕРЕД использованием
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+            System.out.println("[DB] Oracle JDBC driver loaded");
+        } catch (ClassNotFoundException e) {
+            System.err.println("[DB] Oracle JDBC driver not found: " + e.getMessage());
+        }
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            System.out.println("[DB] PostgreSQL JDBC driver loaded");
+        } catch (ClassNotFoundException e) {
+            System.err.println("[DB] PostgreSQL JDBC driver not found: " + e.getMessage());
+        }
+
         cachedOracleUrl = oracleUrl;
         cachedOracleUser = oracleUser;
         cachedOraclePassword = oraclePassword;
