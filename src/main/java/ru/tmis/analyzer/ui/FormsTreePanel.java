@@ -659,10 +659,14 @@ public class FormsTreePanel extends JPanel {
         textArea.setRows(15);
         textArea.setLineWrap(false);
 
+        // Определяем разделитель для примера в зависимости от ОС
+        String separator = System.getProperty("os.name").toLowerCase().contains("win") ? "\\" : "/";
+
         StringBuilder examples = new StringBuilder();
-        examples.append("# Примеры:\n");
-        examples.append("# Forms/Path/To/Form.frm\n");
-        examples.append("# UserFormsRegion/Path/To/Form.frm\n");
+        examples.append("# Примеры (можно использовать / или ").append(separator).append("):\n");
+        examples.append("# Forms").append(separator).append("Path").append(separator).append("To").append(separator).append("Form.frm\n");
+        examples.append("# UserFormsRegion").append(separator).append("Path").append(separator).append("To").append(separator).append("Form.frm\n");
+        examples.append("# Или в формате с /: Forms/Path/To/Form.frm\n");
         textArea.setText(examples.toString());
         textArea.selectAll();
 
@@ -702,6 +706,9 @@ public class FormsTreePanel extends JPanel {
             String trimmed = line.trim();
             if (trimmed.isEmpty() || trimmed.startsWith("#")) continue;
 
+            // Заменяем обратные слеши на прямые (поддержка Windows)
+            trimmed = trimmed.replace("\\", "/");
+
             String normalized = normalizeFormPath(trimmed);
             if (normalized != null && !normalized.isEmpty()) {
                 result.add(normalized);
@@ -714,12 +721,14 @@ public class FormsTreePanel extends JPanel {
     private String normalizeFormPath(String path) {
         if (path == null || path.isEmpty()) return null;
 
-        String normalized = path.trim();
+        // Сначала заменяем обратные слеши на прямые (если пользователь ввёл с \)
+        String normalized = path.trim().replace("\\", "/");
 
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
         }
 
+        // Проверяем, является ли это UserForms
         boolean isUserForm = normalized.matches("^UserForms[A-Za-z0-9_]*/.*");
 
         if (!isUserForm) {

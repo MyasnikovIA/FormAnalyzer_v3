@@ -111,6 +111,13 @@ public class SettingsModel {
                 Gson gson = new Gson();
                 SettingsModel model = gson.fromJson(reader, SettingsModel.class);
                 if (model != null) {
+                    // Конвертируем пути в формат приложения (с /)
+                    if (model.projectPath != null) {
+                        model.projectPath = model.projectPath.replace("\\", "/");
+                    }
+                    if (model.outputDir != null) {
+                        model.outputDir = model.outputDir.replace("\\", "/");
+                    }
                     System.out.println("Настройки загружены из файла: " + SETTINGS_FILE);
                     return model;
                 }
@@ -120,7 +127,6 @@ public class SettingsModel {
         } else {
             System.out.println("Файл настроек не найден, будут использованы настройки по умолчанию");
         }
-        // Всегда возвращаем новый экземпляр, а не null
         return createDefault();
     }
 }

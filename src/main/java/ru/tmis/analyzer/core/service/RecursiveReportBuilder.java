@@ -316,7 +316,7 @@ public class RecursiveReportBuilder {
                     onLevelStart.accept("Уровень " + level + ": " + formList.size() + " форм"));
         }
 
-        // 1. Анализируем формы текущего уровня
+        // 1. Анализируем формы текущего уровня (получаем List<FormInfo>)
         final List<FormInfo> analyzedForms = analyzeForms(formList);
         totalFormsProcessed += analyzedForms.size();
         formsPerLevel.put(level, analyzedForms.size());
@@ -337,39 +337,63 @@ public class RecursiveReportBuilder {
                     onLevelComplete.accept(analyzedCount));
         }
 
-        // 2. Собираем дочерние формы из отчётов текущего уровня
+        // 2. Собираем дочерние формы ИЗ FormInfo (НЕ ИЗ ОТЧЁТОВ!)
         final Set<String> allChildForms = new LinkedHashSet<>();
-        for (String formPath : formList) {
+
+        for (FormInfo formInfo : analyzedForms) {
             if (stopRequested.get()) break;
 
-            // ========== ИСПРАВЛЕНИЕ: Загружаем ВСЕ типы дочерних форм ==========
+            String formPath = formInfo.getFormPath();
 
-            // 2.1. SubForm
-            Set<String> subForms = getSubFormsFromReport(formPath);
-            if (!subForms.isEmpty()) {
+            // 2.1. SubForm из FormInfo
+            Set<String> subForms = formInfo.getSubForms();
+            if (subForms != null && !subForms.isEmpty()) {
                 Set<String> newSubForms = new LinkedHashSet<>(subForms);
                 newSubForms.removeAll(processedForms);
                 if (!newSubForms.isEmpty()) {
-                    log("  Форма " + getShortName(formPath) + " -> SubForm: " + newSubForms.size() + " шт.");
-                    allChildForms.addAll(newSubForms);
+                    // Нормализуем пути перед добавлением
+                    for (String subForm : newSubForms) {
+                        String normalized = normalizeFormPath(subForm);
+                        if (normalized != null && isValidFormPath(normalized)) {
+                            allChildForms.add(normalized);
+                        }
+                    }
+                    if (!newSubForms.isEmpty()) {
+                        log("  Форма " + getShortName(formPath) + " -> SubForm: " + newSubForms.size() + " шт.");
+                    }
                 }
             }
 
-            // 2.2. JS формы
-            Set<String> jsForms = getJsFormsFromReport(formPath);
-            if (!jsForms.isEmpty()) {
+            // 2.2. JS формы из FormInfo
+            Set<String> jsForms = formInfo.getJsForms();
+            if (jsForms != null && !jsForms.isEmpty()) {
                 Set<String> newJsForms = new LinkedHashSet<>(jsForms);
                 newJsForms.removeAll(processedForms);
                 if (!newJsForms.isEmpty()) {
+                    // Нормализуем пути перед добавлением
+                    for (String jsForm : newJsForms) {
+                        String normalized = normalizeFormPath(jsForm);
+                        if (normalized != null && isValidFormPath(normalized)) {
+                            allChildForms.add(normalized);
+                        }
+                    }
                     log("  Форма " + getShortName(formPath) + " -> JS формы: " + newJsForms.size() + " шт.");
-                    allChildForms.addAll(newJsForms);
                 }
             }
 
-            // 2.3. Отчёты (WEB-формы)
-            Set<String> reportForms = getReportFormsFromReport(formPath);
-            if (!reportForms.isEmpty()) {
-                Set<String> newReportForms = new LinkedHashSet<>(reportForms);
+            // 2.3. Отчёты (WEB-формы) из FormInfo - только если это формы .frm
+            Set<String> reports = formInfo.getReports();
+            if (reports != null && !reports.isEmpty()) {
+                Set<String> newReportForms = new LinkedHashSet<>();
+                for (String report : reports) {
+                    // Извлекаем только те отчёты, которые являются формами .frm
+                    if (report.contains(".frm")) {
+                        String normalized = normalizeFormPath(report);
+                        if (normalized != null && isValidFormPath(normalized)) {
+                            newReportForms.add(normalized);
+                        }
+                    }
+                }
                 newReportForms.removeAll(processedForms);
                 if (!newReportForms.isEmpty()) {
                     log("  Форма " + getShortName(formPath) + " -> отчёты (формы): " + newReportForms.size() + " шт.");
@@ -386,6 +410,8 @@ public class RecursiveReportBuilder {
             processLevel(childList, level + 1, processedForms);
         }
     }
+
+
 
     /**
      * Извлекает SubForm из отчёта
@@ -585,6 +611,11 @@ public class RecursiveReportBuilder {
             normalized = normalized.substring(1);
         }
 
+        // Убираем маркер SubForm если есть
+        if (normalized.startsWith("(sub)_")) {
+            normalized = normalized.substring(6);
+        }
+
         // Добавляем .frm если нет расширения
         if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
             normalized = normalized + ".frm";
@@ -597,5 +628,27 @@ public class RecursiveReportBuilder {
 
         return normalized;
     }
+    /**
+     * Валидация пути формы (отсекаем брокеры, константы и мусор)
+     */
+    private boolean isValidFormPath(String path) {
+        if (path == null || path.trim().isEmpty()) return false;
 
+        String normalized = path.trim();
+
+        // Запрещённые символы
+        if (normalized.contains(":") || normalized.contains(";") ||
+                normalized.contains("unit") || normalized.contains("action") ||
+                normalized.contains("composition") || normalized.contains("method") ||
+                normalized.contains("D_PKG_") || normalized.contains("D_V_")) {
+            return false;
+        }
+
+        // Должно быть расширение .frm или .dfrm
+        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+            return false;
+        }
+
+        return true;
+    }
 }

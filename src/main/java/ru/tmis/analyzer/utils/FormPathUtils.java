@@ -22,6 +22,9 @@ public class FormPathUtils {
 
         String normalized = path.trim();
 
+        // Заменяем обратные слеши на прямые для единообразия (внутреннее представление)
+        normalized = normalized.replace("\\", "/");
+
         // Убираем ведущий слеш
         if (normalized.startsWith("/")) {
             normalized = normalized.substring(1);
@@ -50,7 +53,7 @@ public class FormPathUtils {
     }
 
     /**
-     * Получение физического пути к файлу формы
+     * Получение физического пути к файлу формы (с учётом OS)
      */
     public static Path getPhysicalPath(String projectPath, String formPath) {
         String normalized = normalizeFormPathForFs(formPath);
@@ -58,7 +61,7 @@ public class FormPathUtils {
     }
 
     /**
-     * Нормализация пути для файловой системы
+     * Нормализация пути для файловой системы (с учётом OS)
      */
     public static String normalizeFormPathForFs(String path) {
         if (path == null || path.trim().isEmpty()) {
@@ -66,6 +69,9 @@ public class FormPathUtils {
         }
 
         String normalized = path.trim();
+
+        // Заменяем обратные слеши на прямые для единообразия
+        normalized = normalized.replace("\\", "/");
 
         // Убираем ведущий слеш
         if (normalized.startsWith("/")) {
@@ -90,9 +96,13 @@ public class FormPathUtils {
             }
         }
 
+        // Используем File.separator для разделителя в зависимости от ОС
         return normalized.replace("/", File.separator);
     }
 
+    /**
+     * Получение относительного пути от корня проекта
+     */
     public static String getRelativePath(String projectRoot, String absolutePath) {
         Path root = Paths.get(projectRoot);
         Path abs = Paths.get(absolutePath);
@@ -102,5 +112,25 @@ public class FormPathUtils {
         } catch (IllegalArgumentException e) {
             return absolutePath;
         }
+    }
+
+    /**
+     * Конвертирует путь из формата приложения в системный формат
+     * @param appPath путь в формате приложения (с /)
+     * @return путь в формате текущей ОС
+     */
+    public static String toSystemPath(String appPath) {
+        if (appPath == null) return null;
+        return appPath.replace("/", File.separator);
+    }
+
+    /**
+     * Конвертирует путь из системного формата в формат приложения (с /)
+     * @param systemPath путь в формате текущей ОС
+     * @return путь в формате приложения
+     */
+    public static String toAppPath(String systemPath) {
+        if (systemPath == null) return null;
+        return systemPath.replace("\\", "/");
     }
 }
