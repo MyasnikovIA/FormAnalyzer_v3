@@ -1299,10 +1299,6 @@ public class MainWindow extends JFrame {
                 loadLlmPromptToPanel(formPath);
             }
 
-            JOptionPane.showMessageDialog(this,
-                    "Файлы отчётов удалены\nОбщий CSV отчёт обновлён",
-                    "Удаление завершено",
-                    JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Не удалось удалить файлы",
