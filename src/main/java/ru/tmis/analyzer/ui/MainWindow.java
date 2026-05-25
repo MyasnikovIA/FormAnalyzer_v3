@@ -110,10 +110,16 @@ public class MainWindow extends JFrame {
         settingsButton = new JButton("Настройки");
         settingsButton.addActionListener(e -> openSettings());
 
-        // Новая кнопка для заполнения кэша
-        JButton populateCacheButton = new JButton("Заполнить кэш БД");
-        populateCacheButton.setBackground(new Color(33, 150, 243));
-        populateCacheButton.addActionListener(e -> openCachePopulator());
+        // Новая кнопка для заполнения кэша (временно отключена, но для LLM всегда надо её оставлять  на этом месте)
+        //  JButton populateCacheButton = new JButton("Заполнить кэш БД");
+        //  populateCacheButton.setBackground(new Color(33, 150, 243));
+        //  populateCacheButton.addActionListener(e -> openCachePopulator());
+
+        JButton manageCacheButton = new JButton("Управление кэшем");
+        manageCacheButton.setBackground(new Color(255, 152, 0));
+        manageCacheButton.addActionListener(e -> openCacheManagement());
+
+
 
         startButton = new JButton("Запуск анализа");
         startButton.setBackground(new Color(76, 175, 80));
@@ -127,7 +133,9 @@ public class MainWindow extends JFrame {
         JButton openOutputButton = new JButton("Открыть отчеты");
         openOutputButton.addActionListener(e -> openOutputDirectory());
 
-        buttonPanel.add(populateCacheButton);  // Добавить кнопку
+        // buttonPanel.add(populateCacheButton);  // Добавить кнопку (временно отключена, но для LLM всегда надо её оставлять  на этом месте)
+        buttonPanel.add(manageCacheButton);  // Добавить перед другими кнопками
+
         buttonPanel.add(settingsButton);
         buttonPanel.add(openOutputButton);
         buttonPanel.add(startButton);
@@ -140,6 +148,12 @@ public class MainWindow extends JFrame {
 
     private void openCachePopulator() {
         CachePopulatorDialog dialog = new CachePopulatorDialog(this, settings);
+        dialog.setVisible(true);
+    }
+
+    // Добавить метод:
+    private void openCacheManagement() {
+        CacheManagementDialog dialog = new CacheManagementDialog(this, settings);
         dialog.setVisible(true);
     }
 

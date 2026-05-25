@@ -621,11 +621,19 @@ public class DatabaseCacheManager {
             return Collections.emptyList();
         }
         String key = unitCode.toUpperCase();
-        return (List<DbReportInfo>) oracleReportsCache.computeIfAbsent(key, k -> {
-            List<DbReportInfo> value = loader.get();
+
+        // Исправлено: без computeIfAbsent
+        Object cached = oracleReportsCache.get(key);
+        if (cached != null) {
+            return (List<DbReportInfo>) cached;
+        }
+
+        List<DbReportInfo> value = loader.get();
+        if (value != null) {
+            oracleReportsCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value != null ? value : Collections.emptyList();
     }
 
     @SuppressWarnings("unchecked")
@@ -634,13 +642,19 @@ public class DatabaseCacheManager {
             return Collections.emptyList();
         }
         String key = unitCode.toUpperCase();
-        return (List<DbReportInfo>) postgresReportsCache.computeIfAbsent(key, k -> {
-            List<DbReportInfo> value = loader.get();
-            markChanged();
-            return value;
-        });
-    }
 
+        Object cached = postgresReportsCache.get(key);
+        if (cached != null) {
+            return (List<DbReportInfo>) cached;
+        }
+
+        List<DbReportInfo> value = loader.get();
+        if (value != null) {
+            postgresReportsCache.put(key, value);
+            markChanged();
+        }
+        return value != null ? value : Collections.emptyList();
+    }
     @SuppressWarnings("unchecked")
     public static DatabaseObjectChecker.PrimaryKeyInfo getPrimaryKeyInfo(String tableName, Supplier<DatabaseObjectChecker.PrimaryKeyInfo> loader) {
         if (!isOracleAvailable() || !isPostgresAvailable()) {
@@ -821,11 +835,18 @@ public class DatabaseCacheManager {
     public static String getBrokerExecProc(String unit, String action, Supplier<String> loader) {
         if (!isOracleAvailable()) return null;
         String key = (unit + "_" + action).toUpperCase();
-        return brokerExecProcCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        String cached = brokerExecProcCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            brokerExecProcCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
     public static int getPostgresViewOid(String viewName, Supplier<Integer> loader) {
@@ -973,7 +994,7 @@ public class DatabaseCacheManager {
         private final Integer scale;
         private final boolean nullable;
         private final String defaultValue;
-        private final String comment;
+        private final String comment;  // Может быть null
 
         public ColumnInfo(String columnName, String dataType, int dataLength,
                           Integer precision, Integer scale, boolean nullable,
@@ -985,7 +1006,7 @@ public class DatabaseCacheManager {
             this.scale = scale;
             this.nullable = nullable;
             this.defaultValue = defaultValue;
-            this.comment = comment;
+            this.comment = comment;  // null допустим
         }
 
         // Геттеры
@@ -1207,5 +1228,22 @@ public class DatabaseCacheManager {
     public static boolean isPostgresTableDDLCached(String tableName) {
         String key = tableName.toLowerCase();
         return postgresTableDDLCache.containsKey(key);
+    }
+    // Добавить в DatabaseCacheManager.java
+    public static String getOraclePackageSpec(String packageName, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = packageName.toUpperCase();
+
+        String cached = packageSpecCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            packageSpecCache.put(key, value);
+            markChanged();
+        }
+        return value;
     }
 }

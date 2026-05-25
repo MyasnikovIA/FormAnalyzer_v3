@@ -61,8 +61,10 @@ public class DatabaseMetadataService {
     public List<DatabaseCacheManager.ColumnInfo> getTableColumns(String tableName) {
         return DatabaseCacheManager.getTableColumns(tableName, () -> {
             List<DatabaseCacheManager.ColumnInfo> columns = new ArrayList<>();
+
+            // ИСПРАВЛЕННЫЙ SQL - убираем COMMENTS из ALL_TAB_COLUMNS
             String sql = "SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, " +
-                    "DATA_SCALE, NULLABLE, DATA_DEFAULT, COMMENTS " +
+                    "DATA_SCALE, NULLABLE, DATA_DEFAULT " +
                     "FROM ALL_TAB_COLUMNS WHERE OWNER = ? AND TABLE_NAME = ? " +
                     "ORDER BY COLUMN_ID";
 
@@ -72,16 +74,22 @@ public class DatabaseMetadataService {
                 pstmt.setString(2, tableName.toUpperCase());
                 ResultSet rs = pstmt.executeQuery();
 
+                // Отдельно получаем комментарии
+                Map<String, String> comments = getColumnComments(tableName);
+
                 while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    String comment = comments.get(columnName);
+
                     columns.add(new DatabaseCacheManager.ColumnInfo(
-                            rs.getString("COLUMN_NAME"),
+                            columnName,
                             rs.getString("DATA_TYPE"),
                             rs.getInt("DATA_LENGTH"),
                             rs.getInt("DATA_PRECISION") > 0 ? rs.getInt("DATA_PRECISION") : null,
                             rs.getInt("DATA_SCALE") > 0 ? rs.getInt("DATA_SCALE") : null,
                             "N".equals(rs.getString("NULLABLE")),
                             rs.getString("DATA_DEFAULT"),
-                            rs.getString("COMMENTS")
+                            comment  // Используем комментарий из отдельного запроса
                     ));
                 }
             } catch (SQLException e) {
@@ -89,6 +97,32 @@ public class DatabaseMetadataService {
             }
             return columns;
         });
+    }
+
+    /**
+     * Получить комментарии к колонкам таблицы
+     */
+    private Map<String, String> getColumnComments(String tableName) {
+        Map<String, String> comments = new HashMap<>();
+
+        String sql = "SELECT COLUMN_NAME, COMMENTS FROM ALL_COL_COMMENTS " +
+                "WHERE OWNER = ? AND TABLE_NAME = ? AND COMMENTS IS NOT NULL";
+
+        try (Connection conn = getOracleConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, settings.getOracleUser().toUpperCase());
+            pstmt.setString(2, tableName.toUpperCase());
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                comments.put(rs.getString("COLUMN_NAME"), rs.getString("COMMENTS"));
+            }
+        } catch (SQLException e) {
+            // Комментарии не критичны, просто логируем
+            System.err.println("Ошибка получения комментариев для таблицы " + tableName + ": " + e.getMessage());
+        }
+
+        return comments;
     }
 
     /**
