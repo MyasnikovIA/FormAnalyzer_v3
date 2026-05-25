@@ -51,8 +51,8 @@ public class FormsTreePanel extends JPanel {
     private void initUI() {
         setLayout(new BorderLayout(5, 5));
 
-        JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
-        searchPanel.setBorder(BorderFactory.createTitledBorder("Поиск форм"));
+       // JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+       // searchPanel.setBorder(BorderFactory.createTitledBorder("Поиск форм"));
 
         searchField = new JTextField();
         searchField.putClientProperty("JTextField.placeholderText", "Введите путь к форме для фильтрации...");
@@ -63,9 +63,9 @@ public class FormsTreePanel extends JPanel {
             applyFilter();
         });
 
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        searchPanel.add(clearSearchButton, BorderLayout.EAST);
-        add(searchPanel, BorderLayout.NORTH);
+        //searchPanel.add(searchField, BorderLayout.CENTER);
+        //searchPanel.add(clearSearchButton, BorderLayout.EAST);
+        //add(searchPanel, BorderLayout.NORTH);
 
         rootNode = new DefaultMutableTreeNode("Формы для анализа");
         treeModel = new DefaultTreeModel(rootNode);
@@ -84,11 +84,10 @@ public class FormsTreePanel extends JPanel {
         createContextMenu();
 
         JScrollPane treeScroll = new JScrollPane(tree);
-        treeScroll.setBorder(BorderFactory.createTitledBorder("Список форм"));
+       // treeScroll.setBorder(BorderFactory.createTitledBorder("Список форм"));
         add(treeScroll, BorderLayout.CENTER);
 
         // JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-
         // addButton = new JButton("➕ Добавить формы");
         // addButton.addActionListener(e -> showAddFormsDialog());
         // removeButton = new JButton("🗑 Удалить выбранные");
