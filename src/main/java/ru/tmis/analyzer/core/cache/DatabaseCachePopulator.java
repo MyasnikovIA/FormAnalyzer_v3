@@ -1262,11 +1262,9 @@ public class DatabaseCachePopulator {
     }
 
     public PopulateResult loadOracleFunctionsOnly() {
-        log("=== ЗАГРУЗКА ТОЛЬКО ORACLE ФУНКЦИЙ ===");
+        log("=== ЗАГРУЗКА ТОЛЬКО ORACLE ФУНКЦИЙ (ОПТИМИЗИРОВАННО) ===");
         PopulateResult result = new PopulateResult();
-        functionsLoaded = 0;
-        loadAllOraclePackageFunctions();
-        result.oracleFunctionsCount = functionsLoaded;
+        result.oracleFunctionsCount = loadAllOracleFunctionsOptimized();  // ← оптимизированный
         DatabaseCacheManager.forceSaveToDisk();
         return result;
     }
@@ -1304,13 +1302,10 @@ public class DatabaseCachePopulator {
         DatabaseCacheManager.forceSaveToDisk();
         return result;
     }
-
     public PopulateResult loadPostgresReportsOnly() {
-        log("=== ЗАГРУЗКА ТОЛЬКО POSTGRESQL ОТЧЁТОВ ===");
+        log("=== ЗАГРУЗКА ТОЛЬКО POSTGRESQL ОТЧЁТОВ (ОПТИМИЗИРОВАННО) ===");
         PopulateResult result = new PopulateResult();
-        reportsLoaded = 0;
-        loadAllPostgresReports();
-        result.postgresReportsCount = reportsLoaded;
+        result.postgresReportsCount = loadAllPostgresReportsOptimized();  // ← оптимизированный
         DatabaseCacheManager.forceSaveToDisk();
         return result;
     }
@@ -1366,60 +1361,105 @@ public class DatabaseCachePopulator {
         return loaded;
     }
 
-// DatabaseCachePopulator.java - добавить метод
+    // DatabaseCachePopulator.java
 
     /**
-     * Оптимизированная загрузка всех отчётов из Oracle одним запросом
+     * Оптимизированная загрузка всех отчётов Oracle одним запросом
      */
     private int loadAllOracleReportsOptimized() {
         log("[Oracle] Оптимизированная загрузка всех отчётов (один запрос)...");
         updateProgress("Загрузка отчётов Oracle...");
 
-        // Один запрос получает ВСЕ отчёты со всеми полями
-        String sql =
+        // 1. Загружаем ВСЕ отчёты (один запрос)
+        String reportsSql =
                 "SELECT drl.UNITCODE, rep.ID, drl.PRIV_NAME, rep.REP_TYPE, " +
-                        //"rep.REP_DATA," +
-                        " rep.REP_FILENAME, rep.REP_NAME, rep.REP_CODE, rep.LPU " +
+                        "rep.REP_FILENAME, rep.REP_NAME, rep.REP_CODE, rep.LPU " +
                         "FROM D_REPORTS_LINKS drl " +
                         "JOIN D_REPORTS rep ON drl.PID = rep.ID " +
                         "ORDER BY drl.UNITCODE";
 
-        // Карта для группировки отчётов по UNITCODE
+        // 2. Загружаем ВСЕ связи составных отчётов (один запрос)
+        String compositeSql =
+                "SELECT t.PID, rep.ID, rep.REP_CODE, rep.REP_NAME, rep.REP_TYPE, " +
+                        "rep.REP_FILENAME, rep.LPU, drl.PRIV_NAME, t.SORT " +
+                        "FROM D_REPORTS_STRUCTURE t " +
+                        "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
+                        "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
+                        "ORDER BY t.PID, t.SORT";
+
         Map<String, List<DbReportInfo>> reportsByUnit = new LinkedHashMap<>();
+        Map<Integer, List<DbReportInfo>> compositeMap = new HashMap<>();
+        Map<Integer, DbReportInfo> reportCache = new HashMap<>();
         int totalReports = 0;
 
-        try (Connection conn = getOracleConnection();
-             Statement stmt = conn.createStatement()) {
+        try (Connection conn = getOracleConnection()) {
 
-            stmt.setQueryTimeout(120);
-            ResultSet rs = stmt.executeQuery(sql);
+            // 1. Загружаем все отчёты
+            try (Statement stmt = conn.createStatement()) {
+                stmt.setQueryTimeout(120);
+                ResultSet rs = stmt.executeQuery(reportsSql);
 
-            while (rs.next()) {
-                if (stopRequested.get()) break;
+                while (rs.next()) {
+                    if (stopRequested.get()) break;
 
-                String unitCode = rs.getString("UNITCODE");
-                if (unitCode == null || unitCode.trim().isEmpty()) {
-                    continue;
+                    String unitCode = rs.getString("UNITCODE");
+                    if (unitCode == null || unitCode.trim().isEmpty()) {
+                        continue;
+                    }
+
+                    DbReportInfo report = new DbReportInfo();
+                    int reportId = rs.getInt("ID");
+                    report.setRepID(reportId);
+                    report.setPrivName(rs.getString("PRIV_NAME"));
+                    report.setRepType(rs.getInt("REP_TYPE"));
+                    // report.setRepData(rs.getBytes("REP_DATA")); // закомментировано
+                    report.setRepFilename(rs.getString("REP_FILENAME"));
+                    report.setRepName(rs.getString("REP_NAME"));
+                    report.setRepCode(rs.getString("REP_CODE"));
+                    report.setUnitCode(rs.getString("LPU"));
+
+                    reportsByUnit.computeIfAbsent(unitCode, k -> new ArrayList<>()).add(report);
+                    reportCache.put(reportId, report);
+                    totalReports++;
                 }
-
-                DbReportInfo report = new DbReportInfo();
-                report.setRepID(rs.getInt("ID"));
-                report.setPrivName(rs.getString("PRIV_NAME"));
-                report.setRepType(rs.getInt("REP_TYPE"));
-                report.setRepData(rs.getBytes("REP_DATA"));
-                report.setRepFilename(rs.getString("REP_FILENAME"));
-                report.setRepName(rs.getString("REP_NAME"));
-                report.setRepCode(rs.getString("REP_CODE"));
-                report.setUnitCode(rs.getString("LPU"));
-
-                // Группируем по UNITCODE
-                reportsByUnit.computeIfAbsent(unitCode, k -> new ArrayList<>()).add(report);
-                totalReports++;
             }
 
             log("[Oracle] Получено отчётов: " + totalReports + ", UNITCODE: " + reportsByUnit.size());
 
-            // Сохраняем в кэш
+            // 2. Загружаем все связи составных отчётов
+            try (Statement stmt = conn.createStatement()) {
+                stmt.setQueryTimeout(60);
+                ResultSet rs = stmt.executeQuery(compositeSql);
+
+                while (rs.next()) {
+                    if (stopRequested.get()) break;
+
+                    int parentId = rs.getInt("PID");
+
+                    DbReportInfo childReport = new DbReportInfo();
+                    childReport.setRepID(rs.getInt("ID"));
+                    childReport.setRepCode(rs.getString("REP_CODE"));
+                    childReport.setRepName(rs.getString("REP_NAME"));
+                    childReport.setRepType(rs.getInt("REP_TYPE"));
+                    childReport.setRepFilename(rs.getString("REP_FILENAME"));
+                    childReport.setPrivName(rs.getString("PRIV_NAME"));
+                    childReport.setUnitCode(rs.getString("LPU"));
+
+                    compositeMap.computeIfAbsent(parentId, k -> new ArrayList<>()).add(childReport);
+                    reportCache.put(childReport.getRepID(), childReport);
+                }
+            }
+
+            log("[Oracle] Загружено составных связей: " + compositeMap.size());
+
+            // 3. Строим иерархию (рекурсивно добавляем детей)
+            for (List<DbReportInfo> reports : reportsByUnit.values()) {
+                for (DbReportInfo report : reports) {
+                    buildReportHierarchy(report, compositeMap);
+                }
+            }
+
+            // 4. Сохраняем в кэш
             int savedUnits = 0;
             for (Map.Entry<String, List<DbReportInfo>> entry : reportsByUnit.entrySet()) {
                 if (stopRequested.get()) break;
@@ -1427,23 +1467,12 @@ public class DatabaseCachePopulator {
                 String unitCode = entry.getKey();
                 List<DbReportInfo> reports = entry.getValue();
 
-                // Загружаем составные отчёты (рекурсивно)
-                for (DbReportInfo report : reports) {
-                    if (report.isComposite()) {
-                        List<DbReportInfo> children = loadCompositeReportsOptimized(report.getRepID());
-                        for (DbReportInfo child : children) {
-                            report.addChild(child);
-                        }
-                    }
-                }
-
-                // Прямое сохранение в кэш
                 DatabaseCacheManager.putOracleReport(unitCode, reports);
                 savedUnits++;
 
-                if (savedUnits % 10 == 0) {
-                    updateProgress("Oracle отчёты: обработано " + savedUnits + " unit'ов");
-                    log("  Обработано " + savedUnits + " unit'ов, сохранено отчётов: " + totalReports);
+                if (savedUnits % 20 == 0) {
+                    updateProgress("Oracle отчёты: сохранено " + savedUnits + " unit'ов");
+                    log("  Сохранено unit'ов: " + savedUnits + ", отчётов: " + totalReports);
                 }
             }
 
@@ -1456,6 +1485,72 @@ public class DatabaseCachePopulator {
         return 0;
     }
 
+    /**
+     * Рекурсивное построение иерархии отчётов
+     */
+    private void buildReportHierarchy(DbReportInfo report, Map<Integer, List<DbReportInfo>> compositeMap) {
+        List<DbReportInfo> children = compositeMap.get(report.getRepID());
+        if (children != null) {
+            for (DbReportInfo child : children) {
+                report.addChild(child);
+                // Рекурсивно обрабатываем вложенные составные отчёты
+                if (child.isComposite()) {
+                    buildReportHierarchy(child, compositeMap);
+                }
+            }
+        }
+    }
+
+    // DatabaseCachePopulator.java
+
+    /**
+     * Оптимизированная загрузка составных отчётов Oracle
+     */
+    private List<DbReportInfo> loadOracleCompositeReportsOptimized(int parentReportId) {
+        List<DbReportInfo> result = new ArrayList<>();
+
+        String sql =
+                "SELECT rep.ID, rep.REP_CODE, rep.REP_NAME, rep.REP_TYPE, " +
+                        "rep.REP_FILENAME, rep.LPU, drl.PRIV_NAME " +
+                        "FROM D_REPORTS_STRUCTURE t " +
+                        "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
+                        "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
+                        "WHERE t.PID = ? " +
+                        "ORDER BY t.SORT";
+
+        try (Connection conn = getOracleConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, parentReportId);
+            pstmt.setQueryTimeout(30);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                DbReportInfo report = new DbReportInfo();
+                report.setRepID(rs.getInt("ID"));
+                report.setRepCode(rs.getString("REP_CODE"));
+                report.setRepName(rs.getString("REP_NAME"));
+                report.setRepType(rs.getInt("REP_TYPE"));
+                report.setRepFilename(rs.getString("REP_FILENAME"));
+                report.setPrivName(rs.getString("PRIV_NAME"));
+                report.setUnitCode(rs.getString("LPU"));
+
+                // Рекурсивная загрузка для составных отчётов
+                if (report.isComposite()) {
+                    List<DbReportInfo> children = loadOracleCompositeReportsOptimized(report.getRepID());
+                    for (DbReportInfo child : children) {
+                        report.addChild(child);
+                    }
+                }
+                result.add(report);
+            }
+
+        } catch (SQLException e) {
+            error("Ошибка загрузки составных отчётов Oracle для ID=" + parentReportId + ": " + e.getMessage());
+        }
+
+        return result;
+    }
     /**
      * Оптимизированная загрузка составных отчётов
      */
@@ -1505,10 +1600,14 @@ public class DatabaseCachePopulator {
     /**
      * Оптимизированная загрузка всех отчётов из PostgreSQL одним запросом
      */
+    /**
+     * Оптимизированная загрузка всех отчётов PostgreSQL одним запросом
+     */
     private int loadAllPostgresReportsOptimized() {
         log("[PostgreSQL] Оптимизированная загрузка всех отчётов (один запрос)...");
         updateProgress("Загрузка отчётов PostgreSQL...");
 
+        // ОДИН запрос получает ВСЕ отчёты
         String sql =
                 "SELECT unitcode, id, priv_name, rep_type, rep_data, " +
                         "rep_filename, rep_name, rep_code " +
@@ -1516,6 +1615,7 @@ public class DatabaseCachePopulator {
                         "JOIN d_reports rep ON drl.pid = rep.id " +
                         "ORDER BY unitcode";
 
+        // Группировка по unitcode
         Map<String, List<DbReportInfo>> reportsByUnit = new LinkedHashMap<>();
         int totalReports = 0;
 
@@ -1537,7 +1637,7 @@ public class DatabaseCachePopulator {
                 report.setRepID(rs.getInt("id"));
                 report.setPrivName(rs.getString("priv_name"));
                 report.setRepType(rs.getInt("rep_type"));
-                report.setRepData(rs.getBytes("rep_data"));
+                // report.setRepData(rs.getBytes("rep_data")); // закомментировано
                 report.setRepFilename(rs.getString("rep_filename"));
                 report.setRepName(rs.getString("rep_name"));
                 report.setRepCode(rs.getString("rep_code"));
@@ -1545,10 +1645,15 @@ public class DatabaseCachePopulator {
 
                 reportsByUnit.computeIfAbsent(unitCode, k -> new ArrayList<>()).add(report);
                 totalReports++;
+
+                if (totalReports % 500 == 0) {
+                    updateProgress("PostgreSQL отчёты: получено " + totalReports + " записей");
+                }
             }
 
             log("[PostgreSQL] Получено отчётов: " + totalReports + ", UNITCODE: " + reportsByUnit.size());
 
+            // Сохраняем в кэш
             int savedUnits = 0;
             for (Map.Entry<String, List<DbReportInfo>> entry : reportsByUnit.entrySet()) {
                 if (stopRequested.get()) break;
@@ -1556,7 +1661,7 @@ public class DatabaseCachePopulator {
                 String unitCode = entry.getKey();
                 List<DbReportInfo> reports = entry.getValue();
 
-                // Загружаем составные отчёты
+                // Загружаем составные отчёты (если нужно)
                 for (DbReportInfo report : reports) {
                     if (report.isComposite()) {
                         List<DbReportInfo> children = loadPostgresCompositeReportsOptimized(report.getRepID());
@@ -1566,8 +1671,14 @@ public class DatabaseCachePopulator {
                     }
                 }
 
+                // Прямое сохранение в кэш
                 DatabaseCacheManager.putPostgresReport(unitCode, reports);
                 savedUnits++;
+
+                if (savedUnits % 20 == 0) {
+                    updateProgress("PostgreSQL отчёты: сохранено " + savedUnits + " unit'ов");
+                    log("  Сохранено unit'ов: " + savedUnits + ", отчётов: " + totalReports);
+                }
             }
 
             log("[PostgreSQL] Загружено отчётов для " + savedUnits + " unit'ов, всего отчётов: " + totalReports);
@@ -1579,6 +1690,9 @@ public class DatabaseCachePopulator {
         return 0;
     }
 
+    /**
+     * Загрузка составных отчётов PostgreSQL (оптимизированно)
+     */
     private List<DbReportInfo> loadPostgresCompositeReportsOptimized(int parentReportId) {
         List<DbReportInfo> result = new ArrayList<>();
 
@@ -1594,6 +1708,7 @@ public class DatabaseCachePopulator {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, parentReportId);
+            pstmt.setQueryTimeout(30);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -1622,59 +1737,6 @@ public class DatabaseCachePopulator {
     }
 
     /**
-     * Оптимизированная загрузка всех функций PostgreSQL одним запросом
-     */
-    private int loadAllPostgresFunctionsOptimized() {
-        log("[PostgreSQL] Оптимизированная загрузка всех функций (один запрос)...");
-        updateProgress("Загрузка функций PostgreSQL...");
-
-        // Один запрос получает ВСЕ функции с их телами
-        String sql =
-                "SELECT p.proname, " +
-                        "       pg_get_functiondef(p.oid) as funcdef, " +
-                        "       pg_get_function_arguments(p.oid) as func_args " +
-                        "FROM pg_proc p " +
-                        "JOIN pg_namespace n ON p.pronamespace = n.oid " +
-                        "WHERE n.nspname = 'public' " +
-                        "  AND (proname LIKE 'd\\_%' OR proname LIKE 'f\\_%') " +
-                        "ORDER BY proname";
-
-        int count = 0;
-
-        try (Connection conn = getPostgresConnection();
-             Statement stmt = conn.createStatement()) {
-
-            stmt.setQueryTimeout(120);
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                if (stopRequested.get()) break;
-
-                String funcName = rs.getString("proname");
-                String funcDef = rs.getString("funcdef");
-                String funcArgs = rs.getString("func_args");
-
-                if (funcDef != null && !funcDef.isEmpty()) {
-                    // Прямое сохранение в кэш
-                    DatabaseCacheManager.putPostgresFunctionBody(funcName, funcDef);
-                    count++;
-
-                    if (count % 50 == 0) {
-                        updateProgress("PostgreSQL функции: " + count);
-                        log("  Загружено функций: " + count);
-                    }
-                }
-            }
-
-            log("[PostgreSQL] Загружено функций: " + count);
-            return count;
-
-        } catch (SQLException e) {
-            error("[PostgreSQL] Ошибка загрузки функций: " + e.getMessage());
-        }
-        return 0;
-    }
-    /**
      * Оптимизированная загрузка всех пакетов/функций PostgreSQL одним запросом
      */
     private int loadAllPostgresPackagesOptimized() {
@@ -1692,7 +1754,6 @@ public class DatabaseCachePopulator {
                         "WHERE n.nspname = 'public' " +
                         "  AND (proname LIKE 'd\\_pkg\\_%' OR proname LIKE 'd\\_%' OR proname LIKE 'f\\_%') " +
                         "ORDER BY proname";
-
 
         try (Connection conn = getPostgresConnection();
              Statement stmt = conn.createStatement()) {
@@ -1737,63 +1798,105 @@ public class DatabaseCachePopulator {
     /**
      * Оптимизированная загрузка всех функций Oracle одним запросом
      */
+    /**
+     * Оптимизированная загрузка всех функций Oracle одним запросом
+     */
     private int loadAllOracleFunctionsOptimized() {
         log("[Oracle] Оптимизированная загрузка всех функций (один запрос)...");
         updateProgress("Загрузка функций Oracle...");
 
+        // Один запрос получает ВСЕ исходники всех пакетов
         String sql =
-                "SELECT OWNER, NAME, TYPE, LINE, TEXT " +
+                "SELECT NAME, TEXT, LINE " +
                         "FROM ALL_SOURCE " +
                         "WHERE OWNER = ? " +
                         "  AND TYPE = 'PACKAGE BODY' " +
                         "  AND NAME LIKE 'D\\_PKG\\_%' ESCAPE '\\' " +
-                        "ORDER BY OWNER, NAME, LINE";
+                        "ORDER BY NAME, LINE";
 
-        Map<String, StringBuilder> functionsMap = new LinkedHashMap<>();
-        int count = 0;
+        Map<String, StringBuilder> packageBodies = new LinkedHashMap<>();
+        int totalPackages = 0;
 
         try (Connection conn = getOracleConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, settings.getOracleUser().toUpperCase());
-            pstmt.setQueryTimeout(120);
+            pstmt.setQueryTimeout(180);
             ResultSet rs = pstmt.executeQuery();
 
+            // Собираем тела всех пакетов
             while (rs.next()) {
                 if (stopRequested.get()) break;
 
-                String owner = rs.getString("OWNER");
-                String name = rs.getString("NAME");
+                String packageName = rs.getString("NAME");
                 String text = rs.getString("TEXT");
 
-                String key = (owner + "." + name).toUpperCase();
-                functionsMap.computeIfAbsent(key, k -> new StringBuilder()).append(text);
+                packageBodies.computeIfAbsent(packageName, k -> new StringBuilder()).append(text);
             }
 
-            log("[Oracle] Получено пакетов: " + functionsMap.size());
+            log("[Oracle] Получено пакетов: " + packageBodies.size());
+            updateProgress("Разбор функций Oracle (" + packageBodies.size() + " пакетов)...");
 
-            for (Map.Entry<String, StringBuilder> entry : functionsMap.entrySet()) {
+            // Регулярное выражение для поиска функций
+            Pattern funcPattern = Pattern.compile(
+                    "(?i)(?:FUNCTION|PROCEDURE)\\s+(\\w+)\\s*\\([^)]*\\)\\s*(?:RETURN\\s+\\w+\\s+)?(?:IS|AS)\\s+(.*?)(?=END\\s+\\1\\s*;|$)",
+                    Pattern.DOTALL);
+
+            int totalFunctions = 0;
+            int packageCount = 0;
+
+            for (Map.Entry<String, StringBuilder> entry : packageBodies.entrySet()) {
                 if (stopRequested.get()) break;
 
                 String packageName = entry.getKey();
-                String packageBody = entry.getValue().toString();
+                String body = entry.getValue().toString();
+                packageCount++;
 
-                // Извлекаем отдельные функции из тела пакета
-                extractAndSaveFunctions(packageName, packageBody);
-                count++;
+                // Ищем все функции в теле пакета
+                Matcher matcher = funcPattern.matcher(body);
+                int functionsInPackage = 0;
 
-                if (count % 10 == 0) {
-                    updateProgress("Oracle функции: обработано " + count + " пакетов");
+                while (matcher.find()) {
+                    String funcName = matcher.group(1);
+                    String funcBody = matcher.group(2);
+
+                    String fullName = packageName + "." + funcName;
+                    String formattedBody = formatFunctionBody(funcBody, funcName, "PACKAGE", null);
+
+                    DatabaseCacheManager.putOracleFunctionBody(fullName, formattedBody);
+                    totalFunctions++;
+                    functionsInPackage++;
+
+                    if (totalFunctions % 100 == 0) {
+                        updateProgress("Oracle функции: " + totalFunctions);
+                    }
+                }
+
+                if (packageCount % 50 == 0) {
+                    log("  Обработано пакетов: " + packageCount + ", функций: " + totalFunctions);
                 }
             }
 
-            log("[Oracle] Загружено функций: " + functionsLoaded);
-            return functionsLoaded;
+            log("[Oracle] Загружено функций: " + totalFunctions);
+            functionsLoaded = totalFunctions;
+            return totalFunctions;
 
         } catch (SQLException e) {
             error("[Oracle] Ошибка загрузки функций: " + e.getMessage());
         }
         return 0;
+    }
+
+    private String formatFunctionBody(String body, String functionName, String type, String returnType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-- Oracle ").append(type).append(": ").append(functionName).append("\n");
+        if (returnType != null && !returnType.isEmpty()) {
+            sb.append("-- Возвращает: ").append(returnType.trim()).append("\n");
+        }
+        sb.append("--").append("=".repeat(70)).append("\n");
+        sb.append(body);
+        if (!body.endsWith("\n")) sb.append("\n");
+        return sb.toString();
     }
 
     private void extractAndSaveFunctions(String packageName, String packageBody) {
@@ -2461,6 +2564,103 @@ public class DatabaseCachePopulator {
 
         } catch (SQLException e) {
             error("[PostgreSQL] Ошибка загрузки вьюх: " + e.getMessage());
+        }
+        return 0;
+    }
+    /**
+     * Оптимизированная загрузка ВСЕХ составных отчётов Oracle одним запросом
+     * (альтернативный подход - без рекурсивных вызовов)
+     */
+    private Map<Integer, List<DbReportInfo>> loadAllOracleCompositeReportsOptimized() {
+        log("[Oracle] Оптимизированная загрузка всех составных отчётов (один запрос)...");
+
+        Map<Integer, List<DbReportInfo>> compositeMap = new LinkedHashMap<>();
+
+        String sql =
+                "SELECT t.PID, rep.ID, rep.REP_CODE, rep.REP_NAME, rep.REP_TYPE, " +
+                        "rep.REP_FILENAME, rep.LPU, drl.PRIV_NAME, t.SORT " +
+                        "FROM D_REPORTS_STRUCTURE t " +
+                        "JOIN D_REPORTS rep ON rep.ID = t.SUBREPORT " +
+                        "LEFT JOIN D_REPORTS_LINKS drl ON drl.PID = rep.ID " +
+                        "ORDER BY t.PID, t.SORT";
+
+        try (Connection conn = getOracleConnection();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.setQueryTimeout(60);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                int parentId = rs.getInt("PID");
+
+                DbReportInfo report = new DbReportInfo();
+                report.setRepID(rs.getInt("ID"));
+                report.setRepCode(rs.getString("REP_CODE"));
+                report.setRepName(rs.getString("REP_NAME"));
+                report.setRepType(rs.getInt("REP_TYPE"));
+                report.setRepFilename(rs.getString("REP_FILENAME"));
+                report.setPrivName(rs.getString("PRIV_NAME"));
+                report.setUnitCode(rs.getString("LPU"));
+
+                compositeMap.computeIfAbsent(parentId, k -> new ArrayList<>()).add(report);
+            }
+
+            log("[Oracle] Загружено составных связей: " + compositeMap.size());
+            return compositeMap;
+
+        } catch (SQLException e) {
+            error("[Oracle] Ошибка загрузки составных отчётов: " + e.getMessage());
+        }
+
+        return Collections.emptyMap();
+    }
+    /**
+     * Оптимизированная загрузка всех функций PostgreSQL одним запросом
+     */
+    private int loadAllPostgresFunctionsOptimized() {
+        log("[PostgreSQL] Оптимизированная загрузка всех функций (один запрос)...");
+        updateProgress("Загрузка функций PostgreSQL...");
+
+        // Один запрос получает ВСЕ функции
+        String sql =
+                "SELECT p.proname, pg_get_functiondef(p.oid) as funcdef " +
+                        "FROM pg_proc p " +
+                        "JOIN pg_namespace n ON p.pronamespace = n.oid " +
+                        "WHERE n.nspname = 'public' " +
+                        "  AND (proname LIKE 'd\\_%' OR proname LIKE 'f\\_%') " +
+                        "ORDER BY proname";
+
+        int count = 0;
+
+        try (Connection conn = getPostgresConnection();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.setQueryTimeout(120);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                if (stopRequested.get()) break;
+
+                String funcName = rs.getString("proname");
+                String funcDef = rs.getString("funcdef");
+
+                if (funcDef != null && !funcDef.isEmpty()) {
+                    DatabaseCacheManager.putPostgresFunctionBody(funcName, funcDef);
+                    count++;
+
+                    if (count % 100 == 0) {
+                        updateProgress("PostgreSQL функции: " + count);
+                        log("  Загружено функций: " + count);
+                    }
+                }
+            }
+
+            log("[PostgreSQL] Загружено функций: " + count);
+            functionsLoaded = count;
+            return count;
+
+        } catch (SQLException e) {
+            error("[PostgreSQL] Ошибка загрузки функций: " + e.getMessage());
         }
         return 0;
     }
