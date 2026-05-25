@@ -1189,9 +1189,6 @@ public class MainWindow extends JFrame {
     /**
      * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
      */
-    /**
-     * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
-     */
     private void deleteReportForCurrentForm() {
         TreePath selectedPath = formsTreePanel.getSelectedPath();
         if (selectedPath == null) {
@@ -1216,26 +1213,35 @@ public class MainWindow extends JFrame {
         // Формируем безопасное имя файла
         String safeFileName = getSafeFileNameForDelete(formPath);
 
-        // Формируем пути к файлам внутри подкаталога Forms
+        // ========== ПУТИ К ФАЙЛАМ ДЛЯ УДАЛЕНИЯ ==========
+        // TXT отчёт (основной)
         String txtPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".txt";
+        // MD промпт для LLM
         String mdPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".md";
+        // Отдельный CSV файл (в подкаталоге CSV_reports)
+        String csvPath = outputDir + File.separator + "CSV_reports" + File.separator + safeFileName + ".csv";
 
         File txtFile = new File(txtPath);
         File mdFile = new File(mdPath);
+        File csvFile = new File(csvPath);
 
         // Подтверждение удаления
         StringBuilder message = new StringBuilder();
         message.append("Удалить отчёты для формы:\n");
         message.append(formPath).append("\n\n");
+        message.append("Будут удалены:\n");
 
         if (txtFile.exists()) {
-            message.append("✓ ").append(txtFile.getName()).append("\n");
+            message.append("  ✓ ").append(txtFile.getName()).append("\n");
         }
         if (mdFile.exists()) {
-            message.append("✓ ").append(mdFile.getName()).append("\n");
+            message.append("  ✓ ").append(mdFile.getName()).append("\n");
         }
-        if (!txtFile.exists() && !mdFile.exists()) {
-            message.append("(файлы отчётов не найдены)");
+        if (csvFile.exists()) {
+            message.append("  ✓ ").append(csvFile.getName()).append("\n");
+        }
+        if (!txtFile.exists() && !mdFile.exists() && !csvFile.exists()) {
+            message.append("  (файлы отчётов не найдены)");
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
@@ -1250,6 +1256,7 @@ public class MainWindow extends JFrame {
 
         // Удаляем файлы
         boolean deleted = false;
+
         if (txtFile.exists()) {
             if (txtFile.delete()) {
                 appendLog("Удалён файл отчёта: " + txtPath);
@@ -1268,18 +1275,32 @@ public class MainWindow extends JFrame {
             }
         }
 
+        if (csvFile.exists()) {
+            if (csvFile.delete()) {
+                appendLog("Удалён отдельный CSV файл: " + csvPath);
+                deleted = true;
+            } else {
+                appendLog("Ошибка удаления: " + csvPath);
+            }
+        }
+
         if (deleted) {
+            // ========== ОБНОВЛЯЕМ ОБЩИЙ CSV ОТЧЁТ (удаляем строки этой формы) ==========
+            updateCommonCsvAfterDeletion(formPath, outputDir);
+
             // Очищаем панель результата
             resultArea.setText("");
+
             // Очищаем дочерние узлы в дереве
             formsTreePanel.clearChildNodes(formPath);
+
             // Если вкладка LLM активна, показываем инструкцию
             if (tabbedPane.getSelectedIndex() == 2) {
                 loadLlmPromptToPanel(formPath);
             }
 
             JOptionPane.showMessageDialog(this,
-                    "Файлы отчётов удалены",
+                    "Файлы отчётов удалены\nОбщий CSV отчёт обновлён",
                     "Удаление завершено",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -1289,6 +1310,74 @@ public class MainWindow extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    /**
+     * Обновляет общий CSV отчёт после удаления формы (удаляет строки этой формы)
+     */
+    private void updateCommonCsvAfterDeletion(String formPath, String outputDir) {
+        Path commonCsvPath = Paths.get(outputDir, "forms_export.csv");
+        if (!Files.exists(commonCsvPath)) {
+            return;
+        }
+
+        try {
+            // Читаем все строки CSV
+            List<String> lines = Files.readAllLines(commonCsvPath, java.nio.charset.StandardCharsets.UTF_8);
+
+            if (lines.isEmpty()) {
+                return;
+            }
+
+            // Заголовок
+            String header = lines.get(0);
+
+            // Фильтруем строки, оставляя все, кроме строк с удаляемой формой
+            List<String> newLines = new ArrayList<>();
+            newLines.add(header);
+
+            for (int i = 1; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.trim().isEmpty()) continue;
+
+                // Извлекаем имя формы из первой колонки (учитываем возможные кавычки)
+                String formName = extractFormNameFromCsvLine(line);
+
+                if (formName != null && !formName.equals(formPath)) {
+                    newLines.add(line);
+                } else if (formName != null) {
+                    appendLog("  Удалена строка из общего CSV: " + formPath);
+                }
+            }
+
+            // Перезаписываем CSV файл
+            Files.write(commonCsvPath, newLines, java.nio.charset.StandardCharsets.UTF_8);
+            appendLog("Общий CSV отчёт обновлён, удалены строки для формы: " + formPath);
+
+        } catch (IOException e) {
+            appendLog("Ошибка обновления общего CSV отчёта: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Извлекает имя формы из строки CSV
+     */
+    private String extractFormNameFromCsvLine(String line) {
+        if (line == null || line.trim().isEmpty()) return null;
+
+        // Разделяем по точке с запятой
+        String[] parts = line.split(";", 3);
+        if (parts.length < 1) return null;
+
+        String formName = parts[0].trim();
+
+        // Убираем кавычки если есть
+        if (formName.startsWith("\"") && formName.endsWith("\"")) {
+            formName = formName.substring(1, formName.length() - 1);
+        }
+
+        return formName;
+    }
+    
     /**
      * Формирует безопасное имя файла для удаления (без расширения)
      */
