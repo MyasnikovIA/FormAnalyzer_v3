@@ -2,6 +2,8 @@ package ru.tmis.analyzer.ui;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.db.OracleService;
+import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.CSVReportGenerator;
@@ -528,16 +530,70 @@ public class MainWindow extends JFrame {
         return safeName + ".txt";
     }
 
-    // ui/MainWindow.java
-
-    /**
-     * Запускает анализ выбранных форм
-     */
     private void startAnalysis() {
         if (isRunning.get()) {
             appendLog("Анализ уже выполняется");
             return;
         }
+
+        // ========== ПРОВЕРКА ПОДКЛЮЧЕНИЙ К БАЗАМ ДАННЫХ ==========
+        boolean oracleAvailable = false;
+        boolean postgresAvailable = false;
+
+        try {
+            OracleService oracleService = new OracleService(
+                    settings.getOracleUrl(),
+                    settings.getOracleUser(),
+                    settings.getOraclePassword()
+            );
+            oracleAvailable = oracleService.testConnection();
+            if (oracleAvailable) {
+                appendLog("✓ Подключение к Oracle успешно");
+            } else {
+                appendLog("✗ Подключение к Oracle не удалось");
+            }
+        } catch (Exception e) {
+            appendLog("✗ Ошибка подключения к Oracle: " + e.getMessage());
+        }
+
+        try {
+            PostgresService postgresService = new PostgresService(
+                    settings.getPostgresUrl(),
+                    settings.getPostgresUser(),
+                    settings.getPostgresPassword(),
+                    settings.getMisUser()
+            );
+            postgresAvailable = postgresService.testConnection();
+            if (postgresAvailable) {
+                appendLog("✓ Подключение к PostgreSQL успешно");
+            } else {
+                appendLog("✗ Подключение к PostgreSQL не удалось");
+            }
+        } catch (Exception e) {
+            appendLog("✗ Ошибка подключения к PostgreSQL: " + e.getMessage());
+        }
+
+        // Предупреждение, если обе БД недоступны
+        if (!oracleAvailable && !postgresAvailable) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Обе базы данных недоступны!\n" +
+                            "Анализ будет работать некорректно.\n\n" +
+                            "Проверьте настройки подключения.\n" +
+                            "Продолжить анализ?",
+                    "Ошибка подключения к БД",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                appendLog("Анализ отменён пользователем (ошибка подключения к БД)");
+                return;
+            }
+        } else if (!oracleAvailable) {
+            appendLog("⚠ Предупреждение: Oracle недоступна, некоторые функции будут ограничены");
+        } else if (!postgresAvailable) {
+            appendLog("⚠ Предупреждение: PostgreSQL недоступна, некоторые функции будут ограничены");
+        }
+        // =======================================================
 
         // ========== НОВЫЙ КОД: Склеивание существующих CSV отчетов ==========
         try {
@@ -606,30 +662,6 @@ public class MainWindow extends JFrame {
         progressBar.setIndeterminate(true);
         statusLabel.setText("Статус: Анализ запущен");
 
-        currentTask = executorService.submit(() -> {
-            try {
-                runAnalysis(new ArrayList<>(normalizedForms));
-            } catch (Exception e) {
-                SwingUtilities.invokeLater(() -> {
-                    appendLog("ОШИБКА: " + e.getMessage());
-                    e.printStackTrace();
-                });
-            } finally {
-                isRunning.set(false);
-                SwingUtilities.invokeLater(() -> {
-                    startButton.setEnabled(true);
-                    stopButton.setEnabled(false);
-                    settingsButton.setEnabled(true);
-                    statusLabel.setText("Статус: Готов");
-                    progressBar.setIndeterminate(false);
-                    if (!stopRequested) {
-                        progressBar.setString("Анализ завершен");
-                    } else {
-                        progressBar.setString("Анализ остановлен");
-                    }
-                });
-            }
-        });
         currentTask = executorService.submit(() -> {
             try {
                 runAnalysis(new ArrayList<>(normalizedForms));
