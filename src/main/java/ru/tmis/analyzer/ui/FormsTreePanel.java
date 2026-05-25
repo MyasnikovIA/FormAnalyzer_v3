@@ -515,6 +515,10 @@ public class FormsTreePanel extends JPanel {
             }
         });
 
+        // ========== НОВЫЙ ПУНКТ: ОТКРЫТЬ В STASH ==========
+        JMenuItem openInStashMenuItem = new JMenuItem("🌐 Открыть в Stash");
+        openInStashMenuItem.addActionListener(e -> openSelectedFormsInStash());
+
         JMenuItem selectAllMenuItem = new JMenuItem("Выбрать всё");
         selectAllMenuItem.addActionListener(e -> selectAllNodes());
 
@@ -527,7 +531,6 @@ public class FormsTreePanel extends JPanel {
             if (selectedPath != null) {
                 String formPath = getFormPathFromTreePath(selectedPath);
                 if (formPath != null) {
-                    // Запускаем рекурсивное разворачивание в отдельном потоке
                     SwingUtilities.invokeLater(() -> {
                         expandAllChildrenRecursive(formPath, selectedPath);
                     });
@@ -535,18 +538,18 @@ public class FormsTreePanel extends JPanel {
             }
         });
 
-
         popupMenu.add(addMenuItem);
         popupMenu.add(removeMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(runAnalysisMenuItem);
         popupMenu.add(recursiveAnalysisMenuItem);
         popupMenu.addSeparator();
+        popupMenu.add(openInStashMenuItem);  // <-- ДОБАВИТЬ СЮДА
+        popupMenu.addSeparator();
         popupMenu.add(selectAllMenuItem);
         popupMenu.add(deselectAllMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(expandAllMenuItem);
-
 
         tree.addMouseListener(new MouseAdapter() {
             @Override
@@ -574,6 +577,42 @@ public class FormsTreePanel extends JPanel {
                 popupMenu.show(tree, e.getX(), e.getY());
             }
         });
+    }
+
+    /**
+     * Открывает выбранные формы в Stash (отдельные вкладки браузера)
+     */
+    private void openSelectedFormsInStash() {
+        TreePath[] selectedPaths = tree.getSelectionPaths();
+        if (selectedPaths == null || selectedPaths.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Не выбрано ни одной формы",
+                    "Нет выбранных форм",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        for (TreePath path : selectedPaths) {
+            String formPath = getFullFormPathFromTreePath(path);
+            if (formPath == null || formPath.isEmpty()) continue;
+
+            // Убираем маркер SubForm если есть
+            String actualPath = formPath;
+            if (actualPath.startsWith("(sub)_")) {
+                actualPath = actualPath.substring(6);
+            }
+
+            String stashUrl = "https://stash-medmis.bars-open.ru/projects/MED/repos/mis/browse/" + actualPath;
+
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().browse(new java.net.URI(stashUrl));
+                    Thread.sleep(500); // Небольшая задержка между открытием вкладок
+                }
+            } catch (Exception e) {
+                System.err.println("[FormsTreePanel] Ошибка открытия URL для " + formPath + ": " + e.getMessage());
+            }
+        }
     }
 
     private void applyFilter() {
