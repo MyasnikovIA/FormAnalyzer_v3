@@ -68,14 +68,25 @@ public class MainWindow extends JFrame {
         initUI();
         loadWindowState();
 
+        // MainWindow.java - исправленный windowClosing
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                // Принудительное сохранение перед закрытием
-                DatabaseCacheManager.forceSaveToDisk();
+                // Сначала останавливаем автосохранение
                 DatabaseCacheManager.shutdownAutoSave();
+
+                // Затем принудительно сохраняем кэш
+                DatabaseCacheManager.forceSaveToDisk();
+
+                // Восстанавливаем оригинальные потоки вывода
                 restoreSystemOut();
+
+                // Сохраняем состояние окна
                 saveState();
+
+                // Завершаем программу
+                System.exit(0);
             }
         });
 
@@ -157,6 +168,28 @@ public class MainWindow extends JFrame {
         dialog.setVisible(true);
     }
 
+    /**
+     * Добавление сообщения в лог (для фоновых задач)
+     */
+    public void appendLog(String message) {
+        SwingUtilities.invokeLater(() -> {
+            if (logArea != null) {
+                logArea.append("[" + new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message + "\n");
+                logArea.setCaretPosition(logArea.getDocument().getLength());
+            }
+        });
+    }
+
+    /**
+     * Установка статуса в строке состояния
+     */
+    public void setStatusMessage(String message) {
+        SwingUtilities.invokeLater(() -> {
+            if (statusLabel != null) {
+                statusLabel.setText("Статус: " + message);
+            }
+        });
+    }
     private JSplitPane createCenterPanel() {
         // Left panel - forms tree
         JPanel leftPanel = new JPanel(new BorderLayout());
@@ -881,13 +914,6 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private void appendLog(String message) {
-        SwingUtilities.invokeLater(() -> {
-            logArea.append("[" + new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message + "\n");
-            logArea.setCaretPosition(logArea.getDocument().getLength());
-        });
-    }
-
     private void saveLog() {
         String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String filename = "analysis_log_" + timestamp + ".txt";
@@ -1263,4 +1289,5 @@ public class MainWindow extends JFrame {
         }
         return outputDir + File.separator + "Forms" + File.separator + safeName + ".md";
     }
+
 }

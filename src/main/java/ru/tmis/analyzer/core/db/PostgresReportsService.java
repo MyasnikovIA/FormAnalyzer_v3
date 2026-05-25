@@ -22,7 +22,8 @@ public class PostgresReportsService {
             List<DbReportInfo> result = new ArrayList<>();
             if (unitCode == null || unitCode.trim().isEmpty()) return result;
 
-            String sql = "SELECT rep.id, drl.priv_name, rep.rep_type, rep.rep_data, " +
+            String sql = "SELECT rep.id, drl.priv_name, rep.rep_type,\n" +
+                    " -- rep.rep_data, \n" +
                     "rep.rep_filename, rep.rep_name, rep.rep_code " +
                     "FROM d_reports_links drl JOIN d_reports rep ON drl.pid = rep.id " +
                     "WHERE drl.unitcode = ?";

@@ -22,11 +22,36 @@ public class MainForm {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-                // Загружаем настройки
+                // Быстрая загрузка настроек (без подключения к БД)
                 SettingsModel settings = SettingsModel.getInstance();
                 AppConfig config = AppConfig.load();
 
-                // Инициализируем конфигурацию БД
+                // Сразу создаём и показываем окно
+                MainWindow window = new MainWindow(settings, config);
+                window.setVisible(true);
+
+                // Запускаем фоновую загрузку кэша
+                startBackgroundCacheLoading(settings, config, window);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                        "Ошибка запуска приложения: " + e.getMessage(),
+                        "Критическая ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    /**
+     * Фоновая загрузка кэша (не блокирует GUI)
+     */
+    private static void startBackgroundCacheLoading(SettingsModel settings, AppConfig config, MainWindow window) {
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Инициализация подключений к БД (может быть долгой)
+                publish("Инициализация подключений к БД...");
                 DatabaseCacheManager.initDbConfig(
                         settings.getOracleUrl(),
                         settings.getOracleUser(),
@@ -37,23 +62,40 @@ public class MainForm {
                         settings.getMisUser()
                 );
 
-                // ========== НОВЫЙ КОД: Загрузка кэша с диска ==========
-                System.out.println("[Cache] Загрузка кэшированных данных с диска...");
+                // Загрузка кэша с диска
+                publish("Загрузка кэша с диска...");
                 DatabaseCacheManager.setCacheOutputDir(settings.getOutputDir());
                 DatabaseCacheManager.loadFromDisk();
-                System.out.println("[Cache] Загрузка завершена");
-                // =====================================================
 
-                MainWindow window = new MainWindow(settings, config);
-                window.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null,
-                        "Ошибка запуска приложения: " + e.getMessage(),
-                        "Критическая ошибка",
-                        JOptionPane.ERROR_MESSAGE);
+                // Запуск автосохранения
+                publish("Запуск автосохранения кэша...");
+                DatabaseCacheManager.initAutoSave();
+
+                publish("Кэш загружен");
+                return null;
             }
-        });
+
+            @Override
+            protected void process(java.util.List<String> chunks) {
+                String lastMessage = chunks.get(chunks.size() - 1);
+                window.appendLog(lastMessage);
+                window.setStatusMessage(lastMessage);
+            }
+
+            @Override
+            protected void done() {
+                window.setStatusMessage("Готов к работе");
+                window.appendLog("✅ Фоновая загрузка кэша завершена");
+                try {
+                    get(); // Проверяем наличие ошибок
+                } catch (Exception e) {
+                    window.appendLog("❌ Ошибка фоновой загрузки: " + e.getMessage());
+                    window.setStatusMessage("Ошибка загрузки кэша");
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     private static void configureWindowsOracle() {

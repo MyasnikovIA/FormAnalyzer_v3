@@ -11,7 +11,7 @@ public class DbReportInfo {
     private String privName;
     private String unitCode;
     private int repType;
-    private byte[] repData;
+    private transient byte[] repData;
     private String repFilename;
     private String repName;
     private String repCode;

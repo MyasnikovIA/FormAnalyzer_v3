@@ -78,7 +78,7 @@ public class ReportsFromDbService {
                     "SELECT rep.ID,\n" +
                             "       drl.PRIV_NAME,\n" +
                             "       rep.REP_TYPE,\n" +
-                            "       rep.REP_DATA,\n" +
+                            "       -- rep.REP_DATA,\n" +
                             "       rep.REP_FILENAME,\n" +
                             "       rep.REP_NAME,\n" +
                             "       rep.REP_CODE,\n" +

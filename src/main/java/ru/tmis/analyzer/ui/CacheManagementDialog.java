@@ -9,10 +9,12 @@ import ru.tmis.analyzer.core.log.ILogger;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CacheManagementDialog extends JDialog {
 
@@ -21,7 +23,8 @@ public class CacheManagementDialog extends JDialog {
     private Future<?> currentTask;
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
     private volatile boolean isRunning = false;
-    private String currentOperation = "";
+    private volatile boolean isResumeMode = false;
+    private final ConcurrentHashMap<String, Boolean> completedTasks = new ConcurrentHashMap<>();
 
     private JTextArea logArea;
     private JProgressBar progressBar;
@@ -48,7 +51,8 @@ public class CacheManagementDialog extends JDialog {
     private JButton reloadSynonymsBtn;
 
     // Глобальные кнопки
-    private JButton reloadAllBtn;
+    private JButton reloadAllNewBtn;
+    private JButton reloadAllResumeBtn;
     private JButton saveCacheBtn;
     private JButton stopBtn;
     private JButton clearAllBtn;
@@ -57,7 +61,7 @@ public class CacheManagementDialog extends JDialog {
     public CacheManagementDialog(JFrame parent, SettingsModel settings) {
         super(parent, "Управление кэшем БД", true);
         this.settings = settings;
-        this.executor = Executors.newCachedThreadPool(); // Используем cached thread pool для параллельных задач
+        this.executor = Executors.newCachedThreadPool();
 
         initUI();
         setSize(1100, 750);
@@ -73,8 +77,13 @@ public class CacheManagementDialog extends JDialog {
         JPanel infoPanel = createInfoPanel();
         mainPanel.add(infoPanel, BorderLayout.NORTH);
 
+        // Панель с кнопками с прокруткой
         JPanel buttonsPanel = createButtonsPanel();
-        mainPanel.add(buttonsPanel, BorderLayout.CENTER);
+        JScrollPane buttonsScrollPane = new JScrollPane(buttonsPanel);
+        buttonsScrollPane.setBorder(null);
+        buttonsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        buttonsScrollPane.setPreferredSize(new Dimension(0, 400));
+        mainPanel.add(buttonsScrollPane, BorderLayout.CENTER);
 
         JPanel bottomPanel = createBottomPanel();
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -85,25 +94,26 @@ public class CacheManagementDialog extends JDialog {
 
     private JPanel createInfoPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-       // panel.setBorder(BorderFactory.createTitledBorder("Информация"));
-//
-       // JTextArea infoArea = new JTextArea();
-       // infoArea.setEditable(false);
-       // infoArea.setBackground(panel.getBackground());
-       // infoArea.setFont(new Font("Dialog", Font.PLAIN, 11));
-       // infoArea.setText(
-       //         "Управление кэшем базы данных\n\n" +
-       //                 "• КАЖДАЯ КНОПКА ЗАПУСКАЕТ ЗАГРУЗКУ В ОТДЕЛЬНОМ ПАРАЛЛЕЛЬНОМ ПОТОКЕ\n" +
-       //                 "• Вы можете запустить несколько типов загрузки одновременно\n" +
-       //                 "• Процесс можно остановить в любой момент (останавливаются все потоки)\n" +
-       //                 "• Уже загруженные данные сохраняются на диске\n" +
-       //                 "• При повторной загрузке новые данные добавляются к существующим\n" +
-       //                 "• Кнопка 'Сохранить кэш' принудительно сохраняет текущий кэш на диск\n" +
-       //                 "• Кнопка 'Очистить всё' удаляет весь кэш (требуется подтверждение)"
-       // );
-       // infoArea.setMargin(new Insets(10, 10, 10, 10));
-       // panel.add(infoArea, BorderLayout.CENTER);
-//
+        panel.setBorder(BorderFactory.createTitledBorder("Информация"));
+
+        JTextArea infoArea = new JTextArea();
+        infoArea.setEditable(false);
+        infoArea.setBackground(panel.getBackground());
+        infoArea.setFont(new Font("Dialog", Font.PLAIN, 11));
+        infoArea.setText(
+                "Управление кэшем базы данных\n\n" +
+                        "• КАЖДАЯ КНОПКА ЗАПУСКАЕТ ЗАГРУЗКУ В ОТДЕЛЬНОМ ПАРАЛЛЕЛЬНОМ ПОТОКЕ\n" +
+                        "• Вы можете запустить несколько типов загрузки одновременно\n" +
+                        "• Процесс можно остановить в любой момент (останавливаются все потоки)\n" +
+                        "• Уже загруженные данные сохраняются на диске\n" +
+                        "• 'ЗАГРУЗИТЬ ВСЁ (С НАЧАЛА)' - очищает кэш и загружает всё заново\n" +
+                        "• 'ПРОДОЛЖИТЬ ЗАГРУЗКУ' - догружает только недостающие данные\n" +
+                        "• Кнопка 'Сохранить кэш' принудительно сохраняет текущий кэш на диск\n" +
+                        "• Кнопка 'Очистить всё' удаляет весь кэш (требуется подтверждение)"
+        );
+        infoArea.setMargin(new Insets(10, 10, 10, 10));
+        panel.add(infoArea, BorderLayout.CENTER);
+
         return panel;
     }
 
@@ -237,17 +247,20 @@ public class CacheManagementDialog extends JDialog {
         gbc.gridwidth = 2;
         gbc.insets = new Insets(15, 10, 5, 10);
 
-        JPanel globalPanel = new JPanel(new GridLayout(1, 5, 10, 0));
-        reloadAllBtn = createCacheButton("🔄 ПЕРЕЗАГРУЗИТЬ ВСЁ", "Все типы данных (последовательно)", new Color(244, 67, 54));
+        JPanel globalPanel = new JPanel(new GridLayout(2, 3, 10, 5));
+        reloadAllNewBtn = createCacheButton("🔄 ЗАГРУЗИТЬ ВСЁ (С НАЧАЛА)", "Очистить кэш и загрузить все данные заново", new Color(244, 67, 54));
+        reloadAllResumeBtn = createCacheButton("▶️ ПРОДОЛЖИТЬ ЗАГРУЗКУ", "Продолжить незавершённую загрузку", new Color(76, 175, 80));
         saveCacheBtn = createCacheButton("💾 СОХРАНИТЬ КЭШ", "Принудительно сохранить кэш на диск", new Color(0, 200, 83));
         stopBtn = createCacheButton("⏹️ ОСТАНОВИТЬ ВСЕ", "Прервать все текущие операции", new Color(158, 158, 158));
         clearAllBtn = createCacheButton("🗑️ ОЧИСТИТЬ ВСЁ", "Удалить весь кэш", new Color(244, 67, 54));
         refreshStatsBtn = createCacheButton("🔄 ОБНОВИТЬ СТАТИСТИКУ", "Обновить информацию о кэше", new Color(33, 150, 243));
 
         stopBtn.setEnabled(false);
-        stopBtn.setBackground(new Color(0, 0, 0));
+        stopBtn.setBackground(new Color(158, 158, 158));
+        stopBtn.setForeground(Color.BLACK);
 
-        globalPanel.add(reloadAllBtn);
+        globalPanel.add(reloadAllNewBtn);
+        globalPanel.add(reloadAllResumeBtn);
         globalPanel.add(saveCacheBtn);
         globalPanel.add(stopBtn);
         globalPanel.add(clearAllBtn);
@@ -274,7 +287,8 @@ public class CacheManagementDialog extends JDialog {
         reloadSequencesBtn.addActionListener(e -> startReloadInNewThread("sequences"));
         reloadTriggersBtn.addActionListener(e -> startReloadInNewThread("triggers"));
         reloadSynonymsBtn.addActionListener(e -> startReloadInNewThread("synonyms"));
-        reloadAllBtn.addActionListener(e -> startReloadAll());
+        reloadAllNewBtn.addActionListener(e -> startReloadAll(false));
+        reloadAllResumeBtn.addActionListener(e -> startReloadAll(true));
         saveCacheBtn.addActionListener(e -> saveCacheToDisk());
         stopBtn.addActionListener(e -> stopAllReloads());
         clearAllBtn.addActionListener(e -> clearAllCache());
@@ -302,7 +316,7 @@ public class CacheManagementDialog extends JDialog {
         JButton button = new JButton(text);
         button.setToolTipText(tooltip);
         button.setBackground(color);
-        button.setForeground(Color.black);
+        button.setForeground(Color.BLACK);
         button.setFont(button.getFont().deriveFont(Font.BOLD, 10f));
         button.setFocusPainted(false);
         return button;
@@ -351,10 +365,19 @@ public class CacheManagementDialog extends JDialog {
         });
     }
 
-    private String getCacheSize(String cacheName) {
-        // Здесь нужно получить реальную статистику из DatabaseCacheManager
-        // Пока возвращаем заглушку
-        return "?";
+    private int getCacheSize(String cacheName) {
+        switch (cacheName) {
+            case "oracleView": return DatabaseCacheManager.getOracleViewDDLCacheSize();
+            case "postgresView": return DatabaseCacheManager.getPostgresViewDDLCacheSize();
+            case "oracleTable": return DatabaseCacheManager.getOracleTableDDLCacheSize();
+            case "postgresTable": return DatabaseCacheManager.getPostgresTableDDLCacheSize();
+            case "oracleFunction": return DatabaseCacheManager.getOracleFunctionBodyCacheSize();
+            case "postgresFunction": return DatabaseCacheManager.getPostgresFunctionBodyCacheSize();
+            case "broker": return DatabaseCacheManager.getBrokerExecProcCacheSize();
+            case "oracleReport": return DatabaseCacheManager.getOracleReportsCacheSize();
+            case "postgresReport": return DatabaseCacheManager.getPostgresReportsCacheSize();
+            default: return 0;
+        }
     }
 
     private void saveCacheToDisk() {
@@ -370,21 +393,39 @@ public class CacheManagementDialog extends JDialog {
         }
     }
 
+    // CacheManagementDialog.java
+
     /**
      * Запускает загрузку в новом параллельном потоке
      */
     private void startReloadInNewThread(String type) {
         appendLog("🚀 Запуск загрузки: " + getTypeName(type) + " (параллельный поток)");
 
+        // Запускаем в отдельном потоке из пула
         executor.submit(() -> {
+            Thread.currentThread().setName("CacheLoader-" + type);
+            long startTime = System.currentTimeMillis();
+
             try {
                 DatabaseCachePopulator populator = new DatabaseCachePopulator(settings);
                 populator.setLogger(new ILogger() {
-                    @Override public void log(String message) { appendLog(message); }
-                    @Override public void error(String message) { appendLog("ОШИБКА: " + message); }
-                    @Override public void debug(String message) { appendLog("[DEBUG] " + message); }
+                    @Override
+                    public void log(String message) {
+                        appendLog("[" + type + "] " + message);
+                    }
+                    @Override
+                    public void error(String message) {
+                        appendLog("[" + type + "] ОШИБКА: " + message);
+                    }
+                    @Override
+                    public void debug(String message) {
+                        appendLog("[" + type + "] DEBUG: " + message);
+                    }
                 });
                 populator.setStopRequested(stopRequested);
+                populator.setProgressCallback(status -> {
+                    SwingUtilities.invokeLater(() -> statusLabel.setText("Статус: " + status));
+                });
 
                 DatabaseCachePopulator.PopulateResult result = null;
                 String operationName = getTypeName(type);
@@ -392,38 +433,43 @@ public class CacheManagementDialog extends JDialog {
                 updateProgress("Загрузка: " + operationName);
 
                 switch (type) {
+                    // Oracle
                     case "oracle_views":
                         result = populator.loadOracleViewsOnly();
-                        break;
-                    case "postgres_views":
-                        result = populator.loadPostgresViewsOnly();
                         break;
                     case "oracle_tables":
                         result = populator.loadOracleTablesOnly();
                         break;
-                    case "postgres_tables":
-                        result = populator.loadPostgresTablesOnly();
-                        break;
                     case "oracle_functions":
                         result = populator.loadOracleFunctionsOnly();
-                        break;
-                    case "postgres_functions":
-                        result = populator.loadPostgresFunctionsOnly();
                         break;
                     case "oracle_packages":
                         result = populator.loadOraclePackagesOnly();
                         break;
-                    case "postgres_packages":
-                        result = populator.loadPostgresPackagesOnly();
-                        break;
-                    case "brokers":
-                        result = populator.loadBrokersOnly();
-                        break;
                     case "oracle_reports":
                         result = populator.loadOracleReportsOnly();
                         break;
+
+                    // PostgreSQL
+                    case "postgres_views":
+                        result = populator.loadPostgresViewsOnly();
+                        break;
+                    case "postgres_tables":
+                        result = populator.loadPostgresTablesOnly();
+                        break;
+                    case "postgres_functions":
+                        result = populator.loadPostgresFunctionsOnly();
+                        break;
+                    case "postgres_packages":
+                        result = populator.loadPostgresPackagesOnly();
+                        break;
                     case "postgres_reports":
                         result = populator.loadPostgresReportsOnly();
+                        break;
+
+                    // Общие
+                    case "brokers":
+                        result = populator.loadBrokersOnly();
                         break;
                     case "constants":
                         result = populator.loadConstantsOnly();
@@ -443,16 +489,28 @@ public class CacheManagementDialog extends JDialog {
                     case "synonyms":
                         result = populator.loadSynonymsOnly();
                         break;
+
+                    default:
+                        appendLog("❌ Неизвестный тип: " + type);
+                        return;
                 }
 
+                long elapsed = System.currentTimeMillis() - startTime;
+
                 if (result != null) {
-                    appendLog("✅ Загрузка завершена: " + operationName);
+                    appendLog("✅ Загрузка завершена: " + operationName + " за " + (elapsed / 1000) + " сек");
                     refreshStats();
+                } else {
+                    appendLog("⚠️ Загрузка завершена с пустым результатом: " + operationName);
                 }
 
             } catch (Exception e) {
-                appendLog("❌ КРИТИЧЕСКАЯ ОШИБКА в " + getTypeName(type) + ": " + e.getMessage());
-                e.printStackTrace();
+                if (stopRequested.get()) {
+                    appendLog("⏹️ Загрузка прервана пользователем: " + getTypeName(type));
+                } else {
+                    appendLog("❌ КРИТИЧЕСКАЯ ОШИБКА в " + getTypeName(type) + ": " + e.getMessage());
+                    e.printStackTrace();
+                }
             } finally {
                 updateProgress("Готов");
             }
@@ -460,37 +518,193 @@ public class CacheManagementDialog extends JDialog {
     }
 
     /**
-     * Запускает последовательную загрузку ВСЕХ типов
+     * Запускает параллельную загрузку ВСЕХ типов данных
+     * @param resumeMode true - продолжает незавершённые загрузки, false - начинает заново
      */
-    private void startReloadAll() {
-        appendLog("=== ЗАПУСК ПОЛНОЙ ПЕРЕЗАГРУЗКИ ВСЕХ ДАННЫХ ===");
-
-        executor.submit(() -> {
-            try {
-                DatabaseCachePopulator populator = new DatabaseCachePopulator(settings);
-                populator.setLogger(new ILogger() {
-                    @Override public void log(String message) { appendLog(message); }
-                    @Override public void error(String message) { appendLog("ОШИБКА: " + message); }
-                    @Override public void debug(String message) { appendLog("[DEBUG] " + message); }
-                });
-                populator.setStopRequested(stopRequested);
-
-                DatabaseCachePopulator.PopulateResult result = populator.populateAll();
-
-                if (result != null) {
-                    appendLog("=== ПОЛНАЯ ПЕРЕЗАГРУЗКА ЗАВЕРШЕНА ===");
-                    appendLog(result.toString());
-                    refreshStats();
-                }
-
-            } catch (Exception e) {
-                appendLog("КРИТИЧЕСКАЯ ОШИБКА: " + e.getMessage());
-                e.printStackTrace();
+    private void startReloadAll(boolean resumeMode) {
+        if (isRunning && !resumeMode) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Загрузка уже выполняется. Остановить текущую и начать заново?",
+                    "Подтверждение",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
             }
-        });
+            stopAllReloads();
+            try { Thread.sleep(1000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }
+
+        this.isResumeMode = resumeMode;
+        completedTasks.clear();
+
+        appendLog("=== ЗАПУСК ПАРАЛЛЕЛЬНОЙ ЗАГРУЗКИ " + (resumeMode ? "(ПРОДОЛЖЕНИЕ)" : "(С НАЧАЛА)") + " ===");
+
+        String[] allTypes = {
+                "oracle_views", "postgres_views",
+                "oracle_tables", "postgres_tables",
+                "oracle_functions", "postgres_functions",
+                "oracle_packages", "postgres_packages",
+                "brokers",
+                "oracle_reports", "postgres_reports",
+                "constants", "options",
+                "metadata", "sequences", "triggers", "synonyms"
+        };
+
+        AtomicInteger completedCount = new AtomicInteger(0);
+        int totalTasks = allTypes.length;
+
+        for (String type : allTypes) {
+            // Проверяем, нужно ли запускать этот тип
+            if (resumeMode && isTypeFullyLoaded(type)) {
+                appendLog("⏭️ [" + type + "] Пропущен (уже полностью загружен)");
+                int completed = completedCount.incrementAndGet();
+                appendLog("📊 Прогресс: " + completed + " из " + totalTasks + " потоков завершено");
+                continue;
+            }
+
+            executor.submit(() -> {
+                Thread.currentThread().setName("CacheLoader-" + type);
+                long startTime = System.currentTimeMillis();
+
+                try {
+                    appendLog("🚀 [" + type + "] Начало загрузки " + (resumeMode ? "(продолжение)" : ""));
+
+                    DatabaseCachePopulator populator = new DatabaseCachePopulator(settings);
+                    populator.setLogger(new ILogger() {
+                        @Override public void log(String message) { appendLog("[" + type + "] " + message); }
+                        @Override public void error(String message) { appendLog("[" + type + "] ОШИБКА: " + message); }
+                        @Override public void debug(String message) { appendLog("[" + type + "] DEBUG: " + message); }
+                    });
+                    populator.setStopRequested(stopRequested);
+
+                    DatabaseCachePopulator.PopulateResult result = null;
+
+                    switch (type) {
+                        case "oracle_views":
+                            result = populator.loadOracleViewsOnly();
+                            break;
+                        case "postgres_views":
+                            result = populator.loadPostgresViewsOnly();
+                            break;
+                        case "oracle_tables":
+                            result = populator.loadOracleTablesOnly();
+                            break;
+                        case "postgres_tables":
+                            result = populator.loadPostgresTablesOnly();
+                            break;
+                        case "oracle_functions":
+                            result = populator.loadOracleFunctionsOnly();
+                            break;
+                        case "postgres_functions":
+                            result = populator.loadPostgresFunctionsOnly();
+                            break;
+                        case "oracle_packages":
+                            result = populator.loadOraclePackagesOnly();
+                            break;
+                        case "postgres_packages":
+                            result = populator.loadPostgresPackagesOnly();
+                            break;
+                        case "brokers":
+                            result = populator.loadBrokersOnly();
+                            break;
+                        case "oracle_reports":
+                            result = populator.loadOracleReportsOnly();
+                            break;
+                        case "postgres_reports":
+                            result = populator.loadPostgresReportsOnly();
+                            break;
+                        case "constants":
+                            result = populator.loadConstantsOnly();
+                            break;
+                        case "options":
+                            result = populator.loadOptionsOnly();
+                            break;
+                        case "metadata":
+                            result = populator.loadMetadataOnly();
+                            break;
+                        case "sequences":
+                            result = populator.loadSequencesOnly();
+                            break;
+                        case "triggers":
+                            result = populator.loadTriggersOnly();
+                            break;
+                        case "synonyms":
+                            result = populator.loadSynonymsOnly();
+                            break;
+                    }
+
+                    long elapsed = System.currentTimeMillis() - startTime;
+                    completedTasks.put(type, true);
+                    appendLog("✅ [" + type + "] Загрузка завершена за " + (elapsed / 1000) + " сек");
+
+                } catch (Exception e) {
+                    if (stopRequested.get()) {
+                        appendLog("⏹️ [" + type + "] Загрузка прервана пользователем");
+                        completedTasks.put(type, false);
+                    } else {
+                        appendLog("❌ [" + type + "] КРИТИЧЕСКАЯ ОШИБКА: " + e.getMessage());
+                    }
+                } finally {
+                    int completed = completedCount.incrementAndGet();
+                    appendLog("📊 Прогресс: " + completed + " из " + totalTasks + " потоков завершено");
+
+                    if (completed == totalTasks) {
+                        SwingUtilities.invokeLater(() -> {
+                            appendLog("🎉 ВСЕ ПОТОКИ ЗАВЕРШЕНЫ!");
+                            appendLog("=== ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА ЗАВЕРШЕНА ===");
+                            refreshStats();
+                            progressBar.setIndeterminate(false);
+                            progressBar.setValue(100);
+                            statusLabel.setText("Статус: Все потоки завершены");
+                            isRunning = false;
+                        });
+                    }
+                }
+            });
+        }
+
+        updateProgress("Запущено " + totalTasks + " параллельных потоков...");
+        progressBar.setIndeterminate(true);
+        isRunning = true;
+    }
+
+    /**
+     * Проверяет, полностью ли загружен данный тип
+     */
+    private boolean isTypeFullyLoaded(String type) {
+        switch (type) {
+            case "oracle_views":
+                return getCacheSize("oracleView") > 0;
+            case "postgres_views":
+                return getCacheSize("postgresView") > 0;
+            case "oracle_tables":
+                return getCacheSize("oracleTable") > 0;
+            case "postgres_tables":
+                return getCacheSize("postgresTable") > 0;
+            case "oracle_functions":
+                return getCacheSize("oracleFunction") > 0;
+            case "postgres_functions":
+                return getCacheSize("postgresFunction") > 0;
+            case "oracle_packages":
+                return getCacheSize("oraclePackage") > 0;
+            case "brokers":
+                return getCacheSize("broker") > 0;
+            case "oracle_reports":
+                return getCacheSize("oracleReport") > 0;
+            case "postgres_reports":
+                return getCacheSize("postgresReport") > 0;
+            case "constants":
+                return getCacheSize("constant") > 0;
+            case "options":
+                return getCacheSize("systemOption") > 0;
+            default:
+                return false;
+        }
     }
 
     private void stopAllReloads() {
+        if (!isRunning) return;
+
         appendLog("⏹️ Запрос на остановку всех операций...");
         stopRequested.set(true);
         stopBtn.setEnabled(false);
@@ -505,6 +719,7 @@ public class CacheManagementDialog extends JDialog {
                     stopBtn.setEnabled(true);
                     statusLabel.setText("Статус: Готов");
                     appendLog("✅ Все операции остановлены");
+                    isRunning = false;
                 });
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
