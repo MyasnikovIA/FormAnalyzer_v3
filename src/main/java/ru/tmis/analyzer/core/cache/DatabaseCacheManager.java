@@ -76,6 +76,7 @@ public class DatabaseCacheManager {
     private static volatile boolean oracleChecked = false;
     private static volatile boolean postgresChecked = false;
 
+    private static final Map<String, Boolean> missingObjectsCache = new ConcurrentHashMap<>();
 
     // Кэш для D_PKG_CONSTANTS (константы)
     private static final Map<String, String> constantsCache = new ConcurrentHashMap<>();
@@ -679,75 +680,132 @@ public class DatabaseCacheManager {
         });
     }
 
-    // Для простых кэшей (String -> String, Long, Integer)
     public static String getOracleViewDDL(String viewName, Supplier<String> loader) {
-        if (!isOracleAvailable()) return null;
         String key = viewName.toUpperCase();
-        return oracleViewDDLCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        // Проверяем, не отсутствует ли объект
+        if (missingObjectsCache.containsKey(key)) {
+            return null;
+        }
+
+        String cached = oracleViewDDLCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            oracleViewDDLCache.put(key, value);
             markChanged();
-            return value;
-        });
+        } else {
+            missingObjectsCache.put(key, true);  // Запоминаем, что объекта нет
+        }
+        return value;
     }
 
     public static String getPostgresViewDDL(String viewName, Supplier<String> loader) {
         if (!isPostgresAvailable()) return null;
         String key = viewName.toLowerCase();
-        return postgresViewDDLCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        String cached = postgresViewDDLCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            postgresViewDDLCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
     public static String getOracleTableDDL(String tableName, Supplier<String> loader) {
         if (!isOracleAvailable()) return null;
         String key = tableName.toUpperCase();
-        return oracleTableDDLCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        // Сначала проверяем наличие в кэше
+        String cached = oracleTableDDLCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        // Если нет в кэше, загружаем
+        String value = loader.get();
+        if (value != null) {
+            oracleTableDDLCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
+    // Для PostgreSQL таблиц
     public static String getPostgresTableDDL(String tableName, Supplier<String> loader) {
         if (!isPostgresAvailable()) return null;
         String key = tableName.toLowerCase();
-        return postgresTableDDLCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        String cached = postgresTableDDLCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            postgresTableDDLCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
     public static String getOracleFunctionBody(String functionKey, Supplier<String> loader) {
         if (!isOracleAvailable()) return null;
         String key = functionKey.toUpperCase();
-        return oracleFunctionBodyCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        String cached = oracleFunctionBodyCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            oracleFunctionBodyCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
     public static String getPostgresFunctionBody(String functionKey, Supplier<String> loader) {
         if (!isPostgresAvailable()) return null;
         String key = functionKey.toLowerCase();
-        return postgresFunctionBodyCache.computeIfAbsent(key, k -> {
-            String value = loader.get();
+
+        String cached = postgresFunctionBodyCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        String value = loader.get();
+        if (value != null) {
+            postgresFunctionBodyCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value;
     }
 
     public static Long getOracleCount(String objectName, Supplier<Long> loader) {
         if (!isOracleAvailable()) return -1L;
         String key = objectName.toUpperCase();
-        return oracleCountCache.computeIfAbsent(key, k -> {
-            Long value = loader.get();
+
+        Long cached = oracleCountCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        Long value = loader.get();
+        if (value != null) {
+            oracleCountCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value != null ? value : -1L;
     }
 
     public static Long getPostgresCount(String objectName, Supplier<Long> loader) {
@@ -773,12 +831,20 @@ public class DatabaseCacheManager {
     public static int getPostgresViewOid(String viewName, Supplier<Integer> loader) {
         if (!isPostgresAvailable()) return -1;
         String key = viewName.toLowerCase();
-        return postgresViewOidCache.computeIfAbsent(key, k -> {
-            Integer value = loader.get();
+
+        Integer cached = postgresViewOidCache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        Integer value = loader.get();
+        if (value != null && value > 0) {
+            postgresViewOidCache.put(key, value);
             markChanged();
-            return value;
-        });
+        }
+        return value != null ? value : -1;
     }
+
     public static boolean isOracleServerAvailable() {
         if (cachedOracleUrl == null || cachedOracleUrl.isEmpty()) return false;
         return NetworkUtils.isDatabaseServerAvailableWithCache(cachedOracleUrl);
@@ -1107,5 +1173,39 @@ public class DatabaseCacheManager {
             markChanged();
             return value;
         });
+    }
+    // Проверка наличия DDL вьюхи в кэше
+    public static boolean isOracleViewDDLCached(String viewName) {
+        String key = viewName.toUpperCase();
+        return oracleViewDDLCache.containsKey(key);
+    }
+
+    // Проверка наличия DDL таблицы в кэше
+    public static boolean isOracleTableDDLCached(String tableName) {
+        String key = tableName.toUpperCase();
+        return oracleTableDDLCache.containsKey(key);
+    }
+
+    // Проверка наличия тела функции в кэше
+    public static boolean isOracleFunctionBodyCached(String functionKey) {
+        String key = functionKey.toUpperCase();
+        return oracleFunctionBodyCache.containsKey(key);
+    }
+
+    // Проверка наличия отчётов в кэше
+    public static boolean isOracleReportsCached(String unitCode) {
+        String key = unitCode.toUpperCase();
+        return oracleReportsCache.containsKey(key);
+    }
+
+    // PostgreSQL аналогично
+    public static boolean isPostgresViewDDLCached(String viewName) {
+        String key = viewName.toLowerCase();
+        return postgresViewDDLCache.containsKey(key);
+    }
+
+    public static boolean isPostgresTableDDLCached(String tableName) {
+        String key = tableName.toLowerCase();
+        return postgresTableDDLCache.containsKey(key);
     }
 }

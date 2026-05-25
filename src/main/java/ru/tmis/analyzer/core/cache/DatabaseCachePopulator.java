@@ -80,45 +80,96 @@ public class DatabaseCachePopulator {
 
         PopulateResult result = new PopulateResult();
 
+        // 1. Загрузка всех вьюх из Oracle
         if (!stopRequested.get()) {
+            viewsLoaded = 0;
             loadAllOracleViews();
             result.oracleViewsCount = viewsLoaded;
         }
 
+        // 2. Загрузка всех вьюх из PostgreSQL
         if (!stopRequested.get()) {
+            viewsLoaded = 0;
             loadAllPostgresViews();
-            result.postgresViewsCount = viewsLoaded - result.oracleViewsCount;
+            result.postgresViewsCount = viewsLoaded;
         }
 
+        // 3. Прямая загрузка DDL всех таблиц из Oracle
         if (!stopRequested.get()) {
-            loadAllTablesFromViews();
-            result.tablesCount = tablesLoaded;
+            tablesLoaded = 0;
+            loadAllOracleTablesDirectly();
+            result.oracleTablesCount = tablesLoaded;
         }
 
+        // 4. Прямая загрузка DDL всех таблиц из PostgreSQL
         if (!stopRequested.get()) {
+            tablesLoaded = 0;
+            loadAllPostgresTablesDirectly();
+            result.postgresTablesCount = tablesLoaded;
+        }
+
+        // 5. Загрузка всех пакетных функций из Oracle
+        if (!stopRequested.get()) {
+            functionsLoaded = 0;
             loadAllOraclePackageFunctions();
             result.oracleFunctionsCount = functionsLoaded;
         }
 
+        // 6. Загрузка всех функций из PostgreSQL
         if (!stopRequested.get()) {
+            functionsLoaded = 0;
             loadAllPostgresFunctions();
-            result.postgresFunctionsCount = functionsLoaded - result.oracleFunctionsCount;
+            result.postgresFunctionsCount = functionsLoaded;
         }
 
+        // 7. Загрузка всех брокеров
         if (!stopRequested.get()) {
+            brokersLoaded = 0;
             loadAllBrokers();
             result.brokersCount = brokersLoaded;
         }
 
+        // 8. Загрузка всех отчётов из Oracle
         if (!stopRequested.get()) {
+            reportsLoaded = 0;
             loadAllOracleReports();
             result.oracleReportsCount = reportsLoaded;
         }
 
+        // 9. Загрузка всех отчётов из PostgreSQL
         if (!stopRequested.get()) {
+            reportsLoaded = 0;
             loadAllPostgresReports();
-            result.postgresReportsCount = reportsLoaded - result.oracleReportsCount;
+            result.postgresReportsCount = reportsLoaded;
         }
+
+        // ========== ДОБАВИТЬ ВЫЗОВЫ НОВЫХ МЕТОДОВ ==========
+
+        // 10. Загрузка всех констант
+        if (!stopRequested.get()) {
+            int  constantsLoaded = loadAllConstants();
+            result.constantsCount = constantsLoaded;
+        }
+
+        // 11. Загрузка всех системных опций
+        if (!stopRequested.get()) {
+            int systemOptionsLoaded = loadAllSystemOptions();
+            result.systemOptionsCount = systemOptionsLoaded;
+        }
+
+        // 12. Загрузка метаданных таблиц
+        if (!stopRequested.get()) {
+            int metadataLoaded = loadAllTableMetadata();
+            result.metadataCount = metadataLoaded;
+        }
+
+        // 13. Загрузка всех синонимов
+        if (!stopRequested.get()) {
+            int synonymsLoaded = loadAllSynonyms();
+            result.synonymsCount = synonymsLoaded;
+        }
+
+        // ================================================
 
         long elapsed = System.currentTimeMillis() - startTime;
         result.elapsedMs = elapsed;
@@ -127,6 +178,7 @@ public class DatabaseCachePopulator {
         log("Время выполнения: " + (elapsed / 1000) + " сек");
         log(result.toString());
 
+        // Принудительно сохраняем кэш на диск
         DatabaseCacheManager.forceSaveToDisk();
 
         return result;
@@ -151,25 +203,49 @@ public class DatabaseCachePopulator {
             }
 
             log("[Oracle] Найдено вьюх: " + viewNames.size());
-            updateProgress("Загрузка DDL вьюх Oracle (" + viewNames.size() + " шт.)...");
 
-            int total = viewNames.size();
-            for (int i = 0; i < total; i++) {
+            // Подсчитываем, сколько уже есть в кэше
+            int alreadyCached = 0;
+            int toLoad = 0;
+
+            for (String viewName : viewNames) {
+                String key = viewName.toUpperCase();
+                if (DatabaseCacheManager.isOracleViewDDLCached(key)) {
+                    alreadyCached++;
+                } else {
+                    toLoad++;
+                }
+            }
+
+            log("[Oracle] Уже в кэше: " + alreadyCached + ", требуется загрузить: " + toLoad);
+            updateProgress("Загрузка вьюх Oracle (новых: " + toLoad + ")...");
+
+            int loaded = 0;
+            for (String viewName : viewNames) {
                 if (stopRequested.get()) return;
-                String viewName = viewNames.get(i);
-                final int currentIndex = i + 1;
-                final int currentTotal = total;
 
-                if (currentIndex % 50 == 0) {
-                    updateProgress("Oracle вьюхи: " + currentIndex + "/" + currentTotal);
+                String key = viewName.toUpperCase();
+
+                // ПРОВЕРКА: если уже есть в кэше - пропускаем
+                if (DatabaseCacheManager.isOracleViewDDLCached(key)) {
+                    if (loaded % 500 == 0) {
+                        log("  Пропущено (уже в кэше): " + viewName);
+                    }
+                    continue;  // ← ПЕРЕХОДИМ К СЛЕДУЮЩЕМУ ОБЪЕКТУ
                 }
 
+                loaded++;
+                final int currentLoaded = loaded;
+
+                int finalToLoad = toLoad;
                 DatabaseCacheManager.getOracleViewDDL(viewName, () -> {
-                    log("  [" + currentIndex + "/" + currentTotal + "] Загрузка вьюхи: " + viewName);
+                    log("  [" + currentLoaded + "/" + finalToLoad + "] Загрузка вьюхи: " + viewName);
                     return oracleService.getViewDDL(viewName);
                 });
                 viewsLoaded++;
             }
+
+            log("[Oracle] Загружено новых вьюх: " + loaded);
 
         } catch (SQLException e) {
             error("[Oracle] Ошибка: " + e.getMessage());
@@ -291,17 +367,12 @@ public class DatabaseCachePopulator {
 
             log("[Oracle] Найдено пакетов: " + packageNames.size());
 
-            int pkgCount = 0;
-            int funcCount = 0;
-            int totalPackages = packageNames.size();
+            int totalFunctions = 0;
+            int loaded = 0;
+            int skipped = 0;
 
-            for (int i = 0; i < totalPackages; i++) {
+            for (String packageName : packageNames) {
                 if (stopRequested.get()) break;
-                String packageName = packageNames.get(i);
-                pkgCount++;
-                final int currentPkgIndex = i + 1;
-
-                updateProgress("Oracle функции: пакет " + currentPkgIndex + "/" + totalPackages);
 
                 String funcSql = "SELECT DISTINCT NAME FROM ALL_SOURCE " +
                         "WHERE OWNER = ? AND TYPE = 'PACKAGE' AND NAME = ? AND TEXT LIKE '%FUNCTION%'";
@@ -317,21 +388,32 @@ public class DatabaseCachePopulator {
                     }
 
                     for (String funcName : funcNames) {
-                        final String finalPackageName = packageName;
-                        final String finalFuncName = funcName;
+                        totalFunctions++;
                         String fullName = packageName + "." + funcName;
 
+                        // ПРОВЕРКА: если уже есть в кэше - пропускаем
+                        if (DatabaseCacheManager.isOracleFunctionBodyCached(fullName)) {
+                            skipped++;
+                            continue;
+                        }
+
+                        loaded++;
+                        final int currentLoaded = loaded;
+                        final String finalPackageName = packageName;
+                        final String finalFuncName = funcName;
+
                         DatabaseCacheManager.getOracleFunctionBody(fullName, () -> {
-                            log("  Загрузка функции: " + finalPackageName + "." + finalFuncName);
+                            log("  [" + currentLoaded + "] Загрузка функции: " + finalPackageName + "." + finalFuncName);
                             return oracleService.getFunctionBody(finalPackageName, finalFuncName);
                         });
                         functionsLoaded++;
-                        funcCount++;
                     }
                 }
             }
 
-            log("[Oracle] Загружено функций: " + funcCount);
+            log("[Oracle] Функций всего: " + totalFunctions +
+                    ", уже в кэше: " + skipped +
+                    ", загружено: " + loaded);
 
         } catch (SQLException e) {
             error("[Oracle] Ошибка: " + e.getMessage());
@@ -499,7 +581,7 @@ public class DatabaseCachePopulator {
 
             PostgresReportsService pgReportsService = new PostgresReportsService(settings);
             int total = unitCodes.size();
-
+            int postgresReportsCount = 0;
             for (int i = 0; i < total; i++) {
                 if (stopRequested.get()) break;
                 String unitCode = unitCodes.get(i);
@@ -515,9 +597,9 @@ public class DatabaseCachePopulator {
                     log("  [" + currentIndex + "/" + currentTotal + "] Загрузка отчётов PostgreSQL для unit=" + finalUnitCode);
                     return pgReportsService.getReportsByUnit(finalUnitCode);
                 });
-                reportsLoaded++;
+                postgresReportsCount++;
             }
-
+            reportsLoaded += postgresReportsCount;
             log("[PostgreSQL] Загружено отчётов для " + reportsLoaded + " unit'ов");
 
         } catch (SQLException e) {
@@ -542,52 +624,69 @@ public class DatabaseCachePopulator {
                 settings.getPostgresPassword()
         );
         conn.setAutoCommit(true);
+
+        // Устанавливаем контекст МИС
+        String misUser = settings.getMisUser();
+        if (misUser != null && !misUser.trim().isEmpty()) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("SELECT set_config('mis.user', '" + misUser + "', false)");
+            } catch (SQLException e) {
+                System.err.println("  [PostgreSQL] Ошибка установки контекста: " + e.getMessage());
+            }
+        }
+
         return conn;
     }
 
     public static class PopulateResult {
         public int oracleViewsCount = 0;
         public int postgresViewsCount = 0;
-        public int tablesCount = 0;
+        public int oracleTablesCount = 0;
+        public int postgresTablesCount = 0;
         public int oracleFunctionsCount = 0;
         public int postgresFunctionsCount = 0;
         public int brokersCount = 0;
         public int oracleReportsCount = 0;
         public int postgresReportsCount = 0;
+        public int constantsCount = 0;        // Добавить
+        public int systemOptionsCount = 0;    // Добавить
+        public int metadataCount = 0;         // Добавить
+        public int synonymsCount = 0;         // Добавить
         public long elapsedMs = 0;
-        public int constantsCount = 0;
-        public int systemOptionsCount = 0;
-        public int tablesMetadataCount = 0;
-        public int synonymsCount = 0;
-        public int sequencesCount = 0;
-        public int triggersCount = 0;
 
         @Override
         public String toString() {
+            int totalObjects = oracleViewsCount + postgresViewsCount +
+                    oracleTablesCount + postgresTablesCount +
+                    oracleFunctionsCount + postgresFunctionsCount +
+                    brokersCount + oracleReportsCount + postgresReportsCount +
+                    constantsCount + systemOptionsCount + metadataCount + synonymsCount;
+
             return String.format(
-                    "Результат:\n" +
-                            "  Oracle вьюхи: %d\n" +
-                            "  PostgreSQL вьюхи: %d\n" +
-                            "  Таблицы: %d\n" +
-                            "  Oracle функции: %d\n" +
-                            "  PostgreSQL функции: %d\n" +
-                            "  Брокеры: %d\n" +
-                            "  Oracle отчёты: %d\n" +
-                            "  PostgreSQL отчёты: %d\n" +
-                            "  Константы: %d\n" +
-                            "  Системные опции: %d\n" +
-                            "  Метаданные таблиц: %d\n" +
-                            "  Синонимы: %d\n" +
-                            "  Всего объектов: %d\n" +
-                            "  Время: %.1f сек",
-                    oracleViewsCount, postgresViewsCount, tablesCount,
+                    "Результат загрузки кэша:\n" +
+                            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                            "  📊 Oracle вьюхи:          %6d\n" +
+                            "  📊 PostgreSQL вьюхи:      %6d\n" +
+                            "  📋 Oracle таблицы:        %6d\n" +
+                            "  📋 PostgreSQL таблицы:    %6d\n" +
+                            "  🔧 Oracle функции:        %6d\n" +
+                            "  🔧 PostgreSQL функции:    %6d\n" +
+                            "  🔗 Брокеры:               %6d\n" +
+                            "  📄 Oracle отчёты:         %6d\n" +
+                            "  📄 PostgreSQL отчёты:     %6d\n" +
+                            "  📌 Константы:             %6d\n" +
+                            "  ⚙️ Системные опции:       %6d\n" +
+                            "  🏷️ Метаданные таблиц:     %6d\n" +
+                            "  🔍 Синонимы:              %6d\n" +
+                            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                            "  ✅ ВСЕГО ОБЪЕКТОВ:        %6d\n" +
+                            "  ⏱️ Время выполнения:      %.1f сек",
+                    oracleViewsCount, postgresViewsCount,
+                    oracleTablesCount, postgresTablesCount,
                     oracleFunctionsCount, postgresFunctionsCount,
                     brokersCount, oracleReportsCount, postgresReportsCount,
-                    constantsCount, systemOptionsCount, tablesMetadataCount, synonymsCount,
-                    oracleViewsCount + postgresViewsCount + tablesCount +
-                            oracleFunctionsCount + postgresFunctionsCount +
-                            brokersCount + oracleReportsCount + postgresReportsCount +
-                            constantsCount + systemOptionsCount + tablesMetadataCount + synonymsCount,
+                    constantsCount, systemOptionsCount, metadataCount, synonymsCount,
+                    totalObjects,
                     elapsedMs / 1000.0
             );
         }
@@ -595,19 +694,18 @@ public class DatabaseCachePopulator {
     /**
      * Загрузка всех констант из D_PKG_CONSTANTS
      */
-    private void loadAllConstants() {
+    private int loadAllConstants() {
         log("[Oracle] Загрузка всех констант...");
         updateProgress("Загрузка констант...");
 
         String sql = "SELECT CONST_CODE, CONST_VALUE FROM D_PKG_CONSTANTS";
-
+        int count = 0;
         try (Connection conn = getOracleConnection();
              Statement stmt = conn.createStatement()) {
 
             stmt.setQueryTimeout(60);
             ResultSet rs = stmt.executeQuery(sql);
 
-            int count = 0;
             while (rs.next()) {
                 if (stopRequested.get()) break;
                 String constCode = rs.getString("CONST_CODE");
@@ -626,16 +724,18 @@ public class DatabaseCachePopulator {
         } catch (SQLException e) {
             error("[Oracle] Ошибка загрузки констант: " + e.getMessage());
         }
+        return count;
     }
 
     /**
      * Загрузка всех системных опций
      */
-    private void loadAllSystemOptions() {
+    private int loadAllSystemOptions() {
         log("[Oracle] Загрузка системных опций...");
         updateProgress("Загрузка системных опций...");
 
         String sql = "SELECT OPTION_CODE, OPTION_VALUE FROM D_SYSTEM_OPTIONS";
+        int count = 0;
 
         try (Connection conn = getOracleConnection();
              Statement stmt = conn.createStatement()) {
@@ -643,7 +743,6 @@ public class DatabaseCachePopulator {
             stmt.setQueryTimeout(60);
             ResultSet rs = stmt.executeQuery(sql);
 
-            int count = 0;
             while (rs.next()) {
                 if (stopRequested.get()) break;
                 String optionCode = rs.getString("OPTION_CODE");
@@ -662,12 +761,13 @@ public class DatabaseCachePopulator {
         } catch (SQLException e) {
             error("[Oracle] Ошибка загрузки опций: " + e.getMessage());
         }
+        return count;
     }
 
     /**
      * Загрузка метаданных всех таблиц
      */
-    private void loadAllTableMetadata() {
+    private int loadAllTableMetadata() {
         log("[Oracle] Загрузка метаданных таблиц...");
         updateProgress("Загрузка метаданных таблиц...");
 
@@ -675,7 +775,7 @@ public class DatabaseCachePopulator {
 
         // Получаем список всех таблиц D_*
         String sql = "SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER = ? AND TABLE_NAME LIKE 'D\\_%' ESCAPE '\\'";
-
+        int total =0;
         try (Connection conn = getOracleConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -690,7 +790,7 @@ public class DatabaseCachePopulator {
             log("[Oracle] Найдено таблиц для анализа метаданных: " + tableNames.size());
             updateProgress("Загрузка метаданных таблиц (" + tableNames.size() + " шт.)...");
 
-            int total = tableNames.size();
+            total = tableNames.size();
             for (int i = 0; i < total; i++) {
                 if (stopRequested.get()) break;
                 String tableName = tableNames.get(i);
@@ -718,25 +818,26 @@ public class DatabaseCachePopulator {
         } catch (SQLException e) {
             error("[Oracle] Ошибка загрузки метаданных: " + e.getMessage());
         }
+        return total;
     }
 
     /**
      * Загрузка синонимов (ускоряет поиск объектов)
      */
-    private void loadAllSynonyms() {
+    private int loadAllSynonyms() {
         log("[Oracle] Загрузка синонимов...");
         updateProgress("Загрузка синонимов...");
 
         String sql = "SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM ALL_SYNONYMS " +
                 "WHERE OWNER = 'PUBLIC' AND TABLE_NAME LIKE 'D\\_%' ESCAPE '\\'";
 
+        int count = 0;
         try (Connection conn = getOracleConnection();
              Statement stmt = conn.createStatement()) {
 
             stmt.setQueryTimeout(60);
             ResultSet rs = stmt.executeQuery(sql);
 
-            int count = 0;
             while (rs.next()) {
                 if (stopRequested.get()) break;
                 String synonymName = rs.getString("SYNONYM_NAME");
@@ -751,6 +852,132 @@ public class DatabaseCachePopulator {
 
         } catch (SQLException e) {
             error("[Oracle] Ошибка загрузки синонимов: " + e.getMessage());
+        }
+        return count;
+    }
+    /**
+     * Загрузка DDL всех таблиц D_* из Oracle
+     */
+    private void loadAllOracleTablesDirectly() {
+        log("[Oracle] Прямая загрузка DDL всех таблиц...");
+        updateProgress("Загрузка DDL всех таблиц Oracle...");
+
+        String sql = "SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER = ? AND TABLE_NAME LIKE 'D\\_%' ESCAPE '\\'";
+
+        try (Connection conn = getOracleConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, settings.getOracleUser().toUpperCase());
+            pstmt.setQueryTimeout(120);
+            ResultSet rs = pstmt.executeQuery();
+
+            List<String> tableNames = new ArrayList<>();
+            while (rs.next()) {
+                String tableName = rs.getString("TABLE_NAME");
+                if (!tableName.startsWith("D_TEMP") && !tableName.startsWith("D_BIN")) {
+                    tableNames.add(tableName);
+                }
+            }
+
+            // Подсчитываем, сколько уже в кэше
+            int alreadyCached = 0;
+            int toLoad = 0;
+            for (String tableName : tableNames) {
+                if (DatabaseCacheManager.isOracleTableDDLCached(tableName)) {
+                    alreadyCached++;
+                } else {
+                    toLoad++;
+                }
+            }
+
+            log("[Oracle] Таблиц всего: " + tableNames.size() +
+                    ", уже в кэше: " + alreadyCached +
+                    ", требуется загрузить: " + toLoad);
+            updateProgress("Загрузка DDL таблиц Oracle (новых: " + toLoad + ")...");
+
+            int loaded = 0;
+            for (String tableName : tableNames) {
+                if (stopRequested.get()) return;
+
+                // ПРОВЕРКА: если уже есть в кэше - пропускаем
+                if (DatabaseCacheManager.isOracleTableDDLCached(tableName)) {
+                    continue;
+                }
+
+                loaded++;
+                final int currentLoaded = loaded;
+
+                if (currentLoaded % 100 == 0 || currentLoaded == toLoad) {
+                    updateProgress("Oracle таблицы: " + currentLoaded + "/" + toLoad);
+                    log("  [" + currentLoaded + "/" + toLoad + "] Загрузка таблицы: " + tableName);
+                }
+
+                int finalToLoad = toLoad;
+                DatabaseCacheManager.getOracleTableDDL(tableName, () -> {
+                    String ddl = oracleService.getTableDDL(tableName);
+                    if (ddl == null) {
+                        log("  [" + currentLoaded + "/" + finalToLoad + "] НЕ ЗАГРУЖЕНА: " + tableName + " (нет в БД)");
+                    } else {
+                        log("  [" + currentLoaded + "/" + finalToLoad + "] Загрузка таблицы: " + tableName);
+                    }
+                    return ddl;
+                });
+                tablesLoaded++;
+            }
+
+            log("[Oracle] Загружено новых таблиц: " + loaded);
+
+        } catch (SQLException e) {
+            error("[Oracle] Ошибка загрузки списка таблиц: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Загрузка DDL всех таблиц из PostgreSQL
+     */
+    private void loadAllPostgresTablesDirectly() {
+        log("[PostgreSQL] Прямая загрузка DDL всех таблиц...");
+        updateProgress("Загрузка DDL всех таблиц PostgreSQL...");
+
+        String sql = "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'd\\_%'";
+
+        try (Connection conn = getPostgresConnection();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.setQueryTimeout(120);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            List<String> tableNames = new ArrayList<>();
+            while (rs.next()) {
+                String tableName = rs.getString("tablename");
+                tableNames.add(tableName);
+            }
+
+            log("[PostgreSQL] Найдено таблиц для загрузки: " + tableNames.size());
+            updateProgress("Загрузка DDL таблиц PostgreSQL (" + tableNames.size() + " шт.)...");
+
+            int total = tableNames.size();
+            for (int i = 0; i < total; i++) {
+                if (stopRequested.get()) {
+                    log("Загрузка таблиц PostgreSQL прервана");
+                    return;
+                }
+
+                String tableName = tableNames.get(i);
+                final int currentIndex = i + 1;
+
+                if (currentIndex % 100 == 0 || currentIndex == total) {
+                    updateProgress("PostgreSQL таблицы: " + currentIndex + "/" + total);
+                    log("  [" + currentIndex + "/" + total + "] Загрузка таблицы: " + tableName);
+                }
+
+                DatabaseCacheManager.getPostgresTableDDL(tableName, () -> {
+                    return postgresService.getTableDDL(tableName);
+                });
+            }
+
+        } catch (SQLException e) {
+            error("[PostgreSQL] Ошибка загрузки списка таблиц: " + e.getMessage());
         }
     }
 }

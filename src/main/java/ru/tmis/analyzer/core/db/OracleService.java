@@ -33,6 +33,7 @@ public class OracleService {
             return null;
         }
         String key = tableName.toUpperCase();
+
         return DatabaseCacheManager.getOracleTableDDL(key, () -> fetchTableDDL(tableName));
     }
 
