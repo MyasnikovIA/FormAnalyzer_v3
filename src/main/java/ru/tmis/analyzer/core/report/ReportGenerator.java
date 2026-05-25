@@ -159,11 +159,9 @@ public class ReportGenerator {
         writer.println("ФОРМА: " + form.getFormPath());
         writer.println("-".repeat(100));
 
-        // Исправлено: относительный путь для базовой формы
         writer.println("Базовая форма: " + getRelativePath(form.getBaseFormPath()));
         if (form.isFullyReplaced()) {
             writer.println("СТАТУС: ПОЛНОСТЬЮ ЗАМЕНЕНА");
-            // Исправлено: относительный путь для файла замены
             writer.println("Файл замены: " + getRelativePath(form.getReplacementPath()));
         } else if (!form.getOverrides().isEmpty()) {
             writer.println("СТАТУС: ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА");
@@ -171,6 +169,7 @@ public class ReportGenerator {
             writer.println("СТАТУС: БАЗОВАЯ ФОРМА");
         }
         writer.println();
+
         writeUserFormsSection(writer, form);
 
         // SubForm
@@ -199,7 +198,6 @@ public class ReportGenerator {
         if (!form.getReports().isEmpty()) {
             writer.println("Отчеты вызываемые на форме (коды/формы отчета):");
             for (String report : form.getReports()) {
-                // Форматируем отчёт с информацией из БД (если нужно)
                 String formattedReport = formatReportWithDbInfo(report);
                 writer.println("        " + formattedReport + ";");
             }
@@ -214,6 +212,7 @@ public class ReportGenerator {
             writer.println();
         }
 
+        // Контекстное меню (ПКМ) - Oracle
         if (config.isIncludePopupMenus() && form.getPopupMenus() != null && !form.getPopupMenus().isEmpty()) {
             writePopupMenusBlock(writer, form.getPopupMenus(), "OracleSQL");
         }
@@ -232,7 +231,7 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // Используемые таблицы и вьюхи
+        // Используемые вьюхи
         if (config.isIncludeTablesViews() && !form.getTablesViews().isEmpty()) {
             writer.println("ИСПОЛЬЗУЕМЫЕ ВЬЮХИ:");
             for (String tv : form.getTablesViews()) {
@@ -241,14 +240,15 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // Таблицы, используемые через вьюхи
-        System.out.println("[DEBUG] Checking viewDependencies: " + (form.getViewDependencies() != null ? form.getViewDependencies().size() : "null"));
+        // ========== ГЛАВНЫЙ БЛОК: ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ ==========
         if (form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
-            System.out.println("[DEBUG] Calling writeViewTablesBlock");
             writeViewTablesBlock(writer, form, form.getViewDependencies());
         } else {
-            System.out.println("[DEBUG] viewDependencies is null or empty, skipping");
+            writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
+            writer.println("     (нет данных - проверьте подключение к Oracle)");
+            writer.println();
         }
+        // ===================================================================
 
         // Детальное содержимое вьюх
         if (config.isIncludeViewDetails() && form.getViewDependencies() != null && !form.getViewDependencies().isEmpty()) {
@@ -282,7 +282,7 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // ========== ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ ==========
+        // Пользовательские процедуры
         if (form.getUserProcedures() != null && !form.getUserProcedures().isEmpty()) {
             writer.println("ПОЛЬЗОВАТЕЛЬСКИЕ ПРОЦЕДУРЫ:");
             for (String proc : form.getUserProcedures()) {
@@ -291,7 +291,7 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // unitCompositions
+        // Unit композиции
         if (!form.getUnitCompositions().isEmpty()) {
             writer.println("ВСЕ КОМПОЗИЦИИ UnitEdit на форме (JS+тэги):");
             for (String comp : form.getUnitCompositions()) {
@@ -300,7 +300,7 @@ public class ReportGenerator {
             writer.println();
         }
 
-        // блок для jsUnitCompositions
+        // JS Unit Compositions
         if (!form.getJsUnitCompositions().isEmpty()) {
             writer.println("JS Unit Compositions (только из вызовов openWindow/openD3Form):");
             for (String comp : form.getJsUnitCompositions()) {
@@ -328,141 +328,20 @@ public class ReportGenerator {
         }
 
         // Проверка пакетов/функций в PostgreSQL
-        if (config.isCheckPostgresPackages() && !form.getPackagesFunctions().isEmpty()) {
-            writer.println("ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:");
-            writer.println();
-
-            PostgresPackageChecker checker = new PostgresPackageChecker(
-                    settings.getPostgresUrl(),
-                    settings.getPostgresUser(),
-                    settings.getPostgresPassword()
-            );
-
-            Map<String, PostgresPackageChecker.FunctionInfo> results = checker.checkFunctions(form.getPackagesFunctions());
-
-            for (Map.Entry<String, PostgresPackageChecker.FunctionInfo> entry : results.entrySet()) {
-                String funcName = entry.getKey();
-                PostgresPackageChecker.FunctionInfo info = entry.getValue();
-
-                writer.println("  " + funcName + ":");
-                writer.println("    Статус: " + info.getStatus());
-                if (info.getSignature() != null && !info.getSignature().isEmpty()) {
-                    writer.println("    Сигнатура: " + info.getSignature());
-                }
-                if (info.hasErrors()) {
-                    writer.println("    ОШИБКИ:");
-                    for (String err : info.getErrors()) writer.println("      " + err);
-                }
-                if (info.hasWarnings()) {
-                    writer.println("    ПРЕДУПРЕЖДЕНИЯ:");
-                    for (String warn : info.getWarnings()) writer.println("      " + warn);
-                }
-                writer.println();
-            }
-        }
+        writePostgresPackagesCheck(writer, form);
 
         // Проверка первичных ключей
-        if (config.isCheckPostgresPK()) {
-            Set<String> allTables = getAllTablesForForm(form);
-            if (!allTables.isEmpty()) {
-                writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
-                writer.println();
-                DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
-                int pkCount = 0;
-                for (String tableName : allTables) {
-                    pkCount++;
-                    DatabaseObjectChecker.PrimaryKeyInfo pkInfo = checker.checkPrimaryKey(tableName);
-                    writer.println("  " + tableName + ":");
-                    writer.println("    Статус: " + pkInfo.getStatus());
-                    System.out.println("    [" + pkCount + "/" + allTables.size() + "] Проверка PK: " + tableName);
-                    if (pkInfo.hasPKInOracle()) {
-                        writer.println("    Oracle PK поля: " + String.join(", ", pkInfo.getOracleColumns()));
-                    }
-                    if (pkInfo.hasPKInPostgres()) {
-                        writer.println("    PostgreSQL PK поля: " + String.join(", ", pkInfo.getPostgresColumns()));
-                    }
-                    writer.println();
-                }
-            } else {
-                writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
-                writer.println("     (нет таблиц для проверки)");
-                writer.println();
-            }
-        }
+        writePrimaryKeyCheck(writer, form);
 
         // Проверка NOT NULL constraints
-        if (config.isCheckNotNullConstraints()) {
-            Set<String> allTables = getAllTablesForForm(form);
-            if (!allTables.isEmpty()) {
-                writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
-                writer.println();
-                DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
-                int nnCount = 0;
-                for (String tableName : allTables) {
-                    nnCount++;
-                    System.out.println("    [" + nnCount + "/" + allTables.size() + "] Проверка NOT NULL: " + tableName);
-                    List<DatabaseObjectChecker.NotNullConstraintInfo> constraints = checker.checkNotNullConstraints(tableName);
-                    boolean hasIssues = false;
-                    for (DatabaseObjectChecker.NotNullConstraintInfo info : constraints) {
-                        if (!info.isMatch()) {
-                            if (!hasIssues) {
-                                writer.println("  " + tableName + ":");
-                                hasIssues = true;
-                            }
-                            writer.println("    Колонка: " + info.getColumnName());
-                            writer.println("      Oracle: " + (info.isNotNullInOracle() ? "NOT NULL" : "NULL разрешен"));
-                            writer.println("      PostgreSQL: " + (info.isNotNullInPostgres() ? "NOT NULL" : "NULL разрешен"));
-                            writer.println("      " + info.getStatus());
-                            String recommendation = info.getRecommendation();
-                            if (recommendation != null) {
-                                writer.println("      Рекомендация: " + recommendation);
-                            }
-                            writer.println();
-                        }
-                    }
-                    if (!hasIssues) {
-                        writer.println("  " + tableName + ": OK (все NULL constraints совпадают)");
-                        writer.println();
-                    }
-                }
-            } else {
-                writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
-                writer.println("     (нет таблиц для проверки)");
-                writer.println();
-            }
-        }
-        // ========== СТАТИСТИКА КОНВЕРТАЦИИ ==========
-        ConversionStatistics stats = form.getConversionStatistics();
-        if (stats != null && stats.getTotalQueries() > 0) {
-            writer.println("СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:");
-            writer.println("    Всего SQL запросов: " + stats.getTotalQueries());
-            writer.println("    Конвертировано (с Router): " + stats.getConvertedQueries());
-            writer.println("    Процент конвертации: " + String.format("%.1f%%", stats.getConversionPercent()));
+        writeNotNullConstraintsCheck(writer, form);
 
-            if (stats.isFullyConverted()) {
-                writer.println("    СТАТУС: ✓ ФОРМА ПОЛНОСТЬЮ КОНВЕРТИРОВАНА ДЛЯ POSTGRESQL");
-            } else if (stats.isNotConverted()) {
-                writer.println("    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА");
-            } else {
-                writer.println("    СТАТУС: ⚠ ФОРМА КОНВЕРТИРОВАНА ЧАСТИЧНО");
-            }
-            writer.println();
-
-            // Детали по каждому запросу
-            writer.println("ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:");
-            for (Map.Entry<String, ConversionStatistics.QueryConversionInfo> entry :
-                    stats.getQueryDetails().entrySet()) {
-                ConversionStatistics.QueryConversionInfo info = entry.getValue();
-                writer.println("    " + info.getComponentType() + ": " + info.getComponentName());
-                writer.println("        Статус: " + info.getStatus());
-                if (info.hasRouter()) {
-                    writer.println("        Oracle SQL: " + (info.hasOracleSql() ? "✓ есть" : "✗ отсутствует"));
-                    writer.println("        PostgreSQL SQL: " + (info.hasPostgresSql() ? "✓ есть" : "✗ отсутствует"));
-                }
-            }
-            writer.println();
-        }
+        // Статистика конвертации
+        writeConversionStatistics(writer, form);
     }
+
+
+
 
     private void writeSqlQueries(PrintWriter writer, FormInfo form) {
         writer.println("SQL ЗАПРОСЫ (" + form.getSqlQueries().size() + "):");
@@ -548,49 +427,67 @@ public class ReportGenerator {
      * @param formInfo информация о форме
      * @param viewDependencies карта зависимостей вьюх
      */
+    /**
+     * Вывод таблиц, используемых через вьюхи
+     */
     private void writeViewTablesBlock(PrintWriter writer, FormInfo formInfo,
                                       Map<String, ViewTableDependencies> viewDependencies) {
-        if (viewDependencies == null || viewDependencies.isEmpty()) {
-            System.out.println("[DEBUG] writeViewTablesBlock: viewDependencies is null or empty");
+        System.out.println("[DEBUG] writeViewTablesBlock called for form: " + formInfo.getFormPath());
+
+        if (viewDependencies == null) {
+            System.out.println("[DEBUG] viewDependencies is null");
+            writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
+            writer.println("    (нет данных о зависимостях)");
+            writer.println();
             return;
         }
 
-        // Собираем все вьюхи, используемые в этой форме
-        Set<String> viewsUsed = new LinkedHashSet<>();
-        for (String tv : formInfo.getTablesViews()) {
-            if (tv.startsWith("D_V_")) {
-                viewsUsed.add(tv);
-            }
-        }
-
-        if (viewsUsed.isEmpty()) {
-            System.out.println("[DEBUG] writeViewTablesBlock: no views found in form");
+        if (viewDependencies.isEmpty()) {
+            System.out.println("[DEBUG] viewDependencies is empty");
+            writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
+            writer.println("    (нет зависимостей вьюх)");
+            writer.println();
             return;
         }
 
-        // Собираем уникальные таблицы из всех вьюх
+        System.out.println("[DEBUG] viewDependencies size: " + viewDependencies.size());
+
+        // Собираем таблицы из всех вьюх
         Set<String> allTables = new LinkedHashSet<>();
-        for (String viewName : viewsUsed) {
-            ViewTableDependencies deps = viewDependencies.get(viewName);
-            if (deps != null && deps.isExistsInOracle()) {
-                allTables.addAll(deps.getOracleTables());
+
+        for (Map.Entry<String, ViewTableDependencies> entry : viewDependencies.entrySet()) {
+            String viewName = entry.getKey();
+            ViewTableDependencies deps = entry.getValue();
+
+            System.out.println("[DEBUG] Обработка вьюхи: " + viewName);
+            System.out.println("[DEBUG]   existsInOracle: " + deps.isExistsInOracle());
+            System.out.println("[DEBUG]   oracleTables: " + deps.getOracleTables());
+
+            if (deps.isExistsInOracle()) {
+                for (String table : deps.getOracleTables()) {
+                    // Исключаем сами вьюхи и системные объекты
+                    if (!table.startsWith("D_V_") && !table.equals("D_V_URPRIVS")) {
+                        allTables.add(table);
+                        System.out.println("[DEBUG]   Добавлена таблица: " + table);
+                    }
+                }
             }
         }
+
+        writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
 
         if (allTables.isEmpty()) {
-            System.out.println("[DEBUG] writeViewTablesBlock: no tables extracted from views");
-            return;
-        }
-        formInfo.setTablesFromViews(allTables);
-        System.out.println("[DEBUG] Сохранено таблиц в FormInfo: " + allTables.size());
-        writer.println("ТАБЛИЦЫ, ИСПОЛЬЗУЕМЫЕ ЧЕРЕЗ ВЬЮХИ (уникальные для этой формы):");
-        for (String table : allTables) {
-            writer.println("    " + table);
+            writer.println("    (нет таблиц)");
+            System.out.println("[DEBUG] allTables is empty");
+        } else {
+            for (String table : allTables) {
+                writer.println("    " + table);
+                System.out.println("[DEBUG] Записана таблица: " + table);
+            }
+            formInfo.setTablesFromViews(allTables);
         }
         writer.println();
-        System.out.println("[DEBUG] writeViewTablesBlock: wrote " + allTables.size() + " tables");
     }
-
     /**
      * Вывод контекстного меню (PopupMenu) в виде дерева
      */
@@ -727,7 +624,14 @@ public class ReportGenerator {
         for (String tv : formInfo.getTablesViews()) {
             if (tv.startsWith("D_V_")) viewsUsed.add(tv);
         }
+
+        // Также добавляем вьюхи из зависимостей, которые могли быть не в TablesViews
+        for (String viewName : viewDependencies.keySet()) {
+            viewsUsed.add(viewName);
+        }
+
         if (viewsUsed.isEmpty()) {
+            writer.println("ДЕТАЛЬНОЕ СОДЕРЖИМОЕ ВЬЮХ (таблицы):");
             writer.println("  (нет вьюх для детального анализа)");
             writer.println();
             return;
@@ -738,12 +642,17 @@ public class ReportGenerator {
 
         for (String viewName : viewsUsed) {
             ViewTableDependencies deps = viewDependencies.get(viewName);
-            if (deps == null || !deps.isExistsInOracle()) {
-                if (deps != null && deps.getOracleError() != null) {
-                    writer.println("  " + viewName + ":");
-                    writer.println("      Ошибка: " + deps.getOracleError());
-                    writer.println();
-                }
+            if (deps == null) {
+                writer.println("  " + viewName + ":");
+                writer.println("      (зависимости не загружены)");
+                writer.println();
+                continue;
+            }
+
+            if (!deps.isExistsInOracle()) {
+                writer.println("  " + viewName + ":");
+                writer.println("      Ошибка: " + (deps.getOracleError() != null ? deps.getOracleError() : "Вьюха не найдена в Oracle"));
+                writer.println();
                 continue;
             }
 
@@ -757,8 +666,8 @@ public class ReportGenerator {
             writer.println();
 
             Set<String> tables = deps.getOracleTables();
-            if (tables.isEmpty()) {
-                writer.println("      (таблицы не найдены)");
+            if (tables == null || tables.isEmpty()) {
+                writer.println("      (таблицы не найдены в DDL вьюхи)");
             } else {
                 for (String table : tables) {
                     if ("D_V_URPRIVS".equals(table)) continue;
@@ -766,13 +675,12 @@ public class ReportGenerator {
                     long postgresCount = getPostgresCount(table);
                     String tableCountStr = String.format(" (Oracle: %s) (PostgreSQL: %s)",
                             formatCount(oracleCount), formatCount(postgresCount));
-                    writer.println("          " + table + tableCountStr);
+                    writer.println("      " + table + tableCountStr);
                 }
             }
             writer.println();
         }
     }
-
 
     private Set<String> getAllTablesForForm(FormInfo formInfo) {
         Set<String> allTables = new LinkedHashSet<>();
@@ -1357,5 +1265,181 @@ public class ReportGenerator {
             }
         }
     }
+// core/report/ReportGenerator.java - добавить методы
 
+    /**
+     * Проверка пакетов/функций в PostgreSQL
+     */
+    private void writePostgresPackagesCheck(PrintWriter writer, FormInfo form) {
+        if (!config.isCheckPostgresPackages() || form.getPackagesFunctions().isEmpty()) {
+            return;
+        }
+
+        writer.println("ПРОВЕРКА ПАКЕТОВ/ФУНКЦИЙ В PostgreSQL:");
+        writer.println();
+
+        PostgresPackageChecker checker = new PostgresPackageChecker(
+                settings.getPostgresUrl(),
+                settings.getPostgresUser(),
+                settings.getPostgresPassword()
+        );
+
+        Map<String, PostgresPackageChecker.FunctionInfo> results = checker.checkFunctions(form.getPackagesFunctions());
+
+        for (Map.Entry<String, PostgresPackageChecker.FunctionInfo> entry : results.entrySet()) {
+            String funcName = entry.getKey();
+            PostgresPackageChecker.FunctionInfo info = entry.getValue();
+
+            writer.println("  " + funcName + ":");
+            writer.println("    Статус: " + info.getStatus());
+            if (info.getSignature() != null && !info.getSignature().isEmpty()) {
+                writer.println("    Сигнатура: " + info.getSignature());
+            }
+            if (info.hasErrors()) {
+                writer.println("    ОШИБКИ:");
+                for (String err : info.getErrors()) {
+                    writer.println("      " + err);
+                }
+            }
+            if (info.hasWarnings()) {
+                writer.println("    ПРЕДУПРЕЖДЕНИЯ:");
+                for (String warn : info.getWarnings()) {
+                    writer.println("      " + warn);
+                }
+            }
+            writer.println();
+        }
+    }
+
+    /**
+     * Проверка первичных ключей (Oracle vs PostgreSQL)
+     */
+    private void writePrimaryKeyCheck(PrintWriter writer, FormInfo form) {
+        if (!config.isCheckPostgresPK()) {
+            return;
+        }
+
+        Set<String> allTables = getAllTablesForForm(form);
+        if (allTables.isEmpty()) {
+            writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
+            writer.println("     (нет таблиц для проверки)");
+            writer.println();
+            return;
+        }
+
+        writer.println("ПРОВЕРКА ПЕРВИЧНЫХ КЛЮЧЕЙ (Oracle vs PostgreSQL):");
+        writer.println();
+
+        DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+        int pkCount = 0;
+
+        for (String tableName : allTables) {
+            pkCount++;
+            DatabaseObjectChecker.PrimaryKeyInfo pkInfo = checker.checkPrimaryKey(tableName);
+
+            writer.println("  " + tableName + ":");
+            writer.println("    Статус: " + pkInfo.getStatus());
+            System.out.println("    [" + pkCount + "/" + allTables.size() + "] Проверка PK: " + tableName);
+
+            if (pkInfo.hasPKInOracle()) {
+                writer.println("    Oracle PK поля: " + String.join(", ", pkInfo.getOracleColumns()));
+            }
+            if (pkInfo.hasPKInPostgres()) {
+                writer.println("    PostgreSQL PK поля: " + String.join(", ", pkInfo.getPostgresColumns()));
+            }
+            writer.println();
+        }
+    }
+
+    /**
+     * Проверка NOT NULL constraints (Oracle vs PostgreSQL)
+     */
+    private void writeNotNullConstraintsCheck(PrintWriter writer, FormInfo form) {
+        if (!config.isCheckNotNullConstraints()) {
+            return;
+        }
+
+        Set<String> allTables = getAllTablesForForm(form);
+        if (allTables.isEmpty()) {
+            writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
+            writer.println("     (нет таблиц для проверки)");
+            writer.println();
+            return;
+        }
+
+        writer.println("ПРОВЕРКА NOT NULL CONSTRAINT (Oracle vs PostgreSQL):");
+        writer.println();
+
+        DatabaseObjectChecker checker = new DatabaseObjectChecker(SettingsModel.getInstance());
+        int nnCount = 0;
+
+        for (String tableName : allTables) {
+            nnCount++;
+            System.out.println("    [" + nnCount + "/" + allTables.size() + "] Проверка NOT NULL: " + tableName);
+
+            List<DatabaseObjectChecker.NotNullConstraintInfo> constraints = checker.checkNotNullConstraints(tableName);
+            boolean hasIssues = false;
+
+            for (DatabaseObjectChecker.NotNullConstraintInfo info : constraints) {
+                if (!info.isMatch()) {
+                    if (!hasIssues) {
+                        writer.println("  " + tableName + ":");
+                        hasIssues = true;
+                    }
+                    writer.println("    Колонка: " + info.getColumnName());
+                    writer.println("      Oracle: " + (info.isNotNullInOracle() ? "NOT NULL" : "NULL разрешен"));
+                    writer.println("      PostgreSQL: " + (info.isNotNullInPostgres() ? "NOT NULL" : "NULL разрешен"));
+                    writer.println("      " + info.getStatus());
+                    String recommendation = info.getRecommendation();
+                    if (recommendation != null) {
+                        writer.println("      Рекомендация: " + recommendation);
+                    }
+                    writer.println();
+                }
+            }
+
+            if (!hasIssues) {
+                writer.println("  " + tableName + ": OK (все NULL constraints совпадают)");
+                writer.println();
+            }
+        }
+    }
+
+    /**
+     * Статистика конвертации SQL запросов для формы
+     */
+    private void writeConversionStatistics(PrintWriter writer, FormInfo form) {
+        ConversionStatistics stats = form.getConversionStatistics();
+        if (stats == null || stats.getTotalQueries() == 0) {
+            return;
+        }
+
+        writer.println("СТАТИСТИКА КОНВЕРТАЦИИ SQL ЗАПРОСОВ:");
+        writer.println("    Всего SQL запросов: " + stats.getTotalQueries());
+        writer.println("    Конвертировано (с Router): " + stats.getConvertedQueries());
+        writer.println("    Процент конвертации: " + String.format("%.1f%%", stats.getConversionPercent()));
+
+        if (stats.isFullyConverted()) {
+            writer.println("    СТАТУС: ✓ ФОРМА ПОЛНОСТЬЮ КОНВЕРТИРОВАНА ДЛЯ POSTGRESQL");
+        } else if (stats.isNotConverted()) {
+            writer.println("    СТАТУС: ✗ ФОРМА НЕ КОНВЕРТИРОВАНА");
+        } else {
+            writer.println("    СТАТУС: ⚠ ФОРМА КОНВЕРТИРОВАНА ЧАСТИЧНО");
+        }
+        writer.println();
+
+        // Детали по каждому запросу
+        writer.println("ДЕТАЛИ КОНВЕРТАЦИИ ЗАПРОСОВ:");
+        for (Map.Entry<String, ConversionStatistics.QueryConversionInfo> entry :
+                stats.getQueryDetails().entrySet()) {
+            ConversionStatistics.QueryConversionInfo info = entry.getValue();
+            writer.println("    " + info.getComponentType() + ": " + info.getComponentName());
+            writer.println("        Статус: " + info.getStatus());
+            if (info.hasRouter()) {
+                writer.println("        Oracle SQL: " + (info.hasOracleSql() ? "✓ есть" : "✗ отсутствует"));
+                writer.println("        PostgreSQL SQL: " + (info.hasPostgresSql() ? "✓ есть" : "✗ отсутствует"));
+            }
+        }
+        writer.println();
+    }
 }

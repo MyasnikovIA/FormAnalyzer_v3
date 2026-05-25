@@ -564,17 +564,69 @@ public class DatabaseCacheManager {
         return value;
     }
 
+    // DatabaseCacheManager.java
+
+    /**
+     * Получение DDL таблицы с принудительной загрузкой при отсутствии
+     */
     public static String getOracleTableDDL(String tableName, Supplier<String> loader) {
         if (!isOracleAvailable()) return null;
         String key = tableName.toUpperCase();
 
+        // Проверяем кэш
         String cached = oracleTableDDLCache.get(key);
-        if (cached != null) return cached;
+        if (cached != null) {
+            return cached;
+        }
 
+        // Если нет в кэше - загружаем из БД
+        System.out.println("[КЭШ] Таблица " + tableName + " не найдена в кэше, загружаем из БД...");
         String value = loader.get();
-        if (value != null) {
+
+        if (value != null && !value.isEmpty()) {
             oracleTableDDLCache.put(key, value);
             markChanged();
+            // Принудительно сохраняем после добавления важных данных
+            forceSaveToDisk();
+            System.out.println("[КЭШ] Таблица " + tableName + " загружена и сохранена");
+        } else {
+            System.out.println("[КЭШ] Таблица " + tableName + " не найдена в БД");
+            // Запоминаем, что таблицы нет, чтобы не запрашивать снова
+            missingObjectsCache.put(key, true);
+        }
+        return value;
+    }
+
+    /**
+     * Получение зависимостей вьюхи с принудительной загрузкой
+     */
+    @SuppressWarnings("unchecked")
+    public static ViewTableDependencies getViewDependencies(String viewName, Supplier<ViewTableDependencies> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = viewName.toUpperCase();
+
+        // Проверяем кэш
+        Object cached = viewDependenciesCache.get(key);
+        if (cached != null) {
+            if (cached instanceof ViewTableDependencies) {
+                return (ViewTableDependencies) cached;
+            } else {
+                // Неверный тип в кэше - удаляем
+                viewDependenciesCache.remove(key);
+            }
+        }
+
+        // Если нет в кэше - загружаем из БД
+        System.out.println("[КЭШ] Вьюха " + viewName + " не найдена в кэше, загружаем из БД...");
+        ViewTableDependencies value = loader.get();
+
+        if (value != null) {
+            viewDependenciesCache.put(key, value);
+            markChanged();
+            // Принудительно сохраняем после добавления важных данных
+            forceSaveToDisk();
+            System.out.println("[КЭШ] Вьюха " + viewName + " загружена и сохранена. Таблиц: " +
+                    (value.getOracleTables() != null ? value.getOracleTables().size() : 0));
         }
         return value;
     }
@@ -701,21 +753,7 @@ public class DatabaseCacheManager {
         return value != null ? value : Collections.emptyList();
     }
 
-    @SuppressWarnings("unchecked")
-    public static ViewTableDependencies getViewDependencies(String viewName, Supplier<ViewTableDependencies> loader) {
-        if (!isOracleAvailable()) return null;
-        String key = viewName.toUpperCase();
 
-        Object cached = viewDependenciesCache.get(key);
-        if (cached != null) return (ViewTableDependencies) cached;
-
-        ViewTableDependencies value = loader.get();
-        if (value != null) {
-            viewDependenciesCache.put(key, value);
-            markChanged();
-        }
-        return value;
-    }
 
     @SuppressWarnings("unchecked")
     public static DatabaseObjectChecker.PrimaryKeyInfo getPrimaryKeyInfo(String tableName, Supplier<DatabaseObjectChecker.PrimaryKeyInfo> loader) {
@@ -1224,5 +1262,21 @@ public class DatabaseCacheManager {
     }
     public static int getOraclePackageSpecCacheSize() {
         return oraclePackageSpecCache.size();
+    }
+    /**
+     * Очищает кэш зависимостей для указанной вьюхи
+     */
+    public static void clearViewDependency(String viewName) {
+        String key = viewName.toUpperCase();
+        viewDependenciesCache.remove(key);
+        System.out.println("[КЭШ] Очищена зависимость для вьюхи: " + viewName);
+    }
+
+    /**
+     * Очищает весь кэш зависимостей вьюх
+     */
+    public static void clearAllViewDependencies() {
+        viewDependenciesCache.clear();
+        System.out.println("[КЭШ] Очищены все зависимости вьюх");
     }
 }

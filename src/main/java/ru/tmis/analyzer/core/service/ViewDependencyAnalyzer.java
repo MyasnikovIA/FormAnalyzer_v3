@@ -59,9 +59,25 @@ public class ViewDependencyAnalyzer {
         staticPostgresMisUser = misUser;
     }
 
-
     public ViewTableDependencies analyzeView(String viewName) {
-        return DatabaseCacheManager.getViewDependencies(viewName, () -> doAnalyzeView(viewName));
+        String key = viewName.toUpperCase();
+
+        // Проверяем глобальный кэш
+        if (globalViewCache.containsKey(key)) {
+            System.out.println("[КЭШ] Вьюха " + viewName + " взята из глобального кэша");
+            return globalViewCache.get(key);
+        }
+
+        // Загружаем через DatabaseCacheManager
+        ViewTableDependencies deps = DatabaseCacheManager.getViewDependencies(viewName, () -> doAnalyzeView(viewName));
+
+        // Сохраняем в глобальный кэш
+        if (deps != null) {
+            globalViewCache.put(key, deps);
+            System.out.println("[КЭШ] Вьюха " + viewName + " сохранена в глобальный кэш");
+        }
+
+        return deps;
     }
 
     private ViewTableDependencies doAnalyzeView(String viewName) {
@@ -75,28 +91,34 @@ public class ViewDependencyAnalyzer {
             deps.setExistsInOracle(true);
             extractTablesFromDDL(ddl, deps);
             System.out.println("  [ViewDependencyAnalyzer] Oracle DDL получен, таблиц: " + deps.getOracleTables().size());
+            for (String table : deps.getOracleTables()) {
+                System.out.println("    - " + table);
+            }
         } else {
             deps.setExistsInOracle(false);
             deps.setOracleError("Вьюха не найдена в Oracle");
             System.out.println("  [ViewDependencyAnalyzer] Oracle DDL НЕ НАЙДЕН");
         }
 
-        // Получаем DDL вьюхи из PostgreSQL
-        String postgresDDL = getPostgresViewDDL(viewName);
-        if (postgresDDL != null && !postgresDDL.isEmpty()) {
-            deps.setExistsInPostgres(true);
-            Set<String> postgresTables = extractTablesFromPostgresDDL(postgresDDL);
-            deps.addAllPostgresTables(postgresTables);
-            System.out.println("  [ViewDependencyAnalyzer] PostgreSQL DDL получен, таблиц: " + postgresTables.size());
+        // Получаем DDL вьюхи из PostgreSQL (если сервер доступен)
+        if (DatabaseCacheManager.isPostgresServerAvailable()) {
+            String postgresDDL = getPostgresViewDDL(viewName);
+            if (postgresDDL != null && !postgresDDL.isEmpty()) {
+                deps.setExistsInPostgres(true);
+                Set<String> postgresTables = extractTablesFromPostgresDDL(postgresDDL);
+                deps.addAllPostgresTables(postgresTables);
+                System.out.println("  [ViewDependencyAnalyzer] PostgreSQL DDL получен, таблиц: " + postgresTables.size());
+            } else {
+                deps.setExistsInPostgres(false);
+                deps.setPostgresError("Вьюха не найдена в PostgreSQL");
+            }
         } else {
             deps.setExistsInPostgres(false);
-            deps.setPostgresError("Вьюха не найдена в PostgreSQL");
-            System.out.println("  [ViewDependencyAnalyzer] PostgreSQL DDL НЕ НАЙДЕН");
+            deps.setPostgresError("PostgreSQL сервер недоступен");
         }
 
         return deps;
     }
-
 
     private String getPostgresViewDDL(String viewName) {
         String sql = "SELECT pg_get_viewdef(p.oid, true) as viewdef " +
@@ -258,24 +280,14 @@ public class ViewDependencyAnalyzer {
     }
 
     public ViewTableDependencies analyzeViewPublic(String viewName) {
-        String key = viewName.toUpperCase();
-
-        // Проверяем глобальный кэш
-        if (globalViewCache.containsKey(key)) {
-            System.out.println("[КЭШ] Вьюха " + viewName + " взята из глобального кэша");
-            return globalViewCache.get(key);
-        }
-
-        ViewTableDependencies deps = analyzeView(viewName);
-        if (deps != null) {
-            globalViewCache.put(key, deps);
-            System.out.println("[КЭШ] Вьюха " + viewName + " сохранена в глобальный кэш");
-        }
-        return deps;
+        return analyzeView(viewName);
     }
 
     public static boolean isInCache(String viewName) {
         return globalViewCache.containsKey(viewName.toUpperCase());
     }
 
+    public static Map<String, ViewTableDependencies> getGlobalViewCache() {
+        return globalViewCache;
+    }
 }
