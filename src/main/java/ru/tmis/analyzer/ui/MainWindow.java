@@ -1377,7 +1377,7 @@ public class MainWindow extends JFrame {
 
         return formName;
     }
-    
+
     /**
      * Формирует безопасное имя файла для удаления (без расширения)
      */

@@ -7,13 +7,17 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.report.ReportGenerator;
 import ru.tmis.analyzer.ui.FormsTreePanel;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class RecursiveReportBuilder {
@@ -159,93 +163,7 @@ public class RecursiveReportBuilder {
         });
     }
 
-    /**
-     * Рекурсивная обработка уровня
-     * @param formsToAnalyze формы для анализа на текущем уровне
-     * @param level номер уровня (1 - корневой)
-     * @param processedForms множество уже обработанных форм (для предотвращения зацикливания)
-     */
-    private void processLevel(List<String> formsToAnalyze, int level, Set<String> processedForms) throws Exception {
-        if (stopRequested.get()) {
-            log("Построение остановлено пользователем на уровне " + level);
-            return;
-        }
 
-        if (formsToAnalyze == null || formsToAnalyze.isEmpty()) {
-            log("Уровень " + level + ": нет форм для анализа");
-            return;
-        }
-
-        // Убираем дубликаты и уже обработанные формы
-        Set<String> uniqueForms = new LinkedHashSet<>(formsToAnalyze);
-        uniqueForms.removeAll(processedForms);
-
-        if (uniqueForms.isEmpty()) {
-            log("Уровень " + level + ": все формы уже обработаны ранее");
-            return;
-        }
-
-        currentLevel = level;
-        final List<String> formList = new ArrayList<>(uniqueForms);
-
-        log("");
-        log("┌" + "─".repeat(70));
-        log("│ УРОВЕНЬ " + level + " (форм: " + formList.size() + ")");
-        log("└" + "─".repeat(70));
-
-        if (onLevelStart != null) {
-            javax.swing.SwingUtilities.invokeLater(() ->
-                    onLevelStart.accept("Уровень " + level + ": " + formList.size() + " форм"));
-        }
-
-        // 1. Анализируем формы текущего уровня
-        final List<FormInfo> analyzedForms = analyzeForms(formList);
-        totalFormsProcessed += analyzedForms.size();
-        formsPerLevel.put(level, analyzedForms.size());
-
-        // Добавляем проанализированные формы в множество обработанных
-        processedForms.addAll(formList);
-
-        if (stopRequested.get()) {
-            log("Построение остановлено после анализа уровня " + level);
-            return;
-        }
-
-        log("Уровень " + level + " обработан. Проанализировано форм: " + analyzedForms.size());
-
-        if (onLevelComplete != null) {
-            final int analyzedCount = analyzedForms.size();
-            javax.swing.SwingUtilities.invokeLater(() ->
-                    onLevelComplete.accept(analyzedCount));
-        }
-
-        // 2. Собираем дочерние формы из отчётов текущего уровня
-        final Set<String> allChildForms = new LinkedHashSet<>();
-        for (String formPath : formList) {
-            if (stopRequested.get()) break;
-
-            Set<String> children = formsTreePanel.loadChildFormsFromReport(formPath);
-            if (!children.isEmpty()) {
-                // Фильтруем уже обработанные формы
-                Set<String> newChildren = new LinkedHashSet<>(children);
-                newChildren.removeAll(processedForms);
-                if (!newChildren.isEmpty()) {
-                    log("  Форма " + getShortName(formPath) + " -> дочерних: " + newChildren.size() + " (новых: " + newChildren.size() + ")");
-                    allChildForms.addAll(newChildren);
-                } else {
-                    log("  Форма " + getShortName(formPath) + " -> дочерних: " + children.size() + " (все уже обработаны)");
-                }
-            }
-        }
-
-        // 3. Рекурсивно обрабатываем следующий уровень
-        if (!allChildForms.isEmpty() && !stopRequested.get()) {
-            final List<String> childList = new ArrayList<>(allChildForms);
-            log("");
-            log("Переход на уровень " + (level + 1) + " (найдено новых дочерних форм: " + childList.size() + ")");
-            processLevel(childList, level + 1, processedForms);
-        }
-    }
 
     /**
      * Анализ списка форм с сохранением отчётов
@@ -357,4 +275,327 @@ public class RecursiveReportBuilder {
         }
         return formPath;
     }
+
+
+    /**
+     * Рекурсивная обработка уровня
+     * @param formsToAnalyze формы для анализа на текущем уровне
+     * @param level номер уровня (1 - корневой)
+     * @param processedForms множество уже обработанных форм (для предотвращения зацикливания)
+     */
+    private void processLevel(List<String> formsToAnalyze, int level, Set<String> processedForms) throws Exception {
+        if (stopRequested.get()) {
+            log("Построение остановлено пользователем на уровне " + level);
+            return;
+        }
+
+        if (formsToAnalyze == null || formsToAnalyze.isEmpty()) {
+            log("Уровень " + level + ": нет форм для анализа");
+            return;
+        }
+
+        // Убираем дубликаты и уже обработанные формы
+        Set<String> uniqueForms = new LinkedHashSet<>(formsToAnalyze);
+        uniqueForms.removeAll(processedForms);
+
+        if (uniqueForms.isEmpty()) {
+            log("Уровень " + level + ": все формы уже обработаны ранее");
+            return;
+        }
+
+        currentLevel = level;
+        final List<String> formList = new ArrayList<>(uniqueForms);
+
+        log("");
+        log("┌" + "─".repeat(70));
+        log("│ УРОВЕНЬ " + level + " (форм: " + formList.size() + ")");
+        log("└" + "─".repeat(70));
+
+        if (onLevelStart != null) {
+            javax.swing.SwingUtilities.invokeLater(() ->
+                    onLevelStart.accept("Уровень " + level + ": " + formList.size() + " форм"));
+        }
+
+        // 1. Анализируем формы текущего уровня
+        final List<FormInfo> analyzedForms = analyzeForms(formList);
+        totalFormsProcessed += analyzedForms.size();
+        formsPerLevel.put(level, analyzedForms.size());
+
+        // Добавляем проанализированные формы в множество обработанных
+        processedForms.addAll(formList);
+
+        if (stopRequested.get()) {
+            log("Построение остановлено после анализа уровня " + level);
+            return;
+        }
+
+        log("Уровень " + level + " обработан. Проанализировано форм: " + analyzedForms.size());
+
+        if (onLevelComplete != null) {
+            final int analyzedCount = analyzedForms.size();
+            javax.swing.SwingUtilities.invokeLater(() ->
+                    onLevelComplete.accept(analyzedCount));
+        }
+
+        // 2. Собираем дочерние формы из отчётов текущего уровня
+        final Set<String> allChildForms = new LinkedHashSet<>();
+        for (String formPath : formList) {
+            if (stopRequested.get()) break;
+
+            // ========== ИСПРАВЛЕНИЕ: Загружаем ВСЕ типы дочерних форм ==========
+
+            // 2.1. SubForm
+            Set<String> subForms = getSubFormsFromReport(formPath);
+            if (!subForms.isEmpty()) {
+                Set<String> newSubForms = new LinkedHashSet<>(subForms);
+                newSubForms.removeAll(processedForms);
+                if (!newSubForms.isEmpty()) {
+                    log("  Форма " + getShortName(formPath) + " -> SubForm: " + newSubForms.size() + " шт.");
+                    allChildForms.addAll(newSubForms);
+                }
+            }
+
+            // 2.2. JS формы
+            Set<String> jsForms = getJsFormsFromReport(formPath);
+            if (!jsForms.isEmpty()) {
+                Set<String> newJsForms = new LinkedHashSet<>(jsForms);
+                newJsForms.removeAll(processedForms);
+                if (!newJsForms.isEmpty()) {
+                    log("  Форма " + getShortName(formPath) + " -> JS формы: " + newJsForms.size() + " шт.");
+                    allChildForms.addAll(newJsForms);
+                }
+            }
+
+            // 2.3. Отчёты (WEB-формы)
+            Set<String> reportForms = getReportFormsFromReport(formPath);
+            if (!reportForms.isEmpty()) {
+                Set<String> newReportForms = new LinkedHashSet<>(reportForms);
+                newReportForms.removeAll(processedForms);
+                if (!newReportForms.isEmpty()) {
+                    log("  Форма " + getShortName(formPath) + " -> отчёты (формы): " + newReportForms.size() + " шт.");
+                    allChildForms.addAll(newReportForms);
+                }
+            }
+        }
+
+        // 3. Рекурсивно обрабатываем следующий уровень
+        if (!allChildForms.isEmpty() && !stopRequested.get()) {
+            final List<String> childList = new ArrayList<>(allChildForms);
+            log("");
+            log("Переход на уровень " + (level + 1) + " (найдено новых дочерних форм: " + childList.size() + ")");
+            processLevel(childList, level + 1, processedForms);
+        }
+    }
+
+    /**
+     * Извлекает SubForm из отчёта
+     */
+    private Set<String> getSubFormsFromReport(String formPath) {
+        Set<String> result = new LinkedHashSet<>();
+
+        String reportPath = formsTreePanel.getReportFilePath(formPath);
+        File reportFile = new File(reportPath);
+
+        if (!reportFile.exists()) {
+            return result;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportFile.toPath()),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            // Ищем блок SubForm:
+            int subFormStartIndex = content.indexOf("SubForm:");
+            if (subFormStartIndex != -1) {
+                int subFormEndIndex = content.indexOf("\n\n", subFormStartIndex);
+                if (subFormEndIndex == -1) {
+                    subFormEndIndex = content.length();
+                }
+
+                String section = content.substring(subFormStartIndex, subFormEndIndex);
+
+                // Паттерн для извлечения путей форм
+                Pattern subFormPattern = Pattern.compile("^\\s+([^\\s]+)$", Pattern.MULTILINE);
+                Matcher subFormMatcher = subFormPattern.matcher(section);
+
+                while (subFormMatcher.find()) {
+                    String subForm = subFormMatcher.group(1).trim();
+                    if (!subForm.isEmpty() && !subForm.equals("SubForm:")) {
+                        String normalized = normalizeFormPath(subForm);
+                        if (normalized != null) {
+                            result.add(normalized);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            log("  Ошибка чтения отчёта для SubForm: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Извлекает JS формы из отчёта
+     */
+    private Set<String> getJsFormsFromReport(String formPath) {
+        Set<String> result = new LinkedHashSet<>();
+
+        String reportPath = formsTreePanel.getReportFilePath(formPath);
+        File reportFile = new File(reportPath);
+
+        if (!reportFile.exists()) {
+            return result;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportFile.toPath()),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            // Ищем блок "Список вызываемых форм в JS:"
+            int jsStartIndex = content.indexOf("Список вызываемых форм в JS:");
+            if (jsStartIndex != -1) {
+                int endIndex = content.indexOf("\n\n", jsStartIndex);
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(jsStartIndex, endIndex);
+
+                // Паттерн для извлечения .frm файлов
+                Pattern formPattern = Pattern.compile("\\s+([^\\s]+\\.frm)");
+                Matcher formMatcher = formPattern.matcher(section);
+
+                while (formMatcher.find()) {
+                    String jsForm = formMatcher.group(1).trim();
+                    if (!jsForm.isEmpty()) {
+                        String normalized = normalizeFormPath(jsForm);
+                        if (normalized != null) {
+                            result.add(normalized);
+                        }
+                    }
+                }
+            }
+
+            // Также ищем формы в блоке "Отчеты вызываемые на форме"
+            int reportStartIndex = content.indexOf("Отчеты вызываемые на форме");
+            if (reportStartIndex != -1) {
+                int endIndex = content.indexOf("\n\n", reportStartIndex);
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(reportStartIndex, endIndex);
+
+                // Паттерн для извлечения форм отчётов
+                Pattern reportFormPattern = Pattern.compile("(Reports/[^\\s]+\\.frm)");
+                Matcher reportFormMatcher = reportFormPattern.matcher(section);
+
+                while (reportFormMatcher.find()) {
+                    String reportForm = reportFormMatcher.group(1).trim();
+                    if (!reportForm.isEmpty()) {
+                        String normalized = normalizeFormPath(reportForm);
+                        if (normalized != null) {
+                            result.add(normalized);
+                        }
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            log("  Ошибка чтения отчёта для JS форм: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Извлекает формы отчётов из отчёта (WEB-формы)
+     */
+    private Set<String> getReportFormsFromReport(String formPath) {
+        Set<String> result = new LinkedHashSet<>();
+
+        String reportPath = formsTreePanel.getReportFilePath(formPath);
+        File reportFile = new File(reportPath);
+
+        if (!reportFile.exists()) {
+            return result;
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(reportFile.toPath()),
+                    java.nio.charset.StandardCharsets.UTF_8);
+
+            // Ищем блок "Отчеты вызываемые на форме"
+            int startIndex = content.indexOf("Отчеты вызываемые на форме");
+            if (startIndex != -1) {
+                int endIndex = content.indexOf("\n\n", startIndex);
+                if (endIndex == -1) {
+                    endIndex = content.length();
+                }
+
+                String section = content.substring(startIndex, endIndex);
+
+                // Паттерн для извлечения форм отчётов (в скобках после REP_TYPE)
+                // Формат: REP_CODE (WEB-форма) Reports/Visit/OutDirServNew.frm;
+                Pattern reportFormPattern = Pattern.compile("\\(WEB-форма\\)\\s+(Reports/[^\\s;]+\\.frm)");
+                Matcher reportFormMatcher = reportFormPattern.matcher(section);
+
+                while (reportFormMatcher.find()) {
+                    String reportForm = reportFormMatcher.group(1).trim();
+                    if (!reportForm.isEmpty()) {
+                        String normalized = normalizeFormPath(reportForm);
+                        if (normalized != null) {
+                            result.add(normalized);
+                        }
+                    }
+                }
+
+                // Альтернативный паттерн для формата: (WEB-форма) Reports/.../file.frm;
+                Pattern altPattern = Pattern.compile("WEB-forma\\)\\s+(Reports/[^\\s;]+\\.frm)", Pattern.CASE_INSENSITIVE);
+                Matcher altMatcher = altPattern.matcher(section);
+                while (altMatcher.find()) {
+                    String reportForm = altMatcher.group(1).trim();
+                    if (!reportForm.isEmpty()) {
+                        String normalized = normalizeFormPath(reportForm);
+                        if (normalized != null) {
+                            result.add(normalized);
+                        }
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            log("  Ошибка чтения отчёта для форм отчётов: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Нормализация пути формы
+     */
+    private String normalizeFormPath(String path) {
+        if (path == null || path.trim().isEmpty()) return null;
+
+        String normalized = path.trim();
+
+        // Убираем ведущий слеш
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+
+        // Добавляем .frm если нет расширения
+        if (!normalized.endsWith(".frm") && !normalized.endsWith(".dfrm")) {
+            normalized = normalized + ".frm";
+        }
+
+        // Добавляем префикс Forms/ если это не UserForms и не Reports
+        if (!normalized.startsWith("UserForms") && !normalized.startsWith("Forms/") && !normalized.startsWith("Reports/")) {
+            normalized = "Forms/" + normalized;
+        }
+
+        return normalized;
+    }
+
 }
