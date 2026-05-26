@@ -7,6 +7,7 @@ import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.model.RouterInfo;
 import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import ru.tmis.analyzer.core.report.CSVMergeService;
 import ru.tmis.analyzer.utils.CommentRemover;
@@ -34,6 +35,7 @@ public class FormAnalyzerService {
     private ExtractorManager extractorManager;
     private Set<String> formsToAnalyze;
     private boolean csvFileCreatedDuringSession = false;
+    private RouterGeneratorService routerGeneratorService;
 
 
     private BooleanSupplier stopCondition = () -> false;
@@ -56,7 +58,8 @@ public class FormAnalyzerService {
         this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
-        this.extractorManager = new ExtractorManager(settings);  // уже есть
+        this.extractorManager = new ExtractorManager(settings);
+        this.routerGeneratorService = new RouterGeneratorService(settings);
     }
 
     public FormAnalyzerService(SettingsModel settings) {
@@ -307,6 +310,29 @@ public class FormAnalyzerService {
 
         // Передаём в процессор очищенное содержимое
         extractorManager.process(contentWithoutComments, formInfo);
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем после извлечения данных: " + formPath);
+            return null;
+        }
+
+        // Генерируем Router из sqlQueries (которые не имеют Router)
+        List<RouterInfo> generatedFromSql = routerGeneratorService.generateRoutersFromSqlQueries(formInfo);
+        for (RouterInfo router : generatedFromSql) {
+            // Добавляем в соответствующий список
+            if (router.getParentType() == RouterInfo.ParentType.ACTION ||
+                    router.getParentType() == RouterInfo.ParentType.BEFORE_ACTION) {
+                formInfo.addActionRouter(router);
+            } else {
+                formInfo.addDataSetRouter(router);
+            }
+            log("  Сгенерирован Router (converted=false) для SQL: " + router.getName());
+        }
+        // Генерируем Router из брокеров
+        List<RouterInfo> generatedFromBrokers = routerGeneratorService.generateRoutersFromBrokers(formInfo);
+        for (RouterInfo router : generatedFromBrokers) {
+            formInfo.addActionRouter(router);
+            log("  Сгенерирован Router (converted=false) для брокера: " + router.getName());
+        }
 
         // Проверка остановки после extractorManager.process()
         if (stopCondition.getAsBoolean()) {

@@ -145,20 +145,20 @@
 	<cmpAction name="ACT_SEL">
         <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
             <![CDATA[
-                begin
-                    -- сюда необходимо поместить код для ORACLE (код на форме)
-                end;
+            begin
+              -- сюда необходимо поместить код для ORACLE (код на форме)
+            end;
             ]]>
         </cmpActionRouter>
         <cmpActionRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
             <![CDATA[
-                begin
-                    -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
-                end;
+            begin
+              -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+            end;
             ]]>
         </cmpActionRouter>
-        <cmpActionVar name="LPU" src="LPU" srctype="session" type="integer"/>
-        <cmpActionVar name="RES" src="RES" srctype="var"/>
+        <cmpActionVar name="LPU"           src="LPU"                   srctype="session" type="integer"/>
+        <cmpActionVar name="RES"           src="RES"                   srctype="var"/>
         <cmpActionVar name="ACTION_RESULT" src="ACTION_RESULT:caption" srctype="ctrl" put="" len="4000"/>
     </cmpAction>
 ```
@@ -167,12 +167,12 @@
 	<cmpDataSet name="DS_SEL2" activateoncreate="false">
         <cmpDataSetRouter  condition="TYPE_DATABASE=ORACLE">
             <![CDATA[
-                -- сюда необходимо поместить код для ORACLE (код на форме)
+            -- сюда необходимо поместить код для ORACLE (код на форме)
             ]]>
         </cmpDataSetRouter>
         <cmpDataSetRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
             <![CDATA[
-                -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+            -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
             ]]>
         </cmpDataSetRouter>
         <cmpDataSetVar name="pnLPU" src="LPU" srctype="session"/>
@@ -468,8 +468,7 @@ call PROCEDURE_NAME(pnPARAM1 => :pnPARAM1, pnPARAM2 => :pnPARAM2);
 <![CDATA[
 begin
   -- Это правильный комментарий (2 пробела)
-  call PROC(
-    pnID => :pnID);  -- Комментарий в конце строки (1 пробел до комментария)
+  call PROC(pnID => :pnID);  -- Комментарий в конце строки (1 пробел до комментария)
 end;
 ]]>
 ```
@@ -619,7 +618,7 @@ call PROC(pnID  => :pnID,
 <![CDATA[
 begin
   -- POSTGRESQL: комментарий
-  call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU,   -- ЛПУ пользователя
+  call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU,    -- ЛПУ пользователя
                           pnPID => :pnPID);   -- Идентификатор вида плана
 
 end;

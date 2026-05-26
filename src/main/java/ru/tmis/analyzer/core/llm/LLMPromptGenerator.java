@@ -915,7 +915,9 @@ public class LLMPromptGenerator {
 
         return sb.toString();
     }
-
+    /**
+     * Генерирует блок Router компонентов с заданием для LLM по конвертации
+     */
     private String generateRoutersBlock() {
         StringBuilder sb = new StringBuilder();
 
@@ -926,60 +928,365 @@ public class LLMPromptGenerator {
             return sb.toString();
         }
 
-        boolean hasAnyRouters = false;
+        // Собираем все роутеры для анализа
+        List<RouterInfo> allRouters = new ArrayList<>();
+        List<RouterInfo> convertedRouters = new ArrayList<>();
+        List<RouterInfo> nonConvertedRouters = new ArrayList<>();
 
         for (FormInfo form : context.getAnalyzedForms()) {
-            // Фильтруем только converted = true
-            List<RouterInfo> convertedActionRouters = new ArrayList<>();
             for (RouterInfo router : form.getActionRouters()) {
+                allRouters.add(router);
                 if (router.isConverted()) {
-                    convertedActionRouters.add(router);
+                    convertedRouters.add(router);
+                } else {
+                    nonConvertedRouters.add(router);
                 }
             }
-
-            List<RouterInfo> convertedDataSetRouters = new ArrayList<>();
             for (RouterInfo router : form.getDataSetRouters()) {
+                allRouters.add(router);
                 if (router.isConverted()) {
-                    convertedDataSetRouters.add(router);
+                    convertedRouters.add(router);
+                } else {
+                    nonConvertedRouters.add(router);
                 }
             }
-
-            boolean hasActionRouters = !convertedActionRouters.isEmpty();
-            boolean hasDataSetRouters = !convertedDataSetRouters.isEmpty();
-
-            if (!hasActionRouters && !hasDataSetRouters) {
-                continue;
-            }
-
-            hasAnyRouters = true;
-
-            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
-
-            // ActionRouters
-            if (hasActionRouters) {
-                sb.append("#### ActionRouter (Action / BeforeAction)\n\n");
-                for (RouterInfo router : convertedActionRouters) {
-                    appendRouterInfo(sb, router, 0);
-                }
-            }
-
-            // DataSetRouters
-            if (hasDataSetRouters) {
-                sb.append("#### DataSetRouter (DataSet / BeforeSelect)\n\n");
-                for (RouterInfo router : convertedDataSetRouters) {
-                    appendRouterInfo(sb, router, 0);
-                }
-            }
-
-            sb.append("\n---\n\n");
         }
 
-        if (!hasAnyRouters) {
+        if (allRouters.isEmpty()) {
             sb.append("Router компоненты (ActionRouter/DataSetRouter) не найдены в анализируемых формах.\n\n");
+            return sb.toString();
+        }
+
+        // ========== 1. СТАТИСТИКА ==========
+        sb.append("### Статистика Router компонентов\n\n");
+        sb.append("| Тип | Количество |\n");
+        sb.append("|-----|------------|\n");
+        sb.append("| ✅ Конвертированные роутеры (converted=true) | ").append(convertedRouters.size()).append(" |\n");
+        sb.append("| ⚠️ Неконвертированные роутеры (converted=false) | ").append(nonConvertedRouters.size()).append(" |\n");
+        sb.append("| **Всего** | **").append(allRouters.size()).append("** |\n\n");
+
+        // ========== 2. ЗАДАНИЕ ДЛЯ LLM ==========
+        if (!nonConvertedRouters.isEmpty()) {
+            sb.append("---\n\n");
+            sb.append("## 🎯 ЗАДАНИЕ ДЛЯ LLM: КОНВЕРТАЦИЯ ORACLE SQL В POSTGRESQL\n\n");
+
+            sb.append("### Контекст\n\n");
+            sb.append("В системе T-MIS正在进行 миграция с Oracle на PostgreSQL. ");
+            sb.append("Ниже представлены **несконвертированные роутеры** (`converted = false`), ");
+            sb.append("которые содержат Oracle SQL запросы или брокеры.\n\n");
+
+            sb.append("**Для SQL запросов:**\n");
+            sb.append("1. Проанализировать Oracle SQL запрос в блоке `TYPE_DATABASE=ORACLE`\n");
+            sb.append("2. Создать PostgreSQL версию этого запроса\n");
+            sb.append("3. Вставить результат в блок `TYPE_DATABASE=POSTGRE && MODE_DATABASE=tmis`\n\n");
+
+            sb.append("**Для брокеров (Action с unit/action):**\n");
+            sb.append("1. Сохранить оригинальный Oracle вызов в блоке `TYPE_DATABASE=ORACLE`\n");
+            sb.append("2. Выполнить SQL запрос к таблице D_UNITBPS для получения CALL_PROCEDURE\n");
+            sb.append("3. Создать PostgreSQL блок с вызовом полученной функции через `CALL`\n");
+            sb.append("4. Перенести все переменные (`cmpActionVar`) без изменений\n");
+            sb.append("5. Добавить комментарии к каждому параметру (источник данных)\n");
+            sb.append("6. Сохранить отступы по одной вертикальной линии\n\n");
+        }
+
+        // ========== 3. НЕКОНВЕРТИРОВАННЫЕ РОУТЕРЫ (converted=false) - ЗАДАНИЕ ==========
+        if (!nonConvertedRouters.isEmpty()) {
+            sb.append("---\n\n");
+            sb.append("## ⚠️ НЕКОНВЕРТИРОВАННЫЕ РОУТЕРЫ (converted=false) - ТРЕБУЮТ КОНВЕРТАЦИИ\n\n");
+            sb.append("Для каждого из следующих роутеров необходимо создать PostgreSQL версию.\n\n");
+
+            for (FormInfo form : context.getAnalyzedForms()) {
+                List<RouterInfo> formNonConvertedRouters = new ArrayList<>();
+                for (RouterInfo router : form.getActionRouters()) {
+                    if (!router.isConverted()) formNonConvertedRouters.add(router);
+                }
+                for (RouterInfo router : form.getDataSetRouters()) {
+                    if (!router.isConverted()) formNonConvertedRouters.add(router);
+                }
+
+                if (formNonConvertedRouters.isEmpty()) continue;
+
+                sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+                int taskNum = 1;
+                for (RouterInfo router : formNonConvertedRouters) {
+                    sb.append("#### Задание ").append(taskNum++).append(": ")
+                            .append(router.getParentType().getDisplayName())
+                            .append(" `").append(router.getName()).append("` (⚠️ converted=false)\n\n");
+
+                    // Проверяем, является ли это брокером (имеет unit/action или прямую функцию)
+                    boolean isBroker = false;
+                    String unit = null;
+                    String action = null;
+                    String functionName = null;
+
+                    for (RouterItem item : router.getRouters()) {
+                        if (item.getUnit() != null && !item.getUnit().isEmpty()) {
+                            isBroker = true;
+                            unit = item.getUnit();
+                            action = item.getAction();
+                            break;
+                        }
+                        if (item.getAction() != null && item.getAction().startsWith("D_PKG_")) {
+                            isBroker = true;
+                            functionName = item.getAction();
+                            break;
+                        }
+                    }
+
+                    // Находим Oracle SQL или вызов
+                    String oracleContent = null;
+                    for (RouterItem item : router.getRouters()) {
+                        if (item.isOracleRouter() && item.getSqlContent() != null) {
+                            oracleContent = item.getSqlContent();
+                            break;
+                        }
+                    }
+
+                    if (isBroker && (unit != null || functionName != null)) {
+                        // ========== ВЫПОЛНЯЕМ ЗАПРОС К D_UNITBPS ==========
+                        List<Map<String, String>> queryResults = executeBrokerQuery(unit, action);
+
+                        // ========== ВЫЗОВ generateBrokerBlock ==========
+                        generateBrokerBlock(sb, router, unit, action, functionName, oracleContent, queryResults);
+                        // ==============================================
+
+                    } else if (oracleContent != null) {
+                        // ========== ВЫВОД ДЛЯ SQL ЗАПРОСА ==========
+                        sb.append("**Тип:** SQL запрос\n\n");
+
+                        sb.append("**Исходный Oracle SQL:**\n\n");
+                        sb.append("```sql\n");
+                        sb.append(oracleContent);
+                        sb.append("\n```\n\n");
+
+                        if (!router.getVariables().isEmpty()) {
+                            sb.append("**Переменные (bind-параметры):**\n\n");
+                            for (RouterVariable var : router.getVariables()) {
+                                sb.append("- `:").append(var.getName()).append("`");
+                                if (var.getSrc() != null) sb.append(" → ").append(var.getSrc());
+                                sb.append("\n");
+                            }
+                            sb.append("\n");
+                        }
+
+                        sb.append("**Ожидаемый результат после конвертации:**\n\n");
+                        sb.append("```xml\n");
+                        sb.append("<").append(router.getRouterType().getTagName())
+                                .append(" condition=\"TYPE_DATABASE=POSTGRE && MODE_DATABASE=tmis\">\n");
+                        sb.append("    <![CDATA[\n");
+                        sb.append("    -- TODO: Вставить сконвертированный PostgreSQL SQL\n");
+                        sb.append("    -- Требуется конвертация Oracle → PostgreSQL\n");
+                        sb.append("    ]]>\n");
+                        sb.append("</").append(router.getRouterType().getTagName()).append(">\n");
+                        sb.append("```\n\n");
+                    }
+                }
+            }
+        }
+
+        // ========== 4. КОНВЕРТИРОВАННЫЕ РОУТЕРЫ (converted=true) ==========
+        if (!convertedRouters.isEmpty()) {
+            sb.append("---\n\n");
+            sb.append("## ✅ КОНВЕРТИРОВАННЫЕ РОУТЕРЫ (converted=true)\n\n");
+            sb.append("Эти роутеры уже сконвертированы и готовы к использованию.\n\n");
+
+            for (FormInfo form : context.getAnalyzedForms()) {
+                List<RouterInfo> formConvertedRouters = new ArrayList<>();
+                for (RouterInfo router : form.getActionRouters()) {
+                    if (router.isConverted()) formConvertedRouters.add(router);
+                }
+                for (RouterInfo router : form.getDataSetRouters()) {
+                    if (router.isConverted()) formConvertedRouters.add(router);
+                }
+
+                if (formConvertedRouters.isEmpty()) continue;
+
+                sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+                for (RouterInfo router : formConvertedRouters) {
+                    sb.append("#### ").append(router.getParentType().getDisplayName())
+                            .append(": `").append(router.getName()).append("` (✅ converted=true)\n\n");
+
+                    // Проверяем, является ли это брокером
+                    boolean isBroker = false;
+                    String unit = null;
+                    String action = null;
+                    String functionName = null;
+
+                    for (RouterItem item : router.getRouters()) {
+                        if (item.getUnit() != null && !item.getUnit().isEmpty()) {
+                            isBroker = true;
+                            unit = item.getUnit();
+                            action = item.getAction();
+                            break;
+                        }
+                        if (item.getAction() != null && item.getAction().startsWith("D_PKG_")) {
+                            isBroker = true;
+                            functionName = item.getAction();
+                            break;
+                        }
+                    }
+
+                    if (isBroker && (unit != null || functionName != null)) {
+                        // ========== ВЫВОД БРОКЕРА В XML ФОРМАТЕ ==========
+                        sb.append("```xml\n");
+                        sb.append("<component cmptype=\"").append(router.getParentType().getDisplayName())
+                                .append("\" name=\"").append(router.getName()).append("\">\n");
+
+                        // Oracle роутер
+                        sb.append("    <cmpActionRouter");
+                        if (unit != null) {
+                            sb.append(" unit=\"").append(unit).append("\"");
+                        }
+                        if (action != null && !action.isEmpty()) {
+                            sb.append(" action=\"").append(action).append("\"");
+                        }
+                        sb.append(" condition=\"TYPE_DATABASE=ORACLE\"/>\n");
+
+                        // PostgreSQL роутер с CDATA
+                        sb.append("    <cmpActionRouter condition=\"TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis\">\n");
+                        sb.append("        <![CDATA[\n");
+
+                        // Находим PostgreSQL SQL
+                        String postgresSql = null;
+                        for (RouterItem item : router.getRouters()) {
+                            if (item.isPostgresRouter() && item.getSqlContent() != null) {
+                                postgresSql = item.getSqlContent();
+                                break;
+                            }
+                        }
+
+                        if (postgresSql != null) {
+                            // Выводим существующий PostgreSQL SQL с сохранением форматирования
+                            String[] lines = postgresSql.split("\\r?\\n");
+                            for (String line : lines) {
+                                sb.append("        ").append(line).append("\n");
+                            }
+                        } else {
+                            sb.append("        -- PostgreSQL SQL не найден\n");
+                        }
+
+                        sb.append("        ]]>\n");
+                        sb.append("    </cmpActionRouter>\n");
+
+                        // Переменные
+                        for (RouterVariable var : router.getVariables()) {
+                            sb.append("    <cmpActionVar");
+                            sb.append(" name=\"").append(var.getName()).append("\"");
+                            if (var.getSrc() != null) sb.append(" src=\"").append(var.getSrc()).append("\"");
+                            if (var.getSrcType() != null) sb.append(" srctype=\"").append(var.getSrcType()).append("\"");
+
+                            boolean hasPut = var.getPut() != null && !var.getPut().isEmpty();
+                            boolean hasGet = var.getGet() != null && !var.getGet().isEmpty();
+
+                            if (hasGet && !hasPut) {
+                                // get без put - не выводим
+                            } else if (hasGet) {
+                                sb.append(" get=\"").append(var.getGet()).append("\"");
+                            }
+
+                            if (hasPut) {
+                                sb.append(" put=\"").append(var.getPut()).append("\"");
+                            }
+                            if (var.getLen() != null && !var.getLen().isEmpty()) {
+                                sb.append(" len=\"").append(var.getLen()).append("\"");
+                            }
+                            sb.append("/>\n");
+                        }
+
+                        sb.append("</component>\n");
+                        sb.append("```\n\n");
+
+                    } else {
+                        // ========== ВЫВОД SQL ЗАПРОСА ==========
+                        // Находим Oracle и PostgreSQL SQL
+                        String oracleSql = null;
+                        String postgresSql = null;
+
+                        for (RouterItem item : router.getRouters()) {
+                            if (item.isOracleRouter() && item.getSqlContent() != null) {
+                                oracleSql = item.getSqlContent();
+                            }
+                            if (item.isPostgresRouter() && item.getSqlContent() != null) {
+                                postgresSql = item.getSqlContent();
+                            }
+                        }
+
+                        if (oracleSql != null) {
+                            sb.append("**Oracle SQL:**\n\n");
+                            sb.append("```sql\n");
+                            sb.append(oracleSql);
+                            sb.append("\n```\n\n");
+                        }
+
+                        if (postgresSql != null) {
+                            sb.append("**PostgreSQL SQL:**\n\n");
+                            sb.append("```sql\n");
+                            sb.append(postgresSql);
+                            sb.append("\n```\n\n");
+                        }
+                    }
+                }
+            }
         }
 
         return sb.toString();
     }
+
+    /**
+     * Выполняет запрос к таблице D_UNITBPS для получения CALL_PROCEDURE
+     * @param unit код unit'а
+     * @param action действие (может быть null)
+     * @return список результатов запроса
+     */
+    private List<Map<String, String>> executeBrokerQuery(String unit, String action) {
+        List<Map<String, String>> results = new ArrayList<>();
+
+        if (unit == null || unit.isEmpty()) {
+            return results;
+        }
+
+        String sql;
+        if (action != null && !action.isEmpty()) {
+            sql = "SELECT unitbpcode, standard_action, execproc FROM D_UNITBPS WHERE unitbpcode = ? AND standard_action = ?";
+        } else {
+            sql = "SELECT unitbpcode, standard_action, execproc FROM D_UNITBPS WHERE unitbpcode = ?";
+        }
+
+        Properties props = new Properties();
+        props.setProperty("user", settings.getOracleUser());
+        props.setProperty("password", settings.getOraclePassword());
+        props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+        props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+
+        try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, unit);
+            if (action != null && !action.isEmpty()) {
+                pstmt.setString(2, action);
+            }
+            pstmt.setQueryTimeout(30);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, String> row = new LinkedHashMap<>();
+                row.put("unit", rs.getString("unitbpcode"));
+                row.put("action", rs.getString("standard_action"));
+                row.put("call_procedure", rs.getString("execproc"));
+                results.add(row);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[LLM] Ошибка выполнения запроса к D_UNITBPS: " + e.getMessage());
+            // Возвращаем пустой результат, не прерывая генерацию отчёта
+        }
+
+        return results;
+    }
+
+
 
     private void appendRouterInfo(StringBuilder sb, RouterInfo router, int level) {
         String indent = "  ".repeat(level);
@@ -1924,4 +2231,338 @@ public class LLMPromptGenerator {
             return null;
         });
     }
+
+
+    /**
+     * Генерирует блок для брокера с правильным форматированием
+     */
+    /**
+     * Генерирует блок для брокера с правильным форматированием
+     */
+    private void generateBrokerBlock(StringBuilder sb, RouterInfo router, String unit, String action,
+                                     String functionName, String oracleContent,
+                                     List<Map<String, String>> queryResults) {
+        sb.append("**Тип:** Брокер (Action с unit/action)\n\n");
+
+        // Исходный брокер
+        sb.append("#### Исходный брокер (converted=false):\n\n");
+        sb.append("```xml\n");
+        sb.append("<component cmptype=\"").append(router.getParentType().getDisplayName())
+                .append("\" name=\"").append(router.getName()).append("\"");
+        if (unit != null) {
+            sb.append(" unit=\"").append(unit).append("\"");
+        }
+        if (action != null && !action.isEmpty()) {
+            sb.append(" action=\"").append(action).append("\"");
+        }
+        if (functionName != null) {
+            sb.append(" action=\"").append(functionName).append("\"");
+        }
+        sb.append(">\n");
+
+        // Выводим переменные с правильным форматированием
+        for (RouterVariable var : router.getVariables()) {
+            sb.append("    <component cmptype=\"ActionVar\"");
+            sb.append(" name=\"").append(var.getName()).append("\"");
+            if (var.getSrc() != null) sb.append(" src=\"").append(var.getSrc()).append("\"");
+            if (var.getSrcType() != null) sb.append(" srctype=\"").append(var.getSrcType()).append("\"");
+
+            boolean hasPut = var.getPut() != null && !var.getPut().isEmpty();
+            boolean hasGet = var.getGet() != null && !var.getGet().isEmpty();
+
+            if (hasGet && !hasPut) {
+                // get без put - не выводим
+            } else if (hasGet) {
+                sb.append(" get=\"").append(var.getGet()).append("\"");
+            }
+
+            if (hasPut) {
+                sb.append(" put=\"").append(var.getPut()).append("\"");
+            }
+            if (var.getLen() != null && !var.getLen().isEmpty()) {
+                sb.append(" len=\"").append(var.getLen()).append("\"");
+            }
+            sb.append("/>\n");
+        }
+        sb.append("</component>\n");
+        sb.append("```\n\n");
+
+        // Запрос к D_UNITBPS
+        sb.append("#### Делаем запрос для получения ожидаемой функции ");
+        if (unit != null) {
+            sb.append("unit=\"").append(unit).append("\"");
+            if (action != null && !action.isEmpty()) {
+                sb.append(" action=\"").append(action).append("\"");
+            }
+        } else if (functionName != null) {
+            sb.append("action=\"").append(functionName).append("\"");
+        }
+        sb.append("\n\n");
+
+        sb.append("**Запрос:**\n\n");
+        sb.append("```sql\n");
+        sb.append("SELECT t.unitbpcode AS \"unit\",\n");
+        sb.append("       t.standard_action AS \"action\",\n");
+        sb.append("       t.execproc AS \"CALL_PROCEDURE\"\n");
+        sb.append("FROM D_UNITBPS t\n");
+        sb.append("WHERE 1=1\n");
+        if (unit != null) {
+            sb.append("  AND t.unitbpcode = '").append(unit).append("' -- unit\n");
+        }
+        if (action != null && !action.isEmpty()) {
+            sb.append("  AND t.standard_action = '").append(action).append("' -- action\n");
+        }
+        sb.append("```\n\n");
+
+        // Результат запроса
+        sb.append("**Результат запроса:**\n\n");
+        if (!queryResults.isEmpty()) {
+            sb.append("```\n");
+            sb.append(String.format("%-20s | %-10s | %-25s", "unit", "action", "CALL_PROCEDURE"));
+            sb.append("\n");
+            sb.append(String.format("%-20s-+-%-10s-+-%-25s", "-".repeat(20), "-".repeat(10), "-".repeat(25)));
+            sb.append("\n");
+            for (Map<String, String> row : queryResults) {
+                String unitVal = row.getOrDefault("unit", "");
+                String actionVal = row.getOrDefault("action", "");
+                String callProc = row.getOrDefault("call_procedure", "");
+                sb.append(String.format("%-20s | %-10s | %-25s",
+                        unitVal.length() > 20 ? unitVal.substring(0, 17) + "..." : unitVal,
+                        actionVal.length() > 10 ? actionVal.substring(0, 7) + "..." : actionVal,
+                        callProc.length() > 25 ? callProc.substring(0, 22) + "..." : callProc));
+                sb.append("\n");
+            }
+            sb.append("```\n\n");
+        } else {
+            sb.append("```\n(нет данных - функция не найдена в D_UNITBPS)\n```\n\n");
+        }
+
+        // Результат конвертации с правильным форматированием
+        sb.append("#### Результат конвертации (converted=true) с обязательным сохранением стиля написания\n");
+        sb.append("и указанием комментариев к каждому атрибуту (отступы тоже надо сохранить по одной линии по вертикали):\n\n");
+
+        sb.append("```xml\n");
+        sb.append("<component cmptype=\"").append(router.getParentType().getDisplayName())
+                .append("\" name=\"").append(router.getName()).append("\">\n");
+
+        // Oracle роутер
+        sb.append("    <cmpActionRouter");
+        if (unit != null) {
+            sb.append(" unit=\"").append(unit).append("\"");
+        }
+        if (action != null && !action.isEmpty()) {
+            sb.append(" action=\"").append(action).append("\"");
+        }
+        sb.append(" condition=\"TYPE_DATABASE=ORACLE\"/>\n");
+
+        // PostgreSQL роутер с правильным форматированием
+        sb.append("    <cmpActionRouter condition=\"TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis\">\n");
+        sb.append("        <![CDATA[\n");
+        sb.append("        begin\n");
+        sb.append("          call ");
+
+        // Определяем имя вызываемой процедуры
+        String callProcedure = null;
+        if (!queryResults.isEmpty()) {
+            callProcedure = queryResults.get(0).get("call_procedure");
+        }
+        if (callProcedure == null || callProcedure.isEmpty()) {
+            if (functionName != null) {
+                callProcedure = functionName;
+            } else if (unit != null) {
+                callProcedure = unit;
+                if (action != null && !action.isEmpty()) {
+                    callProcedure += "." + action;
+                }
+            }
+        }
+
+        if (callProcedure != null) {
+            sb.append(callProcedure);
+        }
+        sb.append("(");
+
+        // Форматируем параметры с правильным выравниванием
+        List<RouterVariable> vars = router.getVariables();
+
+        // Находим максимальную длину имени параметра для выравнивания
+        int maxParamNameLength = 0;
+        for (RouterVariable var : vars) {
+            int len = var.getName().length();
+            if (len > maxParamNameLength) maxParamNameLength = len;
+        }
+
+        // Вычисляем позицию для комментариев (максимальная длина + 20 пробелов)
+        int commentPosition = maxParamNameLength + 20;
+
+        for (int i = 0; i < vars.size(); i++) {
+            RouterVariable var = vars.get(i);
+            String paramName = var.getName();
+            String src = var.getSrc() != null ? var.getSrc() : "параметр";
+
+            if (i == 0) {
+                // Первый параметр - на той же строке, что и открывающая скобка
+                sb.append(paramName);
+            } else {
+                // Последующие параметры - с новой строки с отступом
+                sb.append("\n                                ").append(paramName);
+            }
+
+            // Добиваем пробелами до максимальной длины
+            int spaces = maxParamNameLength - paramName.length();
+            if (spaces > 0) sb.append(" ".repeat(spaces));
+
+            sb.append(" => :").append(paramName);
+
+            // Добавляем запятую для всех кроме последнего
+            if (i < vars.size() - 1) {
+                sb.append(",");
+            }
+
+            // Выравнивание комментариев по вертикали
+            int currentPos = maxParamNameLength + (i == 0 ? 20 : 32);
+            int commentSpaces = commentPosition - currentPos;
+            if (commentSpaces > 0) sb.append(" ".repeat(commentSpaces));
+
+            sb.append(" -- ").append(src);
+        }
+
+        sb.append("\n          );\n");
+        sb.append("        end;\n");
+        sb.append("        ]]>\n");
+        sb.append("    </cmpActionRouter>\n");
+
+        // Переменные с выравниванием атрибутов по вертикали
+        // Находим максимальную длину для каждого атрибута
+        int maxNameLen = 0;
+        int maxSrcLen = 0;
+        int maxSrcTypeLen = 0;
+        int maxPutLen = 0;
+
+        for (RouterVariable var : vars) {
+            maxNameLen = Math.max(maxNameLen, var.getName().length());
+            maxSrcLen = Math.max(maxSrcLen, var.getSrc() != null ? var.getSrc().length() : 0);
+            maxSrcTypeLen = Math.max(maxSrcTypeLen, var.getSrcType() != null ? var.getSrcType().length() : 0);
+            String put = (var.getPut() != null && !var.getPut().isEmpty()) ? var.getPut() : "";
+            maxPutLen = Math.max(maxPutLen, put.length());
+        }
+
+        for (RouterVariable var : vars) {
+            sb.append("    <cmpActionVar");
+
+            // name с выравниванием
+            sb.append(" name=\"").append(var.getName()).append("\"");
+            int nameSpaces = maxNameLen - var.getName().length();
+            if (nameSpaces > 0) sb.append(" ".repeat(nameSpaces));
+
+            // src с выравниванием
+            if (var.getSrc() != null) {
+                sb.append(" src=\"").append(var.getSrc()).append("\"");
+                int srcSpaces = maxSrcLen - var.getSrc().length();
+                if (srcSpaces > 0) sb.append(" ".repeat(srcSpaces));
+            } else {
+                sb.append(" src=\"\"");
+                sb.append(" ".repeat(maxSrcLen));
+            }
+
+            // srctype с выравниванием
+            if (var.getSrcType() != null) {
+                sb.append(" srctype=\"").append(var.getSrcType()).append("\"");
+                int srcTypeSpaces = maxSrcTypeLen - var.getSrcType().length();
+                if (srcTypeSpaces > 0) sb.append(" ".repeat(srcTypeSpaces));
+            } else {
+                sb.append(" srctype=\"\"");
+                sb.append(" ".repeat(maxSrcTypeLen));
+            }
+
+            boolean hasPut = var.getPut() != null && !var.getPut().isEmpty();
+            boolean hasGet = var.getGet() != null && !var.getGet().isEmpty();
+
+            if (hasGet && !hasPut) {
+                // get без put - не выводим
+            } else if (hasGet) {
+                sb.append(" get=\"").append(var.getGet()).append("\"");
+            }
+
+            if (hasPut) {
+                sb.append(" put=\"").append(var.getPut()).append("\"");
+                int putSpaces = maxPutLen - var.getPut().length();
+                if (putSpaces > 0) sb.append(" ".repeat(putSpaces));
+            }
+
+            if (var.getLen() != null && !var.getLen().isEmpty()) {
+                sb.append(" len=\"").append(var.getLen()).append("\"");
+            }
+            sb.append("/>\n");
+        }
+
+        sb.append("</component>\n");
+        sb.append("```\n\n");
+    }
+
+    /**
+     * Форматирует переменные согласно правилам №30 и №31
+     */
+    private void formatActionVar(StringBuilder sb, RouterVariable var) {
+        sb.append("    <cmpActionVar");
+        sb.append(" name=\"").append(var.getName()).append("\"");
+        if (var.getSrc() != null) sb.append(" src=\"").append(var.getSrc()).append("\"");
+        if (var.getSrcType() != null) sb.append(" srctype=\"").append(var.getSrcType()).append("\"");
+
+        // Правило №31: удаляем get без put
+        boolean hasPut = var.getPut() != null && !var.getPut().isEmpty();
+        boolean hasGet = var.getGet() != null && !var.getGet().isEmpty();
+
+        if (hasGet && !hasPut) {
+            // не выводим get
+        } else if (hasGet) {
+            sb.append(" get=\"").append(var.getGet()).append("\"");
+        }
+
+        // Правило №30: put и len в конце
+        if (hasPut) {
+            sb.append(" put=\"").append(var.getPut()).append("\"");
+        }
+        if (var.getLen() != null && !var.getLen().isEmpty()) {
+            sb.append(" len=\"").append(var.getLen()).append("\"");
+        }
+        sb.append("/>\n");
+    }
+
+    /**
+     * Форматирует параметры вызова процедуры с выравниванием по вертикали
+     */
+    private void formatCallParameters(StringBuilder sb, List<RouterVariable> vars, String indent) {
+        if (vars == null || vars.isEmpty()) return;
+
+        // Находим максимальную длину имени параметра
+        int maxNameLen = 0;
+        for (RouterVariable var : vars) {
+            int len = var.getName().length();
+            if (len > maxNameLen) maxNameLen = len;
+        }
+
+        for (int i = 0; i < vars.size(); i++) {
+            RouterVariable var = vars.get(i);
+            String paramName = var.getName();
+            String src = var.getSrc() != null ? var.getSrc() : "параметр";
+
+            // Выравнивание по вертикали
+            sb.append(indent).append(paramName);
+
+            // Добиваем пробелами до максимальной длины
+            int spaces = maxNameLen - paramName.length();
+            if (spaces > 0) sb.append(" ".repeat(spaces));
+
+            sb.append(" => :").append(paramName);
+            if (i < vars.size() - 1) {
+                sb.append(",");
+            }
+
+            // Комментарий к параметру
+            sb.append("  -- ").append(src);
+            sb.append("\n");
+        }
+    }
+
 }

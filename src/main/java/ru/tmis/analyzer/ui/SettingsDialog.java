@@ -607,7 +607,7 @@ public class SettingsDialog extends JDialog {
 
             String instruction = config.getLlmInstructionText();
             if (instruction == null || instruction.isEmpty()) {
-                instructionTextArea.setText(getInstructionM2());
+                instructionTextArea.setText("");  // <-- ПРОБЛЕМА: берёт из файла
             } else {
                 instructionTextArea.setText(instruction);
             }

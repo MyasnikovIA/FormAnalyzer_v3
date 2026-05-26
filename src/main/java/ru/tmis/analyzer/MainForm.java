@@ -106,5 +106,13 @@ public class MainForm {
         }
         System.setProperty("oracle.jdbc.defaultNChar", "true");
         System.setProperty("oracle.net.disableOob", "true");
+        System.setProperty("user.timezone", "Europe/Moscow");
+
+        if (System.getProperty("user.timezone") == null) {
+            // System.setProperty("user.timezone", "Europe/Moscow");
+            System.setProperty("user.timezone", "GMT");
+            // Отключаем использование региональных настроек для timezone
+            System.setProperty("oracle.jdbc.timezoneAsRegion", "false");
+        }
     }
 }
