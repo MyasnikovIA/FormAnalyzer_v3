@@ -6,7 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.db.PostgresReportsService;
-import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.PopupMenuInfo;

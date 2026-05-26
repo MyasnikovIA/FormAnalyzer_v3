@@ -3,7 +3,6 @@ package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
 
 public class SubFormProcessor implements IXmlProcessor {

@@ -4,11 +4,8 @@ package ru.tmis.analyzer.core.extractor.processors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

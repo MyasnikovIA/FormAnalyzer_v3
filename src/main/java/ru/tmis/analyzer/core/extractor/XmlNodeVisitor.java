@@ -2,8 +2,7 @@
 package ru.tmis.analyzer.core.extractor;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import ru.tmis.analyzer.core.extractor.extractor.SqlExtractor;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;

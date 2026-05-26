@@ -2,12 +2,7 @@
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
-import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.SqlInfo;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Извлечение неизвестных объектов (требующих разбора аналитиком)

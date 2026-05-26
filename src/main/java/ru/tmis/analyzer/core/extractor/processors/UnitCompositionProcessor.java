@@ -2,9 +2,6 @@
 package ru.tmis.analyzer.core.extractor.processors;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import ru.tmis.analyzer.core.extractor.IXmlProcessor;
 import ru.tmis.analyzer.core.model.FormInfo;
 
 import java.util.LinkedHashSet;

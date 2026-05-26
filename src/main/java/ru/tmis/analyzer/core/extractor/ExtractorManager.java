@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
+import ru.tmis.analyzer.core.extractor.extractor.SqlExtractor;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
 import ru.tmis.analyzer.core.extractor.processors.RouterProcessor;
