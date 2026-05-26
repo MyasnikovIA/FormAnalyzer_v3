@@ -2,7 +2,9 @@
 package ru.tmis.analyzer.core.model;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Статистика конвертации SQL запросов в ActionRouter/DataSetRouter
@@ -95,5 +97,21 @@ public class ConversionStatistics {
         public String toString() {
             return String.format("    %s [%s]: %s", componentName, componentType, getStatus());
         }
+    }
+
+    public int getNonRouterQueriesCount() {
+        int count = 0;
+        for (QueryConversionInfo info : queryDetails.values()) {
+            if (!info.hasRouter()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public List<QueryConversionInfo> getNonRouterQueries() {
+        return queryDetails.values().stream()
+                .filter(info -> !info.hasRouter())
+                .collect(Collectors.toList());
     }
 }

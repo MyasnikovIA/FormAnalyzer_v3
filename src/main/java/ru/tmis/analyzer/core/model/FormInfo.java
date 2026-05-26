@@ -24,7 +24,7 @@ public class FormInfo {
             this.syntax = syntax;
             this.openMethod = openMethod;
         }
-
+        
         public String getName() { return name; }
         public String getSyntax() { return syntax; }
         public String getOpenMethod() { return openMethod; }

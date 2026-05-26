@@ -1,4 +1,5 @@
 // core/extractor/ExtractorManager.java
+
 package ru.tmis.analyzer.core.extractor;
 
 import org.jsoup.Jsoup;
@@ -8,16 +9,18 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
 import ru.tmis.analyzer.core.extractor.extractor.SqlExtractor;
 import ru.tmis.analyzer.core.extractor.processors.*;
-import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
-import ru.tmis.analyzer.core.extractor.processors.RouterProcessor;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.ConversionStatistics;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.model.RouterInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class ExtractorManager {
 
@@ -106,6 +109,7 @@ public class ExtractorManager {
             return;
         }
 
+        // 1. Анализ конвертации
         ConversionStatistics stats = conversionAnalyzer.analyzeForm(formInfo, xmlContent);
         formInfo.setConversionStatistics(stats);
 
@@ -114,33 +118,15 @@ public class ExtractorManager {
             return;
         }
 
-        List<SqlInfo> sqlList = sqlExtractor.extract(doc, formInfo);
-        formInfo.setSqlQueries(sqlList);
+        // 2. Извлекаем ВСЕ SQL запросы (включая те, у которых есть Router)
+        List<SqlInfo> allSqlList = sqlExtractor.extract(doc, formInfo);
 
         if (isStopped()) {
             log("Извлечение данных остановлено пользователем (после извлечения SQL)");
             return;
         }
 
-        for (SqlInfo sql : sqlList) {
-            if (isStopped()) {
-                log("Извлечение данных остановлено пользователем (в цикле SQL)");
-                return;
-            }
-
-            for (String tv : sql.getTablesViews()) formInfo.addTableView(tv);
-            for (String pf : sql.getPackagesFunctions()) formInfo.addPackageFunction(pf);
-            for (String proc : sql.getUserProcedures()) formInfo.addUserProcedure(proc);
-            for (String opt : sql.getSystemOptions()) formInfo.addSystemOption(opt);
-            for (String constant : sql.getConstants()) formInfo.addConstant(constant);
-            for (String unknown : sql.getUnknownObjects()) formInfo.addUnknownObject(unknown);
-        }
-
-        if (isStopped()) {
-            log("Извлечение данных остановлено пользователем (перед запуском процессоров)");
-            return;
-        }
-
+        // 3. Запускаем все процессоры (они заполнят RouterInfo, SubForm, Broker и т.д.)
         for (IXmlProcessor processor : processors) {
             if (isStopped()) {
                 log("Извлечение данных остановлено пользователем в процессоре " + processor.getName());
@@ -155,6 +141,105 @@ public class ExtractorManager {
                 System.err.println("Ошибка в процессоре " + processor.getName() + ": " + e.getMessage());
             }
         }
+
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (после процессоров)");
+            return;
+        }
+
+        // 4. ФИЛЬТРАЦИЯ: удаляем из sqlQueries те запросы, у которых есть Router
+        List<SqlInfo> filteredSqlList = filterQueriesWithRouters(allSqlList, formInfo);
+        formInfo.setSqlQueries(filteredSqlList);
+
+        log("  SQL запросов до фильтрации: " + allSqlList.size() +
+                ", после фильтрации (без Router): " + filteredSqlList.size());
+
+        if (filteredSqlList.size() < allSqlList.size()) {
+            log("  Исключено запросов с Router: " + (allSqlList.size() - filteredSqlList.size()));
+        }
+
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (в цикле SQL)");
+            return;
+        }
+
+        // 5. Добавляем извлечённые объекты из SQL в FormInfo
+        for (SqlInfo sql : filteredSqlList) {
+            if (isStopped()) return;
+
+            for (String tv : sql.getTablesViews()) formInfo.addTableView(tv);
+            for (String pf : sql.getPackagesFunctions()) formInfo.addPackageFunction(pf);
+            for (String proc : sql.getUserProcedures()) formInfo.addUserProcedure(proc);
+            for (String opt : sql.getSystemOptions()) formInfo.addSystemOption(opt);
+            for (String constant : sql.getConstants()) formInfo.addConstant(constant);
+            for (String unknown : sql.getUnknownObjects()) formInfo.addUnknownObject(unknown);
+        }
+    }
+
+    /**
+     * Фильтрует SQL запросы, удаляя те, для которых существуют Router компоненты
+     *
+     * @param allSqlList все извлечённые SQL запросы
+     * @param formInfo информация о форме (содержит RouterInfo)
+     * @return отфильтрованный список SQL запросов (без тех, у которых есть Router)
+     */
+    private List<SqlInfo> filterQueriesWithRouters(List<SqlInfo> allSqlList, FormInfo formInfo) {
+        if (allSqlList == null || allSqlList.isEmpty()) {
+            return allSqlList;
+        }
+
+        // Собираем имена компонентов, у которых есть Router
+        Set<String> routerComponentNames = new HashSet<>();
+
+        // ActionRouters
+        for (RouterInfo router : formInfo.getActionRouters()) {
+            if (router.getName() != null && !router.getName().isEmpty()) {
+                routerComponentNames.add(router.getName());
+            }
+        }
+
+        // DataSetRouters
+        for (RouterInfo router : formInfo.getDataSetRouters()) {
+            if (router.getName() != null && !router.getName().isEmpty()) {
+                routerComponentNames.add(router.getName());
+            }
+        }
+
+        // Также проверяем BeforeAction и BeforeSelect (они могут иметь свои имена)
+        for (RouterInfo router : formInfo.getActionRouters()) {
+            if (router.getParentType() == RouterInfo.ParentType.BEFORE_ACTION) {
+                if (router.getName() != null && !router.getName().isEmpty()) {
+                    routerComponentNames.add(router.getName());
+                }
+            }
+        }
+
+        for (RouterInfo router : formInfo.getDataSetRouters()) {
+            if (router.getParentType() == RouterInfo.ParentType.BEFORE_SELECT) {
+                if (router.getName() != null && !router.getName().isEmpty()) {
+                    routerComponentNames.add(router.getName());
+                }
+            }
+        }
+
+        if (routerComponentNames.isEmpty()) {
+            // Нет Router компонентов - возвращаем все запросы
+            return allSqlList;
+        }
+
+        log("  Найдены Router компоненты: " + routerComponentNames);
+
+        // Фильтруем: оставляем только те SQL запросы, чьи имена НЕ входят в routerComponentNames
+        return allSqlList.stream()
+                .filter(sql -> {
+                    String componentName = sql.getComponentName();
+                    boolean hasRouter = routerComponentNames.contains(componentName);
+                    if (hasRouter) {
+                        log("    Исключён запрос с Router: " + componentName + " (" + sql.getSourceType() + ")");
+                    }
+                    return !hasRouter;
+                })
+                .collect(Collectors.toList());
     }
 
     public SqlExtractor getSqlExtractor() {
