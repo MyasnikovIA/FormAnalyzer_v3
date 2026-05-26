@@ -361,18 +361,27 @@ public class HierarchicalJSONReportGenerator {
         if (formInfo.getActionRouters() != null && !formInfo.getActionRouters().isEmpty()) {
             JsonArray actionRoutersArray = new JsonArray();
             for (RouterInfo router : formInfo.getActionRouters()) {
-                actionRoutersArray.add(convertRouterToJson(router));
+                if (router.isConverted()) {  // <-- ФИЛЬТРАЦИЯ
+                    actionRoutersArray.add(convertRouterToJson(router));
+                }
             }
-            formJson.add("actionRouters", actionRoutersArray);
+            if (actionRoutersArray.size() > 0) {
+                formJson.add("actionRouters", actionRoutersArray);
+            }
         }
+
 
         // ========== НОВЫЙ БЛОК: DATASET ROUTERS ==========
         if (formInfo.getDataSetRouters() != null && !formInfo.getDataSetRouters().isEmpty()) {
             JsonArray dataSetRoutersArray = new JsonArray();
             for (RouterInfo router : formInfo.getDataSetRouters()) {
-                dataSetRoutersArray.add(convertRouterToJson(router));
+                if (router.isConverted()) {  // <-- ФИЛЬТРАЦИЯ
+                    dataSetRoutersArray.add(convertRouterToJson(router));
+                }
             }
-            formJson.add("dataSetRouters", dataSetRoutersArray);
+            if (dataSetRoutersArray.size() > 0) {
+                formJson.add("dataSetRouters", dataSetRoutersArray);
+            }
         }
 
         return formJson;
@@ -598,6 +607,9 @@ public class HierarchicalJSONReportGenerator {
     /**
      * Конвертирует SubRouterInfo в JSON объект
      */
+    /**
+     * Конвертирует SubRouterInfo в JSON объект
+     */
     private JsonObject convertSubRouterToJson(SubRouterInfo subRouter) {
         JsonObject subJson = new JsonObject();
 
@@ -621,8 +633,10 @@ public class HierarchicalJSONReportGenerator {
             for (RouterItem item : subRouter.getRouters()) {
                 JsonObject itemJson = new JsonObject();
                 itemJson.addProperty("order", item.getOrder());
-                if (item.getCondition() != null) itemJson.addProperty("condition", item.getCondition());
-                if (item.getSqlContent() != null) {
+                if (item.getCondition() != null && !item.getCondition().isEmpty()) {
+                    itemJson.addProperty("condition", item.getCondition());
+                }
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
                     String sqlPreview = item.getSqlContent().length() > 500 ?
                             item.getSqlContent().substring(0, 500) + "..." :
                             item.getSqlContent();
@@ -640,8 +654,12 @@ public class HierarchicalJSONReportGenerator {
             for (RouterVariable variable : subRouter.getVariables()) {
                 JsonObject varJson = new JsonObject();
                 varJson.addProperty("name", variable.getName());
-                if (variable.getSrc() != null) varJson.addProperty("src", variable.getSrc());
-                if (variable.getSrcType() != null) varJson.addProperty("srctype", variable.getSrcType());
+                if (variable.getSrc() != null) {
+                    varJson.addProperty("src", variable.getSrc());
+                }
+                if (variable.getSrcType() != null) {
+                    varJson.addProperty("srctype", variable.getSrcType());
+                }
                 if (variable.getPut() != null && !variable.getPut().isEmpty()) {
                     varJson.addProperty("put", variable.getPut());
                 }

@@ -7,9 +7,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.model.ConversionStatistics;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.model.RouterInfo;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,8 +25,11 @@ public class ConversionAnalyzer {
 
     private final Map<String, ConversionStatistics> statisticsMap = new LinkedHashMap<>();
 
+    // core/analyzer/ConversionAnalyzer.java - модифицированный метод analyzeForm()
+
     /**
      * Анализирует форму на наличие конвертированных запросов
+     * Учитывает только роутеры с признаком converted = true
      */
     public ConversionStatistics analyzeForm(FormInfo formInfo, String xmlContent) {
         ConversionStatistics stats = new ConversionStatistics(formInfo.getFormPath());
@@ -40,8 +46,55 @@ public class ConversionAnalyzer {
         // Анализируем все DataSet компоненты
         analyzeDataSets(doc, stats);
 
+        // ========== НОВОЕ: обновляем статистику с учётом converted ==========
+        updateStatisticsWithConvertedFlag(formInfo, stats);
+
         statisticsMap.put(formInfo.getFormPath(), stats);
         return stats;
+    }
+
+    /**
+     * Обновляет статистику, учитывая признак converted у роутеров
+     */
+    private void updateStatisticsWithConvertedFlag(FormInfo formInfo, ConversionStatistics stats) {
+        // Собираем имена компонентов, у которых есть Router с converted = true
+        Set<String> convertedRouterNames = new HashSet<>();
+
+        for (RouterInfo router : formInfo.getActionRouters()) {
+            if (router.isConverted()) {
+                convertedRouterNames.add(router.getName());
+            }
+        }
+
+        for (RouterInfo router : formInfo.getDataSetRouters()) {
+            if (router.isConverted()) {
+                convertedRouterNames.add(router.getName());
+            }
+        }
+
+        // Пересчитываем количество конвертированных запросов
+        int convertedCount = 0;
+        for (Map.Entry<String, ConversionStatistics.QueryConversionInfo> entry : stats.getQueryDetails().entrySet()) {
+            String componentName = entry.getKey();
+            ConversionStatistics.QueryConversionInfo info = entry.getValue();
+
+            // Запрос считается конвертированным, если:
+            // 1. У него есть Router в XML
+            // 2. И этот Router имеет признак converted = true
+            if (info.hasRouter() && convertedRouterNames.contains(componentName)) {
+                convertedCount++;
+            }
+        }
+
+        // Обновляем статистику (через рефлексию или добавив setter)
+        // Так как поля private, используем рефлексию или добавляем метод в ConversionStatistics
+        try {
+            java.lang.reflect.Field convertedField = ConversionStatistics.class.getDeclaredField("convertedQueries");
+            convertedField.setAccessible(true);
+            convertedField.set(stats, convertedCount);
+        } catch (Exception e) {
+            System.err.println("[ConversionAnalyzer] Ошибка обновления статистики: " + e.getMessage());
+        }
     }
 
     /**
@@ -118,7 +171,6 @@ public class ConversionAnalyzer {
             String html = component.html();
             String cdata = extractCdata(html);
             if (cdata != null && !cdata.trim().isEmpty()) {
-                // Есть прямой SQL, но нет Router - не конвертировано
                 hasOracleSql = true;
             }
         }
@@ -137,6 +189,9 @@ public class ConversionAnalyzer {
         }
         return null;
     }
+
+
+
 
     /**
      * Получить статистику по всем формам

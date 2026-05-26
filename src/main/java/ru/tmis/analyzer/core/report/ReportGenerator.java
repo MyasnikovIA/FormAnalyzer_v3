@@ -382,11 +382,25 @@ public class ReportGenerator {
     /**
      * Объединённый вывод всех SQL запросов (обычные + конвертированные)
      */
+    /**
+     * Объединённый вывод всех SQL запросов (обычные + конвертированные)
+     * Включает только конвертированные роутеры (converted = true)
+     */
     private void writeAllSqlQueries(PrintWriter writer, FormInfo form) {
         List<SqlInfo> regularQueries = form.getSqlQueries();
+
+        // Фильтруем: только роутеры с converted = true
         List<RouterInfo> convertedRouters = new ArrayList<>();
-        convertedRouters.addAll(form.getActionRouters());
-        convertedRouters.addAll(form.getDataSetRouters());
+        for (RouterInfo router : form.getActionRouters()) {
+            if (router.isConverted()) {
+                convertedRouters.add(router);
+            }
+        }
+        for (RouterInfo router : form.getDataSetRouters()) {
+            if (router.isConverted()) {
+                convertedRouters.add(router);
+            }
+        }
 
         int totalQueries = regularQueries.size() + convertedRouters.size();
 
@@ -410,7 +424,7 @@ public class ReportGenerator {
             num++;
         }
 
-        // 2. Конвертированные SQL запросы (с Router)
+        // 2. Конвертированные SQL запросы (с Router, converted = true)
         for (RouterInfo router : convertedRouters) {
             writer.println("  [" + num + "] " + router.getParentType().getDisplayName() +
                     ": " + router.getName() + " (Конвертированный, " +

@@ -929,8 +929,23 @@ public class LLMPromptGenerator {
         boolean hasAnyRouters = false;
 
         for (FormInfo form : context.getAnalyzedForms()) {
-            boolean hasActionRouters = form.getActionRouters() != null && !form.getActionRouters().isEmpty();
-            boolean hasDataSetRouters = form.getDataSetRouters() != null && !form.getDataSetRouters().isEmpty();
+            // Фильтруем только converted = true
+            List<RouterInfo> convertedActionRouters = new ArrayList<>();
+            for (RouterInfo router : form.getActionRouters()) {
+                if (router.isConverted()) {
+                    convertedActionRouters.add(router);
+                }
+            }
+
+            List<RouterInfo> convertedDataSetRouters = new ArrayList<>();
+            for (RouterInfo router : form.getDataSetRouters()) {
+                if (router.isConverted()) {
+                    convertedDataSetRouters.add(router);
+                }
+            }
+
+            boolean hasActionRouters = !convertedActionRouters.isEmpty();
+            boolean hasDataSetRouters = !convertedDataSetRouters.isEmpty();
 
             if (!hasActionRouters && !hasDataSetRouters) {
                 continue;
@@ -943,7 +958,7 @@ public class LLMPromptGenerator {
             // ActionRouters
             if (hasActionRouters) {
                 sb.append("#### ActionRouter (Action / BeforeAction)\n\n");
-                for (RouterInfo router : form.getActionRouters()) {
+                for (RouterInfo router : convertedActionRouters) {
                     appendRouterInfo(sb, router, 0);
                 }
             }
@@ -951,7 +966,7 @@ public class LLMPromptGenerator {
             // DataSetRouters
             if (hasDataSetRouters) {
                 sb.append("#### DataSetRouter (DataSet / BeforeSelect)\n\n");
-                for (RouterInfo router : form.getDataSetRouters()) {
+                for (RouterInfo router : convertedDataSetRouters) {
                     appendRouterInfo(sb, router, 0);
                 }
             }

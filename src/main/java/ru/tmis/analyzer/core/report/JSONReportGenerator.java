@@ -95,8 +95,12 @@ public class JSONReportGenerator {
         Files.writeString(jsonPath, gson.toJson(root));
     }
 
+
+// core/report/JSONReportGenerator.java - модифицированный метод convertFormToJson()
+
     /**
      * Конвертирует FormInfo в JSON объект
+     * Включает только конвертированные роутеры (converted = true)
      */
     private JsonObject convertFormToJson(FormInfo formInfo) {
         JsonObject formJson = new JsonObject();
@@ -166,42 +170,8 @@ public class JSONReportGenerator {
         // Константы
         addSetToJson(formJson, "Константы", formInfo.getConstants());
 
-        // Брокеры
-        if (!formInfo.getBrokers().isEmpty()) {
-            JsonArray brokersArray = new JsonArray();
-            for (BrokerInfo broker : formInfo.getBrokers()) {
-                JsonObject brokerJson = new JsonObject();
-
-                brokerJson.addProperty("type", broker.getType().name());
-                brokerJson.addProperty("displayString", broker.getDisplayString());
-
-                if (broker.getUnit() != null) brokerJson.addProperty("unit", broker.getUnit());
-                if (broker.getAction() != null) brokerJson.addProperty("action", broker.getAction());
-                if (broker.getFunctionName() != null) brokerJson.addProperty("functionName", broker.getFunctionName());
-                if (broker.getExecProc() != null) brokerJson.addProperty("execProc", broker.getExecProc());
-                if (broker.getComponentName() != null) brokerJson.addProperty("componentName", broker.getComponentName());
-                if (broker.getComponentType() != null) brokerJson.addProperty("componentType", broker.getComponentType());
-
-                // Переменные
-                if (!broker.getVariables().isEmpty()) {
-                    JsonArray varsArray = new JsonArray();
-                    for (RouterVariable var : broker.getVariables()) {
-                        JsonObject varJson = new JsonObject();
-                        varJson.addProperty("name", var.getName());
-                        if (var.getSrc() != null) varJson.addProperty("src", var.getSrc());
-                        if (var.getSrcType() != null) varJson.addProperty("srctype", var.getSrcType());
-                        if (var.getGet() != null && !var.getGet().isEmpty()) varJson.addProperty("get", var.getGet());
-                        if (var.getPut() != null && !var.getPut().isEmpty()) varJson.addProperty("put", var.getPut());
-                        if (var.getType() != null) varJson.addProperty("type", var.getType());
-                        varsArray.add(varJson);
-                    }
-                    brokerJson.add("variables", varsArray);
-                }
-
-                brokersArray.add(brokerJson);
-            }
-            formJson.add("brokers", brokersArray);
-        }
+        // Брокеры (используем строковое представление для совместимости)
+        addSetToJson(formJson, "Брокеры", formInfo.getBrokersAsStrings());
 
         // Неопределенные
         addSetToJson(formJson, "Неопределенные", formInfo.getUnknownObjects());
@@ -226,7 +196,33 @@ public class JSONReportGenerator {
             formJson.add("viewDependencies", viewDepsJson);
         }
 
-        // Popup Menus - НОВАЯ ИЕРАРХИЧЕСКАЯ СТРУКТУРА
+        // ========== ACTION ROUTERS (только converted = true) ==========
+        if (formInfo.getActionRouters() != null && !formInfo.getActionRouters().isEmpty()) {
+            JsonArray actionRoutersArray = new JsonArray();
+            for (RouterInfo router : formInfo.getActionRouters()) {
+                if (router.isConverted()) {  // <-- ФИЛЬТРАЦИЯ
+                    actionRoutersArray.add(convertRouterToHierarchicalJson(router));
+                }
+            }
+            if (actionRoutersArray.size() > 0) {
+                formJson.add("actionRouters", actionRoutersArray);
+            }
+        }
+
+        // ========== DATASET ROUTERS (только converted = true) ==========
+        if (formInfo.getDataSetRouters() != null && !formInfo.getDataSetRouters().isEmpty()) {
+            JsonArray dataSetRoutersArray = new JsonArray();
+            for (RouterInfo router : formInfo.getDataSetRouters()) {
+                if (router.isConverted()) {  // <-- ФИЛЬТРАЦИЯ
+                    dataSetRoutersArray.add(convertRouterToHierarchicalJson(router));
+                }
+            }
+            if (dataSetRoutersArray.size() > 0) {
+                formJson.add("dataSetRouters", dataSetRoutersArray);
+            }
+        }
+
+        // Popup Menus
         if (formInfo.getPopupMenus() != null && !formInfo.getPopupMenus().isEmpty()) {
             JsonArray popupMenusArray = new JsonArray();
             for (PopupMenuInfo menu : formInfo.getPopupMenus()) {
@@ -248,6 +244,143 @@ public class JSONReportGenerator {
         formJson.addProperty("totalSqlQueries", formInfo.getSqlQueries().size());
 
         return formJson;
+    }
+
+    /**
+     * Конвертирует RouterInfo в иерархический JSON
+     */
+    private JsonObject convertRouterToHierarchicalJson(RouterInfo router) {
+        JsonObject routerJson = new JsonObject();
+
+        routerJson.addProperty("name", router.getName());
+        routerJson.addProperty("parentType", router.getParentType().getDisplayName());
+        routerJson.addProperty("routerType", router.getRouterType().getTagName());
+        routerJson.addProperty("formStyle", router.getFormStyle().getName());
+        routerJson.addProperty("converted", router.isConverted());  // <-- ДОБАВИТЬ
+
+        // Роутеры
+        if (!router.getRouters().isEmpty()) {
+            JsonArray routersArray = new JsonArray();
+            for (RouterItem item : router.getRouters()) {
+                JsonObject itemJson = new JsonObject();
+                itemJson.addProperty("order", item.getOrder());
+                if (item.getCondition() != null && !item.getCondition().isEmpty()) {
+                    itemJson.addProperty("condition", item.getCondition());
+                }
+                if (item.getUnit() != null && !item.getUnit().isEmpty()) {
+                    itemJson.addProperty("unit", item.getUnit());
+                }
+                if (item.getAction() != null && !item.getAction().isEmpty()) {
+                    itemJson.addProperty("action", item.getAction());
+                }
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                    String sqlPreview = item.getSqlContent().length() > 500 ?
+                            item.getSqlContent().substring(0, 500) + "..." :
+                            item.getSqlContent();
+                    itemJson.addProperty("sqlContent", sqlPreview);
+                    itemJson.addProperty("sqlLength", item.getSqlContent().length());
+                }
+                routersArray.add(itemJson);
+            }
+            routerJson.add("routers", routersArray);
+        }
+
+        // Переменные
+        if (!router.getVariables().isEmpty()) {
+            JsonArray variablesArray = new JsonArray();
+            for (RouterVariable variable : router.getVariables()) {
+                JsonObject varJson = new JsonObject();
+                varJson.addProperty("name", variable.getName());
+                if (variable.getSrc() != null) varJson.addProperty("src", variable.getSrc());
+                if (variable.getSrcType() != null) varJson.addProperty("srctype", variable.getSrcType());
+                if (variable.getGet() != null && !variable.getGet().isEmpty()) {
+                    varJson.addProperty("get", variable.getGet());
+                }
+                if (variable.getPut() != null && !variable.getPut().isEmpty()) {
+                    varJson.addProperty("put", variable.getPut());
+                }
+                if (variable.getType() != null) varJson.addProperty("type", variable.getType());
+                if (variable.getLen() != null) varJson.addProperty("len", variable.getLen());
+                variablesArray.add(varJson);
+            }
+            routerJson.add("variables", variablesArray);
+        }
+
+        // Вложенные SubAction/SubSelect
+        if (!router.getSubRouters().isEmpty()) {
+            JsonArray subRoutersArray = new JsonArray();
+            for (SubRouterInfo subRouter : router.getSubRouters()) {
+                subRoutersArray.add(convertSubRouterToJson(subRouter));
+            }
+            routerJson.add("subRouters", subRoutersArray);
+        }
+
+        return routerJson;
+    }
+
+    /**
+     * Конвертирует SubRouterInfo в JSON объект
+     */
+    private JsonObject convertSubRouterToJson(SubRouterInfo subRouter) {
+        JsonObject subJson = new JsonObject();
+
+        subJson.addProperty("name", subRouter.getName());
+        subJson.addProperty("type", subRouter.getType().getDisplayName());
+
+        if (subRouter.getGroupName() != null && !subRouter.getGroupName().isEmpty()) {
+            subJson.addProperty("groupName", subRouter.getGroupName());
+        }
+        if (subRouter.getExecon() != null && !subRouter.getExecon().isEmpty()) {
+            subJson.addProperty("execon", subRouter.getExecon());
+        }
+        if (subRouter.getMode() != null && !subRouter.getMode().isEmpty()) {
+            subJson.addProperty("mode", subRouter.getMode());
+        }
+        subJson.addProperty("savepoint", subRouter.isSavepoint());
+
+        // Роутеры внутри SubAction/SubSelect
+        if (!subRouter.getRouters().isEmpty()) {
+            JsonArray routersArray = new JsonArray();
+            for (RouterItem item : subRouter.getRouters()) {
+                JsonObject itemJson = new JsonObject();
+                itemJson.addProperty("order", item.getOrder());
+                if (item.getCondition() != null && !item.getCondition().isEmpty()) {
+                    itemJson.addProperty("condition", item.getCondition());
+                }
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                    // Ограничиваем длину для читаемости JSON
+                    String sqlPreview = item.getSqlContent().length() > 500 ?
+                            item.getSqlContent().substring(0, 500) + "..." :
+                            item.getSqlContent();
+                    itemJson.addProperty("sqlContent", sqlPreview);
+                    itemJson.addProperty("sqlLength", item.getSqlContent().length());
+                }
+                routersArray.add(itemJson);
+            }
+            subJson.add("routers", routersArray);
+        }
+
+        // Переменные (SubActionVar)
+        if (!subRouter.getVariables().isEmpty()) {
+            JsonArray variablesArray = new JsonArray();
+            for (RouterVariable variable : subRouter.getVariables()) {
+                JsonObject varJson = new JsonObject();
+                varJson.addProperty("name", variable.getName());
+                if (variable.getSrc() != null) {
+                    varJson.addProperty("src", variable.getSrc());
+                }
+                if (variable.getSrcType() != null) {
+                    varJson.addProperty("srctype", variable.getSrcType());
+                }
+                if (variable.getPut() != null && !variable.getPut().isEmpty()) {
+                    varJson.addProperty("put", variable.getPut());
+                }
+                variablesArray.add(varJson);
+            }
+            subJson.add("variables", variablesArray);
+        }
+
+        return subJson;
     }
 
     /**
