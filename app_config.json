@@ -33,5 +33,6 @@
   "includePostgresFunctions": true,
   "includeBrokerFunctions": true,
   "skipDbOnError": false,
-  "llmPanelVisible": true
+  "llmPanelVisible": true,
+  "enableHierarchicalJSONExport": true
 }

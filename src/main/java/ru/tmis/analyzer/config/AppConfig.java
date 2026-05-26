@@ -64,7 +64,7 @@ public class AppConfig {
     private boolean includeBrokerFunctions = true;
     private boolean skipDbOnError = true;
     private boolean llmPanelVisible = false;
-
+    private boolean enableHierarchicalJSONExport = true;
 
     // ==================== GETTERS AND SETTERS ====================
 
@@ -176,6 +176,14 @@ public class AppConfig {
 
     public boolean isLlmPanelVisible() { return llmPanelVisible; }
     public void setLlmPanelVisible(boolean llmPanelVisible) { this.llmPanelVisible = llmPanelVisible; }
+
+    public boolean isEnableHierarchicalJSONExport() {
+        return enableHierarchicalJSONExport;
+    }
+
+    public void setEnableHierarchicalJSONExport(boolean enableHierarchicalJSONExport) {
+        this.enableHierarchicalJSONExport = enableHierarchicalJSONExport;
+    }
 
     /**
      * Загрузить конфигурацию из файла

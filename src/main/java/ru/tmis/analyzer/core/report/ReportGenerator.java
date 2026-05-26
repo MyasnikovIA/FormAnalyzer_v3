@@ -116,7 +116,7 @@ public class ReportGenerator {
         // 1. Сохраняем отдельный файл для формы (TXT)
         saveFormReportToFile(formInfo);
 
-        // 2. Добавляем в общий отчет (только в forms_report.txt, без создания дубликата)
+        // 2. Добавляем в общий отчет (forms_report.txt)
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
             Files.createDirectories(outputPath);
@@ -132,22 +132,44 @@ public class ReportGenerator {
             writeFormReport(writer, formInfo);
         }
 
-        // 3. Генерация CSV отчета (ОДИН РАЗ)
+        // 3. Генерация CSV отчета
         if (config != null && config.isEnableCSVExport()) {
             appendToCSVReport(formInfo);
 
-            // 4. Генерация отдельного CSV файла для формы
+            // 4. Отдельный CSV файл для формы
             SingleFormCSVReportGenerator singleCsvGen = new SingleFormCSVReportGenerator(outputDir);
             Path singleCsvPath = singleCsvGen.saveFormCSVReport(formInfo);
             System.out.println("  Отдельный CSV отчет сохранен: " + singleCsvPath);
         }
 
-        // 5. Генерация JSON отчета
+        // 5. Генерация JSON отчета (общий)
         if (config != null && config.isEnableJSONExport()) {
             appendToJSONReport(formInfo);
         }
 
-        // 6. Генерация MD промпта
+        // ========== 6. НОВЫЙ ИЕРАРХИЧЕСКИЙ JSON ОТЧЁТ ==========
+        System.out.println("[ReportGenerator] Проверка иерархического JSON экспорта:");
+        System.out.println("  config.isEnableHierarchicalJSONExport() = " +
+                (config != null ? config.isEnableHierarchicalJSONExport() : "config is null"));
+
+        if (config != null && config.isEnableHierarchicalJSONExport()) {
+            try {
+                HierarchicalJSONReportGenerator hierarchicalJsonGen = new HierarchicalJSONReportGenerator(outputDir, config);
+                Path hierarchicalJsonPath = hierarchicalJsonGen.saveFormToJSON(formInfo);
+                if (hierarchicalJsonPath != null) {
+                    System.out.println("  ✅ Иерархический JSON отчет сохранен: " + hierarchicalJsonPath);
+                } else {
+                    System.out.println("  ❌ Иерархический JSON отчет НЕ создан (saveFormToJSON вернул null)");
+                }
+            } catch (Exception e) {
+                System.err.println("  ❌ Ошибка создания иерархического JSON: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("  ⚠️ Иерархический JSON экспорт отключён в настройках");
+        }
+
+        // 7. Генерация MD промпта
         if (config != null && config.isEnableLLMExport()) {
             generateLLMPromptForForm(formInfo);
         }

@@ -1229,9 +1229,12 @@ public class MainWindow extends JFrame {
         // Отдельный CSV файл (в подкаталоге CSV_reports)
         String csvPath = outputDir + File.separator + "CSV_reports" + File.separator + safeFileName + ".csv";
 
+        String hierarchicalJsonPath = outputDir + File.separator + "JSON_reports" + File.separator + safeFileName + ".json";
+
         File txtFile = new File(txtPath);
         File mdFile = new File(mdPath);
         File csvFile = new File(csvPath);
+        File hierarchicalJsonFile = new File(hierarchicalJsonPath);
 
         // Подтверждение удаления
         StringBuilder message = new StringBuilder();
@@ -1250,6 +1253,10 @@ public class MainWindow extends JFrame {
         }
         if (!txtFile.exists() && !mdFile.exists() && !csvFile.exists()) {
             message.append("  (файлы отчётов не найдены)");
+        }
+        // Добавить в сообщение
+        if (hierarchicalJsonFile.exists()) {
+            message.append("  ✓ ").append(hierarchicalJsonFile.getName()).append(" (JSON_reports/)\n");
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
@@ -1291,6 +1298,14 @@ public class MainWindow extends JFrame {
                 appendLog("Ошибка удаления: " + csvPath);
             }
         }
+        if (hierarchicalJsonFile.exists()) {
+            if (hierarchicalJsonFile.delete()) {
+                appendLog("Удалён иерархический JSON файл: " + hierarchicalJsonPath);
+                deleted = true;
+            } else {
+                appendLog("Ошибка удаления: " + hierarchicalJsonPath);
+            }
+        }
 
         if (deleted) {
             // Обновляем общий CSV отчёт (удаляем строки этой формы)
@@ -1317,6 +1332,7 @@ public class MainWindow extends JFrame {
                     "Ошибка",
                     JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     /**

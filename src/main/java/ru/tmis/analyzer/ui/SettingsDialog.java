@@ -336,7 +336,7 @@ public class SettingsDialog extends JDialog {
                         "CSV файл обновляется после каждой обработанной формы.\n" +
                         "Может быть открыт в Excel или любом текстовом редакторе."));
 
-
+        // JSON Export (обычный)
         enableJSONExportCheckbox = new JCheckBox("Выгружать JSON отчет");
         enableJSONExportCheckbox.setSelected(config.isEnableJSONExport());
         enableJSONExportCheckbox.addActionListener(e -> config.setEnableJSONExport(enableJSONExportCheckbox.isSelected()));
@@ -344,6 +344,15 @@ public class SettingsDialog extends JDialog {
                 "Создавать JSON файл (forms_export.json) со всеми данными о формах.\n" +
                         "JSON файл обновляется после каждой обработанной формы."));
 
+        // ========== НОВЫЙ ЧЕКБОКС: ИЕРАРХИЧЕСКИЙ JSON ==========
+        JCheckBox enableHierarchicalJSONCheckbox = new JCheckBox("Выгружать иерархический JSON отчет (JSON_reports/)");
+        enableHierarchicalJSONCheckbox.setSelected(config.isEnableHierarchicalJSONExport());
+        enableHierarchicalJSONCheckbox.addActionListener(e ->
+                config.setEnableHierarchicalJSONExport(enableHierarchicalJSONCheckbox.isSelected()));
+        contentPanel.add(createCheckboxWithDescription(enableHierarchicalJSONCheckbox,
+                "Создавать для каждой формы отдельный JSON файл в каталоге JSON_reports.\n" +
+                        "Сохраняет полную иерархическую структуру: PopupMenu, вьюхи, таблицы, SQL запросы.\n" +
+                        "Идеально для машинной обработки и анализа структуры форм."));
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
