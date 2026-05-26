@@ -1,10 +1,9 @@
 // core/model/RouterInfo.java
+
 package ru.tmis.analyzer.core.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Информация о Router компонентах (ActionRouter, DataSetRouter)
@@ -44,6 +43,9 @@ public class RouterInfo {
     private final List<SubRouterInfo> subRouters; // Вложенные SubAction/SubSelect
     private FormInfo.FormStyle formStyle = FormInfo.FormStyle.UNKNOWN;
 
+    // НОВОЕ ПОЛЕ: признак конвертированности
+    private boolean converted = true;              // По умолчанию true (найденный роутер считается конвертированным)
+
     public RouterInfo(String name, ParentType parentType, RouterType routerType) {
         this.name = name;
         this.parentType = parentType;
@@ -60,10 +62,16 @@ public class RouterInfo {
     public List<RouterItem> getRouters() { return routers; }
     public List<RouterVariable> getVariables() { return variables; }
     public List<SubRouterInfo> getSubRouters() { return subRouters; }
+    public FormInfo.FormStyle getFormStyle() { return formStyle; }
+
+    // НОВЫЙ ГЕТТЕР И СЕТТЕР
+    public boolean isConverted() { return converted; }
+    public void setConverted(boolean converted) { this.converted = converted; }
 
     public void addRouter(RouterItem router) { this.routers.add(router); }
     public void addVariable(RouterVariable variable) { this.variables.add(variable); }
     public void addSubRouter(SubRouterInfo subRouter) { this.subRouters.add(subRouter); }
+    public void setFormStyle(FormInfo.FormStyle formStyle) { this.formStyle = formStyle; }
 
     /**
      * Проверяет, есть ли роутер для указанного условия
@@ -82,6 +90,10 @@ public class RouterInfo {
                 .orElse(null);
     }
 
+    // Вспомогательные методы
+    public boolean isM2Style() { return formStyle == FormInfo.FormStyle.M2; }
+    public boolean isD3Style() { return formStyle == FormInfo.FormStyle.D3; }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -96,13 +108,7 @@ public class RouterInfo {
         if (!subRouters.isEmpty()) {
             sb.append(", sub=").append(subRouters.size());
         }
+        sb.append(", converted=").append(converted);
         return sb.toString();
     }
-    public FormInfo.FormStyle getFormStyle() { return formStyle; }
-    public void setFormStyle(FormInfo.FormStyle formStyle) { this.formStyle = formStyle; }
-
-    // Вспомогательные методы
-    public boolean isM2Style() { return formStyle == FormInfo.FormStyle.M2; }
-    public boolean isD3Style() { return formStyle == FormInfo.FormStyle.D3; }
-
 }

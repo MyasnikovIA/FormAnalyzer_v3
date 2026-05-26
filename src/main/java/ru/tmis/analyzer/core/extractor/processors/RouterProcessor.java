@@ -140,6 +140,7 @@ public class RouterProcessor implements IXmlProcessor {
                                          FormInfo.FormStyle formStyle) {
         RouterInfo routerInfo = new RouterInfo(name, parentType, routerType);
         routerInfo.setFormStyle(formStyle);
+        routerInfo.setConverted(true);
 
         // Определяем селектор для роутеров в зависимости от типа
         String routerSelector;
