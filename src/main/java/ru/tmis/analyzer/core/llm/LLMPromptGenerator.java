@@ -1222,12 +1222,6 @@ public class LLMPromptGenerator {
      * @param outputDir директория для сохранения
      * @return путь к созданному файлу
      */
-    /**
-     * Генерирует промпт для одной формы и сохраняет в MD файл
-     * @param formInfo информация о форме
-     * @param outputDir директория для сохранения
-     * @return путь к созданному файлу
-     */
     public String generateForSingleForm(FormInfo formInfo, String outputDir) throws Exception {
         // Создаём временный контекст для одной формы
         LLMReportContext singleContext = new LLMReportContext();
@@ -1345,21 +1339,22 @@ public class LLMPromptGenerator {
         // Формируем имя файла (аналогично отчёту, но с .md)
         String safeName = getSafeFileNameForMD(formInfo.getFormPath());
 
-        // Сохраняем в подкаталог Forms
-        Path formsSubDir = Paths.get(outputDir, "Forms");
-        if (!Files.exists(formsSubDir)) {
-            Files.createDirectories(formsSubDir);
+        // ИЗМЕНЕНО: Сохраняем в подкаталог MD_reports (вместо Forms)
+        Path mdSubDir = Paths.get(outputDir, "MD_reports");
+        if (!Files.exists(mdSubDir)) {
+            Files.createDirectories(mdSubDir);
         }
-        Path mdFilePath = formsSubDir.resolve(safeName);
+        Path mdFilePath = mdSubDir.resolve(safeName);
 
         // Сохраняем файл
         Files.writeString(mdFilePath, finalPrompt.toString());
 
+        System.out.println("[LLM] MD промпт сохранён: " + mdFilePath);
         return mdFilePath.toString();
     }
 
     /**
-     * Формирует безопасное имя файла для MD промпта (аналогично отчёту)
+     * Формирует безопасное имя файла для MD промпта
      */
     private String getSafeFileNameForMD(String formPath) {
         String normalized = formPath;

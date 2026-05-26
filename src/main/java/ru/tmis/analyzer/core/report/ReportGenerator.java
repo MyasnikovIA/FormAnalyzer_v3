@@ -944,6 +944,7 @@ public class ReportGenerator {
     private void generateLLMPromptForForm(FormInfo formInfo) {
         try {
             LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
+            // outputDir остаётся тот же, внутри LLMPromptGenerator создаётся MD_reports
             String mdFilePath = llmGen.generateForSingleForm(formInfo, outputDir);
             System.out.println("  LLM промпт сохранен: " + mdFilePath);
         } catch (Exception e) {

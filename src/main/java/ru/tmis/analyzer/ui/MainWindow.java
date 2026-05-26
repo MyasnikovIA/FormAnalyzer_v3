@@ -97,7 +97,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.15 (от 25-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.16 (от 26-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -200,6 +200,10 @@ public class MainWindow extends JFrame {
 
         formsTreePanel = new FormsTreePanel();
         formsTreePanel.setOnFormsChanged(() -> {});
+
+        formsTreePanel.setOnDeleteReportRequested(() -> {
+            deleteReportForCurrentForm();
+        });
 
         formsTreePanel.addTreeSelectionListener(new TreeSelectionListener() {
             private boolean isLoadingChildren = false;
@@ -1069,6 +1073,7 @@ public class MainWindow extends JFrame {
             return;
         }
 
+        // ИЗМЕНЕНО: путь к MD файлу теперь в MD_reports
         String mdFilePath = getLlmPromptFilePath(formPath);
         File mdFile = new File(mdFilePath);
 
@@ -1078,8 +1083,8 @@ public class MainWindow extends JFrame {
                         "1. Убедиться, что в настройках включена опция 'Включить экспорт LLM промпта после анализа'\n" +
                         "2. Запустить анализ формы (кнопка 'Запуск анализа' или 'Рекурсивный анализ')\n" +
                         "3. После завершения анализа MD файл будет создан автоматически\n\n" +
-                        "Файл промпта будет сохранён с тем же именем, что и отчёт, но с расширением .md\n" +
-                        "Пример: Forms#HospitPlanning#hospit_planning.frm.md\n\n" +
+                        "Файл промпта будет сохранён в каталоге MD_reports с тем же именем, что и отчёт, но с расширением .md\n" +
+                        "Пример: MD_reports/Forms#HospitPlanning#hospit_planning.frm.md\n\n" +
                         "=== ОЖИДАНИЕ ФАЙЛА ===\n" +
                         "Файл не найден: " + mdFilePath;
 
@@ -1096,7 +1101,7 @@ public class MainWindow extends JFrame {
             }
         } else {
             llmPromptArea.setText(instructionText);
-            appendLog("MD файл не найден для формы: " + formPath);
+            appendLog("MD файл не найден для формы: " + formPath + " (ожидается в MD_reports)");
         }
     }
 
@@ -1220,7 +1225,7 @@ public class MainWindow extends JFrame {
         // TXT отчёт (основной)
         String txtPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".txt";
         // MD промпт для LLM
-        String mdPath = outputDir + File.separator + "Forms" + File.separator + safeFileName + ".md";
+        String mdPath = outputDir + File.separator + "MD_reports" + File.separator + safeFileName + ".md";
         // Отдельный CSV файл (в подкаталоге CSV_reports)
         String csvPath = outputDir + File.separator + "CSV_reports" + File.separator + safeFileName + ".csv";
 
@@ -1235,13 +1240,13 @@ public class MainWindow extends JFrame {
         message.append("Будут удалены:\n");
 
         if (txtFile.exists()) {
-            message.append("  ✓ ").append(txtFile.getName()).append("\n");
+            message.append("  ✓ ").append(txtFile.getName()).append(" (Forms/)\n");
         }
         if (mdFile.exists()) {
-            message.append("  ✓ ").append(mdFile.getName()).append("\n");
+            message.append("  ✓ ").append(mdFile.getName()).append(" (MD_reports/)\n");
         }
         if (csvFile.exists()) {
-            message.append("  ✓ ").append(csvFile.getName()).append("\n");
+            message.append("  ✓ ").append(csvFile.getName()).append(" (CSV_reports/)\n");
         }
         if (!txtFile.exists() && !mdFile.exists() && !csvFile.exists()) {
             message.append("  (файлы отчётов не найдены)");
@@ -1288,7 +1293,7 @@ public class MainWindow extends JFrame {
         }
 
         if (deleted) {
-            // ========== ОБНОВЛЯЕМ ОБЩИЙ CSV ОТЧЁТ (удаляем строки этой формы) ==========
+            // Обновляем общий CSV отчёт (удаляем строки этой формы)
             updateCommonCsvAfterDeletion(formPath, outputDir);
 
             // Очищаем панель результата
@@ -1302,6 +1307,10 @@ public class MainWindow extends JFrame {
                 loadLlmPromptToPanel(formPath);
             }
 
+            JOptionPane.showMessageDialog(this,
+                    "Отчёты для формы успешно удалены",
+                    "Удаление завершено",
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Не удалось удалить файлы",
@@ -1391,8 +1400,9 @@ public class MainWindow extends JFrame {
         }
         return normalized.replace("/", "#").replace("\\", "#");
     }
+
     /**
-     * Формирует путь к MD файлу промпта (в подкаталоге Forms)
+     * Формирует путь к MD файлу промпта (в подкаталоге MD_reports)
      */
     private String getLlmPromptFilePath(String formPath) {
         String actualPath = formPath;
@@ -1407,7 +1417,8 @@ public class MainWindow extends JFrame {
         if (outputDir == null || outputDir.isEmpty()) {
             outputDir = "SQL_info";
         }
-        return outputDir + File.separator + "Forms" + File.separator + safeName + ".md";
+        // ИЗМЕНЕНО: теперь сохраняем в MD_reports вместо Forms
+        return outputDir + File.separator + "MD_reports" + File.separator + safeName + ".md";
     }
 
 }

@@ -26,6 +26,7 @@ public class FormsTreePanel extends JPanel {
     private JButton selectAllButton;
     private JButton deselectAllButton;
     private Runnable onRecursiveAnalysisRequested;
+    private Runnable onDeleteReportRequested;
 
     private Set<String> allForms = new LinkedHashSet<>();
     private List<String> filteredForms = new ArrayList<>();
@@ -484,13 +485,15 @@ public class FormsTreePanel extends JPanel {
     }
 
 
+    // ui/FormsTreePanel.java
+
     private void createContextMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
         JMenuItem addMenuItem = new JMenuItem("Добавить формы");
         addMenuItem.addActionListener(e -> showAddFormsDialog());
 
-        JMenuItem removeMenuItem = new JMenuItem("Удалить выбранные");
+        JMenuItem removeMenuItem = new JMenuItem("Удалить выбранные формы из списка");
         removeMenuItem.addActionListener(e -> removeSelectedForms());
 
         JMenuItem runAnalysisMenuItem = new JMenuItem("Запуск анализа выбранных форм");
@@ -515,7 +518,14 @@ public class FormsTreePanel extends JPanel {
             }
         });
 
-        // ========== НОВЫЙ ПУНКТ: ОТКРЫТЬ В STASH ==========
+        // ========== НОВЫЙ ПУНКТ: УДАЛИТЬ ОТЧЁТ ==========
+        JMenuItem deleteReportMenuItem = new JMenuItem("🗑 Удалить отчёт для выбранной формы");
+        deleteReportMenuItem.addActionListener(e -> {
+            if (onDeleteReportRequested != null) {
+                onDeleteReportRequested.run();
+            }
+        });
+
         JMenuItem openInStashMenuItem = new JMenuItem("🌐 Открыть в Stash");
         openInStashMenuItem.addActionListener(e -> openSelectedFormsInStash());
 
@@ -544,12 +554,15 @@ public class FormsTreePanel extends JPanel {
         popupMenu.add(runAnalysisMenuItem);
         popupMenu.add(recursiveAnalysisMenuItem);
         popupMenu.addSeparator();
-        popupMenu.add(openInStashMenuItem);  // <-- ДОБАВИТЬ СЮДА
+        popupMenu.add(deleteReportMenuItem);
+        popupMenu.add(openInStashMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(selectAllMenuItem);
         popupMenu.add(deselectAllMenuItem);
         popupMenu.addSeparator();
         popupMenu.add(expandAllMenuItem);
+
+
 
         tree.addMouseListener(new MouseAdapter() {
             @Override
@@ -1676,4 +1689,11 @@ public class FormsTreePanel extends JPanel {
             saveFormsToFile();
         }
     }
+    /**
+     * Установка callback для удаления отчёта
+     */
+    public void setOnDeleteReportRequested(Runnable callback) {
+        this.onDeleteReportRequested = callback;
+    }
+
 }
