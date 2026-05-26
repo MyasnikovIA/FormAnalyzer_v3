@@ -176,6 +176,8 @@ public class ReportGenerator {
     }
 
 
+    // core/report/ReportGenerator.java - полный метод writeFormReport()
+
     private void writeFormReport(PrintWriter writer, FormInfo form) {
         writer.println("-".repeat(100));
         writer.println("ФОРМА: " + form.getFormPath());
@@ -244,11 +246,13 @@ public class ReportGenerator {
             writePopupMenusBlock(writer, form.getPopupMenusPg(), "PostgreSQL");
         }
 
-        // SQL запросы
+        // SQL запросы (ОБЪЕДИНЁННЫЙ блок - обычные + конвертированные)
         if (config.isIncludeSqlContent()) {
-            writeSqlQueries(writer, form);
+            writeAllSqlQueries(writer, form);
         } else {
-            writer.println("SQL ЗАПРОСЫ (" + form.getSqlQueries().size() + "):");
+            int regularCount = form.getSqlQueries().size();
+            int convertedCount = form.getActionRouters().size() + form.getDataSetRouters().size();
+            writer.println("SQL ЗАПРОСЫ (" + (regularCount + convertedCount) + "):");
             writer.println("     (содержимое скрыто)");
             writer.println();
         }
@@ -362,23 +366,185 @@ public class ReportGenerator {
         writeConversionStatistics(writer, form);
     }
 
+    /**
+     * Объединённый вывод всех SQL запросов (обычные + конвертированные)
+     */
+    private void writeAllSqlQueries(PrintWriter writer, FormInfo form) {
+        List<SqlInfo> regularQueries = form.getSqlQueries();
+        List<RouterInfo> convertedRouters = new ArrayList<>();
+        convertedRouters.addAll(form.getActionRouters());
+        convertedRouters.addAll(form.getDataSetRouters());
 
+        int totalQueries = regularQueries.size() + convertedRouters.size();
 
-
-    private void writeSqlQueries(PrintWriter writer, FormInfo form) {
-        writer.println("SQL ЗАПРОСЫ (" + form.getSqlQueries().size() + "):");
+        writer.println("SQL ЗАПРОСЫ (" + totalQueries + "):");
         writer.println();
 
         int num = 1;
-        for (SqlInfo sql : form.getSqlQueries()) {
-            writer.println("  [" + num + "] " + sql.getSourceType() + ": " + sql.getComponentName());
+
+        // 1. Обычные SQL запросы (без Router)
+        for (SqlInfo sql : regularQueries) {
+            writer.println("  [" + num + "] " + sql.getSourceType() + ": " + sql.getComponentName() + " (Обычный)");
             writer.println("      Источник: " + sql.getSourcePath());
             writer.println("      SQL:");
-
             String content = sql.getSqlContent();
             if (content != null && !content.isEmpty()) {
                 for (String line : content.split("\\r?\\n")) {
                     writer.println("      " + line);
+                }
+            }
+            writer.println();
+            num++;
+        }
+
+        // 2. Конвертированные SQL запросы (с Router)
+        for (RouterInfo router : convertedRouters) {
+            writer.println("  [" + num + "] " + router.getParentType().getDisplayName() +
+                    ": " + router.getName() + " (Конвертированный, " +
+                    router.getRouterType().getTagName() + ")");
+            writer.println("      Стиль: " + router.getFormStyle().getName());
+
+            // Переменные
+            if (!router.getVariables().isEmpty()) {
+                writer.println("      Переменные:");
+                for (RouterVariable var : router.getVariables()) {
+                    writer.println("        - " + var.getName() +
+                            (var.getSrc() != null ? " src=" + var.getSrc() : "") +
+                            (var.getSrcType() != null ? " srctype=" + var.getSrcType() : "") +
+                            (var.getPut() != null ? " put=" + var.getPut() : ""));
+                }
+            }
+
+            // Роутеры с SQL
+            if (!router.getRouters().isEmpty()) {
+                writer.println("      Условия и SQL блоки:");
+                for (RouterItem item : router.getRouters()) {
+                    writer.println("        Условие: " + (item.getCondition() != null ? item.getCondition() : "default"));
+                    if (item.getUnit() != null && !item.getUnit().isEmpty()) {
+                        writer.println("        unit: " + item.getUnit());
+                    }
+                    if (item.getAction() != null && !item.getAction().isEmpty()) {
+                        writer.println("        action: " + item.getAction());
+                    }
+                    if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                        writer.println("        SQL:");
+                        for (String line : item.getSqlContent().split("\\r?\\n")) {
+                            writer.println("          " + line);
+                        }
+                    }
+                    writer.println();
+                }
+            }
+
+            // Вложенные SubAction/SubSelect
+            if (!router.getSubRouters().isEmpty()) {
+                writer.println("      Вложенные компоненты:");
+                for (SubRouterInfo subRouter : router.getSubRouters()) {
+                    writeSubRouterInfo(writer, subRouter, "        ");
+                }
+            }
+
+            writer.println();
+            num++;
+        }
+    }
+
+    /**
+     * Выводит информацию о SubRouter
+     */
+    private void writeSubRouterInfo(PrintWriter writer, SubRouterInfo subRouter, String indent) {
+        writer.println(indent + subRouter.getType().getDisplayName() + ": " + subRouter.getName());
+
+        if (subRouter.getGroupName() != null && !subRouter.getGroupName().isEmpty()) {
+            writer.println(indent + "  groupname: " + subRouter.getGroupName());
+        }
+        if (subRouter.getExecon() != null && !subRouter.getExecon().isEmpty()) {
+            writer.println(indent + "  execon: " + subRouter.getExecon());
+        }
+        if (subRouter.getMode() != null && !subRouter.getMode().isEmpty()) {
+            writer.println(indent + "  mode: " + subRouter.getMode());
+        }
+        if (subRouter.isSavepoint()) {
+            writer.println(indent + "  savepoint: true");
+        }
+
+        if (!subRouter.getRouters().isEmpty()) {
+            writer.println(indent + "  Условия и SQL блоки:");
+            for (RouterItem item : subRouter.getRouters()) {
+                writer.println(indent + "    Условие: " + (item.getCondition() != null ? item.getCondition() : "default"));
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                    writer.println(indent + "    SQL:");
+                    for (String line : item.getSqlContent().split("\\r?\\n")) {
+                        writer.println(indent + "      " + line);
+                    }
+                }
+            }
+        }
+
+        if (!subRouter.getVariables().isEmpty()) {
+            writer.println(indent + "  Переменные:");
+            for (RouterVariable var : subRouter.getVariables()) {
+                writer.println(indent + "    - " + var.getName() +
+                        (var.getSrc() != null ? " src=" + var.getSrc() : "") +
+                        (var.getSrcType() != null ? " srctype=" + var.getSrcType() : "") +
+                        (var.getPut() != null ? " put=" + var.getPut() : ""));
+            }
+        }
+
+        writer.println();
+    }
+
+
+
+
+    private void writeSqlQueries(PrintWriter writer, FormInfo form) {
+        // 1. Обычные SQL запросы (без Router)
+        List<SqlInfo> regularQueries = form.getSqlQueries();
+
+        // 2. Конвертированные запросы из RouterInfo
+        List<RouterInfo> convertedRouters = new ArrayList<>();
+        convertedRouters.addAll(form.getActionRouters());
+        convertedRouters.addAll(form.getDataSetRouters());
+
+        int totalQueries = regularQueries.size() + convertedRouters.size();
+
+        writer.println("SQL ЗАПРОСЫ (" + totalQueries + "):");
+        writer.println();
+
+        int num = 1;
+
+        // Выводим обычные запросы
+        for (SqlInfo sql : regularQueries) {
+            writer.println("  [" + num + "] " + sql.getSourceType() + ": " + sql.getComponentName() + " (Обычный)");
+            writer.println("      Источник: " + sql.getSourcePath());
+            writer.println("      SQL:");
+            String content = sql.getSqlContent();
+            if (content != null && !content.isEmpty()) {
+                for (String line : content.split("\\r?\\n")) {
+                    writer.println("      " + line);
+                }
+            }
+            writer.println();
+            num++;
+        }
+
+        // Выводим конвертированные запросы
+        for (RouterInfo router : convertedRouters) {
+            writer.println("  [" + num + "] " + router.getParentType().getDisplayName() +
+                    ": " + router.getName() + " (Конвертированный, " +
+                    router.getRouterType().getTagName() + ")");
+            writer.println("      Стиль: " + router.getFormStyle().getName());
+
+            if (!router.getRouters().isEmpty()) {
+                writer.println("      Условия:");
+                for (RouterItem item : router.getRouters()) {
+                    writer.println("        - " + (item.getCondition() != null ? item.getCondition() : "default"));
+                    if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                        writer.println("          SQL:");
+                        for (String line : item.getSqlContent().split("\\r?\\n")) {
+                            writer.println("            " + line);
+                        }
+                    }
                 }
             }
             writer.println();
