@@ -41,6 +41,7 @@ public class MainWindow extends JFrame {
     private ExecutorService executor;
     private Future<?> currentTask;
     private volatile boolean stopRequested = false;
+    private final AtomicBoolean stopFlag = new AtomicBoolean(false);
 
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private ExecutorService executorService;
@@ -96,7 +97,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initUI() {
-        setTitle("TMIS Form Analyzer v2.0.14 (от 25-05-2026)");
+        setTitle("TMIS Form Analyzer v2.0.15 (от 25-05-2026)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -539,7 +540,6 @@ public class MainWindow extends JFrame {
         // ========== ПРОВЕРКА ПОДКЛЮЧЕНИЙ К БАЗАМ ДАННЫХ ==========
         boolean oracleAvailable = false;
         boolean postgresAvailable = false;
-
         try {
             OracleService oracleService = new OracleService(
                     settings.getOracleUrl(),
@@ -654,6 +654,7 @@ public class MainWindow extends JFrame {
         }
 
         stopRequested = false;
+        stopFlag.set(false);
         isRunning.set(true);
         startButton.setEnabled(false);
         stopButton.setEnabled(true);
@@ -724,7 +725,7 @@ public class MainWindow extends JFrame {
                 // =======================================================
 
                 FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
-
+                analyzer.setStopFlag(stopFlag);
                 // СОЗДАЁМ ReportGenerator
                 currentReportGenerator = new ReportGenerator(settings.getOutputDir(), config);
                 currentReportGenerator.createMainReportHeader();
@@ -830,6 +831,7 @@ public class MainWindow extends JFrame {
         appendLog("");
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings, config);
+        analyzer.setStopFlag(stopFlag);
         currentReportGenerator = new ReportGenerator(settings.getOutputDir(), config);
         currentReportGenerator.createMainReportHeader();
         if (stopRequested) {
@@ -910,6 +912,7 @@ public class MainWindow extends JFrame {
             recursiveBuilder.stop();
             appendLog("Запрос на остановку рекурсивного анализа...");
             stopButton.setEnabled(false);
+            stopFlag.set(true);
             startButton.setEnabled(true);
             settingsButton.setEnabled(true);
             progressBar.setIndeterminate(false);

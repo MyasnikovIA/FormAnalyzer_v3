@@ -8,12 +8,14 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
+import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.ConversionStatistics;
 import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ExtractorManager {
 
@@ -22,6 +24,9 @@ public class ExtractorManager {
     private final SettingsModel settings;
     private final ConversionAnalyzer conversionAnalyzer = new ConversionAnalyzer();
 
+    // Поля для остановки
+    private AtomicBoolean stopRequested = null;
+    private ILogger logger;
 
     public ExtractorManager(SettingsModel settings) {
         this.settings = settings;
@@ -30,21 +35,21 @@ public class ExtractorManager {
     }
 
     private void registerDefaultProcessors() {
-        processors.add(new SubFormProcessor());           // SubForm
-        processors.add(new BrokerProcessor());            // Брокеры
-        processors.add(new PackageFromActionProcessor()); // Пакеты из Action
-        processors.add(new JsFormProcessor());            // JS формы
-        processors.add(new ConstantProcessor());          // Константы
-        processors.add(new SystemOptionProcessor());      // Системные опции
-        processors.add(new UnitCompositionProcessor());   // Unit композиции
-        processors.add(new UniversalCompositionProcessor()); // UniversalComposition
-        processors.add(new SystemCompositionProcessor()); // System/composition
-        processors.add(new D3ApiShowFormProcessor());     // D3Api.showForm
-        processors.add(new ReportProcessor());            // Отчёты
-        processors.add(new AutoPopupMenuProcessor());     // AutoPopupMenu
-        processors.add(new PopupMenuProcessor(settings)); // Контекстное меню Oracle
-        processors.add(new PopupMenuProcessorPg(settings)); // Контекстное меню PostgreSQL
-        processors.add(new UnknownObjectProcessor());     // Неизвестные объекты
+        processors.add(new SubFormProcessor());
+        processors.add(new BrokerProcessor());
+        processors.add(new PackageFromActionProcessor());
+        processors.add(new JsFormProcessor());
+        processors.add(new ConstantProcessor());
+        processors.add(new SystemOptionProcessor());
+        processors.add(new UnitCompositionProcessor());
+        processors.add(new UniversalCompositionProcessor());
+        processors.add(new SystemCompositionProcessor());
+        processors.add(new D3ApiShowFormProcessor());
+        processors.add(new ReportProcessor());
+        processors.add(new AutoPopupMenuProcessor());
+        processors.add(new PopupMenuProcessor(settings));
+        processors.add(new PopupMenuProcessorPg(settings));
+        processors.add(new UnknownObjectProcessor());
 
         processors.sort((a, b) -> Integer.compare(a.getPriority(), b.getPriority()));
     }
@@ -54,35 +59,91 @@ public class ExtractorManager {
         processors.sort((a, b) -> Integer.compare(a.getPriority(), b.getPriority()));
     }
 
-    // core/extractor/ExtractorManager.java
+    /**
+     * Установка флага остановки
+     */
+    public void setStopRequested(AtomicBoolean stopRequested) {
+        this.stopRequested = stopRequested;
+        if (this.sqlExtractor != null) {
+            this.sqlExtractor.setStopRequested(stopRequested);
+        }
+    }
+
+    /**
+     * Установка логгера
+     */
+    public void setLogger(ILogger logger) {
+        this.logger = logger;
+    }
+
+    private void log(String message) {
+        if (logger != null) {
+            logger.log(message);
+        } else {
+            System.out.println(message);
+        }
+    }
+
+    private boolean isStopped() {
+        return stopRequested != null && stopRequested.get();
+    }
 
     public void process(String xmlContent, FormInfo formInfo) {
         if (xmlContent == null || xmlContent.isEmpty()) return;
 
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (до парсинга)");
+            return;
+        }
+
         Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
 
-        // Анализ конвертации SQL запросов
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (перед анализом конвертации)");
+            return;
+        }
+
         ConversionStatistics stats = conversionAnalyzer.analyzeForm(formInfo, xmlContent);
         formInfo.setConversionStatistics(stats);
 
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (перед извлечением SQL)");
+            return;
+        }
 
         List<SqlInfo> sqlList = sqlExtractor.extract(doc, formInfo);
         formInfo.setSqlQueries(sqlList);
 
-        // Обогащаем FormInfo данными из SQL
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (после извлечения SQL)");
+            return;
+        }
+
         for (SqlInfo sql : sqlList) {
+            if (isStopped()) {
+                log("Извлечение данных остановлено пользователем (в цикле SQL)");
+                return;
+            }
+
             for (String tv : sql.getTablesViews()) formInfo.addTableView(tv);
             for (String pf : sql.getPackagesFunctions()) formInfo.addPackageFunction(pf);
             for (String proc : sql.getUserProcedures()) formInfo.addUserProcedure(proc);
             for (String opt : sql.getSystemOptions()) formInfo.addSystemOption(opt);
             for (String constant : sql.getConstants()) formInfo.addConstant(constant);
-
-            // ========== ДОБАВИТЬ ЭТУ СТРОКУ ==========
             for (String unknown : sql.getUnknownObjects()) formInfo.addUnknownObject(unknown);
         }
 
-        // Обрабатываем остальные процессоры
+        if (isStopped()) {
+            log("Извлечение данных остановлено пользователем (перед запуском процессоров)");
+            return;
+        }
+
         for (IXmlProcessor processor : processors) {
+            if (isStopped()) {
+                log("Извлечение данных остановлено пользователем в процессоре " + processor.getName());
+                break;
+            }
+
             if (processor instanceof UnknownObjectProcessor) continue;
 
             try {
@@ -96,6 +157,7 @@ public class ExtractorManager {
     public SqlExtractor getSqlExtractor() {
         return sqlExtractor;
     }
+
     public ConversionAnalyzer getConversionAnalyzer() {
         return conversionAnalyzer;
     }

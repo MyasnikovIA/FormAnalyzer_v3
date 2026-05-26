@@ -182,6 +182,15 @@ public class RecursiveReportBuilder {
 
         FormAnalyzerService analyzer = new FormAnalyzerService(settings);
 
+        if (stopRequested != null) {
+            analyzer.setStopFlag(stopRequested);
+        }
+        analyzer.setLogger(new ILogger() {
+            @Override public void log(String message) { RecursiveReportBuilder.this.log("  " + message); }
+            @Override public void error(String message) { RecursiveReportBuilder.this.error("  " + message); }
+            @Override public void debug(String message) { RecursiveReportBuilder.this.log("  [DEBUG] " + message); }
+        });
+
         // Устанавливаем прямой список форм
         Set<String> formsSet = new LinkedHashSet<>(formPaths);
         analyzer.setFormsToAnalyze(formsSet);

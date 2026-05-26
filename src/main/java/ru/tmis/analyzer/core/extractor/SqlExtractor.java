@@ -8,6 +8,7 @@ import ru.tmis.analyzer.core.model.FormInfo;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,8 @@ import java.util.regex.Pattern;
  * - Неизвестные объекты (требующие ручного разбора)
  */
 public class SqlExtractor {
+
+    private AtomicBoolean stopRequested = null;
 
 
     // Паттерн для поиска CTE (WITH ... AS)
@@ -140,6 +143,12 @@ public class SqlExtractor {
         List<SqlInfo> result = new ArrayList<>();
 
         for (Element element : elements) {
+            // Добавить проверку остановки
+            if (isStopRequested()) {
+                System.out.println("[SqlExtractor] Остановлен пользователем в extractFromElements");
+                break;
+            }
+
             String name = element.attr("name");
             if (name == null || name.isEmpty()) continue;
 
@@ -152,7 +161,6 @@ public class SqlExtractor {
 
             result.add(sqlInfo);
         }
-
         return result;
     }
 
@@ -174,27 +182,36 @@ public class SqlExtractor {
      * Разобрать SQL содержимое и извлечь все типы объектов
      */
     private void parseSqlContent(String sql, SqlInfo sqlInfo) {
+        if (isStopRequested()) return;
+
         String upperSql = sql.toUpperCase();
         String originalSql = sql;
 
+        if (isStopRequested()) return;
         // 1. Пакетные функции (D_PKG_XXXX.YYYY) - определяются по имени
         extractPackages(upperSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 2. Константы (D_PKG_CONSTANTS.SEARCH_*)
         extractConstants(originalSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 3. Системные опции (D_PKG_OPTIONS.GET)
         extractOptions(originalSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 4. Пользовательские процедуры (D_V_USERPROCS)
         extractUserProcedures(originalSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 5. ТАБЛИЦЫ И ВЬЮХИ - определяются по контексту FROM/JOIN
         extractTablesAndViewsByContext(upperSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 6. Все остальные D_* объекты - в UNKNOWN
         extractUnknownObjects(upperSql, sqlInfo);
 
+        if (isStopRequested()) return;
         // 7.
         extractSystemOptions(sql, sqlInfo);
     }
@@ -624,5 +641,11 @@ public class SqlExtractor {
             System.out.println("[SqlExtractor] Отфильтрован мусор в системных опциях: " + cleaned);
         }
     }
+    public void setStopRequested(AtomicBoolean stopRequested) {
+        this.stopRequested = stopRequested;
+    }
 
+    private boolean isStopRequested() {
+        return stopRequested != null && stopRequested.get();
+    }
 }

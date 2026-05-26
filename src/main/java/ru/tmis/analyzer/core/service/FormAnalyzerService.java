@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,19 +31,21 @@ public class FormAnalyzerService {
     private final AppConfig config;
     private final FileScannerService scannerService;
     private final UserFormsResolver userFormsResolver;
-    private final ExtractorManager extractorManager;
+    private ExtractorManager extractorManager;
     private Set<String> formsToAnalyze;
     private boolean csvFileCreatedDuringSession = false;
+
+
+    private BooleanSupplier stopCondition = () -> false;
+    private ILogger logger;
+    private AtomicBoolean stopFlag = null;
 
     public interface FormAnalyzedCallback {
         void onFormAnalyzed(FormInfo formInfo);
     }
     private FormAnalyzedCallback formAnalyzedCallback;
     private final Map<String, ViewTableDependencies> viewDependenciesCache = new ConcurrentHashMap<>();
-
-    private BooleanSupplier stopCondition = () -> false;
     private ProgressCallback progressCallback;
-    private ILogger logger;
 
     public interface ProgressCallback {
         void onProgress(int processed, int total, String currentForm);
@@ -53,15 +56,23 @@ public class FormAnalyzerService {
         this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
-        this.extractorManager = new ExtractorManager(settings);
+        this.extractorManager = new ExtractorManager(settings);  // уже есть
     }
 
     public FormAnalyzerService(SettingsModel settings) {
         this(settings, AppConfig.load());
     }
 
+    /**
+     * Установка логгера
+     */
     public void setLogger(ILogger logger) {
         this.logger = logger;
+
+        // Передаём логгер в extractorManager
+        if (this.extractorManager != null) {
+            this.extractorManager.setLogger(logger);
+        }
     }
 
     private void log(String message) {
@@ -80,6 +91,17 @@ public class FormAnalyzerService {
 
     public void setStopCondition(BooleanSupplier condition) {
         this.stopCondition = condition;
+
+        // Если condition является AtomicBoolean, передаём его в extractorManager
+        if (condition instanceof AtomicBoolean) {
+            this.stopFlag = (AtomicBoolean) condition;
+            this.extractorManager.setStopRequested(this.stopFlag);
+
+            // Также передаём логгер
+            if (this.logger != null) {
+                this.extractorManager.setLogger(this.logger);
+            }
+        }
     }
 
     public void setProgressCallback(ProgressCallback callback) {
@@ -215,10 +237,14 @@ public class FormAnalyzerService {
         return analyzeAllForms();
     }
 
-    /**
-     * Анализ одной формы
-     */
     public FormInfo analyzeForm(String formPath) {
+        // Проверка остановки в начале
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед обработкой формы: " + formPath);
+            return null;
+        }
+
+
         String normalizedPath = FormPathUtils.normalizeFormPath(formPath);
 
         System.out.println("  Проверка формы: " + normalizedPath);
@@ -237,10 +263,22 @@ public class FormAnalyzerService {
         }
         // =======================================================
 
+        // Проверка остановки перед разрешением переопределений
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед разрешением переопределений: " + formPath);
+            return null;
+        }
+
         FormInfo formInfo = userFormsResolver.resolveOverrides(normalizedPath);
 
         Path baseFormPathObj = scannerService.getBaseFormPath(normalizedPath);
         formInfo.setBaseFormPath(baseFormPathObj.toString());
+
+        // Проверка остановки перед чтением файла
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед чтением файла: " + formPath);
+            return null;
+        }
 
         String baseContent = scannerService.readFileContent(baseFormPathObj);
         if (baseContent == null) {
@@ -248,14 +286,38 @@ public class FormAnalyzerService {
             return null;
         }
 
+        // Проверка остановки перед удалением комментариев
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед удалением комментариев: " + formPath);
+            return null;
+        }
+
         // Удаляем комментарии
         String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
+
+        // Проверка остановки перед обработкой экстракторами
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед извлечением данных: " + formPath);
+            return null;
+        }
 
         // Передаём в процессор очищенное содержимое
         extractorManager.process(contentWithoutComments, formInfo);
 
+        // Проверка остановки после extractorManager.process()
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем после извлечения данных: " + formPath);
+            return null;
+        }
+
         // Извлекаем AutoPopupMenu
         extractAutoPopupMenus(contentWithoutComments, formInfo);
+
+        // Проверка остановки перед загрузкой вьюх
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед загрузкой вьюх: " + formPath);
+            return null;
+        }
 
         // ========== СОБИРАЕМ ВСЕ ВЬЮХИ ==========
         Set<String> viewNames = new LinkedHashSet<>();
@@ -275,8 +337,13 @@ public class FormAnalyzerService {
         }
 
         // ========== ЗАГРУЖАЕМ ЗАВИСИМОСТИ ВЬЮХ ==========
-        // Загружаем зависимости вьюх
         if (!viewNames.isEmpty()) {
+            // Проверка остановки перед загрузкой зависимостей
+            if (stopCondition.getAsBoolean()) {
+                log("Анализ остановлен пользователем перед загрузкой зависимостей вьюх: " + formPath);
+                return formInfo;
+            }
+
             Map<String, ViewTableDependencies> viewDeps = loadViewDependencies(viewNames);
             formInfo.setViewDependencies(viewDeps);
             log("  Сохранено зависимостей вьюх: " + viewDeps.size() + " шт.");
@@ -289,6 +356,12 @@ public class FormAnalyzerService {
             }
         }
 
+        // Проверка остановки перед генерацией LLM промпта
+        if (stopCondition.getAsBoolean()) {
+            log("Анализ остановлен пользователем перед генерацией LLM промпта: " + formPath);
+            return formInfo;
+        }
+
         // Генерация LLM промпта для формы (если включено в настройках)
         if (formInfo != null && config != null && config.isEnableLLMExport()) {
             try {
@@ -299,6 +372,7 @@ public class FormAnalyzerService {
                 error("  Ошибка сохранения LLM промпта: " + e.getMessage());
             }
         }
+
         return formInfo;
     }
 
@@ -578,5 +652,29 @@ public class FormAnalyzerService {
         }
 
         return allTables;
+    }
+    // Создание ExtractorManager с передачей флага остановки
+    private void initExtractorManager() {
+        this.extractorManager = new ExtractorManager(settings);
+        if (stopCondition instanceof AtomicBoolean) {
+            this.extractorManager.setStopRequested((AtomicBoolean) stopCondition);
+        }
+        this.extractorManager.setLogger(logger != null ? logger : new ILogger() {
+            @Override public void log(String message) { System.out.println(message); }
+            @Override public void error(String message) { System.err.println(message); }
+            @Override public void debug(String message) { System.out.println("[DEBUG] " + message); }
+        });
+    }
+    /**
+     * Установка флага остановки (прямая передача)
+     */
+    public void setStopFlag(AtomicBoolean stopFlag) {
+        this.stopFlag = stopFlag;
+        this.stopCondition = stopFlag::get;
+
+        // Передаём в extractorManager
+        if (this.extractorManager != null) {
+            this.extractorManager.setStopRequested(stopFlag);
+        }
     }
 }

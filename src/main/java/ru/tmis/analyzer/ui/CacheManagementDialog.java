@@ -94,26 +94,6 @@ public class CacheManagementDialog extends JDialog {
 
     private JPanel createInfoPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Информация"));
-
-        JTextArea infoArea = new JTextArea();
-        infoArea.setEditable(false);
-        infoArea.setBackground(panel.getBackground());
-        infoArea.setFont(new Font("Dialog", Font.PLAIN, 11));
-        infoArea.setText(
-                "Управление кэшем базы данных\n\n" +
-                        "• КАЖДАЯ КНОПКА ЗАПУСКАЕТ ЗАГРУЗКУ В ОТДЕЛЬНОМ ПАРАЛЛЕЛЬНОМ ПОТОКЕ\n" +
-                        "• Вы можете запустить несколько типов загрузки одновременно\n" +
-                        "• Процесс можно остановить в любой момент (останавливаются все потоки)\n" +
-                        "• Уже загруженные данные сохраняются на диске\n" +
-                        "• 'ЗАГРУЗИТЬ ВСЁ (С НАЧАЛА)' - очищает кэш и загружает всё заново\n" +
-                        "• 'ПРОДОЛЖИТЬ ЗАГРУЗКУ' - догружает только недостающие данные\n" +
-                        "• Кнопка 'Сохранить кэш' принудительно сохраняет текущий кэш на диск\n" +
-                        "• Кнопка 'Очистить всё' удаляет весь кэш (требуется подтверждение)"
-        );
-        infoArea.setMargin(new Insets(10, 10, 10, 10));
-        panel.add(infoArea, BorderLayout.CENTER);
-
         return panel;
     }
 
