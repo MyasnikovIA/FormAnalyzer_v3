@@ -6,6 +6,37 @@ import java.util.*;
  * Информация о форме после применения всех переопределений
  */
 public class FormInfo {
+
+    /**
+     * Стиль формы (M2 или D3)
+     */
+    public enum FormStyle {
+        M2("M2", "component cmptype=\"...\"", "openWindow()"),
+        D3("D3", "cmp...", "openD3Form()"),
+        UNKNOWN("Unknown", "не определен", "не определен");
+
+        private final String name;
+        private final String syntax;
+        private final String openMethod;
+
+        FormStyle(String name, String syntax, String openMethod) {
+            this.name = name;
+            this.syntax = syntax;
+            this.openMethod = openMethod;
+        }
+
+        public String getName() { return name; }
+        public String getSyntax() { return syntax; }
+        public String getOpenMethod() { return openMethod; }
+
+        public boolean isM2() { return this == M2; }
+        public boolean isD3() { return this == D3; }
+
+        @Override
+        public String toString() { return name; }
+    }
+
+    private FormStyle formStyle = FormStyle.UNKNOWN;
     private String formPath;
     private String baseFormPath;
     private List<OverrideInfo> overrides;
@@ -34,6 +65,8 @@ public class FormInfo {
     private Set<String> tablesFromViews;  // Таблицы, используемые через вьюхи
     private ConversionStatistics conversionStatistics;
     private List<ReportFromAutoPopupInfo> reportsFromAutoPopup = new ArrayList<>();
+    private List<RouterInfo> actionRouters;      // Action и BeforeAction с роутерами
+    private List<RouterInfo> dataSetRouters;     // DataSet и BeforeSelect с роутерами
 
 
     public FormInfo(String formPath) {
@@ -57,6 +90,8 @@ public class FormInfo {
         this.d3ApiShowFormCompositions = new LinkedHashSet<>();
         this.openD3FormCompositions = new LinkedHashSet<>();
         this.tablesFromViews = new LinkedHashSet<>();
+        this.actionRouters = new ArrayList<>();
+        this.dataSetRouters = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -150,6 +185,16 @@ public class FormInfo {
     public void setReportsFromAutoPopup(List<ReportFromAutoPopupInfo> reports) {
         this.reportsFromAutoPopup = reports;
     }
+
+
+    public List<RouterInfo> getActionRouters() { return actionRouters; }
+    public void setActionRouters(List<RouterInfo> actionRouters) { this.actionRouters = actionRouters; }
+    public void addActionRouter(RouterInfo router) { this.actionRouters.add(router); }
+
+    public List<RouterInfo> getDataSetRouters() { return dataSetRouters; }
+    public void setDataSetRouters(List<RouterInfo> dataSetRouters) { this.dataSetRouters = dataSetRouters; }
+    public void addDataSetRouter(RouterInfo router) { this.dataSetRouters.add(router); }
+
 
     public void addReportFromAutoPopup(ReportFromAutoPopupInfo report) {
         if (this.reportsFromAutoPopup == null) {
@@ -289,4 +334,11 @@ public class FormInfo {
         public String getRepFilename() { return repFilename; }
         public String getFormPath() { return formPath; }
     }
+    // Геттер и сеттер
+    public FormStyle getFormStyle() { return formStyle; }
+    public void setFormStyle(FormStyle formStyle) { this.formStyle = formStyle; }
+
+    // Вспомогательные методы
+    public boolean isM2Style() { return formStyle == FormStyle.M2; }
+    public boolean isD3Style() { return formStyle == FormStyle.D3; }
 }

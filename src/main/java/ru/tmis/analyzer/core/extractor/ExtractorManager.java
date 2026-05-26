@@ -8,6 +8,7 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.extractor.processors.BrokerProcessor;
+import ru.tmis.analyzer.core.extractor.processors.RouterProcessor;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.ConversionStatistics;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -35,6 +36,7 @@ public class ExtractorManager {
     }
 
     private void registerDefaultProcessors() {
+        processors.add(new RouterProcessor());
         processors.add(new SubFormProcessor());
         processors.add(new BrokerProcessor());
         processors.add(new PackageFromActionProcessor());

@@ -5,10 +5,7 @@ import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import ru.tmis.analyzer.core.db.OracleService;
 import ru.tmis.analyzer.core.db.PostgresService;
-import ru.tmis.analyzer.core.model.BrokerInfo;
-import ru.tmis.analyzer.core.model.LLMReportContext;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.SqlInfo;
+import ru.tmis.analyzer.core.model.*;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -467,8 +464,15 @@ public class LLMPromptGenerator {
         if (context.getAnalyzedForms().size() == 1) {
             FormInfo form = context.getAnalyzedForms().get(0);
             sb.append("# ЗАПРОС К LLM: АНАЛИЗ ФОРМЫ ").append(form.getFormPath()).append("\n\n");
-        } else {
-            sb.append("# ЗАПРОС К LLM: АНАЛИЗ ФОРМ T-MIS\n\n");
+
+            // Добавляем информацию о стиле в заголовок
+            if (form.isD3Style()) {
+                sb.append("> **⚠️ ВАЖНО:** Эта форма использует **D3 синтаксис** (компоненты с префиксом `cmp`).\n");
+                sb.append("> Для открытия формы используется метод `openD3Form()`.\n\n");
+            } else if (form.isM2Style()) {
+                sb.append("> **ℹ️ ИНФОРМАЦИЯ:** Эта форма использует **M2 синтаксис** (компоненты с `cmptype`).\n");
+                sb.append("> Для открытия формы используется метод `openWindow()`.\n\n");
+            }
         }
 
         sb.append("> **Обозначения:** 🟠 — Oracle Database, 🐘 — PostgreSQL\n\n");
@@ -489,6 +493,9 @@ public class LLMPromptGenerator {
                 sb.append("**Статус:** ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА\n");
             }
             sb.append("\n");
+
+            // Статистика формы
+            appendFormStatistics(sb, form);
         }
 
         sb.append("**Задача:** Проанализировать предоставленные SQL запросы, вьюхи и DDL таблиц, ");
@@ -497,6 +504,18 @@ public class LLMPromptGenerator {
         sb.append("---\n\n");
 
         // Генерация блоков
+        System.out.println("[LLM] Генерация блока: Информация о форме");
+        sb.append(generateFormInfoBlock());
+
+        System.out.println("[LLM] Генерация блока: UserForms");
+        sb.append(generateUserFormsBlock());
+
+        System.out.println("[LLM] Генерация блока: SubForm и JS формы");
+        sb.append(generateSubFormsAndJsFormsBlock());
+
+        System.out.println("[LLM] Генерация блока: Отчёты");
+        sb.append(generateReportsBlock());
+
         System.out.println("[LLM] Генерация блока: SQL запросы");
         sb.append(generateSqlQueriesBlock());
 
@@ -505,6 +524,15 @@ public class LLMPromptGenerator {
 
         System.out.println("[LLM] Генерация блока: Oracle вьюхи");
         sb.append(generateOracleViewsBlock());
+
+        System.out.println("[LLM] Генерация блока: Router компоненты");
+        sb.append(generateRoutersBlock());
+
+        System.out.println("[LLM] Генерация блока: Константы и системные опции");
+        sb.append(generateConstantsAndOptionsBlock());
+
+        System.out.println("[LLM] Генерация блока: Композиции");
+        sb.append(generateCompositionsBlock());
 
         System.out.println("[LLM] Генерация блока: Брокеры");
         sb.append(generateBrokerFunctionsBlock());
@@ -521,6 +549,12 @@ public class LLMPromptGenerator {
         System.out.println("[LLM] Генерация блока: PostgreSQL функции");
         sb.append(generatePostgresFunctionsBlock());
 
+        System.out.println("[LLM] Генерация блока: Контекстное меню");
+        sb.append(generatePopupMenusBlock());
+
+        System.out.println("[LLM] Генерация блока: Неопределённые объекты");
+        sb.append(generateUnknownObjectsBlock());
+
         sb.append("\n\n---\n\n");
         String instruction = config.getLlmInstructionText();
         if (instruction == null || instruction.trim().isEmpty()) {
@@ -532,11 +566,208 @@ public class LLMPromptGenerator {
         return sb.toString();
     }
 
+    /**
+     * Добавляет статистику формы в отчёт
+     */
+    private void appendFormStatistics(StringBuilder sb, FormInfo form) {
+        sb.append("\n**Статистика формы:**\n");
+        sb.append("- SQL запросов: ").append(form.getSqlQueries().size()).append("\n");
+        sb.append("- Вьюх и таблиц: ").append(form.getTablesViews().size()).append("\n");
+        sb.append("- Пакетов и функций: ").append(form.getPackagesFunctions().size()).append("\n");
+        sb.append("- SubForm: ").append(form.getSubForms().size()).append("\n");
+        sb.append("- JS форм: ").append(form.getJsForms().size()).append("\n");
+        sb.append("- Констант: ").append(form.getConstants().size()).append("\n");
+        sb.append("- Системных опций: ").append(form.getSystemOptions().size()).append("\n");
+        sb.append("- Брокеров: ").append(form.getBrokers().size()).append("\n");
+
+        if (form.getConversionStatistics() != null) {
+            sb.append("- Конвертация SQL: ");
+            sb.append(form.getConversionStatistics().getConvertedQueries()).append("/")
+                    .append(form.getConversionStatistics().getTotalQueries())
+                    .append(" (").append(String.format("%.1f", form.getConversionStatistics().getConversionPercent()))
+                    .append("%)\n");
+        }
+        sb.append("\n");
+    }
+
+    /**
+     * Генерирует блок с основной информацией о форме
+     */
+    // core/llm/LLMPromptGenerator.java - в generateFormInfoBlock()
+
+    private String generateFormInfoBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 1. ИНФОРМАЦИЯ О ФОРМЕ\n\n");
+
+        if (context.getAnalyzedForms().size() == 1) {
+            FormInfo form = context.getAnalyzedForms().get(0);
+            sb.append("| Параметр | Значение |\n");
+            sb.append("|----------|----------|\n");
+            sb.append("| Путь к форме | `").append(form.getFormPath()).append("` |\n");
+            sb.append("| Базовая форма | `").append(form.getBaseFormPath()).append("` |\n");
+
+            // НОВОЕ: информация о стиле формы
+            sb.append("| **Стиль формы** | **").append(form.getFormStyle().getName()).append("** |\n");
+            sb.append("| **Синтаксис компонентов** | `").append(form.getFormStyle().getSyntax()).append("` |\n");
+            sb.append("| **Метод открытия** | `").append(form.getFormStyle().getOpenMethod()).append("` |\n");
+
+            if (form.isFullyReplaced()) {
+                sb.append("| Статус | **ПОЛНОСТЬЮ ЗАМЕНЕНА** |\n");
+                sb.append("| Файл замены | `").append(form.getReplacementPath()).append("` |\n");
+            } else if (!form.getOverrides().isEmpty()) {
+                sb.append("| Статус | **ЧАСТИЧНО ПЕРЕОПРЕДЕЛЕНА** |\n");
+            } else {
+                sb.append("| Статус | БАЗОВАЯ ФОРМА |\n");
+            }
+            sb.append("\n");
+        } else {
+            sb.append("Анализируется ").append(context.getAnalyzedForms().size()).append(" форм.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Генерирует блок UserForms
+     */
+    private String generateUserFormsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 2. ЮЗЕРФОРМЫ (ПЕРЕОПРЕДЕЛЕНИЯ)\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            if (form.getOverrides().isEmpty() && !form.isFullyReplaced()) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (form.isFullyReplaced() && form.getReplacementPath() != null) {
+                sb.append("**ПОЛНАЯ ЗАМЕНА:** `").append(form.getReplacementPath()).append("`\n\n");
+            }
+
+            if (!form.getOverrides().isEmpty()) {
+                Map<String, List<FormInfo.OverrideInfo>> byRegion = new LinkedHashMap<>();
+                for (FormInfo.OverrideInfo ov : form.getOverrides()) {
+                    byRegion.computeIfAbsent(ov.getRegionName(), k -> new ArrayList<>()).add(ov);
+                }
+
+                for (Map.Entry<String, List<FormInfo.OverrideInfo>> entry : byRegion.entrySet()) {
+                    sb.append("**Регион:** `").append(entry.getKey()).append("`\n\n");
+
+                    for (FormInfo.OverrideInfo ov : entry.getValue()) {
+                        String typeDesc;
+                        switch (ov.getType()) {
+                            case FULL_OVERRIDE: typeDesc = "🔵 ПОЛНАЯ ЗАМЕНА"; break;
+                            case PARTIAL_OVERRIDE: typeDesc = "🟡 ЧАСТИЧНОЕ ПЕРЕОПРЕДЕЛЕНИЕ"; break;
+                            case DOT_D_OVERRIDE: typeDesc = "🟢 .d КАТАЛОГ"; break;
+                            default: typeDesc = "⚪ " + ov.getType().name();
+                        }
+                        sb.append("- **").append(typeDesc).append(":** `").append(ov.getOverridePath()).append("`\n");
+                    }
+                    sb.append("\n");
+                }
+            }
+            sb.append("\n");
+        }
+
+        if (!hasAny) {
+            sb.append("Переопределения (UserForms) не найдены.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Генерирует блок SubForm и JS форм
+     */
+    private String generateSubFormsAndJsFormsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 3. СВЯЗИ С ДРУГИМИ ФОРМАМИ\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasSubForms = form.getSubForms() != null && !form.getSubForms().isEmpty();
+            boolean hasJsForms = form.getJsForms() != null && !form.getJsForms().isEmpty();
+
+            if (!hasSubForms && !hasJsForms) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (hasSubForms) {
+                sb.append("**SubForm (вложенные подформы):**\n");
+                for (String subForm : form.getSubForms()) {
+                    sb.append("- `").append(subForm).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasJsForms) {
+                sb.append("**JS формы (вызываемые из JavaScript):**\n");
+                for (String jsForm : form.getJsForms()) {
+                    sb.append("- `").append(jsForm).append("`\n");
+                }
+                sb.append("\n");
+            }
+        }
+
+        if (!hasAny) {
+            sb.append("Связи с другими формами не найдены.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Генерирует блок отчётов
+     */
+    private String generateReportsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 4. ОТЧЁТЫ\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasReports = form.getReports() != null && !form.getReports().isEmpty();
+            boolean hasAutoPopupReports = form.getReportsFromAutoPopup() != null && !form.getReportsFromAutoPopup().isEmpty();
+
+            if (!hasReports && !hasAutoPopupReports) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (hasReports) {
+                sb.append("**Отчёты, вызываемые на форме:**\n");
+                for (String report : form.getReports()) {
+                    sb.append("- `").append(report).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasAutoPopupReports) {
+                sb.append("**Отчёты из AutoPopupMenu:**\n");
+                for (FormInfo.ReportFromAutoPopupInfo report : form.getReportsFromAutoPopup()) {
+                    sb.append("- `").append(report.getRepCode()).append("` (")
+                            .append(report.getRepTypeName()).append(")");
+                    if (report.getFormPath() != null && !report.getFormPath().isEmpty()) {
+                        sb.append(" → `").append(report.getFormPath()).append("`");
+                    }
+                    sb.append("\n");
+                }
+                sb.append("\n");
+            }
+        }
+
+        if (!hasAny) {
+            sb.append("Отчёты не найдены.\n\n");
+        }
+
+        return sb.toString();
+    }
 
     private String generateSqlQueriesBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 1. SQL ЗАПРОСЫ С ТЭГАМИ\n\n");
+        sb.append("\n## 5. SQL ЗАПРОСЫ С ТЭГАМИ\n\n");
 
         if (context.getAllSqlQueries().isEmpty()) {
             sb.append("SQL запросы не найдены.\n\n");
@@ -589,7 +820,7 @@ public class LLMPromptGenerator {
     private String generatePostgresViewsBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 2. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘\n\n");
+        sb.append("\n## 6. ТЕКСТ ВЬЮХ ИЗ POSTGRESQL 🐘\n\n");
 
         Map<String, String> viewDDL = context.getPostgresViewDDL();
         Map<String, Set<String>> viewUsage = context.getViewUsageInForms();
@@ -639,7 +870,7 @@ public class LLMPromptGenerator {
     private String generateOracleViewsBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 3. ТЕКСТ ВЬЮХ ИЗ ORACLE 🟠\n\n");
+        sb.append("\n## 7. ТЕКСТ ВЬЮХ ИЗ ORACLE 🟠\n\n");
         Map<String, String> viewDDL = context.getOracleViewDDL();
         Map<String, Set<String>> viewUsage = context.getViewUsageInForms();
 
@@ -685,10 +916,282 @@ public class LLMPromptGenerator {
         return sb.toString();
     }
 
+    private String generateRoutersBlock() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n## 8. ROUTER КОМПОНЕНТЫ (ActionRouter / DataSetRouter)\n\n");
+
+        if (context == null || context.getAnalyzedForms() == null) {
+            sb.append("Данные о Router компонентах не найдены.\n\n");
+            return sb.toString();
+        }
+
+        boolean hasAnyRouters = false;
+
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasActionRouters = form.getActionRouters() != null && !form.getActionRouters().isEmpty();
+            boolean hasDataSetRouters = form.getDataSetRouters() != null && !form.getDataSetRouters().isEmpty();
+
+            if (!hasActionRouters && !hasDataSetRouters) {
+                continue;
+            }
+
+            hasAnyRouters = true;
+
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            // ActionRouters
+            if (hasActionRouters) {
+                sb.append("#### ActionRouter (Action / BeforeAction)\n\n");
+                for (RouterInfo router : form.getActionRouters()) {
+                    appendRouterInfo(sb, router, 0);
+                }
+            }
+
+            // DataSetRouters
+            if (hasDataSetRouters) {
+                sb.append("#### DataSetRouter (DataSet / BeforeSelect)\n\n");
+                for (RouterInfo router : form.getDataSetRouters()) {
+                    appendRouterInfo(sb, router, 0);
+                }
+            }
+
+            sb.append("\n---\n\n");
+        }
+
+        if (!hasAnyRouters) {
+            sb.append("Router компоненты (ActionRouter/DataSetRouter) не найдены в анализируемых формах.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    private void appendRouterInfo(StringBuilder sb, RouterInfo router, int level) {
+        String indent = "  ".repeat(level);
+        String childIndent = "  ".repeat(level + 1);
+
+        sb.append(indent).append("**").append(router.getParentType().getDisplayName())
+                .append(":** `").append(router.getName()).append("`");
+
+        if (router.getRouterType() == RouterInfo.RouterType.ACTION_ROUTER) {
+            sb.append(" [ActionRouter]");
+        } else {
+            sb.append(" [DataSetRouter]");
+        }
+        sb.append(" *(").append(router.getFormStyle().getName()).append(" стиль)*");
+        sb.append("\n\n");
+
+        // Роутеры
+        if (!router.getRouters().isEmpty()) {
+            sb.append(childIndent).append("**Условия и SQL блоки:**\n\n");
+            for (RouterItem item : router.getRouters()) {
+                sb.append(childIndent).append("- **Условие:** `").append(item.getCondition() != null ? item.getCondition() : "default")
+                        .append("`");
+
+                if (item.getUnit() != null && !item.getUnit().isEmpty()) {
+                    sb.append(", **unit:** `").append(item.getUnit()).append("`");
+                }
+                if (item.getAction() != null && !item.getAction().isEmpty()) {
+                    sb.append(", **action:** `").append(item.getAction()).append("`");
+                }
+                sb.append("\n");
+
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                    sb.append(childIndent).append("  **SQL/PLSQL код:**\n\n");
+                    sb.append(childIndent).append("  ```sql\n");
+                    String[] lines = item.getSqlContent().split("\\r?\\n");
+                    for (String line : lines) {
+                        sb.append(childIndent).append("  ").append(line).append("\n");
+                    }
+                    sb.append(childIndent).append("  ```\n\n");
+                }
+            }
+        }
+
+        // Переменные
+        if (!router.getVariables().isEmpty()) {
+            sb.append(childIndent).append("**Переменные:**\n\n");
+            sb.append(childIndent).append("| Имя | Источник (src) | Тип источника | GET | PUT | Тип |\n");
+            sb.append(childIndent).append("|-----|----------------|---------------|-----|-----|-----|\n");
+            for (RouterVariable var : router.getVariables()) {
+                sb.append(childIndent).append("| `").append(var.getName()).append("` | ")
+                        .append(var.getSrc() != null ? "`" + var.getSrc() + "`" : "-").append(" | ")
+                        .append(var.getSrcType() != null ? var.getSrcType() : "-").append(" | ")
+                        .append(var.getGet() != null && !var.getGet().isEmpty() ? var.getGet() : "-").append(" | ")
+                        .append(var.getPut() != null && !var.getPut().isEmpty() ? var.getPut() : "-").append(" | ")
+                        .append(var.getType() != null ? var.getType() : "-").append(" |\n");
+            }
+            sb.append("\n");
+        }
+
+        // Вложенные SubAction/SubSelect
+        if (!router.getSubRouters().isEmpty()) {
+            sb.append(childIndent).append("**Вложенные компоненты:**\n\n");
+            for (SubRouterInfo subRouter : router.getSubRouters()) {
+                appendSubRouterInfo(sb, subRouter, level + 2);
+            }
+        }
+    }
+
+    private void appendSubRouterInfo(StringBuilder sb, SubRouterInfo subRouter, int level) {
+        String indent = "  ".repeat(level);
+        String childIndent = "  ".repeat(level + 1);
+
+        sb.append(indent).append("**").append(subRouter.getType().getDisplayName())
+                .append(":** `").append(subRouter.getName()).append("`");
+
+        if (subRouter.getGroupName() != null && !subRouter.getGroupName().isEmpty()) {
+            sb.append(" (groupname: `").append(subRouter.getGroupName()).append("`)");
+        }
+        if (subRouter.getExecon() != null && !subRouter.getExecon().isEmpty()) {
+            sb.append(" [execon: ").append(subRouter.getExecon()).append("]");
+        }
+        if (subRouter.getMode() != null && !subRouter.getMode().isEmpty()) {
+            sb.append(" [mode: ").append(subRouter.getMode()).append("]");
+        }
+        if (subRouter.isSavepoint()) {
+            sb.append(" [savepoint]");
+        }
+        sb.append("\n\n");
+
+        // Роутеры внутри SubAction/SubSelect
+        if (!subRouter.getRouters().isEmpty()) {
+            sb.append(childIndent).append("**Условия и SQL блоки:**\n\n");
+            for (RouterItem item : subRouter.getRouters()) {
+                sb.append(childIndent).append("- **Условие:** `").append(item.getCondition() != null ? item.getCondition() : "default")
+                        .append("`\n");
+
+                if (item.getSqlContent() != null && !item.getSqlContent().isEmpty()) {
+                    sb.append(childIndent).append("  **SQL/PLSQL код:**\n\n");
+                    sb.append(childIndent).append("  ```sql\n");
+                    String[] lines = item.getSqlContent().split("\\r?\\n");
+                    for (String line : lines) {
+                        sb.append(childIndent).append("  ").append(line).append("\n");
+                    }
+                    sb.append(childIndent).append("  ```\n\n");
+                }
+            }
+        }
+
+        // Переменные SubActionVar
+        if (!subRouter.getVariables().isEmpty()) {
+            sb.append(childIndent).append("**Переменные:**\n\n");
+            sb.append(childIndent).append("| Имя | Источник (src) | Тип источника | PUT |\n");
+            sb.append(childIndent).append("|-----|----------------|---------------|-----|\n");
+            for (RouterVariable var : subRouter.getVariables()) {
+                sb.append(childIndent).append("| `").append(var.getName()).append("` | ")
+                        .append(var.getSrc() != null ? "`" + var.getSrc() + "`" : "-").append(" | ")
+                        .append(var.getSrcType() != null ? var.getSrcType() : "-").append(" | ")
+                        .append(var.getPut() != null && !var.getPut().isEmpty() ? var.getPut() : "-").append(" |\n");
+            }
+            sb.append("\n");
+        }
+    }
+
+    /**
+     * Генерирует блок констант и системных опций
+     */
+    private String generateConstantsAndOptionsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 9. КОНСТАНТЫ И СИСТЕМНЫЕ ОПЦИИ\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasConstants = form.getConstants() != null && !form.getConstants().isEmpty();
+            boolean hasOptions = form.getSystemOptions() != null && !form.getSystemOptions().isEmpty();
+
+            if (!hasConstants && !hasOptions) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (hasConstants) {
+                sb.append("**Константы (D_PKG_CONSTANTS.SEARCH_*):**\n");
+                for (String constant : form.getConstants()) {
+                    sb.append("- `").append(constant).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasOptions) {
+                sb.append("**Системные опции (D_PKG_OPTIONS.GET):**\n");
+                for (String option : form.getSystemOptions()) {
+                    sb.append("- `").append(option).append("`\n");
+                }
+                sb.append("\n");
+            }
+        }
+
+        if (!hasAny) {
+            sb.append("Константы и системные опции не найдены.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Генерирует блок композиций
+     */
+    private String generateCompositionsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 10. КОМПОЗИЦИИ (UnitEdit / UniversalComposition)\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasUnitComps = form.getUnitCompositions() != null && !form.getUnitCompositions().isEmpty();
+            boolean hasJsUnitComps = form.getJsUnitCompositions() != null && !form.getJsUnitCompositions().isEmpty();
+            boolean hasOpenFormComps = form.getOpenFormCompositions() != null && !form.getOpenFormCompositions().isEmpty();
+            boolean hasOpenD3FormComps = form.getOpenD3FormCompositions() != null && !form.getOpenD3FormCompositions().isEmpty();
+
+            if (!hasUnitComps && !hasJsUnitComps && !hasOpenFormComps && !hasOpenD3FormComps) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (hasUnitComps) {
+                sb.append("**Unit композиции (из тегов):**\n");
+                for (String comp : form.getUnitCompositions()) {
+                    sb.append("- `").append(comp).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasJsUnitComps) {
+                sb.append("**JS Unit композиции (из вызовов openWindow/openD3Form):**\n");
+                for (String comp : form.getJsUnitCompositions()) {
+                    sb.append("- `").append(comp).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasOpenFormComps) {
+                sb.append("**openForm композиции (System/composition):**\n");
+                for (String comp : form.getOpenFormCompositions()) {
+                    sb.append("- `").append(comp).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasOpenD3FormComps) {
+                sb.append("**openD3Form композиции (System/composition):**\n");
+                for (String comp : form.getOpenD3FormCompositions()) {
+                    sb.append("- `").append(comp).append("`\n");
+                }
+                sb.append("\n");
+            }
+        }
+
+        if (!hasAny) {
+            sb.append("Композиции не найдены.\n\n");
+        }
+
+        return sb.toString();
+    }
+
     private String generateBrokerFunctionsBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 4.5. БРОКЕРЫ И ВЫЗЫВАЕМЫЕ ФУНКЦИИ\n\n");
+        sb.append("\n## 11. БРОКЕРЫ И ВЫЗЫВАЕМЫЕ ФУНКЦИИ\n\n");
 
         Map<String, BrokerInfo> brokersMap = context.getBrokersMap();
         Map<String, String> oracleBrokerFunctions = context.getOracleBrokerFunctions();
@@ -775,7 +1278,7 @@ public class LLMPromptGenerator {
     private String generatePostgresTablesBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 4. DDL ТАБЛИЦ ИЗ POSTGRESQL ВЬЮХ\n\n");
+        sb.append("\n## 12. DDL ТАБЛИЦ ИЗ POSTGRESQL ВЬЮХ\n\n");
 
         Map<String, Set<String>> viewTables = context.getPostgresViewTables();
         Map<String, String> tableDDL = context.getPostgresTableDDL();
@@ -840,7 +1343,7 @@ public class LLMPromptGenerator {
     private String generateOracleTablesBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 5. DDL ТАБЛИЦ ИЗ ORACLE ВЬЮХ\n\n");
+        sb.append("\n## 13. DDL ТАБЛИЦ ИЗ ORACLE ВЬЮХ\n\n");
 
         Map<String, Set<String>> viewTables = context.getOracleViewTables();
         Map<String, String> tableDDL = context.getOracleTableDDL();
@@ -905,7 +1408,7 @@ public class LLMPromptGenerator {
     private String generateOracleFunctionsBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 6. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠\n\n");
+        sb.append("\n## 14. ТЕЛА ФУНКЦИЙ ИЗ ORACLE ПАКЕТОВ 🟠\n\n");
 
         Map<String, String> functionBodies = context.getOracleFunctionBodies();
 
@@ -960,7 +1463,7 @@ public class LLMPromptGenerator {
     private String generatePostgresFunctionsBlock() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n## 6.5. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘\n\n");
+        sb.append("\n## 15. ТЕЛА ФУНКЦИЙ И ПРОЦЕДУР ИЗ POSTGRESQL 🐘\n\n");
 
         Map<String, String> functionBodies = context.getPostgresFunctionBodies();
 
@@ -1006,6 +1509,128 @@ public class LLMPromptGenerator {
             }
 
             funcNum++;
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Генерирует блок контекстного меню (PopupMenu)
+     */
+    private String generatePopupMenusBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 16. КОНТЕКСТНОЕ МЕНЮ (ПКМ)\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            boolean hasOracleMenus = form.getPopupMenus() != null && !form.getPopupMenus().isEmpty();
+            boolean hasPostgresMenus = form.getPopupMenusPg() != null && !form.getPopupMenusPg().isEmpty();
+            boolean hasAutoPopup = form.getAutoPopupMenus() != null && !form.getAutoPopupMenus().isEmpty();
+
+            if (!hasOracleMenus && !hasPostgresMenus && !hasAutoPopup) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+
+            if (hasAutoPopup) {
+                sb.append("**AutoPopupMenu (коды подключаемого меню):**\n");
+                for (String unit : form.getAutoPopupMenus()) {
+                    sb.append("- `").append(unit).append("`\n");
+                }
+                sb.append("\n");
+            }
+
+            if (hasOracleMenus) {
+                sb.append("**Контекстное меню (Oracle):**\n\n");
+                for (PopupMenuInfo menu : form.getPopupMenus()) {
+                    appendPopupMenuTree(sb, menu, 0, false);
+                }
+            }
+
+            if (hasPostgresMenus) {
+                sb.append("**Контекстное меню (PostgreSQL):**\n\n");
+                for (PopupMenuInfo menu : form.getPopupMenusPg()) {
+                    appendPopupMenuTree(sb, menu, 0, true);
+                }
+            }
+        }
+
+        if (!hasAny) {
+            sb.append("Контекстное меню не найдено.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Рекурсивный вывод дерева контекстного меню
+     */
+    private void appendPopupMenuTree(StringBuilder sb, PopupMenuInfo menu, int level, boolean isPostgres) {
+        String indent = "  ".repeat(level);
+        String prefix = level == 0 ? "📁 " : "  ";
+
+        sb.append(indent).append(prefix).append("**").append(menu.getName()).append("**");
+        if (isPostgres) {
+            sb.append(" (PostgreSQL)");
+        }
+        sb.append("\n");
+
+        for (PopupMenuInfo.MenuItem item : menu.getRootItems()) {
+            appendMenuItemTree(sb, item, level + 1);
+        }
+        sb.append("\n");
+    }
+
+    /**
+     * Рекурсивный вывод пункта меню
+     */
+    private void appendMenuItemTree(StringBuilder sb, PopupMenuInfo.MenuItem item, int level) {
+        String indent = "  ".repeat(level);
+        String prefix = item.hasChildren() ? "📂 " : "📄 ";
+
+        String displayText;
+        if (item.isDbReport() && item.getCaption() != null) {
+            displayText = item.getCaption();
+        } else if (item.getCaption() != null && !item.getCaption().isEmpty()) {
+            displayText = "\"" + item.getCaption() + "\"";
+        } else if (item.getName() != null && !item.getName().isEmpty()) {
+            displayText = "name=\"" + item.getName() + "\"";
+        } else {
+            displayText = "(без названия)";
+        }
+
+        if (item.isFromAutoPopup() && item.getAutoPopupName() != null) {
+            displayText = "(AutoPopup \"" + item.getAutoPopupName() + "\") " + displayText;
+        }
+
+        sb.append(indent).append(prefix).append(displayText).append("\n");
+
+        for (PopupMenuInfo.MenuItem child : item.getChildren()) {
+            appendMenuItemTree(sb, child, level + 1);
+        }
+    }
+
+    /**
+     * Генерирует блок неопределённых объектов
+     */
+    private String generateUnknownObjectsBlock() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n## 17. НЕОПРЕДЕЛЁННЫЕ ОБЪЕКТЫ (ТРЕБУЮТ РАЗБОРА)\n\n");
+
+        boolean hasAny = false;
+        for (FormInfo form : context.getAnalyzedForms()) {
+            if (form.getUnknownObjects() == null || form.getUnknownObjects().isEmpty()) continue;
+
+            hasAny = true;
+            sb.append("### Форма: ").append(form.getFormPath()).append("\n\n");
+            for (String obj : form.getUnknownObjects()) {
+                sb.append("- `").append(obj).append("`\n");
+            }
+            sb.append("\n");
+        }
+
+        if (!hasAny) {
+            sb.append("Неопределённые объекты не найдены.\n\n");
         }
 
         return sb.toString();
@@ -1125,9 +1750,7 @@ public class LLMPromptGenerator {
             // Функции для этой формы
             Set<String> formFuncs = new LinkedHashSet<>();
             for (SqlInfo sql : form.getSqlQueries()) {
-                for (String pf : sql.getPackagesFunctions()) {
-                    formFuncs.add(pf);
-                }
+                formFuncs.addAll(sql.getPackagesFunctions());
             }
 
             Map<String, String> oraFuncBodies = new LinkedHashMap<>();
@@ -1339,7 +1962,7 @@ public class LLMPromptGenerator {
         // Формируем имя файла (аналогично отчёту, но с .md)
         String safeName = getSafeFileNameForMD(formInfo.getFormPath());
 
-        // ИЗМЕНЕНО: Сохраняем в подкаталог MD_reports (вместо Forms)
+        // Сохраняем в подкаталог MD_reports
         Path mdSubDir = Paths.get(outputDir, "MD_reports");
         if (!Files.exists(mdSubDir)) {
             Files.createDirectories(mdSubDir);
@@ -1387,5 +2010,22 @@ public class LLMPromptGenerator {
         } catch (IOException e) {
             return "Ошибка чтения файла формы: " + e.getMessage();
         }
+    }
+    private FormInfo.FormStyle detectFormStyleFromForm(FormInfo form) {
+        // Проверяем по наличию Router компонентов
+        for (RouterInfo router : form.getActionRouters()) {
+            if (router.getFormStyle() != FormInfo.FormStyle.UNKNOWN) {
+                return router.getFormStyle();
+            }
+        }
+        for (RouterInfo router : form.getDataSetRouters()) {
+            if (router.getFormStyle() != FormInfo.FormStyle.UNKNOWN) {
+                return router.getFormStyle();
+            }
+        }
+
+        // Если не определили по Router, можно по содержимому формы
+        // (но это потребовало бы загрузки исходного кода)
+        return FormInfo.FormStyle.UNKNOWN;
     }
 }

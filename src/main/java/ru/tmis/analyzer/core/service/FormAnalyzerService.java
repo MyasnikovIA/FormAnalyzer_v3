@@ -285,12 +285,16 @@ public class FormAnalyzerService {
             System.err.println("Не удалось прочитать содержимое формы: " + baseFormPathObj);
             return null;
         }
-
         // Проверка остановки перед удалением комментариев
         if (stopCondition.getAsBoolean()) {
             log("Анализ остановлен пользователем перед удалением комментариев: " + formPath);
             return null;
         }
+
+       // ========== ОПРЕДЕЛЯЕМ СТИЛЬ ФОРМЫ ==========
+        FormInfo.FormStyle formStyle = detectFormStyle(baseContent);
+        formInfo.setFormStyle(formStyle);
+        log("  Стиль формы: " + formStyle.getName());
 
         // Удаляем комментарии
         String contentWithoutComments = CommentRemover.removeAllComments(baseContent);
@@ -676,5 +680,42 @@ public class FormAnalyzerService {
         if (this.extractorManager != null) {
             this.extractorManager.setStopRequested(stopFlag);
         }
+    }
+    /**
+     * Определяет стиль формы по содержимому XML
+     * @param xmlContent содержимое формы
+     * @return стиль формы (M2, D3 или UNKNOWN)
+     */
+    private FormInfo.FormStyle detectFormStyle(String xmlContent) {
+        if (xmlContent == null || xmlContent.isEmpty()) {
+            return FormInfo.FormStyle.UNKNOWN;
+        }
+
+        // Ищем первый div с cmptype="Form"
+        // Паттерн для D3: class="d3form" или class содержит d3form
+        Pattern d3Pattern = Pattern.compile(
+                "<div\\s+[^>]*?cmptype\\s*=\\s*[\"']Form[\"'][^>]*?class\\s*=\\s*[\"'][^\"']*\\bd3form\\b[^\"']*[\"']",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+
+        // Паттерн для M2: div с cmptype="Form" без d3form в class
+        Pattern m2Pattern = Pattern.compile(
+                "<div\\s+[^>]*?cmptype\\s*=\\s*[\"']Form[\"'][^>]*?(?:class\\s*=\\s*[\"'][^\"']*[\"'])?",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+
+        Matcher d3Matcher = d3Pattern.matcher(xmlContent);
+        if (d3Matcher.find()) {
+            System.out.println("[FormStyle] Определён стиль D3 (найден class=\"d3form\")");
+            return FormInfo.FormStyle.D3;
+        }
+
+        Matcher m2Matcher = m2Pattern.matcher(xmlContent);
+        if (m2Matcher.find()) {
+            System.out.println("[FormStyle] Определён стиль M2 (форма без d3form)");
+            return FormInfo.FormStyle.M2;
+        }
+
+        return FormInfo.FormStyle.UNKNOWN;
     }
 }
