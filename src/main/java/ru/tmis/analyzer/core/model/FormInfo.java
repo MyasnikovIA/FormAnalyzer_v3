@@ -24,7 +24,7 @@ public class FormInfo {
             this.syntax = syntax;
             this.openMethod = openMethod;
         }
-        
+
         public String getName() { return name; }
         public String getSyntax() { return syntax; }
         public String getOpenMethod() { return openMethod; }
@@ -37,6 +37,8 @@ public class FormInfo {
     }
 
     private FormStyle formStyle = FormStyle.UNKNOWN;
+    private ConversionStatistics conversionStatistics;
+    private Map<String, ConversionStatistics.QueryConversionInfo> queryConversionMap = new LinkedHashMap<>();
     private String formPath;
     private String baseFormPath;
     private List<OverrideInfo> overrides;
@@ -63,7 +65,6 @@ public class FormInfo {
     private List<PopupMenuInfo> popupMenus;
     private List<PopupMenuInfo> popupMenusPg;
     private Set<String> tablesFromViews;  // Таблицы, используемые через вьюхи
-    private ConversionStatistics conversionStatistics;
     private List<ReportFromAutoPopupInfo> reportsFromAutoPopup = new ArrayList<>();
     private List<RouterInfo> actionRouters;      // Action и BeforeAction с роутерами
     private List<RouterInfo> dataSetRouters;     // DataSet и BeforeSelect с роутерами
@@ -341,4 +342,12 @@ public class FormInfo {
     // Вспомогательные методы
     public boolean isM2Style() { return formStyle == FormStyle.M2; }
     public boolean isD3Style() { return formStyle == FormStyle.D3; }
+
+    public Map<String, ConversionStatistics.QueryConversionInfo> getQueryConversionMap() {
+        return queryConversionMap;
+    }
+
+    public void setQueryConversionMap(Map<String, ConversionStatistics.QueryConversionInfo> map) {
+        this.queryConversionMap = map;
+    }
 }

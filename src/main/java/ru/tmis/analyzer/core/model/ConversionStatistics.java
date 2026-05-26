@@ -2,7 +2,6 @@
 package ru.tmis.analyzer.core.model;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,8 @@ public class ConversionStatistics {
         this.formPath = formPath;
     }
 
-    public void addQuery(String componentName, String componentType, boolean hasRouter, boolean hasOracleSql, boolean hasPostgresSql) {
+    public void addQuery(String componentName, String componentType,
+                         boolean hasRouter, boolean hasOracleSql, boolean hasPostgresSql) {
         totalQueries++;
         if (hasRouter) {
             convertedQueries++;
@@ -43,11 +43,42 @@ public class ConversionStatistics {
         return totalQueries > 0 && convertedQueries == 0;
     }
 
+    public boolean isPartiallyConverted() {
+        return totalQueries > 0 && convertedQueries > 0 && convertedQueries < totalQueries;
+    }
+
+    public int getNonRouterQueriesCount() {
+        return totalQueries - convertedQueries;
+    }
+
+    public Map<String, QueryConversionInfo> getNonRouterQueries() {
+        return queryDetails.entrySet().stream()
+                .filter(entry -> !entry.getValue().hasRouter())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public Map<String, QueryConversionInfo> getConvertedQueriesMap() {
+        return queryDetails.entrySet().stream()
+                .filter(entry -> entry.getValue().hasRouter())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     // Getters
-    public String getFormPath() { return formPath; }
-    public int getTotalQueries() { return totalQueries; }
-    public int getConvertedQueries() { return convertedQueries; }
-    public Map<String, QueryConversionInfo> getQueryDetails() { return queryDetails; }
+    public String getFormPath() {
+        return formPath;
+    }
+
+    public int getTotalQueries() {
+        return totalQueries;
+    }
+
+    public int getConvertedQueries() {
+        return convertedQueries;
+    }
+
+    public Map<String, QueryConversionInfo> getQueryDetails() {
+        return queryDetails;
+    }
 
     @Override
     public String toString() {
@@ -74,13 +105,33 @@ public class ConversionStatistics {
             this.hasPostgresSql = hasPostgresSql;
         }
 
-        public String getComponentName() { return componentName; }
-        public String getComponentType() { return componentType; }
-        public boolean hasRouter() { return hasRouter; }
-        public boolean hasOracleSql() { return hasOracleSql; }
-        public boolean hasPostgresSql() { return hasPostgresSql; }
+        // Getters
+        public String getComponentName() {
+            return componentName;
+        }
+
+        public String getComponentType() {
+            return componentType;
+        }
+
+        public boolean hasRouter() {
+            return hasRouter;
+        }
+
+        public boolean hasOracleSql() {
+            return hasOracleSql;
+        }
+
+        public boolean hasPostgresSql() {
+            return hasPostgresSql;
+        }
+
         public boolean isFullyConverted() {
             return hasRouter && hasOracleSql && hasPostgresSql;
+        }
+
+        public boolean isPartiallyConverted() {
+            return hasRouter && (!hasOracleSql || !hasPostgresSql);
         }
 
         public String getStatus() {
@@ -93,25 +144,19 @@ public class ConversionStatistics {
             }
         }
 
+        public String getStatusShort() {
+            if (hasRouter && hasOracleSql && hasPostgresSql) {
+                return "✓";
+            } else if (hasRouter) {
+                return "⚠";
+            } else {
+                return "✗";
+            }
+        }
+
         @Override
         public String toString() {
             return String.format("    %s [%s]: %s", componentName, componentType, getStatus());
         }
-    }
-
-    public int getNonRouterQueriesCount() {
-        int count = 0;
-        for (QueryConversionInfo info : queryDetails.values()) {
-            if (!info.hasRouter()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public List<QueryConversionInfo> getNonRouterQueries() {
-        return queryDetails.values().stream()
-                .filter(info -> !info.hasRouter())
-                .collect(Collectors.toList());
     }
 }

@@ -112,6 +112,7 @@ public class ExtractorManager {
         // 1. Анализ конвертации
         ConversionStatistics stats = conversionAnalyzer.analyzeForm(formInfo, xmlContent);
         formInfo.setConversionStatistics(stats);
+        formInfo.setQueryConversionMap(stats.getQueryDetails());  // если сделать getter для всей карты
 
         if (isStopped()) {
             log("Извлечение данных остановлено пользователем (перед извлечением SQL)");
