@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.tmis.analyzer.core.model.FormInfo;
+import ru.tmis.analyzer.core.model.RouterVariable;
 import ru.tmis.analyzer.core.model.SqlInfo;
 
 import java.util.*;
@@ -143,12 +144,6 @@ public class SqlExtractor {
         List<SqlInfo> result = new ArrayList<>();
 
         for (Element element : elements) {
-            // Добавить проверку остановки
-            if (isStopRequested()) {
-                System.out.println("[SqlExtractor] Остановлен пользователем в extractFromElements");
-                break;
-            }
-
             String name = element.attr("name");
             if (name == null || name.isEmpty()) continue;
 
@@ -157,8 +152,11 @@ public class SqlExtractor {
             if (!isSqlContent(sqlContent)) continue;
 
             SqlInfo sqlInfo = createSqlInfo(type, name, element, sqlContent, formInfo);
-            parseSqlContent(sqlContent, sqlInfo);
 
+            // извлекаем переменные
+            extractVariables(element, sqlInfo);
+
+            parseSqlContent(sqlContent, sqlInfo);
             result.add(sqlInfo);
         }
         return result;
@@ -647,5 +645,46 @@ public class SqlExtractor {
 
     private boolean isStopRequested() {
         return stopRequested != null && stopRequested.get();
+    }
+
+    /**
+     * Извлекает переменные из элемента (ActionVar, DataSetVar, cmpActionVar, cmpDataSetVar)
+     */
+    private void extractVariables(Element element, SqlInfo sqlInfo) {
+        // M2 синтаксис
+        Elements m2Vars = element.select("component[cmptype=ActionVar], component[cmptype=DataSetVar]");
+        for (Element var : m2Vars) {
+            RouterVariable variable = createRouterVariable(var);
+            if (variable != null) {
+                sqlInfo.addVariable(variable);
+            }
+        }
+
+        // D3 синтаксис
+        Elements d3Vars = element.select("cmpActionVar, cmpDataSetVar");
+        for (Element var : d3Vars) {
+            RouterVariable variable = createRouterVariable(var);
+            if (variable != null) {
+                sqlInfo.addVariable(variable);
+            }
+        }
+    }
+
+    /**
+     * Создаёт объект RouterVariable из элемента
+     */
+    private RouterVariable createRouterVariable(Element var) {
+        String name = var.attr("name");
+        if (name == null || name.isEmpty()) return null;
+
+        return new RouterVariable.Builder(name)
+                .setSrc(var.attr("src"))
+                .setSrcType(var.attr("srctype"))
+                .setGet(var.attr("get"))
+                .setPut(var.attr("put"))
+                .setType(var.attr("type"))
+                .setLen(var.attr("len"))
+                .setDefaultValue(var.attr("default"))
+                .build();
     }
 }

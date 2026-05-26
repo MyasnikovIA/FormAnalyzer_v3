@@ -55,7 +55,7 @@ public class FormInfo {
     private Set<String> constants;
     private Set<String> unitCompositions;
     private Set<String> jsUnitCompositions;
-    private Set<String> brokers;
+    private List<BrokerInfo> brokers = new ArrayList<>();
     private Set<String> autoPopupMenus;
     private Set<String> reports;
     private Set<String> openFormCompositions;
@@ -84,7 +84,7 @@ public class FormInfo {
         this.constants = new LinkedHashSet<>();
         this.unitCompositions = new LinkedHashSet<>();
         this.jsUnitCompositions = new LinkedHashSet<>();
-        this.brokers = new LinkedHashSet<>();
+        this.brokers = new ArrayList<>();
         this.autoPopupMenus = new LinkedHashSet<>();
         this.reports = new LinkedHashSet<>();
         this.openFormCompositions = new LinkedHashSet<>();
@@ -144,8 +144,22 @@ public class FormInfo {
     public Set<String> getJsUnitCompositions() { return jsUnitCompositions; }
     public void addJsUnitComposition(String composition) { this.jsUnitCompositions.add(composition); }
 
-    public Set<String> getBrokers() { return brokers; }
-    public void addBroker(String broker) { this.brokers.add(broker); }
+    public List<BrokerInfo> getBrokers() { return brokers; }
+    public void setBrokers(List<BrokerInfo> brokers) { this.brokers = brokers; }
+    public void addBroker(BrokerInfo broker) {
+        if (this.brokers == null) {
+            this.brokers = new ArrayList<>();
+        }
+        this.brokers.add(broker);
+    }
+    @Deprecated
+    public Set<String> getBrokersAsStrings() {
+        Set<String> result = new LinkedHashSet<>();
+        for (BrokerInfo broker : brokers) {
+            result.add(broker.getDisplayString());
+        }
+        return result;
+    }
 
     public Set<String> getAutoPopupMenus() { return autoPopupMenus; }
     public void addAutoPopupMenu(String unit) { this.autoPopupMenus.add(unit); }

@@ -1197,6 +1197,9 @@ public class MainWindow extends JFrame {
     /**
      * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
      */
+    /**
+     * Удаляет файлы отчёта и MD промпта для текущей выбранной формы
+     */
     private void deleteReportForCurrentForm() {
         TreePath selectedPath = formsTreePanel.getSelectedPath();
         if (selectedPath == null) {
@@ -1228,7 +1231,7 @@ public class MainWindow extends JFrame {
         String mdPath = outputDir + File.separator + "MD_reports" + File.separator + safeFileName + ".md";
         // Отдельный CSV файл (в подкаталоге CSV_reports)
         String csvPath = outputDir + File.separator + "CSV_reports" + File.separator + safeFileName + ".csv";
-
+        // Иерархический JSON файл
         String hierarchicalJsonPath = outputDir + File.separator + "JSON_reports" + File.separator + safeFileName + ".json";
 
         File txtFile = new File(txtPath);
@@ -1242,21 +1245,26 @@ public class MainWindow extends JFrame {
         message.append(formPath).append("\n\n");
         message.append("Будут удалены:\n");
 
+        int foundCount = 0;
         if (txtFile.exists()) {
             message.append("  ✓ ").append(txtFile.getName()).append(" (Forms/)\n");
+            foundCount++;
         }
         if (mdFile.exists()) {
             message.append("  ✓ ").append(mdFile.getName()).append(" (MD_reports/)\n");
+            foundCount++;
         }
         if (csvFile.exists()) {
             message.append("  ✓ ").append(csvFile.getName()).append(" (CSV_reports/)\n");
+            foundCount++;
         }
-        if (!txtFile.exists() && !mdFile.exists() && !csvFile.exists()) {
-            message.append("  (файлы отчётов не найдены)");
-        }
-        // Добавить в сообщение
         if (hierarchicalJsonFile.exists()) {
             message.append("  ✓ ").append(hierarchicalJsonFile.getName()).append(" (JSON_reports/)\n");
+            foundCount++;
+        }
+
+        if (foundCount == 0) {
+            message.append("  (файлы отчётов не найдены)");
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
@@ -1270,12 +1278,13 @@ public class MainWindow extends JFrame {
         }
 
         // Удаляем файлы
-        boolean deleted = false;
+        int deletedCount = 0;
+        List<String> deletedFiles = new ArrayList<>();
 
         if (txtFile.exists()) {
             if (txtFile.delete()) {
-                appendLog("Удалён файл отчёта: " + txtPath);
-                deleted = true;
+                deletedCount++;
+                deletedFiles.add(txtFile.getName());
             } else {
                 appendLog("Ошибка удаления: " + txtPath);
             }
@@ -1283,8 +1292,8 @@ public class MainWindow extends JFrame {
 
         if (mdFile.exists()) {
             if (mdFile.delete()) {
-                appendLog("Удалён MD файл: " + mdPath);
-                deleted = true;
+                deletedCount++;
+                deletedFiles.add(mdFile.getName());
             } else {
                 appendLog("Ошибка удаления: " + mdPath);
             }
@@ -1292,22 +1301,26 @@ public class MainWindow extends JFrame {
 
         if (csvFile.exists()) {
             if (csvFile.delete()) {
-                appendLog("Удалён отдельный CSV файл: " + csvPath);
-                deleted = true;
+                deletedCount++;
+                deletedFiles.add(csvFile.getName());
             } else {
                 appendLog("Ошибка удаления: " + csvPath);
             }
         }
+
         if (hierarchicalJsonFile.exists()) {
             if (hierarchicalJsonFile.delete()) {
-                appendLog("Удалён иерархический JSON файл: " + hierarchicalJsonPath);
-                deleted = true;
+                deletedCount++;
+                deletedFiles.add(hierarchicalJsonFile.getName());
             } else {
                 appendLog("Ошибка удаления: " + hierarchicalJsonPath);
             }
         }
 
-        if (deleted) {
+        if (deletedCount > 0) {
+            // Логируем удалённые файлы одной строкой
+            appendLog("🗑 Удалено " + deletedCount + " файлов для формы " + formPath + ": " + String.join(", ", deletedFiles));
+
             // Обновляем общий CSV отчёт (удаляем строки этой формы)
             updateCommonCsvAfterDeletion(formPath, outputDir);
 
@@ -1323,16 +1336,16 @@ public class MainWindow extends JFrame {
             }
 
             JOptionPane.showMessageDialog(this,
-                    "Отчёты для формы успешно удалены",
+                    "Удалено файлов: " + deletedCount + "\n" +
+                            "Форма: " + formPath,
                     "Удаление завершено",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Не удалось удалить файлы",
+                    "Не удалось удалить файлы (возможно, они уже удалены)",
                     "Ошибка",
                     JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     /**
@@ -1341,6 +1354,7 @@ public class MainWindow extends JFrame {
     private void updateCommonCsvAfterDeletion(String formPath, String outputDir) {
         Path commonCsvPath = Paths.get(outputDir, "forms_export.csv");
         if (!Files.exists(commonCsvPath)) {
+            appendLog("  Общий CSV отчёт не найден: " + commonCsvPath);
             return;
         }
 
@@ -1359,26 +1373,33 @@ public class MainWindow extends JFrame {
             List<String> newLines = new ArrayList<>();
             newLines.add(header);
 
+            int removedCount = 0;
+
             for (int i = 1; i < lines.size(); i++) {
                 String line = lines.get(i);
                 if (line.trim().isEmpty()) continue;
 
-                // Извлекаем имя формы из первой колонки (учитываем возможные кавычки)
                 String formName = extractFormNameFromCsvLine(line);
 
                 if (formName != null && !formName.equals(formPath)) {
                     newLines.add(line);
                 } else if (formName != null) {
-                    appendLog("  Удалена строка из общего CSV: " + formPath);
+                    removedCount++;
                 }
             }
 
             // Перезаписываем CSV файл
             Files.write(commonCsvPath, newLines, java.nio.charset.StandardCharsets.UTF_8);
-            appendLog("Общий CSV отчёт обновлён, удалены строки для формы: " + formPath);
+
+            // Логируем ОДИН раз с количеством удалённых строк
+            if (removedCount > 0) {
+                appendLog("  📊 Общий CSV отчёт обновлён: удалено " + removedCount + " строк для формы " + formPath);
+            } else {
+                appendLog("  📊 Общий CSV отчёт не содержит строк для формы " + formPath);
+            }
 
         } catch (IOException e) {
-            appendLog("Ошибка обновления общего CSV отчёта: " + e.getMessage());
+            appendLog("  Ошибка обновления общего CSV отчёта: " + e.getMessage());
         }
     }
 

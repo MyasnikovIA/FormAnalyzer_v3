@@ -338,8 +338,21 @@ public class ReportGenerator {
         // Брокеры
         if (!form.getBrokers().isEmpty()) {
             writer.println("БРОКЕРЫ:");
-            for (String broker : form.getBrokers()) {
-                writer.println("    " + broker);
+            for (BrokerInfo broker : form.getBrokers()) {
+                writer.println("    " + broker.getDisplayString());
+
+                // Детальная информация о переменных (опционально)
+                if (!broker.getVariables().isEmpty()) {
+                    writer.println("        Переменные:");
+                    for (RouterVariable var : broker.getVariables()) {
+                        writer.print("            - " + var.getName());
+                        if (var.getSrc() != null) writer.print(" src=" + var.getSrc());
+                        if (var.getSrcType() != null) writer.print(" srctype=" + var.getSrcType());
+                        if (var.getGet() != null && !var.getGet().isEmpty()) writer.print(" get=" + var.getGet());
+                        if (var.getPut() != null && !var.getPut().isEmpty()) writer.print(" put=" + var.getPut());
+                        writer.println();
+                    }
+                }
             }
             writer.println();
         }

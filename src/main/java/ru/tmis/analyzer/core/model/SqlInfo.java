@@ -1,7 +1,9 @@
 // core/model/SqlInfo.java
 package ru.tmis.analyzer.core.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SqlInfo {
@@ -18,6 +20,8 @@ public class SqlInfo {
     private Set<String> systemOptions;
     private Set<String> unknownObjects;
     private Set<String> constants;
+
+    private List<RouterVariable> variables = new ArrayList<>();
 
     public SqlInfo() {
         this.tablesViews = new LinkedHashSet<>();
@@ -67,4 +71,12 @@ public class SqlInfo {
 
     public Set<String> getConstants() { return constants; }
     public void addConstant(String constant) { this.constants.add(constant); }
+    public List<RouterVariable> getVariables() { return variables; }
+    public void setVariables(List<RouterVariable> variables) { this.variables = variables; }
+    public void addVariable(RouterVariable variable) {
+        if (this.variables == null) {
+            this.variables = new ArrayList<>();
+        }
+        this.variables.add(variable);
+    }
 }

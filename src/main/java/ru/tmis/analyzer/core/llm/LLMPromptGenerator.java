@@ -298,24 +298,21 @@ public class LLMPromptGenerator {
         System.out.println("[PostgreSQL] Загружено тел функций: " + bodies.size());
     }
 
+    /**
+     * Загружает брокеры и соответствующие им функции из БД
+     */
     private void loadBrokerFunctions() {
         Set<BrokerInfo> brokers = new LinkedHashSet<>();
 
         System.out.println("[Broker] Сбор брокеров из форм...");
+
+        // 1. Собираем брокеры из всех форм
         for (FormInfo form : context.getAnalyzedForms()) {
-            for (String brokerStr : form.getBrokers()) {
-                if (brokerStr.contains("unit:") && brokerStr.contains("action:")) {
-                    String unit = extractValue(brokerStr, "unit");
-                    String action = extractValue(brokerStr, "action");
-                    if (unit != null && action != null) {
-                        brokers.add(new BrokerInfo(unit, action));
-                    }
-                } else if (brokerStr.contains("action:") && brokerStr.contains("D_PKG_")) {
-                    String functionName = extractValue(brokerStr, "action");
-                    if (functionName != null && !functionName.isEmpty()) {
-                        brokers.add(new BrokerInfo(functionName));
-                    }
-                }
+            for (BrokerInfo broker : form.getBrokers()) {
+                // Добавляем брокер с информацией о форме
+                broker.setSourcePath(form.getFormPath());
+                broker.setBaseFormPath(form.getBaseFormPath());
+                brokers.add(broker);
             }
         }
 
@@ -330,6 +327,7 @@ public class LLMPromptGenerator {
         System.out.println("[Broker] Найдено брокеров: " + brokers.size());
         System.out.println("[Broker] Разрешение брокеров (поиск execProc)...");
 
+        // 2. Разрешаем брокеры (ищем execProc)
         Map<String, BrokerInfo> resolvedBrokers = new LinkedHashMap<>();
         Map<String, String> oracleBrokerFuncs = new LinkedHashMap<>();
         Map<String, String> postgresBrokerFuncs = new LinkedHashMap<>();
@@ -340,13 +338,19 @@ public class LLMPromptGenerator {
             count++;
 
             if (broker.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION) {
-                System.out.println("[Broker]   [" + count + "/" + brokers.size() + "] Поиск: unit=" + broker.getUnit() + ", action=" + broker.getAction());
+                // Тип 1: unit + action - нужен поиск в D_UNITBPS
+                System.out.println("[Broker]   [" + count + "/" + brokers.size() +
+                        "] Поиск: unit=" + broker.getUnit() +
+                        ", action=" + broker.getAction());
+
                 String execProc = findExecProc(broker.getUnit(), broker.getAction());
                 if (execProc != null) {
                     broker.setExecProc(execProc);
-                    resolvedBrokers.put(broker.getUnit() + "_" + broker.getAction(), broker);
+                    String key = broker.getUnit() + "_" + broker.getAction();
+                    resolvedBrokers.put(key, broker);
                     System.out.println("[Broker]      Найден execProc: " + execProc);
 
+                    // Загружаем Oracle тело функции
                     if (config.isIncludeOracleFunctions() && execProc.contains(".")) {
                         int dot = execProc.lastIndexOf('.');
                         String pkg = execProc.substring(0, dot);
@@ -354,25 +358,36 @@ public class LLMPromptGenerator {
                         String body = oracleService.getFunctionBody(pkg, func);
                         if (body != null && !body.isEmpty()) {
                             oracleBrokerFuncs.put(execProc, body);
-                            System.out.println("[Broker]        Oracle тело функции загружено");
+                            System.out.println("[Broker]        Oracle тело функции загружено (" + body.length() + " симв.)");
+                        } else {
+                            System.out.println("[Broker]        Oracle тело функции НЕ НАЙДЕНО");
                         }
                     }
 
+                    // Загружаем PostgreSQL тело функции
                     if (config.isIncludePostgresFunctions()) {
                         String body = postgresService.getFunctionBody(execProc.toLowerCase());
                         if (body != null && !body.isEmpty()) {
                             postgresBrokerFuncs.put(execProc.toLowerCase(), body);
-                            System.out.println("[Broker]        PostgreSQL тело функции загружено");
+                            System.out.println("[Broker]        PostgreSQL тело функции загружено (" + body.length() + " симв.)");
+                        } else {
+                            System.out.println("[Broker]        PostgreSQL тело функции НЕ НАЙДЕНО");
                         }
                     }
                 } else {
                     System.out.println("[Broker]      execProc НЕ НАЙДЕН");
                 }
-            } else {
-                System.out.println("[Broker]   [" + count + "/" + brokers.size() + "] Прямая функция: " + broker.getDirectFunction());
-                resolvedBrokers.put(broker.getDirectFunction(), broker);
-                String execProc = broker.getDirectFunction();
 
+            } else {
+                // Тип 2: прямое указание функции
+                System.out.println("[Broker]   [" + count + "/" + brokers.size() +
+                        "] Прямая функция: " + broker.getFunctionName());
+
+                String execProc = broker.getFunctionName();
+                broker.setExecProc(execProc);
+                resolvedBrokers.put(execProc, broker);
+
+                // Загружаем Oracle тело функции
                 if (config.isIncludeOracleFunctions() && execProc.contains(".")) {
                     int dot = execProc.lastIndexOf('.');
                     String pkg = execProc.substring(0, dot);
@@ -380,15 +395,20 @@ public class LLMPromptGenerator {
                     String body = oracleService.getFunctionBody(pkg, func);
                     if (body != null && !body.isEmpty()) {
                         oracleBrokerFuncs.put(execProc, body);
-                        System.out.println("[Broker]        Oracle тело функции загружено");
+                        System.out.println("[Broker]        Oracle тело функции загружено (" + body.length() + " симв.)");
+                    } else {
+                        System.out.println("[Broker]        Oracle тело функции НЕ НАЙДЕНО");
                     }
                 }
 
+                // Загружаем PostgreSQL тело функции
                 if (config.isIncludePostgresFunctions()) {
                     String body = postgresService.getFunctionBody(execProc.toLowerCase());
                     if (body != null && !body.isEmpty()) {
                         postgresBrokerFuncs.put(execProc.toLowerCase(), body);
-                        System.out.println("[Broker]        PostgreSQL тело функции загружено");
+                        System.out.println("[Broker]        PostgreSQL тело функции загружено (" + body.length() + " симв.)");
+                    } else {
+                        System.out.println("[Broker]        PostgreSQL тело функции НЕ НАЙДЕНО");
                     }
                 }
             }
@@ -397,7 +417,10 @@ public class LLMPromptGenerator {
         context.setBrokersMap(resolvedBrokers);
         context.setOracleBrokerFunctions(oracleBrokerFuncs);
         context.setPostgresBrokerFunctions(postgresBrokerFuncs);
+
         System.out.println("[Broker] Разрешено брокеров: " + resolvedBrokers.size());
+        System.out.println("[Broker] Загружено Oracle тел функций: " + oracleBrokerFuncs.size());
+        System.out.println("[Broker] Загружено PostgreSQL тел функций: " + postgresBrokerFuncs.size());
     }
 
     private String extractValue(String str, String key) {
@@ -409,29 +432,6 @@ public class LLMPromptGenerator {
         return null;
     }
 
-
-    private String findExecProc(String unit, String action) {
-        return DatabaseCacheManager.getBrokerExecProc(unit, action, () -> {
-            String sql = "SELECT execproc FROM D_UNITBPS WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
-            Properties props = new Properties();
-            props.setProperty("user", settings.getOracleUser());
-            props.setProperty("password", settings.getOraclePassword());
-
-            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, "%" + unit.toUpperCase() + "%");
-                pstmt.setString(2, "%" + action.toUpperCase() + "%");
-                pstmt.setQueryTimeout(30);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    return rs.getString("execproc");
-                }
-            } catch (SQLException e) {
-                System.err.println("[Broker] Ошибка: " + e.getMessage());
-            }
-            return null;
-        });
-    }
 
     private Set<String> extractTablesFromDDL(String ddl) {
         Set<String> tables = new LinkedHashSet<>();
@@ -1188,6 +1188,9 @@ public class LLMPromptGenerator {
         return sb.toString();
     }
 
+    /**
+     * Генерирует блок брокеров и вызываемых функций для LLM промпта
+     */
     private String generateBrokerFunctionsBlock() {
         StringBuilder sb = new StringBuilder();
 
@@ -1221,48 +1224,81 @@ public class LLMPromptGenerator {
 
         int brokerNum = 1;
         for (Map.Entry<String, BrokerInfo> entry : brokersMap.entrySet()) {
-            BrokerInfo info = entry.getValue();
+            BrokerInfo broker = entry.getValue();
 
             sb.append("---\n\n");
             sb.append("### Брокер №").append(brokerNum).append(": ");
 
-            if (info.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION) {
-                sb.append("unit=").append(info.getUnit()).append(", action=").append(info.getAction());
+            if (broker.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION) {
+                sb.append("unit=").append(broker.getUnit()).append(", action=").append(broker.getAction());
             } else {
-                sb.append("action=").append(info.getDirectFunction());
+                sb.append("action=").append(broker.getFunctionName());
             }
             sb.append("\n\n");
 
+            // ========== ИНФОРМАЦИЯ О КОМПОНЕНТЕ ==========
+            if (broker.getComponentName() != null && !broker.getComponentName().isEmpty()) {
+                sb.append("**Компонент:** `").append(broker.getComponentName()).append("`");
+                if (broker.getComponentType() != null && !broker.getComponentType().isEmpty()) {
+                    sb.append(" (").append(broker.getComponentType()).append(")");
+                }
+                sb.append("\n\n");
+            }
+
+            // ========== ПЕРЕМЕННЫЕ (ActionVar) ==========
+            if (broker.getVariables() != null && !broker.getVariables().isEmpty()) {
+                sb.append("**Переменные (ActionVar/DataSetVar):**\n\n");
+                sb.append("| Имя | Источник (src) | Тип источника | GET | PUT | Тип |\n");
+                sb.append("|-----|----------------|---------------|-----|-----|-----|\n");
+                for (RouterVariable var : broker.getVariables()) {
+                    sb.append("| `").append(var.getName()).append("` | ");
+                    sb.append(var.getSrc() != null ? "`" + var.getSrc() + "`" : "-").append(" | ");
+                    sb.append(var.getSrcType() != null ? var.getSrcType() : "-").append(" | ");
+                    sb.append(var.getGet() != null && !var.getGet().isEmpty() ? var.getGet() : "-").append(" | ");
+                    sb.append(var.getPut() != null && !var.getPut().isEmpty() ? var.getPut() : "-").append(" | ");
+                    sb.append(var.getType() != null ? var.getType() : "-").append(" |\n");
+                }
+                sb.append("\n");
+            }
+
+            // ========== ТИП БРОКЕРА ==========
             sb.append("**Тип брокера:** ");
-            sb.append(info.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION ?
+            sb.append(broker.getType() == BrokerInfo.BrokerType.TYPE1_UNIT_ACTION ?
                     "Требуется поиск в D_UNITBPS" : "Прямое указание функции");
             sb.append("\n\n");
 
-            sb.append("**Вызываемая функция:**\n");
+            // ========== ВЫЗЫВАЕМАЯ ФУНКЦИЯ ==========
+            sb.append("**Вызываемая функция (execProc):**\n");
             sb.append("```\n");
-            sb.append(info.getExecProc() != null ? info.getExecProc() : "не найдена");
+            sb.append(broker.getExecProc() != null ? broker.getExecProc() : "не найдена");
             sb.append("\n```\n\n");
 
-            if (info.getExecProc() != null) {
+            if (broker.getExecProc() != null) {
                 // Oracle функция
                 String oracleBody = oracleBrokerFunctions != null ?
-                        oracleBrokerFunctions.get(info.getExecProc()) : null;
+                        oracleBrokerFunctions.get(broker.getExecProc()) : null;
                 if (oracleBody != null && !oracleBody.isEmpty()) {
                     sb.append("**Oracle SQL тело функции 🟠:**\n\n");
                     sb.append("```sql\n");
                     sb.append(oracleBody);
+                    if (!oracleBody.endsWith("\n")) {
+                        sb.append("\n");
+                    }
                     sb.append("```\n\n");
-                }else {
+                } else {
                     sb.append("**Oracle SQL тело функции не найдено.**\n\n");
                 }
 
                 // PostgreSQL функция
                 String postgresBody = postgresBrokerFunctions != null ?
-                        postgresBrokerFunctions.get(info.getExecProc().toLowerCase()) : null;
+                        postgresBrokerFunctions.get(broker.getExecProc().toLowerCase()) : null;
                 if (postgresBody != null && !postgresBody.isEmpty()) {
                     sb.append("**PostgreSQL тело функции 🐘:**\n\n");
                     sb.append("```sql\n");
                     sb.append(postgresBody);
+                    if (!postgresBody.endsWith("\n")) {
+                        sb.append("\n");
+                    }
                     sb.append("```\n\n");
                 } else {
                     sb.append("**PostgreSQL тело функции не найдено.**\n\n");
@@ -1652,192 +1688,6 @@ public class LLMPromptGenerator {
     }
 
 
-    public List<String> generateForEachForm() throws Exception {
-        System.out.println("[LLM] Генерация отдельных промптов для каждой формы...");
-
-        String outputDir = settings.getOutputDir();
-        if (outputDir == null || outputDir.trim().isEmpty()) {
-            outputDir = "LLM_prompts";
-        }
-
-        Path formsDir = Paths.get(outputDir, "forms_prompts");
-        if (!Files.exists(formsDir)) {
-            Files.createDirectories(formsDir);
-        }
-
-        List<String> generatedFiles = new ArrayList<>();
-        int processed = 0;
-        int total = context.getAnalyzedForms().size();
-
-        for (FormInfo form : context.getAnalyzedForms()) {
-            if (stopCondition.getAsBoolean()) {
-                System.out.println("[LLM] Генерация прервана пользователем");
-                break;
-            }
-            processed++;
-            System.out.println("[LLM] [" + processed + "/" + total + "] Обработка формы: " + form.getFormPath());
-
-            // Создаем временный контекст только для одной формы
-            LLMReportContext singleContext = new LLMReportContext();
-            List<FormInfo> singleForm = Collections.singletonList(form);
-            singleContext.setAnalyzedForms(singleForm);
-            singleContext.setTotalForms(1);
-            singleContext.setAllSqlQueries(form.getSqlQueries());
-            singleContext.setTotalSqlQueries(form.getSqlQueries().size());
-
-            // Копируем загруженные данные (вьюхи, таблицы) для этой формы
-            Set<String> formViews = new LinkedHashSet<>();
-            for (String tv : form.getTablesViews()) {
-                if (tv.startsWith("D_V_")) {
-                    formViews.add(tv);
-                }
-            }
-
-            Map<String, String> pgViewsDDL = new LinkedHashMap<>();
-            Map<String, Set<String>> pgViewTables = new LinkedHashMap<>();
-            for (String view : formViews) {
-                if (context.getPostgresViewDDL() != null && context.getPostgresViewDDL().containsKey(view)) {
-                    pgViewsDDL.put(view, context.getPostgresViewDDL().get(view));
-                    pgViewTables.put(view, context.getPostgresViewTables().get(view));
-                }
-            }
-            singleContext.setPostgresViewDDL(pgViewsDDL);
-            singleContext.setPostgresViewTables(pgViewTables);
-
-            Map<String, String> oraViewsDDL = new LinkedHashMap<>();
-            Map<String, Set<String>> oraViewTables = new LinkedHashMap<>();
-            for (String view : formViews) {
-                if (context.getOracleViewDDL() != null && context.getOracleViewDDL().containsKey(view)) {
-                    oraViewsDDL.put(view, context.getOracleViewDDL().get(view));
-                    oraViewTables.put(view, context.getOracleViewTables().get(view));
-                }
-            }
-            singleContext.setOracleViewDDL(oraViewsDDL);
-            singleContext.setOracleViewTables(oraViewTables);
-
-            // Собираем таблицы для этой формы
-            Set<String> formTables = new LinkedHashSet<>();
-            for (String tv : form.getTablesViews()) {
-                if (!tv.startsWith("D_V_")) {
-                    formTables.add(tv);
-                }
-            }
-            if (pgViewTables != null) {
-                for (Set<String> tables : pgViewTables.values()) {
-                    formTables.addAll(tables);
-                }
-            }
-            if (oraViewTables != null) {
-                for (Set<String> tables : oraViewTables.values()) {
-                    formTables.addAll(tables);
-                }
-            }
-
-            // Загружаем DDL таблиц для этой формы
-            Map<String, String> pgTableDDL = new LinkedHashMap<>();
-            Map<String, String> oraTableDDL = new LinkedHashMap<>();
-            for (String table : formTables) {
-                if (context.getPostgresTableDDL() != null && context.getPostgresTableDDL().containsKey(table)) {
-                    pgTableDDL.put(table, context.getPostgresTableDDL().get(table));
-                }
-                if (context.getOracleTableDDL() != null && context.getOracleTableDDL().containsKey(table)) {
-                    oraTableDDL.put(table, context.getOracleTableDDL().get(table));
-                }
-            }
-            singleContext.setPostgresTableDDL(pgTableDDL);
-            singleContext.setOracleTableDDL(oraTableDDL);
-
-            // Функции для этой формы
-            Set<String> formFuncs = new LinkedHashSet<>();
-            for (SqlInfo sql : form.getSqlQueries()) {
-                formFuncs.addAll(sql.getPackagesFunctions());
-            }
-
-            Map<String, String> oraFuncBodies = new LinkedHashMap<>();
-            Map<String, String> pgFuncBodies = new LinkedHashMap<>();
-            for (String func : formFuncs) {
-                if (context.getOracleFunctionBodies() != null && context.getOracleFunctionBodies().containsKey(func)) {
-                    oraFuncBodies.put(func, context.getOracleFunctionBodies().get(func));
-                }
-                String lowerFunc = func.toLowerCase();
-                if (context.getPostgresFunctionBodies() != null && context.getPostgresFunctionBodies().containsKey(lowerFunc)) {
-                    pgFuncBodies.put(lowerFunc, context.getPostgresFunctionBodies().get(lowerFunc));
-                }
-            }
-            singleContext.setOracleFunctionBodies(oraFuncBodies);
-            singleContext.setPostgresFunctionBodies(pgFuncBodies);
-
-            // Брокеры для этой формы
-            Map<String, BrokerInfo> formBrokers = new LinkedHashMap<>();
-            Map<String, String> formOracleBrokerFuncs = new LinkedHashMap<>();
-            Map<String, String> formPostgresBrokerFuncs = new LinkedHashMap<>();
-            for (String brokerStr : form.getBrokers()) {
-                if (brokerStr.contains("unit:") && brokerStr.contains("action:")) {
-                    String unit = extractValue(brokerStr, "unit");
-                    String action = extractValue(brokerStr, "action");
-                    if (unit != null && action != null) {
-                        String key = unit + "_" + action;
-                        if (context.getBrokersMap() != null && context.getBrokersMap().containsKey(key)) {
-                            BrokerInfo info = context.getBrokersMap().get(key);
-                            formBrokers.put(key, info);
-                            if (info.getExecProc() != null) {
-                                if (context.getOracleBrokerFunctions() != null && context.getOracleBrokerFunctions().containsKey(info.getExecProc())) {
-                                    formOracleBrokerFuncs.put(info.getExecProc(), context.getOracleBrokerFunctions().get(info.getExecProc()));
-                                }
-                                if (context.getPostgresBrokerFunctions() != null && context.getPostgresBrokerFunctions().containsKey(info.getExecProc().toLowerCase())) {
-                                    formPostgresBrokerFuncs.put(info.getExecProc().toLowerCase(), context.getPostgresBrokerFunctions().get(info.getExecProc().toLowerCase()));
-                                }
-                            }
-                        }
-                    }
-                } else if (brokerStr.contains("action:") && brokerStr.contains("D_PKG_")) {
-                    String func = extractValue(brokerStr, "action");
-                    if (func != null && context.getBrokersMap() != null && context.getBrokersMap().containsKey(func)) {
-                        BrokerInfo info = context.getBrokersMap().get(func);
-                        formBrokers.put(func, info);
-                        if (context.getOracleBrokerFunctions() != null && context.getOracleBrokerFunctions().containsKey(func)) {
-                            formOracleBrokerFuncs.put(func, context.getOracleBrokerFunctions().get(func));
-                        }
-                        if (context.getPostgresBrokerFunctions() != null && context.getPostgresBrokerFunctions().containsKey(func.toLowerCase())) {
-                            formPostgresBrokerFuncs.put(func.toLowerCase(), context.getPostgresBrokerFunctions().get(func.toLowerCase()));
-                        }
-                    }
-                }
-            }
-            singleContext.setBrokersMap(formBrokers);
-            singleContext.setOracleBrokerFunctions(formOracleBrokerFuncs);
-            singleContext.setPostgresBrokerFunctions(formPostgresBrokerFuncs);
-
-            // Временно сохраняем и восстанавливаем контекст
-            LLMReportContext originalContext = this.context;
-            this.context = singleContext;
-
-            String prompt = generateSingleFile();
-
-            // Восстанавливаем оригинальный контекст
-            this.context = originalContext;
-
-            // Сохраняем файл
-            String safeFilename = form.getFormPath()
-                    .replace("/", "_")
-                    .replace("\\", "_")
-                    .replace(":", "_")
-                    .replace(".frm", "")
-                    .replace(".dfrm", "");
-            if (safeFilename.length() > 100) {
-                safeFilename = safeFilename.substring(0, 100);
-            }
-            String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String filename = safeFilename + "_" + timestamp + ".md";
-            Path filePath = formsDir.resolve(filename);
-
-            Files.writeString(filePath, prompt);
-            generatedFiles.add(filePath.toString());
-            System.out.println("[LLM]   Промпт сохранен");
-        }
-        System.out.println("[LLM] Генерация отдельных промптов завершена. Создано файлов: " + generatedFiles.size());
-        return generatedFiles;
-    }
 
     /**
      * Генерирует промпт для одной формы и сохраняет в MD файл
@@ -2027,5 +1877,36 @@ public class LLMPromptGenerator {
         // Если не определили по Router, можно по содержимому формы
         // (но это потребовало бы загрузки исходного кода)
         return FormInfo.FormStyle.UNKNOWN;
+    }
+
+    /**
+     * Поиск execProc в таблице D_UNITBPS по unit и action
+     */
+    private String findExecProc(String unit, String action) {
+        return DatabaseCacheManager.getBrokerExecProc(unit, action, () -> {
+            String sql = "SELECT execproc FROM D_UNITBPS " +
+                    "WHERE UPPER(unitbpcode) LIKE ? AND UPPER(standard_action) LIKE ? AND ROWNUM = 1";
+            Properties props = new Properties();
+            props.setProperty("user", settings.getOracleUser());
+            props.setProperty("password", settings.getOraclePassword());
+            props.setProperty("oracle.net.CONNECT_TIMEOUT", "10000");
+            props.setProperty("oracle.jdbc.ReadTimeout", "30000");
+
+            try (Connection conn = DriverManager.getConnection(settings.getOracleUrl(), props);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, "%" + unit.toUpperCase() + "%");
+                pstmt.setString(2, "%" + action.toUpperCase() + "%");
+                pstmt.setQueryTimeout(30);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getString("execproc");
+                }
+            } catch (SQLException e) {
+                System.err.println("[Broker] Ошибка поиска execProc: " + e.getMessage());
+            }
+            return null;
+        });
     }
 }

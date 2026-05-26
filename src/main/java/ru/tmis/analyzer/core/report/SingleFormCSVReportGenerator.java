@@ -3,6 +3,7 @@ package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.db.ReportsFromDbService;
+import ru.tmis.analyzer.core.model.BrokerInfo;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 
@@ -111,14 +112,7 @@ public class SingleFormCSVReportGenerator {
             writeBlock(writer, formName, "Константы", formInfo.getConstants());
 
             // 12. Брокеры
-            Set<String> allBrokers = new LinkedHashSet<>();
-            if (formInfo.getBrokers() != null) {
-                for (String comp : formInfo.getBrokers()) {
-                    String normalized = comp.replaceAll("[;,]", "").replaceAll("\"", "");
-                    allBrokers.add(normalized);
-                }
-            }
-            writeBlock(writer, formName, "Брокеры", allBrokers);
+            writeBrokerBlock(writer, formName, "Брокеры", formInfo.getBrokers());
 
             // 13. Неопределенные
             writeBlock(writer, formName, "Неопределенные", formInfo.getUnknownObjects());
@@ -134,6 +128,20 @@ public class SingleFormCSVReportGenerator {
                 .replace(" composition:", " composition:")
                 .replace(",", "")
                 .replace(";", "");
+    }
+
+    /**
+     * Записывает блок брокеров в CSV (для списка BrokerInfo)
+     */
+    private void writeBrokerBlock(PrintWriter writer, String formName, String blockName, List<BrokerInfo> brokers) {
+        if (brokers == null || brokers.isEmpty()) {
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
+        } else {
+            for (BrokerInfo broker : brokers) {
+                String value = broker.getDisplayString();
+                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+            }
+        }
     }
 
     private void writeBlock(PrintWriter writer, String formName, String blockName, Set<String> values) {

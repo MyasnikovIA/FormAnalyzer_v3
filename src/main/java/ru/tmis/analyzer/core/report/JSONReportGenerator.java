@@ -8,10 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
-import ru.tmis.analyzer.core.model.DbReportInfo;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.PopupMenuInfo;
-import ru.tmis.analyzer.core.model.ViewTableDependencies;
+import ru.tmis.analyzer.core.model.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -170,7 +167,41 @@ public class JSONReportGenerator {
         addSetToJson(formJson, "Константы", formInfo.getConstants());
 
         // Брокеры
-        addSetToJson(formJson, "Брокеры", formInfo.getBrokers());
+        if (!formInfo.getBrokers().isEmpty()) {
+            JsonArray brokersArray = new JsonArray();
+            for (BrokerInfo broker : formInfo.getBrokers()) {
+                JsonObject brokerJson = new JsonObject();
+
+                brokerJson.addProperty("type", broker.getType().name());
+                brokerJson.addProperty("displayString", broker.getDisplayString());
+
+                if (broker.getUnit() != null) brokerJson.addProperty("unit", broker.getUnit());
+                if (broker.getAction() != null) brokerJson.addProperty("action", broker.getAction());
+                if (broker.getFunctionName() != null) brokerJson.addProperty("functionName", broker.getFunctionName());
+                if (broker.getExecProc() != null) brokerJson.addProperty("execProc", broker.getExecProc());
+                if (broker.getComponentName() != null) brokerJson.addProperty("componentName", broker.getComponentName());
+                if (broker.getComponentType() != null) brokerJson.addProperty("componentType", broker.getComponentType());
+
+                // Переменные
+                if (!broker.getVariables().isEmpty()) {
+                    JsonArray varsArray = new JsonArray();
+                    for (RouterVariable var : broker.getVariables()) {
+                        JsonObject varJson = new JsonObject();
+                        varJson.addProperty("name", var.getName());
+                        if (var.getSrc() != null) varJson.addProperty("src", var.getSrc());
+                        if (var.getSrcType() != null) varJson.addProperty("srctype", var.getSrcType());
+                        if (var.getGet() != null && !var.getGet().isEmpty()) varJson.addProperty("get", var.getGet());
+                        if (var.getPut() != null && !var.getPut().isEmpty()) varJson.addProperty("put", var.getPut());
+                        if (var.getType() != null) varJson.addProperty("type", var.getType());
+                        varsArray.add(varJson);
+                    }
+                    brokerJson.add("variables", varsArray);
+                }
+
+                brokersArray.add(brokerJson);
+            }
+            formJson.add("brokers", brokersArray);
+        }
 
         // Неопределенные
         addSetToJson(formJson, "Неопределенные", formInfo.getUnknownObjects());

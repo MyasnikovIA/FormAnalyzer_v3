@@ -2,6 +2,7 @@ package ru.tmis.analyzer.core.report;
 
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.db.ReportsFromDbService;
+import ru.tmis.analyzer.core.model.BrokerInfo;
 import ru.tmis.analyzer.core.model.DbReportInfo;
 import ru.tmis.analyzer.core.model.FormInfo;
 
@@ -107,14 +108,7 @@ public class CSVReportGenerator {
                 writeBlock(writer, formName, "Константы", form.getConstants());
 
                 // 12. Брокеры
-                Set<String> allBrokers = new LinkedHashSet<>();
-                if (form.getBrokers() != null) {
-                    for (String comp : form.getBrokers()) {
-                        String normalized = comp.replaceAll(";","").replaceAll(",","").replaceAll("\"","");
-                        allBrokers.add(normalized);
-                    }
-                }
-                writeBlock(writer, formName, "Брокеры", allBrokers);
+                writeBlock(writer, formName, "Брокеры", form.getBrokers());
 
                 // 13. Неопределенные (РАЗОБРАТЬ АНАЛИТИКОМ)
                 writeBlock(writer, formName, "Неопределенные", form.getUnknownObjects());
@@ -139,6 +133,17 @@ public class CSVReportGenerator {
         }
     }
 
+    private void writeBlock(PrintWriter writer, String formName, String blockName,
+                            List<BrokerInfo> brokers) {
+        if (brokers == null || brokers.isEmpty()) {
+            writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";(не найдено)");
+        } else {
+            for (BrokerInfo broker : brokers) {
+                String value = broker.getDisplayString();
+                writer.println(escapeCSV(formName) + ";" + escapeCSV(blockName) + ";" + escapeCSV(value));
+            }
+        }
+    }
 
     /**
      * Записывает блок UserForms в CSV
