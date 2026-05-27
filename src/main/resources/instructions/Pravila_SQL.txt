@@ -1,0 +1,1432 @@
+2) Все цифровые переменные  должны быть обернуты в to_number (пример: to_number(:pnLPU) )
+4) Все псевдонимы  в SQL запросах "t" должны быть заменены на аббревиатуры тех таблиц, которые они привязаны (пример core.v_job_workers_group t => jwg  или worg)
+5) Все переменные в запросах, которые содержать _ID или "ID" точно являются числами и должны быть обернуты to_number
+6) Все атрибуты cmpActionVar и cmpDataSetVar должны быить выстроены в одну линию по вертикали. закрывающийся тэг "/>" должен быть без пробелов между последним атрибутом
+7) SQL запросы  должны иметь следующий вид :
+   ```sql
+	<component cmptype="Action" name="AC_get_gw">
+        <![CDATA[
+        select jwg.ID,к
+               jwg.CODE,
+               jwg.CNT_WORKERS,
+          from core.v_job_workers_group jwg
+         where jwg.ID = to_number(:id)
+        ]]>
+		***
+	```
+8) Пробел после function  не должен быть правильное написание "function() {"
+9) в JS функциях после ",",":",";" должен быть пробел
+10) атрибуты функций должны начинаться в одну длинию по вертикали , каждый атрибут на новой строке
+11) Если в атрибутах cmpActionVar  есть атрибут put , тогда эту переменную необходимо получать в SQL запросе  через INTO (Если этого блока нет, тогда надо добавить его)
+   не правильно:
+   ```xml
+    <component cmptype="Action" name="AC_get_gw">
+        <![CDATA[
+        select
+            t.id,
+            t.code
+        from core.v_job_workers_group t
+        where id = :id
+        ]]>
+        <component cmptype="ActionVar"  name="id"   src="data"      srctype="var"/>
+        <component cmptype="ActionVar"  name="id"   src="tb_Ctrl"   srctype="ctrl" put=""/>
+        <component cmptype="ActionVar"  name="code" src="code_Ctrl" srctype="ctrl" put=""/>
+    </component>
+	```
+  правильно:
+   ```xml
+    <component cmptype="Action" name="AC_get_gw">
+        <![CDATA[
+        select jwg.id,
+               jwg.code
+	      into :pnID_TAB,
+		       :psCODE,
+          from CORE.V_JOB_WORKERS_GROUP jwg
+         where id = :pnID
+        ]]>
+        <component cmptype="ActionVar"  name="pnID"     src="data"     srctype="var"/>
+        <component cmptype="ActionVar"  name="pnID_TAB" src="ctrlTb"   srctype="ctrl" put=""/>
+        <component cmptype="ActionVar"  name="psCODE"   src="ctrlCode" srctype="ctrl" put=""/>
+    </component>
+	```
+
+29) ROWNUM писать в нижнем регистре;
+30) перемещать атрибуты put="" и len="17" вконец всех атрибутов испоользовать шаблон из блока "правильно:"
+     не правильно :
+        <component cmptype="ActionVar" name="pnD_INSERT_ID" put="v0" len="17" src="psNEW_ID" srctype="var"/>
+        <component cmptype="ActionVar" name="pnLPU"         get="v1"          src="LPU"      srctype="session"/>
+        <component cmptype="ActionVar" name="pnPID"         get="v2"          src="pnTEMP_ID" srctype="var"/>
+    правильно:
+        <component cmptype="ActionVar" name="pnLPU"         src="LPU"       srctype="session"/>
+        <component cmptype="ActionVar" name="pnD_INSERT_ID" src="psNEW_ID"  srctype="var"     put="" len="17"/>
+        <component cmptype="ActionVar" name="pnPID"         src="pnTEMP_ID" srctype="var"/>
+
+31) Если на форме нет cmpFetch или <component cmptype="Fetch" тогда все атрибуты get="" и put="" должны быть пустыми значениями в cmpActionVar и cmpDataSetVar
+    Если есть атрибут только get , без атрибута put , тогда этот атрибут удаляется
+
+33) в SQL запросах в конструкция  "case when",  "else" переноситься на новую строчку под "case" + 2 пробела
+     не правильно :
+                select case when (ds.REC_DATE = trunc(ds.REC_DATE) and ds.REC_DATE is not null) then v.VISIT_DATE
+                            else ds.REC_DATE
+                       end
+    правильно:
+                select case when (ds.REC_DATE = trunc(ds.REC_DATE) and ds.REC_DATE is not null) then v.VISIT_DATE
+                         else ds.REC_DATE
+                       end
+34) В SQL запросах, когда встречается однобуквенный псевдоним, необходимо его заменить на более осмысленную версия, которая ассоциируется с  таблицей, на которую ссылается псевдоним:
+     не правильно :
+          D_V_VISITS v
+          D_V_DIRECTION_SERVICES d
+    правильно:
+          D_V_VISITS vis
+          D_V_DIRECTION_SERVICES ds
+
+
+40) необходимо все запросы на форме поместить в блоки Router которые имеют следующий вид.
+Для Action :
+```
+	<cmpAction name="ACT_SEL">
+        <cmpActionRouter condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            begin
+              -- сюда необходимо поместить код для ORACLE (код на форме)
+            end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            begin
+              -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+            end;
+            ]]>
+        </cmpActionRouter>
+        <cmpActionVar name="LPU"           src="LPU"                   srctype="session" type="integer"/>
+        <cmpActionVar name="RES"           src="RES"                   srctype="var"/>
+        <cmpActionVar name="ACTION_RESULT" src="ACTION_RESULT:caption" srctype="ctrl" put="" len="4000"/>
+    </cmpAction>
+```
+Для DataSet :
+```
+	<cmpDataSet name="DS_SEL2" activateoncreate="false">
+        <cmpDataSetRouter  condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+            -- сюда необходимо поместить код для ORACLE (код на форме)
+            ]]>
+        </cmpDataSetRouter>
+        <cmpDataSetRouter  condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+            -- сюда необходимо поместить код для POSTGRESQL (с преобразованием типов)
+            ]]>
+        </cmpDataSetRouter>
+        <cmpDataSetVar name="pnLPU" src="LPU" srctype="session"/>
+        <cmpDataSetVar name="pnPID" src="ID"  srctype="var"/>
+    </cmpDataSet>
+```
+41) Всевызываемые функции или процедуры должнывызываться через именованные атрибуты и на против каждого атрибута необходимо указать комментарий, за что отвечает этот атрибут. Это необходимо делать для всех видов зароса и блоков PLSQL в синтаксисе PostgreSQL и OracleSQL
+
+43) в POSTGRE необходимо принудительно конвертировать входящие переменные через "::"
+Пример:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = to_number(:pnLPU)
+                       and hmkb.pid = to_number(:pnHPK_ID)
+                       and hmkb.mkb_handle = :psHPK_ID
+```
+
+переработанный код:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = (:pnLPU)::numeric
+                       and hmkb.pid = (:pnHPK_ID)::numeric
+                       and hmkb.mkb_handle = (:psHPK_ID)::text
+```
+44) Все таблицы должны писаться в верхнем регистре, все имена полуй пишуться в верхним регистре, все псевданимы таблиц пишутся с маленькой буквы
+Пример:
+```
+                    select hmkb.id,
+                           hmkb.mkb,
+                           hmkb.mkb_handle,
+                           hmkb.mkb_own,
+                           hmkb.max_count
+                      from d_v_hpk_mkbs hmkb
+                     where hmkb.lpu = to_number(:pnLPU)
+                       and hmkb.pid = to_number(:pnHPK_ID)
+```
+Переработанный запрос:
+```
+                    select hmkb.ID,
+                           hmkb.MKB,
+                           hmkb.MKB_HANDLE,
+                           hmkb.MKB_OWN,
+                           hmkb.MAX_COUNT
+                      from D_V_HPK_MKBS hmkb
+                     where hmkb.LPU = to_number(:pnLPU)
+                       and hmkb.PID = to_number(:pnHPK_ID)
+```
+
+45) SQL запрос в DataSet начинаеся сразу же под "<![CDATA[" начала. select  должно быть на одной линии под "<![CDATA[" по вертикали
+Пример исходника :
+```
+            <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                    -- POSTGRESQL: выборка диагнозов для вида плана госпитализации
+                    -- pnLPU - идентификатор ЛПУ из сессии
+                    -- pnHPK_ID - идентификатор вида плана госпитализации
+                    select hmkb.ID,
+                           hmkb.MKB,
+                           hmkb.MKB_HANDLE,
+                           hmkb.MKB_OWN,
+                           hmkb.MAX_COUNT
+                      from D_V_HPK_MKBS hmkb
+                     where hmkb.LPU = (:pnLPU)::numeric
+                       and hmkb.PID = (:pnHPK_ID)::numeric
+                ]]>
+            </cmpDataSetRouter>
+```
+Исправленый вариант:
+```
+            <cmpDataSetRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+                <![CDATA[
+                -- POSTGRESQL: выборка диагнозов для вида плана госпитализации
+                -- pnLPU - идентификатор ЛПУ из сессии
+                -- pnHPK_ID - идентификатор вида плана госпитализации
+                select hmkb.ID,
+                       hmkb.MKB,
+                       hmkb.MKB_HANDLE,
+                       hmkb.MKB_OWN,
+                       hmkb.MAX_COUNT
+                  from D_V_HPK_MKBS hmkb
+                 where hmkb.LPU = (:pnLPU)::numeric
+                   and hmkb.PID = (:pnHPK_ID)::numeric
+                ]]>
+            </cmpDataSetRouter>
+```
+46) необходимо в SQL запросах написать на против каждого поля комментарий "--" в котором описано что это за поле в запросе
+48) Отступы внутри блоков CDATA для SQL/PLSQL
+
+**Правило:** Внутри блоков `CDATA` для **SQL запросов** (`cmpActionRouter` и `cmpDataSetRouter`) все вложенные конструкции должны иметь отступ **2 пробела** от начала строки. Для всех остальных блоков (например, JavaScript в `Script` компоненте) сохраняется отступ **4 пробела**.
+
+**Пример для PL/SQL блока в Action:**
+```xml
+<!-- Правильно (2 пробела) - только для SQL/PLSQL -->
+<cmpActionRouter condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- комментарий с 2 пробелами
+      call PROCEDURE_NAME(param => :value);
+    end;
+    ]]>
+</cmpActionRouter>
+```
+
+**Пример для SQL запроса в DataSet:**
+```xml
+<!-- Правильно (2 пробела) - только для SQL -->
+<cmpDataSetRouter condition="TYPE_DATABASE=ORACLE">
+    <![CDATA[
+    select tab.ID,
+           tab.NAME
+      from TABLE tab
+     where tab.ID = :pnID
+    ]]>
+</cmpDataSetRouter>
+```
+50) Отступы для многострочных комментариев в SQL/PLSQL блоках
+
+**Правило:** Комментарии внутри блоков CDATA для SQL/PLSQL должны иметь отступ **2 пробела**:
+
+```xml
+<![CDATA[
+begin
+  -- Это правильный комментарий (2 пробела)
+  call PROC(pnID => :pnID);  -- Комментарий в конце строки (1 пробел до комментария)
+end;
+]]>
+```
+
+51) Структура begin/end блоков в SQL/PLSQL
+
+**Правило:** Ключевые слова `begin` и `end` должны быть на отдельных строках и не иметь отступа внутри CDATA (выровнены по левому краю относительно содержимого CDATA). Весь SQL/PLSQL код внутри блока имеет отступ **2 пробела**:
+
+```xml
+<![CDATA[
+begin
+  -- код с отступом 2 пробела
+  if condition then
+    -- вложенный код с отступом 4 пробела (2 + 2)
+    do_something;
+  end if;
+end;
+]]>
+```
+
+### 52) Смешанные блоки (SQL внутри JS не допускаются)
+
+**Правило:** Блоки SQL/PLSQL могут находиться только в компонентах `cmpActionRouter` и `cmpDataSetRouter`. В компоненте `Script` может быть только JavaScript код с отступом **4 пробела**. Не допускается смешивание SQL кода в JavaScript блоках.
+
+### 53) Общее правило отступов
+
+| Тип блока | Компонент | Отступ внутри CDATA |
+|-----------|-----------|---------------------|
+| SQL/PLSQL | `cmpActionRouter` | 2 пробела |
+| SQL/PLSQL | `cmpDataSetRouter` | 2 пробела |
+| JavaScript | `Script` | 4 пробела |
+| JavaScript | атрибуты событий (onclick, oncreate и т.д.) | 4 пробела |
+
+### 54) Форматирование SELECT запросов в DataSet
+
+**Правило:** В блоках `cmpDataSetRouter` SQL запрос должен начинаться сразу после `CDATA[` без дополнительных отступов. Ключевые слова SQL (`select`, `from`, `where`, `and`, `order by`) должны быть выровнены по вертикали:
+
+```xml
+<cmpDataSetRouter condition="TYPE_DATABASE=ORACLE">
+    <![CDATA[
+    select hmkb.ID,                         -- Уникальный идентификатор записи
+           hmkb.MKB,                        -- Код диагноза
+           hmkb.MKB_HANDLE                  -- Ручной ввод
+      from D_V_HPK_MKBS hmkb                -- Представление диагнозов
+     where hmkb.LPU = to_number(:pnLPU)     -- Фильтр по ЛПУ
+       and hmkb.PID = to_number(:pnHPK_ID)  -- Фильтр по виду плана
+    ]]>
+</cmpDataSetRouter>
+```
+
+55) Форматирование вызова процедур/функций в одну строку (предпочтительный вариант)
+
+**Правило:** Если количество параметров не превышает 3-х, вызов процедуры/функции должен быть оформлен **в одну строку**. Параметры разделяются запятой с пробелом после запятой. Комментарий к параметру ставится после `--` с одним пробелом.
+
+**Пример:**
+```sql
+-- Правильно (3 параметра в одну строку)
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnD_INSERT_ID => :pnD_INSERT_ID); -- Выходной ID записи
+```
+
+```sql
+-- Правильно (2 параметра в одну строку)
+call D_PKG_HPK_MKBS.DELETE(pnID  => :pnID,   -- Идентификатор записи
+                           pnLPU => :pnLPU); -- ЛПУ пользователя
+```
+
+```sql
+-- Правильно (1 параметр)
+call D_PKG_HPK_MKBS.GET(pnID => :pnID); -- Получить запись по ID
+```
+
+56) Форматирование вызова процедур/функций с переносом строк (для 4+ параметров)
+
+**Правило:** Если количество параметров 4 и более, вызов процедуры/функции оформляется с переносом строки после открывающей скобки. Каждый параметр на новой строке с отступом **2 пробела** от уровня `call`. Закрывающая скобка и точка с запятой на отдельной строке с отступом **2 пробела**.
+
+**Пример:**
+```sql
+-- Правильно (4+ параметров с переносом)
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnMKB         => :pnMKB,          -- Код МКБ
+                        pnMAX_COUNT   => :pnMAX_COUNT,    -- Максимальное количество
+                        pnCID         => :pnCID);         -- Каталог для проверки прав
+```
+
+ 57) Выравнивание параметров при вызове в одну строку
+
+**Правило:** При вызове в одну строку все параметры должны быть выровнены по вертикали относительно первого параметра. Отступ для последующих строк - **на 20 пробелов больше** чем у `call` (или выравнивание по открывающей скобке).
+
+```sql
+-- Правильно (выравнивание параметров)
+call PROCEDURE_NAME(pnPARAM1 => :pnPARAM1,      -- Комментарий
+                    pnPARAM2 => :pnPARAM2,      -- Комментарий
+                    psPARAM3 => :psPARAM3);     -- Комментарий
+```
+
+58) Пробелы вокруг оператора `=>`
+
+**Правило:** Вокруг оператора `=>` всегда должны быть пробелы: пробел до и пробел после.
+
+```sql
+-- Правильно
+call PROC(pnID => :pnID);
+
+-- Неправильно
+call PROC(pnID=>:pnID);
+call PROC(pnID =>:pnID);
+call PROC(pnID=> :pnID);
+```
+
+59) Комментарии к параметрам
+
+**Правило:** Комментарий к параметру ставится после запятой (или после значения параметра) через `--` с одним пробелом. Комментарий должен описывать назначение параметра на русском языке.
+
+```sql
+-- Правильно
+call PROC(pnID   => :pnID,    -- Идентификатор записи
+          pnLPU  => :pnLPU,   -- ЛПУ пользователя
+          psCODE => :psCODE); -- Код услуги
+
+-- Неправильно (нет пробела после --)
+call PROC(pnID => :pnID,--Идентификатор записи
+          pnLPU => :pnLPU,--ЛПУ пользователя);
+```
+
+60) Точка с запятой в конце вызова
+
+**Правило:** Вызов процедуры/функции всегда заканчивается точкой с запятой (`;`). При переносе строки точка с запятой ставится после закрывающей скобки на отдельной строке.
+
+```sql
+-- Правильно (одна строка)
+call PROC(pnID => :pnID);  -- точка с запятой в конце
+
+-- Правильно (многострочный)
+call PROC(pnID  => :pnID,
+          pnLPU => :pnLPU);  -- точка с запятой после закрывающей скобки
+```
+
+61) Пустые строки между секциями
+
+**Правило:** Между вызовом процедуры и закрывающим `end;` должна быть одна пустая строка для визуального разделения.
+
+```xml
+<![CDATA[
+begin
+  -- POSTGRESQL: комментарий
+  call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU,    -- ЛПУ пользователя
+                          pnPID => :pnPID);   -- Идентификатор вида плана
+
+end;
+]]>
+```
+
+
+62) Приоритет форматирования вызова
+
+**Правило:** Следовать следующему приоритету при форматировании:
+
+1. **1-3 параметра** → Одна строка с выравниванием параметров
+2. **4+ параметров** → Многострочный формат с переносом
+3. **Длинные значения параметров** (>50 символов) → Многострочный формат независимо от количества параметров
+
+63) Именованные параметры обязательны
+
+**Правило:** При вызове процедур/функций всегда использовать **именованные параметры** (синтаксис `name => value`). Позиционная передача параметров запрещена.
+
+```sql
+-- Правильно (именованные параметры)
+call PROC(pnID => :pnID, pnLPU => :pnLPU);
+
+-- Неправильно (позиционная передача)
+call PROC(:pnID, :pnLPU);
+```
+
+64) Регистр имен процедур и параметров
+
+**Правило:** Имена процедур/функций пишутся в **верхнем регистре**. Имена параметров в вызове пишутся в **нижнем регистре** с префиксом типа (`pn`, `ps`, `pd`).
+
+```sql
+-- Правильно
+call D_PKG_HPK_MKBS.ADD(pnLPU => :pnLPU, pnPID => :pnPID);
+
+-- Неправильно (процедура в нижнем регистре)
+call d_pkg_hpk_mkbs.add(pnLPU => :pnLPU, pnPID => :pnPID);
+
+-- Неправильно (параметр в верхнем регистре)
+call D_PKG_HPK_MKBS.ADD(PNLPU => :pnLPU, PNPID => :pnPID);
+```
+
+65) Примеры правильного форматирования
+
+**Пример 1: 2 параметра (короткий вызов)**
+```sql
+call D_PKG_HPK_MKBS.DELETE(pnID  => :pnID,   -- Идентификатор записи
+                           pnLPU => :pnLPU); -- ЛПУ пользователя
+```
+
+**Пример 2: 3 параметра (средний вызов)**
+```sql
+call D_PKG_HPK_MKBS.UPDATE(pnID    => :pnID,        -- Идентификатор записи
+                           pnLPU   => :pnLPU,       -- ЛПУ пользователя
+                           psNAME  => :psNAME);     -- Наименование
+```
+
+**Пример 3: 5 параметров (многострочный вызов)**
+```sql
+call D_PKG_HPK_MKBS.ADD(pnLPU         => :pnLPU,          -- ЛПУ пользователя
+                        pnPID         => :pnPID,          -- Идентификатор вида плана
+                        pnMKB         => :pnMKB,          -- Код МКБ
+                        pnMAX_COUNT   => :pnMAX_COUNT,    -- Максимальное количество
+                        pnCID         => :pnCID);         -- Каталог для проверки прав
+
+```
+
+**Пример 4: Длинное значение параметра (многострочный)**
+```sql
+call D_PKG_HPK_MKBS.SET_DESCRIPTION(
+  pnID    => :pnID,                  -- Идентификатор записи
+  psTEXT  => :psVERY_LONG_TEXT       -- Очень длинное описание параметра
+            || ' continued on next line'
+);
+```
+# ДОПОЛНЕНИЕ ПРАВИЛА №66: СТИЛЬ КОМПОНЕНТОВ ДЛЯ M2
+## Правило №66: Определение стиля компонентов на основе версии платформы
+
+
+## Правило №70: Вызов процедур в PostgreSQL с использованием call
+
+### Правило №70: Использование CALL для вызова процедур в PostgreSQL
+
+В блоках `cmpActionRouter` для PostgreSQL необходимо использовать ключевое слово `call` для вызова хранимых процедур (функций, возвращающих void).
+
+#### 70.1 Синтаксис вызова
+
+**Правильный синтаксис PostgreSQL:**
+```sql
+call SCHEMA_NAME.PROCEDURE_NAME(parameter1 => value1, parameter2 => value2);
+```
+
+**Неправильный синтаксис (Oracle-style):**
+```sql
+-- Не использовать SELECT для вызова процедур
+select SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+
+-- Не использовать EXEC
+exec SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+
+-- Не использовать begin ... end без CALL
+begin
+  SCHEMA_NAME.PROCEDURE_NAME(parameter1, parameter2);
+end;
+```
+
+#### 70.2 Пример для Action (PostgreSQL)
+
+**Правильно:**
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- PostgreSQL: вызов процедуры добавления записи
+      call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- Выходной ID записи
+                              pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                              pnPID         => :pnPID);          -- Идентификатор родителя
+    end;
+    ]]>
+</component>
+```
+
+**Неправильно:**
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- Ошибка: SELECT вместо CALL
+      select D_PKG_HPK_MKBS.ADD(:pnD_INSERT_ID, :pnLPU, :pnPID);
+    end;
+    ]]>
+</component>
+```
+
+#### 70.3 Полный пример Action с двумя маршрутами
+
+```xml
+<component cmptype="Action" name="acAddHpkMkbs">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="INSERT"/>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          -- PostgreSQL: вызов процедуры добавления
+          call D_PKG_HPK_MKBS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID,   -- ID новой записи
+                                  pnLPU         => :pnLPU,           -- ЛПУ пользователя
+                                  pnPID         => :pnPID,           -- ID родителя
+                                  pnMKB         => :pnMKB,           -- Код МКБ
+                                  psMKB_HANDLE  => :psMKB_HANDLE,    -- Признак ручного ввода
+                                  pnMKB_OWN     => :pnMKB_OWN,       -- Собственный код МКБ
+                                  pnMAX_COUNT   => :pnMAX_COUNT);    -- Максимальное количество
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU"         src="LPU"         srctype="session"/>
+    <component cmptype="ActionVar" name="pnD_INSERT_ID" src="newid"       srctype="var" put="" len="17"/>
+    <component cmptype="ActionVar" name="pnPID"         src="HPK_ID"      srctype="var"/>
+    <component cmptype="ActionVar" name="pnMKB"         src="MKB"         srctype="var"/>
+    <component cmptype="ActionVar" name="psMKB_HANDLE"  src="MKB_HANDLE"  srctype="var"/>
+    <component cmptype="ActionVar" name="pnMKB_OWN"     src="MKB_OWN"     srctype="var"/>
+    <component cmptype="ActionVar" name="pnMAX_COUNT"   src="MAX_COUNT"   srctype="var"/>
+</component>
+```
+
+#### 70.4 Пример для DELETE операции
+
+```xml
+<component cmptype="Action" name="acDeleteHpkMkbs">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE" unit="HPK_MKBS" action="DELETE"/>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        begin
+          -- PostgreSQL: вызов процедуры удаления
+          call D_PKG_HPK_MKBS.DEL(pnID  => :pnID,    -- ID удаляемой записи
+                                  pnLPU => :pnLPU);  -- ЛПУ пользователя
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU" src="LPU"     srctype="session"/>
+    <component cmptype="ActionVar" name="pnID"  src="HPK_ID"  srctype="var"/>
+</component>
+```
+
+#### 70.5 Основные требования
+
+1. **Обязательное использование `call`** - для всех вызовов процедур в PostgreSQL
+2. **Именованные параметры** - всегда использовать синтаксис `name => value`
+3. **Блок `begin ... end`** - обязательный для нескольких операторов
+4. **Точка с запятой** - обязательная в конце каждого оператора и после `end`
+5. **Комментарии** - для каждого параметра после `--`
+
+#### 70.6 Сравнение Oracle и PostgreSQL
+
+| Элемент | Oracle | PostgreSQL |
+|---------|--------|------------|
+| **Ключевое слово** | `BEGIN` (без CALL) | `CALL` |
+| **Синтаксис** | `procedure_name(params);` | `CALL procedure_name(params);` |
+| **Пакеты** | `PKG_NAME.PROC_NAME` | `PKG_NAME.PROC_NAME` |
+| **Параметры** | Именованные или позиционные | Именованные (рекомендуется) |
+
+#### 70.7 Ошибки, которых следует избегать
+
+```sql
+-- Ошибка 1: Отсутствие call
+begin
+  D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+end;
+
+-- Ошибка 2: Использование SELECT
+begin
+  select D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+end;
+
+-- Ошибка 3: Позиционные параметры (не рекомендуется)
+begin
+  call D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU, :pnPID);
+end;
+
+-- Ошибка 4: Отсутствие блока begin...end для нескольких операторов
+call D_PKG_HPK_MKBS.ADD(:pnID, :pnLPU);
+call D_PKG_HPK_MKBS.LOG(:pnID);  -- Без begin...end будет ошибка
+```
+
+#### 70.8 Шаблон для быстрого использования
+
+```xml
+<component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+    <![CDATA[
+    begin
+      -- PostgreSQL: комментарий действия
+      call SCHEMA.PROCEDURE_NAME(pnPARAM1 => :pnPARAM1,   -- Комментарий параметра 1
+                                 pnPARAM2 => :pnPARAM2,   -- Комментарий параметра 2
+                                 psPARAM3 => :psPARAM3);  -- Комментарий параметра 3
+    end;
+    ]]>
+</component>
+```
+
+
+### 74.1 Проблема
+
+В PostgreSQL при вызове хранимой процедуры, имеющей параметры типа `INOUT` или `OUT` (которые возвращают значения), **нельзя напрямую использовать переменную ActionVar** (например `:pnCID`) в качестве аргумента. Это приводит к ошибке несоответствия типов, так как платформа M2 не может правильно связать переменную для возврата значения.
+
+### 74.2 Решение
+
+Необходимо создать **локальную переменную** в блоке `DECLARE`, передать её в процедуру (для `INOUT` - с предварительным присвоением значения), а затем присвоить результат обратно в ActionVar переменную.
+
+### 74.3 Типы параметров и их обработка
+
+| Тип параметра | Описание | Действие до вызова | Действие после вызова |
+|---------------|----------|-------------------|----------------------|
+| `IN` | Только входной | Присвоить значение | Не требуется |
+| `OUT` | Только выходной | Не требуется | Присвоить результат |
+| `INOUT` | Входной и выходной | Присвоить значение | Присвоить результат |
+
+### 74.4 Шаблоны решений
+
+#### Для параметра типа `INOUT`:
+
+```sql
+declare
+  nLOCAL_VAR numeric;  -- Локальная переменная того же типа
+begin
+  -- 1. Присваиваем значение из ActionVar в локальную переменную
+  nLOCAL_VAR := :pnCID;
+
+  -- 2. Вызываем процедуру с локальной переменной
+  call D_PKG_CATALOGS.FIND_ROOT_CATALOG(pnRAISE    => 1,
+                                        pnLPU      => (:pnLPU)::numeric,
+                                        psUNITCODE => 'HOSP_PLAN_KINDS',
+                                        pnCATALOG  => nLOCAL_VAR);  -- INOUT параметр
+
+  -- 3. Присваиваем результат обратно в ActionVar
+  :pnCID := nLOCAL_VAR;
+end;
+```
+
+#### Для параметра типа `OUT`:
+
+```sql
+declare
+  nLOCAL_VAR numeric;  -- Локальная переменная для получения результата
+begin
+  -- 1. Вызываем процедуру с локальной переменной
+  call D_PKG_SOME_PACKAGE.GET_DATA(pnLPU     => (:pnLPU)::numeric,
+                                   pnID      => (:pnID)::numeric,
+                                   pnRESULT  => nLOCAL_VAR);  -- OUT параметр
+
+  -- 2. Присваиваем результат обратно в ActionVar
+  :pnRESULT := nLOCAL_VAR;
+end;
+```
+
+### 74.5 Полный пример для `acGetDefParams`
+
+```xml
+<component cmptype="Action" name="acGetDefParams">
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+        <![CDATA[
+        begin
+          :pdSYS_DATE := to_char(sysdate, 'DD.MM.YYYY');
+          :pdFILTER_DATE_FROM := '01.' || to_char(sysdate, 'MM.YYYY');
+          :pdFILTER_DATE_TO := to_char(last_day(sysdate), 'DD.MM.YYYY');
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
+            into :pnSHOW_CSE
+            from dual;
+
+          D_PKG_CATALOGS.FIND_ROOT_CATALOG(1, :pnLPU, 'HOSP_PLAN_KINDS', :pnCID);
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_INSERT', null, 0)
+            into :pnSCH_ADD
+            from dual;
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_UPDATE', null, 0)
+            into :pnSCH_UPD
+            from dual;
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV(:pnLPU, 'HPK_SCHEDULE_DELETE', null, 0)
+            into :pnSCH_DEL
+            from dual;
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+        <![CDATA[
+        declare
+          nCID numeric;  -- Локальная переменная для INOUT параметра
+        begin
+          :pdSYS_DATE := to_char(current_date, 'DD.MM.YYYY');
+          :pdFILTER_DATE_FROM := '01.' || to_char(current_date, 'MM.YYYY');
+          :pdFILTER_DATE_TO := to_char(date_trunc('month', current_date) + interval '1 month - 1 day', 'DD.MM.YYYY');
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HOSP_PLAN_KINDS_VIEW_CSE_ACCESS', null, 0)
+            into :pnSHOW_CSE;
+
+          -- Присваиваем значение из ActionVar в локальную переменную
+          nCID := :pnCID;
+
+          -- Вызываем процедуру с локальной переменной (INOUT параметр)
+          call D_PKG_CATALOGS.FIND_ROOT_CATALOG(pnRAISE    => 1,                       -- Отображать сообщение при ошибке
+                                                pnLPU      => (:pnLPU)::numeric,       -- ЛПУ пользователя
+                                                psUNITCODE => 'HOSP_PLAN_KINDS',       -- Код раздела
+                                                pnCATALOG  => nCID);                   -- INOUT: ID каталога
+
+          -- Возвращаем результат обратно в ActionVar
+          :pnCID := nCID;
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_INSERT', null, 0)
+            into :pnSCH_ADD;
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_UPDATE', null, 0)
+            into :pnSCH_UPD;
+
+          select D_PKG_URPRIVS.CHECK_BPPRIV((:pnLPU)::numeric, 'HPK_SCHEDULE_DELETE', null, 0)
+            into :pnSCH_DEL;
+        end;
+        ]]>
+    </component>
+    <component cmptype="ActionVar" name="pnLPU"              src="LPU"            srctype="session"/>
+    <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="PLAN_DATE_FROM" srctype="ctrl" put="" len="15"/>
+    <component cmptype="ActionVar" name="pdFILTER_DATE_TO"   src="PLAN_DATE_TO"   srctype="ctrl" put="" len="15"/>
+    <component cmptype="ActionVar" name="pdFILTER_DATE_FROM" src="deSchDateFrom"  srctype="ctrl" put="" len="15"/>
+    <component cmptype="ActionVar" name="pdFILTER_DATE_TO"   src="deSchDateTo"    srctype="ctrl" put="" len="15"/>
+    <component cmptype="ActionVar" name="pnSHOW_CSE"         src="SHOW_CSE"       srctype="var"  put="" len="10"/>
+    <component cmptype="ActionVar" name="pnCID"              src="MAIN_CID"       srctype="var"  put="" len="17"/>
+    <component cmptype="ActionVar" name="pdSYS_DATE"         src="SYS_DATE"       srctype="var"  put="" len="15"/>
+    <component cmptype="ActionVar" name="pnSCH_ADD"          src="SCH_ADD"        srctype="var"  put="" len="1"/>
+    <component cmptype="ActionVar" name="pnSCH_UPD"          src="SCH_UPD"        srctype="var"  put="" len="1"/>
+    <component cmptype="ActionVar" name="pnSCH_DEL"          src="SCH_DEL"        srctype="var"  put="" len="1"/>
+</component>
+```
+
+### 74.6 Пример для процедуры с несколькими OUT параметрами
+
+```sql
+declare
+  nOUT1 numeric;
+  nOUT2 numeric;
+  sOUT3 varchar;
+begin
+  -- Вызов процедуры с OUT параметрами
+  call D_PKG_SOME.GET_VALUES(pnID    => (:pnID)::numeric,
+                             pnOUT1  => nOUT1,   -- OUT параметр
+                             pnOUT2  => nOUT2,   -- OUT параметр
+                             psOUT3  => sOUT3);  -- OUT параметр
+
+  -- Присваиваем результаты в ActionVar
+  :pnRESULT1 := nOUT1;
+  :pnRESULT2 := nOUT2;
+  :psRESULT3 := sOUT3;
+end;
+```
+
+### 74.7 Важные замечания
+
+1. **Локальная переменная обязательна** - нельзя использовать `:pnCID` напрямую
+2. **Тип локальной переменной** должен соответствовать типу параметра процедуры
+3. **Для INOUT параметров** - обязательно присвоить начальное значение до вызова
+4. **Для OUT параметров** - начальное значение не требуется
+5. **Всегда присваивать результат** обратно в ActionVar после вызова
+6. **Имя локальной переменной** рекомендуется начинать с префикса `n` (число) или `s` (строка), `d` (дата)
+
+```sql
+declare
+  nNEW_ID numeric;  -- Локальная переменная
+begin
+  -- Проверка даты
+  if (:pdCLOSE_DATE_PLAN)::date < (:pdPLAN_DATE)::date then
+    PERFORM D_P_EXC('Дата плана не может быть больше...');
+  end if;
+
+  -- Присваиваем начальное значение (для INOUT параметра)
+  nNEW_ID := (:pnD_INSERT_ID)::numeric;
+
+  -- Вызываем процедуру с локальной переменной
+  call D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => nNEW_ID,   -- INOUT параметр
+                           pnLPU         => (:pnLPU)::numeric,
+                           pnPID         => (:pnPID)::numeric,
+                           pdPLAN_DATE   => (:pdPLAN_DATE)::date,
+                           pnMALE_COUNT  => (:pnMALE_COUNT)::numeric,
+                           pnOPER_COUNT  => (:pnOPER_COUNT)::numeric,
+                           pnGEN_COUNT   => (:pnGEN_COUNT)::numeric);
+
+  -- Возвращаем результат обратно в ActionVar
+  :pnD_INSERT_ID := nNEW_ID;
+end;
+```
+
+### Уточнение Правило №74:
+**Для PostgreSQL при вызове процедур с параметрами `INOUT` или `OUT`:**
+1. **Всегда** создавайте локальную переменную в блоке `DECLARE`
+2. **Для `INOUT`** - присвойте значение из ActionVar ДО вызова
+3. **Для `OUT`** - не требуется присвоения до вызова
+4. **После вызова** - обязательно присвойте результат обратно в ActionVar
+5. **Исключение:** Если процедура НЕ содержит `INOUT`/`OUT` параметров, можно вызывать без `DECLARE`
+
+### Уточняющие признаки для определения необходимости `DECLARE`:
+
+| Признак | Нужен DECLARE |
+|---------|---------------|
+| Параметр используется в `INTO` или `RETURNING` | ✅ Да |
+| В Oracle версии есть `RETURNING ID INTO` | ✅ Да |
+| Параметр имеет тип `OUT` или `INOUT` в сигнатуре | ✅ Да |
+| Параметр только `IN` | ❌ Нет |
+| Переменная используется только для передачи значения В ПРОЦЕДУРУ | ❌ Нет |
+| Переменная используется для получения значения ИЗ ПРОЦЕДУРЫ | ✅ Да |
+
+### Как определить в вашем случае:
+
+В исходном Oracle коде:
+```sql
+D_PKG_HPK_PLANS.ADD(pnD_INSERT_ID => :pnD_INSERT_ID, ...)
+```
+Стрелка `=>` указывает на именованный параметр. Если в PostgreSQL сигнатуре этот параметр `INOUT` или процедура использует `RETURNING`, то нужен `DECLARE`.
+
+**Вывод:** Правило нужно дополнить явным указанием, что **любой параметр, который возвращает значение (включая `pnD_INSERT_ID`), требует использования `DECLARE` с локальной переменной.**
+
+75) `PERFORM` надо писать в нихнем регистре `perform`
+## Правило №76: Порядок группировки компонентов в форме (исправленное)
+
+### 76.1 Общая структура формы
+
+Форма должна иметь следующую структуру компонентов (сверху вниз):
+
+1. **Блок комментария формы** (документация)
+2. **Script компонент** (весь JavaScript код)
+3. **Action компоненты** (все SQL/PLSQL блоки)
+4. **DataSet компоненты** (все SQL/PLSQL блоки)
+5. **HTML/таблицы и визуальные компоненты** (Grid, Edit, Button, и т.д.)
+6. **Все остальные компоненты** (MaskInspector, DepControls, SubForm и др.) - могут находиться в любом месте
+
+### 76.2 Важные замечания
+
+- **SubForm**, **MaskInspector**, **DepControls** и другие вспомогательные компоненты **не подчиняются** данному правилу группировки и могут находиться в любом месте формы
+- **Комментарий формы** всегда должен быть первым элементом после открывающего тега `<div cmptype="form">`
+
+
+Вот правила для обработки исключений и работы с SELECT в PostgreSQL, которые нужно добавить в ваш файл правил:
+
+```markdown
+## Правило №77: Обработка отсутствия данных в PostgreSQL (вместо NO_DATA_FOUND)
+
+### 77.1 Проблема
+
+В Oracle PL/SQL используется конструкция `EXCEPTION WHEN NO_DATA_FOUND THEN` для обработки ситуаций, когда SELECT не возвращает строк. В PostgreSQL эта конструкция **НЕ РАБОТАЕТ**, так как:
+- В PostgreSQL нет исключения `NO_DATA_FOUND`
+- SELECT в PostgreSQL при отсутствии данных не генерирует исключение, а просто не присваивает значения переменным
+
+### 77.2 Решение
+
+В PostgreSQL необходимо использовать проверку `FOUND` после каждого SELECT или предварительный подсчет строк через COUNT.
+
+### 77.3 Способ 1: Проверка FOUND (рекомендуемый)
+
+```sql
+-- PostgreSQL: правильный способ обработки отсутствия данных
+declare
+  v_id   NUMERIC;
+  v_name VARCHAR;
+begin
+  -- Выполняем SELECT
+  select t.ID,
+         t.NAME
+    into v_id,
+         v_name
+    from D_V_SOME_TABLE t
+   where t.CODE = :psCODE;
+
+  -- Проверяем, найдена ли запись
+  if not FOUND then
+    -- Запись не найдена, устанавливаем значения по умолчанию
+    v_id := null;
+    v_name := null;
+  end if;
+end;
+```
+
+### 77.4 Способ 2: Предварительный подсчет строк
+
+```sql
+-- PostgreSQL: альтернативный способ с COUNT
+declare
+  v_id     NUMERIC;
+  v_name   VARCHAR;
+  v_count  INTEGER;
+begin
+  -- Сначала проверяем существование записи
+  select count(*)
+    into v_count
+    from D_V_SOME_TABLE t
+   where t.CODE = :psCODE;
+
+  if v_count > 0 then
+    -- Запись существует, выполняем основной SELECT
+    select t.ID,
+           t.NAME
+      into v_id,
+           v_name
+      from D_V_SOME_TABLE t
+     where t.CODE = :psCODE;
+  else
+    -- Запись не найдена
+    v_id := null;
+    v_name := null;
+  end if;
+end;
+```
+
+### 77.5 Способ 3: Использование агрегатной функции (для одиночных значений)
+
+```sql
+-- PostgreSQL: использование MAX для получения значения или NULL
+declare
+  v_id   NUMERIC;
+  v_name VARCHAR;
+begin
+  -- MAX вернет NULL, если записей нет
+  select max(t.ID),
+         max(t.NAME)
+    into v_id,
+         v_name
+    from D_V_SOME_TABLE t
+   where t.CODE = :psCODE;
+end;
+```
+
+### 77.6 Пример преобразования из Oracle в PostgreSQL
+
+**Oracle код (НЕПРАВИЛЬНО для PostgreSQL):**
+```sql
+begin
+  select t.ID,
+         t.NAME
+    into v_id,
+         v_name
+    from D_V_SOME_TABLE t
+   where t.CODE = :psCODE;
+exception when no_data_found then
+  v_id := null;
+  v_name := null;
+end;
+```
+
+**PostgreSQL код (ПРАВИЛЬНО):**
+```sql
+begin
+  select t.ID,
+         t.NAME
+    into v_id,
+         v_name
+    from D_V_SOME_TABLE t
+   where t.CODE = :psCODE;
+
+  if not FOUND then
+    v_id := null;
+    v_name := null;
+  end if;
+end;
+```
+
+### 77.7 Для вложенных SELECT (с несколькими возможными отсутствиями)
+
+```sql
+declare
+  v_id1   NUMERIC;
+  v_name1 VARCHAR;
+  v_id2   NUMERIC;
+  v_name2 VARCHAR;
+begin
+  -- Первый SELECT
+  select t.ID,
+         t.NAME
+    into v_id1,
+         v_name1
+    from D_V_TABLE1 t
+   where t.CODE = :psCODE1;
+
+  if not FOUND then
+    v_id1 := null;
+    v_name1 := null;
+  end if;
+
+  -- Второй SELECT (выполняется независимо)
+  select t.ID,
+         t.NAME
+    into v_id2,
+         v_name2
+    from D_V_TABLE2 t
+   where t.CODE = :psCODE2;
+
+  if not FOUND then
+    v_id2 := null;
+    v_name2 := null;
+  end if;
+end;
+```
+
+### 77.8 Полный пример для checkPreviousDirection
+
+**Неправильно (Oracle-стиль):**
+```sql
+begin
+  select ...
+    into ...
+    from ...
+   where ...;
+exception when no_data_found then
+  -- этот блок НЕ БУДЕТ РАБОТАТЬ в PostgreSQL
+  dPREV_HOSP_PLAN_DATE := null;
+end;
+```
+
+**Правильно (PostgreSQL-стиль):**
+```sql
+begin
+  select ...
+    into ...
+    from ...
+   where ...;
+
+  if not FOUND then
+    dPREV_HOSP_PLAN_DATE := null;
+  end if;
+end;
+```
+
+### 77.9 Важные замечания
+
+1. **Переменная FOUND** - это специальная переменная в PostgreSQL, которая принимает значение:
+   - `TRUE` - если последний SELECT, INSERT, UPDATE, DELETE или FETCH вернул хотя бы одну строку
+   - `FALSE` - если не вернул ни одной строки
+
+2. **FOUND проверяется сразу после операции** - нельзя выполнять другие операции между SELECT и проверкой FOUND
+
+3. **Для UPDATE/DELETE** - FOUND также работает:
+   ```sql
+   update D_V_SOME_TABLE set STATUS = 1 where ID = :pnID;
+   if not FOUND then
+     -- ничего не обновлено
+   end if;
+   ```
+
+4. **Вложенные блоки** - FOUND чувствителен к контексту и работает только для последней операции в текущем блоке
+
+### 77.10 Сравнение Oracle и PostgreSQL
+
+| Операция | Oracle | PostgreSQL |
+|----------|--------|------------|
+| **Обработка отсутствия данных** | `EXCEPTION WHEN NO_DATA_FOUND THEN` | `if not FOUND then` |
+| **Проверка наличия строк** | `SQL%ROWCOUNT` или `EXCEPTION` | `FOUND` или `GET DIAGNOSTICS` |
+| **Исключение при отсутствии** | Генерируется автоматически | Не генерируется |
+| **Поведение SELECT INTO** | Ошибка NO_DATA_FOUND | Переменные не изменяются, FOUND = FALSE |
+
+### 77.11 Что НЕ нужно использовать в PostgreSQL
+
+```sql
+-- НЕ ИСПОЛЬЗОВАТЬ (это Oracle-синтаксис):
+exception when no_data_found then
+exception when dup_val_on_index then
+exception when too_many_rows then
+  -- Для TOO_MANY_ROWS в PostgreSQL тоже нет исключения,
+  -- SELECT INTO вернет только первую строку (если указать LIMIT 1)
+```
+
+### 77.12 Шаблон для быстрого использования
+
+```sql
+-- PostgreSQL шаблон для SELECT с проверкой отсутствия данных
+declare
+  v_var1 NUMERIC;
+  v_var2 VARCHAR;
+begin
+  -- Выполняем SELECT
+  select t.COLUMN1,
+         t.COLUMN2
+    into v_var1,
+         v_var2
+    from D_V_TABLE t
+   where t.ID = (:pnID)::numeric;
+
+  -- Проверяем результат
+  if not FOUND then
+    v_var1 := null;  -- или другое значение по умолчанию
+    v_var2 := null;
+  end if;
+
+  -- Продолжаем работу с v_var1, v_var2
+end;
+```
+```markdown
+## Правило №78: Получение данных из функций в PostgreSQL
+
+### 78.1 Проблема
+
+В Oracle PL/SQL можно напрямую присваивать значение переменной из функции:
+```sql
+:VAR := D_PKG_OPTIONS.GET('PARAM_NAME', :LPU);
+```
+
+В PostgreSQL **НЕЛЬЗЯ** напрямую присваивать значение `cmpActionVar` переменной через `:=` из функции, возвращающей значение.
+
+### 78.2 Решение
+
+В PostgreSQL для получения значения из функции необходимо использовать конструкцию `SELECT function_name(...) INTO :var_name`.
+
+### 78.3 Правильный синтаксис для PostgreSQL
+
+**Неправильно (Oracle-стиль для PostgreSQL):**
+```sql
+begin
+  -- ЭТО НЕ РАБОТАЕТ в PostgreSQL
+  :ADD_DIR_KIND_HOSP := D_PKG_OPTION_SPECS.GET('ADDDIRKINDHOSP', (:LPU)::numeric, 0);
+  :ALLOWSELECTALLLPU := D_PKG_OPTION_SPECS.GET('AllowSelectAllLpu', (:LPU)::numeric, 0);
+end;
+```
+
+**Правильно (PostgreSQL-стиль):**
+```sql
+begin
+  -- PostgreSQL: каждый вызов функции через SELECT INTO
+  select D_PKG_OPTION_SPECS.GET('ADDDIRKINDHOSP', (:LPU)::numeric, 0)
+    into :ADD_DIR_KIND_HOSP;
+
+  select D_PKG_OPTION_SPECS.GET('AllowSelectAllLpu', (:LPU)::numeric, 0)
+    into :ALLOWSELECTALLLPU;
+
+  select D_PKG_OPTION_SPECS.GET('HHLPUDICT', (:LPU)::numeric, 0)
+    into :HH_LPU_DICT;
+end;
+```
+
+### 78.4 Для функций с несколькими выходными параметрами
+
+Если функция возвращает несколько значений (запись или составной тип), используйте `SELECT * INTO`:
+
+```sql
+declare
+  v_id   NUMERIC;
+  v_name VARCHAR;
+begin
+  -- Функция возвращает запись с несколькими полями
+  select * into v_id, v_name
+  from D_PKG_SOME.GET_PERSON_INFO((:pnID)::numeric);
+end;
+```
+
+### 78.5 Для функций, возвращающих таблицу (SETOF)
+
+```sql
+declare
+  v_id   NUMERIC;
+  v_name VARCHAR;
+begin
+  -- Для функций, возвращающих SETOF, используем SELECT INTO с LIMIT 1
+  select t.ID,
+         t.NAME
+    into v_id,
+         v_name
+    from D_PKG_SOME.GET_PERSON_LIST((:pnLPU)::numeric) t
+   limit 1;
+end;
+```
+
+### 78.6 Для функций, возвращающих BOOLEAN
+
+```sql
+declare
+  v_result BOOLEAN;
+begin
+  select D_PKG_ROLES.CHECK_EMP_ROLES(:EMPLOYER, (:LPU)::numeric, (:pnROLE_ID)::numeric, 1)
+    into v_result;
+
+  if v_result then
+    -- действия при TRUE
+  else
+    -- действия при FALSE
+  end if;
+end;
+```
+
+### 78.7 Пример преобразования из Oracle в PostgreSQL
+
+**Oracle код (НЕПРАВИЛЬНО для PostgreSQL):**
+```sql
+begin
+  :ROLES_EDIT_DIRECTION_DATE := D_PKG_ROLES.CHECK_EMP_ROLES(:EMPLOYER, :LPU, D_PKG_OPTIONS.GET('RolesEditDirectionDate', :LPU), 1);
+  :ADD_DIR_HOSP_REASON := coalesce(D_PKG_OPTION_SPECS.GET('AddDirectionHospReason', :LPU, 0), 0);
+  :HOSP_DIR_PARAMETRS := coalesce(D_PKG_OPTION_SPECS.GET('HospDirParametrs', to_number(:LPU), 0), null);
+end;
+```
+
+**PostgreSQL код (ПРАВИЛЬНО):**
+```sql
+begin
+  -- PostgreSQL: каждый вызов функции через SELECT INTO
+  select D_PKG_ROLES.CHECK_EMP_ROLES(:EMPLOYER, (:LPU)::numeric,
+         D_PKG_OPTIONS.GET('RolesEditDirectionDate', (:LPU)::numeric), 1)
+    into :ROLES_EDIT_DIRECTION_DATE;
+
+  select coalesce(D_PKG_OPTION_SPECS.GET('AddDirectionHospReason', (:LPU)::numeric, 0), 0)
+    into :ADD_DIR_HOSP_REASON;
+
+  select coalesce(D_PKG_OPTION_SPECS.GET('HospDirParametrs', (:LPU)::numeric, 0), null)
+    into :HOSP_DIR_PARAMETRS;
+end;
+```
+
+### 78.8 Смешанные случаи (функция + операторы)
+
+Когда нужно использовать значение функции в выражении:
+
+```sql
+declare
+  v_count INTEGER;
+  v_result NUMERIC;
+begin
+  -- PostgreSQL: функция в выражении через SELECT
+  select D_PKG_SOME.GET_COUNT((:pnLPU)::numeric) * 2
+    into v_count;
+
+  -- Или с COALESCE
+  select coalesce(D_PKG_SOME.GET_VALUE((:pnLPU)::numeric), 0) + 10
+    into v_result;
+end;
+```
+
+### 78.9 Таблица соответствия
+
+| Тип операции | Oracle | PostgreSQL |
+|--------------|--------|------------|
+| **Присвоение из функции** | `:var := func(params);` | `select func(params) into :var;` |
+| **Функция в выражении** | `:var := func(params) + 10;` | `select func(params) + 10 into :var;` |
+| **COALESCE с функцией** | `:var := coalesce(func(params), 0);` | `select coalesce(func(params), 0) into :var;` |
+| **Несколько функций** | `:var1 := func1(params); :var2 := func2(params);` | `select func1(params) into :var1; select func2(params) into :var2;` |
+| **Функция как условие** | `if func(params) = 1 then` | `if (select func(params)) = 1 then` |
+
+### 78.10 Что НЕЛЬЗЯ использовать в PostgreSQL
+
+```sql
+-- НЕ ИСПОЛЬЗОВАТЬ (Oracle-синтаксис):
+begin
+  :VAR := SOME_FUNCTION(:param);                    -- Прямое присваивание
+  :VAR := :VAR2 + SOME_FUNCTION(:param);           -- Функция в выражении с :=
+  if SOME_FUNCTION(:param) = 1 then                -- Функция в условии (можно, но осторожно)
+  :VAR := coalesce(SOME_FUNCTION(:param), 0);      -- COALESCE с функцией и :=
+end;
+```
+
+**Примечание:** Функции в условиях `IF` можно использовать, но рекомендуется выносить их в отдельный SELECT INTO для ясности.
+
+### 78.11 Рекомендации
+
+1. **Всегда используйте SELECT INTO** для получения значений из функций в PostgreSQL
+2. **Не смешивайте** прямое присваивание `:=` с вызовами функций
+3. **Для каждой функции** - отдельный SELECT INTO
+4. **Приводите типы** параметров через `::numeric`, `::text` и т.д.
+5. **Используйте FOUND** для проверки, вернула ли функция значение (для функций, возвращающих NULL)
+
+### 78.12 Шаблон для быстрого использования
+
+```sql
+-- PostgreSQL шаблон для получения данных из функции
+declare
+  v_result NUMERIC;
+  v_text   VARCHAR;
+  v_flag   BOOLEAN;
+begin
+  -- Для числового результата
+  select D_PKG_SOME.GET_NUMERIC((:pnPARAM)::numeric)
+    into v_result;
+
+  -- Для текстового результата
+  select D_PKG_SOME.GET_TEXT((:pnPARAM)::numeric)
+    into v_text;
+
+  -- Для булевого результата
+  select D_PKG_SOME.GET_BOOLEAN((:pnPARAM)::numeric)
+    into v_flag;
+
+  -- С проверкой наличия значения
+  select D_PKG_SOME.GET_VALUE((:pnPARAM)::numeric)
+    into :ACTION_VAR;
+
+  if not FOUND then
+    :ACTION_VAR := null;  -- или значение по умолчанию
+  end if;
+end;
+```
+
+### 78.13 Исключения из правила
+
+**Единственное исключение** - встроенные функции PostgreSQL, которые не требуют SELECT INTO:
+
+```sql
+-- ЭТО РАБОТАЕТ (встроенные функции PostgreSQL)
+:VAR := current_date;           -- текущая дата
+:VAR := current_timestamp;      -- текущая дата и время
+:VAR := now();                   -- текущая дата и время
+:VAR := random();               -- случайное число
+```
+
+Но для единообразия кода, даже встроенные функции рекомендуется вызывать через SELECT INTO.
+
+**Короткие правила по комментариям:**
+
+1. **Каждое поле в SELECT** — комментарий после запятой на той же строке
+2. **Каждый параметр в INTO** — комментарий после параметра
+3. **Каждая переменная в DECLARE** — комментарий после типа
+4. **Каждый параметр вызова процедуры** — комментарий после значения
+5. **Каждый блок BEGIN/END** — комментарий с описанием действия
+
+**Пример для вашего кода:**
+
+```sql
+for x in (select t.ID,                          -- ID внешнего направления
+                 l.ID as DID,                   -- ID связанного направления
+                 l.LPU as DIR_LPU,              -- LPU связанного направления
+                 t.LPU as OD_LPU                -- LPU внешнего направления
+            from D_V_OUTER_DIRECTIONS t         -- таблица внешних направлений
+```
+## Правило №79: Приведение типов при вызове функций в PostgreSQL
+
+### Проблема
+
+При вызове функций в PostgreSQL параметры должны строго соответствовать типам, указанным в сигнатуре функции. PostgreSQL не выполняет неявное приведение типов так же, как Oracle.
+
+### Решение
+
+**Все параметры при вызове функции должны быть явно приведены к нужному типу** с использованием синтаксиса `::тип`.
+
+### Пример
+
+**Неправильно (ошибка типа):**
+```sql
+where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT(t.ID, :EMPLOYER, 'LPU', :LPU, 7, :CABLAB, 0) > 0
+```
+
+**Правильно (явное приведение):**
+```sql
+where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT(t.ID::bigint,          -- bigint
+                                               (:EMPLOYER)::numeric,  -- numeric
+                                               'LPU'::text,           -- text
+                                               (:LPU)::numeric,       -- numeric
+                                               7::integer,            -- integer
+                                               (:CABLAB)::numeric,    -- numeric
+                                               0::integer) > 0        -- integer
+```
+
+### Типы приведения по умолчанию
+
+| Тип переменной | Приведение |
+|----------------|------------|
+| Числовой ID | `::bigint` или `::numeric` |
+| Строковая переменная | `::text` |
+| Числовая константа | `::integer` или `::numeric` |
+| Строковая константа | `::text` |
+| Дата | `::date` |
+
+### Короткое правило
+
+> **При вызове любой функции в PostgreSQL каждый параметр должен иметь явное приведение типа через `::`.**
+Блок ActionVar должен быть внизу.
+Шаблон:
+```
+    <component cmptype="Action" name="InsertAction" compile="true">
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=ORACLE">
+            <![CDATA[
+			begin
+              -- OracleSQL
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionRouter" condition="TYPE_DATABASE=POSTGRE&amp;&amp;MODE_DATABASE=tmis">
+            <![CDATA[
+			begin
+              -- PostgreSQL
+            end;
+            ]]>
+        </component>
+        <component cmptype="ActionVar" name="DIRECTION_CONDITION"  src="directionCondition"   srctype="ctrl"/>
+        <component cmptype="ActionVar" name="DIRECTION_REASON"     src="directionReason"      srctype="ctrl"/>
+    </component>
+```
+
+Переключись в режим "РАЗРАБОТЧИК, СЛЕДУЮЩИЙ ПРАВИЛАМ"
+Все тэги и содержимое сместить на 4 пробела "    "
+
+
+
+Переключись в режим "РАЗРАБОТЧИК, СЛЕДУЮЩИЙ ПРАВИЛАМ"
+правильно отформатируй код, поставь комментарии, соблюди отступы, вызов функций (параметры в том регистре как указаног в функциях)

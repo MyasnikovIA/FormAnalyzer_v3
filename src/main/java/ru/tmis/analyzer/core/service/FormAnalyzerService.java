@@ -4,6 +4,8 @@ package ru.tmis.analyzer.core.service;
 import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
+import ru.tmis.analyzer.core.db.OracleService;
+import ru.tmis.analyzer.core.db.PostgresService;
 import ru.tmis.analyzer.core.extractor.ExtractorManager;
 import ru.tmis.analyzer.core.log.ILogger;
 import ru.tmis.analyzer.core.model.FormInfo;
@@ -12,7 +14,6 @@ import ru.tmis.analyzer.core.model.ViewTableDependencies;
 import ru.tmis.analyzer.core.report.CSVMergeService;
 import ru.tmis.analyzer.utils.CommentRemover;
 import ru.tmis.analyzer.utils.FormPathUtils;
-import ru.tmis.analyzer.core.llm.LLMPromptGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,6 +38,8 @@ public class FormAnalyzerService {
     private boolean csvFileCreatedDuringSession = false;
     private RouterGeneratorService routerGeneratorService;
 
+    private final OracleService oracleService;
+    private final PostgresService postgresService;
 
     private BooleanSupplier stopCondition = () -> false;
     private ILogger logger;
@@ -45,6 +48,7 @@ public class FormAnalyzerService {
     public interface FormAnalyzedCallback {
         void onFormAnalyzed(FormInfo formInfo);
     }
+
     private FormAnalyzedCallback formAnalyzedCallback;
     private final Map<String, ViewTableDependencies> viewDependenciesCache = new ConcurrentHashMap<>();
     private ProgressCallback progressCallback;
@@ -58,8 +62,19 @@ public class FormAnalyzerService {
         this.config = config;
         this.scannerService = new FileScannerService(settings.getProjectPath());
         this.userFormsResolver = new UserFormsResolver(scannerService);
-        this.extractorManager = new ExtractorManager(settings);
+        this.extractorManager = new ExtractorManager(settings, config);
         this.routerGeneratorService = new RouterGeneratorService(settings);
+        this.oracleService = new OracleService(
+                settings.getOracleUrl(),
+                settings.getOracleUser(),
+                settings.getOraclePassword()
+        );
+        this.postgresService = new PostgresService(
+                settings.getPostgresUrl(),
+                settings.getPostgresUser(),
+                settings.getPostgresPassword(),
+                settings.getMisUser()
+        );
     }
 
     public FormAnalyzerService(SettingsModel settings) {
@@ -294,7 +309,7 @@ public class FormAnalyzerService {
             return null;
         }
 
-       // ========== ОПРЕДЕЛЯЕМ СТИЛЬ ФОРМЫ ==========
+        // ========== ОПРЕДЕЛЯЕМ СТИЛЬ ФОРМЫ ==========
         FormInfo.FormStyle formStyle = detectFormStyle(baseContent);
         formInfo.setFormStyle(formStyle);
         log("  Стиль формы: " + formStyle.getName());
@@ -351,6 +366,7 @@ public class FormAnalyzerService {
 
         // ========== СОБИРАЕМ ВСЕ ВЬЮХИ ==========
         Set<String> viewNames = new LinkedHashSet<>();
+        System.out.println("formInfo.getTablesViews() "+formInfo.getTablesViews());
         for (String tv : formInfo.getTablesViews()) {
             if (tv.startsWith("D_V_")) {
                 viewNames.add(tv);
@@ -382,27 +398,22 @@ public class FormAnalyzerService {
                 log("    Вьюха " + entry.getKey() + " содержит " + entry.getValue().getOracleTables().size() + " таблиц");
                 for (String table : entry.getValue().getOracleTables()) {
                     log("      - " + table);
+                    formInfo.addTableFromView(table);
                 }
             }
-        }
 
-        // Проверка остановки перед генерацией LLM промпта
-        if (stopCondition.getAsBoolean()) {
-            log("Анализ остановлен пользователем перед генерацией LLM промпта: " + formPath);
-            return formInfo;
-        }
-
-        // Генерация LLM промпта для формы (если включено в настройках)
-        if (formInfo != null && config != null && config.isEnableLLMExport()) {
-            try {
-                LLMPromptGenerator llmGen = new LLMPromptGenerator(config);
-                String mdFilePath = llmGen.generateForSingleForm(formInfo, settings.getOutputDir());
-                log("  LLM промпт сохранен: " + mdFilePath);
-            } catch (Exception e) {
-                error("  Ошибка сохранения LLM промпта: " + e.getMessage());
+            // ========== НОВЫЙ КОД: Загрузка DDL для LLM ПОСЛЕ загрузки зависимостей ==========
+            if (config != null && config.isEnableLLMExport()) {
+                log("  Загрузка DDL данных для LLM отчёта...");
+                LLMDataLoader llmDataLoader = new LLMDataLoader(settings, config);
+                llmDataLoader.loadLLMData(formInfo);
+                log("  Загружено Oracle вьюх: " + formInfo.getOracleViewDDLs().size());
+                log("  Загружено PostgreSQL вьюх: " + formInfo.getPostgresViewDDLs().size());
+                log("  Загружено таблиц: " + formInfo.getOracleTableDDLs().size() +
+                        " (Oracle), " + formInfo.getPostgresTableDDLs().size() + " (PostgreSQL)");
             }
+            // ===================================================
         }
-
         return formInfo;
     }
 
@@ -683,18 +694,31 @@ public class FormAnalyzerService {
 
         return allTables;
     }
+
     // Создание ExtractorManager с передачей флага остановки
     private void initExtractorManager() {
-        this.extractorManager = new ExtractorManager(settings);
+        this.extractorManager = new ExtractorManager(settings, config);
         if (stopCondition instanceof AtomicBoolean) {
             this.extractorManager.setStopRequested((AtomicBoolean) stopCondition);
         }
         this.extractorManager.setLogger(logger != null ? logger : new ILogger() {
-            @Override public void log(String message) { System.out.println(message); }
-            @Override public void error(String message) { System.err.println(message); }
-            @Override public void debug(String message) { System.out.println("[DEBUG] " + message); }
+            @Override
+            public void log(String message) {
+                System.out.println(message);
+            }
+
+            @Override
+            public void error(String message) {
+                System.err.println(message);
+            }
+
+            @Override
+            public void debug(String message) {
+                System.out.println("[DEBUG] " + message);
+            }
         });
     }
+
     /**
      * Установка флага остановки (прямая передача)
      */
@@ -707,8 +731,10 @@ public class FormAnalyzerService {
             this.extractorManager.setStopRequested(stopFlag);
         }
     }
+
     /**
      * Определяет стиль формы по содержимому XML
+     *
      * @param xmlContent содержимое формы
      * @return стиль формы (M2, D3 или UNKNOWN)
      */
@@ -743,5 +769,15 @@ public class FormAnalyzerService {
         }
 
         return FormInfo.FormStyle.UNKNOWN;
+    }
+    private ExtractorManager createExtractorManager() {
+        ExtractorManager manager = new ExtractorManager(settings, config);
+        if (stopFlag != null) {
+            manager.setStopRequested(stopFlag);
+        }
+        if (logger != null) {
+            manager.setLogger(logger);
+        }
+        return manager;
     }
 }

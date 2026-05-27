@@ -1658,4 +1658,51 @@ public class ReportGenerator {
         }
         writer.println();
     }
+    private void appendViewDDLs(FormInfo formInfo, StringBuilder sb) {
+        // PostgreSQL вьюхи
+        if (config.isIncludePostgresViews() && !formInfo.getPostgresViewDDLs().isEmpty()) {
+            sb.append("\n### PostgreSQL вьюхи\n\n");
+            for (Map.Entry<String, String> entry : formInfo.getPostgresViewDDLs().entrySet()) {
+                sb.append("#### ").append(entry.getKey()).append("\n\n");
+                sb.append("```sql\n");
+                sb.append(entry.getValue());
+                sb.append("\n```\n\n");
+            }
+        }
+
+        // Oracle вьюхи
+        if (config.isIncludeOracleViews() && !formInfo.getOracleViewDDLs().isEmpty()) {
+            sb.append("\n### Oracle вьюхи\n\n");
+            for (Map.Entry<String, String> entry : formInfo.getOracleViewDDLs().entrySet()) {
+                sb.append("#### ").append(entry.getKey()).append("\n\n");
+                sb.append("```sql\n");
+                sb.append(entry.getValue());
+                sb.append("\n```\n\n");
+            }
+        }
+    }
+
+    private void appendTableDDLs(FormInfo formInfo, StringBuilder sb) {
+        // PostgreSQL таблицы
+        if (config.isIncludePostgresTables() && !formInfo.getPostgresTableDDLs().isEmpty()) {
+            sb.append("\n### PostgreSQL таблицы\n\n");
+            for (Map.Entry<String, String> entry : formInfo.getPostgresTableDDLs().entrySet()) {
+                sb.append("#### ").append(entry.getKey()).append("\n\n");
+                sb.append("```sql\n");
+                sb.append(entry.getValue());
+                sb.append("\n```\n\n");
+            }
+        }
+
+        // Oracle таблицы
+        if (config.isIncludeOracleTables() && !formInfo.getOracleTableDDLs().isEmpty()) {
+            sb.append("\n### Oracle таблицы\n\n");
+            for (Map.Entry<String, String> entry : formInfo.getOracleTableDDLs().entrySet()) {
+                sb.append("#### ").append(entry.getKey()).append("\n\n");
+                sb.append("```sql\n");
+                sb.append(entry.getValue());
+                sb.append("\n```\n\n");
+            }
+        }
+    }
 }

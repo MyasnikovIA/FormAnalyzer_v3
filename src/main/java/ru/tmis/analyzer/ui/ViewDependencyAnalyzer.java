@@ -59,21 +59,12 @@ public class ViewDependencyAnalyzer {
         staticPostgresMisUser = misUser;
     }
 
+
     public ViewTableDependencies analyzeView(String viewName) {
-        return DatabaseCacheManager.getViewDependencies(viewName, () -> {
-            ViewTableDependencies deps = new ViewTableDependencies(viewName);
-
-            String ddl = getViewDDL(viewName);
-            if (ddl != null && !ddl.isEmpty()) {
-                deps.setExistsInOracle(true);
-                extractTablesFromDDL(ddl, deps);
-            } else {
-                deps.setExistsInOracle(false);
-                deps.setOracleError("Вьюха не найдена в Oracle");
-            }
-
-            return doAnalyzeView(viewName);
-        });
+        // Не используем DatabaseCacheManager.getViewDependenciesLazy здесь,
+        // так как это может вызвать рекурсию. Просто анализируем и возвращаем результат.
+        System.out.println("[ViewDependencyAnalyzer] Загрузка вьюхи " + viewName + " из БД...");
+        return doAnalyzeView(viewName);
     }
 
     private ViewTableDependencies doAnalyzeView(String viewName) {
@@ -89,12 +80,13 @@ public class ViewDependencyAnalyzer {
             deps.setOracleError("Вьюха не найдена в Oracle");
         }
 
-        // Получаем DDL вьюхи из PostgreSQL
         String postgresDDL = getPostgresViewDDL(viewName);
         if (postgresDDL != null && !postgresDDL.isEmpty()) {
             deps.setExistsInPostgres(true);
             Set<String> postgresTables = extractTablesFromPostgresDDL(postgresDDL);
             deps.addAllPostgresTables(postgresTables);
+            System.out.println("[ViewDependencyAnalyzer] PostgreSQL вьюха " + viewName +
+                    " содержит таблицы: " + postgresTables);
         } else {
             deps.setExistsInPostgres(false);
             deps.setPostgresError("Вьюха не найдена в PostgreSQL");

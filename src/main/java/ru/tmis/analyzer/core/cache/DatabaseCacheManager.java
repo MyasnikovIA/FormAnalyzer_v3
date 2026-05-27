@@ -486,54 +486,6 @@ public class DatabaseCacheManager {
         markChanged();
     }
 
-    public static void putOracleTableDDL(String tableName, String ddl) {
-        String key = tableName.toUpperCase();
-        if (ddl != null) {
-            oracleTableDDLCache.put(key, ddl);
-            markChanged();
-        }
-    }
-
-    public static void putOracleViewDDL(String viewName, String ddl) {
-        String key = viewName.toUpperCase();
-        if (ddl != null) {
-            oracleViewDDLCache.put(key, ddl);
-            markChanged();
-        }
-    }
-
-    public static void putPostgresTableDDL(String tableName, String ddl) {
-        String key = tableName.toLowerCase();
-        if (ddl != null) {
-            postgresTableDDLCache.put(key, ddl);
-            markChanged();
-        }
-    }
-
-    public static void putPostgresViewDDL(String viewName, String ddl) {
-        String key = viewName.toLowerCase();
-        if (ddl != null) {
-            postgresViewDDLCache.put(key, ddl);
-            markChanged();
-        }
-    }
-
-    public static void putOracleFunctionBody(String functionKey, String body) {
-        String key = functionKey.toUpperCase();
-        if (body != null) {
-            oracleFunctionBodyCache.put(key, body);
-            markChanged();
-        }
-    }
-
-    public static void putPostgresFunctionBody(String functionKey, String body) {
-        String key = functionKey.toLowerCase();
-        if (body != null) {
-            postgresFunctionBodyCache.put(key, body);
-            markChanged();
-        }
-    }
-
     public static void putOraclePackageSpec(String packageName, String spec) {
         String key = packageName.toUpperCase();
         if (spec != null) {
@@ -1306,5 +1258,475 @@ public class DatabaseCacheManager {
     public static void clearAllViewDependencies() {
         viewDependenciesCache.clear();
         System.out.println("[КЭШ] Очищены все зависимости вьюх");
+    }
+
+
+    /**
+     * Прямое получение DDL вьюхи из кэша (без ленивой загрузки)
+     * @param viewName имя вьюхи
+     * @return DDL или null если нет в кэше
+     */
+    public static String getOracleViewDDL(String viewName) {
+        return oracleViewDDLCache.get(viewName.toUpperCase());
+    }
+
+    /**
+     * Прямое получение DDL вьюхи PostgreSQL из кэша
+     */
+    public static String getPostgresViewDDL(String viewName) {
+        return postgresViewDDLCache.get(viewName.toLowerCase());
+    }
+
+    /**
+     * Прямое получение DDL таблицы Oracle из кэша
+     */
+    public static String getOracleTableDDL(String tableName) {
+        return oracleTableDDLCache.get(tableName.toUpperCase());
+    }
+
+    /**
+     * Прямое получение DDL таблицы PostgreSQL из кэша
+     */
+    public static String getPostgresTableDDL(String tableName) {
+        return postgresTableDDLCache.get(tableName.toLowerCase());
+    }
+
+
+// core/cache/DatabaseCacheManager.java - добавить все эти методы
+
+// ==================== LAZY МЕТОДЫ ДЛЯ ВСЕХ ТИПОВ ДАННЫХ ====================
+    /**
+     * Получить DDL Oracle вьюхи с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getOracleViewDDLLazy(String viewName, Supplier<String> loader) {
+        String key = viewName.toUpperCase();
+        String cached = getOracleViewDDL(viewName);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            oracleViewDDLCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Oracle вьюха " + viewName + " загружена и сохранена");
+        }
+        return value;
+    }
+    /**
+     * Получить DDL PostgreSQL вьюхи с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getPostgresViewDDLLazy(String viewName, Supplier<String> loader) {
+        if (!isPostgresAvailable()) return null;
+        String key = viewName.toLowerCase();
+        String cached = getPostgresViewDDL(viewName);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            postgresViewDDLCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PostgreSQL вьюха " + viewName + " загружена и сохранена");
+        }
+        return value;
+    }
+
+
+    /**
+     * Получить DDL Oracle таблицы с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getOracleTableDDLLazy(String tableName, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = tableName.toUpperCase();
+        String cached = getOracleTableDDL(tableName);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            oracleTableDDLCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Oracle таблица " + tableName + " загружена и сохранена");
+        }
+        return value;
+    }
+
+
+    /**
+     * Получить DDL PostgreSQL таблицы с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getPostgresTableDDLLazy(String tableName, Supplier<String> loader) {
+        if (!isPostgresAvailable()) return null;
+        String key = tableName.toLowerCase();
+        String cached = getPostgresTableDDL(tableName);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            postgresTableDDLCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PostgreSQL таблица " + tableName + " загружена и сохранена");
+        }
+        return value;
+    }
+
+    /**
+     * Получить тело Oracle функции с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getOracleFunctionBodyLazy(String functionKey, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = functionKey.toUpperCase();
+        String cached = getOracleFunctionBody(key, () -> null); // используем существующий метод
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            oracleFunctionBodyCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Oracle функция " + functionKey + " загружена и сохранена");
+        }
+        return value;
+    }
+
+    /**
+     * Получить тело PostgreSQL функции с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getPostgresFunctionBodyLazy(String functionKey, Supplier<String> loader) {
+        if (!isPostgresAvailable()) return null;
+        String key = functionKey.toLowerCase();
+        String cached = getPostgresFunctionBody(key, () -> null);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            postgresFunctionBodyCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PostgreSQL функция " + functionKey + " загружена и сохранена");
+        }
+        return value;
+    }
+
+    /**
+     * Получить execProc для брокера с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getBrokerExecProcLazy(String unit, String action, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = (unit + "_" + action).toUpperCase();
+        String cached = brokerExecProcCache.get(key);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            brokerExecProcCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Брокер unit=" + unit + ", action=" + action + " -> " + value);
+        }
+        return value;
+    }
+
+    /**
+     * Получить константу с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getConstantLazy(String constCode, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = constCode.toUpperCase();
+        String cached = constantsCache.get(key);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            constantsCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Константа " + constCode + " = " + value);
+        }
+        return value;
+    }
+
+    /**
+     * Получить системную опцию с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getSystemOptionLazy(String optionCode, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = optionCode.toUpperCase();
+        String cached = systemOptionsCache.get(key);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            systemOptionsCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Системная опция " + optionCode + " = " + value);
+        }
+        return value;
+    }
+
+    /**
+     * Получить список отчётов Oracle с автоматической загрузкой при отсутствии в кэше
+     */
+    @SuppressWarnings("unchecked")
+    public static List<DbReportInfo> getOracleReportsLazy(String unitCode, Supplier<List<DbReportInfo>> loader) {
+        if (!isOracleAvailable()) return Collections.emptyList();
+        String key = unitCode.toUpperCase();
+
+        Object cached = oracleReportsCache.get(key);
+        if (cached != null) {
+            return (List<DbReportInfo>) cached;
+        }
+
+        List<DbReportInfo> value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            oracleReportsCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Отчёты Oracle для unit=" + unitCode + ": " + value.size() + " шт.");
+        }
+        return value != null ? value : Collections.emptyList();
+    }
+
+    /**
+     * Получить список отчётов PostgreSQL с автоматической загрузкой при отсутствии в кэше
+     */
+    @SuppressWarnings("unchecked")
+    public static List<DbReportInfo> getPostgresReportsLazy(String unitCode, Supplier<List<DbReportInfo>> loader) {
+        if (!isPostgresAvailable()) return Collections.emptyList();
+        String key = unitCode.toUpperCase();
+
+        Object cached = postgresReportsCache.get(key);
+        if (cached != null) {
+            return (List<DbReportInfo>) cached;
+        }
+
+        List<DbReportInfo> value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            postgresReportsCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Отчёты PostgreSQL для unit=" + unitCode + ": " + value.size() + " шт.");
+        }
+        return value != null ? value : Collections.emptyList();
+    }
+
+    /**
+     * Получить количество записей в Oracle с автоматической загрузкой при отсутствии в кэше
+     */
+    public static Long getOracleCountLazy(String objectName, Supplier<Long> loader) {
+        if (!isOracleAvailable()) return -1L;
+        String key = objectName.toUpperCase();
+
+        Long cached = oracleCountCache.get(key);
+        if (cached != null) return cached;
+
+        Long value = loader.get();
+        if (value != null && value >= 0) {
+            oracleCountCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Oracle COUNT(" + objectName + ") = " + value);
+        }
+        return value != null ? value : -1L;
+    }
+
+    /**
+     * Получить количество записей в PostgreSQL с автоматической загрузкой при отсутствии в кэше
+     */
+    public static Long getPostgresCountLazy(String objectName, Supplier<Long> loader) {
+        if (!isPostgresAvailable()) return -1L;
+        String key = objectName.toLowerCase();
+
+        Long cached = postgresCountCache.get(key);
+        if (cached != null) return cached;
+
+        Long value = loader.get();
+        if (value != null && value >= 0) {
+            postgresCountCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PostgreSQL COUNT(" + objectName + ") = " + value);
+        }
+        return value != null ? value : -1L;
+    }
+
+    /**
+     * Получить OID вьюхи PostgreSQL с автоматической загрузкой при отсутствии в кэше
+     */
+    public static Integer getPostgresViewOidLazy(String viewName, Supplier<Integer> loader) {
+        if (!isPostgresAvailable()) return -1;
+        String key = viewName.toLowerCase();
+
+        Integer cached = postgresViewOidCache.get(key);
+        if (cached != null) return cached;
+
+        Integer value = loader.get();
+        if (value != null && value > 0) {
+            postgresViewOidCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PostgreSQL OID для вьюхи " + viewName + " = " + value);
+        }
+        return value != null ? value : -1;
+    }
+
+    /**
+     * Получить спецификацию Oracle пакета с автоматической загрузкой при отсутствии в кэше
+     */
+    public static String getOraclePackageSpecLazy(String packageName, Supplier<String> loader) {
+        if (!isOracleAvailable()) return null;
+        String key = packageName.toUpperCase();
+
+        String cached = oraclePackageSpecCache.get(key);
+        if (cached != null) return cached;
+
+        String value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            oraclePackageSpecCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Oracle пакет " + packageName + " загружен и сохранён");
+        }
+        return value;
+    }
+
+    /**
+     * Получить информацию о первичном ключе с автоматической загрузкой
+     */
+    @SuppressWarnings("unchecked")
+    public static DatabaseObjectChecker.PrimaryKeyInfo getPrimaryKeyInfoLazy(String tableName, Supplier<DatabaseObjectChecker.PrimaryKeyInfo> loader) {
+        if (!isOracleAvailable() || !isPostgresAvailable()) return null;
+        String key = tableName.toUpperCase();
+
+        Object cached = pkCache.get(key);
+        if (cached != null) {
+            return (DatabaseObjectChecker.PrimaryKeyInfo) cached;
+        }
+
+        DatabaseObjectChecker.PrimaryKeyInfo value = loader.get();
+        if (value != null) {
+            pkCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] PK информация для таблицы " + tableName + " загружена");
+        }
+        return value;
+    }
+
+    /**
+     * Получить NOT NULL constraints с автоматической загрузкой
+     */
+    @SuppressWarnings("unchecked")
+    public static List<DatabaseObjectChecker.NotNullConstraintInfo> getNotNullConstraintsLazy(String tableName, Supplier<List<DatabaseObjectChecker.NotNullConstraintInfo>> loader) {
+        if (!isOracleAvailable() || !isPostgresAvailable()) return Collections.emptyList();
+        String key = tableName.toUpperCase();
+
+        Object cached = notNullCache.get(key);
+        if (cached != null) {
+            return (List<DatabaseObjectChecker.NotNullConstraintInfo>) cached;
+        }
+
+        List<DatabaseObjectChecker.NotNullConstraintInfo> value = loader.get();
+        if (value != null && !value.isEmpty()) {
+            notNullCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] NOT NULL constraints для таблицы " + tableName + " загружены");
+        }
+        return value != null ? value : Collections.emptyList();
+    }
+
+    /**
+     * Получить результат проверки PostgreSQL функции с автоматической загрузкой
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getPostgresFunctionCheckLazy(String functionName, Supplier<T> loader) {
+        if (!isPostgresAvailable()) return null;
+        String key = functionName.toLowerCase();
+
+        Object cached = postgresFunctionCheckCache.get(key);
+        if (cached != null) {
+            return (T) cached;
+        }
+
+        T value = loader.get();
+        if (value != null) {
+            postgresFunctionCheckCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Результат проверки функции PostgreSQL " + functionName + " сохранён");
+        }
+        return value;
+    }
+
+    public static void putOracleViewDDL(String viewName, String ddl) {
+        String key = viewName.toUpperCase();
+        if (ddl != null && !ddl.isEmpty()) {
+            oracleViewDDLCache.put(key, ddl);
+            markChanged();
+        }
+    }
+
+    public static void putPostgresViewDDL(String viewName, String ddl) {
+        String key = viewName.toLowerCase();
+        if (ddl != null && !ddl.isEmpty()) {
+            postgresViewDDLCache.put(key, ddl);
+            markChanged();
+        }
+    }
+
+    public static void putOracleTableDDL(String tableName, String ddl) {
+        String key = tableName.toUpperCase();
+        if (ddl != null && !ddl.isEmpty()) {
+            oracleTableDDLCache.put(key, ddl);
+            markChanged();
+        }
+    }
+
+    public static void putPostgresTableDDL(String tableName, String ddl) {
+        String key = tableName.toLowerCase();
+        if (ddl != null && !ddl.isEmpty()) {
+            postgresTableDDLCache.put(key, ddl);
+            markChanged();
+        }
+    }
+
+    public static void putOracleFunctionBody(String functionKey, String body) {
+        String key = functionKey.toUpperCase();
+        if (body != null && !body.isEmpty()) {
+            oracleFunctionBodyCache.put(key, body);
+            markChanged();
+        }
+    }
+
+    public static void putPostgresFunctionBody(String functionKey, String body) {
+        String key = functionKey.toLowerCase();
+        if (body != null && !body.isEmpty()) {
+            postgresFunctionBodyCache.put(key, body);
+            markChanged();
+        }
+    }
+
+    public static void putViewDependencies(String viewName, ViewTableDependencies deps) {
+        String key = viewName.toUpperCase();
+        if (deps != null) {
+            viewDependenciesCache.put(key, deps);
+            markChanged();
+        }
+    }
+
+    public static ViewTableDependencies getViewDependenciesLazy(String viewName, Supplier<ViewTableDependencies> loader) {
+        String key = viewName.toUpperCase();
+
+        // Проверяем кэш через прямой метод
+        ViewTableDependencies cached = getViewDependencies(viewName);
+        if (cached != null) {
+            return cached;
+        }
+
+        // Загружаем через ленивый загрузчик
+        System.out.println("[КЭШ] Загрузка зависимостей вьюхи " + viewName + " из БД...");
+        ViewTableDependencies value = loader.get();
+        if (value != null) {
+            viewDependenciesCache.put(key, value);
+            markChanged();
+            System.out.println("[КЭШ] Зависимости вьюхи " + viewName + " сохранены в кэш");
+        }
+        return value;
+    }
+
+    /**
+     * Прямое получение зависимостей вьюхи из кэша
+     */
+    public static ViewTableDependencies getViewDependencies(String viewName) {
+        Object cached = viewDependenciesCache.get(viewName.toUpperCase());
+        if (cached instanceof ViewTableDependencies) {
+            return (ViewTableDependencies) cached;
+        }
+        return null;
     }
 }

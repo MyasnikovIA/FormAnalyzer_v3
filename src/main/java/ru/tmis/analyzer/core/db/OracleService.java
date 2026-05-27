@@ -5,6 +5,8 @@ import ru.tmis.analyzer.core.cache.DatabaseCacheManager;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OracleService {
 
@@ -19,27 +21,16 @@ public class OracleService {
     }
 
     public String getViewDDL(String viewName) {
-        if (!DatabaseCacheManager.isOracleServerAvailable()) {
-            System.err.println("[Oracle] Сервер недоступен, пропускаем запрос для вьюхи: " + viewName);
-            return null;
-        }
-        String key = viewName.toUpperCase();
-        return DatabaseCacheManager.getOracleViewDDL(key, () -> fetchViewDDL(viewName));
+        return DatabaseCacheManager.getOracleViewDDLLazy(viewName, () -> fetchViewDDL(viewName));
     }
 
     public String getTableDDL(String tableName) {
-        if (!DatabaseCacheManager.isOracleServerAvailable()) {
-            System.err.println("[Oracle] Сервер недоступен, пропускаем запрос для таблицы: " + tableName);
-            return null;
-        }
-        String key = tableName.toUpperCase();
-
-        return DatabaseCacheManager.getOracleTableDDL(key, () -> fetchTableDDL(tableName));
+        return DatabaseCacheManager.getOracleTableDDLLazy(tableName, () -> fetchTableDDL(tableName));
     }
 
     public String getFunctionBody(String packageName, String functionName) {
-        String key = (packageName + "." + functionName).toUpperCase();
-        return DatabaseCacheManager.getOracleFunctionBody(key, () -> fetchFunctionBody(packageName, functionName));
+        String key = packageName + "." + functionName;
+        return DatabaseCacheManager.getOracleFunctionBodyLazy(key, () -> fetchFunctionBody(packageName, functionName));
     }
 
     public long getTableCount(String objectName) {
@@ -177,12 +168,15 @@ public class OracleService {
         }
     }
 
-    private String fetchFunctionBody(String packageName, String functionName) {
+    private String fetchFunctionBody(String packageName, String procedureName) {
+        // Ищем как функцию ИЛИ как процедуру
         String sql = "SELECT TEXT FROM ALL_SOURCE " +
                 "WHERE OWNER = ? AND TYPE = 'PACKAGE BODY' " +
                 "AND NAME = UPPER(?) ORDER BY LINE";
+
         try (Connection conn = DatabaseConnector.getOracleConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, user.toUpperCase());
             pstmt.setString(2, packageName.toUpperCase());
             pstmt.setQueryTimeout(30);
@@ -193,16 +187,43 @@ public class OracleService {
             }
             String fullBody = body.toString();
             if (fullBody.isEmpty()) return null;
-            String pattern = "(?i)(FUNCTION|PROCEDURE)\\s+" + functionName + "\\s*\\([^)]*\\)\\s+(RETURN\\s+\\w+\\s+)?(IS|AS)\\s+(.*?)(END\\s+" + functionName + "\\s*;|END\\s*;)";
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern, java.util.regex.Pattern.DOTALL);
-            java.util.regex.Matcher m = p.matcher(fullBody);
-            if (m.find()) {
-                return formatFunctionBody(m.group(0), functionName, "PACKAGE", m.group(2));
+
+            // Ищем ФУНКЦИЮ или ПРОЦЕДУРУ с указанным именем
+            Pattern pattern = Pattern.compile(
+                    "(?i)(FUNCTION|PROCEDURE)\\s+" + procedureName + "\\s*\\([^)]*\\)\\s*(?:RETURN\\s+\\w+\\s+)?(?:IS|AS)\\s+(.*?)(?:END\\s+" + procedureName + "\\s*;|END\\s*;)",
+                    Pattern.DOTALL
+            );
+            Matcher matcher = pattern.matcher(fullBody);
+            String type ="";
+            if (matcher.find()) {
+                type = matcher.group(1).toUpperCase();
+                String procBody = matcher.group(2);
+                return formatProcedureBody(procBody, procedureName, type);
             }
+
+            // Если не нашли, ищем более простым паттерном
+            Pattern simplePattern = Pattern.compile(
+                    "(?i)(FUNCTION|PROCEDURE)\\s+" + procedureName + "\\s*[(\\(]",
+                    Pattern.DOTALL
+            );
+            if (simplePattern.matcher(fullBody).find()) {
+                // Нашли объявление, но не смогли извлечь тело
+                return "-- " + type + ": " + procedureName + "\n-- (тело не удалось извлечить)";
+            }
+
         } catch (SQLException e) {
-            System.err.println("Ошибка получения тела функции " + packageName + "." + functionName + ": " + e.getMessage());
+            System.err.println("Ошибка получения тела " + packageName + "." + procedureName + ": " + e.getMessage());
         }
         return null;
+    }
+
+    private String formatProcedureBody(String body, String name, String type) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-- Oracle ").append(type).append(": ").append(name).append("\n");
+        sb.append("--").append("=".repeat(70)).append("\n");
+        sb.append(body);
+        if (!body.endsWith("\n")) sb.append("\n");
+        return sb.toString();
     }
 
     private long fetchTableCount(String objectName) {

@@ -28,41 +28,15 @@ public class PostgresService {
     }
 
     // ==================== ОСНОВНЫЕ МЕТОДЫ С КЭШИРОВАНИЕМ ====================
-
     public String getViewDDL(String viewName) {
-        String key = viewName.toLowerCase();
-        String cached = getCachedViewDDL(key);
-        if (cached != null) return cached;
-
-        String ddl = fetchViewDDL(viewName);
-        if (ddl != null) {
-            putCachedViewDDL(key, ddl);
-        }
-        return ddl;
+        return DatabaseCacheManager.getPostgresViewDDLLazy(viewName, () -> fetchViewDDL(viewName));
     }
-
     public String getTableDDL(String tableName) {
-        String key = tableName.toLowerCase();
-        String cached = getCachedTableDDL(key);
-        if (cached != null) return cached;
-
-        String ddl = fetchTableDDL(tableName);
-        if (ddl != null) {
-            putCachedTableDDL(key, ddl);
-        }
-        return ddl;
+        return DatabaseCacheManager.getPostgresTableDDLLazy(tableName, () -> fetchTableDDL(tableName));
     }
 
     public String getFunctionBody(String functionName) {
-        String key = functionName.toLowerCase();
-        String cached = getCachedFunctionBody(key);
-        if (cached != null) return cached;
-
-        String body = fetchFunctionBody(functionName);
-        if (body != null) {
-            putCachedFunctionBody(key, body);
-        }
-        return body;
+        return DatabaseCacheManager.getPostgresFunctionBodyLazy(functionName, () -> fetchFunctionBody(functionName));
     }
 
     public long getTableCount(String objectName) {

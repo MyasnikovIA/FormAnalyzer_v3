@@ -25,6 +25,7 @@ public class LLMPromptGenerator {
     private LLMReportContext context;
     private BooleanSupplier stopCondition = () -> false;
 
+
     public LLMPromptGenerator(AppConfig config) {
         this.config = config;
         this.settings = SettingsModel.getInstance();
@@ -216,86 +217,6 @@ public class LLMPromptGenerator {
             context.setOracleTableDDL(tableDDL);
             System.out.println("[Oracle] Загружено DDL таблиц: " + tableDDL.size());
         }
-    }
-
-    private void loadOracleFunctions() {
-        Set<String> funcs = new LinkedHashSet<>();
-        for (SqlInfo sql : context.getAllSqlQueries()) {
-            for (String pf : sql.getPackagesFunctions()) {
-                if (pf.contains(".") && !pf.startsWith("D_PKG_CONSTANTS") &&
-                        !pf.startsWith("D_PKG_OPTIONS") && !pf.startsWith("D_PKG_OPTION_SPECS")) {
-                    funcs.add(pf);
-                }
-            }
-        }
-
-        if (funcs.isEmpty()) {
-            System.out.println("[Oracle] Нет функций для загрузки");
-            context.setOracleFunctionBodies(new LinkedHashMap<>());
-            return;
-        }
-
-        System.out.println("[Oracle] Загрузка тел функций (" + funcs.size() + " шт.)...");
-
-        Map<String, String> bodies = new LinkedHashMap<>();
-        int count = 0;
-        for (String fullName : funcs) {
-            if (stopCondition.getAsBoolean()) break;
-            count++;
-            System.out.println("[Oracle]   [" + count + "/" + funcs.size() + "] Загрузка функции: " + fullName);
-            int dot = fullName.lastIndexOf('.');
-            if (dot > 0) {
-                String pkg = fullName.substring(0, dot);
-                String func = fullName.substring(dot + 1);
-                String body = oracleService.getFunctionBody(pkg, func);
-                if (body != null && !body.isEmpty()) {
-                    bodies.put(fullName, body);
-                    System.out.println("[Oracle]      OK (" + body.length() + " симв.)");
-                } else {
-                    System.out.println("[Oracle]      НЕ НАЙДЕНА");
-                }
-            }
-        }
-        context.setOracleFunctionBodies(bodies);
-        System.out.println("[Oracle] Загружено тел функций: " + bodies.size());
-    }
-
-    private void loadPostgresFunctions() {
-        Set<String> funcs = new LinkedHashSet<>();
-        for (SqlInfo sql : context.getAllSqlQueries()) {
-            for (String pf : sql.getPackagesFunctions()) {
-                String name = pf.toLowerCase();
-                if (name.contains("(")) {
-                    name = name.substring(0, name.indexOf("("));
-                }
-                funcs.add(name);
-            }
-        }
-
-        if (funcs.isEmpty()) {
-            System.out.println("[PostgreSQL] Нет функций для загрузки");
-            context.setPostgresFunctionBodies(new LinkedHashMap<>());
-            return;
-        }
-
-        System.out.println("[PostgreSQL] Загрузка тел функций (" + funcs.size() + " шт.)...");
-
-        Map<String, String> bodies = new LinkedHashMap<>();
-        int count = 0;
-        for (String name : funcs) {
-            if (stopCondition.getAsBoolean()) break;
-            count++;
-            System.out.println("[PostgreSQL]   [" + count + "/" + funcs.size() + "] Загрузка функции: " + name);
-            String body = postgresService.getFunctionBody(name);
-            if (body != null && !body.isEmpty()) {
-                bodies.put(name, body);
-                System.out.println("[PostgreSQL]      OK (" + body.length() + " симв.)");
-            } else {
-                System.out.println("[PostgreSQL]      НЕ НАЙДЕНА");
-            }
-        }
-        context.setPostgresFunctionBodies(bodies);
-        System.out.println("[PostgreSQL] Загружено тел функций: " + bodies.size());
     }
 
     /**
@@ -1770,47 +1691,26 @@ public class LLMPromptGenerator {
 
         Map<String, String> functionBodies = context.getOracleFunctionBodies();
 
-        Set<String> allPackageFunctions = new LinkedHashSet<>();
-        for (SqlInfo sql : context.getAllSqlQueries()) {
-            for (String pf : sql.getPackagesFunctions()) {
-                if (pf.contains(".") &&
-                        !pf.toUpperCase().contains("D_PKG_CONSTANTS") &&
-                        !pf.toUpperCase().contains("D_PKG_OPTIONS") &&
-                        !pf.toUpperCase().contains("D_PKG_OPTION_SPECS")) {
-                    allPackageFunctions.add(pf);
-                }
-            }
-        }
-
-        if (allPackageFunctions.isEmpty()) {
+        if (functionBodies == null || functionBodies.isEmpty()) {
             sb.append("Пакетные функции для анализа не найдены.\n\n");
             return sb.toString();
         }
 
-        sb.append("Ниже представлены тела функций из Oracle пакетов, ");
-        sb.append("которые используются в SQL запросах форм.\n\n");
-
+        sb.append("Ниже представлены тела функций из Oracle пакетов.\n\n");
         sb.append("**Статистика:**\n");
-        sb.append("- Всего уникальных пакетных функций: ").append(allPackageFunctions.size()).append("\n");
-        sb.append("- Загружено тел функций: ").append(functionBodies != null ? functionBodies.size() : 0).append("\n\n");
+        sb.append("- Всего функций: ").append(functionBodies.size()).append("\n\n");
 
         int funcNum = 1;
-        for (String funcName : allPackageFunctions) {
+        for (Map.Entry<String, String> entry : functionBodies.entrySet()) {
+            String funcName = entry.getKey();
+            String body = entry.getValue();
+
             sb.append("---\n\n");
             sb.append("### Функция №").append(funcNum).append(": ").append(funcName).append("\n\n");
-
-            String body = (functionBodies != null) ? functionBodies.get(funcName) : null;
-
-            if (body != null && !body.isEmpty()) {
-                sb.append("```sql\n");
-                sb.append(body);
-                if (!body.endsWith("\n")) {
-                    sb.append("\n");
-                }
-                sb.append("```\n\n");
-            } else {
-                sb.append("Тело функции не найдено в Oracle (возможно функция в спецификации пакета или нет доступа).\n\n");
-            }
+            sb.append("```sql\n");
+            sb.append(body);
+            if (!body.endsWith("\n")) sb.append("\n");
+            sb.append("```\n\n");
 
             funcNum++;
         }
@@ -1825,18 +1725,7 @@ public class LLMPromptGenerator {
 
         Map<String, String> functionBodies = context.getPostgresFunctionBodies();
 
-        Set<String> allFunctions = new LinkedHashSet<>();
-        for (SqlInfo sql : context.getAllSqlQueries()) {
-            for (String pf : sql.getPackagesFunctions()) {
-                String name = pf.toLowerCase();
-                if (name.contains("(")) {
-                    name = name.substring(0, name.indexOf("("));
-                }
-                allFunctions.add(name);
-            }
-        }
-
-        if (allFunctions.isEmpty()) {
+        if (functionBodies == null || functionBodies.isEmpty()) {
             sb.append("Функции для анализа не найдены.\n\n");
             return sb.toString();
         }
@@ -1845,15 +1734,15 @@ public class LLMPromptGenerator {
         sb.append("которые используются в SQL запросах форм.\n\n");
 
         sb.append("**Статистика:**\n");
-        sb.append("- Всего уникальных функций/процедур: ").append(allFunctions.size()).append("\n");
-        sb.append("- Загружено тел функций: ").append(functionBodies != null ? functionBodies.size() : 0).append("\n\n");
+        sb.append("- Всего уникальных функций/процедур: ").append(functionBodies.size()).append("\n\n");
 
         int funcNum = 1;
-        for (String funcName : allFunctions) {
+        for (Map.Entry<String, String> entry : functionBodies.entrySet()) {
+            String funcName = entry.getKey();
+            String body = entry.getValue();
+
             sb.append("---\n\n");
             sb.append("### Функция №").append(funcNum).append(": ").append(funcName).append("\n\n");
-
-            String body = (functionBodies != null) ? functionBodies.get(funcName) : null;
 
             if (body != null && !body.isEmpty()) {
                 sb.append("```sql\n");
@@ -2010,13 +1899,6 @@ public class LLMPromptGenerator {
     }
 
 
-
-    /**
-     * Генерирует промпт для одной формы и сохраняет в MD файл
-     * @param formInfo информация о форме
-     * @param outputDir директория для сохранения
-     * @return путь к созданному файлу
-     */
     public String generateForSingleForm(FormInfo formInfo, String outputDir) throws Exception {
         // Создаём временный контекст для одной формы
         LLMReportContext singleContext = new LLMReportContext();
@@ -2026,87 +1908,53 @@ public class LLMPromptGenerator {
         singleContext.setAllSqlQueries(formInfo.getSqlQueries());
         singleContext.setTotalSqlQueries(formInfo.getSqlQueries().size());
 
-        // Копируем необходимые данные из глобального контекста если есть
-        if (context != null) {
-            // Вьюхи для этой формы
-            Set<String> formViews = new LinkedHashSet<>();
-            for (String tv : formInfo.getTablesViews()) {
-                if (tv.startsWith("D_V_")) {
-                    formViews.add(tv);
-                }
-            }
-
-            Map<String, String> pgViewsDDL = new LinkedHashMap<>();
-            Map<String, String> oraViewsDDL = new LinkedHashMap<>();
-            Map<String, Set<String>> pgViewTables = new LinkedHashMap<>();
-            Map<String, Set<String>> oraViewTables = new LinkedHashMap<>();
-
-            for (String view : formViews) {
-                if (context.getPostgresViewDDL() != null && context.getPostgresViewDDL().containsKey(view)) {
-                    pgViewsDDL.put(view, context.getPostgresViewDDL().get(view));
-                    if (context.getPostgresViewTables() != null) {
-                        pgViewTables.put(view, context.getPostgresViewTables().get(view));
-                    }
-                }
-                if (context.getOracleViewDDL() != null && context.getOracleViewDDL().containsKey(view)) {
-                    oraViewsDDL.put(view, context.getOracleViewDDL().get(view));
-                    if (context.getOracleViewTables() != null) {
-                        oraViewTables.put(view, context.getOracleViewTables().get(view));
-                    }
-                }
-            }
-            singleContext.setPostgresViewDDL(pgViewsDDL);
-            singleContext.setPostgresViewTables(pgViewTables);
-            singleContext.setOracleViewDDL(oraViewsDDL);
-            singleContext.setOracleViewTables(oraViewTables);
-
-            // Таблицы для этой формы
-            Set<String> formTables = new LinkedHashSet<>();
-            for (String tv : formInfo.getTablesViews()) {
-                if (!tv.startsWith("D_V_")) {
-                    formTables.add(tv);
-                }
-            }
-            for (Set<String> tables : pgViewTables.values()) {
-                formTables.addAll(tables);
-            }
-            for (Set<String> tables : oraViewTables.values()) {
-                formTables.addAll(tables);
-            }
-
-            Map<String, String> pgTableDDL = new LinkedHashMap<>();
-            Map<String, String> oraTableDDL = new LinkedHashMap<>();
-            for (String table : formTables) {
-                if (context.getPostgresTableDDL() != null && context.getPostgresTableDDL().containsKey(table)) {
-                    pgTableDDL.put(table, context.getPostgresTableDDL().get(table));
-                }
-                if (context.getOracleTableDDL() != null && context.getOracleTableDDL().containsKey(table)) {
-                    oraTableDDL.put(table, context.getOracleTableDDL().get(table));
-                }
-            }
-            singleContext.setPostgresTableDDL(pgTableDDL);
-            singleContext.setOracleTableDDL(oraTableDDL);
-
-            // Функции для этой формы
-            Set<String> formFuncs = new LinkedHashSet<>();
-            for (SqlInfo sql : formInfo.getSqlQueries()) {
-                formFuncs.addAll(sql.getPackagesFunctions());
-            }
-
-            Map<String, String> oraFuncBodies = new LinkedHashMap<>();
-            Map<String, String> pgFuncBodies = new LinkedHashMap<>();
-            for (String func : formFuncs) {
-                if (context.getOracleFunctionBodies() != null && context.getOracleFunctionBodies().containsKey(func)) {
-                    oraFuncBodies.put(func, context.getOracleFunctionBodies().get(func));
-                }
-                String lowerFunc = func.toLowerCase();
-                if (context.getPostgresFunctionBodies() != null && context.getPostgresFunctionBodies().containsKey(lowerFunc)) {
-                    pgFuncBodies.put(lowerFunc, context.getPostgresFunctionBodies().get(lowerFunc));
-                }
-            }
-            singleContext.setOracleFunctionBodies(oraFuncBodies);
-            singleContext.setPostgresFunctionBodies(pgFuncBodies);
+        // Копируем тела функций
+        if (formInfo.getOracleFunctionBodies() != null) {
+            singleContext.setOracleFunctionBodies(new LinkedHashMap<>(formInfo.getOracleFunctionBodies()));
         }
+        if (formInfo.getPostgresFunctionBodies() != null) {
+            singleContext.setPostgresFunctionBodies(new LinkedHashMap<>(formInfo.getPostgresFunctionBodies()));
+        }
+
+        // ========== НОВЫЙ КОД: КОПИРУЕМ DDL ДАННЫЕ ИЗ FORMINFO ==========
+        // Копируем DDL вьюх
+        if (formInfo.getOracleViewDDLs() != null && !formInfo.getOracleViewDDLs().isEmpty()) {
+            singleContext.setOracleViewDDL(new LinkedHashMap<>(formInfo.getOracleViewDDLs()));
+            System.out.println("[LLM] Скопировано Oracle вьюх: " + formInfo.getOracleViewDDLs().size());
+        }
+        if (formInfo.getPostgresViewDDLs() != null && !formInfo.getPostgresViewDDLs().isEmpty()) {
+            singleContext.setPostgresViewDDL(new LinkedHashMap<>(formInfo.getPostgresViewDDLs()));
+            System.out.println("[LLM] Скопировано PostgreSQL вьюх: " + formInfo.getPostgresViewDDLs().size());
+        }
+
+        // Копируем DDL таблиц
+        if (formInfo.getOracleTableDDLs() != null && !formInfo.getOracleTableDDLs().isEmpty()) {
+            singleContext.setOracleTableDDL(new LinkedHashMap<>(formInfo.getOracleTableDDLs()));
+            System.out.println("[LLM] Скопировано Oracle таблиц: " + formInfo.getOracleTableDDLs().size());
+        }
+        if (formInfo.getPostgresTableDDLs() != null && !formInfo.getPostgresTableDDLs().isEmpty()) {
+            singleContext.setPostgresTableDDL(new LinkedHashMap<>(formInfo.getPostgresTableDDLs()));
+            System.out.println("[LLM] Скопировано PostgreSQL таблиц: " + formInfo.getPostgresTableDDLs().size());
+        }
+
+        // Копируем зависимости вьюх (для отображения связи вьюха -> таблицы)
+        if (formInfo.getViewDependencies() != null) {
+            Map<String, Set<String>> oracleViewTables = new LinkedHashMap<>();
+            Map<String, Set<String>> postgresViewTables = new LinkedHashMap<>();
+            for (Map.Entry<String, ViewTableDependencies> entry : formInfo.getViewDependencies().entrySet()) {
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getOracleTables() != null && !entry.getValue().getOracleTables().isEmpty()) {
+                        oracleViewTables.put(entry.getKey(), entry.getValue().getOracleTables());
+                    }
+                    if (entry.getValue().getPostgresTables() != null && !entry.getValue().getPostgresTables().isEmpty()) {
+                        postgresViewTables.put(entry.getKey(), entry.getValue().getPostgresTables());
+                    }
+                }
+            }
+            singleContext.setOracleViewTables(oracleViewTables);
+            singleContext.setPostgresViewTables(postgresViewTables);
+        }
+        // ================================================================
 
         // Временно заменяем контекст
         LLMReportContext originalContext = this.context;
@@ -2121,27 +1969,21 @@ public class LLMPromptGenerator {
         // Добавляем исходный текст формы
         String formSourceCode = getFormSourceCode(formInfo.getFormPath());
 
-        // Создаём итоговый промпт с исходным кодом формы
+        // Создаём итоговый промпт
         StringBuilder finalPrompt = new StringBuilder();
         finalPrompt.append(prompt);
-        finalPrompt.append("\n\n");
-        finalPrompt.append("---\n\n");
-        finalPrompt.append("## ИСХОДНЫЙ ТЕКСТ ФОРМЫ\n\n");
+        finalPrompt.append("\n\n---\n\n## ИСХОДНЫЙ ТЕКСТ ФОРМЫ\n\n");
         finalPrompt.append("Ниже представлен исходный XML код анализируемой формы:\n\n");
         finalPrompt.append(formSourceCode);
         finalPrompt.append("\n\n");
 
-        // Формируем имя файла (аналогично отчёту, но с .md)
+        // Сохраняем файл
         String safeName = getSafeFileNameForMD(formInfo.getFormPath());
-
-        // Сохраняем в подкаталог MD_reports
         Path mdSubDir = Paths.get(outputDir, "MD_reports");
         if (!Files.exists(mdSubDir)) {
             Files.createDirectories(mdSubDir);
         }
         Path mdFilePath = mdSubDir.resolve(safeName);
-
-        // Сохраняем файл
         Files.writeString(mdFilePath, finalPrompt.toString());
 
         System.out.println("[LLM] MD промпт сохранён: " + mdFilePath);
@@ -2565,4 +2407,279 @@ public class LLMPromptGenerator {
         }
     }
 
+
+    /**
+     * Загружает тела функций Oracle из уже собранных данных в FormInfo
+     * (никаких запросов к БД!)
+     */
+    private void loadOracleFunctions() {
+        Map<String, String> allBodies = new LinkedHashMap<>();
+
+        for (FormInfo form : context.getAnalyzedForms()) {
+            // ПРЯМОЕ КОПИРОВАНИЕ из FormInfo
+            if (form.getOracleFunctionBodies() != null) {
+                allBodies.putAll(form.getOracleFunctionBodies());
+                System.out.println("[LLM] Взято из FormInfo Oracle функций: " + form.getOracleFunctionBodies().size());
+            }
+        }
+
+        context.setOracleFunctionBodies(allBodies);
+        System.out.println("[Oracle] Загружено тел функций в контекст: " + allBodies.size());
+    }
+
+    /**
+     * Загружает тела функций PostgreSQL из уже собранных данных в FormInfo
+     * (никаких запросов к БД!)
+     */
+    private void loadPostgresFunctions() {
+        Map<String, String> allBodies = new LinkedHashMap<>();
+
+        for (FormInfo form : context.getAnalyzedForms()) {
+            // 1. Данные уже загружены в FormInfo при анализе
+            if (form.getPostgresFunctionBodies() != null) {
+                allBodies.putAll(form.getPostgresFunctionBodies());
+            }
+
+            // 2. Собираем функции из роутеров
+            collectPostgresFunctionsFromRouters(form, allBodies);
+
+            // 3. Функции из брокеров
+            for (BrokerInfo broker : form.getBrokers()) {
+                if (broker.getExecProc() != null && !broker.getExecProc().isEmpty()) {
+                    String key = broker.getExecProc().toLowerCase();
+                    if (!allBodies.containsKey(key)) {
+                        String body = DatabaseCacheManager.getPostgresFunctionBody(key, () -> null);
+                        if (body != null && !body.isEmpty()) {
+                            allBodies.put(key, body);
+                            System.out.println("[LLM] Добавлено тело PostgreSQL функции из брокера: " + key);
+                        }
+                    }
+                }
+            }
+        }
+
+        context.setPostgresFunctionBodies(allBodies);
+        System.out.println("[PostgreSQL] Загружено тел функций из контекста: " + allBodies.size());
+    }
+
+    /**
+     * Собирает Oracle функции из RouterInfo и добавляет в карту тел
+     */
+    private void collectFunctionsFromRouters(FormInfo form, Map<String, String> bodies) {
+        Pattern packagePattern = Pattern.compile(
+                "\\b(D_PKG_[A-Z0-9_]+\\.[A-Z0-9_]+)\\b",
+                Pattern.CASE_INSENSITIVE
+        );
+
+        // ActionRouters
+        for (RouterInfo router : form.getActionRouters()) {
+            for (RouterItem item : router.getRouters()) {
+                if (item.getSqlContent() != null) {
+                    Matcher m = packagePattern.matcher(item.getSqlContent());
+                    while (m.find()) {
+                        String func = m.group(1);
+                        // Исключаем константы и опции
+                        if (!func.toUpperCase().contains("D_PKG_CONSTANTS") &&
+                                !func.toUpperCase().contains("D_PKG_OPTIONS") &&
+                                !func.toUpperCase().contains("D_PKG_OPTION_SPECS")) {
+
+                            if (!bodies.containsKey(func)) {
+                                String body = DatabaseCacheManager.getOracleFunctionBody(func, () -> null);
+                                if (body != null && !body.isEmpty()) {
+                                    bodies.put(func, body);
+                                    System.out.println("[LLM] Добавлено тело функции из роутера: " + func);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // SubRouters
+            for (SubRouterInfo sub : router.getSubRouters()) {
+                for (RouterItem item : sub.getRouters()) {
+                    if (item.getSqlContent() != null) {
+                        Matcher m = packagePattern.matcher(item.getSqlContent());
+                        while (m.find()) {
+                            String func = m.group(1);
+                            if (!bodies.containsKey(func)) {
+                                String body = DatabaseCacheManager.getOracleFunctionBody(func, () -> null);
+                                if (body != null && !body.isEmpty()) {
+                                    bodies.put(func, body);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // DataSetRouters
+        for (RouterInfo router : form.getDataSetRouters()) {
+            for (RouterItem item : router.getRouters()) {
+                if (item.getSqlContent() != null) {
+                    Matcher m = packagePattern.matcher(item.getSqlContent());
+                    while (m.find()) {
+                        String func = m.group(1);
+                        if (!bodies.containsKey(func)) {
+                            String body = DatabaseCacheManager.getOracleFunctionBody(func, () -> null);
+                            if (body != null && !body.isEmpty()) {
+                                bodies.put(func, body);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Собирает PostgreSQL функции из RouterInfo
+     */
+    private void collectPostgresFunctionsFromRouters(FormInfo form, Map<String, String> bodies) {
+        Pattern functionPattern = Pattern.compile(
+                "\\b([a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*)\\b|\\b([a-z][a-z0-9_]*)\\s*\\(",
+                Pattern.CASE_INSENSITIVE
+        );
+
+        Set<String> foundFunctions = new LinkedHashSet<>();
+
+        // ActionRouters
+        for (RouterInfo router : form.getActionRouters()) {
+            for (RouterItem item : router.getRouters()) {
+                if (item.getSqlContent() != null) {
+                    String sql = item.getSqlContent().toLowerCase();
+                    Matcher m = functionPattern.matcher(sql);
+                    while (m.find()) {
+                        String func = m.group(1) != null ? m.group(1) : m.group(2);
+                        if (func != null && !func.startsWith("d_pkg_constants") &&
+                                !func.startsWith("d_pkg_options") && func.length() > 3) {
+                            foundFunctions.add(func);
+                        }
+                    }
+                }
+            }
+        }
+
+        // DataSetRouters
+        for (RouterInfo router : form.getDataSetRouters()) {
+            for (RouterItem item : router.getRouters()) {
+                if (item.getSqlContent() != null) {
+                    String sql = item.getSqlContent().toLowerCase();
+                    Matcher m = functionPattern.matcher(sql);
+                    while (m.find()) {
+                        String func = m.group(1) != null ? m.group(1) : m.group(2);
+                        if (func != null && !func.startsWith("d_pkg_constants") &&
+                                !func.startsWith("d_pkg_options") && func.length() > 3) {
+                            foundFunctions.add(func);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (String func : foundFunctions) {
+            if (!bodies.containsKey(func)) {
+                String body = DatabaseCacheManager.getPostgresFunctionBody(func, () -> null);
+                if (body != null && !body.isEmpty()) {
+                    bodies.put(func, body);
+                    System.out.println("[LLM] Добавлено тело PostgreSQL функции из роутера: " + func);
+                }
+            }
+        }
+    }
+    /**
+     * Загружает DDL таблиц, используемых во вьюхах Oracle
+     */
+    private void loadOracleTableDDL() {
+        Map<String, Set<String>> viewTables = context.getOracleViewTables();
+        if (viewTables == null || viewTables.isEmpty()) {
+            System.out.println("[Oracle] Нет вьюх для получения таблиц");
+            context.setOracleTableDDL(Collections.emptyMap());
+            return;
+        }
+
+        // Собираем все уникальные таблицы из всех вьюх
+        Set<String> allTables = new LinkedHashSet<>();
+        for (Set<String> tables : viewTables.values()) {
+            allTables.addAll(tables);
+        }
+
+        if (allTables.isEmpty()) {
+            System.out.println("[Oracle] Нет таблиц для загрузки");
+            context.setOracleTableDDL(Collections.emptyMap());
+            return;
+        }
+
+        System.out.println("[Oracle] Загрузка DDL таблиц (" + allTables.size() + " шт.)...");
+
+        Map<String, String> tableDDL = new LinkedHashMap<>();
+        int count = 0;
+        for (String tableName : allTables) {
+            if (stopCondition.getAsBoolean()) break;
+            count++;
+            System.out.println("[Oracle]   [" + count + "/" + allTables.size() + "] Загрузка таблицы: " + tableName);
+
+            String ddl = DatabaseCacheManager.getOracleTableDDL(tableName, () ->
+                    oracleService.getTableDDL(tableName)
+            );
+
+            if (ddl != null && !ddl.isEmpty()) {
+                tableDDL.put(tableName, ddl);
+                System.out.println("[Oracle]      OK (" + ddl.length() + " симв.)");
+            } else {
+                System.out.println("[Oracle]      НЕ НАЙДЕНА");
+            }
+        }
+
+        context.setOracleTableDDL(tableDDL);
+        System.out.println("[Oracle] Загружено DDL таблиц: " + tableDDL.size());
+    }
+    /**
+     * Загружает DDL таблиц, используемых во вьюхах PostgreSQL
+     */
+    private void loadPostgresTableDDL() {
+        Map<String, Set<String>> viewTables = context.getPostgresViewTables();
+        if (viewTables == null || viewTables.isEmpty()) {
+            System.out.println("[PostgreSQL] Нет вьюх для получения таблиц");
+            context.setPostgresTableDDL(Collections.emptyMap());
+            return;
+        }
+
+        // Собираем все уникальные таблицы из всех вьюх
+        Set<String> allTables = new LinkedHashSet<>();
+        for (Set<String> tables : viewTables.values()) {
+            allTables.addAll(tables);
+        }
+
+        if (allTables.isEmpty()) {
+            System.out.println("[PostgreSQL] Нет таблиц для загрузки");
+            context.setPostgresTableDDL(Collections.emptyMap());
+            return;
+        }
+
+        System.out.println("[PostgreSQL] Загрузка DDL таблиц (" + allTables.size() + " шт.)...");
+
+        Map<String, String> tableDDL = new LinkedHashMap<>();
+        int count = 0;
+        for (String tableName : allTables) {
+            if (stopCondition.getAsBoolean()) break;
+            count++;
+            System.out.println("[PostgreSQL]   [" + count + "/" + allTables.size() + "] Загрузка таблицы: " + tableName);
+
+            String ddl = DatabaseCacheManager.getPostgresTableDDL(tableName, () ->
+                    postgresService.getTableDDL(tableName)
+            );
+
+            if (ddl != null && !ddl.isEmpty()) {
+                tableDDL.put(tableName, ddl);
+                System.out.println("[PostgreSQL]      OK (" + ddl.length() + " симв.)");
+            } else {
+                System.out.println("[PostgreSQL]      НЕ НАЙДЕНА");
+            }
+        }
+
+        context.setPostgresTableDDL(tableDDL);
+        System.out.println("[PostgreSQL] Загружено DDL таблиц: " + tableDDL.size());
+    }
 }

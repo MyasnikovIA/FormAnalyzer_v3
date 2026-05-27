@@ -68,7 +68,18 @@ public class FormInfo {
     private List<ReportFromAutoPopupInfo> reportsFromAutoPopup = new ArrayList<>();
     private List<RouterInfo> actionRouters;      // Action и BeforeAction с роутерами
     private List<RouterInfo> dataSetRouters;     // DataSet и BeforeSelect с роутерами
+    private Map<String, String> oracleFunctionBodies = new LinkedHashMap<>();
+    private Map<String, String> postgresFunctionBodies = new LinkedHashMap<>();
+    // Для хранения DDL вьюх
+    private Map<String, String> oracleViewDDLs = new LinkedHashMap<>();
+    private Map<String, String> postgresViewDDLs = new LinkedHashMap<>();
 
+    // Для хранения DDL таблиц
+    private Map<String, String> oracleTableDDLs = new LinkedHashMap<>();
+    private Map<String, String> postgresTableDDLs = new LinkedHashMap<>();
+
+    // Для хранения зависимостей таблиц от вьюх
+    private Map<String, Set<String>> viewTableDependencies = new LinkedHashMap<>();
 
     public FormInfo(String formPath) {
         this.formPath = formPath;
@@ -364,4 +375,34 @@ public class FormInfo {
     public void setQueryConversionMap(Map<String, ConversionStatistics.QueryConversionInfo> map) {
         this.queryConversionMap = map;
     }
+    // Геттеры/сеттеры
+    public Map<String, String> getOracleFunctionBodies() { return oracleFunctionBodies; }
+    public void setOracleFunctionBodies(Map<String, String> bodies) { this.oracleFunctionBodies = bodies; }
+    public void addOracleFunctionBody(String name, String body) { this.oracleFunctionBodies.put(name, body); }
+
+    public Map<String, String> getPostgresFunctionBodies() { return postgresFunctionBodies; }
+    public void setPostgresFunctionBodies(Map<String, String> bodies) { this.postgresFunctionBodies = bodies; }
+    public void addPostgresFunctionBody(String name, String body) { this.postgresFunctionBodies.put(name, body); }
+    // Getters and Setters
+    public Map<String, String> getOracleViewDDLs() { return oracleViewDDLs; }
+    public void setOracleViewDDLs(Map<String, String> oracleViewDDLs) { this.oracleViewDDLs = oracleViewDDLs; }
+    public void addOracleViewDDL(String viewName, String ddl) { this.oracleViewDDLs.put(viewName, ddl); }
+
+    public Map<String, String> getPostgresViewDDLs() { return postgresViewDDLs; }
+    public void setPostgresViewDDLs(Map<String, String> postgresViewDDLs) { this.postgresViewDDLs = postgresViewDDLs; }
+    public void addPostgresViewDDL(String viewName, String ddl) { this.postgresViewDDLs.put(viewName, ddl); }
+
+    public Map<String, String> getOracleTableDDLs() { return oracleTableDDLs; }
+    public void setOracleTableDDLs(Map<String, String> oracleTableDDLs) { this.oracleTableDDLs = oracleTableDDLs; }
+    public void addOracleTableDDL(String tableName, String ddl) { this.oracleTableDDLs.put(tableName, ddl); }
+
+    public Map<String, String> getPostgresTableDDLs() { return postgresTableDDLs; }
+    public void setPostgresTableDDLs(Map<String, String> postgresTableDDLs) { this.postgresTableDDLs = postgresTableDDLs; }
+    public void addPostgresTableDDL(String tableName, String ddl) { this.postgresTableDDLs.put(tableName, ddl); }
+
+    public Map<String, Set<String>> getViewTableDependencies() { return viewTableDependencies; }
+    public void setViewTableDependencies(Map<String, Set<String>> viewTableDependencies) { this.viewTableDependencies = viewTableDependencies; }
+    public void addViewTableDependency(String viewName, Set<String> tables) { this.viewTableDependencies.put(viewName, tables); }
+
+
 }

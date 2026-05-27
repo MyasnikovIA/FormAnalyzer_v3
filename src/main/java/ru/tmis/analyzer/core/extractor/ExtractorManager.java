@@ -5,21 +5,22 @@ package ru.tmis.analyzer.core.extractor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
+import ru.tmis.analyzer.config.AppConfig;
 import ru.tmis.analyzer.config.SettingsModel;
 import ru.tmis.analyzer.core.analyzer.ConversionAnalyzer;
 import ru.tmis.analyzer.core.extractor.extractor.SqlExtractor;
 import ru.tmis.analyzer.core.extractor.processors.*;
 import ru.tmis.analyzer.core.log.ILogger;
-import ru.tmis.analyzer.core.model.ConversionStatistics;
-import ru.tmis.analyzer.core.model.FormInfo;
-import ru.tmis.analyzer.core.model.RouterInfo;
-import ru.tmis.analyzer.core.model.SqlInfo;
+import ru.tmis.analyzer.core.model.*;
+import ru.tmis.analyzer.core.service.LLMDataLoader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ExtractorManager {
@@ -28,14 +29,18 @@ public class ExtractorManager {
     private final SqlExtractor sqlExtractor;
     private final SettingsModel settings;
     private final ConversionAnalyzer conversionAnalyzer = new ConversionAnalyzer();
+    private final AppConfig config;
+    private LLMDataLoader llmDataLoader;
 
     // Поля для остановки
     private AtomicBoolean stopRequested = null;
     private ILogger logger;
 
-    public ExtractorManager(SettingsModel settings) {
+    public ExtractorManager(SettingsModel settings, AppConfig config) {
         this.settings = settings;
         this.sqlExtractor = new SqlExtractor();
+        this.config = config;
+        this.llmDataLoader = new LLMDataLoader(settings, config);
         registerDefaultProcessors();
     }
 
@@ -122,6 +127,17 @@ public class ExtractorManager {
         // 2. Извлекаем ВСЕ SQL запросы (включая те, у которых есть Router)
         List<SqlInfo> allSqlList = sqlExtractor.extract(doc, formInfo);
 
+        for (SqlInfo sql : allSqlList) {
+            if (isStopped()) return;
+            for (String tv : sql.getTablesViews()) {
+                formInfo.addTableView(tv);
+                System.out.println("[ExtractorManager] Добавлена вьюха/таблица ДО фильтрации: " + tv);
+            }
+            for (String pf : sql.getPackagesFunctions()) {
+                formInfo.addPackageFunction(pf);
+            }
+        }
+
         if (isStopped()) {
             log("Извлечение данных остановлено пользователем (после извлечения SQL)");
             return;
@@ -167,7 +183,6 @@ public class ExtractorManager {
         // 5. Добавляем извлечённые объекты из SQL в FormInfo
         for (SqlInfo sql : filteredSqlList) {
             if (isStopped()) return;
-
             for (String tv : sql.getTablesViews()) formInfo.addTableView(tv);
             for (String pf : sql.getPackagesFunctions()) formInfo.addPackageFunction(pf);
             for (String proc : sql.getUserProcedures()) formInfo.addUserProcedure(proc);
@@ -175,6 +190,49 @@ public class ExtractorManager {
             for (String constant : sql.getConstants()) formInfo.addConstant(constant);
             for (String unknown : sql.getUnknownObjects()) formInfo.addUnknownObject(unknown);
         }
+
+        // 6. Собираем функции из роутеров и добавляем в packagesFunctions
+        // (только если включен экспорт LLM промпта)
+        if (config != null && config.isEnableLLMExport()) {
+            for (RouterInfo router : formInfo.getActionRouters()) {
+                for (RouterItem item : router.getRouters()) {
+                    if (item.getSqlContent() != null) {
+                        extractFunctionsFromSql(item.getSqlContent(), formInfo);
+                    }
+                }
+            }
+            for (RouterInfo router : formInfo.getDataSetRouters()) {
+                for (RouterItem item : router.getRouters()) {
+                    if (item.getSqlContent() != null) {
+                        extractFunctionsFromSql(item.getSqlContent(), formInfo);
+                    }
+                }
+            }
+
+            // Также проверяем SubRouters
+            for (RouterInfo router : formInfo.getActionRouters()) {
+                for (SubRouterInfo subRouter : router.getSubRouters()) {
+                    for (RouterItem item : subRouter.getRouters()) {
+                        if (item.getSqlContent() != null) {
+                            extractFunctionsFromSql(item.getSqlContent(), formInfo);
+                        }
+                    }
+                }
+            }
+            for (RouterInfo router : formInfo.getDataSetRouters()) {
+                for (SubRouterInfo subRouter : router.getSubRouters()) {
+                    for (RouterItem item : subRouter.getRouters()) {
+                        if (item.getSqlContent() != null) {
+                            extractFunctionsFromSql(item.getSqlContent(), formInfo);
+                        }
+                    }
+                }
+            }
+
+            log("  [ExtractorManager] Всего функций после обработки роутеров: " +
+                    formInfo.getPackagesFunctions().size());
+        }
+
     }
 
     /**
@@ -249,5 +307,30 @@ public class ExtractorManager {
 
     public ConversionAnalyzer getConversionAnalyzer() {
         return conversionAnalyzer;
+    }
+
+    /**
+     * Извлекает имена пакетных функций из SQL текста и добавляет их в FormInfo
+     * (только если включен экспорт LLM промпта)
+     */
+    private void extractFunctionsFromSql(String sqlContent, FormInfo formInfo) {
+        if (sqlContent == null || sqlContent.isEmpty()) return;
+
+        // Проверяем, включен ли экспорт LLM
+        if (config == null || !config.isEnableLLMExport()) {
+            return;
+        }
+
+        Pattern funcPattern = Pattern.compile(
+                "\\b(D_PKG_[A-Z0-9_]+\\.[A-Z0-9_]+)\\b",
+                Pattern.CASE_INSENSITIVE
+        );
+
+        Matcher m = funcPattern.matcher(sqlContent);
+        while (m.find()) {
+            String func = m.group(1);
+            formInfo.addPackageFunction(func);
+            log("    [LLM] Найдена функция: " + func);
+        }
     }
 }

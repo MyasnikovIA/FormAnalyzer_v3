@@ -80,4 +80,5 @@ public class ViewTableDependencies {
     public void setPostgresError(String postgresError) {
         this.postgresError = postgresError;
     }
+
 }
