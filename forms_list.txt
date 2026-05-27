@@ -1,2 +1,2 @@
-Forms/HospPlanJournal/hp_add_direction.frm
-Forms/HospPlan/hospplan.frm
+Forms/HospPlan/select_lpu_outer_hosp.frm
+Forms/HospPlan/hp_directions_edit.frm

@@ -1387,6 +1387,127 @@ where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT(t.ID::bigint,          -- bigint
                                                0::integer) > 0        -- integer
 ```
 
+## Правила для PostgreSQL при выборке первой записи
+
+### Правило №80: Использование LIMIT 1 вместо ROW_NUMBER() для получения первой записи
+
+**Проблема:** В Oracle часто используется конструкция с `ROW_NUMBER() OVER (...)` и внешним запросом `WHERE RN = 1` для получения первой строки. В PostgreSQL это можно сделать проще и эффективнее.
+
+**Решение:** Использовать `LIMIT 1` в конце запроса.
+
+**Сравнение:**
+
+| Oracle | PostgreSQL |
+|--------|------------|
+| `select * from (select t.*, row_number() over (order by t.date desc) rn from table t) where rn = 1` | `select * from table t order by t.date desc limit 1` |
+
+### Правило №81: Обработка отсутствия данных при использовании LIMIT 1
+
+При использовании `LIMIT 1` запрос всегда возвращает 0 или 1 строку. Для проверки наличия данных используем переменную `FOUND`.
+
+```sql
+select d.hosp_plan_date, ...
+  into v_date, v_name
+  from ...
+ where ...
+ order by d.reg_date desc
+ limit 1;
+
+if not FOUND then
+  -- данные не найдены
+  v_date := null;
+end if;
+```
+
+
+## Дополнение в правила (Правило №80 и №81)
+
+```markdown
+## Правило №80: Использование LIMIT 1 вместо ROW_NUMBER() для получения первой записи в PostgreSQL
+
+### Проблема
+
+В Oracle часто используется конструкция с `ROW_NUMBER() OVER (...)` и внешним запросом `WHERE RN = 1` для получения первой строки:
+
+```sql
+select *
+  from (select t.*,
+               row_number() over (order by t.date desc) rn
+          from table t)
+ where rn = 1;
+```
+
+В PostgreSQL эта конструкция избыточна и менее эффективна.
+
+### Решение
+
+Использовать `LIMIT 1` в конце запроса:
+
+```sql
+select t.*
+  from table t
+ order by t.date desc
+ limit 1;
+```
+
+### Пример сравнения
+
+| СУБД | Конструкция |
+|------|-------------|
+| Oracle | `select * from (select t.*, row_number() over (order by t.date desc) rn from table t) where rn = 1` |
+| PostgreSQL | `select t.* from table t order by t.date desc limit 1` |
+
+## Правило №81: Обработка отсутствия данных при использовании LIMIT 1
+
+При использовании `LIMIT 1` запрос всегда возвращает 0 или 1 строку. Для проверки наличия данных используем переменную `FOUND`:
+
+```sql
+select t.id,
+       t.name
+  into v_id,
+       v_name
+  from table t
+ where t.status = 1
+ order by t.date desc
+ limit 1;
+
+if not FOUND then
+  v_id := null;
+  v_name := null;
+end if;
+```
+
+### Важные замечания
+
+1. **LIMIT 1 всегда ставится в конце запроса** после ORDER BY
+2. **Не нужно оборачивать запрос в подзапрос** для фильтрации по RN
+3. **FOUND проверяется сразу после SELECT** как и в других случаях
+4. **Для множества условий** LIMIT 1 работает корректно со сложными WHERE
+```
+## Правило №82: Форматирование CROSS JOIN в PostgreSQL
+
+**Правило:** При использовании `CROSS JOIN` в PostgreSQL, оператор `cross join` пишется в нижнем регистре и располагается на новой строке с отступом **на 4 пробела больше**, чем основной `from`, с выравниванием по вертикали.
+
+**Пример правильного форматирования:**
+
+```sql
+from D_V_DIRECTIONS_BASE d
+     cross join D_V_LPU_BASE l
+     cross join D_V_LPUDICT_BASE ld
+```
+
+**Пример неправильного форматирования:**
+
+```sql
+-- Неправильно (на одной строке)
+from D_V_DIRECTIONS_BASE d cross join D_V_LPU_BASE l cross join D_V_LPUDICT_BASE ld
+
+-- Неправильно (нет отступа)
+from D_V_DIRECTIONS_BASE d
+cross join D_V_LPU_BASE l
+cross join D_V_LPUDICT_BASE ld
+```
+
 ### Типы приведения по умолчанию
 
 | Тип переменной | Приведение |
@@ -1423,10 +1544,6 @@ where D_PKG_CSE_ACCESSES.CHECK_EMPLOYER_RIGHT(t.ID::bigint,          -- bigint
     </component>
 ```
 
-Переключись в режим "РАЗРАБОТЧИК, СЛЕДУЮЩИЙ ПРАВИЛАМ"
-Все тэги и содержимое сместить на 4 пробела "    "
 
 
 
-Переключись в режим "РАЗРАБОТЧИК, СЛЕДУЮЩИЙ ПРАВИЛАМ"
-правильно отформатируй код, поставь комментарии, соблюди отступы, вызов функций (параметры в том регистре как указаног в функциях)

@@ -1899,6 +1899,7 @@ public class LLMPromptGenerator {
     }
 
 
+
     public String generateForSingleForm(FormInfo formInfo, String outputDir) throws Exception {
         // Создаём временный контекст для одной формы
         LLMReportContext singleContext = new LLMReportContext();
@@ -1916,8 +1917,8 @@ public class LLMPromptGenerator {
             singleContext.setPostgresFunctionBodies(new LinkedHashMap<>(formInfo.getPostgresFunctionBodies()));
         }
 
-        // ========== НОВЫЙ КОД: КОПИРУЕМ DDL ДАННЫЕ ИЗ FORMINFO ==========
-        // Копируем DDL вьюх
+        // ========== КОПИРУЕМ DDL ДАННЫЕ ИЗ FORMINFO ==========
+        // 1. Копируем DDL вьюх
         if (formInfo.getOracleViewDDLs() != null && !formInfo.getOracleViewDDLs().isEmpty()) {
             singleContext.setOracleViewDDL(new LinkedHashMap<>(formInfo.getOracleViewDDLs()));
             System.out.println("[LLM] Скопировано Oracle вьюх: " + formInfo.getOracleViewDDLs().size());
@@ -1927,17 +1928,29 @@ public class LLMPromptGenerator {
             System.out.println("[LLM] Скопировано PostgreSQL вьюх: " + formInfo.getPostgresViewDDLs().size());
         }
 
-        // Копируем DDL таблиц
+        // 2. КОПИРУЕМ DDL ТАБЛИЦ - ЭТО САМОЕ ВАЖНОЕ!
         if (formInfo.getOracleTableDDLs() != null && !formInfo.getOracleTableDDLs().isEmpty()) {
             singleContext.setOracleTableDDL(new LinkedHashMap<>(formInfo.getOracleTableDDLs()));
             System.out.println("[LLM] Скопировано Oracle таблиц: " + formInfo.getOracleTableDDLs().size());
+            // Для отладки - выводим список таблиц
+            for (String table : formInfo.getOracleTableDDLs().keySet()) {
+                System.out.println("[LLM]   Oracle таблица: " + table);
+            }
+        } else {
+            System.out.println("[LLM] Oracle таблицы не найдены в formInfo");
         }
+
         if (formInfo.getPostgresTableDDLs() != null && !formInfo.getPostgresTableDDLs().isEmpty()) {
             singleContext.setPostgresTableDDL(new LinkedHashMap<>(formInfo.getPostgresTableDDLs()));
             System.out.println("[LLM] Скопировано PostgreSQL таблиц: " + formInfo.getPostgresTableDDLs().size());
+            for (String table : formInfo.getPostgresTableDDLs().keySet()) {
+                System.out.println("[LLM]   PostgreSQL таблица: " + table);
+            }
+        } else {
+            System.out.println("[LLM] PostgreSQL таблицы не найдены в formInfo");
         }
 
-        // Копируем зависимости вьюх (для отображения связи вьюха -> таблицы)
+        // 3. Копируем зависимости вьюх (связь вьюха -> таблицы)
         if (formInfo.getViewDependencies() != null) {
             Map<String, Set<String>> oracleViewTables = new LinkedHashMap<>();
             Map<String, Set<String>> postgresViewTables = new LinkedHashMap<>();
@@ -1987,6 +2000,7 @@ public class LLMPromptGenerator {
         Files.writeString(mdFilePath, finalPrompt.toString());
 
         System.out.println("[LLM] MD промпт сохранён: " + mdFilePath);
+        System.out.println("[LLM] Размер файла: " + Files.size(mdFilePath) + " байт");
         return mdFilePath.toString();
     }
 

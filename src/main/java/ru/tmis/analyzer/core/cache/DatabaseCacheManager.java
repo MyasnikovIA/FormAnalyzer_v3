@@ -1344,6 +1344,8 @@ public class DatabaseCacheManager {
             oracleTableDDLCache.put(key, value);
             markChanged();
             System.out.println("[КЭШ] Oracle таблица " + tableName + " загружена и сохранена");
+        } else {
+            missingObjectsCache.put(key, true);
         }
         return value;
     }

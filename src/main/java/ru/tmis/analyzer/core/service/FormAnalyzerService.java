@@ -402,15 +402,15 @@ public class FormAnalyzerService {
                 }
             }
 
-            // ========== НОВЫЙ КОД: Загрузка DDL для LLM ПОСЛЕ загрузки зависимостей ==========
+            // ========== ЗАГРУЖАЕМ DDL ДАННЫХ ДЛЯ LLM ==========
             if (config != null && config.isEnableLLMExport()) {
                 log("  Загрузка DDL данных для LLM отчёта...");
                 LLMDataLoader llmDataLoader = new LLMDataLoader(settings, config);
                 llmDataLoader.loadLLMData(formInfo);
                 log("  Загружено Oracle вьюх: " + formInfo.getOracleViewDDLs().size());
                 log("  Загружено PostgreSQL вьюх: " + formInfo.getPostgresViewDDLs().size());
-                log("  Загружено таблиц: " + formInfo.getOracleTableDDLs().size() +
-                        " (Oracle), " + formInfo.getPostgresTableDDLs().size() + " (PostgreSQL)");
+                log("  Загружено Oracle функций: " + formInfo.getOracleFunctionBodies().size());
+                log("  Загружено PostgreSQL функций: " + formInfo.getPostgresFunctionBodies().size());
             }
             // ===================================================
         }
